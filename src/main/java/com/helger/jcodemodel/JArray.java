@@ -49,12 +49,11 @@ import java.util.List;
  */
 public class JArray extends AbstractJExpressionImpl
 {
-
   private final AbstractJType type;
   private final JExpression size;
   private List <JExpression> exprs = null;
 
-  public JArray (final AbstractJType type, final JExpression size)
+  protected JArray (final AbstractJType type, final JExpression size)
   {
     this.type = type;
     this.size = size;

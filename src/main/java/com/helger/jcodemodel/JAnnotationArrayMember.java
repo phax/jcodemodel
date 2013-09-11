@@ -54,12 +54,12 @@ import java.util.List;
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public final class JAnnotationArrayMember extends AbstractJAnnotationValue implements JAnnotatable
+public class JAnnotationArrayMember extends AbstractJAnnotationValue implements JAnnotatable
 {
   private final List <AbstractJAnnotationValue> values = new ArrayList <AbstractJAnnotationValue> ();
   private final JCodeModel owner;
 
-  JAnnotationArrayMember (final JCodeModel owner)
+  protected JAnnotationArrayMember (final JCodeModel owner)
   {
     this.owner = owner;
   }

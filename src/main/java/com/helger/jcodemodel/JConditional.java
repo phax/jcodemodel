@@ -50,7 +50,7 @@ public class JConditional implements JStatement
   /**
    * JExpression to test to determine branching
    */
-  private JExpression test = null;
+  private final JExpression test;
 
   /**
    * JBlock of statements for "then" clause
@@ -60,7 +60,7 @@ public class JConditional implements JStatement
   /**
    * JBlock of statements for optional "else" clause
    */
-  private JBlock _else = null;
+  private JBlock _else;
 
   /**
    * Constructor
@@ -68,7 +68,7 @@ public class JConditional implements JStatement
    * @param test
    *        JExpression which will determine branching
    */
-  public JConditional (final JExpression test)
+  protected JConditional (final JExpression test)
   {
     this.test = test;
   }

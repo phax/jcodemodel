@@ -62,12 +62,12 @@ public class JNarrowedClass extends AbstractJClass
    */
   private final List <AbstractJClass> args;
 
-  public JNarrowedClass (final AbstractJClass basis, final AbstractJClass arg)
+  protected JNarrowedClass (final AbstractJClass basis, final AbstractJClass arg)
   {
     this (basis, Collections.singletonList (arg));
   }
 
-  public JNarrowedClass (final AbstractJClass basis, final List <AbstractJClass> args)
+  protected JNarrowedClass (final AbstractJClass basis, final List <AbstractJClass> args)
   {
     super (basis.owner ());
     this.basis = basis;

@@ -48,16 +48,14 @@ package com.helger.jcodemodel;
  */
 public class JForEach implements JStatement
 {
-
   private final AbstractJType type;
   private final String var;
   private JBlock body; // lazily created
   private final JExpression collection;
   private final JVar loopVar;
 
-  public JForEach (final AbstractJType vartype, final String variable, final JExpression collection)
+  protected JForEach (final AbstractJType vartype, final String variable, final JExpression collection)
   {
-
     this.type = vartype;
     this.var = variable;
     this.collection = collection;

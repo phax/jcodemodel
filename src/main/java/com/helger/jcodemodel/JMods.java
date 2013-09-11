@@ -73,7 +73,7 @@ public class JMods implements JGenerable
   /** bit-packed representation of modifiers. */
   private int mods;
 
-  public JMods (final int mods)
+  protected JMods (final int mods)
   {
     this.mods = mods;
   }

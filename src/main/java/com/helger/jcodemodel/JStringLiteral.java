@@ -49,7 +49,7 @@ public class JStringLiteral extends AbstractJExpressionImpl
 {
   public final String what;
 
-  public JStringLiteral (final String what)
+  protected JStringLiteral (final String what)
   {
     this.what = what;
   }

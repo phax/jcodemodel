@@ -63,7 +63,7 @@ public class JCast extends AbstractJExpressionImpl
    * @param object
    *        JExpression for the object upon which the cast is applied
    */
-  public JCast (final AbstractJType type, final JExpression object)
+  protected JCast (final AbstractJType type, final JExpression object)
   {
     this.type = type;
     this.object = object;

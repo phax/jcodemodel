@@ -60,7 +60,7 @@ public class JTypeWildcard extends AbstractJClass
 
   private final AbstractJClass bound;
 
-  JTypeWildcard (final AbstractJClass bound)
+  protected JTypeWildcard (final AbstractJClass bound)
   {
     super (bound.owner ());
     this.bound = bound;

@@ -63,7 +63,7 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements JAssignmen
    * @param index
    *        JExpression for index of component to access
    */
-  public JArrayCompRef (final JExpression array, final JExpression index)
+  protected JArrayCompRef (final JExpression array, final JExpression index)
   {
     if (array == null || index == null)
       throw new NullPointerException ();

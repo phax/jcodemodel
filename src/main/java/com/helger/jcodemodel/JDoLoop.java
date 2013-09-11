@@ -55,12 +55,12 @@ public class JDoLoop implements JStatement
   /**
    * JBlock of statements which makes up body of this Do statement
    */
-  private JBlock body = null;
+  private JBlock body;
 
   /**
    * Construct a Do statment
    */
-  public JDoLoop (final JExpression test)
+  protected JDoLoop (final JExpression test)
   {
     this.test = test;
   }

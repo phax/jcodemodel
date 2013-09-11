@@ -50,12 +50,12 @@ public class JAssignment extends AbstractJExpressionImpl implements JStatement
   private final JExpression rhs;
   private final String op;
 
-  public JAssignment (final JAssignmentTarget lhs, final JExpression rhs)
+  protected JAssignment (final JAssignmentTarget lhs, final JExpression rhs)
   {
     this (lhs, rhs, "");
   }
 
-  public JAssignment (final JAssignmentTarget lhs, final JExpression rhs, final String op)
+  protected JAssignment (final JAssignmentTarget lhs, final JExpression rhs, final String op)
   {
     this.lhs = lhs;
     this.rhs = rhs;

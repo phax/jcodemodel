@@ -79,7 +79,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
    */
   private List <JExpression> args;
 
-  public JEnumConstant (final JDefinedClass type, final String name)
+  protected JEnumConstant (final JDefinedClass type, final String name)
   {
     this.type = type;
     this.name = name;

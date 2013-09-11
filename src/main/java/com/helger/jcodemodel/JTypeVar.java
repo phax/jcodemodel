@@ -56,7 +56,7 @@ public class JTypeVar extends AbstractJClass implements JDeclaration
 
   private AbstractJClass bound;
 
-  public JTypeVar (final JCodeModel owner, final String _name)
+  protected JTypeVar (final JCodeModel owner, final String _name)
   {
     super (owner);
     this.name = _name;

@@ -63,7 +63,7 @@ public class JCase implements JStatement
   /**
    * Construct a case statement
    */
-  public JCase (final JExpression label)
+  protected JCase (final JExpression label)
   {
     this (label, false);
   }
@@ -72,7 +72,7 @@ public class JCase implements JStatement
    * Construct a case statement. If isDefaultCase is true, then label should be
    * null since default cases don't have a label.
    */
-  public JCase (final JExpression label, final boolean isDefaultCase)
+  protected JCase (final JExpression label, final boolean isDefaultCase)
   {
     this.label = label;
     this.isDefaultCase = isDefaultCase;

@@ -50,13 +50,12 @@ import java.util.List;
 
 public class JForLoop implements JStatement
 {
-
   private final List <Object> inits = new ArrayList <Object> ();
   private JExpression test;
   private final List <JExpression> updates = new ArrayList <JExpression> ();
   private JBlock body;
 
-  public JForLoop ()
+  protected JForLoop ()
   {}
 
   public JVar init (final int mods, final AbstractJType type, final String var, final JExpression e)

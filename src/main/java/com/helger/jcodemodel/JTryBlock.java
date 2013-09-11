@@ -55,7 +55,7 @@ public class JTryBlock implements JStatement
   private final List <JCatchBlock> catches = new ArrayList <JCatchBlock> ();
   private JBlock _finally;
 
-  JTryBlock ()
+  protected JTryBlock ()
   {}
 
   public JBlock body ()

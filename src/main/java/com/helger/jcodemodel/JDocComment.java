@@ -77,7 +77,7 @@ public class JDocComment extends JCommentPart implements JGenerable
   /** The @deprecated tag */
   private JCommentPart atDeprecated = null;
 
-  public JDocComment (final JCodeModel owner)
+  protected JDocComment (final JCodeModel owner)
   {
     this.owner = owner;
   }

@@ -47,7 +47,6 @@ package com.helger.jcodemodel;
  */
 public class JLabel implements JStatement
 {
-
   final String label;
 
   /**
@@ -56,7 +55,7 @@ public class JLabel implements JStatement
    * @param _label
    *        break label or null.
    */
-  public JLabel (final String _label)
+  protected JLabel (final String _label)
   {
     this.label = _label;
   }

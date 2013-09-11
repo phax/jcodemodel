@@ -68,7 +68,7 @@ public class JSwitch implements JStatement
   /**
    * Construct a While statment
    */
-  public JSwitch (final JExpression test)
+  protected JSwitch (final JExpression test)
   {
     this.test = test;
   }

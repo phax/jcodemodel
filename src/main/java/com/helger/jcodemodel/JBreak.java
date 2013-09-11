@@ -54,7 +54,7 @@ public class JBreak implements JStatement
    * @param _label
    *        break label or null.
    */
-  public JBreak (final JLabel _label)
+  protected JBreak (final JLabel _label)
   {
     this.label = _label;
   }

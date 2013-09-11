@@ -76,12 +76,12 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
    * @param name
    *        Name of field to access
    */
-  public JFieldRef (final JExpression object, final String name)
+  protected JFieldRef (final JExpression object, final String name)
   {
     this (object, name, false);
   }
 
-  public JFieldRef (final JExpression object, final JVar v)
+  protected JFieldRef (final JExpression object, final JVar v)
   {
     this (object, v, false);
   }
@@ -89,17 +89,17 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
   /**
    * Static field reference.
    */
-  public JFieldRef (final AbstractJType type, final String name)
+  protected JFieldRef (final AbstractJType type, final String name)
   {
     this (type, name, false);
   }
 
-  public JFieldRef (final AbstractJType type, final JVar v)
+  protected JFieldRef (final AbstractJType type, final JVar v)
   {
     this (type, v, false);
   }
 
-  public JFieldRef (final JGenerable object, final String name, final boolean explicitThis)
+  protected JFieldRef (final JGenerable object, final String name, final boolean explicitThis)
   {
     this.explicitThis = explicitThis;
     this.object = object;
@@ -108,7 +108,7 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
     this.name = name;
   }
 
-  public JFieldRef (final JGenerable object, final JVar var, final boolean explicitThis)
+  protected JFieldRef (final JGenerable object, final JVar var, final boolean explicitThis)
   {
     this.explicitThis = explicitThis;
     this.object = object;

@@ -65,14 +65,14 @@ public final class JOp
     private final JExpression e;
     private final boolean opFirst;
 
-    public UnaryOp (final String op, final JExpression e)
+    protected UnaryOp (final String op, final JExpression e)
     {
       this.op = op;
       this.e = e;
       opFirst = false;
     }
 
-    public UnaryOp (final JExpression e, final String op)
+    protected UnaryOp (final JExpression e, final String op)
     {
       this.op = op;
       this.e = e;
@@ -128,7 +128,7 @@ public final class JOp
 
   public static class TightUnaryOp extends UnaryOp
   {
-    public TightUnaryOp (final JExpression e, final String op)
+    protected TightUnaryOp (final JExpression e, final String op)
     {
       super (e, op);
     }
@@ -141,7 +141,6 @@ public final class JOp
       else
         f.g (expr ()).p (op ());
     }
-
   }
 
   public static JExpression incr (final JExpression e)
@@ -162,7 +161,7 @@ public final class JOp
     private final String op;
     private final JGenerable right;
 
-    public BinaryOp (final JExpression left, final String op, final JGenerable right)
+    protected BinaryOp (final JExpression left, final String op, final JGenerable right)
     {
       this.left = left;
       this.op = op;
@@ -317,11 +316,11 @@ public final class JOp
     private final String op2;
     private final JExpression e3;
 
-    public TernaryOp (final JExpression e1,
-                      final String op1,
-                      final JExpression e2,
-                      final String op2,
-                      final JExpression e3)
+    protected TernaryOp (final JExpression e1,
+                         final String op1,
+                         final JExpression e2,
+                         final String op2,
+                         final JExpression e3)
     {
       this.e1 = e1;
       this.op1 = op1;

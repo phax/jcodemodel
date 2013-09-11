@@ -48,7 +48,6 @@ import java.util.List;
  */
 public class JInvocation extends AbstractJExpressionImpl implements JStatement
 {
-
   /**
    * Object expression upon which this method will be invoked, or null if this
    * is a constructor invocation
@@ -75,7 +74,7 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
   /**
    * If isConstructor==true, this field keeps the type to be created.
    */
-  private AbstractJType type = null;
+  private AbstractJType type;
 
   /**
    * Invokes a method on an object.
@@ -86,12 +85,12 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    * @param name
    *        Name of method to invoke
    */
-  public JInvocation (final JExpression object, final String name)
+  protected JInvocation (final JExpression object, final String name)
   {
     this ((JGenerable) object, name);
   }
 
-  public JInvocation (final JExpression object, final JMethod method)
+  protected JInvocation (final JExpression object, final JMethod method)
   {
     this ((JGenerable) object, method);
   }
@@ -99,12 +98,12 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
   /**
    * Invokes a static method on a class.
    */
-  public JInvocation (final AbstractJClass type, final String name)
+  protected JInvocation (final AbstractJClass type, final String name)
   {
     this ((JGenerable) type, name);
   }
 
-  public JInvocation (final AbstractJClass type, final JMethod method)
+  protected JInvocation (final AbstractJClass type, final JMethod method)
   {
     this ((JGenerable) type, method);
   }

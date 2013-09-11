@@ -60,13 +60,14 @@ import java.util.TreeSet;
  * <h2>Where to go from here?</h2>
  * <p>
  * You'd want to generate fields and methods on a class. See
- * {@link #method(int, AbstractJType, String)} and {@link #field(int, AbstractJType, String)}.
+ * {@link #method(int, AbstractJType, String)} and
+ * {@link #field(int, AbstractJType, String)}.
  */
 public class JDefinedClass extends AbstractJClass implements JDeclaration, JClassContainer, JGenerifiable, JAnnotatable, JDocCommentable
 {
 
   /** Name of this class. Null if anonymous. */
-  private String name = null;
+  private final String name;
 
   /** Modifiers for the class declaration */
   private JMods mods;
@@ -81,13 +82,13 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   /* package */final Map <String, JFieldVar> fields = new LinkedHashMap <String, JFieldVar> ();
 
   /** Static initializer, if this class has one */
-  private JBlock init = null;
+  private JBlock init;
 
   /** Instance initializer, if this class has one */
-  private JBlock instanceInit = null;
+  private JBlock instanceInit;
 
   /** class javadoc */
-  private JDocComment jdoc = null;
+  private JDocComment jdoc;
 
   /** Set of constructors for this class, if any */
   private final List <JMethod> constructors = new ArrayList <JMethod> ();
@@ -128,7 +129,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    * nested class, this is {@link JDefinedClass}. If this is an anonymous class,
    * this constructor shouldn't be used.
    */
-  private JClassContainer outer = null;
+  private final JClassContainer outer;
 
   /**
    * Default value is class or interface or annotationTypeDeclaration or enum
@@ -150,7 +151,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> annotations = null;
+  private List <JAnnotationUse> annotations;
 
   /**
    * Helper class to implement {@link JGenerifiable}.
@@ -164,7 +165,10 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
     }
   };
 
-  public JDefinedClass (final JClassContainer parent, final int mods, final String name, final EClassType classTypeval)
+  protected JDefinedClass (final JClassContainer parent,
+                           final int mods,
+                           final String name,
+                           final EClassType classTypeval)
   {
     this (mods, name, parent, parent.owner (), classTypeval);
   }
@@ -172,7 +176,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   /**
    * Constructor for creating anonymous inner class.
    */
-  public JDefinedClass (final JCodeModel owner, final int mods, final String name)
+  protected JDefinedClass (final JCodeModel owner, final int mods, final String name)
   {
     this (mods, name, null, owner);
   }

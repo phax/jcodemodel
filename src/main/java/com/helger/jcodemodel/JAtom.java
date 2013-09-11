@@ -45,10 +45,9 @@ package com.helger.jcodemodel;
  */
 public class JAtom extends AbstractJExpressionImpl
 {
-
   private final String what;
 
-  public JAtom (final String what)
+  protected JAtom (final String what)
   {
     this.what = what;
   }

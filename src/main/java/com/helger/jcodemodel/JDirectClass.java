@@ -56,7 +56,7 @@ public class JDirectClass extends AbstractJClass
 
   private final String fullName;
 
-  public JDirectClass (final JCodeModel _owner, final String fullName)
+  protected JDirectClass (final JCodeModel _owner, final String fullName)
   {
     super (_owner);
     this.fullName = fullName;

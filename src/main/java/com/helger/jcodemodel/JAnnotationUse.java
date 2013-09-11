@@ -59,7 +59,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    */
   private Map <String, AbstractJAnnotationValue> memberValues;
 
-  public JAnnotationUse (final AbstractJClass clazz)
+  protected JAnnotationUse (final AbstractJClass clazz)
   {
     this.clazz = clazz;
   }

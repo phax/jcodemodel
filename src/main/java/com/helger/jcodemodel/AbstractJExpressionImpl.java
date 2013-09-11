@@ -45,6 +45,9 @@ package com.helger.jcodemodel;
  */
 public abstract class AbstractJExpressionImpl implements JExpression
 {
+  protected AbstractJExpressionImpl ()
+  {}
+
   //
   //
   // from JOp

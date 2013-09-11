@@ -58,7 +58,7 @@ public class JThrow implements JStatement
    * @param expr
    *        JExpression which evaluates to JThrow value
    */
-  public JThrow (final JExpression expr)
+  protected JThrow (final JExpression expr)
   {
     this.expr = expr;
   }

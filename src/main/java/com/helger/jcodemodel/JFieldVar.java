@@ -62,11 +62,11 @@ public class JFieldVar extends JVar implements JDocCommentable
    * @param init
    *        Value to initialize this variable to
    */
-  public JFieldVar (final JDefinedClass owner,
-                    final JMods mods,
-                    final AbstractJType type,
-                    final String name,
-                    final JExpression init)
+  protected JFieldVar (final JDefinedClass owner,
+                       final JMods mods,
+                       final AbstractJType type,
+                       final String name,
+                       final JExpression init)
   {
     super (mods, type, name, init);
     this.owner = owner;

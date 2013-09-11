@@ -53,7 +53,7 @@ public class JAnonymousClass extends JDefinedClass
    */
   private final AbstractJClass base;
 
-  public JAnonymousClass (final AbstractJClass _base)
+  protected JAnonymousClass (final AbstractJClass _base)
   {
     super (_base.owner (), 0, null);
     this.base = _base;

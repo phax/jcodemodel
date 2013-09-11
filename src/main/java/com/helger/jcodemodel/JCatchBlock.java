@@ -50,7 +50,7 @@ public class JCatchBlock implements JGenerable
   private JVar var = null;
   private final JBlock body = new JBlock ();
 
-  public JCatchBlock (final AbstractJClass exception)
+  protected JCatchBlock (final AbstractJClass exception)
   {
     this.exception = exception;
   }

@@ -55,7 +55,7 @@ public class JArrayClass extends AbstractJClass
   // array component type
   private final AbstractJType componentType;
 
-  public JArrayClass (final JCodeModel owner, final AbstractJType component)
+  protected JArrayClass (final JCodeModel owner, final AbstractJType component)
   {
     super (owner);
     this.componentType = component;

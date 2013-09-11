@@ -57,7 +57,7 @@ public class JReturn implements JStatement
    * @param expr
    *        JExpression which evaluates to return value
    */
-  public JReturn (final JExpression expr)
+  protected JReturn (final JExpression expr)
   {
     this.expr = expr;
   }

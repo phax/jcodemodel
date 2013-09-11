@@ -54,7 +54,7 @@ import java.util.List;
 public final class JNullType extends AbstractJClass
 {
 
-  JNullType (final JCodeModel _owner)
+  protected JNullType (final JCodeModel _owner)
   {
     super (_owner);
   }

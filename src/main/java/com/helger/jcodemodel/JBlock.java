@@ -71,12 +71,12 @@ public class JBlock implements JGenerable, JStatement
    */
   private int pos;
 
-  public JBlock ()
+  protected JBlock ()
   {
     this (true, true);
   }
 
-  public JBlock (final boolean bracesRequired, final boolean indentRequired)
+  protected JBlock (final boolean bracesRequired, final boolean indentRequired)
   {
     this.bracesRequired = bracesRequired;
     this.indentRequired = indentRequired;
