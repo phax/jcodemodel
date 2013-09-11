@@ -42,11 +42,12 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 /**
  * JClass for generating expressions containing operators
  */
-
+@Immutable
 public final class JOp
 {
   private JOp ()

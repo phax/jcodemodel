@@ -47,7 +47,6 @@ import java.util.Iterator;
  */
 public interface JClassContainer
 {
-
   /**
    * Returns true if the container is a class.
    */
@@ -151,5 +150,4 @@ public interface JClassContainer
    *            When the specified class/interface was already created.
    */
   JDefinedClass _enum (String name) throws JClassAlreadyExistsException;
-
 }

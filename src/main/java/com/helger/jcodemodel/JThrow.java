@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * JThrow statement
  */
@@ -58,17 +60,18 @@ public class JThrow implements JStatement
    * @param expr
    *        JExpression which evaluates to JThrow value
    */
-  protected JThrow (final JExpression expr)
+  protected JThrow (@Nonnull final JExpression expr)
   {
     this.expr = expr;
   }
 
+  @Nonnull
   public JExpression expr ()
   {
     return expr;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     f.print ("throw");
     f.generable (expr);

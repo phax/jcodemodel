@@ -40,6 +40,9 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * JContinue statement
  */
@@ -53,17 +56,18 @@ public class JContinue implements JStatement
    * @param _label
    *        a valid label or null.
    */
-  protected JContinue (final JLabel _label)
+  protected JContinue (@Nullable final JLabel _label)
   {
     this.label = _label;
   }
 
+  @Nullable
   public JLabel label ()
   {
     return label;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     if (label == null)
       f.print ("continue;").newline ();

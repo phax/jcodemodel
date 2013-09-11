@@ -42,10 +42,13 @@ package com.helger.jcodemodel.util;
 
 import java.util.Comparator;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.AbstractJClass;
 
 /**
- * Comparator object that sorts {@link AbstractJClass}es in the order of their names.
+ * Comparator object that sorts {@link AbstractJClass}es in the order of their
+ * names.
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
@@ -56,7 +59,7 @@ public class ClassNameComparator implements Comparator <AbstractJClass>
   private ClassNameComparator ()
   {}
 
-  public int compare (final AbstractJClass l, final AbstractJClass r)
+  public int compare (@Nonnull final AbstractJClass l, @Nonnull final AbstractJClass r)
   {
     return l.fullName ().compareTo (r.fullName ());
   }

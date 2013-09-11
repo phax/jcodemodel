@@ -46,6 +46,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * Represents an arrays as annotation members
  * <p>
@@ -59,7 +61,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
   private final List <AbstractJAnnotationValue> values = new ArrayList <AbstractJAnnotationValue> ();
   private final JCodeModel owner;
 
-  protected JAnnotationArrayMember (final JCodeModel owner)
+  protected JAnnotationArrayMember (@Nonnull final JCodeModel owner)
   {
     this.owner = owner;
   }
@@ -72,6 +74,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final String value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
@@ -87,6 +90,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final boolean value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
@@ -102,6 +106,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final byte value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
@@ -117,6 +122,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final char value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
@@ -132,6 +138,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final double value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
@@ -147,6 +154,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final long value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
@@ -162,6 +170,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final short value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
@@ -177,6 +186,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final int value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
@@ -192,6 +202,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final float value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
@@ -207,6 +218,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final Enum <?> value)
   {
     final AbstractJAnnotationValue annotationValue = new AbstractJAnnotationValue ()
@@ -228,6 +240,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final JEnumConstant value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (value);
@@ -243,6 +256,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final JExpression value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (value);
@@ -258,6 +272,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
+  @Nonnull
   public JAnnotationArrayMember param (final Class <?> value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (new AbstractJExpressionImpl ()
@@ -272,6 +287,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     return this;
   }
 
+  @Nonnull
   public JAnnotationArrayMember param (final AbstractJType type)
   {
     final AbstractJClass clazz = type.boxify ();
@@ -283,7 +299,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
   /**
    * Adds a new annotation to the array.
    */
-  public JAnnotationUse annotate (final Class <? extends Annotation> clazz)
+  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
     return annotate (owner.ref (clazz));
   }
@@ -291,7 +307,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
   /**
    * Adds a new annotation to the array.
    */
-  public JAnnotationUse annotate (final AbstractJClass clazz)
+  @Nonnull
+  public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     final JAnnotationUse a = new JAnnotationUse (clazz);
     values.add (a);
@@ -315,10 +332,9 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     return Collections.<JAnnotationUse> unmodifiableList ((List) values);
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.print ('{').newline ().indent ();
-
     boolean first = true;
     for (final AbstractJAnnotationValue aValue : values)
     {

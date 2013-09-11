@@ -40,6 +40,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 /**
  * Represents an annotation on a program element. TODO How to add enums to the
  * annotations
@@ -59,22 +61,24 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    */
   private Map <String, AbstractJAnnotationValue> memberValues;
 
-  protected JAnnotationUse (final AbstractJClass clazz)
+  protected JAnnotationUse (@Nonnull final AbstractJClass clazz)
   {
     this.clazz = clazz;
   }
 
+  @Nonnull
   public AbstractJClass getAnnotationClass ()
   {
     return clazz;
   }
 
+  @Nonnull
   public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
     return Collections.unmodifiableMap (memberValues);
   }
 
-  private JCodeModel owner ()
+  private JCodeModel _owner ()
   {
     return clazz.owner ();
   }
@@ -98,6 +102,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final boolean value)
   {
     addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
@@ -114,6 +119,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final byte value)
   {
     addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
@@ -130,6 +136,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final char value)
   {
     addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
@@ -146,6 +153,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final double value)
   {
     addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
@@ -162,6 +170,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final float value)
   {
     addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
@@ -178,6 +187,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final long value)
   {
     addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
@@ -194,6 +204,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final short value)
   {
     addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
@@ -210,6 +221,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final int value)
   {
     addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
@@ -226,6 +238,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final String value)
   {
     // Escape string values with quotes so that they can
@@ -246,9 +259,10 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse annotationParam (final String name, final Class <? extends Annotation> value)
   {
-    final JAnnotationUse annotationUse = new JAnnotationUse (owner ().ref (value));
+    final JAnnotationUse annotationUse = new JAnnotationUse (_owner ().ref (value));
     addValue (name, annotationUse);
     return annotationUse;
   }
@@ -263,13 +277,14 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final Enum <?> value)
   {
     addValue (name, new AbstractJAnnotationValue ()
     {
       public void generate (final JFormatter f)
       {
-        f.type (owner ().ref (value.getDeclaringClass ())).print ('.').print (value.name ());
+        f.type (_owner ().ref (value.getDeclaringClass ())).print ('.').print (value.name ());
       }
     });
     return this;
@@ -285,6 +300,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final JEnumConstant value)
   {
     addValue (name, new JAnnotationStringValue (value));
@@ -310,11 +326,12 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final Class <?> value)
   {
     addValue (name, new JAnnotationStringValue (new AbstractJExpressionImpl ()
     {
-      public void generate (final JFormatter f)
+      public void generate (@Nonnull final JFormatter f)
       {
         f.print (value.getName ().replace ('$', '.'));
         f.print (".class");
@@ -334,7 +351,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
-  public JAnnotationUse param (final String name, final AbstractJType type)
+  @Nonnull
+  public JAnnotationUse param (final String name, @Nonnull final AbstractJType type)
   {
     final AbstractJClass c = type.boxify ();
     addValue (name, new JAnnotationStringValue (c.dotclass ()));
@@ -351,6 +369,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
+  @Nonnull
   public JAnnotationUse param (final String name, final JExpression value)
   {
     addValue (name, new JAnnotationStringValue (value));
@@ -365,9 +384,10 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    * @return The JAnnotationArrayMember. For adding array values
    * @see JAnnotationArrayMember
    */
+  @Nonnull
   public JAnnotationArrayMember paramArray (final String name)
   {
-    final JAnnotationArrayMember arrayMember = new JAnnotationArrayMember (owner ());
+    final JAnnotationArrayMember arrayMember = new JAnnotationArrayMember (_owner ());
     addValue (name, arrayMember);
     return arrayMember;
   }

@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Field Reference
  */
@@ -89,7 +91,7 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
   /**
    * Static field reference.
    */
-  protected JFieldRef (final AbstractJType type, final String name)
+  protected JFieldRef (final AbstractJType type, @Nonnull final String name)
   {
     this (type, name, false);
   }
@@ -99,7 +101,7 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
     this (type, v, false);
   }
 
-  protected JFieldRef (final JGenerable object, final String name, final boolean explicitThis)
+  protected JFieldRef (final JGenerable object, @Nonnull final String name, final boolean explicitThis)
   {
     this.explicitThis = explicitThis;
     this.object = object;
@@ -133,7 +135,7 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
     return explicitThis;
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     final String name = name ();
 
@@ -154,12 +156,14 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
     }
   }
 
-  public JExpression assign (final JExpression rhs)
+  @Nonnull
+  public JExpression assign (@Nonnull final JExpression rhs)
   {
     return JExpr.assign (this, rhs);
   }
 
-  public JExpression assignPlus (final JExpression rhs)
+  @Nonnull
+  public JExpression assignPlus (@Nonnull final JExpression rhs)
   {
     return JExpr.assignPlus (this, rhs);
   }

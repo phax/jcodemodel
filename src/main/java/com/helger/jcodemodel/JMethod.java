@@ -48,6 +48,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.util.ClassNameComparator;
 
 /**
@@ -119,7 +121,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, 
    * @param name
    *        Name of this method
    */
-  public JMethod (final JDefinedClass outer, final int mods, final AbstractJType type, final String name)
+  public JMethod (@Nonnull final JDefinedClass outer, final int mods, final AbstractJType type, final String name)
   {
     this.mods = JMods.forMethod (mods);
     this.type = type;
@@ -197,6 +199,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, 
    *        Name of the parameter being added
    * @return New parameter variable
    */
+  @Nonnull
   public JVar param (final int mods, final AbstractJType type, final String name)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, name, null);

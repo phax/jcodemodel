@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * If statement, with optional else clause
  */
@@ -68,11 +70,12 @@ public class JConditional implements JStatement
    * @param test
    *        JExpression which will determine branching
    */
-  protected JConditional (final JExpression test)
+  protected JConditional (@Nonnull final JExpression test)
   {
     this.test = test;
   }
 
+  @Nonnull
   public JExpression test ()
   {
     return test;
@@ -83,6 +86,7 @@ public class JConditional implements JStatement
    * 
    * @return Then block
    */
+  @Nonnull
   public JBlock _then ()
   {
     return _then;
@@ -93,6 +97,7 @@ public class JConditional implements JStatement
    * 
    * @return Newly generated else block
    */
+  @Nonnull
   public JBlock _else ()
   {
     if (_else == null)
@@ -103,12 +108,13 @@ public class JConditional implements JStatement
   /**
    * Creates <tt>... else if(...) ...</tt> code.
    */
-  public JConditional _elseif (final JExpression boolExp)
+  @Nonnull
+  public JConditional _elseif (@Nonnull final JExpression boolExp)
   {
     return _else ()._if (boolExp);
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     if (test == JExpr.TRUE)
     {

@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Common interface for code components that can generate uses of themselves as
  * statements.
@@ -47,5 +49,5 @@ package com.helger.jcodemodel;
 
 public interface JStatement
 {
-  void state (JFormatter f);
+  void state (@Nonnull JFormatter f);
 }

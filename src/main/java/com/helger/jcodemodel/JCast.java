@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * A cast operation.
  */
@@ -63,23 +65,25 @@ public class JCast extends AbstractJExpressionImpl
    * @param object
    *        JExpression for the object upon which the cast is applied
    */
-  protected JCast (final AbstractJType type, final JExpression object)
+  protected JCast (@Nonnull final AbstractJType type, @Nonnull final JExpression object)
   {
     this.type = type;
     this.object = object;
   }
 
+  @Nonnull
   public AbstractJType type ()
   {
     return type;
   }
 
+  @Nonnull
   public JExpression object ()
   {
     return object;
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.print ("((").generable (type).print (')').generable (object).print (')');
   }

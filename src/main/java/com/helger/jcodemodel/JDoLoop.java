@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Do loops
  */
@@ -60,16 +62,18 @@ public class JDoLoop implements JStatement
   /**
    * Construct a Do statment
    */
-  protected JDoLoop (final JExpression test)
+  protected JDoLoop (@Nonnull final JExpression test)
   {
     this.test = test;
   }
 
+  @Nonnull
   public JExpression test ()
   {
     return test;
   }
 
+  @Nonnull
   public JBlock body ()
   {
     if (body == null)
@@ -95,5 +99,4 @@ public class JDoLoop implements JStatement
     }
     f.print (';').newline ();
   }
-
 }

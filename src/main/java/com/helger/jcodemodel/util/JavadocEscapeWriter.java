@@ -60,7 +60,6 @@ import java.io.Writer;
  */
 public class JavadocEscapeWriter extends FilterWriter
 {
-
   public JavadocEscapeWriter (final Writer next)
   {
     super (next);

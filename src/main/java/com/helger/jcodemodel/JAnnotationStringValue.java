@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Captures the value of the annotation.
  * 
@@ -47,23 +49,23 @@ package com.helger.jcodemodel;
  */
 public class JAnnotationStringValue extends AbstractJAnnotationValue
 {
-
   /**
    * The value of the Annotation member
    */
   private final JExpression value;
 
-  protected JAnnotationStringValue (final JExpression value)
+  protected JAnnotationStringValue (@Nonnull final JExpression value)
   {
     this.value = value;
   }
 
+  @Nonnull
   public JExpression value ()
   {
     return value;
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.generable (value);
   }

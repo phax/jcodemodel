@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nullable;
+
 /**
  * A return statement
  */
@@ -57,11 +59,12 @@ public class JReturn implements JStatement
    * @param expr
    *        JExpression which evaluates to return value
    */
-  protected JReturn (final JExpression expr)
+  protected JReturn (@Nullable final JExpression expr)
   {
     this.expr = expr;
   }
 
+  @Nullable
   public JExpression expr ()
   {
     return expr;

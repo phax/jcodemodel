@@ -81,7 +81,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
    */
   private List <JExpression> args;
 
-  protected JEnumConstant (final JDefinedClass type, final String name)
+  protected JEnumConstant (@Nonnull final JDefinedClass type, @Nonnull final String name)
   {
     this.type = type;
     this.name = name;
@@ -138,7 +138,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
   @Nonnull
   public String getName ()
   {
-    return this.type.fullName ().concat (".").concat (this.name);
+    return type.fullName () + '.' + name;
   }
 
   /**

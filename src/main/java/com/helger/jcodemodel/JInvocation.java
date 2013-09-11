@@ -43,6 +43,8 @@ package com.helger.jcodemodel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * JMethod invocation
  */
@@ -85,12 +87,12 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    * @param name
    *        Name of method to invoke
    */
-  protected JInvocation (final JExpression object, final String name)
+  protected JInvocation (@Nonnull final JExpression object, @Nonnull final String name)
   {
     this ((JGenerable) object, name);
   }
 
-  protected JInvocation (final JExpression object, final JMethod method)
+  protected JInvocation (@Nonnull final JExpression object, @Nonnull final JMethod method)
   {
     this ((JGenerable) object, method);
   }
@@ -98,17 +100,17 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
   /**
    * Invokes a static method on a class.
    */
-  protected JInvocation (final AbstractJClass type, final String name)
+  protected JInvocation (@Nonnull final AbstractJClass type, @Nonnull final String name)
   {
     this ((JGenerable) type, name);
   }
 
-  protected JInvocation (final AbstractJClass type, final JMethod method)
+  protected JInvocation (@Nonnull final AbstractJClass type, @Nonnull final JMethod method)
   {
     this ((JGenerable) type, method);
   }
 
-  private JInvocation (final JGenerable object, final String name)
+  private JInvocation (@Nonnull final JGenerable object, @Nonnull final String name)
   {
     this.object = object;
     if (name.indexOf ('.') >= 0)
@@ -116,7 +118,7 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
     this.name = name;
   }
 
-  private JInvocation (final JGenerable object, final JMethod method)
+  private JInvocation (@Nonnull final JGenerable object, @Nonnull final JMethod method)
   {
     this.object = object;
     this.method = method;
@@ -130,7 +132,7 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    *        added arguments are treated as array initializer. Thus you can
    *        create an expression like <code>new int[]{1,2,3,4,5}</code>.
    */
-  public JInvocation (final AbstractJType c)
+  protected JInvocation (@Nonnull final AbstractJType c)
   {
     this.isConstructor = true;
     this.type = c;
@@ -142,7 +144,8 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    * @param arg
    *        Argument to add to argument list
    */
-  public JInvocation arg (final JExpression arg)
+  @Nonnull
+  public JInvocation arg (@Nonnull final JExpression arg)
   {
     if (arg == null)
       throw new IllegalArgumentException ();
@@ -153,7 +156,8 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
   /**
    * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
    */
-  public JInvocation arg (final String v)
+  @Nonnull
+  public JInvocation arg (@Nonnull final String v)
   {
     return arg (JExpr.lit (v));
   }
@@ -163,12 +167,13 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    * 
    * @return If there's no arguments, an empty array will be returned.
    */
+  @Nonnull
   public JExpression [] listArgs ()
   {
     return args.toArray (new JExpression [args.size ()]);
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     if (isConstructor && type.isArray ())
     {
@@ -205,9 +210,8 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
     }
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     f.generable (this).print (';').newline ();
   }
-
 }

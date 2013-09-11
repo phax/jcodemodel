@@ -40,6 +40,9 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * A field that can have a {@link JDocComment} associated with it
  */
@@ -62,16 +65,17 @@ public class JFieldVar extends JVar implements JDocCommentable
    * @param init
    *        Value to initialize this variable to
    */
-  protected JFieldVar (final JDefinedClass owner,
-                       final JMods mods,
-                       final AbstractJType type,
-                       final String name,
-                       final JExpression init)
+  protected JFieldVar (@Nonnull final JDefinedClass owner,
+                       @Nonnull final JMods mods,
+                       @Nonnull final AbstractJType type,
+                       @Nonnull final String name,
+                       @Nullable final JExpression init)
   {
     super (mods, type, name, init);
     this.owner = owner;
   }
 
+  @Nonnull
   public JDefinedClass owner ()
   {
     return owner;
@@ -94,6 +98,7 @@ public class JFieldVar extends JVar implements JDocCommentable
    * 
    * @return JDocComment containing javadocs for this class
    */
+  @Nonnull
   public JDocComment javadoc ()
   {
     if (jdoc == null)
@@ -102,7 +107,7 @@ public class JFieldVar extends JVar implements JDocCommentable
   }
 
   @Override
-  public void declare (final JFormatter f)
+  public void declare (@Nonnull final JFormatter f)
   {
     if (jdoc != null)
       f.generable (jdoc);

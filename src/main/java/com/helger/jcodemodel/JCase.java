@@ -40,6 +40,9 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Case statement
  */
@@ -58,12 +61,12 @@ public class JCase implements JStatement
   /**
    * JBlock of statements which makes up body of this While statement
    */
-  private JBlock body = null;
+  private JBlock body;
 
   /**
    * Construct a case statement
    */
-  protected JCase (final JExpression label)
+  protected JCase (@Nonnull final JExpression label)
   {
     this (label, false);
   }
@@ -72,12 +75,13 @@ public class JCase implements JStatement
    * Construct a case statement. If isDefaultCase is true, then label should be
    * null since default cases don't have a label.
    */
-  protected JCase (final JExpression label, final boolean isDefaultCase)
+  protected JCase (@Nullable final JExpression label, final boolean isDefaultCase)
   {
     this.label = label;
     this.isDefaultCase = isDefaultCase;
   }
 
+  @Nullable
   public JExpression label ()
   {
     return label;
@@ -88,6 +92,7 @@ public class JCase implements JStatement
     return isDefaultCase;
   }
 
+  @Nonnull
   public JBlock body ()
   {
     if (body == null)
@@ -95,7 +100,7 @@ public class JCase implements JStatement
     return body;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     f.indent ();
     if (!isDefaultCase)

@@ -43,6 +43,9 @@ package com.helger.jcodemodel;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * JavaDoc comment.
  * <p>
@@ -82,9 +85,15 @@ public class JDocComment extends JCommentPart implements JGenerable
   /** The @deprecated tag */
   private JCommentPart atDeprecated = null;
 
-  protected JDocComment (final JCodeModel owner)
+  protected JDocComment (@Nonnull final JCodeModel owner)
   {
     this.owner = owner;
+  }
+
+  @Nonnull
+  public JCodeModel owner ()
+  {
+    return owner;
   }
 
   @Override
@@ -108,17 +117,19 @@ public class JDocComment extends JCommentPart implements JGenerable
   /**
    * Append a text to an @param tag.
    */
-  public JCommentPart addParam (final JVar param)
+  public JCommentPart addParam (@Nonnull final JVar param)
   {
     return addParam (param.name ());
   }
 
+  @Nullable
   public JCommentPart removeParam (final String param)
   {
     return atParams.remove (param);
   }
 
-  public JCommentPart removeParam (final JVar param)
+  @Nullable
+  public JCommentPart removeParam (@Nonnull final JVar param)
   {
     return removeParam (param.name ());
   }
@@ -128,12 +139,14 @@ public class JDocComment extends JCommentPart implements JGenerable
     atParams.clear ();
   }
 
-  public JCommentPart getParam (final String param)
+  @Nullable
+  public JCommentPart getParam (@Nullable final String param)
   {
     return atParams.get (param);
   }
 
-  public JCommentPart getParam (final JVar param)
+  @Nullable
+  public JCommentPart getParam (@Nonnull final JVar param)
   {
     return getParam (param.name ());
   }
@@ -141,7 +154,7 @@ public class JDocComment extends JCommentPart implements JGenerable
   /**
    * add an @throws tag to the javadoc
    */
-  public JCommentPart addThrows (final Class <? extends Throwable> exception)
+  public JCommentPart addThrows (@Nonnull final Class <? extends Throwable> exception)
   {
     return addThrows (owner.ref (exception));
   }
@@ -160,11 +173,13 @@ public class JDocComment extends JCommentPart implements JGenerable
     return p;
   }
 
-  public JCommentPart removeThrows (final Class <? extends Throwable> exception)
+  @Nullable
+  public JCommentPart removeThrows (@Nonnull final Class <? extends Throwable> exception)
   {
     return removeThrows (owner.ref (exception));
   }
 
+  @Nullable
   public JCommentPart removeThrows (final AbstractJClass exception)
   {
     return atThrows.remove (exception);
@@ -175,9 +190,22 @@ public class JDocComment extends JCommentPart implements JGenerable
     atThrows.clear ();
   }
 
+  @Nullable
+  public JCommentPart getThrows (@Nonnull final Class <? extends Throwable> exception)
+  {
+    return getThrows (owner.ref (exception));
+  }
+
+  @Nullable
+  public JCommentPart getThrows (final AbstractJClass exception)
+  {
+    return atThrows.get (exception);
+  }
+
   /**
    * Appends a text to @return tag.
    */
+  @Nonnull
   public JCommentPart addReturn ()
   {
     if (atReturn == null)
@@ -193,6 +221,7 @@ public class JDocComment extends JCommentPart implements JGenerable
   /**
    * Appends a text to @author tag.
    */
+  @Nonnull
   public JCommentPart addAuthor ()
   {
     if (atAuthor == null)
@@ -208,6 +237,7 @@ public class JDocComment extends JCommentPart implements JGenerable
   /**
    * add an @deprecated tag to the javadoc, with the associated message.
    */
+  @Nonnull
   public JCommentPart addDeprecated ()
   {
     if (atDeprecated == null)
@@ -223,6 +253,7 @@ public class JDocComment extends JCommentPart implements JGenerable
   /**
    * add an xdoclet.
    */
+  @Nonnull
   public Map <String, String> addXdoclet (final String name)
   {
     Map <String, String> p = atXdoclets.get (name);
@@ -237,6 +268,7 @@ public class JDocComment extends JCommentPart implements JGenerable
   /**
    * add an xdoclet.
    */
+  @Nonnull
   public Map <String, String> addXdoclet (final String name, final Map <String, String> attributes)
   {
     final Map <String, String> p = addXdoclet (name);
@@ -247,6 +279,7 @@ public class JDocComment extends JCommentPart implements JGenerable
   /**
    * add an xdoclet.
    */
+  @Nonnull
   public Map <String, String> addXdoclet (final String name, final String attribute, final String value)
   {
     final Map <String, String> p = addXdoclet (name);
@@ -254,6 +287,7 @@ public class JDocComment extends JCommentPart implements JGenerable
     return p;
   }
 
+  @Nullable
   public Map <String, String> removeXdoclet (final String name)
   {
     return atXdoclets.remove (name);
@@ -264,7 +298,7 @@ public class JDocComment extends JCommentPart implements JGenerable
     atXdoclets.clear ();
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     // I realized that we can't use StringTokenizer because
     // this will recognize multiple \n as one token.

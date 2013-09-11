@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * While statement
  */
@@ -60,16 +62,18 @@ public class JWhileLoop implements JStatement
   /**
    * Construct a While statment
    */
-  protected JWhileLoop (final JExpression test)
+  protected JWhileLoop (@Nonnull final JExpression test)
   {
     this.test = test;
   }
 
+  @Nonnull
   public JExpression test ()
   {
     return test;
   }
 
+  @Nonnull
   public JBlock body ()
   {
     if (body == null)
@@ -77,7 +81,7 @@ public class JWhileLoop implements JStatement
     return body;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     if (JOp.hasTopOp (test))
     {

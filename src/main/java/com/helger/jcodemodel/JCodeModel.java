@@ -53,6 +53,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.SecureLoader;
 import com.helger.jcodemodel.writer.FileCodeWriter;
@@ -377,6 +378,7 @@ public final class JCodeModel
    * fails, we assume that the class is derived straight from {@link Object},
    * and return a {@link AbstractJClass}.
    */
+  @Nonnull
   public AbstractJClass ref (final String fullyQualifiedClassName)
   {
     try
@@ -388,6 +390,7 @@ public final class JCodeModel
     {
       // fall through
     }
+
     // then the default mechanism.
     try
     {
@@ -427,7 +430,7 @@ public final class JCodeModel
    * @exception ClassNotFoundException
    *            If the specified type is not found.
    */
-  public AbstractJType parseType (final String name) throws ClassNotFoundException
+  public AbstractJType parseType (@Nonnull final String name) throws ClassNotFoundException
   {
     // array
     if (name.endsWith ("[]"))
@@ -686,6 +689,7 @@ public final class JCodeModel
     }
 
     @Override
+    @Nullable
     public JPrimitiveType getPrimitiveType ()
     {
       final Class <?> v = boxToPrimitive.get (_class);

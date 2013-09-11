@@ -44,6 +44,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * A part is a part of a javadoc comment, and it is a list of values.
  * <p>
@@ -67,37 +70,38 @@ public class JCommentPart extends ArrayList <Object>
   {}
 
   /**
-   * Appends a new value. If the value is {@link AbstractJType} it will be printed as a @link
-   * tag. Otherwise it will be converted to String via {@link Object#toString()}
-   * .
+   * Appends a new value. If the value is {@link AbstractJType} it will be
+   * printed as a @link tag. Otherwise it will be converted to String via
+   * {@link Object#toString()} .
    */
-  public JCommentPart append (final Object o)
+  @Nonnull
+  public JCommentPart append (@Nullable final Object o)
   {
     add (o);
     return this;
   }
 
   @Override
-  public boolean add (final Object o)
+  public boolean add (@Nullable final Object o)
   {
-    flattenAppend (o);
+    _flattenAppend (o);
     return true;
   }
 
-  private void flattenAppend (final Object value)
+  private void _flattenAppend (@Nullable final Object value)
   {
     if (value == null)
       return;
     if (value instanceof Object [])
     {
       for (final Object o : (Object []) value)
-        flattenAppend (o);
+        _flattenAppend (o);
     }
     else
       if (value instanceof Collection <?>)
       {
         for (final Object o : (Collection <?>) value)
-          flattenAppend (o);
+          _flattenAppend (o);
       }
       else
         super.add (value);
@@ -106,7 +110,7 @@ public class JCommentPart extends ArrayList <Object>
   /**
    * Writes this part into the formatter by using the specified indentation.
    */
-  protected void format (final JFormatter f, final String indent)
+  protected void format (@Nonnull final JFormatter f, final String indent)
   {
     if (!f.isPrinting ())
     {
@@ -134,12 +138,12 @@ public class JCommentPart extends ArrayList <Object>
         {
           final String line = s.substring (0, idx);
           if (line.length () > 0)
-            f.print (escape (line));
+            f.print (_escape (line));
           s = s.substring (idx + 1);
           f.newline ().print (indent);
         }
         if (s.length () != 0)
-          f.print (escape (s));
+          f.print (_escape (s));
       }
       else
         if (o instanceof AbstractJClass)
@@ -163,7 +167,7 @@ public class JCommentPart extends ArrayList <Object>
   /**
    * Escapes the appearance of the comment terminator.
    */
-  private static String escape (final String sText)
+  private static String _escape (@Nonnull final String sText)
   {
     String s = sText;
     while (true)

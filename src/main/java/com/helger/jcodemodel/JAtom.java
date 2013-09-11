@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * JAtoms: Simple code components that merely generate themselves.
  */
@@ -47,17 +49,18 @@ public class JAtom extends AbstractJExpressionImpl
 {
   private final String what;
 
-  protected JAtom (final String what)
+  protected JAtom (@Nonnull final String what)
   {
     this.what = what;
   }
 
+  @Nonnull
   public String what ()
   {
     return what;
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.print (what);
   }

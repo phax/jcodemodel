@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Catch block for a try/catch/finally statement
  */
@@ -47,24 +49,26 @@ public class JCatchBlock implements JGenerable
 {
 
   private final AbstractJClass exception;
-  private JVar var = null;
+  private JVar var;
   private final JBlock body = new JBlock ();
 
-  protected JCatchBlock (final AbstractJClass exception)
+  protected JCatchBlock (@Nonnull final AbstractJClass exception)
   {
     this.exception = exception;
   }
 
+  @Nonnull
   public AbstractJClass exception ()
   {
     return exception;
   }
 
+  @Nonnull
   public JVar param (final String name)
   {
     if (var != null)
       throw new IllegalStateException ();
-    var = new JVar (JMods.forVar (JMod.NONE), exception, name, null);
+    var = new JVar (JMods.forVar (JMod.FINAL), exception, name, null);
     return var;
   }
 
@@ -73,15 +77,16 @@ public class JCatchBlock implements JGenerable
     return var;
   }
 
+  @Nonnull
   public JBlock body ()
   {
     return body;
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     if (var == null)
-      var = new JVar (JMods.forVar (JMod.NONE), exception, "_x", null);
+      var = new JVar (JMods.forVar (JMod.FINAL), exception, "ex", null);
     f.print ("catch (").var (var).print (')').generable (body);
   }
 }

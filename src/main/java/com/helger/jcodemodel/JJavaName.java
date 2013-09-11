@@ -44,6 +44,8 @@ import java.util.HashSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.Nonnull;
+
 /**
  * Utility methods that convert arbitrary strings into Java identifiers.
  */
@@ -211,7 +213,7 @@ public class JJavaName
   /**
    * Checks if a given string is usable as a Java identifier.
    */
-  public static boolean isJavaIdentifier (final String s)
+  public static boolean isJavaIdentifier (@Nonnull final String s)
   {
     if (s.length () == 0)
       return false;

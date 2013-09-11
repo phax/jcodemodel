@@ -46,13 +46,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Variables and fields.
  */
 
 public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssignmentTarget, JAnnotatable
 {
-
   /**
    * Modifiers.
    */
@@ -88,8 +90,13 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
    * @param init
    *        Value to initialize this variable to
    */
-  protected JVar (final JMods mods, final AbstractJType type, final String name, final JExpression init)
+  protected JVar (@Nonnull final JMods mods,
+                  @Nonnull final AbstractJType type,
+                  @Nonnull final String name,
+                  @Nullable final JExpression init)
   {
+    if (!JJavaName.isJavaIdentifier (name))
+      throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
     this.mods = mods;
     this.type = type;
     this.name = name;
@@ -102,7 +109,8 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
    * @param init
    *        JExpression to be used to initialize this field
    */
-  public JVar init (final JExpression init)
+  @Nonnull
+  public JVar init (@Nullable final JExpression init)
   {
     this.init = init;
     return this;
@@ -113,6 +121,7 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
    * 
    * @return Name of the variable
    */
+  @Nonnull
   public String name ()
   {
     return name;
@@ -121,10 +130,10 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
   /**
    * Changes the name of this variable.
    */
-  public void name (final String name)
+  public void name (@Nonnull final String name)
   {
     if (!JJavaName.isJavaIdentifier (name))
-      throw new IllegalArgumentException ();
+      throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
     this.name = name;
   }
 
@@ -142,6 +151,7 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
    * @return the current modifiers of this method. Always return non-null valid
    *         object.
    */
+  @Nonnull
   public JMods mods ()
   {
     return mods;
@@ -154,11 +164,12 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
    *        must not be null.
    * @return the old type value. always non-null.
    */
-  public AbstractJType type (final AbstractJType newType)
+  @Nonnull
+  public AbstractJType type (@Nonnull final AbstractJType newType)
   {
-    final AbstractJType r = type;
     if (newType == null)
       throw new IllegalArgumentException ();
+    final AbstractJType r = type;
     type = newType;
     return r;
   }
@@ -169,7 +180,8 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
    * @param clazz
    *        The annotation class to annotate the field with
    */
-  public JAnnotationUse annotate (final AbstractJClass clazz)
+  @Nonnull
+  public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     if (annotations == null)
       annotations = new ArrayList <JAnnotationUse> ();
@@ -206,7 +218,7 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
     return annotations != null;
   }
 
-  public void bind (final JFormatter f)
+  public void bind (@Nonnull final JFormatter f)
   {
     if (annotations != null)
       for (final JAnnotationUse annotation : annotations)
@@ -216,22 +228,24 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
       f.print ('=').generable (init);
   }
 
-  public void declare (final JFormatter f)
+  public void declare (@Nonnull final JFormatter f)
   {
     f.var (this).print (';').newline ();
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.id (name);
   }
 
-  public JExpression assign (final JExpression rhs)
+  @Nonnull
+  public JExpression assign (@Nonnull final JExpression rhs)
   {
     return JExpr.assign (this, rhs);
   }
 
-  public JExpression assignPlus (final JExpression rhs)
+  @Nonnull
+  public JExpression assignPlus (@Nonnull final JExpression rhs)
   {
     return JExpr.assignPlus (this, rhs);
   }

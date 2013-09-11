@@ -47,7 +47,6 @@ package com.helger.jcodemodel;
  */
 public class JClassAlreadyExistsException extends Exception
 {
-
   private static final long serialVersionUID = 1L;
 
   private final JDefinedClass existing;

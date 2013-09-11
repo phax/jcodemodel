@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * Switch statement
  */
@@ -68,28 +70,32 @@ public class JSwitch implements JStatement
   /**
    * Construct a While statment
    */
-  protected JSwitch (final JExpression test)
+  protected JSwitch (@Nonnull final JExpression test)
   {
     this.test = test;
   }
 
+  @Nonnull
   public JExpression test ()
   {
     return test;
   }
 
+  @Nonnull
   public Iterator <JCase> cases ()
   {
     return cases.iterator ();
   }
 
-  public JCase _case (final JExpression label)
+  @Nonnull
+  public JCase _case (@Nonnull final JExpression label)
   {
     final JCase c = new JCase (label);
     cases.add (c);
     return c;
   }
 
+  @Nonnull
   public JCase _default ()
   {
     if (defaultCase == null)
@@ -100,7 +106,7 @@ public class JSwitch implements JStatement
     return defaultCase;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     if (JOp.hasTopOp (test))
     {
@@ -116,5 +122,4 @@ public class JSwitch implements JStatement
       f.statement (defaultCase);
     f.print ('}').newline ();
   }
-
 }

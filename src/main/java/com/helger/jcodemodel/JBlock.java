@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * A block of Java code, which may contain statements and local declarations.
  * <p>
@@ -86,12 +88,14 @@ public class JBlock implements JGenerable, JStatement
    * Returns a read-only view of {@link JStatement}s and {@link JDeclaration} in
    * this block.
    */
+  @Nonnull
   public List <Object> getContents ()
   {
     return Collections.unmodifiableList (content);
   }
 
-  private <T> T insert (final T statementOrDeclaration)
+  @Nonnull
+  private <T> T _insert (@Nonnull final T statementOrDeclaration)
   {
     content.add (pos, statementOrDeclaration);
     pos++;
@@ -160,6 +164,7 @@ public class JBlock implements JGenerable, JStatement
    *        Name of the variable
    * @return Newly generated JVar
    */
+  @Nonnull
   public JVar decl (final AbstractJType type, final String name)
   {
     return decl (JMod.NONE, type, name, null);
@@ -176,6 +181,7 @@ public class JBlock implements JGenerable, JStatement
    *        Initialization expression for this variable. May be null.
    * @return Newly generated JVar
    */
+  @Nonnull
   public JVar decl (final AbstractJType type, final String name, final JExpression init)
   {
     return decl (JMod.NONE, type, name, init);
@@ -194,10 +200,11 @@ public class JBlock implements JGenerable, JStatement
    *        Initialization expression for this variable. May be null.
    * @return Newly generated JVar
    */
+  @Nonnull
   public JVar decl (final int mods, final AbstractJType type, final String name, final JExpression init)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, name, init);
-    insert (v);
+    _insert (v);
     bracesRequired = true;
     indentRequired = true;
     return v;
@@ -211,15 +218,17 @@ public class JBlock implements JGenerable, JStatement
    * @param exp
    *        Right hand side expression
    */
-  public JBlock assign (final JAssignmentTarget lhs, final JExpression exp)
+  @Nonnull
+  public JBlock assign (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression exp)
   {
-    insert (new JAssignment (lhs, exp));
+    _insert (new JAssignment (lhs, exp));
     return this;
   }
 
-  public JBlock assignPlus (final JAssignmentTarget lhs, final JExpression exp)
+  @Nonnull
+  public JBlock assignPlus (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression exp)
   {
-    insert (new JAssignment (lhs, exp, "+"));
+    _insert (new JAssignment (lhs, exp, "+"));
     return this;
   }
 
@@ -233,10 +242,11 @@ public class JBlock implements JGenerable, JStatement
    *        Name of method to invoke
    * @return Newly generated JInvocation
    */
+  @Nonnull
   public JInvocation invoke (final JExpression expr, final String method)
   {
     final JInvocation i = new JInvocation (expr, method);
-    insert (i);
+    _insert (i);
     return i;
   }
 
@@ -252,7 +262,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JInvocation invoke (final JExpression expr, final JMethod method)
   {
-    return insert (new JInvocation (expr, method));
+    return _insert (new JInvocation (expr, method));
   }
 
   /**
@@ -260,7 +270,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JInvocation staticInvoke (final AbstractJClass type, final String method)
   {
-    return insert (new JInvocation (type, method));
+    return _insert (new JInvocation (type, method));
   }
 
   /**
@@ -272,7 +282,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JInvocation invoke (final String method)
   {
-    return insert (new JInvocation ((JExpression) null, method));
+    return _insert (new JInvocation ((JExpression) null, method));
   }
 
   /**
@@ -284,7 +294,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JInvocation invoke (final JMethod method)
   {
-    return insert (new JInvocation ((JExpression) null, method));
+    return _insert (new JInvocation ((JExpression) null, method));
   }
 
   /**
@@ -296,7 +306,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JBlock add (final JStatement s)
   { // ## Needed?
-    insert (s);
+    _insert (s);
     return this;
   }
 
@@ -309,7 +319,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JConditional _if (final JExpression expr)
   {
-    return insert (new JConditional (expr));
+    return _insert (new JConditional (expr));
   }
 
   /**
@@ -319,7 +329,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JForLoop _for ()
   {
-    return insert (new JForLoop ());
+    return _insert (new JForLoop ());
   }
 
   /**
@@ -329,7 +339,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JWhileLoop _while (final JExpression test)
   {
-    return insert (new JWhileLoop (test));
+    return _insert (new JWhileLoop (test));
   }
 
   /**
@@ -337,7 +347,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JSwitch _switch (final JExpression test)
   {
-    return insert (new JSwitch (test));
+    return _insert (new JSwitch (test));
   }
 
   /**
@@ -347,7 +357,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JDoLoop _do (final JExpression test)
   {
-    return insert (new JDoLoop (test));
+    return _insert (new JDoLoop (test));
   }
 
   /**
@@ -357,7 +367,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JTryBlock _try ()
   {
-    return insert (new JTryBlock ());
+    return _insert (new JTryBlock ());
   }
 
   /**
@@ -365,7 +375,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public void _return ()
   {
-    insert (new JReturn (null));
+    _insert (new JReturn (null));
   }
 
   /**
@@ -373,7 +383,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public void _return (final JExpression exp)
   {
-    insert (new JReturn (exp));
+    _insert (new JReturn (exp));
   }
 
   /**
@@ -381,7 +391,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public void _throw (final JExpression exp)
   {
-    insert (new JThrow (exp));
+    _insert (new JThrow (exp));
   }
 
   /**
@@ -394,7 +404,7 @@ public class JBlock implements JGenerable, JStatement
 
   public void _break (final JLabel label)
   {
-    insert (new JBreak (label));
+    _insert (new JBreak (label));
   }
 
   /**
@@ -404,7 +414,7 @@ public class JBlock implements JGenerable, JStatement
   public JLabel label (final String name)
   {
     final JLabel l = new JLabel (name);
-    insert (l);
+    _insert (l);
     return l;
   }
 
@@ -413,7 +423,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public void _continue (final JLabel label)
   {
-    insert (new JContinue (label));
+    _insert (new JContinue (label));
   }
 
   public void _continue ()
@@ -429,7 +439,7 @@ public class JBlock implements JGenerable, JStatement
     final JBlock b = new JBlock ();
     b.bracesRequired = false;
     b.indentRequired = false;
-    return insert (b);
+    return _insert (b);
   }
 
   /**
@@ -485,7 +495,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JForEach forEach (final AbstractJType varType, final String name, final JExpression collection)
   {
-    return insert (new JForEach (varType, name, collection));
+    return _insert (new JForEach (varType, name, collection));
 
   }
 

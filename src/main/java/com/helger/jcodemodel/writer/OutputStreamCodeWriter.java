@@ -71,7 +71,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
     super (encoding);
     try
     {
-      this.out = new PrintStream (os, false, encoding == null ? null : encoding.name ());
+      this.out = encoding == null ? new PrintStream (os, false) : new PrintStream (os, false, encoding.name ());
     }
     catch (final UnsupportedEncodingException ueex)
     {
