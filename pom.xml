@@ -15,7 +15,7 @@
   
   <licenses>
     <license>
-      <name>CDDL 1.1</name>
+      <name>CDDL+GPL 1.1</name>
       <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
       <distribution>repo</distribution>
     </license>
@@ -30,12 +30,56 @@
 
   <developers>
     <developer>
+      <id>snajper</id>
+      <name>Martin Grebac</name>
+      <email>martin.grebac@oracle.com</email>
+    </developer>
+    <developer>
+      <id>jungicz</id>
+      <name>Lukas Jungmann</name>
+      <email>lukas.jungmann@oracle.com</email>
+    </developer>
+    <developer>
+      <id>lexi</id>
+      <name>Aleksei Valikov</name>
+      <email>valikov@gmx.net</email>
+    </developer>
+    <developer>
+      <id>kohsuke</id>
+      <name>Kohsuke Kawaguchi</name>
+      <email>kohsuke.kawaguchi@sun.com</email>
+    </developer>
+    <developer>
+      <name>Ryan Shoemaker</name>
+      <id>ryans</id>
+      <email>ryan.shoemaker@sun.com</email>
+    </developer>
+    <developer>
+      <name>Bhakti Mehta</name>
+      <id>bhakti</id>
+      <email>bhakti.mehta@sun.com</email>
+    </developer>
+    <developer>
       <id>philip</id>
       <name>Philip Helger</name>
       <email>ph(at)phloc.com</email>
     </developer>
   </developers>
-  
+
+  <contributors>
+    <contributor>
+      <name>Gregory Kick</name>
+      <email>gk5885@kickstyle.net</email>
+      <organization>KickStyle</organization>
+      <organizationUrl>http://kickstyle.net/</organizationUrl>
+      <timezone>-6</timezone>
+    </contributor>
+    <contributor>
+      <name>Aleksei Valikov</name>
+      <email>valikov@gmx.net</email>
+    </contributor>
+  </contributors>
+      
   <repositories>
     <repository>
       <id>phloc.com</id>
