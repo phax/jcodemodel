@@ -55,7 +55,8 @@ import java.util.Map;
  * 
  * @author Kohsuke Kawaguchi
  */
-class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <A>> implements InvocationHandler, JAnnotationWriter <A>
+@SuppressWarnings ({ "unchecked", "rawtypes" })
+public class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <A>> implements InvocationHandler, JAnnotationWriter <A>
 {
   /**
    * This is what we are writing to.
@@ -77,7 +78,7 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
    */
   private Map <String, JAnnotationArrayMember> arrays;
 
-  public TypedAnnotationWriter (final Class <A> annotation, final Class <W> writer, final JAnnotationUse use)
+  protected TypedAnnotationWriter (final Class <A> annotation, final Class <W> writer, final JAnnotationUse use)
   {
     this.annotation = annotation;
     this.writerType = writer;
@@ -94,10 +95,8 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
     return annotation;
   }
 
-  @SuppressWarnings ("unchecked")
   public Object invoke (final Object proxy, final Method method, final Object [] args) throws Throwable
   {
-
     if (method.getDeclaringClass () == JAnnotationWriter.class)
     {
       try
@@ -183,11 +182,10 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
     throw new IllegalArgumentException ("Unable to handle this method call " + method.toString ());
   }
 
-  @SuppressWarnings ("unchecked")
   private Object addArrayValue (final Object proxy,
                                 final String name,
-                                final Class itemType,
-                                final Class expectedReturnType,
+                                final Class <?> itemType,
+                                final Class <?> expectedReturnType,
                                 final Object arg)
   {
     if (arrays == null)
@@ -202,7 +200,7 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
     // sub annotation
     if (Annotation.class.isAssignableFrom (itemType))
     {
-      final Class <? extends Annotation> r = itemType;
+      final Class <? extends Annotation> r = (Class <? extends Annotation>) itemType;
       if (!JAnnotationWriter.class.isAssignableFrom (expectedReturnType))
         throw new IllegalArgumentException ("Unexpected return type " + expectedReturnType);
       return new TypedAnnotationWriter (r, expectedReturnType, m.annotate (r)).createProxy ();
@@ -259,7 +257,6 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
   /**
    * Creates a proxy and returns it.
    */
-  @SuppressWarnings ("unchecked")
   private W createProxy ()
   {
     return (W) Proxy.newProxyInstance (SecureLoader.getClassClassLoader (writerType), new Class [] { writerType }, this);
@@ -268,7 +265,6 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
   /**
    * Creates a new typed annotation writer.
    */
-  @SuppressWarnings ("unchecked")
   static <W extends JAnnotationWriter <?>> W create (final Class <W> w, final JAnnotatable annotatable)
   {
     final Class <? extends Annotation> a = findAnnotationType (w);
