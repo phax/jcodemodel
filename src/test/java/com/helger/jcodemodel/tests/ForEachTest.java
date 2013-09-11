@@ -52,40 +52,39 @@ import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
- * 
  * Simple program to test the generation of the enhanced for loop in jdk 1.5
  * 
  * @author Bhakti Mehta Bhakti.Mehta@sun.com
- * 
  */
 
-public class ForEachTest {
+public class ForEachTest
+{
 
-	@Test
-	public void main() throws Exception {
+  @Test
+  public void main () throws Exception
+  {
 
-		JCodeModel cm = new JCodeModel();
-		JDefinedClass cls = cm._class("Test");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("Test");
 
-		JMethod m = cls.method(JMod.PUBLIC, cm.VOID, "foo");
-		m.body().decl(cm.INT, "getCount");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
+    m.body ().decl (cm.INT, "getCount");
 
-		// This is not exactly right because we need to
-		// support generics
-		AbstractJClass arrayListclass = cm.ref(ArrayList.class);
-		JVar $list = m.body().decl(arrayListclass, "alist",
-				JExpr._new(arrayListclass));
+    // This is not exactly right because we need to
+    // support generics
+    final AbstractJClass arrayListclass = cm.ref (ArrayList.class);
+    final JVar $list = m.body ().decl (arrayListclass, "alist", JExpr._new (arrayListclass));
 
-		AbstractJClass $integerclass = cm.ref(Integer.class);
-		JForEach foreach = m.body().forEach($integerclass, "count", $list);
-		JVar $count1 = foreach.var();
-		foreach.body().assign(JExpr.ref("getCount"), JExpr.lit(10));
+    final AbstractJClass $integerclass = cm.ref (Integer.class);
+    final JForEach foreach = m.body ().forEach ($integerclass, "count", $list);
+    final JVar $count1 = foreach.var ();
+    foreach.body ().assign (JExpr.ref ("getCount"), JExpr.lit (10));
 
-		// printing out the variable
-		JFieldRef out1 = cm.ref(System.class).staticRef("out");
-		// JInvocation invocation =
-		foreach.body().invoke(out1, "println").arg($count1);
+    // printing out the variable
+    final JFieldRef out1 = cm.ref (System.class).staticRef ("out");
+    // JInvocation invocation =
+    foreach.body ().invoke (out1, "println").arg ($count1);
 
-		cm.build(new SingleStreamCodeWriter(System.out));
-	}
+    cm.build (new SingleStreamCodeWriter (System.out));
+  }
 }

@@ -45,15 +45,17 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class NestedClassTest {
-	@Test
-	public void main() throws Exception {
-		JCodeModel cm = new JCodeModel();
-		JDefinedClass c = cm._package("foo")._class(0, "Foo");
-		c._extends(cm.ref(Bar.class));
-		cm.build(new SingleStreamCodeWriter(System.out));
-	}
+public class NestedClassTest
+{
+  @Test
+  public void main () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass c = cm._package ("foo")._class (0, "Foo");
+    c._extends (cm.ref (Bar.class));
+    cm.build (new SingleStreamCodeWriter (System.out));
+  }
 
-	public static class Bar {
-	}
+  public static class Bar
+  {}
 }

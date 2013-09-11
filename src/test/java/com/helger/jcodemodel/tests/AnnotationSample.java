@@ -1,4 +1,5 @@
 package com.helger.jcodemodel.tests;
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -45,16 +46,18 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class AnnotationSample {
-    public static void main(String[] args) throws Exception {
-        JCodeModel cm = new JCodeModel();
-        JDefinedClass cls = cm._class("Test");
-        JMethod m = cls.method(JMod.PUBLIC,cm.VOID,"foo");
-        m.annotate(Deprecated.class);
+public class AnnotationSample
+{
+  public static void main (final String [] args) throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("Test");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
+    m.annotate (Deprecated.class);
 
-        JFieldVar field = cls.field(JMod.PRIVATE,cm.DOUBLE,"y");
-        field.annotate(Deprecated.class);
+    final JFieldVar field = cls.field (JMod.PRIVATE, cm.DOUBLE, "y");
+    field.annotate (Deprecated.class);
 
-        cm.build(new SingleStreamCodeWriter(System.out));
-    }
+    cm.build (new SingleStreamCodeWriter (System.out));
+  }
 }

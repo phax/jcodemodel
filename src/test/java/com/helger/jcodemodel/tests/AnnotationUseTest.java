@@ -58,104 +58,96 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
  * 
  * @author Bhakti Mehta
  */
-public class AnnotationUseTest {
+public class AnnotationUseTest
+{
 
-	@Test
-	public void main() throws Exception {
-		JCodeModel cm = new JCodeModel();
-		JDefinedClass cls = cm._class("Test");
-		// JMethod m =
-		cls.method(JMod.PUBLIC, cm.VOID, "foo");
+  @Test
+  public void main () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("Test");
+    // JMethod m =
+    cls.method (JMod.PUBLIC, cm.VOID, "foo");
 
-		// Annotating a class
-		// Using the existing Annotations from java.lang.annotation package
-		JAnnotationUse use = cls.annotate(cm.ref(Retention.class));
+    // Annotating a class
+    // Using the existing Annotations from java.lang.annotation package
+    final JAnnotationUse use = cls.annotate (cm.ref (Retention.class));
 
-		// declaring an enum class and an enumconstant as a membervaluepair
-		JDefinedClass enumcls = cls._enum("Iamenum");
-		JEnumConstant ec = enumcls.enumConstant("GOOD");
-		JEnumConstant ec1 = enumcls.enumConstant("BAD");
-		JEnumConstant ec2 = enumcls.enumConstant("BAD");
-		ec1.equals(ec2);
+    // declaring an enum class and an enumconstant as a membervaluepair
+    final JDefinedClass enumcls = cls._enum ("Iamenum");
+    final JEnumConstant ec = enumcls.enumConstant ("GOOD");
+    final JEnumConstant ec1 = enumcls.enumConstant ("BAD");
+    final JEnumConstant ec2 = enumcls.enumConstant ("BAD");
+    ec1.equals (ec2);
 
-		use.param("value", ec);
-		// adding another param as an enum
-		use.param("value1", RetentionPolicy.RUNTIME);
+    use.param ("value", ec);
+    // adding another param as an enum
+    use.param ("value1", RetentionPolicy.RUNTIME);
 
-		// Adding annotation for fields
-		// will generate like
-		// @String(name = "book") private double y;
-		//
-		JFieldVar field = cls.field(JMod.PRIVATE, cm.DOUBLE, "y");
+    // Adding annotation for fields
+    // will generate like
+    // @String(name = "book") private double y;
+    //
+    final JFieldVar field = cls.field (JMod.PRIVATE, cm.DOUBLE, "y");
 
-		// Adding more annotations which are member value pairs
-		JAnnotationUse ause = field.annotate(Retention.class);
-		ause.param("name", "book");
-		ause.param("targetNamespace", 5);
+    // Adding more annotations which are member value pairs
+    final JAnnotationUse ause = field.annotate (Retention.class);
+    ause.param ("name", "book");
+    ause.param ("targetNamespace", 5);
 
-		// Adding arrays as member value pairs
-		JAnnotationArrayMember arrayMember = ause.paramArray("names");
-		arrayMember.param("Bob");
-		arrayMember.param("Rob");
-		arrayMember.param("Ted");
+    // Adding arrays as member value pairs
+    final JAnnotationArrayMember arrayMember = ause.paramArray ("names");
+    arrayMember.param ("Bob");
+    arrayMember.param ("Rob");
+    arrayMember.param ("Ted");
 
-		JAnnotationArrayMember arrayMember1 = ause.paramArray("namesno");
-		arrayMember1.param(4);
-		arrayMember1.param(5);
-		arrayMember1.param(6);
+    final JAnnotationArrayMember arrayMember1 = ause.paramArray ("namesno");
+    arrayMember1.param (4);
+    arrayMember1.param (5);
+    arrayMember1.param (6);
 
-		JAnnotationArrayMember arrayMember2 = ause.paramArray("values");
-		// adding an annotation as a member value pair
-		arrayMember2.annotate(Target.class).param("type", Integer.class);
-		arrayMember2.annotate(Target.class).param("type", Float.class);
+    final JAnnotationArrayMember arrayMember2 = ause.paramArray ("values");
+    // adding an annotation as a member value pair
+    arrayMember2.annotate (Target.class).param ("type", Integer.class);
+    arrayMember2.annotate (Target.class).param ("type", Float.class);
 
-		// test typed annotation writer
-		XmlElementW w = cls.annotate2(XmlElementW.class);
-		w.ns("##default").value("foobar");
+    // test typed annotation writer
+    final XmlElementW w = cls.annotate2 (XmlElementW.class);
+    w.ns ("##default").value ("foobar");
 
-		// adding an annotation as a member value pair
-		JAnnotationUse myuse = ause.annotationParam("foo", Target.class);
-		myuse.param("junk", 7);
+    // adding an annotation as a member value pair
+    final JAnnotationUse myuse = ause.annotationParam ("foo", Target.class);
+    myuse.param ("junk", 7);
 
-		cm.build(new SingleStreamCodeWriter(System.out));
-	}
+    cm.build (new SingleStreamCodeWriter (System.out));
+  }
 
-	@interface XmlElement {
-		String value();
+  @interface XmlElement
+  {
+    String value();
 
-		String ns();
-	}
+    String ns();
+  }
 
-	interface XmlElementW extends JAnnotationWriter<XmlElement> {
-		XmlElementW value(String s);
+  interface XmlElementW extends JAnnotationWriter <XmlElement>
+  {
+    XmlElementW value (String s);
 
-		XmlElementW ns(String s);
-	}
+    XmlElementW ns (String s);
+  }
 }
 
 /*
  * *********************************************************************
  * Generates this
  * **********************************************************************
- * 
  * @java.lang.annotation.Retention(value1 =
  * java.lang.annotation.RetentionPolicy.RUNTIME, value = Test.Iamenum.GOOD)
  * public class Test {
- * 
  * @java.lang.annotation.Retention(foo = @java.lang.annotation.Target(junk = 7)
- * 
  * , targetNamespace = 5, namesno = { 4, 5, 6 }, values =
  * {@java.lang.annotation.Target(type = java.lang.Integer) ,
  * @java.lang.annotation.Target(type = java.lang.Float) }, names = {"Bob",
- * "Rob", "Ted"}, name = "book") private double y;
- * 
- * public void foo() { }
- * 
- * public enum Iamenum {
- * 
- * BAD, GOOD; }
- * 
- * }
- * 
- * }
+ * "Rob", "Ted"}, name = "book") private double y; public void foo() { } public
+ * enum Iamenum { BAD, GOOD; } } }
  */

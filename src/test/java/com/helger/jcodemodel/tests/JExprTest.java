@@ -40,42 +40,38 @@
 
 package com.helger.jcodemodel.tests;
 
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
-
-import junit.framework.Assert;
-import junit.framework.TestCase;
 
 /**
  * JExpr tests.
  */
-public class JExprTest extends TestCase {
+public class JExprTest
+{
 
-	/**
-	 * Tests double literal expression.
-	 */
-	public void testLitDouble() throws Exception {
-		Assert.assertTrue(CodeModelTestsUtils.toString(
-				JExpr.lit(Double.POSITIVE_INFINITY)).endsWith(
-				"POSITIVE_INFINITY"));
-		Assert.assertTrue(CodeModelTestsUtils.toString(
-				JExpr.lit(Double.NEGATIVE_INFINITY)).endsWith(
-				"NEGATIVE_INFINITY"));
-		Assert.assertTrue(CodeModelTestsUtils.toString(JExpr.lit(Double.NaN))
-				.endsWith("NaN"));
+  /**
+   * Tests double literal expression.
+   */
+  @Test
+  public void testLitDouble () throws Exception
+  {
+    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Double.POSITIVE_INFINITY)).endsWith ("POSITIVE_INFINITY"));
+    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Double.NEGATIVE_INFINITY)).endsWith ("NEGATIVE_INFINITY"));
+    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Double.NaN)).endsWith ("NaN"));
 
-	}
+  }
 
-	public void testLitFloat() throws Exception {
-		Assert.assertTrue(CodeModelTestsUtils.toString(
-				JExpr.lit(Float.POSITIVE_INFINITY)).endsWith(
-				"POSITIVE_INFINITY"));
-		Assert.assertTrue(CodeModelTestsUtils.toString(
-				JExpr.lit(Float.NEGATIVE_INFINITY)).endsWith(
-				"NEGATIVE_INFINITY"));
-		Assert.assertTrue(CodeModelTestsUtils.toString(JExpr.lit(Float.NaN))
-				.endsWith("NaN"));
+  @Test
+  public void testLitFloat () throws Exception
+  {
+    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Float.POSITIVE_INFINITY)).endsWith ("POSITIVE_INFINITY"));
+    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Float.NEGATIVE_INFINITY)).endsWith ("NEGATIVE_INFINITY"));
+    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Float.NaN)).endsWith ("NaN"));
 
-	}
+  }
 
 }

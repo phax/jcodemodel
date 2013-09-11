@@ -47,11 +47,13 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class PackageAnnotationTest {
-	@Test
-	public void main() throws IOException {
-		JCodeModel cm = new JCodeModel();
-		cm._package("foo").annotate(Inherited.class);
-		cm.build(new SingleStreamCodeWriter(System.out));
-	}
+public class PackageAnnotationTest
+{
+  @Test
+  public void main () throws IOException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    cm._package ("foo").annotate (Inherited.class);
+    cm.build (new SingleStreamCodeWriter (System.out));
+  }
 }

@@ -1,4 +1,5 @@
 package com.helger.jcodemodel.tests;
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -47,24 +48,23 @@ import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
- * 
- * @author
- * 	Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class AnonymousClassTest {
+public class AnonymousClassTest
+{
 
-    @Test
-    public void main() throws Exception {
-        JCodeModel cm = new JCodeModel();
-        JDefinedClass cls = cm._class("Test");
-        JMethod m = cls.method(JMod.PUBLIC, cm.VOID, "foo");
+  @Test
+  public void main () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("Test");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
 
-        JDefinedClass c = cm.anonymousClass(cm.ref(Iterator.class));
-        c.method(0, cm.VOID, "bob");
-        c.field(JMod.PRIVATE, cm.DOUBLE, "y");
-        m.body().decl(cm.ref(Object.class), "x",
-                JExpr._new(c));
+    final JDefinedClass c = cm.anonymousClass (cm.ref (Iterator.class));
+    c.method (0, cm.VOID, "bob");
+    c.field (JMod.PRIVATE, cm.DOUBLE, "y");
+    m.body ().decl (cm.ref (Object.class), "x", JExpr._new (c));
 
-        cm.build(new SingleStreamCodeWriter(System.out));
-    }
+    cm.build (new SingleStreamCodeWriter (System.out));
+  }
 }

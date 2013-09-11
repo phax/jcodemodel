@@ -1,4 +1,5 @@
 package com.helger.jcodemodel.tests;
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -35,17 +36,20 @@ package com.helger.jcodemodel.tests;
  * holder.
  */
 
-import com.helger.jcodemodel.JCodeModel;
+import org.junit.Test;
 
-import junit.framework.TestCase;
+import com.helger.jcodemodel.JCodeModel;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public class JCodeModelTest extends TestCase {
-    public void testParseArray() throws Exception {
-        JCodeModel cm = new JCodeModel();
-        cm.parseType("java.util.ArrayList<java.lang.String[]>[]");
-    }
+public class JCodeModelTest
+{
+  @Test
+  public void testParseArray () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    cm.parseType ("java.util.ArrayList<java.lang.String[]>[]");
+  }
 
 }

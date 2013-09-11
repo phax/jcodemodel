@@ -59,32 +59,32 @@ import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 
-public class JDefinedClassInstanceInitTest {
+public class JDefinedClassInstanceInitTest
+{
 
-	@Test
-	public void generatesInstanceInit() throws Exception {
-		JCodeModel cm = new JCodeModel();
-		JDefinedClass c = cm._package("myPackage")._class(0, "MyClass");
-		JFieldVar myField = c.field(JMod.PRIVATE, String.class, "myField");
-		c.instanceInit().assign(JExpr._this().ref(myField),
-				JExpr.lit("myValue"));
-		final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		final String encoding = "UTF-8";
-//		cm.build(new OutputStreamCodeWriter(System.out, encoding));
-		cm.build(new OutputStreamCodeWriter(bos, encoding));
-		bos.close();
+  @Test
+  public void generatesInstanceInit () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass c = cm._package ("myPackage")._class (0, "MyClass");
+    final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");
+    c.instanceInit ().assign (JExpr._this ().ref (myField), JExpr.lit ("myValue"));
+    final ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+    final String encoding = "UTF-8";
+    // cm.build(new OutputStreamCodeWriter(System.out, encoding));
+    cm.build (new OutputStreamCodeWriter (bos, encoding));
+    bos.close ();
 
-		final ByteArrayInputStream bis = new ByteArrayInputStream(
-				bos.toByteArray());
+    final ByteArrayInputStream bis = new ByteArrayInputStream (bos.toByteArray ());
 
-		CompilationUnit compilationUnit = JavaParser.parse(bis, encoding);
+    final CompilationUnit compilationUnit = JavaParser.parse (bis, encoding);
 
-		TypeDeclaration typeDeclaration = compilationUnit.getTypes().get(0);
-		ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
+    final TypeDeclaration typeDeclaration = compilationUnit.getTypes ().get (0);
+    final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
 
-		final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration
-				.getMembers().get(1);
+    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
+                                                                                                   .get (1);
 
-		assertNotNull(initializerDeclaration);
-	}
+    assertNotNull (initializerDeclaration);
+  }
 }

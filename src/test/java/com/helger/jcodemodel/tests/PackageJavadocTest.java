@@ -1,4 +1,5 @@
 package com.helger.jcodemodel.tests;
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -45,12 +46,14 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 /**
  * @author Kohsuke Kawaguchi
  */
-public class PackageJavadocTest {
-	
-	@Test
-    public void main() throws IOException {
-        JCodeModel cm = new JCodeModel();
-        cm._package("foo").javadoc().add("String");
-        cm.build(new SingleStreamCodeWriter(System.out));
-    }
+public class PackageJavadocTest
+{
+
+  @Test
+  public void main () throws IOException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    cm._package ("foo").javadoc ().add ("String");
+    cm.build (new SingleStreamCodeWriter (System.out));
+  }
 }

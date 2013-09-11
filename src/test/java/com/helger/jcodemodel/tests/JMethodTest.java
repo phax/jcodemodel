@@ -45,17 +45,19 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
 
-public class JMethodTest {
+public class JMethodTest
+{
 
-	@Test
-	public void main() throws Exception {
-		JCodeModel cm = new JCodeModel();
-		JDefinedClass cls = cm._class("Test");
-		JMethod m = cls.method(JMod.PUBLIC, cm.VOID, "foo");
+  @Test
+  public void main () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("Test");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
 
-		JVar foo = m.param(String.class, "foo");
+    final JVar foo = m.param (String.class, "foo");
 
-		Assert.assertEquals(1, m.params().size());
-		Assert.assertSame(foo, m.params().get(0));
-	}
+    Assert.assertEquals (1, m.params ().size ());
+    Assert.assertSame (foo, m.params ().get (0));
+  }
 }
