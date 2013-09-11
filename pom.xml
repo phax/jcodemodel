@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.phloc</groupId>
@@ -8,7 +7,7 @@
   </parent>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>2.6.1-SNAPSHOT</version>
+  <version>2.6.1</version>
   <packaging>jar</packaging>
   <name>jcodemodel</name>
   <description>Java code generation library</description>
@@ -25,7 +24,7 @@
     <connection>scm:git:git@github.com:phax/jcodemodel.git</connection>
     <developerConnection>scm:git:git@github.com:phax/jcodemodel.git</developerConnection>
     <url>http://github.com/phax/jcodemodel</url>
-    <tag>HEAD</tag>
+    <tag>jcodemodel-2.6.1</tag>
   </scm>
 
   <developers>
