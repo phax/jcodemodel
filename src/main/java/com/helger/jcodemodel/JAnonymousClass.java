@@ -73,6 +73,6 @@ public class JAnonymousClass extends JDefinedClass
   @Override
   public void generate (final JFormatter f)
   {
-    f.t (base);
+    f.type (base);
   }
 }

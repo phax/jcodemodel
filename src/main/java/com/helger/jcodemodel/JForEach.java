@@ -89,12 +89,12 @@ public class JForEach implements JStatement
 
   public void state (final JFormatter f)
   {
-    f.p ("for (");
-    f.g (type).id (var).p (": ").g (collection);
-    f.p (')');
+    f.print ("for (");
+    f.generable (type).id (var).print (": ").generable (collection);
+    f.print (')');
     if (body != null)
-      f.g (body).nl ();
+      f.generable (body).newline ();
     else
-      f.p (';').nl ();
+      f.print (';').newline ();
   }
 }

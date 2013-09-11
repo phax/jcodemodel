@@ -46,6 +46,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Represents a Java reference type, such as a class, an interface, an enum, an
  * array type, a parameterized type.
@@ -58,7 +61,7 @@ public abstract class AbstractJClass extends AbstractJType
   private final JCodeModel _owner;
   private AbstractJClass arrayClass;
 
-  protected AbstractJClass (final JCodeModel _owner)
+  protected AbstractJClass (@Nonnull final JCodeModel _owner)
   {
     this._owner = _owner;
   }
@@ -89,6 +92,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   /** Gets the JCodeModel object to which this object belongs. */
   @Override
+  @Nonnull
   public final JCodeModel owner ()
   {
     return _owner;
@@ -122,6 +126,7 @@ public abstract class AbstractJClass extends AbstractJType
    * <code>Set&lt;T></code>, this method returns an array that contains single
    * {@link JTypeVar} for 'T'.
    */
+  @Nonnull
   public JTypeVar [] typeParams ()
   {
     return EMPTY_ARRAY;
@@ -146,6 +151,7 @@ public abstract class AbstractJClass extends AbstractJType
    * If this class represents one of the wrapper classes defined in the
    * java.lang package, return the corresponding primitive type. Otherwise null.
    */
+  @Nullable
   public JPrimitiveType getPrimitiveType ()
   {
     return null;
@@ -164,6 +170,7 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   @Override
+  @Nonnull
   public AbstractJType unboxify ()
   {
     final JPrimitiveType pt = getPrimitiveType ();
@@ -171,6 +178,7 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   @Override
+  @Nonnull
   public AbstractJClass erasure ()
   {
     return this;
@@ -182,7 +190,7 @@ public abstract class AbstractJClass extends AbstractJType
    * This method works in the same way as {@link Class#isAssignableFrom(Class)}
    * works. For example, baseClass.isAssignableFrom(derivedClass)==true.
    */
-  public final boolean isAssignableFrom (final AbstractJClass derived)
+  public final boolean isAssignableFrom (@Nonnull final AbstractJClass derived)
   {
     // to avoid the confusion, always use "this" explicitly in this method.
 
@@ -241,9 +249,8 @@ public abstract class AbstractJClass extends AbstractJType
    * @return The use of {@code baseType} in {@code this} type. or null if the
    *         type is not assignable to the base type.
    */
-  public final AbstractJClass getBaseClass (final AbstractJClass baseType)
+  public final AbstractJClass getBaseClass (@Nonnull final AbstractJClass baseType)
   {
-
     if (this.erasure ().equals (baseType))
       return this;
 
@@ -266,7 +273,7 @@ public abstract class AbstractJClass extends AbstractJType
     return null;
   }
 
-  public final AbstractJClass getBaseClass (final Class <?> baseType)
+  public final AbstractJClass getBaseClass (@Nonnull final Class <?> baseType)
   {
     return getBaseClass (owner ().ref (baseType));
   }
@@ -399,7 +406,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   public void generate (final JFormatter f)
   {
-    f.t (this);
+    f.type (this);
   }
 
   /**
@@ -407,6 +414,6 @@ public abstract class AbstractJClass extends AbstractJType
    */
   void printLink (final JFormatter f)
   {
-    f.p ("{@link ").g (this).p ('}');
+    f.print ("{@link ").generable (this).print ('}');
   }
 }

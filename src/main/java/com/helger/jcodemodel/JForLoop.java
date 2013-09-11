@@ -112,22 +112,22 @@ public class JForLoop implements JStatement
 
   public void state (final JFormatter f)
   {
-    f.p ("for (");
+    f.print ("for (");
     boolean first = true;
     for (final Object o : inits)
     {
       if (!first)
-        f.p (',');
+        f.print (',');
       if (o instanceof JVar)
-        f.b ((JVar) o);
+        f.var ((JVar) o);
       else
-        f.g ((JExpression) o);
+        f.generable ((JExpression) o);
       first = false;
     }
-    f.p (';').g (test).p (';').g (updates).p (')');
+    f.print (';').generable (test).print (';').g (updates).print (')');
     if (body != null)
-      f.g (body).nl ();
+      f.generable (body).newline ();
     else
-      f.p (';').nl ();
+      f.print (';').newline ();
   }
 }

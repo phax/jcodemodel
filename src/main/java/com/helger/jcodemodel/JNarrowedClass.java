@@ -151,24 +151,24 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public void generate (final JFormatter f)
   {
-    f.t (basis).p ('<').g (args).p (JFormatter.CLOSE_TYPE_ARGS);
+    f.type (basis).print ('<').g (args).print (JFormatter.CLOSE_TYPE_ARGS);
   }
 
   @Override
   void printLink (final JFormatter f)
   {
     basis.printLink (f);
-    f.p ("{@code <}");
+    f.print ("{@code <}");
     boolean first = true;
     for (final AbstractJClass c : args)
     {
       if (first)
         first = false;
       else
-        f.p (',');
+        f.print (',');
       c.printLink (f);
     }
-    f.p ("{@code >}");
+    f.print ("{@code >}");
   }
 
   @Override

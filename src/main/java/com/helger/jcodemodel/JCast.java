@@ -81,6 +81,6 @@ public class JCast extends AbstractJExpressionImpl
 
   public void generate (final JFormatter f)
   {
-    f.p ("((").g (type).p (')').g (object).p (')');
+    f.print ("((").generable (type).print (')').generable (object).print (')');
   }
 }

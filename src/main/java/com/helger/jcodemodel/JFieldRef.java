@@ -139,13 +139,13 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
 
     if (object != null)
     {
-      f.g (object).p ('.').p (name);
+      f.generable (object).print ('.').print (name);
     }
     else
     {
       if (explicitThis)
       {
-        f.p ("this.").p (name);
+        f.print ("this.").print (name);
       }
       else
       {

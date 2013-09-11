@@ -65,6 +65,6 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
 
   public void generate (final JFormatter f)
   {
-    f.g (value);
+    f.generable (value);
   }
 }

@@ -446,7 +446,7 @@ public class JBlock implements JGenerable, JStatement
     {
       public void state (final JFormatter f)
       {
-        f.p (source).nl ();
+        f.print (source).newline ();
       }
     };
     add (s);
@@ -456,14 +456,14 @@ public class JBlock implements JGenerable, JStatement
   public void generate (final JFormatter f)
   {
     if (bracesRequired)
-      f.p ('{').nl ();
+      f.print ('{').newline ();
     if (indentRequired)
-      f.i ();
+      f.indent ();
     generateBody (f);
     if (indentRequired)
-      f.o ();
+      f.outdent ();
     if (bracesRequired)
-      f.p ('}');
+      f.print ('}');
   }
 
   void generateBody (final JFormatter f)
@@ -471,9 +471,9 @@ public class JBlock implements JGenerable, JStatement
     for (final Object o : content)
     {
       if (o instanceof JDeclaration)
-        f.d ((JDeclaration) o);
+        f.declaration ((JDeclaration) o);
       else
-        f.s ((JStatement) o);
+        f.statement ((JStatement) o);
     }
   }
 
@@ -491,9 +491,9 @@ public class JBlock implements JGenerable, JStatement
 
   public void state (final JFormatter f)
   {
-    f.g (this);
+    f.generable (this);
     if (bracesRequired)
-      f.nl ();
+      f.newline ();
   }
 
 }

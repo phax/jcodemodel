@@ -107,21 +107,21 @@ public class JArray extends AbstractJExpressionImpl
       arrayCount++;
     }
 
-    f.p ("new").g (t).p ('[');
+    f.print ("new").generable (t).print ('[');
     if (size != null)
-      f.g (size);
-    f.p (']');
+      f.generable (size);
+    f.print (']');
 
     for (int i = 0; i < arrayCount; i++)
-      f.p ("[]");
+      f.print ("[]");
 
     if (size == null || hasExprs)
-      f.p ('{');
+      f.print ('{');
     if (hasExprs)
       f.g (exprs);
     else
-      f.p (' ');
+      f.print (' ');
     if (size == null || hasExprs)
-      f.p ('}');
+      f.print ('}');
   }
 }

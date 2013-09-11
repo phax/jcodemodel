@@ -210,15 +210,15 @@ public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssi
   {
     if (annotations != null)
       for (final JAnnotationUse annotation : annotations)
-        f.g (annotation).nl ();
-    f.g (mods).g (type).id (name);
+        f.generable (annotation).newline ();
+    f.generable (mods).generable (type).id (name);
     if (init != null)
-      f.p ('=').g (init);
+      f.print ('=').generable (init);
   }
 
   public void declare (final JFormatter f)
   {
-    f.b (this).p (';').nl ();
+    f.var (this).print (';').newline ();
   }
 
   public void generate (final JFormatter f)

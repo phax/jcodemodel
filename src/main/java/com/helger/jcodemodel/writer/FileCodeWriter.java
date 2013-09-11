@@ -44,6 +44,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,7 +58,6 @@ import com.helger.jcodemodel.JPackage;
  */
 public class FileCodeWriter extends AbstractCodeWriter
 {
-
   /** The target directory to put source code. */
   private final File target;
 
@@ -72,7 +72,7 @@ public class FileCodeWriter extends AbstractCodeWriter
     this (target, false);
   }
 
-  public FileCodeWriter (final File target, final String encoding) throws IOException
+  public FileCodeWriter (final File target, final Charset encoding) throws IOException
   {
     this (target, false, encoding);
   }
@@ -82,7 +82,7 @@ public class FileCodeWriter extends AbstractCodeWriter
     this (target, readOnly, null);
   }
 
-  public FileCodeWriter (final File target, final boolean readOnly, final String encoding) throws IOException
+  public FileCodeWriter (final File target, final boolean readOnly, final Charset encoding) throws IOException
   {
     super (encoding);
     this.target = target;
@@ -103,7 +103,7 @@ public class FileCodeWriter extends AbstractCodeWriter
     if (pkg.isUnnamed ())
       dir = target;
     else
-      dir = new File (target, toDirName (pkg));
+      dir = new File (target, _toDirName (pkg));
 
     if (!dir.exists ())
       dir.mkdirs ();
@@ -130,9 +130,8 @@ public class FileCodeWriter extends AbstractCodeWriter
   }
 
   /** Converts a package name to the directory name. */
-  private static String toDirName (final JPackage pkg)
+  private static String _toDirName (final JPackage pkg)
   {
     return pkg.name ().replace ('.', File.separatorChar);
   }
-
 }

@@ -67,7 +67,7 @@ public class JLabel implements JStatement
 
   public void state (final JFormatter f)
   {
-    f.p (label + ':').nl ();
+    f.print (label + ':').newline ();
   }
 
 }

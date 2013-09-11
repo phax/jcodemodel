@@ -128,6 +128,16 @@ public class JDocComment extends JCommentPart implements JGenerable
     atParams.clear ();
   }
 
+  public JCommentPart getParam (final String param)
+  {
+    return atParams.get (param);
+  }
+
+  public JCommentPart getParam (final JVar param)
+  {
+    return getParam (param.name ());
+  }
+
   /**
    * add an @throws tag to the javadoc
    */
@@ -259,48 +269,48 @@ public class JDocComment extends JCommentPart implements JGenerable
     // I realized that we can't use StringTokenizer because
     // this will recognize multiple \n as one token.
 
-    f.p ("/**").nl ();
+    f.print ("/**").newline ();
 
     format (f, " * ");
 
-    f.p (" * ").nl ();
+    f.print (" * ").newline ();
     for (final Map.Entry <String, JCommentPart> e : atParams.entrySet ())
     {
-      f.p (" * @param ").p (e.getKey ()).nl ();
+      f.print (" * @param ").print (e.getKey ()).newline ();
       e.getValue ().format (f, INDENT);
     }
     if (atReturn != null)
     {
-      f.p (" * @return").nl ();
+      f.print (" * @return").newline ();
       atReturn.format (f, INDENT);
     }
     if (atAuthor != null)
     {
-      f.p (" * @author").nl ();
+      f.print (" * @author").newline ();
       atAuthor.format (f, INDENT);
     }
     for (final Map.Entry <AbstractJClass, JCommentPart> e : atThrows.entrySet ())
     {
-      f.p (" * @throws ").t (e.getKey ()).nl ();
+      f.print (" * @throws ").type (e.getKey ()).newline ();
       e.getValue ().format (f, INDENT);
     }
     if (atDeprecated != null)
     {
-      f.p (" * @deprecated").nl ();
+      f.print (" * @deprecated").newline ();
       atDeprecated.format (f, INDENT);
     }
     for (final Map.Entry <String, Map <String, String>> e : atXdoclets.entrySet ())
     {
-      f.p (" * @").p (e.getKey ());
+      f.print (" * @").print (e.getKey ());
       if (e.getValue () != null)
       {
         for (final Map.Entry <String, String> a : e.getValue ().entrySet ())
         {
-          f.p (" ").p (a.getKey ()).p ("= \"").p (a.getValue ()).p ("\"");
+          f.print (" ").print (a.getKey ()).print ("= \"").print (a.getValue ()).print ("\"");
         }
       }
-      f.nl ();
+      f.newline ();
     }
-    f.p (" */").nl ();
+    f.print (" */").newline ();
   }
 }

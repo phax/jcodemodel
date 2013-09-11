@@ -123,15 +123,15 @@ public class JConditional implements JStatement
 
     if (JOp.hasTopOp (test))
     {
-      f.p ("if ").g (test);
+      f.print ("if ").generable (test);
     }
     else
     {
-      f.p ("if (").g (test).p (')');
+      f.print ("if (").generable (test).print (')');
     }
-    f.g (_then);
+    f.generable (_then);
     if (_else != null)
-      f.p ("else").g (_else);
-    f.nl ();
+      f.print ("else").generable (_else);
+    f.newline ();
   }
 }

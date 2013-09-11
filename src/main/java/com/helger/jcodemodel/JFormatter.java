@@ -40,6 +40,7 @@
 
 package com.helger.jcodemodel;
 
+import java.io.Closeable;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -52,25 +53,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 /**
  * This is a utility class for managing indentation and other basic formatting
  * for PrintWriter.
  */
-public class JFormatter
+public class JFormatter implements Closeable
 {
-  /** all classes and ids encountered during the collection mode **/
-  /**
-   * map from short type name to ReferenceList (list of JClass and ids sharing
-   * that name)
-   **/
-  private final Map <String, ReferenceList> collectedReferences;
-
-  /**
-   * set of imported types (including package java types, eventhough we won't
-   * generate imports for them)
-   */
-  private final Set <AbstractJClass> importedClasses;
-
   private static enum EMode
   {
     /**
@@ -83,6 +73,27 @@ public class JFormatter
      */
     PRINTING
   }
+
+  /**
+   * Special character token we use to differenciate '>' as an operator and '>'
+   * as the end of the type arguments. The former uses '>' and it requires a
+   * preceding whitespace. The latter uses this, and it does not have a
+   * preceding whitespace.
+   */
+  /* package */static final char CLOSE_TYPE_ARGS = '\uFFFF';
+
+  /** all classes and ids encountered during the collection mode **/
+  /**
+   * map from short type name to ReferenceList (list of JClass and ids sharing
+   * that name)
+   **/
+  private final Map <String, ReferenceList> collectedReferences = new HashMap <String, ReferenceList> ();
+
+  /**
+   * set of imported types (including package java types, even though we won't
+   * generate imports for them)
+   */
+  private final Set <AbstractJClass> importedClasses = new HashSet <AbstractJClass> ();
 
   /**
    * The current running mode. Set to PRINTING so that a casual client can use a
@@ -105,35 +116,36 @@ public class JFormatter
    */
   private final PrintWriter pw;
 
+  private char lastChar = 0;
+  private boolean atBeginningOfLine = true;
+  private JPackage javaLang;
+
   /**
    * Creates a JFormatter.
    * 
-   * @param s
+   * @param aPW
    *        PrintWriter to JFormatter to use.
    * @param space
    *        Incremental indentation string, similar to tab value.
    */
-  public JFormatter (final PrintWriter s, final String space)
+  public JFormatter (@Nonnull final PrintWriter aPW, @Nonnull final String space)
   {
-    pw = s;
+    pw = aPW;
     indentSpace = space;
-    collectedReferences = new HashMap <String, ReferenceList> ();
-    // ids = new HashSet<String>();
-    importedClasses = new HashSet <AbstractJClass> ();
   }
 
   /**
    * Creates a formatter with default incremental indentations of four spaces.
    */
-  public JFormatter (final PrintWriter s)
+  public JFormatter (@Nonnull final PrintWriter aPW)
   {
-    this (s, "    ");
+    this (aPW, "    ");
   }
 
   /**
    * Creates a formatter with default incremental indentations of four spaces.
    */
-  public JFormatter (final Writer w)
+  public JFormatter (@Nonnull final Writer w)
   {
     this (new PrintWriter (w));
   }
@@ -158,7 +170,8 @@ public class JFormatter
   /**
    * Decrement the indentation level.
    */
-  public JFormatter o ()
+  @Nonnull
+  public JFormatter outdent ()
   {
     indentLevel--;
     return this;
@@ -167,13 +180,14 @@ public class JFormatter
   /**
    * Increment the indentation level.
    */
-  public JFormatter i ()
+  @Nonnull
+  public JFormatter indent ()
   {
     indentLevel++;
     return this;
   }
 
-  private boolean needSpace (final char c1, final char c2)
+  private boolean _needSpace (final char c1, final char c2)
   {
     if ((c1 == ']') && (c2 == '{'))
       return true;
@@ -234,10 +248,7 @@ public class JFormatter
     return false;
   }
 
-  private char lastChar = 0;
-  private boolean atBeginningOfLine = true;
-
-  private void spaceIfNeeded (final char c)
+  private void _spaceIfNeeded (final char c)
   {
     if (atBeginningOfLine)
     {
@@ -246,7 +257,7 @@ public class JFormatter
       atBeginningOfLine = false;
     }
     else
-      if ((lastChar != 0) && needSpace (lastChar, c))
+      if ((lastChar != 0) && _needSpace (lastChar, c))
         pw.print (' ');
   }
 
@@ -255,8 +266,10 @@ public class JFormatter
    * 
    * @param c
    *        the char
+   * @return this
    */
-  public JFormatter p (final char c)
+  @Nonnull
+  public JFormatter print (final char c)
   {
     if (mode == EMode.PRINTING)
     {
@@ -266,7 +279,7 @@ public class JFormatter
       }
       else
       {
-        spaceIfNeeded (c);
+        _spaceIfNeeded (c);
         pw.print (c);
       }
       lastChar = c;
@@ -279,28 +292,26 @@ public class JFormatter
    * 
    * @param s
    *        the String
+   * @return this
    */
-  public JFormatter p (final String s)
+  @Nonnull
+  public JFormatter print (@Nonnull final String s)
   {
     if (mode == EMode.PRINTING)
     {
-      spaceIfNeeded (s.charAt (0));
+      _spaceIfNeeded (s.charAt (0));
       pw.print (s);
       lastChar = s.charAt (s.length () - 1);
     }
     return this;
   }
 
-  public JFormatter t (final AbstractJType type)
+  @Nonnull
+  public JFormatter type (@Nonnull final AbstractJType type)
   {
     if (type.isReference ())
-    {
-      return t ((AbstractJClass) type);
-    }
-    else
-    {
-      return g (type);
-    }
+      return type ((AbstractJClass) type);
+    return generable (type);
   }
 
   /**
@@ -309,7 +320,8 @@ public class JFormatter
    * In the collecting mode we use this information to decide what types to
    * import and what not to.
    */
-  public JFormatter t (final AbstractJClass type)
+  @Nonnull
+  public JFormatter type (@Nonnull final AbstractJClass type)
   {
     switch (mode)
     {
@@ -319,29 +331,30 @@ public class JFormatter
         // so we don't need a FQCN
         if (importedClasses.contains (type))
         {
-          p (type.name ()); // FQCN imported or not necessary, so generate short
+          // FQCN imported or not necessary, so generate short
+          print (type.name ());
           // name
         }
         else
         {
           if (type.outer () != null)
-            t (type.outer ()).p ('.').p (type.name ());
+            type (type.outer ()).print ('.').print (type.name ());
           else
-            p (type.fullName ()); // collision was detected, so generate FQCN
+          {
+            // collision was detected, so generate FQCN
+            print (type.fullName ());
+          }
         }
         break;
       case COLLECTING:
         final String shortName = type.name ();
-        if (collectedReferences.containsKey (shortName))
+        ReferenceList tl = collectedReferences.get (shortName);
+        if (tl == null)
         {
-          collectedReferences.get (shortName).add (type);
-        }
-        else
-        {
-          final ReferenceList tl = new ReferenceList ();
-          tl.add (type);
+          tl = new ReferenceList ();
           collectedReferences.put (shortName, tl);
         }
+        tl.add (type);
         break;
     }
     return this;
@@ -350,35 +363,37 @@ public class JFormatter
   /**
    * Print an identifier
    */
-  public JFormatter id (final String id)
+  @Nonnull
+  public JFormatter id (@Nonnull final String id)
   {
     switch (mode)
     {
       case PRINTING:
-        p (id);
+        print (id);
         break;
       case COLLECTING:
         // see if there is a type name that collides with this id
-        if (collectedReferences.containsKey (id))
+        ReferenceList tl = collectedReferences.get (id);
+        if (tl != null)
         {
-          if (!collectedReferences.get (id).getClasses ().isEmpty ())
+          if (!tl.getClasses ().isEmpty ())
           {
-            for (final AbstractJClass type : collectedReferences.get (id).getClasses ())
+            for (final AbstractJClass type : tl.getClasses ())
             {
               if (type.outer () != null)
               {
-                collectedReferences.get (id).setId (false);
+                tl.setId (false);
                 return this;
               }
             }
           }
-          collectedReferences.get (id).setId (true);
+          tl.setId (true);
         }
         else
         {
           // not a type, but we need to create a place holder to
           // see if there might be a collision with a type
-          final ReferenceList tl = new ReferenceList ();
+          tl = new ReferenceList ();
           tl.setId (true);
           collectedReferences.put (id, tl);
         }
@@ -390,7 +405,8 @@ public class JFormatter
   /**
    * Print a new line into the stream
    */
-  public JFormatter nl ()
+  @Nonnull
+  public JFormatter newline ()
   {
     if (mode == EMode.PRINTING)
     {
@@ -407,7 +423,8 @@ public class JFormatter
    * @param g
    *        the JGenerable object
    */
-  public JFormatter g (final JGenerable g)
+  @Nonnull
+  public JFormatter generable (@Nonnull final JGenerable g)
   {
     g.generate (this);
     return this;
@@ -416,7 +433,8 @@ public class JFormatter
   /**
    * Produces {@link JGenerable}s separated by ','
    */
-  public JFormatter g (final Collection <? extends JGenerable> list)
+  @Nonnull
+  public JFormatter g (@Nonnull final Collection <? extends JGenerable> list)
   {
     boolean first = true;
     if (!list.isEmpty ())
@@ -424,8 +442,8 @@ public class JFormatter
       for (final JGenerable item : list)
       {
         if (!first)
-          p (',');
-        g (item);
+          print (',');
+        generable (item);
         first = false;
       }
     }
@@ -438,7 +456,8 @@ public class JFormatter
    * @param d
    *        the JDeclaration object
    */
-  public JFormatter d (final JDeclaration d)
+  @Nonnull
+  public JFormatter declaration (@Nonnull final JDeclaration d)
   {
     d.declare (this);
     return this;
@@ -450,7 +469,8 @@ public class JFormatter
    * @param s
    *        the JStatement object
    */
-  public JFormatter s (final JStatement s)
+  @Nonnull
+  public JFormatter statement (@Nonnull final JStatement s)
   {
     s.state (this);
     return this;
@@ -462,7 +482,8 @@ public class JFormatter
    * @param v
    *        the JVar object
    */
-  public JFormatter b (final JVar v)
+  @Nonnull
+  public JFormatter var (@Nonnull final JVar v)
   {
     v.bind (this);
     return this;
@@ -471,11 +492,11 @@ public class JFormatter
   /**
    * Generates the whole source code out of the specified class.
    */
-  void write (final JDefinedClass c)
+  void write (@Nonnull final JDefinedClass c)
   {
     // first collect all the types and identifiers
     mode = EMode.COLLECTING;
-    d (c);
+    declaration (c);
 
     javaLang = c.owner ()._package ("java.lang");
 
@@ -502,8 +523,8 @@ public class JFormatter
     final JPackage pkg = (JPackage) c.parentContainer ();
     if (!pkg.isUnnamed ())
     {
-      nl ().d (pkg);
-      nl ();
+      newline ().declaration (pkg);
+      newline ();
     }
 
     // generate import statements
@@ -514,19 +535,19 @@ public class JFormatter
       // suppress import statements for primitive types, built-in types,
       // types in the root package, and types in
       // the same package as the current type
-      if (!supressImport (clazz, c))
+      if (!_supressImport (clazz, c))
       {
         if (clazz instanceof JNarrowedClass)
         {
           clazz = clazz.erasure ();
         }
 
-        p ("import").p (clazz.fullName ()).p (';').nl ();
+        print ("import").print (clazz.fullName ()).print (';').newline ();
       }
     }
-    nl ();
+    newline ();
 
-    d (c);
+    declaration (c);
   }
 
   /**
@@ -538,7 +559,7 @@ public class JFormatter
    *        JType that is the current class being processed
    * @return true if an import statement should be suppressed, false otherwise
    */
-  private boolean supressImport (final AbstractJClass aImportClass, final AbstractJClass c)
+  private boolean _supressImport (@Nonnull final AbstractJClass aImportClass, @Nonnull final AbstractJClass c)
   {
     AbstractJClass clazz = aImportClass;
     if (clazz instanceof JNarrowedClass)
@@ -555,7 +576,10 @@ public class JFormatter
 
     final String packageName = clazz._package ().name ();
     if (packageName.equals ("java.lang"))
-      return true; // no need to explicitly import java.lang classes
+    {
+      // no need to explicitly import java.lang classes
+      return true;
+    }
 
     if (clazz._package () == c._package ())
     {
@@ -570,23 +594,13 @@ public class JFormatter
     return false;
   }
 
-  private JPackage javaLang;
-
-  /**
-   * Special character token we use to differenciate '>' as an operator and '>'
-   * as the end of the type arguments. The former uses '>' and it requires a
-   * preceding whitespace. The latter uses this, and it does not have a
-   * preceding whitespace.
-   */
-  /* package */static final char CLOSE_TYPE_ARGS = '\uFFFF';
-
   /**
    * Used during the optimization of class imports. List of
    * {@link AbstractJClass}es whose short name is the same.
    * 
    * @author Ryan.Shoemaker@Sun.COM
    */
-  final class ReferenceList
+  private final class ReferenceList
   {
     private final ArrayList <AbstractJClass> classes = new ArrayList <AbstractJClass> ();
 
@@ -606,7 +620,7 @@ public class JFormatter
         return true;
 
       // an id and (at least one) type with the same name
-      if (id && classes.size () != 0)
+      if (id && !classes.isEmpty ())
         return true;
 
       for (AbstractJClass c : classes)
@@ -660,7 +674,7 @@ public class JFormatter
      */
     public boolean isId ()
     {
-      return id && classes.size () == 0;
+      return id && classes.isEmpty ();
     }
   }
 }

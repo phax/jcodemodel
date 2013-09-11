@@ -67,8 +67,8 @@ public class JBreak implements JStatement
   public void state (final JFormatter f)
   {
     if (label == null)
-      f.p ("break;").nl ();
+      f.print ("break;").newline ();
     else
-      f.p ("break").p (label.label).p (';').nl ();
+      f.print ("break").print (label.label).print (';').newline ();
   }
 }

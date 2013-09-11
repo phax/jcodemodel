@@ -135,7 +135,7 @@ public class JTypeVar extends AbstractJClass implements JDeclaration
   {
     f.id (name);
     if (bound != null)
-      f.p ("extends").g (bound);
+      f.print ("extends").generable (bound);
   }
 
   @Override

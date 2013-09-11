@@ -179,25 +179,25 @@ public class JMods implements JGenerable
   public void generate (final JFormatter f)
   {
     if ((mods & JMod.PUBLIC) != 0)
-      f.p ("public");
+      f.print ("public");
     if ((mods & JMod.PROTECTED) != 0)
-      f.p ("protected");
+      f.print ("protected");
     if ((mods & JMod.PRIVATE) != 0)
-      f.p ("private");
+      f.print ("private");
     if ((mods & JMod.FINAL) != 0)
-      f.p ("final");
+      f.print ("final");
     if ((mods & JMod.STATIC) != 0)
-      f.p ("static");
+      f.print ("static");
     if ((mods & JMod.ABSTRACT) != 0)
-      f.p ("abstract");
+      f.print ("abstract");
     if ((mods & JMod.NATIVE) != 0)
-      f.p ("native");
+      f.print ("native");
     if ((mods & JMod.SYNCHRONIZED) != 0)
-      f.p ("synchronized");
+      f.print ("synchronized");
     if ((mods & JMod.TRANSIENT) != 0)
-      f.p ("transient");
+      f.print ("transient");
     if ((mods & JMod.VOLATILE) != 0)
-      f.p ("volatile");
+      f.print ("volatile");
   }
 
   @Override

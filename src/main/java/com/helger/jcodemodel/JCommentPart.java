@@ -114,12 +114,12 @@ public class JCommentPart extends ArrayList <Object>
       // we don't need to worry about the exact formatting of text.
       for (final Object o : this)
         if (o instanceof AbstractJClass)
-          f.g ((AbstractJClass) o);
+          f.generable ((AbstractJClass) o);
       return;
     }
 
     if (!isEmpty ())
-      f.p (indent);
+      f.print (indent);
 
     final Iterator <Object> itr = iterator ();
     while (itr.hasNext ())
@@ -134,12 +134,12 @@ public class JCommentPart extends ArrayList <Object>
         {
           final String line = s.substring (0, idx);
           if (line.length () > 0)
-            f.p (escape (line));
+            f.print (escape (line));
           s = s.substring (idx + 1);
-          f.nl ().p (indent);
+          f.newline ().print (indent);
         }
         if (s.length () != 0)
-          f.p (escape (s));
+          f.print (escape (s));
       }
       else
         if (o instanceof AbstractJClass)
@@ -150,14 +150,14 @@ public class JCommentPart extends ArrayList <Object>
         else
           if (o instanceof AbstractJType)
           {
-            f.g ((AbstractJType) o);
+            f.generable ((AbstractJType) o);
           }
           else
             throw new IllegalStateException ();
     }
 
     if (!isEmpty ())
-      f.nl ();
+      f.newline ();
   }
 
   /**

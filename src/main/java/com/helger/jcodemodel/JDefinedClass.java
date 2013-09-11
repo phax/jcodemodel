@@ -52,6 +52,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * A generated Java class/interface/enum/....
  * <p>
@@ -102,7 +105,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    * {@link JCodeModel#isCaseSensitiveFileSystem}) to avoid conflicts. Lazily
    * created to save footprint.
    * 
-   * @see #getClasses()
+   * @see #_getClasses()
    */
   private Map <String, JDefinedClass> classes;
 
@@ -667,20 +670,18 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   {
 
     String NAME;
-    if (JCodeModel.isCaseSensitiveFileSystem)
+    if (owner ().isCaseSensitiveFileSystem)
       NAME = name.toUpperCase ();
     else
       NAME = name;
 
-    if (getClasses ().containsKey (NAME))
-      throw new JClassAlreadyExistsException (getClasses ().get (NAME));
-    else
-    {
-      // XXX problems caught in the NC constructor
-      final JDefinedClass c = new JDefinedClass (this, mods, name, classTypeVal);
-      getClasses ().put (NAME, c);
-      return c;
-    }
+    if (_getClasses ().containsKey (NAME))
+      throw new JClassAlreadyExistsException (_getClasses ().get (NAME));
+
+    // XXX problems caught in the NC constructor
+    final JDefinedClass c = new JDefinedClass (this, mods, name, classTypeVal);
+    _getClasses ().put (NAME, c);
+    return c;
   }
 
   /**
@@ -744,6 +745,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   /**
    * Returns an iterator that walks the nested classes defined in this class.
    */
+  @Nonnull
   public final Iterator <JDefinedClass> classes ()
   {
     if (classes == null)
@@ -752,7 +754,8 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
       return classes.values ().iterator ();
   }
 
-  private Map <String, JDefinedClass> getClasses ()
+  @Nonnull
+  private Map <String, JDefinedClass> _getClasses ()
   {
     if (classes == null)
       classes = new TreeMap <String, JDefinedClass> ();
@@ -762,46 +765,46 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   /**
    * Returns all the nested classes defined in this class.
    */
+  @Nonnull
   public final AbstractJClass [] listClasses ()
   {
     if (classes == null)
       return new AbstractJClass [0];
-    else
-      return classes.values ().toArray (new AbstractJClass [classes.values ().size ()]);
+    return classes.values ().toArray (new AbstractJClass [classes.values ().size ()]);
   }
 
   @Override
+  @Nullable
   public AbstractJClass outer ()
   {
     if (outer.isClass ())
       return (AbstractJClass) outer;
-    else
-      return null;
+    return null;
   }
 
-  public void declare (final JFormatter f)
+  public void declare (@Nonnull final JFormatter f)
   {
     if (jdoc != null)
-      f.nl ().g (jdoc);
+      f.newline ().generable (jdoc);
 
     if (annotations != null)
     {
       for (final JAnnotationUse annotation : annotations)
-        f.g (annotation).nl ();
+        f.generable (annotation).newline ();
     }
 
-    f.g (mods).p (classType.declarationToken ()).id (name).d (generifiable);
+    f.generable (mods).print (classType.declarationToken ()).id (name).declaration (generifiable);
 
     if (superClass != null && superClass != owner ().ref (Object.class))
-      f.nl ().i ().p ("extends").g (superClass).nl ().o ();
+      f.newline ().indent ().print ("extends").generable (superClass).newline ().outdent ();
 
     if (!interfaces.isEmpty ())
     {
       if (superClass == null)
-        f.nl ();
-      f.i ().p (classType == ClassType.INTERFACE ? "extends" : "implements");
+        f.newline ();
+      f.indent ().print (classType == ClassType.INTERFACE ? "extends" : "implements");
       f.g (interfaces);
-      f.nl ().o ();
+      f.newline ().outdent ();
     }
     declareBody (f);
   }
@@ -809,9 +812,9 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   /**
    * prints the body of a class.
    */
-  protected void declareBody (final JFormatter f)
+  protected void declareBody (@Nonnull final JFormatter f)
   {
-    f.p ('{').nl ().nl ().i ();
+    f.print ('{').newline ().newline ().indent ();
     boolean first = true;
 
     if (!enumConstantsByName.isEmpty ())
@@ -819,34 +822,34 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
       for (final JEnumConstant c : enumConstantsByName.values ())
       {
         if (!first)
-          f.p (',').nl ();
-        f.d (c);
+          f.print (',').newline ();
+        f.declaration (c);
         first = false;
       }
-      f.p (';').nl ();
+      f.print (';').newline ();
     }
 
     for (final JFieldVar field : fields.values ())
-      f.d (field);
+      f.declaration (field);
     if (init != null)
-      f.nl ().p ("static").s (init);
+      f.newline ().print ("static").statement (init);
     if (instanceInit != null)
-      f.nl ().s (instanceInit);
+      f.newline ().statement (instanceInit);
     for (final JMethod m : constructors)
     {
-      f.nl ().d (m);
+      f.newline ().declaration (m);
     }
     for (final JMethod m : methods)
     {
-      f.nl ().d (m);
+      f.newline ().declaration (m);
     }
     if (classes != null)
       for (final JDefinedClass dc : classes.values ())
-        f.nl ().d (dc);
+        f.newline ().declaration (dc);
 
     if (directBlock != null)
-      f.p (directBlock);
-    f.nl ().o ().p ('}').nl ();
+      f.print (directBlock);
+    f.newline ().outdent ().print ('}').newline ();
   }
 
   /**

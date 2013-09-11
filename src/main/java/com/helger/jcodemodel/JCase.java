@@ -97,17 +97,17 @@ public class JCase implements JStatement
 
   public void state (final JFormatter f)
   {
-    f.i ();
+    f.indent ();
     if (!isDefaultCase)
     {
-      f.p ("case ").g (label).p (':').nl ();
+      f.print ("case ").generable (label).print (':').newline ();
     }
     else
     {
-      f.p ("default:").nl ();
+      f.print ("default:").newline ();
     }
     if (body != null)
-      f.s (body);
-    f.o ();
+      f.statement (body);
+    f.outdent ();
   }
 }

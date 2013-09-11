@@ -118,7 +118,7 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
       throw new IllegalArgumentException (msg);
     }
 
-    if (JCodeModel.isCaseSensitiveFileSystem)
+    if (owner.isCaseSensitiveFileSystem)
       upperCaseClassMap = null;
     else
       upperCaseClassMap = new HashMap <String, JDefinedClass> ();
@@ -451,12 +451,12 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
   public void declare (final JFormatter f)
   {
     if (name.length () != 0)
-      f.p ("package").p (name).p (';').nl ();
+      f.print ("package").print (name).print (';').newline ();
   }
 
   public void generate (final JFormatter f)
   {
-    f.p (name);
+    f.print (name);
   }
 
   void build (final AbstractCodeWriter src, final AbstractCodeWriter res) throws IOException
@@ -479,15 +479,15 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
       final JFormatter f = createJavaSourceFileWriter (src, "package-info");
 
       if (jdoc != null)
-        f.g (jdoc);
+        f.generable (jdoc);
 
       // TODO: think about importing
       if (annotations != null)
       {
         for (final JAnnotationUse a : annotations)
-          f.g (a).nl ();
+          f.generable (a).newline ();
       }
-      f.d (this);
+      f.declaration (this);
 
       f.close ();
     }

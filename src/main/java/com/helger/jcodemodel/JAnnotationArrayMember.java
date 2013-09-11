@@ -213,7 +213,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     {
       public void generate (final JFormatter f)
       {
-        f.t (owner.ref (value.getDeclaringClass ())).p ('.').p (value.name ());
+        f.type (owner.ref (value.getDeclaringClass ())).print ('.').print (value.name ());
       }
     };
     values.add (annotationValue);
@@ -264,8 +264,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     {
       public void generate (final JFormatter f)
       {
-        f.p (value.getName ().replace ('$', '.'));
-        f.p (".class");
+        f.print (value.getName ().replace ('$', '.'));
+        f.print (".class");
       }
     });
     values.add (annotationValue);
@@ -317,16 +317,16 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
 
   public void generate (final JFormatter f)
   {
-    f.p ('{').nl ().i ();
+    f.print ('{').newline ().indent ();
 
     boolean first = true;
     for (final AbstractJAnnotationValue aValue : values)
     {
       if (!first)
-        f.p (',').nl ();
-      f.g (aValue);
+        f.print (',').newline ();
+      f.generable (aValue);
       first = false;
     }
-    f.nl ().o ().p ('}');
+    f.newline ().outdent ().print ('}');
   }
 }

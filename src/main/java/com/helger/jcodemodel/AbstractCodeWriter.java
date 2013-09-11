@@ -58,17 +58,15 @@ public abstract class AbstractCodeWriter
 {
   /**
    * Encoding to be used by the writer. Null means platform specific encoding.
-   * 
-   * @since 2.5
    */
-  private final String encoding;
+  private final Charset encoding;
 
-  protected AbstractCodeWriter (final String encoding)
+  protected AbstractCodeWriter (final Charset encoding)
   {
     this.encoding = encoding;
   }
 
-  public String encoding ()
+  public Charset encoding ()
   {
     return encoding;
   }

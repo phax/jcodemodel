@@ -79,21 +79,21 @@ public class JDoLoop implements JStatement
 
   public void state (final JFormatter f)
   {
-    f.p ("do");
+    f.print ("do");
     if (body != null)
-      f.g (body);
+      f.generable (body);
     else
-      f.p ("{ }");
+      f.print ("{ }");
 
     if (JOp.hasTopOp (test))
     {
-      f.p ("while ").g (test);
+      f.print ("while ").generable (test);
     }
     else
     {
-      f.p ("while (").g (test).p (')');
+      f.print ("while (").generable (test).print (')');
     }
-    f.p (';').nl ();
+    f.print (';').newline ();
   }
 
 }

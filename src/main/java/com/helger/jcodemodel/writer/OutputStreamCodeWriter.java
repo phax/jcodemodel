@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
@@ -65,12 +66,12 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
    * @param os
    *        This stream will be closed at the end of the code generation.
    */
-  public OutputStreamCodeWriter (final OutputStream os, final String encoding)
+  public OutputStreamCodeWriter (final OutputStream os, final Charset encoding)
   {
     super (encoding);
     try
     {
-      this.out = new PrintStream (os, false, encoding);
+      this.out = new PrintStream (os, false, encoding == null ? null : encoding.name ());
     }
     catch (final UnsupportedEncodingException ueex)
     {

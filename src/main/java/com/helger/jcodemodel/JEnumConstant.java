@@ -46,6 +46,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * Enum Constant. When used as an {@link JExpression}, this object represents a
  * reference to the enum constant.
@@ -104,7 +106,8 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
    * @param arg
    *        Argument to add to argument list
    */
-  public JEnumConstant arg (final JExpression arg)
+  @Nonnull
+  public JEnumConstant arg (@Nonnull final JExpression arg)
   {
     if (arg == null)
       throw new IllegalArgumentException ();
@@ -114,6 +117,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
     return this;
   }
 
+  @Nonnull
   public List <JExpression> args ()
   {
     if (args == null)
@@ -131,6 +135,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
    * 
    * @return never null.
    */
+  @Nonnull
   public String getName ()
   {
     return this.type.fullName ().concat (".").concat (this.name);
@@ -141,6 +146,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
    * 
    * @return JDocComment containing javadocs for this constant.
    */
+  @Nonnull
   public JDocComment javadoc ()
   {
     if (jdoc == null)
@@ -154,6 +160,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
    * @param clazz
    *        The annotation class to annotate the field with
    */
+  @Nonnull
   public JAnnotationUse annotate (final AbstractJClass clazz)
   {
     if (annotations == null)
@@ -169,6 +176,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
    * @param clazz
    *        The annotation class to annotate the field with
    */
+  @Nonnull
   public JAnnotationUse annotate (final Class <? extends Annotation> clazz)
   {
     return annotate (type.owner ().ref (clazz));
@@ -189,20 +197,20 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
     return Collections.unmodifiableList (annotations);
   }
 
-  public void declare (final JFormatter f)
+  public void declare (@Nonnull final JFormatter f)
   {
     if (jdoc != null)
-      f.nl ().g (jdoc);
+      f.newline ().generable (jdoc);
     if (annotations != null)
       for (final JAnnotationUse annotation : annotations)
-        f.g (annotation).nl ();
+        f.generable (annotation).newline ();
     f.id (name);
     if (args != null)
-      f.p ('(').g (args).p (')');
+      f.print ('(').g (args).print (')');
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
-    f.t (type).p ('.').p (name);
+    f.type (type).print ('.').print (name);
   }
 }

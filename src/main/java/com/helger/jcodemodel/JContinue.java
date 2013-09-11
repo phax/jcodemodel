@@ -66,8 +66,8 @@ public class JContinue implements JStatement
   public void state (final JFormatter f)
   {
     if (label == null)
-      f.p ("continue;").nl ();
+      f.print ("continue;").newline ();
     else
-      f.p ("continue").p (label.label).p (';').nl ();
+      f.print ("continue").print (label.label).print (';').newline ();
   }
 }

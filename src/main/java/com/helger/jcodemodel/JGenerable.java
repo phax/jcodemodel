@@ -40,11 +40,13 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Common interface for code components that can generate uses of themselves.
  */
 
 public interface JGenerable
 {
-  void generate (JFormatter f);
+  void generate (@Nonnull JFormatter f);
 }

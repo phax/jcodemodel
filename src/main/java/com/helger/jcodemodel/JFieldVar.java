@@ -105,7 +105,7 @@ public class JFieldVar extends JVar implements JDocCommentable
   public void declare (final JFormatter f)
   {
     if (jdoc != null)
-      f.g (jdoc);
+      f.generable (jdoc);
     super.declare (f);
   }
 }

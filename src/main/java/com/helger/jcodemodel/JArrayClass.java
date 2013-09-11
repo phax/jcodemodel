@@ -82,7 +82,7 @@ public class JArrayClass extends AbstractJClass
   @Override
   public void generate (final JFormatter f)
   {
-    f.g (componentType).p ("[]");
+    f.generable (componentType).print ("[]");
   }
 
   @Override

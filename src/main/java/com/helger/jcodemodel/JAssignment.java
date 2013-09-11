@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Assignment statements, which are also expressions.
  */
@@ -50,40 +52,43 @@ public class JAssignment extends AbstractJExpressionImpl implements JStatement
   private final JExpression rhs;
   private final String op;
 
-  protected JAssignment (final JAssignmentTarget lhs, final JExpression rhs)
+  protected JAssignment (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression rhs)
   {
     this (lhs, rhs, "");
   }
 
-  protected JAssignment (final JAssignmentTarget lhs, final JExpression rhs, final String op)
+  protected JAssignment (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression rhs, @Nonnull final String op)
   {
     this.lhs = lhs;
     this.rhs = rhs;
     this.op = op;
   }
 
+  @Nonnull
   public JAssignmentTarget lhs ()
   {
     return lhs;
   }
 
+  @Nonnull
   public JExpression rhs ()
   {
     return rhs;
   }
 
+  @Nonnull
   public String op ()
   {
     return op;
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
-    f.g (lhs).p (op + '=').g (rhs);
+    f.generable (lhs).print (op + '=').generable (rhs);
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
-    f.g (this).p (';').nl ();
+    f.generable (this).print (';').newline ();
   }
 }

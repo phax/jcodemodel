@@ -455,69 +455,69 @@ public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, 
   public void declare (final JFormatter f)
   {
     if (jdoc != null)
-      f.g (jdoc);
+      f.generable (jdoc);
 
     if (annotations != null)
     {
       for (final JAnnotationUse a : annotations)
-        f.g (a).nl ();
+        f.generable (a).newline ();
     }
 
-    f.g (mods);
+    f.generable (mods);
 
     // declare the generics parameters
     super.declare (f);
 
     if (!isConstructor ())
-      f.g (type);
-    f.id (name).p ('(').i ();
+      f.generable (type);
+    f.id (name).print ('(').indent ();
     // when parameters are printed in new lines, we want them to be indented.
     // there's a good chance no newlines happen, too, but just in case it does.
     boolean first = true;
     for (final JVar var : params)
     {
       if (!first)
-        f.p (',');
+        f.print (',');
       if (var.isAnnotated ())
-        f.nl ();
-      f.b (var);
+        f.newline ();
+      f.var (var);
       first = false;
     }
     if (hasVarArgs ())
     {
       if (!first)
-        f.p (',');
+        f.print (',');
       for (final JAnnotationUse annotation : varParam.annotations ())
-        f.g (annotation).nl ();
-      f.g (varParam.mods ()).g (varParam.type ().elementType ());
-      f.p ("... ");
+        f.generable (annotation).newline ();
+      f.generable (varParam.mods ()).generable (varParam.type ().elementType ());
+      f.print ("... ");
       f.id (varParam.name ());
     }
 
-    f.o ().p (')');
+    f.outdent ().print (')');
     if (_throws != null && !_throws.isEmpty ())
     {
-      f.nl ().i ().p ("throws").g (_throws).nl ().o ();
+      f.newline ().indent ().print ("throws").g (_throws).newline ().outdent ();
     }
 
     if (defaultValue != null)
     {
-      f.p ("default ");
-      f.g (defaultValue);
+      f.print ("default ");
+      f.generable (defaultValue);
     }
     if (body != null)
     {
-      f.s (body);
+      f.statement (body);
     }
     else
       if (!outer.isInterface () && !outer.isAnnotationTypeDeclaration () && !mods.isAbstract () && !mods.isNative ())
       {
         // Print an empty body for non-native, non-abstract methods
-        f.s (new JBlock ());
+        f.statement (new JBlock ());
       }
       else
       {
-        f.p (';').nl ();
+        f.print (';').newline ();
       }
   }
 

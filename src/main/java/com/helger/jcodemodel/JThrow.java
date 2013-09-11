@@ -70,9 +70,9 @@ public class JThrow implements JStatement
 
   public void state (final JFormatter f)
   {
-    f.p ("throw");
-    f.g (expr);
-    f.p (';').nl ();
+    f.print ("throw");
+    f.generable (expr);
+    f.print (';').newline ();
   }
 
 }

@@ -104,17 +104,17 @@ public class JSwitch implements JStatement
   {
     if (JOp.hasTopOp (test))
     {
-      f.p ("switch ").g (test).p (" {").nl ();
+      f.print ("switch ").generable (test).print (" {").newline ();
     }
     else
     {
-      f.p ("switch (").g (test).p (')').p (" {").nl ();
+      f.print ("switch (").generable (test).print (')').print (" {").newline ();
     }
     for (final JCase c : cases)
-      f.s (c);
+      f.statement (c);
     if (defaultCase != null)
-      f.s (defaultCase);
-    f.p ('}').nl ();
+      f.statement (defaultCase);
+    f.print ('}').newline ();
   }
 
 }

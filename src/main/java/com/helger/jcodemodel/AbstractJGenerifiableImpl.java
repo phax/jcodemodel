@@ -60,14 +60,14 @@ public abstract class AbstractJGenerifiableImpl implements JGenerifiable, JDecla
   {
     if (typeVariables != null)
     {
-      f.p ('<');
+      f.print ('<');
       for (int i = 0; i < typeVariables.size (); i++)
       {
         if (i != 0)
-          f.p (',');
-        f.d (typeVariables.get (i));
+          f.print (',');
+        f.declaration (typeVariables.get (i));
       }
-      f.p ('>');
+      f.print ('>');
     }
   }
 

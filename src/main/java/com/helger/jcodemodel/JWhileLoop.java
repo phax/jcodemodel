@@ -81,15 +81,15 @@ public class JWhileLoop implements JStatement
   {
     if (JOp.hasTopOp (test))
     {
-      f.p ("while ").g (test);
+      f.print ("while ").generable (test);
     }
     else
     {
-      f.p ("while (").g (test).p (')');
+      f.print ("while (").generable (test).print (')');
     }
     if (body != null)
-      f.s (body);
+      f.statement (body);
     else
-      f.p (';').nl ();
+      f.print (';').newline ();
   }
 }

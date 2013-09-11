@@ -142,6 +142,6 @@ public class JPrimitiveType extends AbstractJType
 
   public void generate (final JFormatter f)
   {
-    f.p (typeName);
+    f.print (typeName);
   }
 }

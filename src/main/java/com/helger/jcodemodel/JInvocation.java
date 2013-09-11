@@ -173,12 +173,12 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
     if (isConstructor && type.isArray ())
     {
       // [RESULT] new T[]{arg1,arg2,arg3,...};
-      f.p ("new").g (type).p ('{');
+      f.print ("new").generable (type).print ('{');
     }
     else
     {
       if (isConstructor)
-        f.p ("new").g (type).p ('(');
+        f.print ("new").generable (type).print ('(');
       else
       {
         String name = this.name;
@@ -186,18 +186,18 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
           name = this.method.name ();
 
         if (object != null)
-          f.g (object).p ('.').p (name).p ('(');
+          f.generable (object).print ('.').print (name).print ('(');
         else
-          f.id (name).p ('(');
+          f.id (name).print ('(');
       }
     }
 
     f.g (args);
 
     if (isConstructor && type.isArray ())
-      f.p ('}');
+      f.print ('}');
     else
-      f.p (')');
+      f.print (')');
 
     if (type instanceof JDefinedClass && ((JDefinedClass) type).isAnonymous ())
     {
@@ -207,7 +207,7 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
 
   public void state (final JFormatter f)
   {
-    f.g (this).p (';').nl ();
+    f.generable (this).print (';').newline ();
   }
 
 }

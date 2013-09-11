@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * This helps enable whether the JDefinedClass is a Class or Interface or
  * AnnotationTypeDeclaration or Enum
@@ -58,11 +60,12 @@ public enum ClassType
    */
   private final String declarationToken;
 
-  private ClassType (final String token)
+  private ClassType (@Nonnull final String token)
   {
     this.declarationToken = token;
   }
 
+  @Nonnull
   public String declarationToken ()
   {
     return declarationToken;

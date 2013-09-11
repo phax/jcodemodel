@@ -69,10 +69,10 @@ public class JReturn implements JStatement
 
   public void state (final JFormatter f)
   {
-    f.p ("return ");
+    f.print ("return ");
     if (expr != null)
-      f.g (expr);
-    f.p (';').nl ();
+      f.generable (expr);
+    f.print (';').newline ();
   }
 
 }

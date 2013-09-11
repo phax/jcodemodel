@@ -49,6 +49,7 @@ import japa.parser.ast.body.TypeDeclaration;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
 
 import org.junit.Test;
 
@@ -70,14 +71,14 @@ public class JDefinedClassInstanceInitTest
     final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");
     c.instanceInit ().assign (JExpr._this ().ref (myField), JExpr.lit ("myValue"));
     final ByteArrayOutputStream bos = new ByteArrayOutputStream ();
-    final String encoding = "UTF-8";
+    final Charset encoding = Charset.forName ("UTF-8");
     // cm.build(new OutputStreamCodeWriter(System.out, encoding));
     cm.build (new OutputStreamCodeWriter (bos, encoding));
     bos.close ();
 
     final ByteArrayInputStream bis = new ByteArrayInputStream (bos.toByteArray ());
 
-    final CompilationUnit compilationUnit = JavaParser.parse (bis, encoding);
+    final CompilationUnit compilationUnit = JavaParser.parse (bis, encoding.name ());
 
     final TypeDeclaration typeDeclaration = compilationUnit.getTypes ().get (0);
     final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;

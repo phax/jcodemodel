@@ -59,6 +59,6 @@ public class JAtom extends AbstractJExpressionImpl
 
   public void generate (final JFormatter f)
   {
-    f.p (what);
+    f.print (what);
   }
 }

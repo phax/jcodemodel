@@ -84,11 +84,11 @@ public class JTryBlock implements JStatement
 
   public void state (final JFormatter f)
   {
-    f.p ("try").g (body);
+    f.print ("try").generable (body);
     for (final JCatchBlock cb : catches)
-      f.g (cb);
+      f.generable (cb);
     if (_finally != null)
-      f.p ("finally").g (_finally);
-    f.nl ();
+      f.print ("finally").generable (_finally);
+    f.newline ();
   }
 }

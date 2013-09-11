@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Factory methods that generate various {@link JExpression}s.
  */
@@ -54,66 +56,79 @@ public final class JExpr
   private JExpr ()
   {}
 
-  public static JExpression assign (final JAssignmentTarget lhs, final JExpression rhs)
+  @Nonnull
+  public static JExpression assign (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression rhs)
   {
     return new JAssignment (lhs, rhs);
   }
 
-  public static JExpression assignPlus (final JAssignmentTarget lhs, final JExpression rhs)
+  @Nonnull
+  public static JExpression assignPlus (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression rhs)
   {
     return new JAssignment (lhs, rhs, "+");
   }
 
+  @Nonnull
   public static JInvocation _new (final AbstractJClass c)
   {
     return new JInvocation (c);
   }
 
+  @Nonnull
   public static JInvocation _new (final AbstractJType t)
   {
     return new JInvocation (t);
   }
 
+  @Nonnull
   public static JInvocation invoke (final String method)
   {
     return new JInvocation ((JExpression) null, method);
   }
 
+  @Nonnull
   public static JInvocation invoke (final JMethod method)
   {
     return new JInvocation ((JExpression) null, method);
   }
 
+  @Nonnull
   public static JInvocation invoke (final JExpression lhs, final JMethod method)
   {
     return new JInvocation (lhs, method);
   }
 
+  @Nonnull
   public static JInvocation invoke (final JExpression lhs, final String method)
   {
     return new JInvocation (lhs, method);
   }
 
+  @Nonnull
   public static JFieldRef ref (final String field)
   {
     return new JFieldRef ((JExpression) null, field);
   }
 
+  @Nonnull
   public static JFieldRef ref (final JExpression lhs, final JVar field)
   {
     return new JFieldRef (lhs, field);
   }
 
+  @Nonnull
   public static JFieldRef ref (final JExpression lhs, final String field)
   {
     return new JFieldRef (lhs, field);
   }
 
+  @Nonnull
   public static JFieldRef refthis (final String field)
   {
     return new JFieldRef (null, field, true);
   }
 
+  @Nonnull
   public static JExpression dotclass (final AbstractJClass cl)
   {
     return new AbstractJExpressionImpl ()
@@ -125,21 +140,24 @@ public final class JExpr
           c = ((JNarrowedClass) cl).basis;
         else
           c = cl;
-        f.g (c).p (".class");
+        f.generable (c).print (".class");
       }
     };
   }
 
+  @Nonnull
   public static JArrayCompRef component (final JExpression lhs, final JExpression index)
   {
     return new JArrayCompRef (lhs, index);
   }
 
+  @Nonnull
   public static JCast cast (final AbstractJType type, final JExpression expr)
   {
     return new JCast (type, expr);
   }
 
+  @Nonnull
   public static JArray newArray (final AbstractJType type)
   {
     return newArray (type, null);
@@ -151,6 +169,7 @@ public final class JExpr
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
+  @Nonnull
   public static JArray newArray (final AbstractJType type, final JExpression size)
   {
     // you cannot create an array whose component type is a generic
@@ -163,6 +182,7 @@ public final class JExpr
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
+  @Nonnull
   public static JArray newArray (final AbstractJType type, final int size)
   {
     return newArray (type, lit (size));
@@ -173,6 +193,7 @@ public final class JExpr
   /**
    * Returns a reference to "this", an implicit reference to the current object.
    */
+  @Nonnull
   public static JExpression _this ()
   {
     return __this;
@@ -183,6 +204,7 @@ public final class JExpr
   /**
    * Returns a reference to "super", an implicit reference to the super class.
    */
+  @Nonnull
   public static JExpression _super ()
   {
     return __super;
@@ -192,6 +214,7 @@ public final class JExpr
 
   private static final JExpression __null = new JAtom ("null");
 
+  @Nonnull
   public static JExpression _null ()
   {
     return __null;
@@ -200,77 +223,62 @@ public final class JExpr
   /**
    * Boolean constant that represents <code>true</code>
    */
+  @Nonnull
   public static final JExpression TRUE = new JAtom ("true");
 
   /**
    * Boolean constant that represents <code>false</code>
    */
+  @Nonnull
   public static final JExpression FALSE = new JAtom ("false");
 
+  @Nonnull
   public static JExpression lit (final boolean b)
   {
     return b ? TRUE : FALSE;
   }
 
+  @Nonnull
   public static JExpression lit (final int n)
   {
     return new JAtom (Integer.toString (n));
   }
 
+  @Nonnull
   public static JExpression lit (final long n)
   {
     return new JAtom (Long.toString (n) + "L");
   }
 
+  @Nonnull
   public static JExpression lit (final float f)
   {
     if (f == Float.NEGATIVE_INFINITY)
-    {
       return new JAtom ("java.lang.Float.NEGATIVE_INFINITY");
-    }
-    else
-      if (f == Float.POSITIVE_INFINITY)
-      {
-        return new JAtom ("java.lang.Float.POSITIVE_INFINITY");
-      }
-      else
-        if (Float.isNaN (f))
-        {
-          return new JAtom ("java.lang.Float.NaN");
-        }
-        else
-        {
-          return new JAtom (Float.toString (f) + "F");
-        }
+    if (f == Float.POSITIVE_INFINITY)
+      return new JAtom ("java.lang.Float.POSITIVE_INFINITY");
+    if (Float.isNaN (f))
+      return new JAtom ("java.lang.Float.NaN");
+    return new JAtom (Float.toString (f) + "F");
   }
 
+  @Nonnull
   public static JExpression lit (final double d)
   {
     if (d == Double.NEGATIVE_INFINITY)
-    {
       return new JAtom ("java.lang.Double.NEGATIVE_INFINITY");
-    }
-    else
-      if (d == Double.POSITIVE_INFINITY)
-      {
-        return new JAtom ("java.lang.Double.POSITIVE_INFINITY");
-      }
-      else
-        if (Double.isNaN (d))
-        {
-          return new JAtom ("java.lang.Double.NaN");
-        }
-        else
-        {
-          return new JAtom (Double.toString (d) + "D");
-        }
+    if (d == Double.POSITIVE_INFINITY)
+      return new JAtom ("java.lang.Double.POSITIVE_INFINITY");
+    if (Double.isNaN (d))
+      return new JAtom ("java.lang.Double.NaN");
+    return new JAtom (Double.toString (d) + "D");
   }
 
   /**
    * Escapes the given string, then surrounds it by the specified quotation
    * mark.
    */
-  public static String quotify (final char quote, final String s)
+  public static String quotify (final char quote, @Nonnull final String s)
   {
     final int n = s.length ();
     final StringBuilder sb = new StringBuilder (n + 2);
@@ -320,12 +328,14 @@ public final class JExpr
     return sb.toString ();
   }
 
+  @Nonnull
   public static JExpression lit (final char c)
   {
     return new JAtom (quotify ('\'', "" + c));
   }
 
-  public static JExpression lit (final String s)
+  @Nonnull
+  public static JExpression lit (@Nonnull final String s)
   {
     return new JStringLiteral (s);
   }
@@ -340,13 +350,14 @@ public final class JExpr
    * Be warned that there is a danger in using this method, as it obfuscates the
    * object model.
    */
-  public static JExpression direct (final String source)
+  @Nonnull
+  public static JExpression direct (@Nonnull final String source)
   {
     return new AbstractJExpressionImpl ()
     {
       public void generate (final JFormatter f)
       {
-        f.p ('(').p (source).p (')');
+        f.print ('(').print (source).print (')');
       }
     };
   }

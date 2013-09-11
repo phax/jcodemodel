@@ -269,7 +269,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
     {
       public void generate (final JFormatter f)
       {
-        f.t (owner ().ref (value.getDeclaringClass ())).p ('.').p (value.name ());
+        f.type (owner ().ref (value.getDeclaringClass ())).print ('.').print (value.name ());
       }
     });
     return this;
@@ -316,8 +316,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue
     {
       public void generate (final JFormatter f)
       {
-        f.p (value.getName ().replace ('$', '.'));
-        f.p (".class");
+        f.print (value.getName ().replace ('$', '.'));
+        f.print (".class");
       }
     }));
     return this;
@@ -374,28 +374,28 @@ public class JAnnotationUse extends AbstractJAnnotationValue
 
   public void generate (final JFormatter f)
   {
-    f.p ('@').g (clazz);
+    f.print ('@').generable (clazz);
     if (memberValues != null)
     {
-      f.p ('(');
+      f.print ('(');
       boolean first = true;
 
       if (isOptimizable ())
       {
         // short form
-        f.g (memberValues.get ("value"));
+        f.generable (memberValues.get ("value"));
       }
       else
       {
         for (final Map.Entry <String, AbstractJAnnotationValue> mapEntry : memberValues.entrySet ())
         {
           if (!first)
-            f.p (',');
-          f.p (mapEntry.getKey ()).p ('=').g (mapEntry.getValue ());
+            f.print (',');
+          f.print (mapEntry.getKey ()).print ('=').generable (mapEntry.getValue ());
           first = false;
         }
       }
-      f.p (')');
+      f.print (')');
     }
   }
 

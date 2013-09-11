@@ -51,6 +51,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.util.SecureLoader;
 import com.helger.jcodemodel.writer.FileCodeWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter;
@@ -111,9 +114,9 @@ public final class JCodeModel
    * If the flag is true, we will consider two classes "Foo" and "foo" as a
    * collision.
    */
-  protected static final boolean isCaseSensitiveFileSystem = getFileSystemCaseSensitivity ();
+  protected final boolean isCaseSensitiveFileSystem = getFileSystemCaseSensitivity ();
 
-  private static boolean getFileSystemCaseSensitivity ()
+  protected boolean getFileSystemCaseSensitivity ()
   {
     try
     {
@@ -139,7 +142,8 @@ public final class JCodeModel
    *        Name of the package. Use "" to indicate the root package.
    * @return Newly generated package
    */
-  public JPackage _package (final String name)
+  @Nonnull
+  public JPackage _package (@Nonnull final String name)
   {
     JPackage p = packages.get (name);
     if (p == null)
@@ -150,6 +154,7 @@ public final class JCodeModel
     return p;
   }
 
+  @Nonnull
   public final JPackage rootPackage ()
   {
     return _package ("");
@@ -175,7 +180,8 @@ public final class JCodeModel
   }
 
   /**
-   * Creates a dummy, unknown {@link AbstractJClass} that represents a given name.
+   * Creates a dummy, unknown {@link AbstractJClass} that represents a given
+   * name.
    * <p>
    * This method is useful when the code generation needs to include the
    * user-specified class that may or may not exist, and only thing known about
@@ -318,6 +324,7 @@ public final class JCodeModel
    * Returns the number of files to be generated if {@link #build} is invoked
    * now.
    */
+  @Nonnegative
   public int countArtifacts ()
   {
     int r = 0;
@@ -335,7 +342,7 @@ public final class JCodeModel
    * 
    * @see #_ref(Class) for the version that handles more cases.
    */
-  public AbstractJClass ref (final Class <?> clazz)
+  public AbstractJClass ref (@Nonnull final Class <?> clazz)
   {
     JReferencedClass jrc = refClasses.get (clazz);
     if (jrc == null)
@@ -355,12 +362,11 @@ public final class JCodeModel
     return jrc;
   }
 
-  public AbstractJType _ref (final Class <?> c)
+  public AbstractJType _ref (@Nonnull final Class <?> c)
   {
     if (c.isPrimitive ())
       return AbstractJType.parse (this, c.getName ());
-    else
-      return ref (c);
+    return ref (c);
   }
 
   /**
@@ -402,9 +408,10 @@ public final class JCodeModel
   private AbstractJClass wildcard;
 
   /**
-   * Gets a {@link AbstractJClass} representation for "?", which is equivalent to
-   * "? extends Object".
+   * Gets a {@link AbstractJClass} representation for "?", which is equivalent
+   * to "? extends Object".
    */
+  @Nonnull
   public AbstractJClass wildcard ()
   {
     if (wildcard == null)

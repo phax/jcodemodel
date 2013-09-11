@@ -83,7 +83,7 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements JAssignmen
 
   public void generate (final JFormatter f)
   {
-    f.g (array).p ('[').g (index).p (']');
+    f.generable (array).print ('[').generable (index).print (']');
   }
 
   public JExpression assign (final JExpression rhs)

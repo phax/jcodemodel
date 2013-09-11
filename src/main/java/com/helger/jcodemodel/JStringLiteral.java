@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * String literal.
  * 
@@ -49,18 +51,19 @@ public class JStringLiteral extends AbstractJExpressionImpl
 {
   public final String what;
 
-  protected JStringLiteral (final String what)
+  protected JStringLiteral (@Nonnull final String what)
   {
     this.what = what;
   }
 
+  @Nonnull
   public String what ()
   {
     return what;
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
-    f.p (JExpr.quotify ('"', what));
+    f.print (JExpr.quotify ('"', what));
   }
 }

@@ -138,8 +138,8 @@ public class JTypeWildcard extends AbstractJClass
   public void generate (final JFormatter f)
   {
     if (bound._extends () == null)
-      f.p ("?"); // instead of "? extends Object"
+      f.print ("?"); // instead of "? extends Object"
     else
-      f.p ("? extends").g (bound);
+      f.print ("? extends").generable (bound);
   }
 }

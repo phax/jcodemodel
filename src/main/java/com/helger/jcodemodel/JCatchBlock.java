@@ -82,6 +82,6 @@ public class JCatchBlock implements JGenerable
   {
     if (var == null)
       var = new JVar (JMods.forVar (JMod.NONE), exception, "_x", null);
-    f.p ("catch (").b (var).p (')').g (body);
+    f.print ("catch (").var (var).print (')').generable (body);
   }
 }
