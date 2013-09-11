@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * JMethod invocation
@@ -87,12 +88,12 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    * @param name
    *        Name of method to invoke
    */
-  protected JInvocation (@Nonnull final JExpression object, @Nonnull final String name)
+  protected JInvocation (@Nullable final JExpression object, @Nonnull final String name)
   {
     this ((JGenerable) object, name);
   }
 
-  protected JInvocation (@Nonnull final JExpression object, @Nonnull final JMethod method)
+  protected JInvocation (@Nullable final JExpression object, @Nonnull final JMethod method)
   {
     this ((JGenerable) object, method);
   }
@@ -110,7 +111,7 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
     this ((JGenerable) type, method);
   }
 
-  private JInvocation (@Nonnull final JGenerable object, @Nonnull final String name)
+  private JInvocation (@Nullable final JGenerable object, @Nonnull final String name)
   {
     this.object = object;
     if (name.indexOf ('.') >= 0)
@@ -118,7 +119,7 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
     this.name = name;
   }
 
-  private JInvocation (@Nonnull final JGenerable object, @Nonnull final JMethod method)
+  private JInvocation (@Nullable final JGenerable object, @Nonnull final JMethod method)
   {
     this.object = object;
     this.method = method;
@@ -136,6 +137,11 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
   {
     this.isConstructor = true;
     this.type = c;
+  }
+
+  public boolean isConstructor ()
+  {
+    return isConstructor;
   }
 
   /**

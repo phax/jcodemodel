@@ -40,6 +40,7 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -70,12 +71,11 @@ public class JReturn implements JStatement
     return expr;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     f.print ("return ");
     if (expr != null)
       f.generable (expr);
     f.print (';').newline ();
   }
-
 }

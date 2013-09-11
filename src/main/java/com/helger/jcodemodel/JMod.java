@@ -40,9 +40,12 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.concurrent.Immutable;
+
 /**
  * Modifier constants.
  */
+@Immutable
 public final class JMod
 {
   public static final int NONE = 0x000;

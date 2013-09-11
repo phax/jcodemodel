@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * A Java expression.
  * <p>
@@ -57,114 +59,144 @@ public interface JExpression extends JGenerable
   /**
    * Returns "-[this]" from "[this]".
    */
+  @Nonnull
   JExpression minus ();
 
   /**
    * Returns "![this]" from "[this]".
    */
+  @Nonnull
   JExpression not ();
 
   /**
    * Returns "~[this]" from "[this]".
    */
+  @Nonnull
   JExpression complement ();
 
   /**
    * Returns "[this]++" from "[this]".
    */
+  @Nonnull
   JExpression incr ();
 
   /**
    * Returns "[this]--" from "[this]".
    */
+  @Nonnull
   JExpression decr ();
 
   /**
    * Returns "[this]+[right]"
    */
+  @Nonnull
   JExpression plus (JExpression right);
 
   /**
    * Returns "[this]-[right]"
    */
+  @Nonnull
   JExpression minus (JExpression right);
 
   /**
    * Returns "[this]*[right]"
    */
+  @Nonnull
   JExpression mul (JExpression right);
 
   /**
    * Returns "[this]/[right]"
    */
+  @Nonnull
   JExpression div (JExpression right);
 
   /**
    * Returns "[this]%[right]"
    */
+  @Nonnull
   JExpression mod (JExpression right);
 
   /**
    * Returns "[this]&lt;&lt;[right]"
    */
+  @Nonnull
   JExpression shl (JExpression right);
 
   /**
    * Returns "[this]>>[right]"
    */
+  @Nonnull
   JExpression shr (JExpression right);
 
   /**
    * Returns "[this]>>>[right]"
    */
+  @Nonnull
   JExpression shrz (JExpression right);
 
   /** Bit-wise AND '&amp;'. */
+  @Nonnull
   JExpression band (JExpression right);
 
   /** Bit-wise OR '|'. */
+  @Nonnull
   JExpression bor (JExpression right);
 
   /** Logical AND '&amp;&amp;'. */
+  @Nonnull
   JExpression cand (JExpression right);
 
   /** Logical OR '||'. */
+  @Nonnull
   JExpression cor (JExpression right);
 
+  @Nonnull
   JExpression xor (JExpression right);
 
+  @Nonnull
   JExpression lt (JExpression right);
 
+  @Nonnull
   JExpression lte (JExpression right);
 
+  @Nonnull
   JExpression gt (JExpression right);
 
+  @Nonnull
   JExpression gte (JExpression right);
 
+  @Nonnull
   JExpression eq (JExpression right);
 
+  @Nonnull
   JExpression ne (JExpression right);
 
   /**
    * Returns "[this] instanceof [right]"
    */
+  @Nonnull
   JExpression _instanceof (AbstractJType right);
 
   /**
    * Returns "[this].[method]". Arguments shall be added to the returned
    * {@link JInvocation} object.
    */
+  @Nonnull
   JInvocation invoke (JMethod method);
 
   /**
    * Returns "[this].[method]". Arguments shall be added to the returned
    * {@link JInvocation} object.
    */
+  @Nonnull
   JInvocation invoke (String method);
 
+  @Nonnull
   JFieldRef ref (JVar field);
 
+  @Nonnull
   JFieldRef ref (String field);
 
+  @Nonnull
   JArrayCompRef component (JExpression index);
 }

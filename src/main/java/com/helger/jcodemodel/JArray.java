@@ -44,6 +44,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * array creation and initialization.
  */
@@ -51,19 +54,21 @@ public class JArray extends AbstractJExpressionImpl
 {
   private final AbstractJType type;
   private final JExpression size;
-  private List <JExpression> exprs = null;
+  private List <JExpression> exprs;
 
-  protected JArray (final AbstractJType type, final JExpression size)
+  protected JArray (@Nonnull final AbstractJType type, @Nullable final JExpression size)
   {
     this.type = type;
     this.size = size;
   }
 
+  @Nonnull
   public AbstractJType type ()
   {
     return type;
   }
 
+  @Nullable
   public JExpression size ()
   {
     return size;
@@ -72,7 +77,8 @@ public class JArray extends AbstractJExpressionImpl
   /**
    * Add an element to the array initializer
    */
-  public JArray add (final JExpression e)
+  @Nonnull
+  public JArray add (@Nonnull final JExpression e)
   {
     if (exprs == null)
       exprs = new ArrayList <JExpression> ();
@@ -80,6 +86,7 @@ public class JArray extends AbstractJExpressionImpl
     return this;
   }
 
+  @Nonnull
   public List <JExpression> exprs ()
   {
     if (exprs == null)
@@ -92,7 +99,7 @@ public class JArray extends AbstractJExpressionImpl
     return exprs != null && !exprs.isEmpty ();
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
 
     // generally we produce new T[x], but when T is an array type (T=T'[])

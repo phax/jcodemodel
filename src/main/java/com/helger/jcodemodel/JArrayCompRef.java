@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * array component reference.
  */
@@ -63,7 +65,7 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements JAssignmen
    * @param index
    *        JExpression for index of component to access
    */
-  protected JArrayCompRef (final JExpression array, final JExpression index)
+  protected JArrayCompRef (@Nonnull final JExpression array, @Nonnull final JExpression index)
   {
     if (array == null || index == null)
       throw new NullPointerException ();
@@ -71,27 +73,31 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements JAssignmen
     this.index = index;
   }
 
+  @Nonnull
   public JExpression array ()
   {
     return array;
   }
 
+  @Nonnull
   public JExpression index ()
   {
     return index;
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.generable (array).print ('[').generable (index).print (']');
   }
 
-  public JExpression assign (final JExpression rhs)
+  @Nonnull
+  public JExpression assign (@Nonnull final JExpression rhs)
   {
     return JExpr.assign (this, rhs);
   }
 
-  public JExpression assignPlus (final JExpression rhs)
+  @Nonnull
+  public JExpression assignPlus (@Nonnull final JExpression rhs)
   {
     return JExpr.assignPlus (this, rhs);
   }

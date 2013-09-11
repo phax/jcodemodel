@@ -44,10 +44,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * For statement
  */
-
 public class JForLoop implements JStatement
 {
   private final List <Object> inits = new ArrayList <Object> ();
@@ -58,7 +60,11 @@ public class JForLoop implements JStatement
   protected JForLoop ()
   {}
 
-  public JVar init (final int mods, final AbstractJType type, final String var, final JExpression e)
+  @Nonnull
+  public JVar init (final int mods,
+                    @Nonnull final AbstractJType type,
+                    @Nonnull final String var,
+                    @Nullable final JExpression e)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, var, e);
     inits.add (v);
@@ -70,7 +76,7 @@ public class JForLoop implements JStatement
     return init (JMod.NONE, type, var, e);
   }
 
-  public void init (final JVar v, final JExpression e)
+  public void init (@Nonnull final JVar v, @Nonnull final JExpression e)
   {
     inits.add (JExpr.assign (v, e));
   }
@@ -78,16 +84,18 @@ public class JForLoop implements JStatement
   /**
    * @return List of {@link JExpression} or {@link JVar}
    */
+  @Nonnull
   public List <Object> inits ()
   {
     return Collections.unmodifiableList (inits);
   }
 
-  public void test (final JExpression e)
+  public void test (@Nullable final JExpression e)
   {
     this.test = e;
   }
 
+  @Nullable
   public JExpression test ()
   {
     return test;
@@ -98,11 +106,13 @@ public class JForLoop implements JStatement
     updates.add (e);
   }
 
+  @Nonnull
   public List <JExpression> updates ()
   {
     return Collections.unmodifiableList (updates);
   }
 
+  @Nonnull
   public JBlock body ()
   {
     if (body == null)
@@ -110,7 +120,7 @@ public class JForLoop implements JStatement
     return body;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     f.print ("for (");
     boolean first = true;

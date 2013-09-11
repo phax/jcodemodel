@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * ForEach Statement This will generate the code for statement based on the new
  * j2se 1.5 j.l.s.
@@ -54,14 +56,17 @@ public class JForEach implements JStatement
   private final JExpression collection;
   private final JVar loopVar;
 
-  protected JForEach (final AbstractJType vartype, final String variable, final JExpression collection)
+  protected JForEach (@Nonnull final AbstractJType vartype,
+                      @Nonnull final String variable,
+                      @Nonnull final JExpression collection)
   {
     this.type = vartype;
     this.var = variable;
     this.collection = collection;
-    loopVar = new JVar (JMods.forVar (JMod.NONE), type, var, collection);
+    loopVar = new JVar (JMods.forVar (JMod.FINAL), type, var, collection);
   }
 
+  @Nonnull
   public AbstractJType type ()
   {
     return type;
@@ -70,16 +75,19 @@ public class JForEach implements JStatement
   /**
    * Returns a reference to the loop variable.
    */
+  @Nonnull
   public JVar var ()
   {
     return loopVar;
   }
 
+  @Nonnull
   public JExpression collection ()
   {
     return collection;
   }
 
+  @Nonnull
   public JBlock body ()
   {
     if (body == null)
@@ -87,7 +95,7 @@ public class JForEach implements JStatement
     return body;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     f.print ("for (");
     f.generable (type).id (var).print (": ").generable (collection);

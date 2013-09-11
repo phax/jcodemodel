@@ -40,6 +40,9 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * JBreak statement
  */
@@ -54,21 +57,22 @@ public class JBreak implements JStatement
    * @param _label
    *        break label or null.
    */
-  protected JBreak (final JLabel _label)
+  protected JBreak (@Nullable final JLabel _label)
   {
     this.label = _label;
   }
 
+  @Nullable
   public JLabel label ()
   {
     return label;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     if (label == null)
       f.print ("break;").newline ();
     else
-      f.print ("break").print (label.label).print (';').newline ();
+      f.print ("break ").print (label.label).print (';').newline ();
   }
 }

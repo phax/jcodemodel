@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import javax.annotation.Nonnull;
+
 /**
  * Modifier groups.
  */
@@ -95,30 +97,35 @@ public class JMods implements JGenerable
     /* ## check for illegal combinations too */
   }
 
+  @Nonnull
   public static JMods forVar (final int mods)
   {
     _check (mods, VAR, "variable");
     return new JMods (mods);
   }
 
+  @Nonnull
   public static JMods forField (final int mods)
   {
     _check (mods, FIELD, "field");
     return new JMods (mods);
   }
 
+  @Nonnull
   public static JMods forMethod (final int mods)
   {
     _check (mods, METHOD, "method");
     return new JMods (mods);
   }
 
+  @Nonnull
   public static JMods forClass (final int mods)
   {
     _check (mods, CLASS, "class");
     return new JMods (mods);
   }
 
+  @Nonnull
   public static JMods forInterface (final int mods)
   {
     _check (mods, INTERFACE, "class");
@@ -142,41 +149,41 @@ public class JMods implements JGenerable
 
   public void setSynchronized (final boolean newValue)
   {
-    setFlag (JMod.SYNCHRONIZED, newValue);
+    _setFlag (JMod.SYNCHRONIZED, newValue);
   }
 
   public void setPrivate ()
   {
-    setFlag (JMod.PUBLIC, false);
-    setFlag (JMod.PROTECTED, false);
-    setFlag (JMod.PRIVATE, true);
+    _setFlag (JMod.PUBLIC, false);
+    _setFlag (JMod.PROTECTED, false);
+    _setFlag (JMod.PRIVATE, true);
   }
 
   public void setProtected ()
   {
-    setFlag (JMod.PUBLIC, false);
-    setFlag (JMod.PROTECTED, true);
-    setFlag (JMod.PRIVATE, false);
+    _setFlag (JMod.PUBLIC, false);
+    _setFlag (JMod.PROTECTED, true);
+    _setFlag (JMod.PRIVATE, false);
   }
 
   public void setPublic ()
   {
-    setFlag (JMod.PUBLIC, true);
-    setFlag (JMod.PROTECTED, false);
-    setFlag (JMod.PRIVATE, false);
+    _setFlag (JMod.PUBLIC, true);
+    _setFlag (JMod.PROTECTED, false);
+    _setFlag (JMod.PRIVATE, false);
   }
 
   public void setFinal (final boolean newValue)
   {
-    setFlag (JMod.FINAL, newValue);
+    _setFlag (JMod.FINAL, newValue);
   }
 
-  private void setFlag (final int bit, final boolean newValue)
+  private void _setFlag (final int bit, final boolean newValue)
   {
     mods = (mods & ~bit) | (newValue ? bit : 0);
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     if ((mods & JMod.PUBLIC) != 0)
       f.print ("public");

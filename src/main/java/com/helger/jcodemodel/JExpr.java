@@ -40,7 +40,9 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Factory methods that generate various {@link JExpression}s.
@@ -69,7 +71,7 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JInvocation _new (final AbstractJClass c)
+  public static JInvocation _new (@Nonnull final AbstractJClass c)
   {
     return new JInvocation (c);
   }
@@ -81,59 +83,59 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JInvocation invoke (final String method)
+  public static JInvocation invoke (@Nonnull final String method)
   {
     return new JInvocation ((JExpression) null, method);
   }
 
   @Nonnull
-  public static JInvocation invoke (final JMethod method)
+  public static JInvocation invoke (@Nonnull final JMethod method)
   {
     return new JInvocation ((JExpression) null, method);
   }
 
   @Nonnull
-  public static JInvocation invoke (final JExpression lhs, final JMethod method)
+  public static JInvocation invoke (@Nullable final JExpression lhs, @Nonnull final JMethod method)
   {
     return new JInvocation (lhs, method);
   }
 
   @Nonnull
-  public static JInvocation invoke (final JExpression lhs, final String method)
+  public static JInvocation invoke (@Nullable final JExpression lhs, @Nonnull final String method)
   {
     return new JInvocation (lhs, method);
   }
 
   @Nonnull
-  public static JFieldRef ref (final String field)
+  public static JFieldRef ref (@Nonnull final String field)
   {
     return new JFieldRef ((JExpression) null, field);
   }
 
   @Nonnull
-  public static JFieldRef ref (final JExpression lhs, final JVar field)
+  public static JFieldRef ref (@Nullable final JExpression lhs, @Nonnull final JVar field)
   {
     return new JFieldRef (lhs, field);
   }
 
   @Nonnull
-  public static JFieldRef ref (final JExpression lhs, final String field)
+  public static JFieldRef ref (@Nullable final JExpression lhs, @Nonnull final String field)
   {
     return new JFieldRef (lhs, field);
   }
 
   @Nonnull
-  public static JFieldRef refthis (final String field)
+  public static JFieldRef refthis (@Nonnull final String field)
   {
     return new JFieldRef (null, field, true);
   }
 
   @Nonnull
-  public static JExpression dotclass (final AbstractJClass cl)
+  public static JExpression dotclass (@Nonnull final AbstractJClass cl)
   {
     return new AbstractJExpressionImpl ()
     {
-      public void generate (final JFormatter f)
+      public void generate (@Nonnull final JFormatter f)
       {
         AbstractJClass c;
         if (cl instanceof JNarrowedClass)
@@ -146,19 +148,19 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JArrayCompRef component (final JExpression lhs, final JExpression index)
+  public static JArrayCompRef component (@Nonnull final JExpression lhs, @Nonnull final JExpression index)
   {
     return new JArrayCompRef (lhs, index);
   }
 
   @Nonnull
-  public static JCast cast (final AbstractJType type, final JExpression expr)
+  public static JCast cast (@Nonnull final AbstractJType type, @Nonnull final JExpression expr)
   {
     return new JCast (type, expr);
   }
 
   @Nonnull
-  public static JArray newArray (final AbstractJType type)
+  public static JArray newArray (@Nonnull final AbstractJType type)
   {
     return newArray (type, null);
   }
@@ -170,7 +172,7 @@ public final class JExpr
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
   @Nonnull
-  public static JArray newArray (final AbstractJType type, final JExpression size)
+  public static JArray newArray (@Nonnull final AbstractJType type, @Nullable final JExpression size)
   {
     // you cannot create an array whose component type is a generic
     return new JArray (type.erasure (), size);
@@ -183,7 +185,7 @@ public final class JExpr
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
   @Nonnull
-  public static JArray newArray (final AbstractJType type, final int size)
+  public static JArray newArray (@Nonnull final AbstractJType type, @Nonnegative final int size)
   {
     return newArray (type, lit (size));
   }

@@ -40,22 +40,26 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Java built-in primitive types. Instances of this class can be obtained as
  * constants of {@link JCodeModel}, such as {@link JCodeModel#BOOLEAN}.
  */
 public class JPrimitiveType extends AbstractJType
 {
-
-  private final String typeName;
   private final JCodeModel owner;
+  private final String typeName;
   /**
    * Corresponding wrapper class. For example, this would be "java.lang.Short"
    * for short.
    */
   private final AbstractJClass wrapperClass;
+  private AbstractJClass arrayClass;
 
-  protected JPrimitiveType (final JCodeModel owner, final String typeName, final Class <?> wrapper)
+  protected JPrimitiveType (@Nonnull final JCodeModel owner,
+                            @Nonnull final String typeName,
+                            @Nonnull final Class <?> wrapper)
   {
     this.owner = owner;
     this.typeName = typeName;
@@ -63,18 +67,21 @@ public class JPrimitiveType extends AbstractJType
   }
 
   @Override
+  @Nonnull
   public JCodeModel owner ()
   {
     return owner;
   }
 
   @Override
+  @Nonnull
   public String fullName ()
   {
     return typeName;
   }
 
   @Override
+  @Nonnull
   public String name ()
   {
     return fullName ();
@@ -86,9 +93,8 @@ public class JPrimitiveType extends AbstractJType
     return true;
   }
 
-  private AbstractJClass arrayClass;
-
   @Override
+  @Nonnull
   public AbstractJClass array ()
   {
     if (arrayClass == null)
@@ -101,6 +107,7 @@ public class JPrimitiveType extends AbstractJType
    * returns a reference to java.lang.Integer if this object represents int.
    */
   @Override
+  @Nonnull
   public AbstractJClass boxify ()
   {
     return wrapperClass;
@@ -113,6 +120,7 @@ public class JPrimitiveType extends AbstractJType
    */
   @Deprecated
   @Override
+  @Nonnull
   public AbstractJType unboxify ()
   {
     return this;
@@ -124,7 +132,8 @@ public class JPrimitiveType extends AbstractJType
    * expression <code>new Float(x)</code> for the paramter x. REVISIT: it's not
    * clear how this method works for VOID.
    */
-  public JExpression wrap (final JExpression exp)
+  @Nonnull
+  public JExpression wrap (@Nonnull final JExpression exp)
   {
     return JExpr._new (boxify ()).arg (exp);
   }
@@ -133,14 +142,15 @@ public class JPrimitiveType extends AbstractJType
    * Do the opposite of the wrap method. REVISIT: it's not clear how this method
    * works for VOID.
    */
-  public JExpression unwrap (final JExpression exp)
+  @Nonnull
+  public JExpression unwrap (@Nonnull final JExpression exp)
   {
     // it just so happens that the unwrap method is always
     // things like "intValue" or "booleanValue".
     return exp.invoke (typeName + "Value");
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.print (typeName);
   }

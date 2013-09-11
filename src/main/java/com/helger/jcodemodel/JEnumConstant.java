@@ -87,6 +87,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
     this.name = name;
   }
 
+  @Nonnull
   public JDefinedClass type ()
   {
     return type;
@@ -95,6 +96,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
   /**
    * @return The plain name of the enum constant, without any type prefix
    */
+  @Nonnull
   public String name ()
   {
     return name;
@@ -190,6 +192,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
   /**
    * {@link JAnnotatable#annotations()}
    */
+  @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
     if (annotations == null)

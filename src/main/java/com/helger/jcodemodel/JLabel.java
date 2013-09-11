@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Label that can be used for continue and break.
  * 
@@ -50,24 +52,24 @@ public class JLabel implements JStatement
   final String label;
 
   /**
-   * JBreak constructor
+   * JLabel constructor
    * 
-   * @param _label
-   *        break label or null.
+   * @param label
+   *        label name.
    */
-  protected JLabel (final String _label)
+  protected JLabel (@Nonnull final String label)
   {
-    this.label = _label;
+    this.label = label;
   }
 
+  @Nonnull
   public String label ()
   {
     return label;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     f.print (label + ':').newline ();
   }
-
 }

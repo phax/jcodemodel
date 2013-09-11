@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Field Reference
@@ -78,12 +79,12 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
    * @param name
    *        Name of field to access
    */
-  protected JFieldRef (final JExpression object, final String name)
+  protected JFieldRef (@Nullable final JExpression object, @Nonnull final String name)
   {
     this (object, name, false);
   }
 
-  protected JFieldRef (final JExpression object, final JVar v)
+  protected JFieldRef (@Nullable final JExpression object, @Nonnull final JVar v)
   {
     this (object, v, false);
   }
@@ -96,12 +97,12 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
     this (type, name, false);
   }
 
-  protected JFieldRef (final AbstractJType type, final JVar v)
+  protected JFieldRef (final AbstractJType type, @Nonnull final JVar v)
   {
     this (type, v, false);
   }
 
-  protected JFieldRef (final JGenerable object, @Nonnull final String name, final boolean explicitThis)
+  protected JFieldRef (@Nullable final JGenerable object, @Nonnull final String name, final boolean explicitThis)
   {
     this.explicitThis = explicitThis;
     this.object = object;
@@ -110,13 +111,14 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
     this.name = name;
   }
 
-  protected JFieldRef (final JGenerable object, final JVar var, final boolean explicitThis)
+  protected JFieldRef (@Nullable final JGenerable object, @Nonnull final JVar var, final boolean explicitThis)
   {
     this.explicitThis = explicitThis;
     this.object = object;
     this.var = var;
   }
 
+  @Nonnull
   public String name ()
   {
     String name = this.name;
@@ -125,6 +127,7 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
     return name;
   }
 
+  @Nullable
   public JVar var ()
   {
     return var;

@@ -50,6 +50,8 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.util.SecureLoader;
 
 /**
@@ -267,6 +269,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationW
   /**
    * Creates a new typed annotation writer.
    */
+  @Nonnull
   static <W extends JAnnotationWriter <?>> W create (final Class <W> w, final JAnnotatable annotatable)
   {
     final Class <? extends Annotation> a = findAnnotationType (w);
