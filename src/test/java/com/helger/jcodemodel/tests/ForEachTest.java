@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JClass;
+import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
@@ -72,11 +72,11 @@ public class ForEachTest {
 
 		// This is not exactly right because we need to
 		// support generics
-		JClass arrayListclass = cm.ref(ArrayList.class);
+		AbstractJClass arrayListclass = cm.ref(ArrayList.class);
 		JVar $list = m.body().decl(arrayListclass, "alist",
 				JExpr._new(arrayListclass));
 
-		JClass $integerclass = cm.ref(Integer.class);
+		AbstractJClass $integerclass = cm.ref(Integer.class);
 		JForEach foreach = m.body().forEach($integerclass, "count", $list);
 		JVar $count1 = foreach.var();
 		foreach.body().assign(JExpr.ref("getCount"), JExpr.lit(10));

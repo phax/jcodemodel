@@ -46,23 +46,29 @@ import java.util.List;
 /**
  * Represents a wildcard type like "? extends Foo".
  * <p>
- * Instances of this class can be obtained from {@link JClass#wildcard()} TODO:
- * extend this to cover "? super Integer".
+ * Instances of this class can be obtained from
+ * {@link AbstractJClass#wildcard()} TODO: extend this to cover
+ * "? super Integer".
  * <p>
  * Our modeling of types are starting to look really ugly. ideally it should
  * have been done somewhat like APT, but it's too late now.
  * 
  * @author Kohsuke Kawaguchi
  */
-final class JTypeWildcard extends JClass
+public class JTypeWildcard extends AbstractJClass
 {
 
-  private final JClass bound;
+  private final AbstractJClass bound;
 
-  JTypeWildcard (final JClass bound)
+  JTypeWildcard (final AbstractJClass bound)
   {
     super (bound.owner ());
     this.bound = bound;
+  }
+
+  public AbstractJClass bound ()
+  {
+    return bound;
   }
 
   @Override
@@ -89,7 +95,7 @@ final class JTypeWildcard extends JClass
    * If no bound is given, this method returns {@link Object}.
    */
   @Override
-  public JClass _extends ()
+  public AbstractJClass _extends ()
   {
     if (bound != null)
       return bound;
@@ -101,7 +107,7 @@ final class JTypeWildcard extends JClass
    * Returns the interface bounds of this variable.
    */
   @Override
-  public Iterator <JClass> _implements ()
+  public Iterator <AbstractJClass> _implements ()
   {
     return bound._implements ();
   }
@@ -119,9 +125,9 @@ final class JTypeWildcard extends JClass
   }
 
   @Override
-  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
-    final JClass nb = bound.substituteParams (variables, bindings);
+    final AbstractJClass nb = bound.substituteParams (variables, bindings);
     if (nb == bound)
       return this;
     else

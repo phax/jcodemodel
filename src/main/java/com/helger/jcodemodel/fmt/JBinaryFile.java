@@ -44,7 +44,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.helger.jcodemodel.JResourceFile;
+import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
  * Allows the application to use OutputStream to define data that will be stored
@@ -52,7 +52,7 @@ import com.helger.jcodemodel.JResourceFile;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JBinaryFile extends JResourceFile
+public final class JBinaryFile extends AbstractJResourceFile
 {
 
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream ();

@@ -40,44 +40,26 @@
 
 package com.helger.jcodemodel;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 /**
- * Represents a resource file in the application-specific file format.
+ * This helps enable whether the JDefinedClass is a Class or Interface or
+ * AnnotationTypeDeclaration or Enum
+ * 
+ * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public abstract class JResourceFile
+public enum EClassType
 {
-
-  private final String name;
-
-  protected JResourceFile (final String name)
-  {
-    this.name = name;
-  }
+  CLASS ("class"),
+  INTERFACE ("interface"),
+  ANNOTATION_TYPE_DECL ("@interface"),
+  ENUM ("enum");
 
   /**
-   * Gets the name of this property file
+   * The keyword used to declare this type.
    */
-  public String name ()
-  {
-    return name;
-  }
+  final String declarationToken;
 
-  /**
-   * Returns true if this file should be generated into the directory that the
-   * resource files go into.
-   * <p>
-   * Returns false if this file should be generated into the directory where
-   * other source files go.
-   */
-  protected boolean isResource ()
+  private EClassType (final String token)
   {
-    return true;
+    this.declarationToken = token;
   }
-
-  /**
-   * called by JPackage to produce the file image.
-   */
-  protected abstract void build (OutputStream os) throws IOException;
 }

@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -52,7 +53,7 @@ public class JTryBlock implements JStatement
 
   private final JBlock body = new JBlock ();
   private final List <JCatchBlock> catches = new ArrayList <JCatchBlock> ();
-  private JBlock _finally = null;
+  private JBlock _finally;
 
   JTryBlock ()
   {}
@@ -62,11 +63,16 @@ public class JTryBlock implements JStatement
     return body;
   }
 
-  public JCatchBlock _catch (final JClass exception)
+  public JCatchBlock _catch (final AbstractJClass exception)
   {
     final JCatchBlock cb = new JCatchBlock (exception);
     catches.add (cb);
     return cb;
+  }
+
+  public List <JCatchBlock> catches ()
+  {
+    return Collections.unmodifiableList (catches);
   }
 
   public JBlock _finally ()
@@ -85,5 +91,4 @@ public class JTryBlock implements JStatement
       f.p ("finally").g (_finally);
     f.nl ();
   }
-
 }

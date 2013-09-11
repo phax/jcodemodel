@@ -45,12 +45,13 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A special {@link JClass} that represents an unknown class (except its name.)
+ * A special {@link AbstractJClass} that represents an unknown class (except its
+ * name.)
  * 
  * @author Kohsuke Kawaguchi
  * @see JCodeModel#directClass(String)
  */
-final class JDirectClass extends JClass
+public class JDirectClass extends AbstractJClass
 {
 
   private final String fullName;
@@ -87,15 +88,15 @@ final class JDirectClass extends JClass
   }
 
   @Override
-  public JClass _extends ()
+  public AbstractJClass _extends ()
   {
     return owner ().ref (Object.class);
   }
 
   @Override
-  public Iterator <JClass> _implements ()
+  public Iterator <AbstractJClass> _implements ()
   {
-    return Collections.<JClass> emptyList ().iterator ();
+    return Collections.<AbstractJClass> emptyList ().iterator ();
   }
 
   @Override
@@ -111,7 +112,7 @@ final class JDirectClass extends JClass
   }
 
   @Override
-  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
     return this;
   }

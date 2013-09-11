@@ -44,7 +44,7 @@ package com.helger.jcodemodel;
  * Field Reference
  */
 
-public class JFieldRef extends JExpressionImpl implements JAssignmentTarget
+public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTarget
 {
   /**
    * Object expression upon which this field will be accessed, or null for the
@@ -89,12 +89,12 @@ public class JFieldRef extends JExpressionImpl implements JAssignmentTarget
   /**
    * Static field reference.
    */
-  public JFieldRef (final JType type, final String name)
+  public JFieldRef (final AbstractJType type, final String name)
   {
     this (type, name, false);
   }
 
-  public JFieldRef (final JType type, final JVar v)
+  public JFieldRef (final AbstractJType type, final JVar v)
   {
     this (type, v, false);
   }
@@ -115,11 +115,27 @@ public class JFieldRef extends JExpressionImpl implements JAssignmentTarget
     this.var = var;
   }
 
-  public void generate (final JFormatter f)
+  public String name ()
   {
     String name = this.name;
     if (name == null)
       name = var.name ();
+    return name;
+  }
+
+  public JVar var ()
+  {
+    return var;
+  }
+
+  public boolean explicitThis ()
+  {
+    return explicitThis;
+  }
+
+  public void generate (final JFormatter f)
+  {
+    final String name = name ();
 
     if (object != null)
     {

@@ -44,9 +44,8 @@ package com.helger.jcodemodel;
  * JClass for generating expressions containing operators
  */
 
-abstract public class JOp
+public final class JOp
 {
-
   private JOp ()
   {}
 
@@ -60,16 +59,17 @@ abstract public class JOp
 
   /* -- Unary operators -- */
 
-  public static class UnaryOp extends JExpressionImpl
+  public static class UnaryOp extends AbstractJExpressionImpl
   {
-    protected String op;
-    protected JExpression e;
-    protected boolean opFirst = true;
+    private final String op;
+    private final JExpression e;
+    private final boolean opFirst;
 
     public UnaryOp (final String op, final JExpression e)
     {
       this.op = op;
       this.e = e;
+      opFirst = false;
     }
 
     public UnaryOp (final JExpression e, final String op)
@@ -77,6 +77,21 @@ abstract public class JOp
       this.op = op;
       this.e = e;
       opFirst = false;
+    }
+
+    public String op ()
+    {
+      return op;
+    }
+
+    public JExpression expr ()
+    {
+      return e;
+    }
+
+    public boolean opFirst ()
+    {
+      return opFirst;
     }
 
     public void generate (final JFormatter f)
@@ -113,7 +128,6 @@ abstract public class JOp
 
   public static class TightUnaryOp extends UnaryOp
   {
-
     public TightUnaryOp (final JExpression e, final String op)
     {
       super (e, op);
@@ -122,10 +136,10 @@ abstract public class JOp
     @Override
     public void generate (final JFormatter f)
     {
-      if (opFirst)
-        f.p (op).g (e);
+      if (opFirst ())
+        f.p (op ()).g (expr ());
       else
-        f.g (e).p (op);
+        f.g (expr ()).p (op ());
     }
 
   }
@@ -142,18 +156,32 @@ abstract public class JOp
 
   /* -- Binary operators -- */
 
-  public static class BinaryOp extends JExpressionImpl
+  public static class BinaryOp extends AbstractJExpressionImpl
   {
-
-    private final String op;
     private final JExpression left;
+    private final String op;
     private final JGenerable right;
 
-    public BinaryOp (final String op, final JExpression left, final JGenerable right)
+    public BinaryOp (final JExpression left, final String op, final JGenerable right)
     {
       this.left = left;
       this.op = op;
       this.right = right;
+    }
+
+    public JExpression left ()
+    {
+      return left;
+    }
+
+    public String op ()
+    {
+      return op;
+    }
+
+    public JGenerable right ()
+    {
+      return right;
     }
 
     public void generate (final JFormatter f)
@@ -165,52 +193,52 @@ abstract public class JOp
 
   public static JExpression plus (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("+", left, right);
+    return new BinaryOp (left, "+", right);
   }
 
   public static JExpression minus (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("-", left, right);
+    return new BinaryOp (left, "-", right);
   }
 
   public static JExpression mul (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("*", left, right);
+    return new BinaryOp (left, "*", right);
   }
 
   public static JExpression div (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("/", left, right);
+    return new BinaryOp (left, "/", right);
   }
 
   public static JExpression mod (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("%", left, right);
+    return new BinaryOp (left, "%", right);
   }
 
   public static JExpression shl (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("<<", left, right);
+    return new BinaryOp (left, "<<", right);
   }
 
   public static JExpression shr (final JExpression left, final JExpression right)
   {
-    return new BinaryOp (">>", left, right);
+    return new BinaryOp (left, ">>", right);
   }
 
   public static JExpression shrz (final JExpression left, final JExpression right)
   {
-    return new BinaryOp (">>>", left, right);
+    return new BinaryOp (left, ">>>", right);
   }
 
   public static JExpression band (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("&", left, right);
+    return new BinaryOp (left, "&", right);
   }
 
   public static JExpression bor (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("|", left, right);
+    return new BinaryOp (left, "|", right);
   }
 
   public static JExpression cand (final JExpression left, final JExpression right)
@@ -223,7 +251,7 @@ abstract public class JOp
       return left; // JExpr.FALSE
     if (right == JExpr.FALSE)
       return right; // JExpr.FALSE
-    return new BinaryOp ("&&", left, right);
+    return new BinaryOp (left, "&&", right);
   }
 
   public static JExpression cor (final JExpression left, final JExpression right)
@@ -236,52 +264,52 @@ abstract public class JOp
       return right;
     if (right == JExpr.FALSE)
       return left;
-    return new BinaryOp ("||", left, right);
+    return new BinaryOp (left, "||", right);
   }
 
   public static JExpression xor (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("^", left, right);
+    return new BinaryOp (left, "^", right);
   }
 
   public static JExpression lt (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("<", left, right);
+    return new BinaryOp (left, "<", right);
   }
 
   public static JExpression lte (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("<=", left, right);
+    return new BinaryOp (left, "<=", right);
   }
 
   public static JExpression gt (final JExpression left, final JExpression right)
   {
-    return new BinaryOp (">", left, right);
+    return new BinaryOp (left, ">", right);
   }
 
   public static JExpression gte (final JExpression left, final JExpression right)
   {
-    return new BinaryOp (">=", left, right);
+    return new BinaryOp (left, ">=", right);
   }
 
   public static JExpression eq (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("==", left, right);
+    return new BinaryOp (left, "==", right);
   }
 
   public static JExpression ne (final JExpression left, final JExpression right)
   {
-    return new BinaryOp ("!=", left, right);
+    return new BinaryOp (left, "!=", right);
   }
 
-  public static JExpression _instanceof (final JExpression left, final JType right)
+  public static JExpression _instanceof (final JExpression left, final AbstractJType right)
   {
-    return new BinaryOp ("instanceof", left, right);
+    return new BinaryOp (left, "instanceof", right);
   }
 
   /* -- Ternary operators -- */
 
-  public static class TernaryOp extends JExpressionImpl
+  public static class TernaryOp extends AbstractJExpressionImpl
   {
     private final JExpression e1;
     private final String op1;
@@ -289,10 +317,10 @@ abstract public class JOp
     private final String op2;
     private final JExpression e3;
 
-    public TernaryOp (final String op1,
-                      final String op2,
-                      final JExpression e1,
+    public TernaryOp (final JExpression e1,
+                      final String op1,
                       final JExpression e2,
+                      final String op2,
                       final JExpression e3)
     {
       this.e1 = e1;
@@ -300,6 +328,31 @@ abstract public class JOp
       this.e2 = e2;
       this.op2 = op2;
       this.e3 = e3;
+    }
+
+    public JExpression expr1 ()
+    {
+      return e1;
+    }
+
+    public String op1 ()
+    {
+      return op1;
+    }
+
+    public JGenerable expr2 ()
+    {
+      return e2;
+    }
+
+    public String op2 ()
+    {
+      return op2;
+    }
+
+    public JGenerable expr3 ()
+    {
+      return e3;
     }
 
     public void generate (final JFormatter f)
@@ -311,7 +364,6 @@ abstract public class JOp
 
   public static JExpression cond (final JExpression cond, final JExpression ifTrue, final JExpression ifFalse)
   {
-    return new TernaryOp ("?", ":", cond, ifTrue, ifFalse);
+    return new TernaryOp (cond, "?", ifTrue, ":", ifFalse);
   }
-
 }

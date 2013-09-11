@@ -50,7 +50,7 @@ import java.util.List;
  * Variables and fields.
  */
 
-public class JVar extends JExpressionImpl implements JDeclaration, JAssignmentTarget, JAnnotatable
+public class JVar extends AbstractJExpressionImpl implements JDeclaration, JAssignmentTarget, JAnnotatable
 {
 
   /**
@@ -61,7 +61,7 @@ public class JVar extends JExpressionImpl implements JDeclaration, JAssignmentTa
   /**
    * JType of the variable
    */
-  private JType type;
+  private AbstractJType type;
 
   /**
    * Name of the variable
@@ -76,7 +76,7 @@ public class JVar extends JExpressionImpl implements JDeclaration, JAssignmentTa
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> annotations = null;
+  private List <JAnnotationUse> annotations;
 
   /**
    * JVar constructor
@@ -88,7 +88,7 @@ public class JVar extends JExpressionImpl implements JDeclaration, JAssignmentTa
    * @param init
    *        Value to initialize this variable to
    */
-  JVar (final JMods mods, final JType type, final String name, final JExpression init)
+  protected JVar (final JMods mods, final AbstractJType type, final String name, final JExpression init)
   {
     this.mods = mods;
     this.type = type;
@@ -133,7 +133,7 @@ public class JVar extends JExpressionImpl implements JDeclaration, JAssignmentTa
    * 
    * @return always non-null.
    */
-  public JType type ()
+  public AbstractJType type ()
   {
     return type;
   }
@@ -154,9 +154,9 @@ public class JVar extends JExpressionImpl implements JDeclaration, JAssignmentTa
    *        must not be null.
    * @return the old type value. always non-null.
    */
-  public JType type (final JType newType)
+  public AbstractJType type (final AbstractJType newType)
   {
-    final JType r = type;
+    final AbstractJType r = type;
     if (newType == null)
       throw new IllegalArgumentException ();
     type = newType;
@@ -169,7 +169,7 @@ public class JVar extends JExpressionImpl implements JDeclaration, JAssignmentTa
    * @param clazz
    *        The annotation class to annotate the field with
    */
-  public JAnnotationUse annotate (final JClass clazz)
+  public JAnnotationUse annotate (final AbstractJClass clazz)
   {
     if (annotations == null)
       annotations = new ArrayList <JAnnotationUse> ();
@@ -235,5 +235,4 @@ public class JVar extends JExpressionImpl implements JDeclaration, JAssignmentTa
   {
     return JExpr.assignPlus (this, rhs);
   }
-
 }

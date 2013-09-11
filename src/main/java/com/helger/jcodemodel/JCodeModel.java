@@ -82,7 +82,7 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  * <h2>Where to go from here?</h2>
  * <p>
  * Most of the time you'd want to populate new type definitions in a
- * {@link JCodeModel}. See {@link #_class(String, ClassType)}.
+ * {@link JCodeModel}. See {@link #_class(String, EClassType)}.
  */
 public final class JCodeModel
 {
@@ -170,17 +170,17 @@ public final class JCodeModel
    */
   public JDefinedClass _class (final String fullyqualifiedName) throws JClassAlreadyExistsException
   {
-    return _class (fullyqualifiedName, ClassType.CLASS);
+    return _class (fullyqualifiedName, EClassType.CLASS);
   }
 
   /**
-   * Creates a dummy, unknown {@link JClass} that represents a given name.
+   * Creates a dummy, unknown {@link AbstractJClass} that represents a given name.
    * <p>
    * This method is useful when the code generation needs to include the
    * user-specified class that may or may not exist, and only thing known about
    * it is a class name.
    */
-  public JClass directClass (final String name)
+  public AbstractJClass directClass (final String name)
   {
     return new JDirectClass (this, name);
   }
@@ -191,7 +191,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (final int mods, final String fullyqualifiedName, final ClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
   {
     final int idx = fullyqualifiedName.lastIndexOf ('.');
     if (idx < 0)
@@ -206,7 +206,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (final String fullyqualifiedName, final ClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
   {
     return _class (JMod.PUBLIC, fullyqualifiedName, t);
   }
@@ -229,7 +229,7 @@ public final class JCodeModel
   /**
    * Creates a new anonymous class.
    */
-  public JDefinedClass anonymousClass (final JClass baseType)
+  public JDefinedClass anonymousClass (final AbstractJClass baseType)
   {
     return new JAnonymousClass (baseType);
   }
@@ -334,7 +334,7 @@ public final class JCodeModel
    * 
    * @see #_ref(Class) for the version that handles more cases.
    */
-  public JClass ref (final Class <?> clazz)
+  public AbstractJClass ref (final Class <?> clazz)
   {
     JReferencedClass jrc = refClasses.get (clazz);
     if (jrc == null)
@@ -354,10 +354,10 @@ public final class JCodeModel
     return jrc;
   }
 
-  public JType _ref (final Class <?> c)
+  public AbstractJType _ref (final Class <?> c)
   {
     if (c.isPrimitive ())
-      return JType.parse (this, c.getName ());
+      return AbstractJType.parse (this, c.getName ());
     else
       return ref (c);
   }
@@ -368,9 +368,9 @@ public final class JCodeModel
    * <p>
    * First, this method attempts to load the class of the given name. If that
    * fails, we assume that the class is derived straight from {@link Object},
-   * and return a {@link JClass}.
+   * and return a {@link AbstractJClass}.
    */
-  public JClass ref (final String fullyQualifiedClassName)
+  public AbstractJClass ref (final String fullyQualifiedClassName)
   {
     try
     {
@@ -398,13 +398,13 @@ public final class JCodeModel
   /**
    * Cached for {@link #wildcard()}.
    */
-  private JClass wildcard;
+  private AbstractJClass wildcard;
 
   /**
-   * Gets a {@link JClass} representation for "?", which is equivalent to
+   * Gets a {@link AbstractJClass} representation for "?", which is equivalent to
    * "? extends Object".
    */
-  public JClass wildcard ()
+  public AbstractJClass wildcard ()
   {
     if (wildcard == null)
       wildcard = ref (Object.class).wildcard ();
@@ -419,7 +419,7 @@ public final class JCodeModel
    * @exception ClassNotFoundException
    *            If the specified type is not found.
    */
-  public JType parseType (final String name) throws ClassNotFoundException
+  public AbstractJType parseType (final String name) throws ClassNotFoundException
   {
     // array
     if (name.endsWith ("[]"))
@@ -428,7 +428,7 @@ public final class JCodeModel
     // try primitive type
     try
     {
-      return JType.parse (this, name);
+      return AbstractJType.parse (this, name);
     }
     catch (final IllegalArgumentException e)
     {}
@@ -453,7 +453,7 @@ public final class JCodeModel
      * 
      * @return the index of the character next to T.
      */
-    JClass parseTypeName () throws ClassNotFoundException
+    AbstractJClass parseTypeName () throws ClassNotFoundException
     {
       final int start = idx;
 
@@ -490,7 +490,7 @@ public final class JCodeModel
           break;
       }
 
-      final JClass clazz = ref (s.substring (start, idx));
+      final AbstractJClass clazz = ref (s.substring (start, idx));
 
       return parseSuffix (clazz);
     }
@@ -499,7 +499,7 @@ public final class JCodeModel
      * Parses additional left-associative suffixes, like type arguments and
      * array specifiers.
      */
-    private JClass parseSuffix (final JClass clazz) throws ClassNotFoundException
+    private AbstractJClass parseSuffix (final AbstractJClass clazz) throws ClassNotFoundException
     {
       if (idx == s.length ())
         return clazz; // hit EOL
@@ -536,13 +536,13 @@ public final class JCodeModel
      * 
      * @return the index of the character next to '>'
      */
-    private JClass parseArguments (final JClass rawType) throws ClassNotFoundException
+    private AbstractJClass parseArguments (final AbstractJClass rawType) throws ClassNotFoundException
     {
       if (s.charAt (idx) != '<')
         throw new IllegalArgumentException ();
       idx++;
 
-      final List <JClass> args = new ArrayList <JClass> ();
+      final List <AbstractJClass> args = new ArrayList <AbstractJClass> ();
 
       while (true)
       {
@@ -551,7 +551,7 @@ public final class JCodeModel
           throw new IllegalArgumentException ("Missing '>' in " + s);
         final char ch = s.charAt (idx);
         if (ch == '>')
-          return rawType.narrow (args.toArray (new JClass [args.size ()]));
+          return rawType.narrow (args.toArray (new AbstractJClass [args.size ()]));
 
         if (ch != ',')
           throw new IllegalArgumentException (s);
@@ -571,7 +571,7 @@ public final class JCodeModel
    * the _package() method, which obtains the owner JPackage object, which is
    * scoped to JCodeModel.
    */
-  private class JReferencedClass extends JClass implements JDeclaration
+  private class JReferencedClass extends AbstractJClass implements JDeclaration
   {
     private final Class <?> _class;
 
@@ -601,7 +601,7 @@ public final class JCodeModel
     }
 
     @Override
-    public JClass outer ()
+    public AbstractJClass outer ()
     {
       final Class <?> p = _class.getDeclaringClass ();
       if (p == null)
@@ -627,7 +627,7 @@ public final class JCodeModel
     }
 
     @Override
-    public JClass _extends ()
+    public AbstractJClass _extends ()
     {
       final Class <?> sp = _class.getSuperclass ();
       if (sp == null)
@@ -641,10 +641,10 @@ public final class JCodeModel
     }
 
     @Override
-    public Iterator <JClass> _implements ()
+    public Iterator <AbstractJClass> _implements ()
     {
       final Class <?> [] interfaces = _class.getInterfaces ();
-      return new Iterator <JClass> ()
+      return new Iterator <AbstractJClass> ()
       {
         private int idx = 0;
 
@@ -653,7 +653,7 @@ public final class JCodeModel
           return idx < interfaces.length;
         }
 
-        public JClass next ()
+        public AbstractJClass next ()
         {
           return JCodeModel.this.ref (interfaces[idx++]);
         }
@@ -682,7 +682,7 @@ public final class JCodeModel
     {
       final Class <?> v = boxToPrimitive.get (_class);
       if (v != null)
-        return JType.parse (JCodeModel.this, v.getName ());
+        return AbstractJType.parse (JCodeModel.this, v.getName ());
       else
         return null;
     }
@@ -704,7 +704,7 @@ public final class JCodeModel
     }
 
     @Override
-    protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+    protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
     {
       // TODO: does JDK 1.5 reflection provides these information?
       return this;

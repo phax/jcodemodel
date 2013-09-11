@@ -43,8 +43,10 @@ package com.helger.jcodemodel;
 /**
  * Factory methods that generate various {@link JExpression}s.
  */
-public abstract class JExpr
+public final class JExpr
 {
+  private static final String charEscape = "\b\t\n\f\r\"\'\\";
+  private static final String charMacro = "btnfr\"'\\";
 
   /**
    * This class is not instanciable.
@@ -62,12 +64,12 @@ public abstract class JExpr
     return new JAssignment (lhs, rhs, "+");
   }
 
-  public static JInvocation _new (final JClass c)
+  public static JInvocation _new (final AbstractJClass c)
   {
     return new JInvocation (c);
   }
 
-  public static JInvocation _new (final JType t)
+  public static JInvocation _new (final AbstractJType t)
   {
     return new JInvocation (t);
   }
@@ -112,13 +114,13 @@ public abstract class JExpr
     return new JFieldRef (null, field, true);
   }
 
-  public static JExpression dotclass (final JClass cl)
+  public static JExpression dotclass (final AbstractJClass cl)
   {
-    return new JExpressionImpl ()
+    return new AbstractJExpressionImpl ()
     {
       public void generate (final JFormatter f)
       {
-        JClass c;
+        AbstractJClass c;
         if (cl instanceof JNarrowedClass)
           c = ((JNarrowedClass) cl).basis;
         else
@@ -133,12 +135,12 @@ public abstract class JExpr
     return new JArrayCompRef (lhs, index);
   }
 
-  public static JCast cast (final JType type, final JExpression expr)
+  public static JCast cast (final AbstractJType type, final JExpression expr)
   {
     return new JCast (type, expr);
   }
 
-  public static JArray newArray (final JType type)
+  public static JArray newArray (final AbstractJType type)
   {
     return newArray (type, null);
   }
@@ -149,7 +151,7 @@ public abstract class JExpr
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
-  public static JArray newArray (final JType type, final JExpression size)
+  public static JArray newArray (final AbstractJType type, final JExpression size)
   {
     // you cannot create an array whose component type is a generic
     return new JArray (type.erasure (), size);
@@ -161,7 +163,7 @@ public abstract class JExpr
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
-  public static JArray newArray (final JType type, final int size)
+  public static JArray newArray (final AbstractJType type, final int size)
   {
     return newArray (type, lit (size));
   }
@@ -264,9 +266,6 @@ public abstract class JExpr
         }
   }
 
-  static final String charEscape = "\b\t\n\f\r\"\'\\";
-  static final String charMacro = "btnfr\"'\\";
-
   /**
    * Escapes the given string, then surrounds it by the specified quotation
    * mark.
@@ -343,7 +342,7 @@ public abstract class JExpr
    */
   public static JExpression direct (final String source)
   {
-    return new JExpressionImpl ()
+    return new AbstractJExpressionImpl ()
     {
       public void generate (final JFormatter f)
       {

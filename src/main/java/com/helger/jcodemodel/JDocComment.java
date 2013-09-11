@@ -40,7 +40,6 @@
 
 package com.helger.jcodemodel;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -59,14 +58,16 @@ public class JDocComment extends JCommentPart implements JGenerable
 
   private static final long serialVersionUID = 1L;
 
+  private final JCodeModel owner;
+
   /** list of @param tags */
-  private final Map <String, JCommentPart> atParams = new HashMap <String, JCommentPart> ();
+  private final Map <String, JCommentPart> atParams = new LinkedHashMap <String, JCommentPart> ();
 
   /** list of xdoclets */
-  private final Map <String, Map <String, String>> atXdoclets = new HashMap <String, Map <String, String>> ();
+  private final Map <String, Map <String, String>> atXdoclets = new LinkedHashMap <String, Map <String, String>> ();
 
   /** list of @throws tags */
-  private final Map <JClass, JCommentPart> atThrows = new HashMap <JClass, JCommentPart> ();
+  private final Map <AbstractJClass, JCommentPart> atThrows = new LinkedHashMap <AbstractJClass, JCommentPart> ();
 
   /**
    * The @return tag part.
@@ -75,8 +76,6 @@ public class JDocComment extends JCommentPart implements JGenerable
 
   /** The @deprecated tag */
   private JCommentPart atDeprecated = null;
-
-  private final JCodeModel owner;
 
   public JDocComment (final JCodeModel owner)
   {
@@ -119,6 +118,11 @@ public class JDocComment extends JCommentPart implements JGenerable
     return removeParam (param.name ());
   }
 
+  public void removeAllParams ()
+  {
+    atParams.clear ();
+  }
+
   /**
    * add an @throws tag to the javadoc
    */
@@ -130,7 +134,7 @@ public class JDocComment extends JCommentPart implements JGenerable
   /**
    * add an @throws tag to the javadoc
    */
-  public JCommentPart addThrows (final JClass exception)
+  public JCommentPart addThrows (final AbstractJClass exception)
   {
     JCommentPart p = atThrows.get (exception);
     if (p == null)
@@ -146,9 +150,14 @@ public class JDocComment extends JCommentPart implements JGenerable
     return removeThrows (owner.ref (exception));
   }
 
-  public JCommentPart removeThrows (final JClass exception)
+  public JCommentPart removeThrows (final AbstractJClass exception)
   {
-    return atParams.remove (exception);
+    return atThrows.remove (exception);
+  }
+
+  public void removeAllThrows ()
+  {
+    atThrows.clear ();
   }
 
   /**
@@ -220,6 +229,11 @@ public class JDocComment extends JCommentPart implements JGenerable
     return atXdoclets.remove (name);
   }
 
+  public void removeAllXdoclets ()
+  {
+    atXdoclets.clear ();
+  }
+
   public void generate (final JFormatter f)
   {
     // I realized that we can't use StringTokenizer because
@@ -240,7 +254,7 @@ public class JDocComment extends JCommentPart implements JGenerable
       f.p (" * @return").nl ();
       atReturn.format (f, INDENT);
     }
-    for (final Map.Entry <JClass, JCommentPart> e : atThrows.entrySet ())
+    for (final Map.Entry <AbstractJClass, JCommentPart> e : atThrows.entrySet ())
     {
       f.p (" * @throws ").t (e.getKey ()).nl ();
       e.getValue ().format (f, INDENT);

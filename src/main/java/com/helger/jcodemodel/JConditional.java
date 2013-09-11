@@ -68,9 +68,14 @@ public class JConditional implements JStatement
    * @param test
    *        JExpression which will determine branching
    */
-  JConditional (final JExpression test)
+  public JConditional (final JExpression test)
   {
     this.test = test;
+  }
+
+  public JExpression test ()
+  {
+    return test;
   }
 
   /**

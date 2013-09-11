@@ -43,17 +43,21 @@ package com.helger.jcodemodel;
 /**
  * Catch block for a try/catch/finally statement
  */
-
 public class JCatchBlock implements JGenerable
 {
 
-  JClass exception;
+  private final AbstractJClass exception;
   private JVar var = null;
   private final JBlock body = new JBlock ();
 
-  JCatchBlock (final JClass exception)
+  public JCatchBlock (final AbstractJClass exception)
   {
     this.exception = exception;
+  }
+
+  public AbstractJClass exception ()
+  {
+    return exception;
   }
 
   public JVar param (final String name)
@@ -61,6 +65,11 @@ public class JCatchBlock implements JGenerable
     if (var != null)
       throw new IllegalStateException ();
     var = new JVar (JMods.forVar (JMod.NONE), exception, name, null);
+    return var;
+  }
+
+  public JVar param ()
+  {
     return var;
   }
 
@@ -75,5 +84,4 @@ public class JCatchBlock implements JGenerable
       var = new JVar (JMods.forVar (JMod.NONE), exception, "_x", null);
     f.p ("catch (").b (var).p (')').g (body);
   }
-
 }

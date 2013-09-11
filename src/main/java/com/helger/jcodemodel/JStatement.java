@@ -47,7 +47,5 @@ package com.helger.jcodemodel;
 
 public interface JStatement
 {
-
-  public void state (JFormatter f);
-
+  void state (JFormatter f);
 }

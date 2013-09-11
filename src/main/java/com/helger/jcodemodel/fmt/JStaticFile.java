@@ -44,14 +44,14 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.helger.jcodemodel.JResourceFile;
+import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
  * Allows an application to copy a resource file to the output.
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JStaticFile extends JResourceFile
+public final class JStaticFile extends AbstractJResourceFile
 {
 
   private final ClassLoader classLoader;

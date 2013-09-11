@@ -52,36 +52,50 @@ import java.util.List;
  * 
  * @author Bhakti Mehta (Bhakti.Mehta@sun.com)
  */
-public class JEnumConstant extends JExpressionImpl implements JDeclaration, JAnnotatable, JDocCommentable
+public class JEnumConstant extends AbstractJExpressionImpl implements JDeclaration, JAnnotatable, JDocCommentable
 {
+  /**
+   * The enum class.
+   */
+  private final JDefinedClass type;
 
   /**
    * The constant.
    */
   private final String name;
-  /**
-   * The enum class.
-   */
-  private final JDefinedClass type;
+
   /**
    * javadoc comments, if any.
    */
-  private JDocComment jdoc = null;
+  private JDocComment jdoc;
 
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> annotations = null;
+  private List <JAnnotationUse> annotations;
 
   /**
    * List of the constructor argument expressions. Lazily constructed.
    */
-  private List <JExpression> args = null;
+  private List <JExpression> args;
 
   public JEnumConstant (final JDefinedClass type, final String name)
   {
-    this.name = name;
     this.type = type;
+    this.name = name;
+  }
+
+  public JDefinedClass type ()
+  {
+    return type;
+  }
+
+  /**
+   * @return The plain name of the enum constant, without any type prefix
+   */
+  public String name ()
+  {
+    return name;
   }
 
   /**
@@ -113,7 +127,7 @@ public class JEnumConstant extends JExpressionImpl implements JDeclaration, JAnn
   }
 
   /**
-   * Returns the name of this constant.
+   * Returns the name of this constant including the type name
    * 
    * @return never null.
    */
@@ -140,7 +154,7 @@ public class JEnumConstant extends JExpressionImpl implements JDeclaration, JAnn
    * @param clazz
    *        The annotation class to annotate the field with
    */
-  public JAnnotationUse annotate (final JClass clazz)
+  public JAnnotationUse annotate (final AbstractJClass clazz)
   {
     if (annotations == null)
       annotations = new ArrayList <JAnnotationUse> ();

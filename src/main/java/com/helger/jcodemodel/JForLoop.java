@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,18 +52,21 @@ public class JForLoop implements JStatement
 {
 
   private final List <Object> inits = new ArrayList <Object> ();
-  private JExpression test = null;
+  private JExpression test;
   private final List <JExpression> updates = new ArrayList <JExpression> ();
-  private JBlock body = null;
+  private JBlock body;
 
-  public JVar init (final int mods, final JType type, final String var, final JExpression e)
+  public JForLoop ()
+  {}
+
+  public JVar init (final int mods, final AbstractJType type, final String var, final JExpression e)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, var, e);
     inits.add (v);
     return v;
   }
 
-  public JVar init (final JType type, final String var, final JExpression e)
+  public JVar init (final AbstractJType type, final String var, final JExpression e)
   {
     return init (JMod.NONE, type, var, e);
   }
@@ -72,14 +76,32 @@ public class JForLoop implements JStatement
     inits.add (JExpr.assign (v, e));
   }
 
+  /**
+   * @return List of {@link JExpression} or {@link JVar}
+   */
+  public List <Object> inits ()
+  {
+    return Collections.unmodifiableList (inits);
+  }
+
   public void test (final JExpression e)
   {
     this.test = e;
   }
 
+  public JExpression test ()
+  {
+    return test;
+  }
+
   public void update (final JExpression e)
   {
     updates.add (e);
+  }
+
+  public List <JExpression> updates ()
+  {
+    return Collections.unmodifiableList (updates);
   }
 
   public JBlock body ()
@@ -109,5 +131,4 @@ public class JForLoop implements JStatement
     else
       f.p (';').nl ();
   }
-
 }

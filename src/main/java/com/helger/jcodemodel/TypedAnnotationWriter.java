@@ -134,9 +134,9 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
 
     // scalar value
 
-    if (arg instanceof JType)
+    if (arg instanceof AbstractJType)
     {
-      final JType targ = (JType) arg;
+      final AbstractJType targ = (AbstractJType) arg;
       checkType (Class.class, rt);
       if (m.getDefaultValue () != null)
       {
@@ -209,10 +209,10 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
     }
 
     // primitive
-    if (arg instanceof JType)
+    if (arg instanceof AbstractJType)
     {
       checkType (Class.class, itemType);
-      m.param ((JType) arg);
+      m.param ((AbstractJType) arg);
       return proxy;
     }
     checkType (arg.getClass (), itemType);

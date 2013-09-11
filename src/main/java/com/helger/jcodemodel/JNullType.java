@@ -51,7 +51,7 @@ import java.util.List;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JNullType extends JClass
+public final class JNullType extends AbstractJClass
 {
 
   JNullType (final JCodeModel _owner)
@@ -78,15 +78,15 @@ public final class JNullType extends JClass
   }
 
   @Override
-  public JClass _extends ()
+  public AbstractJClass _extends ()
   {
     return null;
   }
 
   @Override
-  public Iterator <JClass> _implements ()
+  public Iterator <AbstractJClass> _implements ()
   {
-    return Collections.<JClass> emptyList ().iterator ();
+    return Collections.<AbstractJClass> emptyList ().iterator ();
   }
 
   @Override
@@ -102,7 +102,7 @@ public final class JNullType extends JClass
   }
 
   @Override
-  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
     return this;
   }

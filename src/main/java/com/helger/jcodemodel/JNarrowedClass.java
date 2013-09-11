@@ -51,23 +51,23 @@ import java.util.List;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-class JNarrowedClass extends JClass
+public class JNarrowedClass extends AbstractJClass
 {
   /**
    * A generic class with type parameters.
    */
-  final JClass basis;
+  final AbstractJClass basis;
   /**
    * Arguments to those parameters.
    */
-  private final List <JClass> args;
+  private final List <AbstractJClass> args;
 
-  JNarrowedClass (final JClass basis, final JClass arg)
+  public JNarrowedClass (final AbstractJClass basis, final AbstractJClass arg)
   {
     this (basis, Collections.singletonList (arg));
   }
 
-  JNarrowedClass (final JClass basis, final List <JClass> args)
+  public JNarrowedClass (final AbstractJClass basis, final List <AbstractJClass> args)
   {
     super (basis.owner ());
     this.basis = basis;
@@ -76,17 +76,17 @@ class JNarrowedClass extends JClass
   }
 
   @Override
-  public JClass narrow (final JClass clazz)
+  public AbstractJClass narrow (final AbstractJClass clazz)
   {
-    final List <JClass> newArgs = new ArrayList <JClass> (args);
+    final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (args);
     newArgs.add (clazz);
     return new JNarrowedClass (basis, newArgs);
   }
 
   @Override
-  public JClass narrow (final JClass... clazz)
+  public AbstractJClass narrow (final AbstractJClass... clazz)
   {
-    final List <JClass> newArgs = new ArrayList <JClass> (args);
+    final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (args);
     newArgs.addAll (Arrays.asList (clazz));
     return new JNarrowedClass (basis, newArgs);
   }
@@ -98,7 +98,7 @@ class JNarrowedClass extends JClass
     buf.append (basis.name ());
     buf.append ('<');
     boolean first = true;
-    for (final JClass c : args)
+    for (final AbstractJClass c : args)
     {
       if (first)
         first = false;
@@ -117,7 +117,7 @@ class JNarrowedClass extends JClass
     buf.append (basis.fullName ());
     buf.append ('<');
     boolean first = true;
-    for (final JClass c : args)
+    for (final AbstractJClass c : args)
     {
       if (first)
         first = false;
@@ -136,7 +136,7 @@ class JNarrowedClass extends JClass
     buf.append (basis.binaryName ());
     buf.append ('<');
     boolean first = true;
-    for (final JClass c : args)
+    for (final AbstractJClass c : args)
     {
       if (first)
         first = false;
@@ -160,7 +160,7 @@ class JNarrowedClass extends JClass
     basis.printLink (f);
     f.p ("{@code <}");
     boolean first = true;
-    for (final JClass c : args)
+    for (final AbstractJClass c : args)
     {
       if (first)
         first = false;
@@ -178,27 +178,27 @@ class JNarrowedClass extends JClass
   }
 
   @Override
-  public JClass _extends ()
+  public AbstractJClass _extends ()
   {
-    final JClass base = basis._extends ();
+    final AbstractJClass base = basis._extends ();
     if (base == null)
       return base;
     return base.substituteParams (basis.typeParams (), args);
   }
 
   @Override
-  public Iterator <JClass> _implements ()
+  public Iterator <AbstractJClass> _implements ()
   {
-    return new Iterator <JClass> ()
+    return new Iterator <AbstractJClass> ()
     {
-      private final Iterator <JClass> core = basis._implements ();
+      private final Iterator <AbstractJClass> core = basis._implements ();
 
       public void remove ()
       {
         core.remove ();
       }
 
-      public JClass next ()
+      public AbstractJClass next ()
       {
         return core.next ().substituteParams (basis.typeParams (), args);
       }
@@ -211,7 +211,7 @@ class JNarrowedClass extends JClass
   }
 
   @Override
-  public JClass erasure ()
+  public AbstractJClass erasure ()
   {
     return basis;
   }
@@ -243,7 +243,7 @@ class JNarrowedClass extends JClass
   {
     if (!(obj instanceof JNarrowedClass))
       return false;
-    return fullName ().equals (((JClass) obj).fullName ());
+    return fullName ().equals (((AbstractJClass) obj).fullName ());
   }
 
   @Override
@@ -253,15 +253,15 @@ class JNarrowedClass extends JClass
   }
 
   @Override
-  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
-    final JClass b = basis.substituteParams (variables, bindings);
+    final AbstractJClass b = basis.substituteParams (variables, bindings);
     boolean different = b != basis;
 
-    final List <JClass> clazz = new ArrayList <JClass> (args.size ());
+    final List <AbstractJClass> clazz = new ArrayList <AbstractJClass> (args.size ());
     for (int i = 0; i < clazz.size (); i++)
     {
-      final JClass c = args.get (i).substituteParams (variables, bindings);
+      final AbstractJClass c = args.get (i).substituteParams (variables, bindings);
       clazz.set (i, c);
       different |= c != args.get (i);
     }
@@ -273,7 +273,7 @@ class JNarrowedClass extends JClass
   }
 
   @Override
-  public List <JClass> getTypeParameters ()
+  public List <AbstractJClass> getTypeParameters ()
   {
     return args;
   }

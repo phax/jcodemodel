@@ -40,10 +40,43 @@
 
 package com.helger.jcodemodel;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
- * Things that can be values of an annotation element.
- * 
- * @author Bhakti Mehta (bhakti.mehta@sun.com)
+ * Represents a resource file in the application-specific file format.
  */
-public abstract class JAnnotationValue implements JGenerable
-{}
+public abstract class AbstractJResourceFile
+{
+  private final String name;
+
+  protected AbstractJResourceFile (final String name)
+  {
+    this.name = name;
+  }
+
+  /**
+   * Gets the name of this property file
+   */
+  public String name ()
+  {
+    return name;
+  }
+
+  /**
+   * Returns true if this file should be generated into the directory that the
+   * resource files go into.
+   * <p>
+   * Returns false if this file should be generated into the directory where
+   * other source files go.
+   */
+  protected boolean isResource ()
+  {
+    return true;
+  }
+
+  /**
+   * called by JPackage to produce the file image.
+   */
+  protected abstract void build (OutputStream os) throws IOException;
+}

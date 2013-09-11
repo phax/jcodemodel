@@ -44,7 +44,7 @@ package com.helger.jcodemodel;
  * Java built-in primitive types. Instances of this class can be obtained as
  * constants of {@link JCodeModel}, such as {@link JCodeModel#BOOLEAN}.
  */
-public final class JPrimitiveType extends JType
+public class JPrimitiveType extends AbstractJType
 {
 
   private final String typeName;
@@ -53,9 +53,9 @@ public final class JPrimitiveType extends JType
    * Corresponding wrapper class. For example, this would be "java.lang.Short"
    * for short.
    */
-  private final JClass wrapperClass;
+  private final AbstractJClass wrapperClass;
 
-  JPrimitiveType (final JCodeModel owner, final String typeName, final Class <?> wrapper)
+  protected JPrimitiveType (final JCodeModel owner, final String typeName, final Class <?> wrapper)
   {
     this.owner = owner;
     this.typeName = typeName;
@@ -86,10 +86,10 @@ public final class JPrimitiveType extends JType
     return true;
   }
 
-  private JClass arrayClass;
+  private AbstractJClass arrayClass;
 
   @Override
-  public JClass array ()
+  public AbstractJClass array ()
   {
     if (arrayClass == null)
       arrayClass = new JArrayClass (owner, this);
@@ -101,7 +101,7 @@ public final class JPrimitiveType extends JType
    * returns a reference to java.lang.Integer if this object represents int.
    */
   @Override
-  public JClass boxify ()
+  public AbstractJClass boxify ()
   {
     return wrapperClass;
   }
@@ -113,7 +113,7 @@ public final class JPrimitiveType extends JType
    */
   @Deprecated
   @Override
-  public JType unboxify ()
+  public AbstractJType unboxify ()
   {
     return this;
   }

@@ -49,13 +49,13 @@ import java.util.List;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-final class JArrayClass extends JClass
+public class JArrayClass extends AbstractJClass
 {
 
   // array component type
-  private final JType componentType;
+  private final AbstractJType componentType;
 
-  JArrayClass (final JCodeModel owner, final JType component)
+  public JArrayClass (final JCodeModel owner, final AbstractJType component)
   {
     super (owner);
     this.componentType = component;
@@ -92,15 +92,15 @@ final class JArrayClass extends JClass
   }
 
   @Override
-  public JClass _extends ()
+  public AbstractJClass _extends ()
   {
     return owner ().ref (Object.class);
   }
 
   @Override
-  public Iterator <JClass> _implements ()
+  public Iterator <AbstractJClass> _implements ()
   {
-    return Collections.<JClass> emptyList ().iterator ();
+    return Collections.<AbstractJClass> emptyList ().iterator ();
   }
 
   @Override
@@ -116,7 +116,7 @@ final class JArrayClass extends JClass
   }
 
   @Override
-  public JType elementType ()
+  public AbstractJType elementType ()
   {
     return componentType;
   }
@@ -150,12 +150,12 @@ final class JArrayClass extends JClass
   }
 
   @Override
-  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
     if (componentType.isPrimitive ())
       return this;
 
-    final JClass c = ((JClass) componentType).substituteParams (variables, bindings);
+    final AbstractJClass c = ((AbstractJClass) componentType).substituteParams (variables, bindings);
     if (c == componentType)
       return this;
 

@@ -60,9 +60,14 @@ public class JDoLoop implements JStatement
   /**
    * Construct a Do statment
    */
-  JDoLoop (final JExpression test)
+  public JDoLoop (final JExpression test)
   {
     this.test = test;
+  }
+
+  public JExpression test ()
+  {
+    return test;
   }
 
   public JBlock body ()

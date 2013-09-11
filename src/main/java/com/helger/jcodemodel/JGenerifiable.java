@@ -61,7 +61,7 @@ public interface JGenerifiable
   /**
    * Adds a new type variable to this declaration with a bound.
    */
-  JTypeVar generify (String name, JClass bound);
+  JTypeVar generify (String name, AbstractJClass bound);
 
   /**
    * Iterates all the type parameters of this class/interface.

@@ -47,7 +47,7 @@ import java.util.List;
 /**
  * Switch statement
  */
-public final class JSwitch implements JStatement
+public class JSwitch implements JStatement
 {
 
   /**
@@ -63,12 +63,12 @@ public final class JSwitch implements JStatement
   /**
    * a single default case
    */
-  private JCase defaultCase = null;
+  private JCase defaultCase;
 
   /**
    * Construct a While statment
    */
-  JSwitch (final JExpression test)
+  public JSwitch (final JExpression test)
   {
     this.test = test;
   }
@@ -92,10 +92,11 @@ public final class JSwitch implements JStatement
 
   public JCase _default ()
   {
-    // what if (default != null) ???
-
-    // default cases statements don't have a label
-    defaultCase = new JCase (null, true);
+    if (defaultCase == null)
+    {
+      // default cases statements don't have a label
+      defaultCase = new JCase (null, true);
+    }
     return defaultCase;
   }
 

@@ -62,7 +62,7 @@ import java.util.TreeMap;
 /**
  * A Java package.
  */
-public final class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnnotatable, Comparable <JPackage>, JDocCommentable
+public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnnotatable, Comparable <JPackage>, JDocCommentable
 {
 
   /**
@@ -80,12 +80,12 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
   /**
    * List of resources files inside this package.
    */
-  private final Set <JResourceFile> resources = new HashSet <JResourceFile> ();
+  private final Set <AbstractJResourceFile> resources = new HashSet <AbstractJResourceFile> ();
 
   /**
-   * All {@link JClass}s in this package keyed the upper case class name. This
-   * field is non-null only on Windows, to detect "Foo" and "foo" as a
-   * collision.
+   * All {@link AbstractJClass}s in this package keyed the upper case class
+   * name. This field is non-null only on Windows, to detect "Foo" and "foo" as
+   * a collision.
    */
   private final Map <String, JDefinedClass> upperCaseClassMap;
 
@@ -109,7 +109,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
    * @throws IllegalArgumentException
    *         If each part of the package name is not a valid identifier
    */
-  JPackage (final String name, final JCodeModel cw)
+  protected JPackage (final String name, final JCodeModel cw)
   {
     this.owner = cw;
     if (name.equals ("."))
@@ -171,10 +171,10 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
    */
   public JDefinedClass _class (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.CLASS);
+    return _class (mods, name, EClassType.CLASS);
   }
 
-  public JDefinedClass _class (final int mods, final String name, final ClassType classTypeVal) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, final String name, final EClassType classTypeVal) throws JClassAlreadyExistsException
   {
     if (classes.containsKey (name))
       throw new JClassAlreadyExistsException (classes.get (name));
@@ -235,7 +235,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
    */
   public JDefinedClass _interface (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.INTERFACE);
+    return _class (mods, name, EClassType.INTERFACE);
   }
 
   /**
@@ -257,7 +257,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
    */
   public JDefinedClass _annotationTypeDeclaration (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, ClassType.ANNOTATION_TYPE_DECL);
+    return _class (JMod.PUBLIC, name, EClassType.ANNOTATION_TYPE_DECL);
   }
 
   /**
@@ -271,13 +271,13 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
    */
   public JDefinedClass _enum (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, ClassType.ENUM);
+    return _class (JMod.PUBLIC, name, EClassType.ENUM);
   }
 
   /**
    * Adds a new resource file to this package.
    */
-  public JResourceFile addResourceFile (final JResourceFile rsrc)
+  public AbstractJResourceFile addResourceFile (final AbstractJResourceFile rsrc)
   {
     resources.add (rsrc);
     return rsrc;
@@ -288,7 +288,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
    */
   public boolean hasResourceFile (final String name)
   {
-    for (final JResourceFile r : resources)
+    for (final AbstractJResourceFile r : resources)
       if (r.name ().equals (name))
         return true;
     return false;
@@ -297,7 +297,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
   /**
    * Iterates all resource files in this package.
    */
-  public Iterator <JResourceFile> propertyFiles ()
+  public Iterator <AbstractJResourceFile> propertyFiles ()
   {
     return resources.iterator ();
   }
@@ -318,7 +318,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
   /**
    * Removes a class from this package.
    */
-  public void remove (final JClass c)
+  public void remove (final AbstractJClass c)
   {
     if (c._package () != this)
       throw new IllegalArgumentException ("the specified class is not a member of this package,"
@@ -334,7 +334,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
   /**
    * Reference a class within this package.
    */
-  public JClass ref (final String name) throws ClassNotFoundException
+  public AbstractJClass ref (final String name) throws ClassNotFoundException
   {
     if (name.indexOf ('.') >= 0)
       throw new IllegalArgumentException ("JClass name contains '.': " + name);
@@ -410,7 +410,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
     return owner;
   }
 
-  public JAnnotationUse annotate (final JClass clazz)
+  public JAnnotationUse annotate (final AbstractJClass clazz)
   {
     if (isUnnamed ())
       throw new IllegalArgumentException ("the root package cannot be annotated");
@@ -493,7 +493,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
     }
 
     // write resources
-    for (final JResourceFile rsrc : resources)
+    for (final AbstractJResourceFile rsrc : resources)
     {
       final AbstractCodeWriter cw = rsrc.isResource () ? res : src;
       final OutputStream os = new BufferedOutputStream (cw.openBinary (this, rsrc.name ()));

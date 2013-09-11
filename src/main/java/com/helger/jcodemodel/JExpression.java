@@ -148,7 +148,7 @@ public interface JExpression extends JGenerable
   /**
    * Returns "[this] instanceof [right]"
    */
-  JExpression _instanceof (JType right);
+  JExpression _instanceof (AbstractJType right);
 
   /**
    * Returns "[this].[method]". Arguments shall be added to the returned

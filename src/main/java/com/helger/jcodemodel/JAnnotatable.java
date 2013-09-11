@@ -56,7 +56,7 @@ public interface JAnnotatable
    * @param clazz
    *        The annotation class to annotate the program element with
    */
-  JAnnotationUse annotate (JClass clazz);
+  JAnnotationUse annotate (AbstractJClass clazz);
 
   /**
    * Adds an annotation to this program element.

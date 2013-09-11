@@ -45,13 +45,12 @@ package com.helger.jcodemodel;
  */
 public class JFieldVar extends JVar implements JDocCommentable
 {
+  private final JDefinedClass owner;
 
   /**
    * javadoc comments for this JFieldVar
    */
-  private JDocComment jdoc = null;
-
-  private final JDefinedClass owner;
+  private JDocComment jdoc;
 
   /**
    * JFieldVar constructor
@@ -63,10 +62,19 @@ public class JFieldVar extends JVar implements JDocCommentable
    * @param init
    *        Value to initialize this variable to
    */
-  JFieldVar (final JDefinedClass owner, final JMods mods, final JType type, final String name, final JExpression init)
+  public JFieldVar (final JDefinedClass owner,
+                    final JMods mods,
+                    final AbstractJType type,
+                    final String name,
+                    final JExpression init)
   {
     super (mods, type, name, init);
     this.owner = owner;
+  }
+
+  public JDefinedClass owner ()
+  {
+    return owner;
   }
 
   @Override
@@ -100,5 +108,4 @@ public class JFieldVar extends JVar implements JDocCommentable
       f.g (jdoc);
     super.declare (f);
   }
-
 }

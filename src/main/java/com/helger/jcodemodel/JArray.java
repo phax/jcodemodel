@@ -41,22 +41,33 @@
 package com.helger.jcodemodel;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * array creation and initialization.
  */
-public class JArray extends JExpressionImpl
+public class JArray extends AbstractJExpressionImpl
 {
 
-  private final JType type;
+  private final AbstractJType type;
   private final JExpression size;
   private List <JExpression> exprs = null;
 
-  public JArray (final JType type, final JExpression size)
+  public JArray (final AbstractJType type, final JExpression size)
   {
     this.type = type;
     this.size = size;
+  }
+
+  public AbstractJType type ()
+  {
+    return type;
+  }
+
+  public JExpression size ()
+  {
+    return size;
   }
 
   /**
@@ -70,13 +81,26 @@ public class JArray extends JExpressionImpl
     return this;
   }
 
+  public List <JExpression> exprs ()
+  {
+    if (exprs == null)
+      exprs = new ArrayList <JExpression> ();
+    return Collections.unmodifiableList (exprs);
+  }
+
+  public boolean hasExprs ()
+  {
+    return exprs != null && !exprs.isEmpty ();
+  }
+
   public void generate (final JFormatter f)
   {
 
     // generally we produce new T[x], but when T is an array type (T=T'[])
     // then new T'[][x] is wrong. It has to be new T'[x][].
     int arrayCount = 0;
-    JType t = type;
+    AbstractJType t = type;
+    final boolean hasExprs = hasExprs ();
 
     while (t.isArray ())
     {
@@ -92,17 +116,13 @@ public class JArray extends JExpressionImpl
     for (int i = 0; i < arrayCount; i++)
       f.p ("[]");
 
-    if ((size == null) || (exprs != null))
+    if (size == null || hasExprs)
       f.p ('{');
-    if (exprs != null)
-    {
+    if (hasExprs)
       f.g (exprs);
-    }
     else
-    {
       f.p (' ');
-    }
-    if ((size == null) || (exprs != null))
+    if (size == null || hasExprs)
       f.p ('}');
   }
 }

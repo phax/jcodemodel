@@ -56,13 +56,13 @@ import java.util.TreeSet;
  * A generated Java class/interface/enum/....
  * <p>
  * This class models a declaration, and since a declaration can be always used
- * as a reference, it inherits {@link JClass}.
+ * as a reference, it inherits {@link AbstractJClass}.
  * <h2>Where to go from here?</h2>
  * <p>
  * You'd want to generate fields and methods on a class. See
- * {@link #method(int, JType, String)} and {@link #field(int, JType, String)}.
+ * {@link #method(int, AbstractJType, String)} and {@link #field(int, AbstractJType, String)}.
  */
-public class JDefinedClass extends JClass implements JDeclaration, JClassContainer, JGenerifiable, JAnnotatable, JDocCommentable
+public class JDefinedClass extends AbstractJClass implements JDeclaration, JClassContainer, JGenerifiable, JAnnotatable, JDocCommentable
 {
 
   /** Name of this class. Null if anonymous. */
@@ -72,10 +72,10 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
   private JMods mods;
 
   /** Name of the super class of this class. */
-  private JClass superClass;
+  private AbstractJClass superClass;
 
   /** List of interfaces that this class implements */
-  private final Set <JClass> interfaces = new TreeSet <JClass> ();
+  private final Set <AbstractJClass> interfaces = new TreeSet <AbstractJClass> ();
 
   /** Fields keyed by their names. */
   /* package */final Map <String, JFieldVar> fields = new LinkedHashMap <String, JFieldVar> ();
@@ -133,7 +133,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
   /**
    * Default value is class or interface or annotationTypeDeclaration or enum
    */
-  private final ClassType classType;
+  private final EClassType classType;
 
   /**
    * List containing the enum value declarations
@@ -155,7 +155,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
   /**
    * Helper class to implement {@link JGenerifiable}.
    */
-  private final JGenerifiableImpl generifiable = new JGenerifiableImpl ()
+  private final AbstractJGenerifiableImpl generifiable = new AbstractJGenerifiableImpl ()
   {
     @Override
     protected JCodeModel owner ()
@@ -164,7 +164,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
     }
   };
 
-  JDefinedClass (final JClassContainer parent, final int mods, final String name, final ClassType classTypeval)
+  public JDefinedClass (final JClassContainer parent, final int mods, final String name, final EClassType classTypeval)
   {
     this (mods, name, parent, parent.owner (), classTypeval);
   }
@@ -172,14 +172,14 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
   /**
    * Constructor for creating anonymous inner class.
    */
-  JDefinedClass (final JCodeModel owner, final int mods, final String name)
+  public JDefinedClass (final JCodeModel owner, final int mods, final String name)
   {
     this (mods, name, null, owner);
   }
 
   private JDefinedClass (final int mods, final String name, final JClassContainer parent, final JCodeModel owner)
   {
-    this (mods, name, parent, owner, ClassType.CLASS);
+    this (mods, name, parent, owner, EClassType.CLASS);
   }
 
   /**
@@ -194,7 +194,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
                          final String name,
                          final JClassContainer parent,
                          final JCodeModel owner,
-                         final ClassType classTypeVal)
+                         final EClassType classTypeVal)
   {
     super (owner);
 
@@ -248,9 +248,9 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    *        Superclass for this class
    * @return This class
    */
-  public JDefinedClass _extends (final JClass superClass)
+  public JDefinedClass _extends (final AbstractJClass superClass)
   {
-    if (this.classType == ClassType.INTERFACE)
+    if (this.classType == EClassType.INTERFACE)
       if (superClass.isInterface ())
       {
         return this._implements (superClass);
@@ -260,7 +260,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
     if (superClass == null)
       throw new NullPointerException ();
 
-    for (JClass o = superClass.outer (); o != null; o = o.outer ())
+    for (AbstractJClass o = superClass.outer (); o != null; o = o.outer ())
     {
       if (this == o)
       {
@@ -285,7 +285,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    * Returns the class extended by this class.
    */
   @Override
-  public JClass _extends ()
+  public AbstractJClass _extends ()
   {
     if (superClass == null)
       superClass = owner ().ref (Object.class);
@@ -299,7 +299,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    *        Interface that this class implements
    * @return This class
    */
-  public JDefinedClass _implements (final JClass iface)
+  public JDefinedClass _implements (final AbstractJClass iface)
   {
     interfaces.add (iface);
     return this;
@@ -314,7 +314,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    * Returns an iterator that walks the nested classes defined in this class.
    */
   @Override
-  public Iterator <JClass> _implements ()
+  public Iterator <AbstractJClass> _implements ()
   {
     return interfaces.iterator ();
   }
@@ -381,7 +381,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
   @Override
   public boolean isInterface ()
   {
-    return this.classType == ClassType.INTERFACE;
+    return this.classType == EClassType.INTERFACE;
   }
 
   @Override
@@ -401,7 +401,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    *        Name of this field
    * @return Newly generated field
    */
-  public JFieldVar field (final int mods, final JType type, final String name)
+  public JFieldVar field (final int mods, final AbstractJType type, final String name)
   {
     return field (mods, type, name, null);
   }
@@ -424,7 +424,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    *        Initial value of this field.
    * @return Newly generated field
    */
-  public JFieldVar field (final int mods, final JType type, final String name, final JExpression init)
+  public JFieldVar field (final int mods, final AbstractJType type, final String name, final JExpression init)
   {
     final JFieldVar f = new JFieldVar (this, JMods.forField (mods), type, name, init);
 
@@ -442,7 +442,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    */
   public boolean isAnnotationTypeDeclaration ()
   {
-    return this.classType == ClassType.ANNOTATION_TYPE_DECL;
+    return this.classType == EClassType.ANNOTATION_TYPE_DECL;
 
   }
 
@@ -457,7 +457,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    */
   public JDefinedClass _annotationTypeDeclaration (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, ClassType.ANNOTATION_TYPE_DECL);
+    return _class (JMod.PUBLIC, name, EClassType.ANNOTATION_TYPE_DECL);
   }
 
   /**
@@ -471,7 +471,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    */
   public JDefinedClass _enum (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, ClassType.ENUM);
+    return _class (JMod.PUBLIC, name, EClassType.ENUM);
   }
 
   /**
@@ -487,10 +487,10 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    */
   public JDefinedClass _enum (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.ENUM);
+    return _class (mods, name, EClassType.ENUM);
   }
 
-  public ClassType getClassType ()
+  public EClassType getClassType ()
   {
     return this.classType;
   }
@@ -573,7 +573,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    * 
    * @return null if not found.
    */
-  public JMethod getConstructor (final JType [] argTypes)
+  public JMethod getConstructor (final AbstractJType [] argTypes)
   {
     for (final JMethod m : constructors)
     {
@@ -594,7 +594,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    *        Name of the method
    * @return Newly generated JMethod
    */
-  public JMethod method (final int mods, final JType type, final String name)
+  public JMethod method (final int mods, final AbstractJType type, final String name)
   {
     // XXX problems caught in M constructor
     final JMethod m = new JMethod (this, mods, type, name);
@@ -620,7 +620,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    * 
    * @return null if not found.
    */
-  public JMethod getMethod (final String name, final JType [] argTypes)
+  public JMethod getMethod (final String name, final AbstractJType [] argTypes)
   {
     for (final JMethod m : methods)
     {
@@ -659,10 +659,10 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    */
   public JDefinedClass _class (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.CLASS);
+    return _class (mods, name, EClassType.CLASS);
   }
 
-  public JDefinedClass _class (final int mods, final String name, final ClassType classTypeVal) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, final String name, final EClassType classTypeVal) throws JClassAlreadyExistsException
   {
 
     String NAME;
@@ -701,7 +701,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    */
   public JDefinedClass _interface (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.INTERFACE);
+    return _class (mods, name, EClassType.INTERFACE);
   }
 
   /**
@@ -761,19 +761,19 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
   /**
    * Returns all the nested classes defined in this class.
    */
-  public final JClass [] listClasses ()
+  public final AbstractJClass [] listClasses ()
   {
     if (classes == null)
-      return new JClass [0];
+      return new AbstractJClass [0];
     else
-      return classes.values ().toArray (new JClass [classes.values ().size ()]);
+      return classes.values ().toArray (new AbstractJClass [classes.values ().size ()]);
   }
 
   @Override
-  public JClass outer ()
+  public AbstractJClass outer ()
   {
     if (outer.isClass ())
-      return (JClass) outer;
+      return (AbstractJClass) outer;
     else
       return null;
   }
@@ -798,7 +798,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
     {
       if (superClass == null)
         f.nl ();
-      f.i ().p (classType == ClassType.INTERFACE ? "extends" : "implements");
+      f.i ().p (classType == EClassType.INTERFACE ? "extends" : "implements");
       f.g (interfaces);
       f.nl ().o ();
     }
@@ -885,7 +885,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
     return generifiable.generify (name, bound);
   }
 
-  public JTypeVar generify (final String name, final JClass bound)
+  public JTypeVar generify (final String name, final AbstractJClass bound)
   {
     return generifiable.generify (name, bound);
   }
@@ -897,7 +897,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
   }
 
   @Override
-  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
     return this;
   }
@@ -919,7 +919,7 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
    * @param clazz
    *        The annotation class to annotate the class with
    */
-  public JAnnotationUse annotate (final JClass clazz)
+  public JAnnotationUse annotate (final AbstractJClass clazz)
   {
     if (annotations == null)
       annotations = new ArrayList <JAnnotationUse> ();

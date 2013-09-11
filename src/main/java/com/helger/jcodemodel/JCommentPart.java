@@ -48,7 +48,7 @@ import java.util.Iterator;
  * A part is a part of a javadoc comment, and it is a list of values.
  * <p>
  * A part can contain a free-form text. This text is modeled as a collection of
- * 'values' in this class. A value can be a {@link JType} (which will be
+ * 'values' in this class. A value can be a {@link AbstractJType} (which will be
  * prinited with a @link tag), anything that can be turned into a {@link String}
  * via the {@link Object#toString()} method, or a {@link Collection}/array of
  * those objects.
@@ -63,8 +63,11 @@ public class JCommentPart extends ArrayList <Object>
 
   private static final long serialVersionUID = 1L;
 
+  public JCommentPart ()
+  {}
+
   /**
-   * Appends a new value. If the value is {@link JType} it will be printed as a @link
+   * Appends a new value. If the value is {@link AbstractJType} it will be printed as a @link
    * tag. Otherwise it will be converted to String via {@link Object#toString()}
    * .
    */
@@ -110,8 +113,8 @@ public class JCommentPart extends ArrayList <Object>
       // quickly pass the types to JFormatter, as that's all we care.
       // we don't need to worry about the exact formatting of text.
       for (final Object o : this)
-        if (o instanceof JClass)
-          f.g ((JClass) o);
+        if (o instanceof AbstractJClass)
+          f.g ((AbstractJClass) o);
       return;
     }
 
@@ -139,15 +142,15 @@ public class JCommentPart extends ArrayList <Object>
           f.p (escape (s));
       }
       else
-        if (o instanceof JClass)
+        if (o instanceof AbstractJClass)
         {
           // TODO: this doesn't print the parameterized type properly
-          ((JClass) o).printLink (f);
+          ((AbstractJClass) o).printLink (f);
         }
         else
-          if (o instanceof JType)
+          if (o instanceof AbstractJType)
           {
-            f.g ((JType) o);
+            f.g ((AbstractJType) o);
           }
           else
             throw new IllegalStateException ();
@@ -160,7 +163,7 @@ public class JCommentPart extends ArrayList <Object>
   /**
    * Escapes the appearance of the comment terminator.
    */
-  private String escape (final String sText)
+  private static String escape (final String sText)
   {
     String s = sText;
     while (true)

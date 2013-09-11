@@ -42,21 +42,21 @@ package com.helger.jcodemodel.util;
 
 import java.util.Comparator;
 
-import com.helger.jcodemodel.JClass;
+import com.helger.jcodemodel.AbstractJClass;
 
 /**
- * Comparator object that sorts {@link JClass}es in the order of their names.
+ * Comparator object that sorts {@link AbstractJClass}es in the order of their names.
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class ClassNameComparator implements Comparator <JClass>
+public class ClassNameComparator implements Comparator <AbstractJClass>
 {
-  public static final Comparator <JClass> theInstance = new ClassNameComparator ();
+  public static final Comparator <AbstractJClass> theInstance = new ClassNameComparator ();
 
   private ClassNameComparator ()
   {}
 
-  public int compare (final JClass l, final JClass r)
+  public int compare (final AbstractJClass l, final AbstractJClass r)
   {
     return l.fullName ().compareTo (r.fullName ());
   }

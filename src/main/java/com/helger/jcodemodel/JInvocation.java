@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * JMethod invocation
  */
-public class JInvocation extends JExpressionImpl implements JStatement
+public class JInvocation extends AbstractJExpressionImpl implements JStatement
 {
 
   /**
@@ -75,7 +75,7 @@ public class JInvocation extends JExpressionImpl implements JStatement
   /**
    * If isConstructor==true, this field keeps the type to be created.
    */
-  private JType type = null;
+  private AbstractJType type = null;
 
   /**
    * Invokes a method on an object.
@@ -99,12 +99,12 @@ public class JInvocation extends JExpressionImpl implements JStatement
   /**
    * Invokes a static method on a class.
    */
-  public JInvocation (final JClass type, final String name)
+  public JInvocation (final AbstractJClass type, final String name)
   {
     this ((JGenerable) type, name);
   }
 
-  public JInvocation (final JClass type, final JMethod method)
+  public JInvocation (final AbstractJClass type, final JMethod method)
   {
     this ((JGenerable) type, method);
   }
@@ -131,7 +131,7 @@ public class JInvocation extends JExpressionImpl implements JStatement
    *        added arguments are treated as array initializer. Thus you can
    *        create an expression like <code>new int[]{1,2,3,4,5}</code>.
    */
-  JInvocation (final JType c)
+  public JInvocation (final AbstractJType c)
   {
     this.isConstructor = true;
     this.type = c;

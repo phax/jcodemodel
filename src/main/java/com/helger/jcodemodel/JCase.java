@@ -43,18 +43,12 @@ package com.helger.jcodemodel;
 /**
  * Case statement
  */
-public final class JCase implements JStatement
+public class JCase implements JStatement
 {
-
   /**
    * label part of the case statement
    */
   private final JExpression label;
-
-  /**
-   * JBlock of statements which makes up body of this While statement
-   */
-  private JBlock body = null;
 
   /**
    * is this a regular case statement or a default case statement?
@@ -62,9 +56,14 @@ public final class JCase implements JStatement
   private boolean isDefaultCase = false;
 
   /**
+   * JBlock of statements which makes up body of this While statement
+   */
+  private JBlock body = null;
+
+  /**
    * Construct a case statement
    */
-  JCase (final JExpression label)
+  public JCase (final JExpression label)
   {
     this (label, false);
   }
@@ -73,7 +72,7 @@ public final class JCase implements JStatement
    * Construct a case statement. If isDefaultCase is true, then label should be
    * null since default cases don't have a label.
    */
-  JCase (final JExpression label, final boolean isDefaultCase)
+  public JCase (final JExpression label, final boolean isDefaultCase)
   {
     this.label = label;
     this.isDefaultCase = isDefaultCase;
@@ -82,6 +81,11 @@ public final class JCase implements JStatement
   public JExpression label ()
   {
     return label;
+  }
+
+  public boolean isDefaultCase ()
+  {
+    return isDefaultCase;
   }
 
   public JBlock body ()

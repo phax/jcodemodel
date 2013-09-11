@@ -45,18 +45,23 @@ package com.helger.jcodemodel;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-class JAnonymousClass extends JDefinedClass
+public class JAnonymousClass extends JDefinedClass
 {
 
   /**
    * Base interface/class from which this anonymous class is built.
    */
-  private final JClass base;
+  private final AbstractJClass base;
 
-  JAnonymousClass (final JClass _base)
+  public JAnonymousClass (final AbstractJClass _base)
   {
     super (_base.owner (), 0, null);
     this.base = _base;
+  }
+
+  public AbstractJClass base ()
+  {
+    return base;
   }
 
   @Override
@@ -70,5 +75,4 @@ class JAnonymousClass extends JDefinedClass
   {
     f.t (base);
   }
-
 }

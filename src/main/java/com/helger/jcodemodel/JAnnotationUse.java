@@ -46,30 +46,30 @@ import java.util.Map;
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public final class JAnnotationUse extends JAnnotationValue
+public class JAnnotationUse extends AbstractJAnnotationValue
 {
 
   /**
    * The {@link Annotation} class
    */
-  private final JClass clazz;
+  private final AbstractJClass clazz;
 
   /**
    * Map of member values.
    */
-  private Map <String, JAnnotationValue> memberValues;
+  private Map <String, AbstractJAnnotationValue> memberValues;
 
-  JAnnotationUse (final JClass clazz)
+  public JAnnotationUse (final AbstractJClass clazz)
   {
     this.clazz = clazz;
   }
 
-  public JClass getAnnotationClass ()
+  public AbstractJClass getAnnotationClass ()
   {
     return clazz;
   }
 
-  public Map <String, JAnnotationValue> getAnnotationMembers ()
+  public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
     return Collections.unmodifiableMap (memberValues);
   }
@@ -79,12 +79,12 @@ public final class JAnnotationUse extends JAnnotationValue
     return clazz.owner ();
   }
 
-  private void addValue (final String name, final JAnnotationValue annotationValue)
+  private void addValue (final String name, final AbstractJAnnotationValue annotationValue)
   {
     // Use ordered map to keep the code generation the same on any JVM.
     // Lazily created.
     if (memberValues == null)
-      memberValues = new LinkedHashMap <String, JAnnotationValue> ();
+      memberValues = new LinkedHashMap <String, AbstractJAnnotationValue> ();
     memberValues.put (name, annotationValue);
   }
 
@@ -265,7 +265,7 @@ public final class JAnnotationUse extends JAnnotationValue
    */
   public JAnnotationUse param (final String name, final Enum <?> value)
   {
-    addValue (name, new JAnnotationValue ()
+    addValue (name, new AbstractJAnnotationValue ()
     {
       public void generate (final JFormatter f)
       {
@@ -312,7 +312,7 @@ public final class JAnnotationUse extends JAnnotationValue
    */
   public JAnnotationUse param (final String name, final Class <?> value)
   {
-    addValue (name, new JAnnotationStringValue (new JExpressionImpl ()
+    addValue (name, new JAnnotationStringValue (new AbstractJExpressionImpl ()
     {
       public void generate (final JFormatter f)
       {
@@ -334,9 +334,9 @@ public final class JAnnotationUse extends JAnnotationValue
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
-  public JAnnotationUse param (final String name, final JType type)
+  public JAnnotationUse param (final String name, final AbstractJType type)
   {
-    final JClass c = type.boxify ();
+    final AbstractJClass c = type.boxify ();
     addValue (name, new JAnnotationStringValue (c.dotclass ()));
     return this;
   }
@@ -387,7 +387,7 @@ public final class JAnnotationUse extends JAnnotationValue
       }
       else
       {
-        for (final Map.Entry <String, JAnnotationValue> mapEntry : memberValues.entrySet ())
+        for (final Map.Entry <String, AbstractJAnnotationValue> mapEntry : memberValues.entrySet ())
         {
           if (!first)
             f.p (',');

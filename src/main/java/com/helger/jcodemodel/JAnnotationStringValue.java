@@ -45,7 +45,7 @@ package com.helger.jcodemodel;
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-final class JAnnotationStringValue extends JAnnotationValue
+public final class JAnnotationStringValue extends AbstractJAnnotationValue
 {
 
   /**
@@ -53,9 +53,14 @@ final class JAnnotationStringValue extends JAnnotationValue
    */
   private final JExpression value;
 
-  JAnnotationStringValue (final JExpression value)
+  public JAnnotationStringValue (final JExpression value)
   {
     this.value = value;
+  }
+
+  public JExpression value ()
+  {
+    return value;
   }
 
   public void generate (final JFormatter f)

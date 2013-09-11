@@ -52,20 +52,28 @@ public class JMods implements JGenerable
   // mask
   //
   private static int VAR = JMod.FINAL;
-  private static int FIELD = (JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED | JMod.STATIC | JMod.FINAL | JMod.TRANSIENT | JMod.VOLATILE);
-  private static int METHOD = (JMod.PUBLIC |
-                               JMod.PRIVATE |
-                               JMod.PROTECTED |
-                               JMod.FINAL |
-                               JMod.ABSTRACT |
-                               JMod.STATIC |
-                               JMod.NATIVE | JMod.SYNCHRONIZED);
-  private static int CLASS = (JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED | JMod.STATIC | JMod.FINAL | JMod.ABSTRACT);
+  private static int FIELD = JMod.PUBLIC |
+                             JMod.PRIVATE |
+                             JMod.PROTECTED |
+                             JMod.STATIC |
+                             JMod.FINAL |
+                             JMod.TRANSIENT |
+                             JMod.VOLATILE;
+  private static int METHOD = JMod.PUBLIC |
+                              JMod.PRIVATE |
+                              JMod.PROTECTED |
+                              JMod.FINAL |
+                              JMod.ABSTRACT |
+                              JMod.STATIC |
+                              JMod.NATIVE |
+                              JMod.SYNCHRONIZED;
+  private static int CLASS = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED | JMod.STATIC | JMod.FINAL | JMod.ABSTRACT;
   private static int INTERFACE = JMod.PUBLIC;
+
   /** bit-packed representation of modifiers. */
   private int mods;
 
-  private JMods (final int mods)
+  public JMods (final int mods)
   {
     this.mods = mods;
   }
@@ -78,7 +86,7 @@ public class JMods implements JGenerable
     return mods;
   }
 
-  private static void check (final int mods, final int legal, final String what)
+  private static void _check (final int mods, final int legal, final String what)
   {
     if ((mods & ~legal) != 0)
     {
@@ -87,33 +95,33 @@ public class JMods implements JGenerable
     /* ## check for illegal combinations too */
   }
 
-  static JMods forVar (final int mods)
+  public static JMods forVar (final int mods)
   {
-    check (mods, VAR, "variable");
+    _check (mods, VAR, "variable");
     return new JMods (mods);
   }
 
-  static JMods forField (final int mods)
+  public static JMods forField (final int mods)
   {
-    check (mods, FIELD, "field");
+    _check (mods, FIELD, "field");
     return new JMods (mods);
   }
 
-  static JMods forMethod (final int mods)
+  public static JMods forMethod (final int mods)
   {
-    check (mods, METHOD, "method");
+    _check (mods, METHOD, "method");
     return new JMods (mods);
   }
 
-  static JMods forClass (final int mods)
+  public static JMods forClass (final int mods)
   {
-    check (mods, CLASS, "class");
+    _check (mods, CLASS, "class");
     return new JMods (mods);
   }
 
-  static JMods forInterface (final int mods)
+  public static JMods forInterface (final int mods)
   {
-    check (mods, INTERFACE, "class");
+    _check (mods, INTERFACE, "class");
     return new JMods (mods);
   }
 

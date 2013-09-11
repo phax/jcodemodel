@@ -49,6 +49,164 @@ import java.util.regex.Pattern;
  */
 public class JJavaName
 {
+  private static class Entry
+  {
+    private final Pattern pattern;
+    private final String replacement;
+
+    public Entry (final String pattern, final String replacement)
+    {
+      this.pattern = Pattern.compile (pattern, Pattern.CASE_INSENSITIVE);
+      this.replacement = replacement;
+    }
+
+    String apply (final String word)
+    {
+      final Matcher m = pattern.matcher (word);
+      if (m.matches ())
+      {
+        final StringBuffer buf = new StringBuffer ();
+        m.appendReplacement (buf, replacement);
+        return buf.toString ();
+      }
+      else
+      {
+        return null;
+      }
+    }
+  }
+
+  private static final Entry [] TABLE;
+
+  static
+  {
+    final String [] source = { "(.*)child",
+                              "$1children",
+                              "(.+)fe",
+                              "$1ves",
+                              "(.*)mouse",
+                              "$1mise",
+                              "(.+)f",
+                              "$1ves",
+                              "(.+)ch",
+                              "$1ches",
+                              "(.+)sh",
+                              "$1shes",
+                              "(.*)tooth",
+                              "$1teeth",
+                              "(.+)um",
+                              "$1a",
+                              "(.+)an",
+                              "$1en",
+                              "(.+)ato",
+                              "$1atoes",
+                              "(.*)basis",
+                              "$1bases",
+                              "(.*)axis",
+                              "$1axes",
+                              "(.+)is",
+                              "$1ises",
+                              "(.+)ss",
+                              "$1sses",
+                              "(.+)us",
+                              "$1uses",
+                              "(.+)s",
+                              "$1s",
+                              "(.*)foot",
+                              "$1feet",
+                              "(.+)ix",
+                              "$1ixes",
+                              "(.+)ex",
+                              "$1ices",
+                              "(.+)nx",
+                              "$1nxes",
+                              "(.+)x",
+                              "$1xes",
+                              "(.+)y",
+                              "$1ies",
+                              "(.+)",
+                              "$1s", };
+
+    TABLE = new Entry [source.length / 2];
+
+    for (int i = 0; i < source.length; i += 2)
+    {
+      TABLE[i / 2] = new Entry (source[i], source[i + 1]);
+    }
+  }
+
+  /** All reserved keywords of Java. */
+  private static HashSet <String> reservedKeywords = new HashSet <String> ();
+
+  static
+  {
+    // see
+    // http://java.sun.com/docs/books/tutorial/java/nutsandbolts/_keywords.html
+    final String [] words = new String [] { "abstract",
+                                           "boolean",
+                                           "break",
+                                           "byte",
+                                           "case",
+                                           "catch",
+                                           "char",
+                                           "class",
+                                           "const",
+                                           "continue",
+                                           "default",
+                                           "do",
+                                           "double",
+                                           "else",
+                                           "extends",
+                                           "final",
+                                           "finally",
+                                           "float",
+                                           "for",
+                                           "goto",
+                                           "if",
+                                           "implements",
+                                           "import",
+                                           "instanceof",
+                                           "int",
+                                           "interface",
+                                           "long",
+                                           "native",
+                                           "new",
+                                           "package",
+                                           "private",
+                                           "protected",
+                                           "public",
+                                           "return",
+                                           "short",
+                                           "static",
+                                           "strictfp",
+                                           "super",
+                                           "switch",
+                                           "synchronized",
+                                           "this",
+                                           "throw",
+                                           "throws",
+                                           "transient",
+                                           "try",
+                                           "void",
+                                           "volatile",
+                                           "while",
+
+                                           // technically these are not reserved
+                                           // words but they cannot be used as
+                                           // identifiers.
+                                           "true",
+                                           "false",
+                                           "null",
+
+                                           // and I believe assert is also a new
+                                           // keyword
+                                           "assert",
+
+                                           // and 5.0 keywords
+                                           "enum" };
+    for (final String w : words)
+      reservedKeywords.add (w);
+  }
 
   /**
    * Checks if a given string is usable as a Java identifier.
@@ -149,164 +307,5 @@ public class JJavaName
 
     // failed
     return word;
-  }
-
-  /** All reserved keywords of Java. */
-  private static HashSet <String> reservedKeywords = new HashSet <String> ();
-
-  static
-  {
-    // see
-    // http://java.sun.com/docs/books/tutorial/java/nutsandbolts/_keywords.html
-    final String [] words = new String [] { "abstract",
-                                            "boolean",
-                                            "break",
-                                            "byte",
-                                            "case",
-                                            "catch",
-                                            "char",
-                                            "class",
-                                            "const",
-                                            "continue",
-                                            "default",
-                                            "do",
-                                            "double",
-                                            "else",
-                                            "extends",
-                                            "final",
-                                            "finally",
-                                            "float",
-                                            "for",
-                                            "goto",
-                                            "if",
-                                            "implements",
-                                            "import",
-                                            "instanceof",
-                                            "int",
-                                            "interface",
-                                            "long",
-                                            "native",
-                                            "new",
-                                            "package",
-                                            "private",
-                                            "protected",
-                                            "public",
-                                            "return",
-                                            "short",
-                                            "static",
-                                            "strictfp",
-                                            "super",
-                                            "switch",
-                                            "synchronized",
-                                            "this",
-                                            "throw",
-                                            "throws",
-                                            "transient",
-                                            "try",
-                                            "void",
-                                            "volatile",
-                                            "while",
-
-                                            // technically these are not reserved
-                                            // words but they cannot be used as
-                                            // identifiers.
-                                            "true",
-                                            "false",
-                                            "null",
-
-                                            // and I believe assert is also a new
-                                            // keyword
-                                            "assert",
-
-                                            // and 5.0 keywords
-    "enum" };
-    for (final String w : words)
-      reservedKeywords.add (w);
-  }
-
-  private static class Entry
-  {
-    private final Pattern pattern;
-    private final String replacement;
-
-    public Entry (final String pattern, final String replacement)
-    {
-      this.pattern = Pattern.compile (pattern, Pattern.CASE_INSENSITIVE);
-      this.replacement = replacement;
-    }
-
-    String apply (final String word)
-    {
-      final Matcher m = pattern.matcher (word);
-      if (m.matches ())
-      {
-        final StringBuffer buf = new StringBuffer ();
-        m.appendReplacement (buf, replacement);
-        return buf.toString ();
-      }
-      else
-      {
-        return null;
-      }
-    }
-  }
-
-  private static final Entry [] TABLE;
-
-  static
-  {
-    final String [] source = { "(.*)child",
-                               "$1children",
-                               "(.+)fe",
-                               "$1ves",
-                               "(.*)mouse",
-                               "$1mise",
-                               "(.+)f",
-                               "$1ves",
-                               "(.+)ch",
-                               "$1ches",
-                               "(.+)sh",
-                               "$1shes",
-                               "(.*)tooth",
-                               "$1teeth",
-                               "(.+)um",
-                               "$1a",
-                               "(.+)an",
-                               "$1en",
-                               "(.+)ato",
-                               "$1atoes",
-                               "(.*)basis",
-                               "$1bases",
-                               "(.*)axis",
-                               "$1axes",
-                               "(.+)is",
-                               "$1ises",
-                               "(.+)ss",
-                               "$1sses",
-                               "(.+)us",
-                               "$1uses",
-                               "(.+)s",
-                               "$1s",
-                               "(.*)foot",
-                               "$1feet",
-                               "(.+)ix",
-                               "$1ixes",
-                               "(.+)ex",
-                               "$1ices",
-                               "(.+)nx",
-                               "$1nxes",
-                               "(.+)x",
-                               "$1xes",
-                               "(.+)y",
-                               "$1ies",
-                               "(.+)",
-                               "$1s", };
-
-    TABLE = new Entry [source.length / 2];
-
-    for (int i = 0; i < source.length; i += 2)
-    {
-      TABLE[i / 2] = new Entry (source[i], source[i + 1]);
-    }
   }
 }

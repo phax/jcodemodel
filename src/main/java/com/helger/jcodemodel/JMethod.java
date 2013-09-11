@@ -53,7 +53,7 @@ import com.helger.jcodemodel.util.ClassNameComparator;
 /**
  * Java method.
  */
-public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocCommentable
+public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, JDocCommentable
 {
 
   /**
@@ -64,12 +64,12 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
   /**
    * Return type for this method
    */
-  private JType type = null;
+  private AbstractJType type;
 
   /**
    * Name of this method
    */
-  private String name = null;
+  private String name;
 
   /**
    * List of parameters for this method's declaration
@@ -80,40 +80,34 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    * Set of exceptions that this method may throw. A set instance lazily
    * created.
    */
-  private Set <JClass> _throws;
+  private Set <AbstractJClass> _throws;
 
   /**
    * JBlock of statements that makes up the body this method
    */
-  private JBlock body = null;
+  private JBlock body;
 
   private final JDefinedClass outer;
 
   /**
    * javadoc comments for this JMethod
    */
-  private JDocComment jdoc = null;
+  private JDocComment jdoc;
 
   /**
    * Variable parameter for this method's varargs declaration introduced in J2SE
    * 1.5
    */
-  private JVar varParam = null;
+  private JVar varParam;
 
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> annotations = null;
-
-  private boolean isConstructor ()
-  {
-    return type == null;
-  }
-
+  private List <JAnnotationUse> annotations;
   /**
    * To set the default value for the annotation member
    */
-  private JExpression defaultValue = null;
+  private JExpression defaultValue;
 
   /**
    * JMethod constructor
@@ -125,7 +119,7 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    * @param name
    *        Name of this method
    */
-  JMethod (final JDefinedClass outer, final int mods, final JType type, final String name)
+  public JMethod (final JDefinedClass outer, final int mods, final AbstractJType type, final String name)
   {
     this.mods = JMods.forMethod (mods);
     this.type = type;
@@ -141,7 +135,7 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    * @param _class
    *        JClass containing this constructor
    */
-  JMethod (final int mods, final JDefinedClass _class)
+  public JMethod (final int mods, final JDefinedClass _class)
   {
     this.mods = JMods.forMethod (mods);
     this.type = null;
@@ -149,10 +143,15 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
     this.outer = _class;
   }
 
-  private Set <JClass> getThrows ()
+  public boolean isConstructor ()
+  {
+    return type == null;
+  }
+
+  private Set <AbstractJClass> _getThrows ()
   {
     if (_throws == null)
-      _throws = new TreeSet <JClass> (ClassNameComparator.theInstance);
+      _throws = new TreeSet <AbstractJClass> (ClassNameComparator.theInstance);
     return _throws;
   }
 
@@ -162,9 +161,9 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    * @param exception
    *        Name of an exception that this method may throw
    */
-  public JMethod _throws (final JClass exception)
+  public JMethod _throws (final AbstractJClass exception)
   {
-    getThrows ().add (exception);
+    _getThrows ().add (exception);
     return this;
   }
 
@@ -183,6 +182,11 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
     return Collections.<JVar> unmodifiableList (params);
   }
 
+  public JVar paramAtIndex (final int index)
+  {
+    return params.get (index);
+  }
+
   /**
    * Add the specified variable to the list of parameters for this method
    * signature.
@@ -193,14 +197,14 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    *        Name of the parameter being added
    * @return New parameter variable
    */
-  public JVar param (final int mods, final JType type, final String name)
+  public JVar param (final int mods, final AbstractJType type, final String name)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, name, null);
     params.add (v);
     return v;
   }
 
-  public JVar param (final JType type, final String name)
+  public JVar param (final AbstractJType type, final String name)
   {
     return param (JMod.NONE, type, name);
   }
@@ -216,7 +220,7 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
   }
 
   /**
-   * @see #varParam(JType, String)
+   * @see #varParam(AbstractJType, String)
    */
   public JVar varParam (final Class <?> type, final String name)
   {
@@ -236,13 +240,13 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    *         If this method is called twice. varargs in J2SE 1.5 can appear only
    *         once in the method signature.
    */
-  public JVar varParam (final JType type, final String name)
+  public JVar varParam (final AbstractJType type, final String name)
   {
     return varParam (JMods.forVar (JMod.NONE), type, name);
   }
 
   /**
-   * @see #varParam(mods, JType, String)
+   * @see #varParam(JMods, AbstractJType, String)
    */
   public JVar varParam (final JMods mods, final Class <?> type, final String name)
   {
@@ -264,7 +268,7 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    *         If this method is called twice. varargs in J2SE 1.5 can appear only
    *         once in the method signature.
    */
-  public JVar varParam (final JMods mods, final JType type, final String name)
+  public JVar varParam (final JMods mods, final AbstractJType type, final String name)
   {
     if (hasVarArgs ())
       throw new IllegalStateException ("Cannot have two varargs in a method,\n"
@@ -281,7 +285,7 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    * @param clazz
    *        The annotation class to annotate the field with
    */
-  public JAnnotationUse annotate (final JClass clazz)
+  public JAnnotationUse annotate (final AbstractJClass clazz)
   {
     if (annotations == null)
       annotations = new ArrayList <JAnnotationUse> ();
@@ -337,7 +341,7 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
   /**
    * Returns the return type.
    */
-  public JType type ()
+  public AbstractJType type ()
   {
     return type;
   }
@@ -345,7 +349,7 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
   /**
    * Overrides the return type.
    */
-  public void type (final JType t)
+  public void type (final AbstractJType t)
   {
     this.type = t;
   }
@@ -355,9 +359,9 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    * 
    * @return If there's no parameter, an empty array will be returned.
    */
-  public JType [] listParamTypes ()
+  public AbstractJType [] listParamTypes ()
   {
-    final JType [] r = new JType [params.size ()];
+    final AbstractJType [] r = new AbstractJType [params.size ()];
     for (int i = 0; i < r.length; i++)
       r[i] = params.get (i).type ();
     return r;
@@ -368,7 +372,7 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
    * 
    * @return If there's no vararg parameter type, null will be returned.
    */
-  public JType listVarParamType ()
+  public AbstractJType listVarParamType ()
   {
     if (varParam != null)
       return varParam.type ();
@@ -399,7 +403,7 @@ public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocComm
   /**
    * Returns true if the method has the specified signature.
    */
-  public boolean hasSignature (final JType [] argTypes)
+  public boolean hasSignature (final AbstractJType [] argTypes)
   {
     final JVar [] p = listParams ();
     if (p.length != argTypes.length)

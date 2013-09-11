@@ -44,13 +44,13 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-import com.helger.jcodemodel.JResourceFile;
+import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
  * A simple class that takes an object and serializes it into a file in the
  * parent package with the given name.
  */
-public class JSerializedObject extends JResourceFile
+public class JSerializedObject extends AbstractJResourceFile
 {
 
   private final Object obj;

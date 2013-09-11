@@ -46,7 +46,7 @@ package com.helger.jcodemodel;
  * 
  * @author snajper
  */
-class SecureLoader
+final class SecureLoader
 {
 
   static ClassLoader getContextClassLoader ()
@@ -58,12 +58,12 @@ class SecureLoader
     else
     {
       return java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <ClassLoader> ()
-                                                          {
+      {
         public ClassLoader run ()
         {
           return Thread.currentThread ().getContextClassLoader ();
         }
-                                                          });
+      });
     }
   }
 
@@ -76,12 +76,12 @@ class SecureLoader
     else
     {
       return java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <ClassLoader> ()
-                                                          {
+      {
         public ClassLoader run ()
         {
           return c.getClassLoader ();
         }
-                                                          });
+      });
     }
   }
 
@@ -94,12 +94,12 @@ class SecureLoader
     else
     {
       return java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <ClassLoader> ()
-                                                          {
+      {
         public ClassLoader run ()
         {
           return ClassLoader.getSystemClassLoader ();
         }
-                                                          });
+      });
     }
   }
 
@@ -112,13 +112,13 @@ class SecureLoader
     else
     {
       java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <Object> ()
-                                                   {
+      {
         public java.lang.Object run ()
         {
           Thread.currentThread ().setContextClassLoader (cl);
           return null;
         }
-                                                   });
+      });
     }
   }
 }

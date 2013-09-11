@@ -49,27 +49,29 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This is a utility class for managing indentation and other basic formatting
  * for PrintWriter.
  */
-public final class JFormatter
+public class JFormatter
 {
   /** all classes and ids encountered during the collection mode **/
   /**
    * map from short type name to ReferenceList (list of JClass and ids sharing
    * that name)
    **/
-  private final HashMap <String, ReferenceList> collectedReferences;
+  private final Map <String, ReferenceList> collectedReferences;
 
   /**
    * set of imported types (including package java types, eventhough we won't
    * generate imports for them)
    */
-  private final HashSet <JClass> importedClasses;
+  private final Set <AbstractJClass> importedClasses;
 
-  private static enum Mode
+  private static enum EMode
   {
     /**
      * Collect all the type names and identifiers. In this mode we don't
@@ -86,7 +88,7 @@ public final class JFormatter
    * The current running mode. Set to PRINTING so that a casual client can use a
    * formatter just like before.
    */
-  private Mode mode = Mode.PRINTING;
+  private EMode mode = EMode.PRINTING;
 
   /**
    * Current number of indentation strings to print
@@ -117,7 +119,7 @@ public final class JFormatter
     indentSpace = space;
     collectedReferences = new HashMap <String, ReferenceList> ();
     // ids = new HashSet<String>();
-    importedClasses = new HashSet <JClass> ();
+    importedClasses = new HashSet <AbstractJClass> ();
   }
 
   /**
@@ -150,7 +152,7 @@ public final class JFormatter
    */
   public boolean isPrinting ()
   {
-    return mode == Mode.PRINTING;
+    return mode == EMode.PRINTING;
   }
 
   /**
@@ -256,7 +258,7 @@ public final class JFormatter
    */
   public JFormatter p (final char c)
   {
-    if (mode == Mode.PRINTING)
+    if (mode == EMode.PRINTING)
     {
       if (c == CLOSE_TYPE_ARGS)
       {
@@ -280,7 +282,7 @@ public final class JFormatter
    */
   public JFormatter p (final String s)
   {
-    if (mode == Mode.PRINTING)
+    if (mode == EMode.PRINTING)
     {
       spaceIfNeeded (s.charAt (0));
       pw.print (s);
@@ -289,11 +291,11 @@ public final class JFormatter
     return this;
   }
 
-  public JFormatter t (final JType type)
+  public JFormatter t (final AbstractJType type)
   {
     if (type.isReference ())
     {
-      return t ((JClass) type);
+      return t ((AbstractJClass) type);
     }
     else
     {
@@ -307,7 +309,7 @@ public final class JFormatter
    * In the collecting mode we use this information to decide what types to
    * import and what not to.
    */
-  public JFormatter t (final JClass type)
+  public JFormatter t (final AbstractJClass type)
   {
     switch (mode)
     {
@@ -361,7 +363,7 @@ public final class JFormatter
         {
           if (!collectedReferences.get (id).getClasses ().isEmpty ())
           {
-            for (final JClass type : collectedReferences.get (id).getClasses ())
+            for (final AbstractJClass type : collectedReferences.get (id).getClasses ())
             {
               if (type.outer () != null)
               {
@@ -390,7 +392,7 @@ public final class JFormatter
    */
   public JFormatter nl ()
   {
-    if (mode == Mode.PRINTING)
+    if (mode == EMode.PRINTING)
     {
       pw.println ();
       lastChar = 0;
@@ -472,7 +474,7 @@ public final class JFormatter
   void write (final JDefinedClass c)
   {
     // first collect all the types and identifiers
-    mode = Mode.COLLECTING;
+    mode = EMode.COLLECTING;
     d (c);
 
     javaLang = c.owner ()._package ("java.lang");
@@ -494,7 +496,7 @@ public final class JFormatter
     importedClasses.add (c);
 
     // then print the declaration
-    mode = Mode.PRINTING;
+    mode = EMode.PRINTING;
 
     assert c.parentContainer ().isPackage () : "this method is only for a pacakge-level class";
     final JPackage pkg = (JPackage) c.parentContainer ();
@@ -505,9 +507,9 @@ public final class JFormatter
     }
 
     // generate import statements
-    final JClass [] imports = importedClasses.toArray (new JClass [importedClasses.size ()]);
+    final AbstractJClass [] imports = importedClasses.toArray (new AbstractJClass [importedClasses.size ()]);
     Arrays.sort (imports);
-    for (JClass clazz : imports)
+    for (AbstractJClass clazz : imports)
     {
       // suppress import statements for primitive types, built-in types,
       // types in the root package, and types in
@@ -536,9 +538,9 @@ public final class JFormatter
    *        JType that is the current class being processed
    * @return true if an import statement should be suppressed, false otherwise
    */
-  private boolean supressImport (final JClass aImportClass, final JClass c)
+  private boolean supressImport (final AbstractJClass aImportClass, final AbstractJClass c)
   {
-    JClass clazz = aImportClass;
+    AbstractJClass clazz = aImportClass;
     if (clazz instanceof JNarrowedClass)
     {
       clazz = clazz.erasure ();
@@ -579,14 +581,14 @@ public final class JFormatter
   /* package */static final char CLOSE_TYPE_ARGS = '\uFFFF';
 
   /**
-   * Used during the optimization of class imports. List of {@link JClass}es
-   * whose short name is the same.
+   * Used during the optimization of class imports. List of
+   * {@link AbstractJClass}es whose short name is the same.
    * 
    * @author Ryan.Shoemaker@Sun.COM
    */
   final class ReferenceList
   {
-    private final ArrayList <JClass> classes = new ArrayList <JClass> ();
+    private final ArrayList <AbstractJClass> classes = new ArrayList <AbstractJClass> ();
 
     /** true if this name is used as an identifier (like a variable name.) **/
     private boolean id;
@@ -607,7 +609,7 @@ public final class JFormatter
       if (id && classes.size () != 0)
         return true;
 
-      for (JClass c : classes)
+      for (AbstractJClass c : classes)
       {
         if (c instanceof JAnonymousClass)
         {
@@ -636,13 +638,13 @@ public final class JFormatter
       return false;
     }
 
-    public void add (final JClass clazz)
+    public void add (final AbstractJClass clazz)
     {
       if (!classes.contains (clazz))
         classes.add (clazz);
     }
 
-    public List <JClass> getClasses ()
+    public List <AbstractJClass> getClasses ()
     {
       return classes;
     }

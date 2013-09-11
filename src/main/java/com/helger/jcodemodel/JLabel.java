@@ -56,9 +56,14 @@ public class JLabel implements JStatement
    * @param _label
    *        break label or null.
    */
-  JLabel (final String _label)
+  public JLabel (final String _label)
   {
     this.label = _label;
+  }
+
+  public String label ()
+  {
+    return label;
   }
 
   public void state (final JFormatter f)

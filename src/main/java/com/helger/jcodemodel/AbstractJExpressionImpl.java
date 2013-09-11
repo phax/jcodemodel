@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 /**
  * Provides default implementations for {@link JExpression}.
  */
-public abstract class JExpressionImpl implements JExpression
+public abstract class AbstractJExpressionImpl implements JExpression
 {
   //
   //
@@ -173,7 +173,7 @@ public abstract class JExpressionImpl implements JExpression
     return JOp.ne (this, right);
   }
 
-  public final JExpression _instanceof (final JType right)
+  public final JExpression _instanceof (final AbstractJType right)
   {
     return JOp._instanceof (this, right);
   }

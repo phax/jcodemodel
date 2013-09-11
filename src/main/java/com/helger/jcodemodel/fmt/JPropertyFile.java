@@ -44,12 +44,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import com.helger.jcodemodel.JResourceFile;
+import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
  * A property file.
  */
-public class JPropertyFile extends JResourceFile
+public class JPropertyFile extends AbstractJResourceFile
 {
   public JPropertyFile (final String name)
   {

@@ -46,7 +46,5 @@ package com.helger.jcodemodel;
 
 public interface JGenerable
 {
-
-  public void generate (JFormatter f);
-
+  void generate (JFormatter f);
 }

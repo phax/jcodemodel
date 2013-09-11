@@ -41,25 +41,9 @@
 package com.helger.jcodemodel;
 
 /**
- * This helps enable whether the JDefinedClass is a Class or Interface or
- * AnnotationTypeDeclaration or Enum
+ * Things that can be values of an annotation element.
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public enum ClassType
-{
-  CLASS ("class"),
-  INTERFACE ("interface"),
-  ANNOTATION_TYPE_DECL ("@interface"),
-  ENUM ("enum");
-
-  /**
-   * The keyword used to declare this type.
-   */
-  final String declarationToken;
-
-  private ClassType (final String token)
-  {
-    this.declarationToken = token;
-  }
-}
+public abstract class AbstractJAnnotationValue implements JGenerable
+{}

@@ -43,17 +43,16 @@ package com.helger.jcodemodel;
 /**
  * Assignment statements, which are also expressions.
  */
-public class JAssignment extends JExpressionImpl implements JStatement
+public class JAssignment extends AbstractJExpressionImpl implements JStatement
 {
 
-  JAssignmentTarget lhs;
-  JExpression rhs;
-  String op = "";
+  private final JAssignmentTarget lhs;
+  private final JExpression rhs;
+  private final String op;
 
   public JAssignment (final JAssignmentTarget lhs, final JExpression rhs)
   {
-    this.lhs = lhs;
-    this.rhs = rhs;
+    this (lhs, rhs, "");
   }
 
   public JAssignment (final JAssignmentTarget lhs, final JExpression rhs, final String op)
@@ -61,6 +60,21 @@ public class JAssignment extends JExpressionImpl implements JStatement
     this.lhs = lhs;
     this.rhs = rhs;
     this.op = op;
+  }
+
+  public JAssignmentTarget lhs ()
+  {
+    return lhs;
+  }
+
+  public JExpression rhs ()
+  {
+    return rhs;
+  }
+
+  public String op ()
+  {
+    return op;
   }
 
   public void generate (final JFormatter f)
@@ -72,5 +86,4 @@ public class JAssignment extends JExpressionImpl implements JStatement
   {
     f.g (this).p (';').nl ();
   }
-
 }

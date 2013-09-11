@@ -42,9 +42,9 @@ package com.helger.jcodemodel;
 
 /**
  * A representation of a type in codeModel. A type is always either primitive (
- * {@link JPrimitiveType}) or a reference type ({@link JClass}).
+ * {@link JPrimitiveType}) or a reference type ({@link AbstractJClass}).
  */
-public abstract class JType implements JGenerable, Comparable <JType>
+public abstract class AbstractJType implements JGenerable, Comparable <AbstractJType>
 {
 
   /**
@@ -54,32 +54,23 @@ public abstract class JType implements JGenerable, Comparable <JType>
   {
     if (typeName.equals ("void"))
       return codeModel.VOID;
-    else
-      if (typeName.equals ("boolean"))
-        return codeModel.BOOLEAN;
-      else
-        if (typeName.equals ("byte"))
-          return codeModel.BYTE;
-        else
-          if (typeName.equals ("short"))
-            return codeModel.SHORT;
-          else
-            if (typeName.equals ("char"))
-              return codeModel.CHAR;
-            else
-              if (typeName.equals ("int"))
-                return codeModel.INT;
-              else
-                if (typeName.equals ("float"))
-                  return codeModel.FLOAT;
-                else
-                  if (typeName.equals ("long"))
-                    return codeModel.LONG;
-                  else
-                    if (typeName.equals ("double"))
-                      return codeModel.DOUBLE;
-                    else
-                      throw new IllegalArgumentException ("Not a primitive type: " + typeName);
+    if (typeName.equals ("boolean"))
+      return codeModel.BOOLEAN;
+    if (typeName.equals ("byte"))
+      return codeModel.BYTE;
+    if (typeName.equals ("short"))
+      return codeModel.SHORT;
+    if (typeName.equals ("char"))
+      return codeModel.CHAR;
+    if (typeName.equals ("int"))
+      return codeModel.INT;
+    if (typeName.equals ("float"))
+      return codeModel.FLOAT;
+    if (typeName.equals ("long"))
+      return codeModel.LONG;
+    if (typeName.equals ("double"))
+      return codeModel.DOUBLE;
+    throw new IllegalArgumentException ("Not a primitive type: " + typeName);
   }
 
   /** Gets the owner code model object. */
@@ -118,10 +109,10 @@ public abstract class JType implements JGenerable, Comparable <JType>
    * Create an array type of this type. This method is undefined for primitive
    * void type, which doesn't have any corresponding array representation.
    * 
-   * @return A {@link JClass} representing the array type whose element type is
-   *         this type
+   * @return A {@link AbstractJClass} representing the array type whose element
+   *         type is this type
    */
-  public abstract JClass array ();
+  public abstract AbstractJClass array ();
 
   /** Tell whether or not this is an array type. */
   public boolean isArray ()
@@ -143,7 +134,7 @@ public abstract class JType implements JGenerable, Comparable <JType>
    * <p>
    * For example, for "int", this method returns "java.lang.Integer".
    */
-  public abstract JClass boxify ();
+  public abstract AbstractJClass boxify ();
 
   /**
    * If this class is a wrapper type for a primitive, return the primitive type.
@@ -151,12 +142,12 @@ public abstract class JType implements JGenerable, Comparable <JType>
    * <p>
    * For example, for "java.lang.Integer", this method returns "int".
    */
-  public abstract JType unboxify ();
+  public abstract AbstractJType unboxify ();
 
   /**
    * Returns the erasure of this type.
    */
-  public JType erasure ()
+  public AbstractJType erasure ()
   {
     return this;
   }
@@ -172,7 +163,7 @@ public abstract class JType implements JGenerable, Comparable <JType>
   /**
    * If this is an array, returns the component type of the array. (T of T[])
    */
-  public JType elementType ()
+  public AbstractJType elementType ()
   {
     throw new IllegalArgumentException ("Not an array type");
   }
@@ -188,24 +179,17 @@ public abstract class JType implements JGenerable, Comparable <JType>
    * to packages java and javax over all others. This method is used to sort
    * generated import statments in a conventional way for readability.
    */
-  public int compareTo (final JType o)
+  public int compareTo (final AbstractJType o)
   {
+    final String lhs = fullName ();
     final String rhs = o.fullName ();
-    final boolean p = fullName ().startsWith ("java");
+    final boolean p = lhs.startsWith ("java");
     final boolean q = rhs.startsWith ("java");
 
     if (p && !q)
-    {
       return -1;
-    }
-    else
-      if (!p && q)
-      {
-        return 1;
-      }
-      else
-      {
-        return fullName ().compareTo (rhs);
-      }
+    if (!p && q)
+      return 1;
+    return lhs.compareTo (rhs);
   }
 }

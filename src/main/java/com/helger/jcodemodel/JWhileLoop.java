@@ -55,12 +55,12 @@ public class JWhileLoop implements JStatement
   /**
    * JBlock of statements which makes up body of this While statement
    */
-  private JBlock body = null;
+  private JBlock body;
 
   /**
    * Construct a While statment
    */
-  JWhileLoop (final JExpression test)
+  protected JWhileLoop (final JExpression test)
   {
     this.test = test;
   }
@@ -92,5 +92,4 @@ public class JWhileLoop implements JStatement
     else
       f.p (';').nl ();
   }
-
 }

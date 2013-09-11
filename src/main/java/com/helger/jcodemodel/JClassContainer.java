@@ -77,7 +77,7 @@ public interface JClassContainer
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (String name) throws JClassAlreadyExistsException;
+  JDefinedClass _class (String name) throws JClassAlreadyExistsException;
 
   /**
    * Add an interface to this class/package.
@@ -90,7 +90,7 @@ public interface JClassContainer
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _interface (int mods, String name) throws JClassAlreadyExistsException;
+  JDefinedClass _interface (int mods, String name) throws JClassAlreadyExistsException;
 
   /**
    * Adds a public interface to this package.
@@ -98,17 +98,17 @@ public interface JClassContainer
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _interface (String name) throws JClassAlreadyExistsException;
+  JDefinedClass _interface (String name) throws JClassAlreadyExistsException;
 
   /**
    * Creates a new class/enum/interface/annotation.
    */
-  public JDefinedClass _class (int mods, String name, ClassType kind) throws JClassAlreadyExistsException;
+  JDefinedClass _class (int mods, String name, EClassType kind) throws JClassAlreadyExistsException;
 
   /**
    * Returns an iterator that walks the nested classes defined in this class.
    */
-  public Iterator <JDefinedClass> classes ();
+  Iterator <JDefinedClass> classes ();
 
   /**
    * Parent JClassContainer. If this is a package, this method returns a parent
@@ -116,19 +116,19 @@ public interface JClassContainer
    * outer-most class, this method returns a package to which it belongs. If
    * this is an inner class, this method returns the outer class.
    */
-  public JClassContainer parentContainer ();
+  JClassContainer parentContainer ();
 
   /**
    * Gets the nearest package parent.
    * <p>
    * If <tt>this.isPackage()</tt>, then return <tt>this</tt>.
    */
-  public JPackage getPackage ();
+  JPackage getPackage ();
 
   /**
    * Get the root code model object.
    */
-  public JCodeModel owner ();
+  JCodeModel owner ();
 
   /**
    * Add an annotationType Declaration to this package
@@ -139,7 +139,7 @@ public interface JClassContainer
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _annotationTypeDeclaration (String name) throws JClassAlreadyExistsException;
+  JDefinedClass _annotationTypeDeclaration (String name) throws JClassAlreadyExistsException;
 
   /**
    * Add a public enum to this package
@@ -150,6 +150,6 @@ public interface JClassContainer
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _enum (String name) throws JClassAlreadyExistsException;
+  JDefinedClass _enum (String name) throws JClassAlreadyExistsException;
 
 }

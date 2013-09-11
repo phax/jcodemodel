@@ -87,8 +87,8 @@ public class VarArgsTest {
             
             // checking for param after varParam it behaves ok
             //JVar[] var1 = m.varParam(Float.class, "param4");
-            JClass string = cm.ref(String.class);
-            JClass stringArray = string.array();
+            AbstractJClass string = cm.ref(String.class);
+            AbstractJClass stringArray = string.array();
 //            JVar param5 =
             m.param(String.class, "param5");
             

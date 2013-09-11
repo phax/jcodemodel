@@ -43,12 +43,12 @@ package com.helger.jcodemodel;
 /**
  * A cast operation.
  */
-public class JCast extends JExpressionImpl
+public class JCast extends AbstractJExpressionImpl
 {
   /**
    * JType to which the expression is to be cast.
    */
-  private final JType type;
+  private final AbstractJType type;
 
   /**
    * JExpression to be cast.
@@ -63,10 +63,20 @@ public class JCast extends JExpressionImpl
    * @param object
    *        JExpression for the object upon which the cast is applied
    */
-  public JCast (final JType type, final JExpression object)
+  public JCast (final AbstractJType type, final JExpression object)
   {
     this.type = type;
     this.object = object;
+  }
+
+  public AbstractJType type ()
+  {
+    return type;
+  }
+
+  public JExpression object ()
+  {
+    return object;
   }
 
   public void generate (final JFormatter f)

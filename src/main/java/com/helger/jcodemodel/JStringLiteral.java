@@ -45,19 +45,22 @@ package com.helger.jcodemodel;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class JStringLiteral extends JExpressionImpl
+public class JStringLiteral extends AbstractJExpressionImpl
 {
-
-  public final String str;
+  public final String what;
 
   public JStringLiteral (final String what)
   {
-    this.str = what;
+    this.what = what;
+  }
 
+  public String what ()
+  {
+    return what;
   }
 
   public void generate (final JFormatter f)
   {
-    f.p (JExpr.quotify ('"', str));
+    f.p (JExpr.quotify ('"', what));
   }
 }

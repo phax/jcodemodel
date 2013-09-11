@@ -52,7 +52,7 @@ import java.util.List;
  * inserted into the {@link #pos() "current position"}. The position advances
  * one every time you add a new instruction.
  */
-public final class JBlock implements JGenerable, JStatement
+public class JBlock implements JGenerable, JStatement
 {
   /**
    * Declarations and statements contained in this block. Either
@@ -160,7 +160,7 @@ public final class JBlock implements JGenerable, JStatement
    *        Name of the variable
    * @return Newly generated JVar
    */
-  public JVar decl (final JType type, final String name)
+  public JVar decl (final AbstractJType type, final String name)
   {
     return decl (JMod.NONE, type, name, null);
   }
@@ -176,7 +176,7 @@ public final class JBlock implements JGenerable, JStatement
    *        Initialization expression for this variable. May be null.
    * @return Newly generated JVar
    */
-  public JVar decl (final JType type, final String name, final JExpression init)
+  public JVar decl (final AbstractJType type, final String name, final JExpression init)
   {
     return decl (JMod.NONE, type, name, init);
   }
@@ -194,7 +194,7 @@ public final class JBlock implements JGenerable, JStatement
    *        Initialization expression for this variable. May be null.
    * @return Newly generated JVar
    */
-  public JVar decl (final int mods, final JType type, final String name, final JExpression init)
+  public JVar decl (final int mods, final AbstractJType type, final String name, final JExpression init)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, name, init);
     insert (v);
@@ -258,7 +258,7 @@ public final class JBlock implements JGenerable, JStatement
   /**
    * Creates a static invocation statement.
    */
-  public JInvocation staticInvoke (final JClass type, final String method)
+  public JInvocation staticInvoke (final AbstractJClass type, final String method)
   {
     return insert (new JInvocation (type, method));
   }
@@ -483,7 +483,7 @@ public final class JBlock implements JGenerable, JStatement
    * 
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
-  public JForEach forEach (final JType varType, final String name, final JExpression collection)
+  public JForEach forEach (final AbstractJType varType, final String name, final JExpression collection)
   {
     return insert (new JForEach (varType, name, collection));
 

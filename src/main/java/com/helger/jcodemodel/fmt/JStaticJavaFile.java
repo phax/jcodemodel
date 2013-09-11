@@ -53,32 +53,32 @@ import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
 
-import com.helger.jcodemodel.JClass;
+import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JPackage;
-import com.helger.jcodemodel.JResourceFile;
+import com.helger.jcodemodel.AbstractJResourceFile;
 import com.helger.jcodemodel.JTypeVar;
 
 /**
  * Statically generated Java soruce file.
  * <p>
- * This {@link JResourceFile} implementation will generate a Java source file by
+ * This {@link AbstractJResourceFile} implementation will generate a Java source file by
  * copying the source code from a resource.
  * <p>
  * While copying a resource, we look for a package declaration and replace it
  * with the target package name. This allows the static Java source code to have
  * an arbitrary package declaration.
  * <p>
- * You can also use the getJClass method to obtain a {@link JClass} object that
+ * You can also use the getJClass method to obtain a {@link AbstractJClass} object that
  * represents the static file. This allows the client code to refer to the class
  * from other CodeModel generated code.
  * <p>
  * Note that because we don't parse the static Java source code, the returned
- * {@link JClass} object doesn't respond to methods like "isInterface" or
+ * {@link AbstractJClass} object doesn't respond to methods like "isInterface" or
  * "_extends",
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JStaticJavaFile extends JResourceFile
+public final class JStaticJavaFile extends AbstractJResourceFile
 {
 
   private final JPackage pkg;
@@ -107,7 +107,7 @@ public final class JStaticJavaFile extends JResourceFile
   /**
    * Returns a class object that represents a statically generated code.
    */
-  public final JClass getJClass ()
+  public final AbstractJClass getJClass ()
   {
     return clazz;
   }
@@ -219,7 +219,7 @@ public final class JStaticJavaFile extends JResourceFile
     }
   }
 
-  private class JStaticClass extends JClass
+  private class JStaticClass extends AbstractJClass
   {
     private final JTypeVar [] typeParams;
 
@@ -252,13 +252,13 @@ public final class JStaticJavaFile extends JResourceFile
     }
 
     @Override
-    public JClass _extends ()
+    public AbstractJClass _extends ()
     {
       throw new UnsupportedOperationException ();
     }
 
     @Override
-    public Iterator <JClass> _implements ()
+    public Iterator <AbstractJClass> _implements ()
     {
       throw new UnsupportedOperationException ();
     }
@@ -282,7 +282,7 @@ public final class JStaticJavaFile extends JResourceFile
     }
 
     @Override
-    protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+    protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
     {
       return this;
     }

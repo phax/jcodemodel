@@ -48,7 +48,7 @@ import java.util.List;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-abstract class JGenerifiableImpl implements JGenerifiable, JDeclaration
+public abstract class AbstractJGenerifiableImpl implements JGenerifiable, JDeclaration
 {
 
   /** Lazily created list of {@link JTypeVar}s. */
@@ -85,7 +85,7 @@ abstract class JGenerifiableImpl implements JGenerifiable, JDeclaration
     return generify (name, owner ().ref (bound));
   }
 
-  public JTypeVar generify (final String name, final JClass bound)
+  public JTypeVar generify (final String name, final AbstractJClass bound)
   {
     return generify (name).bound (bound);
   }
@@ -93,7 +93,7 @@ abstract class JGenerifiableImpl implements JGenerifiable, JDeclaration
   public JTypeVar [] typeParams ()
   {
     if (typeVariables == null)
-      return JClass.EMPTY_ARRAY;
+      return AbstractJClass.EMPTY_ARRAY;
     else
       return typeVariables.toArray (new JTypeVar [typeVariables.size ()]);
   }

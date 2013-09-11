@@ -45,14 +45,14 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-import com.helger.jcodemodel.JResourceFile;
+import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
  * Simple text file.
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class JTextFile extends JResourceFile
+public class JTextFile extends AbstractJResourceFile
 {
   public JTextFile (final String name)
   {

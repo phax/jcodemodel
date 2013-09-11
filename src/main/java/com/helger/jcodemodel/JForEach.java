@@ -46,16 +46,16 @@ package com.helger.jcodemodel;
  * 
  * @author Bhakti
  */
-public final class JForEach implements JStatement
+public class JForEach implements JStatement
 {
 
-  private final JType type;
+  private final AbstractJType type;
   private final String var;
-  private JBlock body = null; // lazily created
+  private JBlock body; // lazily created
   private final JExpression collection;
   private final JVar loopVar;
 
-  public JForEach (final JType vartype, final String variable, final JExpression collection)
+  public JForEach (final AbstractJType vartype, final String variable, final JExpression collection)
   {
 
     this.type = vartype;
@@ -64,12 +64,22 @@ public final class JForEach implements JStatement
     loopVar = new JVar (JMods.forVar (JMod.NONE), type, var, collection);
   }
 
+  public AbstractJType type ()
+  {
+    return type;
+  }
+
   /**
    * Returns a reference to the loop variable.
    */
   public JVar var ()
   {
     return loopVar;
+  }
+
+  public JExpression collection ()
+  {
+    return collection;
   }
 
   public JBlock body ()
@@ -89,5 +99,4 @@ public final class JForEach implements JStatement
     else
       f.p (';').nl ();
   }
-
 }

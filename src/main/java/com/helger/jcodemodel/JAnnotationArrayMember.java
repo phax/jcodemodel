@@ -54,9 +54,9 @@ import java.util.List;
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public final class JAnnotationArrayMember extends JAnnotationValue implements JAnnotatable
+public final class JAnnotationArrayMember extends AbstractJAnnotationValue implements JAnnotatable
 {
-  private final List <JAnnotationValue> values = new ArrayList <JAnnotationValue> ();
+  private final List <AbstractJAnnotationValue> values = new ArrayList <AbstractJAnnotationValue> ();
   private final JCodeModel owner;
 
   JAnnotationArrayMember (final JCodeModel owner)
@@ -74,7 +74,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final String value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
     values.add (annotationValue);
     return this;
   }
@@ -89,7 +89,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final boolean value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
     values.add (annotationValue);
     return this;
   }
@@ -104,7 +104,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final byte value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
     values.add (annotationValue);
     return this;
   }
@@ -119,7 +119,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final char value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
     values.add (annotationValue);
     return this;
   }
@@ -134,7 +134,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final double value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
     values.add (annotationValue);
     return this;
   }
@@ -149,7 +149,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final long value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
     values.add (annotationValue);
     return this;
   }
@@ -164,7 +164,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final short value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
     values.add (annotationValue);
     return this;
   }
@@ -179,7 +179,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final int value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
     values.add (annotationValue);
     return this;
   }
@@ -194,7 +194,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final float value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
     values.add (annotationValue);
     return this;
   }
@@ -209,7 +209,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final Enum <?> value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationValue ()
+    final AbstractJAnnotationValue annotationValue = new AbstractJAnnotationValue ()
     {
       public void generate (final JFormatter f)
       {
@@ -230,7 +230,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final JEnumConstant value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (value);
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (value);
     values.add (annotationValue);
     return this;
   }
@@ -245,7 +245,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final JExpression value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (value);
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (value);
     values.add (annotationValue);
     return this;
   }
@@ -260,7 +260,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
    */
   public JAnnotationArrayMember param (final Class <?> value)
   {
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (new JExpressionImpl ()
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (new AbstractJExpressionImpl ()
     {
       public void generate (final JFormatter f)
       {
@@ -272,10 +272,10 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
     return this;
   }
 
-  public JAnnotationArrayMember param (final JType type)
+  public JAnnotationArrayMember param (final AbstractJType type)
   {
-    final JClass clazz = type.boxify ();
-    final JAnnotationValue annotationValue = new JAnnotationStringValue (clazz.dotclass ());
+    final AbstractJClass clazz = type.boxify ();
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (clazz.dotclass ());
     values.add (annotationValue);
     return this;
   }
@@ -291,7 +291,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
   /**
    * Adds a new annotation to the array.
    */
-  public JAnnotationUse annotate (final JClass clazz)
+  public JAnnotationUse annotate (final AbstractJClass clazz)
   {
     final JAnnotationUse a = new JAnnotationUse (clazz);
     values.add (a);
@@ -320,7 +320,7 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
     f.p ('{').nl ().i ();
 
     boolean first = true;
-    for (final JAnnotationValue aValue : values)
+    for (final AbstractJAnnotationValue aValue : values)
     {
       if (!first)
         f.p (',').nl ();

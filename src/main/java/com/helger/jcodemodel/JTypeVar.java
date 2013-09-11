@@ -49,12 +49,12 @@ import java.util.List;
  * @see JGenerifiable
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class JTypeVar extends JClass implements JDeclaration
+public class JTypeVar extends AbstractJClass implements JDeclaration
 {
 
   private final String name;
 
-  private JClass bound;
+  private AbstractJClass bound;
 
   public JTypeVar (final JCodeModel owner, final String _name)
   {
@@ -85,7 +85,7 @@ public class JTypeVar extends JClass implements JDeclaration
    * 
    * @return this
    */
-  public JTypeVar bound (final JClass c)
+  public JTypeVar bound (final AbstractJClass c)
   {
     if (bound != null)
       throw new IllegalArgumentException ("type variable has an existing class bound " + bound);
@@ -99,7 +99,7 @@ public class JTypeVar extends JClass implements JDeclaration
    * If no bound is given, this method returns {@link Object}.
    */
   @Override
-  public JClass _extends ()
+  public AbstractJClass _extends ()
   {
     if (bound != null)
       return bound;
@@ -111,7 +111,7 @@ public class JTypeVar extends JClass implements JDeclaration
    * Returns the interface bounds of this variable.
    */
   @Override
-  public Iterator <JClass> _implements ()
+  public Iterator <AbstractJClass> _implements ()
   {
     return bound._implements ();
   }
@@ -139,7 +139,7 @@ public class JTypeVar extends JClass implements JDeclaration
   }
 
   @Override
-  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
     for (int i = 0; i < variables.length; i++)
       if (variables[i] == this)
