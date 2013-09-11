@@ -48,17 +48,24 @@ import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
- * {@link AbstractCodeWriter} that delegates to another {@link AbstractCodeWriter}.
+ * {@link AbstractCodeWriter} that delegates to another
+ * {@link AbstractCodeWriter}.
  * 
  * @author Kohsuke Kawaguchi
  */
 public class FilterCodeWriter extends AbstractCodeWriter
 {
-  protected AbstractCodeWriter core;
+  private final AbstractCodeWriter core;
 
   public FilterCodeWriter (final AbstractCodeWriter core)
   {
+    super (core.encoding ());
     this.core = core;
+  }
+
+  protected AbstractCodeWriter core ()
+  {
+    return core;
   }
 
   @Override

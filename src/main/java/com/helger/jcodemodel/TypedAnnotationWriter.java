@@ -50,6 +50,8 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.helger.jcodemodel.util.SecureLoader;
+
 /**
  * Dynamically implements the typed annotation writer interfaces.
  * 

@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.util;
 
 /**
  * Class defined for safe calls of getClassLoader methods of any kind
@@ -46,10 +46,12 @@ package com.helger.jcodemodel;
  * 
  * @author snajper
  */
-final class SecureLoader
+public final class SecureLoader
 {
+  private SecureLoader ()
+  {}
 
-  static ClassLoader getContextClassLoader ()
+  public static ClassLoader getContextClassLoader ()
   {
     if (System.getSecurityManager () == null)
     {
@@ -67,7 +69,7 @@ final class SecureLoader
     }
   }
 
-  static ClassLoader getClassClassLoader (final Class <?> c)
+  public static ClassLoader getClassClassLoader (final Class <?> c)
   {
     if (System.getSecurityManager () == null)
     {
@@ -85,7 +87,7 @@ final class SecureLoader
     }
   }
 
-  static ClassLoader getSystemClassLoader ()
+  public static ClassLoader getSystemClassLoader ()
   {
     if (System.getSecurityManager () == null)
     {
@@ -103,7 +105,7 @@ final class SecureLoader
     }
   }
 
-  static void setContextClassLoader (final ClassLoader cl)
+  public static void setContextClassLoader (final ClassLoader cl)
   {
     if (System.getSecurityManager () == null)
     {

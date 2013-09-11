@@ -67,6 +67,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
    */
   public OutputStreamCodeWriter (final OutputStream os, final String encoding)
   {
+    super (encoding);
     try
     {
       this.out = new PrintStream (os, false, encoding);
@@ -75,7 +76,6 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
     {
       throw new IllegalArgumentException (ueex);
     }
-    this.encoding = encoding;
   }
 
   @Override

@@ -165,10 +165,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
     }
   };
 
-  protected JDefinedClass (final JClassContainer parent,
-                           final int mods,
-                           final String name,
-                           final ClassType classTypeval)
+  protected JDefinedClass (final JClassContainer parent, final int mods, final String name, final ClassType classTypeval)
   {
     this (mods, name, parent, parent.owner (), classTypeval);
   }
@@ -793,7 +790,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
         f.g (annotation).nl ();
     }
 
-    f.g (mods).p (classType.declarationToken).id (name).d (generifiable);
+    f.g (mods).p (classType.declarationToken ()).id (name).d (generifiable);
 
     if (superClass != null && superClass != owner ().ref (Object.class))
       f.nl ().i ().p ("extends").g (superClass).nl ().o ();

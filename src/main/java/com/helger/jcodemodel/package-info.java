@@ -71,8 +71,8 @@
  *
  * <p>
  * You bulid this tree mostly from top-down. So, you first create
- * a new {@link JDefinedClass} from {@link JCodeModel}, then you
- * create a {@link JMethod} from {@link JDefinedClass}, and so on.
+ * a new {@link com.helger.jcodemodel.JDefinedClass} from {@link com.helger.jcodemodel.JCodeModel}, then you
+ * create a {@link com.helger.jcodemodel.JMethod} from {@link com.helger.jcodemodel.JDefinedClass}, and so on.
  *
  * <p>
  * This design brings the following beneefits:
@@ -112,7 +112,7 @@
  * better performance wise, here's the findings.
  *
  * <p>
- * {@link List}s {@link Map}s, and other collections take up
+ * {@link java.util.List}s {@link java.util.Map}s, and other collections take up
  * a lot of space. Allocating those things lazily is generally
  * a good idea.
  *

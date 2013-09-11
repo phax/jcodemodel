@@ -67,6 +67,7 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
    */
   public SingleStreamCodeWriter (final OutputStream os)
   {
+    super (null);
     out = new PrintStream (os);
   }
 

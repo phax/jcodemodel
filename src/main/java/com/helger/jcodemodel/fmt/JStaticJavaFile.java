@@ -54,9 +54,10 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.AbstractJResourceFile;
+import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JTypeVar;
+import com.helger.jcodemodel.util.SecureLoader;
 
 /**
  * Statically generated Java soruce file.

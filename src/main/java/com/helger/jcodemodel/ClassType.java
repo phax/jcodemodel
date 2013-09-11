@@ -56,10 +56,15 @@ public enum ClassType
   /**
    * The keyword used to declare this type.
    */
-  final String declarationToken;
+  private final String declarationToken;
 
   private ClassType (final String token)
   {
     this.declarationToken = token;
+  }
+
+  public String declarationToken ()
+  {
+    return declarationToken;
   }
 }

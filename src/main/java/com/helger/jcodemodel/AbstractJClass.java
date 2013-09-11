@@ -130,17 +130,17 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Sometimes useful reusable empty array.
    */
-  protected static final JTypeVar [] EMPTY_ARRAY = new JTypeVar [0];
+  static final JTypeVar [] EMPTY_ARRAY = new JTypeVar [0];
 
   /**
    * Checks if this object represents an interface.
    */
-  abstract public boolean isInterface ();
+  public abstract boolean isInterface ();
 
   /**
    * Checks if this class is an abstract class.
    */
-  abstract public boolean isAbstract ();
+  public abstract boolean isAbstract ();
 
   /**
    * If this class represents one of the wrapper classes defined in the

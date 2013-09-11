@@ -62,6 +62,7 @@ public class ZipCodeWriter extends AbstractCodeWriter
    */
   public ZipCodeWriter (final OutputStream target)
   {
+    super (null);
     zip = new ZipOutputStream (target);
     // nullify the close method.
     filter = new FilterOutputStream (zip)

@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import com.helger.jcodemodel.AbstractJResourceFile;
+import com.helger.jcodemodel.util.SecureLoader;
 
 /**
  * Allows an application to copy a resource file to the output.

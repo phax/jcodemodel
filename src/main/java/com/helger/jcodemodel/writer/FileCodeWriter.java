@@ -84,9 +84,9 @@ public class FileCodeWriter extends AbstractCodeWriter
 
   public FileCodeWriter (final File target, final boolean readOnly, final String encoding) throws IOException
   {
+    super (encoding);
     this.target = target;
     this.readOnly = readOnly;
-    this.encoding = encoding;
     if (!target.exists () || !target.isDirectory ())
       throw new IOException (target + ": non-existent directory");
   }

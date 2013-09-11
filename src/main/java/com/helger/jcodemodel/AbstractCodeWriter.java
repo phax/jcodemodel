@@ -61,7 +61,17 @@ public abstract class AbstractCodeWriter
    * 
    * @since 2.5
    */
-  protected String encoding = null;
+  private final String encoding;
+
+  protected AbstractCodeWriter (final String encoding)
+  {
+    this.encoding = encoding;
+  }
+
+  public String encoding ()
+  {
+    return encoding;
+  }
 
   /**
    * Called by CodeModel to store the specified file. The callee must allocate a
