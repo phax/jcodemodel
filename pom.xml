@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.phloc</groupId>
+    <artifactId>parent-pom</artifactId>
+    <version>22.5</version>
+  </parent>
+  <groupId>com.helger</groupId>
+  <artifactId>jcodemodel</artifactId>
+  <version>2.7-SNAPSHOT</version>
+  <name>jcodemodel</name>
+  <description>Java code generation library</description>
+  
+  <licenses>
+    <license>
+      <name>CDDL 1.1</name>
+      <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  
+  <scm>
+    <connection>scm:git:git@github.com:phax/jcodemodel.git</connection>
+    <developerConnection>scm:git:git@github.com:phax/jcodemodel.git</developerConnection>
+    <url>http://github.com/phax/jcodemodel</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>philip</id>
+      <name>Philip Helger</name>
+      <email>ph(at)phloc.com</email>
+    </developer>
+  </developers>
+  
+  <repositories>
+    <repository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>phloc.com</id>
+      <url>http://repo.phloc.com/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>  
+
+  <distributionManagement>
+    <repository>
+      <id>repo.phloc.public</id>
+      <url>sftp://www.phloc.com/var/www/html-repo/maven2</url>
+    </repository>
+  </distributionManagement>
+  
+  <dependencies>
+    <dependency>
+      <groupId>com.google.code.javaparser</groupId>
+      <artifactId>javaparser</artifactId>
+      <version>1.0.9</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Export-Package>
+              com.helger.codemodel.*
+            </Export-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
