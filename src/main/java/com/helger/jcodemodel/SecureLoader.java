@@ -57,17 +57,17 @@ class SecureLoader
     }
     else
     {
-      return (ClassLoader) java.security.AccessController.doPrivileged (new java.security.PrivilegedAction ()
-      {
-        public java.lang.Object run ()
+      return java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <ClassLoader> ()
+                                                          {
+        public ClassLoader run ()
         {
           return Thread.currentThread ().getContextClassLoader ();
         }
-      });
+                                                          });
     }
   }
 
-  static ClassLoader getClassClassLoader (final Class c)
+  static ClassLoader getClassClassLoader (final Class <?> c)
   {
     if (System.getSecurityManager () == null)
     {
@@ -75,13 +75,13 @@ class SecureLoader
     }
     else
     {
-      return (ClassLoader) java.security.AccessController.doPrivileged (new java.security.PrivilegedAction ()
-      {
-        public java.lang.Object run ()
+      return java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <ClassLoader> ()
+                                                          {
+        public ClassLoader run ()
         {
           return c.getClassLoader ();
         }
-      });
+                                                          });
     }
   }
 
@@ -93,13 +93,13 @@ class SecureLoader
     }
     else
     {
-      return (ClassLoader) java.security.AccessController.doPrivileged (new java.security.PrivilegedAction ()
-      {
-        public java.lang.Object run ()
+      return java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <ClassLoader> ()
+                                                          {
+        public ClassLoader run ()
         {
           return ClassLoader.getSystemClassLoader ();
         }
-      });
+                                                          });
     }
   }
 
@@ -111,15 +111,14 @@ class SecureLoader
     }
     else
     {
-      java.security.AccessController.doPrivileged (new java.security.PrivilegedAction ()
-      {
+      java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <Object> ()
+                                                   {
         public java.lang.Object run ()
         {
           Thread.currentThread ().setContextClassLoader (cl);
           return null;
         }
-      });
+                                                   });
     }
   }
-
 }

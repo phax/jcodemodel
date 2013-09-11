@@ -56,4 +56,7 @@ public final class JMod
   public final static int SYNCHRONIZED = 0x080;
   public final static int TRANSIENT = 0x100;
   public final static int VOLATILE = 0x200;
+
+  private JMod ()
+  {}
 }

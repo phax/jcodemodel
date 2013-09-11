@@ -141,7 +141,7 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
       if (m.getDefaultValue () != null)
       {
         // check the default
-        if (targ.equals (targ.owner ().ref ((Class) m.getDefaultValue ())))
+        if (targ.equals (targ.owner ().ref ((Class <?>) m.getDefaultValue ())))
           return proxy; // defaulted
       }
       use.param (name, targ);
@@ -161,22 +161,22 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
     }
     if (arg instanceof Boolean)
     {
-      use.param (name, (Boolean) arg);
+      use.param (name, ((Boolean) arg).booleanValue ());
       return proxy;
     }
     if (arg instanceof Integer)
     {
-      use.param (name, (Integer) arg);
+      use.param (name, ((Integer) arg).intValue ());
       return proxy;
     }
-    if (arg instanceof Class)
+    if (arg instanceof Class <?>)
     {
-      use.param (name, (Class) arg);
+      use.param (name, (Class <?>) arg);
       return proxy;
     }
-    if (arg instanceof Enum)
+    if (arg instanceof Enum <?>)
     {
-      use.param (name, (Enum) arg);
+      use.param (name, (Enum <?>) arg);
       return proxy;
     }
 
@@ -223,17 +223,17 @@ class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <
     }
     if (arg instanceof Boolean)
     {
-      m.param ((Boolean) arg);
+      m.param (((Boolean) arg).booleanValue ());
       return proxy;
     }
     if (arg instanceof Integer)
     {
-      m.param ((Integer) arg);
+      m.param (((Integer) arg).intValue ());
       return proxy;
     }
-    if (arg instanceof Class)
+    if (arg instanceof Class <?>)
     {
-      m.param ((Class) arg);
+      m.param ((Class <?>) arg);
       return proxy;
     }
     // TODO: enum constant. how should we handle it?

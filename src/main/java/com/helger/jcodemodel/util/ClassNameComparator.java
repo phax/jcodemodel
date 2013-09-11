@@ -51,6 +51,8 @@ import com.helger.jcodemodel.JClass;
  */
 public class ClassNameComparator implements Comparator <JClass>
 {
+  public static final Comparator <JClass> theInstance = new ClassNameComparator ();
+
   private ClassNameComparator ()
   {}
 
@@ -58,6 +60,4 @@ public class ClassNameComparator implements Comparator <JClass>
   {
     return l.fullName ().compareTo (r.fullName ());
   }
-
-  public static final Comparator <JClass> theInstance = new ClassNameComparator ();
 }

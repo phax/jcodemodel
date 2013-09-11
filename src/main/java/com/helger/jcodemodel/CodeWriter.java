@@ -44,9 +44,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
-import com.helger.jcodemodel.util.EncoderFactory;
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
 /**
@@ -95,7 +95,7 @@ public abstract class CodeWriter
   public Writer openSource (final JPackage pkg, final String fileName) throws IOException
   {
     final OutputStreamWriter bw = encoding != null ? new OutputStreamWriter (openBinary (pkg, fileName), encoding)
-                                                  : new OutputStreamWriter (openBinary (pkg, fileName));
+    : new OutputStreamWriter (openBinary (pkg, fileName));
 
     // create writer
     try
@@ -104,7 +104,7 @@ public abstract class CodeWriter
       {
         // can't change this signature to Encoder because
         // we can't have Encoder in method signature
-        private final CharsetEncoder encoder = EncoderFactory.createEncoder (bw.getEncoding ());
+        private final CharsetEncoder encoder = Charset.forName (bw.getEncoding ()).newEncoder ();
 
         @Override
         protected boolean requireEscaping (final int ch)
