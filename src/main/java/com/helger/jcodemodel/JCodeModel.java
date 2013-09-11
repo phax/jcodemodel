@@ -228,18 +228,6 @@ public final class JCodeModel
 
   /**
    * Creates a new anonymous class.
-   * 
-   * @deprecated The naming convention doesn't match the rest of the CodeModel.
-   *             Use {@link #anonymousClass(JClass)} instead.
-   */
-  @Deprecated
-  public JDefinedClass newAnonymousClass (final JClass baseType)
-  {
-    return new JAnonymousClass (baseType);
-  }
-
-  /**
-   * Creates a new anonymous class.
    */
   public JDefinedClass anonymousClass (final JClass baseType)
   {
@@ -443,8 +431,7 @@ public final class JCodeModel
       return JType.parse (this, name);
     }
     catch (final IllegalArgumentException e)
-    {
-    }
+    {}
 
     // existing class
     return new TypeNameParser (name).parseTypeName ();
@@ -658,7 +645,7 @@ public final class JCodeModel
     {
       final Class <?> [] interfaces = _class.getInterfaces ();
       return new Iterator <JClass> ()
-          {
+      {
         private int idx = 0;
 
         public boolean hasNext ()
@@ -675,7 +662,7 @@ public final class JCodeModel
         {
           throw new UnsupportedOperationException ();
         }
-          };
+      };
     }
 
     @Override

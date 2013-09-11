@@ -119,15 +119,6 @@ public final class JPrimitiveType extends JType
   }
 
   /**
-   * @deprecated Use {@link #boxify()}.
-   */
-  @Deprecated
-  public JClass getWrapperClass ()
-  {
-    return boxify ();
-  }
-
-  /**
    * Wraps an expression of this type to the corresponding wrapper class. For
    * example, if this class represents "float", this method will return the
    * expression <code>new Float(x)</code> for the paramter x. REVISIT: it's not

@@ -53,7 +53,7 @@ import com.helger.jcodemodel.util.ClassNameComparator;
 /**
  * Java method.
  */
-public class JMethod extends JGenerifiableImpl implements  JAnnotatable, JDocCommentable
+public class JMethod extends JGenerifiableImpl implements JAnnotatable, JDocCommentable
 {
 
   /**
@@ -238,20 +238,41 @@ public class JMethod extends JGenerifiableImpl implements  JAnnotatable, JDocCom
    */
   public JVar varParam (final JType type, final String name)
   {
-    if (!hasVarArgs ())
-    {
+    return varParam (JMods.forVar (JMod.NONE), type, name);
+  }
 
-      varParam = new JVar (JMods.forVar (JMod.NONE), type.array (), name, null);
-      return varParam;
-    }
-    else
-    {
+  /**
+   * @see #varParam(mods, JType, String)
+   */
+  public JVar varParam (final JMods mods, final Class <?> type, final String name)
+  {
+    return varParam (mods, outer.owner ()._ref (type), name);
+  }
+
+  /**
+   * Add the specified variable argument to the list of parameters for this
+   * method signature.
+   * 
+   * @param mods
+   *        mods to use
+   * @param type
+   *        Type of the parameter being added.
+   * @param name
+   *        Name of the parameter being added
+   * @return the variable parameter
+   * @throws IllegalStateException
+   *         If this method is called twice. varargs in J2SE 1.5 can appear only
+   *         once in the method signature.
+   */
+  public JVar varParam (final JMods mods, final JType type, final String name)
+  {
+    if (hasVarArgs ())
       throw new IllegalStateException ("Cannot have two varargs in a method,\n"
-          + "Check if varParam method of JMethod is"
-          + " invoked more than once");
+                                       + "Check if varParam method of JMethod is"
+                                       + " invoked more than once");
 
-    }
-
+    varParam = new JVar (mods, type.array (), name, null);
+    return varParam;
   }
 
   /**
@@ -462,7 +483,9 @@ public class JMethod extends JGenerifiableImpl implements  JAnnotatable, JDocCom
     {
       if (!first)
         f.p (',');
-      f.g (varParam.type ().elementType ());
+      for (final JAnnotationUse annotation : varParam.annotations ())
+        f.g (annotation).nl ();
+      f.g (varParam.mods ()).g (varParam.type ().elementType ());
       f.p ("... ");
       f.id (varParam.name ());
     }
@@ -499,15 +522,6 @@ public class JMethod extends JGenerifiableImpl implements  JAnnotatable, JDocCom
    *         object.
    */
   public JMods mods ()
-  {
-    return mods;
-  }
-
-  /**
-   * @deprecated use {@link #mods()}
-   */
-  @Deprecated
-  public JMods getMods ()
   {
     return mods;
   }

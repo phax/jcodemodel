@@ -209,10 +209,8 @@ public class JVar extends JExpressionImpl implements JDeclaration, JAssignmentTa
   public void bind (final JFormatter f)
   {
     if (annotations != null)
-    {
-      for (int i = 0; i < annotations.size (); i++)
-        f.g (annotations.get (i)).nl ();
-    }
+      for (final JAnnotationUse annotation : annotations)
+        f.g (annotation).nl ();
     f.g (mods).g (type).id (name);
     if (init != null)
       f.p ('=').g (init);

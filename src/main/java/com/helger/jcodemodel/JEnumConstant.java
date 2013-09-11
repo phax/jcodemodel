@@ -100,6 +100,18 @@ public class JEnumConstant extends JExpressionImpl implements JDeclaration, JAnn
     return this;
   }
 
+  public List <JExpression> args ()
+  {
+    if (args == null)
+      args = new ArrayList <JExpression> ();
+    return Collections.unmodifiableList (args);
+  }
+
+  public boolean hasArgs ()
+  {
+    return args != null && !args.isEmpty ();
+  }
+
   /**
    * Returns the name of this constant.
    * 
@@ -168,15 +180,11 @@ public class JEnumConstant extends JExpressionImpl implements JDeclaration, JAnn
     if (jdoc != null)
       f.nl ().g (jdoc);
     if (annotations != null)
-    {
-      for (int i = 0; i < annotations.size (); i++)
-        f.g (annotations.get (i)).nl ();
-    }
+      for (final JAnnotationUse annotation : annotations)
+        f.g (annotation).nl ();
     f.id (name);
     if (args != null)
-    {
       f.p ('(').g (args).p (')');
-    }
   }
 
   public void generate (final JFormatter f)

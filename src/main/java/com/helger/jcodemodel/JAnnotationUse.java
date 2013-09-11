@@ -297,7 +297,9 @@ public final class JAnnotationUse extends JAnnotationValue
    * 
    * <pre>
    * &#64;XmlCollectionItem(type=Integer.class);
-   *    * </pre>
+   *    *
+   * </pre>
+   * 
    * For adding a value of Class<? extends Annotation>
    * {@link #annotationParam(String, Class)}
    * 
@@ -305,9 +307,8 @@ public final class JAnnotationUse extends JAnnotationValue
    *        The simple name for this annotation param
    * @param value
    *        The class type of the param
-   * @return
-   *         The JAnnotationUse. More member value pairs can
-   * be added to it using the same or the overloaded methods.
+   * @return The JAnnotationUse. More member value pairs can be added to it
+   *         using the same or the overloaded methods.
    */
   public JAnnotationUse param (final String name, final Class <?> value)
   {
@@ -369,40 +370,6 @@ public final class JAnnotationUse extends JAnnotationValue
     final JAnnotationArrayMember arrayMember = new JAnnotationArrayMember (owner ());
     addValue (name, arrayMember);
     return arrayMember;
-  }
-
-  // /**
-  // * This can be used to add annotations inside annotations
-  // * for e.g &#64;XmlCollection(values=
-  // &#64;XmlCollectionItem(type=Foo.class))
-  // * @param className
-  // * The classname of the annotation to be included
-  // * @return
-  // * The JAnnotationUse that can be used as a member within this
-  // JAnnotationUse
-  // * @deprecated
-  // * use {@link JAnnotationArrayMember#annotate}
-  // */
-  // public JAnnotationUse annotate(String className) {
-  // JAnnotationUse annotationUse = new JAnnotationUse(owner().ref(className));
-  // return annotationUse;
-  // }
-
-  /**
-   * This can be used to add annotations inside annotations for e.g
-   * &#64;XmlCollection(values= &#64;XmlCollectionItem(type=Foo.class))
-   * 
-   * @param clazz
-   *        The annotation class to be included
-   * @return The JAnnotationUse that can be used as a member within this
-   *         JAnnotationUse
-   * @deprecated use {@link JAnnotationArrayMember#annotate}
-   */
-  @Deprecated
-  public JAnnotationUse annotate (final Class <? extends Annotation> clazz)
-  {
-    final JAnnotationUse annotationUse = new JAnnotationUse (owner ().ref (clazz));
-    return annotationUse;
   }
 
   public void generate (final JFormatter f)

@@ -306,30 +306,13 @@ public final class JAnnotationArrayMember extends JAnnotationValue implements JA
   /**
    * {@link JAnnotatable#annotations()}
    */
-  @SuppressWarnings ("unchecked")
+  @SuppressWarnings ({ "unchecked", "rawtypes" })
   public Collection <JAnnotationUse> annotations ()
   {
     // this invocation is invalid if the caller isn't adding annotations into an
     // array
     // so this potentially type-unsafe conversion would be justified.
     return Collections.<JAnnotationUse> unmodifiableList ((List) values);
-  }
-
-  /**
-   * Adds an annotation member to this annotation array This can be used for e.g
-   * &#64;XmlCollection(values= &#64;XmlCollectionItem(type=Foo.class))
-   * 
-   * @param value
-   *        Adds a annotation to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
-   * @deprecated use {@link #annotate}
-   */
-  @Deprecated
-  public JAnnotationArrayMember param (final JAnnotationUse value)
-  {
-    values.add (value);
-    return this;
   }
 
   public void generate (final JFormatter f)
