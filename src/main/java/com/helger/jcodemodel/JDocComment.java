@@ -74,6 +74,11 @@ public class JDocComment extends JCommentPart implements JGenerable
    */
   private JCommentPart atReturn = null;
 
+  /**
+   * The @author tag part.
+   */
+  private JCommentPart atAuthor = null;
+
   /** The @deprecated tag */
   private JCommentPart atDeprecated = null;
 
@@ -176,6 +181,21 @@ public class JDocComment extends JCommentPart implements JGenerable
   }
 
   /**
+   * Appends a text to @author tag.
+   */
+  public JCommentPart addAuthor ()
+  {
+    if (atAuthor == null)
+      atAuthor = new JCommentPart ();
+    return atAuthor;
+  }
+
+  public void removeAuthor ()
+  {
+    atAuthor = null;
+  }
+
+  /**
    * add an @deprecated tag to the javadoc, with the associated message.
    */
   public JCommentPart addDeprecated ()
@@ -253,6 +273,11 @@ public class JDocComment extends JCommentPart implements JGenerable
     {
       f.p (" * @return").nl ();
       atReturn.format (f, INDENT);
+    }
+    if (atAuthor != null)
+    {
+      f.p (" * @author").nl ();
+      atAuthor.format (f, INDENT);
     }
     for (final Map.Entry <AbstractJClass, JCommentPart> e : atThrows.entrySet ())
     {

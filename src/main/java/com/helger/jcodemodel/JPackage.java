@@ -171,10 +171,10 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
    */
   public JDefinedClass _class (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, EClassType.CLASS);
+    return _class (mods, name, ClassType.CLASS);
   }
 
-  public JDefinedClass _class (final int mods, final String name, final EClassType classTypeVal) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, final String name, final ClassType classTypeVal) throws JClassAlreadyExistsException
   {
     if (classes.containsKey (name))
       throw new JClassAlreadyExistsException (classes.get (name));
@@ -235,7 +235,7 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
    */
   public JDefinedClass _interface (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, EClassType.INTERFACE);
+    return _class (mods, name, ClassType.INTERFACE);
   }
 
   /**
@@ -257,7 +257,7 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
    */
   public JDefinedClass _annotationTypeDeclaration (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, EClassType.ANNOTATION_TYPE_DECL);
+    return _class (JMod.PUBLIC, name, ClassType.ANNOTATION_TYPE_DECL);
   }
 
   /**
@@ -271,7 +271,7 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
    */
   public JDefinedClass _enum (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, EClassType.ENUM);
+    return _class (JMod.PUBLIC, name, ClassType.ENUM);
   }
 
   /**

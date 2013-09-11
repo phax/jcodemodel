@@ -134,7 +134,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   /**
    * Default value is class or interface or annotationTypeDeclaration or enum
    */
-  private final EClassType classType;
+  private final ClassType classType;
 
   /**
    * List containing the enum value declarations
@@ -168,7 +168,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   protected JDefinedClass (final JClassContainer parent,
                            final int mods,
                            final String name,
-                           final EClassType classTypeval)
+                           final ClassType classTypeval)
   {
     this (mods, name, parent, parent.owner (), classTypeval);
   }
@@ -183,7 +183,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
 
   private JDefinedClass (final int mods, final String name, final JClassContainer parent, final JCodeModel owner)
   {
-    this (mods, name, parent, owner, EClassType.CLASS);
+    this (mods, name, parent, owner, ClassType.CLASS);
   }
 
   /**
@@ -198,7 +198,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
                          final String name,
                          final JClassContainer parent,
                          final JCodeModel owner,
-                         final EClassType classTypeVal)
+                         final ClassType classTypeVal)
   {
     super (owner);
 
@@ -254,7 +254,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _extends (final AbstractJClass superClass)
   {
-    if (this.classType == EClassType.INTERFACE)
+    if (this.classType == ClassType.INTERFACE)
       if (superClass.isInterface ())
       {
         return this._implements (superClass);
@@ -385,7 +385,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   @Override
   public boolean isInterface ()
   {
-    return this.classType == EClassType.INTERFACE;
+    return this.classType == ClassType.INTERFACE;
   }
 
   @Override
@@ -446,7 +446,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public boolean isAnnotationTypeDeclaration ()
   {
-    return this.classType == EClassType.ANNOTATION_TYPE_DECL;
+    return this.classType == ClassType.ANNOTATION_TYPE_DECL;
 
   }
 
@@ -461,7 +461,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _annotationTypeDeclaration (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, EClassType.ANNOTATION_TYPE_DECL);
+    return _class (JMod.PUBLIC, name, ClassType.ANNOTATION_TYPE_DECL);
   }
 
   /**
@@ -475,7 +475,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _enum (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, EClassType.ENUM);
+    return _class (JMod.PUBLIC, name, ClassType.ENUM);
   }
 
   /**
@@ -491,10 +491,10 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _enum (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, EClassType.ENUM);
+    return _class (mods, name, ClassType.ENUM);
   }
 
-  public EClassType getClassType ()
+  public ClassType getClassType ()
   {
     return this.classType;
   }
@@ -663,10 +663,10 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _class (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, EClassType.CLASS);
+    return _class (mods, name, ClassType.CLASS);
   }
 
-  public JDefinedClass _class (final int mods, final String name, final EClassType classTypeVal) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, final String name, final ClassType classTypeVal) throws JClassAlreadyExistsException
   {
 
     String NAME;
@@ -705,7 +705,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _interface (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, EClassType.INTERFACE);
+    return _class (mods, name, ClassType.INTERFACE);
   }
 
   /**
@@ -802,7 +802,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
     {
       if (superClass == null)
         f.nl ();
-      f.i ().p (classType == EClassType.INTERFACE ? "extends" : "implements");
+      f.i ().p (classType == ClassType.INTERFACE ? "extends" : "implements");
       f.g (interfaces);
       f.nl ().o ();
     }

@@ -82,7 +82,7 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  * <h2>Where to go from here?</h2>
  * <p>
  * Most of the time you'd want to populate new type definitions in a
- * {@link JCodeModel}. See {@link #_class(String, EClassType)}.
+ * {@link JCodeModel}. See {@link #_class(String, ClassType)}.
  */
 public final class JCodeModel
 {
@@ -170,7 +170,7 @@ public final class JCodeModel
    */
   public JDefinedClass _class (final String fullyqualifiedName) throws JClassAlreadyExistsException
   {
-    return _class (fullyqualifiedName, EClassType.CLASS);
+    return _class (fullyqualifiedName, ClassType.CLASS);
   }
 
   /**
@@ -191,7 +191,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (final int mods, final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, final String fullyqualifiedName, final ClassType t) throws JClassAlreadyExistsException
   {
     final int idx = fullyqualifiedName.lastIndexOf ('.');
     if (idx < 0)
@@ -206,7 +206,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final String fullyqualifiedName, final ClassType t) throws JClassAlreadyExistsException
   {
     return _class (JMod.PUBLIC, fullyqualifiedName, t);
   }

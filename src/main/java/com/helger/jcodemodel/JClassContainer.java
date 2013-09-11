@@ -103,7 +103,7 @@ public interface JClassContainer
   /**
    * Creates a new class/enum/interface/annotation.
    */
-  JDefinedClass _class (int mods, String name, EClassType kind) throws JClassAlreadyExistsException;
+  JDefinedClass _class (int mods, String name, ClassType kind) throws JClassAlreadyExistsException;
 
   /**
    * Returns an iterator that walks the nested classes defined in this class.

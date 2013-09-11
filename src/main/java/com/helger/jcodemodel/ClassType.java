@@ -46,7 +46,7 @@ package com.helger.jcodemodel;
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public enum EClassType
+public enum ClassType
 {
   CLASS ("class"),
   INTERFACE ("interface"),
@@ -58,7 +58,7 @@ public enum EClassType
    */
   final String declarationToken;
 
-  private EClassType (final String token)
+  private ClassType (final String token)
   {
     this.declarationToken = token;
   }

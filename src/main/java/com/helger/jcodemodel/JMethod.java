@@ -242,13 +242,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, 
    */
   public JVar varParam (final AbstractJType type, final String name)
   {
-    return varParam (JMods.forVar (JMod.NONE), type, name);
+    return varParam (JMod.NONE, type, name);
   }
 
   /**
-   * @see #varParam(JMods, AbstractJType, String)
+   * @see #varParam(int, AbstractJType, String)
    */
-  public JVar varParam (final JMods mods, final Class <?> type, final String name)
+  public JVar varParam (final int mods, final Class <?> type, final String name)
   {
     return varParam (mods, outer.owner ()._ref (type), name);
   }
@@ -268,14 +268,14 @@ public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, 
    *         If this method is called twice. varargs in J2SE 1.5 can appear only
    *         once in the method signature.
    */
-  public JVar varParam (final JMods mods, final AbstractJType type, final String name)
+  public JVar varParam (final int mods, final AbstractJType type, final String name)
   {
     if (hasVarArgs ())
       throw new IllegalStateException ("Cannot have two varargs in a method,\n"
                                        + "Check if varParam method of JMethod is"
                                        + " invoked more than once");
 
-    varParam = new JVar (mods, type.array (), name, null);
+    varParam = new JVar (JMods.forVar (mods), type.array (), name, null);
     return varParam;
   }
 
