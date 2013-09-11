@@ -45,7 +45,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import com.helger.jcodemodel.CodeWriter;
+import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
@@ -56,7 +56,7 @@ import com.helger.jcodemodel.JPackage;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class SingleStreamCodeWriter extends CodeWriter
+public class SingleStreamCodeWriter extends AbstractCodeWriter
 {
 
   private final PrintStream out;

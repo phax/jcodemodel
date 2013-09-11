@@ -50,7 +50,7 @@ public class JStringLiteral extends JExpressionImpl
 
   public final String str;
 
-  JStringLiteral (final String what)
+  public JStringLiteral (final String what)
   {
     this.str = what;
 

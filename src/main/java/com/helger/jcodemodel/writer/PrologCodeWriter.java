@@ -44,7 +44,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
-import com.helger.jcodemodel.CodeWriter;
+import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
@@ -70,7 +70,7 @@ public class PrologCodeWriter extends FilterCodeWriter
    *        the beginning of each line to make it a valid Java comment, so the
    *        caller can just pass strings like "abc\ndef"
    */
-  public PrologCodeWriter (final CodeWriter core, final String prolog)
+  public PrologCodeWriter (final AbstractCodeWriter core, final String prolog)
   {
     super (core);
     this.prolog = prolog;

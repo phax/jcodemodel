@@ -46,7 +46,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 
-import com.helger.jcodemodel.CodeWriter;
+import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
@@ -57,7 +57,7 @@ import com.helger.jcodemodel.JPackage;
  */
 public class ProgressCodeWriter extends FilterCodeWriter
 {
-  public ProgressCodeWriter (final CodeWriter output, final PrintStream progress)
+  public ProgressCodeWriter (final AbstractCodeWriter output, final PrintStream progress)
   {
     super (output);
     this.progress = progress;

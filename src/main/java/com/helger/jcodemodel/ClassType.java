@@ -46,8 +46,12 @@ package com.helger.jcodemodel;
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public final class ClassType
+public enum ClassType
 {
+  CLASS ("class"),
+  INTERFACE ("interface"),
+  ANNOTATION_TYPE_DECL ("@interface"),
+  ENUM ("enum");
 
   /**
    * The keyword used to declare this type.
@@ -58,9 +62,4 @@ public final class ClassType
   {
     this.declarationToken = token;
   }
-
-  public static final ClassType CLASS = new ClassType ("class");
-  public static final ClassType INTERFACE = new ClassType ("interface");
-  public static final ClassType ANNOTATION_TYPE_DECL = new ClassType ("@interface");
-  public static final ClassType ENUM = new ClassType ("enum");
 }

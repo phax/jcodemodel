@@ -54,10 +54,10 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
-import com.helger.jcodemodel.CodeWriter;
+import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
-public class OutputStreamCodeWriter extends CodeWriter
+public class OutputStreamCodeWriter extends AbstractCodeWriter
 {
   private final PrintStream out;
 

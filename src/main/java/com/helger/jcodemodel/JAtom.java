@@ -43,12 +43,12 @@ package com.helger.jcodemodel;
 /**
  * JAtoms: Simple code components that merely generate themselves.
  */
-final class JAtom extends JExpressionImpl
+public class JAtom extends JExpressionImpl
 {
 
   private final String what;
 
-  JAtom (final String what)
+  public JAtom (final String what)
   {
     this.what = what;
   }

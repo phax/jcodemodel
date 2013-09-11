@@ -52,7 +52,7 @@ import java.util.List;
  * 
  * @author Bhakti Mehta (Bhakti.Mehta@sun.com)
  */
-public final class JEnumConstant extends JExpressionImpl implements JDeclaration, JAnnotatable, JDocCommentable
+public class JEnumConstant extends JExpressionImpl implements JDeclaration, JAnnotatable, JDocCommentable
 {
 
   /**
@@ -78,7 +78,7 @@ public final class JEnumConstant extends JExpressionImpl implements JDeclaration
    */
   private List <JExpression> args = null;
 
-  JEnumConstant (final JDefinedClass type, final String name)
+  public JEnumConstant (final JDefinedClass type, final String name)
   {
     this.name = name;
     this.type = type;

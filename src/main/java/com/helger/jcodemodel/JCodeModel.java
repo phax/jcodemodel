@@ -267,7 +267,7 @@ public final class JCodeModel
 
   /**
    * Generates Java source code. A convenience method that calls
-   * {@link #build(CodeWriter,CodeWriter)}.
+   * {@link #build(AbstractCodeWriter,AbstractCodeWriter)}.
    * 
    * @param srcDir
    *        Java source files are generated into this directory.
@@ -278,8 +278,8 @@ public final class JCodeModel
    */
   public void build (final File srcDir, final File resourceDir, final PrintStream status) throws IOException
   {
-    CodeWriter src = new FileCodeWriter (srcDir);
-    CodeWriter res = new FileCodeWriter (resourceDir);
+    AbstractCodeWriter src = new FileCodeWriter (srcDir);
+    AbstractCodeWriter res = new FileCodeWriter (resourceDir);
     if (status != null)
     {
       src = new ProgressCodeWriter (src, status);
@@ -307,7 +307,7 @@ public final class JCodeModel
   /**
    * A convenience method for <code>build(out,out)</code>.
    */
-  public void build (final CodeWriter out) throws IOException
+  public void build (final AbstractCodeWriter out) throws IOException
   {
     build (out, out);
   }
@@ -315,7 +315,7 @@ public final class JCodeModel
   /**
    * Generates Java source code.
    */
-  public void build (final CodeWriter source, final CodeWriter resource) throws IOException
+  public void build (final AbstractCodeWriter source, final AbstractCodeWriter resource) throws IOException
   {
     final JPackage [] pkgs = packages.values ().toArray (new JPackage [packages.size ()]);
     // avoid concurrent modification exception

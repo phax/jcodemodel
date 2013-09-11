@@ -46,7 +46,7 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import com.helger.jcodemodel.CodeWriter;
+import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
@@ -54,7 +54,7 @@ import com.helger.jcodemodel.JPackage;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class ZipCodeWriter extends CodeWriter
+public class ZipCodeWriter extends AbstractCodeWriter
 {
   /**
    * @param target

@@ -47,7 +47,7 @@ import java.io.OutputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.helger.jcodemodel.CodeWriter;
+import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
@@ -55,7 +55,7 @@ import com.helger.jcodemodel.JPackage;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class FileCodeWriter extends CodeWriter
+public class FileCodeWriter extends AbstractCodeWriter
 {
 
   /** The target directory to put source code. */

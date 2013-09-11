@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * JMethod invocation
  */
-public final class JInvocation extends JExpressionImpl implements JStatement
+public class JInvocation extends JExpressionImpl implements JStatement
 {
 
   /**
@@ -86,12 +86,12 @@ public final class JInvocation extends JExpressionImpl implements JStatement
    * @param name
    *        Name of method to invoke
    */
-  JInvocation (final JExpression object, final String name)
+  public JInvocation (final JExpression object, final String name)
   {
     this ((JGenerable) object, name);
   }
 
-  JInvocation (final JExpression object, final JMethod method)
+  public JInvocation (final JExpression object, final JMethod method)
   {
     this ((JGenerable) object, method);
   }
@@ -99,12 +99,12 @@ public final class JInvocation extends JExpressionImpl implements JStatement
   /**
    * Invokes a static method on a class.
    */
-  JInvocation (final JClass type, final String name)
+  public JInvocation (final JClass type, final String name)
   {
     this ((JGenerable) type, name);
   }
 
-  JInvocation (final JClass type, final JMethod method)
+  public JInvocation (final JClass type, final JMethod method)
   {
     this ((JGenerable) type, method);
   }

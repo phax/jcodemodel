@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 /**
  * array component reference.
  */
-final class JArrayCompRef extends JExpressionImpl implements JAssignmentTarget
+public class JArrayCompRef extends JExpressionImpl implements JAssignmentTarget
 {
   /**
    * JArray expression upon which this component will be accessed.
@@ -63,12 +63,10 @@ final class JArrayCompRef extends JExpressionImpl implements JAssignmentTarget
    * @param index
    *        JExpression for index of component to access
    */
-  JArrayCompRef (final JExpression array, final JExpression index)
+  public JArrayCompRef (final JExpression array, final JExpression index)
   {
-    if ((array == null) || (index == null))
-    {
+    if (array == null || index == null)
       throw new NullPointerException ();
-    }
     this.array = array;
     this.index = index;
   }

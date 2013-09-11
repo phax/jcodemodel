@@ -76,12 +76,12 @@ public class JFieldRef extends JExpressionImpl implements JAssignmentTarget
    * @param name
    *        Name of field to access
    */
-  JFieldRef (final JExpression object, final String name)
+  public JFieldRef (final JExpression object, final String name)
   {
     this (object, name, false);
   }
 
-  JFieldRef (final JExpression object, final JVar v)
+  public JFieldRef (final JExpression object, final JVar v)
   {
     this (object, v, false);
   }
@@ -89,17 +89,17 @@ public class JFieldRef extends JExpressionImpl implements JAssignmentTarget
   /**
    * Static field reference.
    */
-  JFieldRef (final JType type, final String name)
+  public JFieldRef (final JType type, final String name)
   {
     this (type, name, false);
   }
 
-  JFieldRef (final JType type, final JVar v)
+  public JFieldRef (final JType type, final JVar v)
   {
     this (type, v, false);
   }
 
-  JFieldRef (final JGenerable object, final String name, final boolean explicitThis)
+  public JFieldRef (final JGenerable object, final String name, final boolean explicitThis)
   {
     this.explicitThis = explicitThis;
     this.object = object;
@@ -108,7 +108,7 @@ public class JFieldRef extends JExpressionImpl implements JAssignmentTarget
     this.name = name;
   }
 
-  JFieldRef (final JGenerable object, final JVar var, final boolean explicitThis)
+  public JFieldRef (final JGenerable object, final JVar var, final boolean explicitThis)
   {
     this.explicitThis = explicitThis;
     this.object = object;

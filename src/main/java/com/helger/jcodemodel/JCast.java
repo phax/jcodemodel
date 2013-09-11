@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 /**
  * A cast operation.
  */
-final class JCast extends JExpressionImpl
+public class JCast extends JExpressionImpl
 {
   /**
    * JType to which the expression is to be cast.
@@ -63,7 +63,7 @@ final class JCast extends JExpressionImpl
    * @param object
    *        JExpression for the object upon which the cast is applied
    */
-  JCast (final JType type, final JExpression object)
+  public JCast (final JType type, final JExpression object)
   {
     this.type = type;
     this.object = object;

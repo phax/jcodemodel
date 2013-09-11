@@ -50,13 +50,13 @@ public class JAssignment extends JExpressionImpl implements JStatement
   JExpression rhs;
   String op = "";
 
-  JAssignment (final JAssignmentTarget lhs, final JExpression rhs)
+  public JAssignment (final JAssignmentTarget lhs, final JExpression rhs)
   {
     this.lhs = lhs;
     this.rhs = rhs;
   }
 
-  JAssignment (final JAssignmentTarget lhs, final JExpression rhs, final String op)
+  public JAssignment (final JAssignmentTarget lhs, final JExpression rhs, final String op)
   {
     this.lhs = lhs;
     this.rhs = rhs;

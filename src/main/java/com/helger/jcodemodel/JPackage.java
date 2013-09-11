@@ -174,17 +174,6 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
     return _class (mods, name, ClassType.CLASS);
   }
 
-  /**
-   * {@inheritDoc}
-   * 
-   * @deprecated
-   */
-  @Deprecated
-  public JDefinedClass _class (final int mods, final String name, final boolean isInterface) throws JClassAlreadyExistsException
-  {
-    return _class (mods, name, isInterface ? ClassType.INTERFACE : ClassType.CLASS);
-  }
-
   public JDefinedClass _class (final int mods, final String name, final ClassType classTypeVal) throws JClassAlreadyExistsException
   {
     if (classes.containsKey (name))
@@ -470,7 +459,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
     f.p (name);
   }
 
-  void build (final CodeWriter src, final CodeWriter res) throws IOException
+  void build (final AbstractCodeWriter src, final AbstractCodeWriter res) throws IOException
   {
 
     // write classes
@@ -506,7 +495,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
     // write resources
     for (final JResourceFile rsrc : resources)
     {
-      final CodeWriter cw = rsrc.isResource () ? res : src;
+      final AbstractCodeWriter cw = rsrc.isResource () ? res : src;
       final OutputStream os = new BufferedOutputStream (cw.openBinary (this, rsrc.name ()));
       rsrc.build (os);
       os.close ();
@@ -533,7 +522,7 @@ public final class JPackage implements JDeclaration, JGenerable, JClassContainer
     return r;
   }
 
-  private JFormatter createJavaSourceFileWriter (final CodeWriter src, final String className) throws IOException
+  private JFormatter createJavaSourceFileWriter (final AbstractCodeWriter src, final String className) throws IOException
   {
     final Writer bw = new BufferedWriter (src.openSource (this, className + ".java"));
     return new JFormatter (new PrintWriter (bw));

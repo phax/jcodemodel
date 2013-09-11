@@ -101,14 +101,6 @@ public interface JClassContainer
   public JDefinedClass _interface (String name) throws JClassAlreadyExistsException;
 
   /**
-   * Create a new class or a new interface.
-   * 
-   * @deprecated use {@link #_class(int, String, ClassType)}
-   */
-  @Deprecated
-  public JDefinedClass _class (int mods, String name, boolean isInterface) throws JClassAlreadyExistsException;
-
-  /**
    * Creates a new class/enum/interface/annotation.
    */
   public JDefinedClass _class (int mods, String name, ClassType kind) throws JClassAlreadyExistsException;

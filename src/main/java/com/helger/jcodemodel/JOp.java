@@ -60,20 +60,19 @@ abstract public class JOp
 
   /* -- Unary operators -- */
 
-  static private class UnaryOp extends JExpressionImpl
+  public static class UnaryOp extends JExpressionImpl
   {
-
     protected String op;
     protected JExpression e;
     protected boolean opFirst = true;
 
-    UnaryOp (final String op, final JExpression e)
+    public UnaryOp (final String op, final JExpression e)
     {
       this.op = op;
       this.e = e;
     }
 
-    UnaryOp (final JExpression e, final String op)
+    public UnaryOp (final JExpression e, final String op)
     {
       this.op = op;
       this.e = e;
@@ -112,10 +111,10 @@ abstract public class JOp
     return new UnaryOp ("~", e);
   }
 
-  static private class TightUnaryOp extends UnaryOp
+  public static class TightUnaryOp extends UnaryOp
   {
 
-    TightUnaryOp (final JExpression e, final String op)
+    public TightUnaryOp (final JExpression e, final String op)
     {
       super (e, op);
     }
@@ -143,14 +142,14 @@ abstract public class JOp
 
   /* -- Binary operators -- */
 
-  static private class BinaryOp extends JExpressionImpl
+  public static class BinaryOp extends JExpressionImpl
   {
 
-    String op;
-    JExpression left;
-    JGenerable right;
+    private final String op;
+    private final JExpression left;
+    private final JGenerable right;
 
-    BinaryOp (final String op, final JExpression left, final JGenerable right)
+    public BinaryOp (final String op, final JExpression left, final JGenerable right)
     {
       this.left = left;
       this.op = op;
@@ -282,16 +281,19 @@ abstract public class JOp
 
   /* -- Ternary operators -- */
 
-  static private class TernaryOp extends JExpressionImpl
+  public static class TernaryOp extends JExpressionImpl
   {
+    private final JExpression e1;
+    private final String op1;
+    private final JExpression e2;
+    private final String op2;
+    private final JExpression e3;
 
-    String op1;
-    String op2;
-    JExpression e1;
-    JExpression e2;
-    JExpression e3;
-
-    TernaryOp (final String op1, final String op2, final JExpression e1, final JExpression e2, final JExpression e3)
+    public TernaryOp (final String op1,
+                      final String op2,
+                      final JExpression e1,
+                      final JExpression e2,
+                      final JExpression e3)
     {
       this.e1 = e1;
       this.op1 = op1;

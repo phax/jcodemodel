@@ -662,17 +662,6 @@ public class JDefinedClass extends JClass implements JDeclaration, JClassContain
     return _class (mods, name, ClassType.CLASS);
   }
 
-  /**
-   * {@inheritDoc}
-   * 
-   * @deprecated
-   */
-  @Deprecated
-  public JDefinedClass _class (final int mods, final String name, final boolean isInterface) throws JClassAlreadyExistsException
-  {
-    return _class (mods, name, isInterface ? ClassType.INTERFACE : ClassType.CLASS);
-  }
-
   public JDefinedClass _class (final int mods, final String name, final ClassType classTypeVal) throws JClassAlreadyExistsException
   {
 

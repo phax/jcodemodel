@@ -54,9 +54,8 @@ import com.helger.jcodemodel.util.UnicodeEscapeWriter;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public abstract class CodeWriter
+public abstract class AbstractCodeWriter
 {
-
   /**
    * Encoding to be used by the writer. Null means platform specific encoding.
    * 
@@ -95,7 +94,7 @@ public abstract class CodeWriter
   public Writer openSource (final JPackage pkg, final String fileName) throws IOException
   {
     final OutputStreamWriter bw = encoding != null ? new OutputStreamWriter (openBinary (pkg, fileName), encoding)
-    : new OutputStreamWriter (openBinary (pkg, fileName));
+                                                  : new OutputStreamWriter (openBinary (pkg, fileName));
 
     // create writer
     try

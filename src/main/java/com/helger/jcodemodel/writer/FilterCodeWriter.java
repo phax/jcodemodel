@@ -44,19 +44,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
-import com.helger.jcodemodel.CodeWriter;
+import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
- * {@link CodeWriter} that delegates to another {@link CodeWriter}.
+ * {@link AbstractCodeWriter} that delegates to another {@link AbstractCodeWriter}.
  * 
  * @author Kohsuke Kawaguchi
  */
-public class FilterCodeWriter extends CodeWriter
+public class FilterCodeWriter extends AbstractCodeWriter
 {
-  protected CodeWriter core;
+  protected AbstractCodeWriter core;
 
-  public FilterCodeWriter (final CodeWriter core)
+  public FilterCodeWriter (final AbstractCodeWriter core)
   {
     this.core = core;
   }

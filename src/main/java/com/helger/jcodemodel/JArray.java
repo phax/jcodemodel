@@ -46,12 +46,18 @@ import java.util.List;
 /**
  * array creation and initialization.
  */
-public final class JArray extends JExpressionImpl
+public class JArray extends JExpressionImpl
 {
 
   private final JType type;
   private final JExpression size;
   private List <JExpression> exprs = null;
+
+  public JArray (final JType type, final JExpression size)
+  {
+    this.type = type;
+    this.size = size;
+  }
 
   /**
    * Add an element to the array initializer
@@ -62,12 +68,6 @@ public final class JArray extends JExpressionImpl
       exprs = new ArrayList <JExpression> ();
     exprs.add (e);
     return this;
-  }
-
-  JArray (final JType type, final JExpression size)
-  {
-    this.type = type;
-    this.size = size;
   }
 
   public void generate (final JFormatter f)
@@ -105,5 +105,4 @@ public final class JArray extends JExpressionImpl
     if ((size == null) || (exprs != null))
       f.p ('}');
   }
-
 }
