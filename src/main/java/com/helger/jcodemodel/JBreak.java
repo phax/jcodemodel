@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 /**
  * JBreak statement
  */
-final class JBreak implements JStatement
+public class JBreak implements JStatement
 {
 
   private final JLabel label;
@@ -54,9 +54,14 @@ final class JBreak implements JStatement
    * @param _label
    *        break label or null.
    */
-  JBreak (final JLabel _label)
+  public JBreak (final JLabel _label)
   {
     this.label = _label;
+  }
+
+  public JLabel label ()
+  {
+    return label;
   }
 
   public void state (final JFormatter f)

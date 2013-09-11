@@ -200,7 +200,7 @@ public final class JStaticJavaFile extends JResourceFile
   /**
    * A {@link LineFilter} that combines two {@link LineFilter}s.
    */
-  public final static class ChainFilter implements LineFilter
+  public static final class ChainFilter implements LineFilter
   {
     private final LineFilter first, second;
 
@@ -212,7 +212,7 @@ public final class JStaticJavaFile extends JResourceFile
 
     public String process (final String sLine) throws ParseException
     {
-      final String  line = first.process (sLine);
+      final String line = first.process (sLine);
       if (line == null)
         return null;
       return second.process (line);

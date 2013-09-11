@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 /**
  * JContinue statement
  */
-class JContinue implements JStatement
+public class JContinue implements JStatement
 {
 
   private final JLabel label;
@@ -54,9 +54,14 @@ class JContinue implements JStatement
    * @param _label
    *        a valid label or null.
    */
-  JContinue (final JLabel _label)
+  public JContinue (final JLabel _label)
   {
     this.label = _label;
+  }
+
+  public JLabel label ()
+  {
+    return label;
   }
 
   public void state (final JFormatter f)
@@ -66,5 +71,4 @@ class JContinue implements JStatement
     else
       f.p ("continue").p (label.label).p (';').nl ();
   }
-
 }

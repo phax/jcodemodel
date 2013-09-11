@@ -44,7 +44,7 @@ package com.helger.jcodemodel;
  * JThrow statement
  */
 
-class JThrow implements JStatement
+public class JThrow implements JStatement
 {
 
   /**
@@ -58,9 +58,14 @@ class JThrow implements JStatement
    * @param expr
    *        JExpression which evaluates to JThrow value
    */
-  JThrow (final JExpression expr)
+  public JThrow (final JExpression expr)
   {
     this.expr = expr;
+  }
+
+  public JExpression expr ()
+  {
+    return expr;
   }
 
   public void state (final JFormatter f)

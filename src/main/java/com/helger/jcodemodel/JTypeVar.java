@@ -49,14 +49,14 @@ import java.util.List;
  * @see JGenerifiable
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JTypeVar extends JClass implements JDeclaration
+public class JTypeVar extends JClass implements JDeclaration
 {
 
   private final String name;
 
   private JClass bound;
 
-  JTypeVar (final JCodeModel owner, final String _name)
+  public JTypeVar (final JCodeModel owner, final String _name)
   {
     super (owner);
     this.name = _name;

@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -54,6 +55,7 @@ import java.util.Map;
  */
 public class JDocComment extends JCommentPart implements JGenerable
 {
+  private static final String INDENT = " *     ";
 
   private static final long serialVersionUID = 1L;
 
@@ -107,6 +109,16 @@ public class JDocComment extends JCommentPart implements JGenerable
     return addParam (param.name ());
   }
 
+  public JCommentPart removeParam (final String param)
+  {
+    return atParams.remove (param);
+  }
+
+  public JCommentPart removeParam (final JVar param)
+  {
+    return removeParam (param.name ());
+  }
+
   /**
    * add an @throws tag to the javadoc
    */
@@ -122,8 +134,21 @@ public class JDocComment extends JCommentPart implements JGenerable
   {
     JCommentPart p = atThrows.get (exception);
     if (p == null)
-      atThrows.put (exception, p = new JCommentPart ());
+    {
+      p = new JCommentPart ();
+      atThrows.put (exception, p);
+    }
     return p;
+  }
+
+  public JCommentPart removeThrows (final Class <? extends Throwable> exception)
+  {
+    return removeThrows (owner.ref (exception));
+  }
+
+  public JCommentPart removeThrows (final JClass exception)
+  {
+    return atParams.remove (exception);
   }
 
   /**
@@ -136,6 +161,11 @@ public class JDocComment extends JCommentPart implements JGenerable
     return atReturn;
   }
 
+  public void removeReturn ()
+  {
+    atReturn = null;
+  }
+
   /**
    * add an @deprecated tag to the javadoc, with the associated message.
    */
@@ -146,6 +176,11 @@ public class JDocComment extends JCommentPart implements JGenerable
     return atDeprecated;
   }
 
+  public void removeDeprecated ()
+  {
+    atDeprecated = null;
+  }
+
   /**
    * add an xdoclet.
    */
@@ -153,7 +188,10 @@ public class JDocComment extends JCommentPart implements JGenerable
   {
     Map <String, String> p = atXdoclets.get (name);
     if (p == null)
-      atXdoclets.put (name, p = new HashMap <String, String> ());
+    {
+      p = new LinkedHashMap <String, String> ();
+      atXdoclets.put (name, p);
+    }
     return p;
   }
 
@@ -162,9 +200,7 @@ public class JDocComment extends JCommentPart implements JGenerable
    */
   public Map <String, String> addXdoclet (final String name, final Map <String, String> attributes)
   {
-    Map <String, String> p = atXdoclets.get (name);
-    if (p == null)
-      atXdoclets.put (name, p = new HashMap <String, String> ());
+    final Map <String, String> p = addXdoclet (name);
     p.putAll (attributes);
     return p;
   }
@@ -174,11 +210,14 @@ public class JDocComment extends JCommentPart implements JGenerable
    */
   public Map <String, String> addXdoclet (final String name, final String attribute, final String value)
   {
-    Map <String, String> p = atXdoclets.get (name);
-    if (p == null)
-      atXdoclets.put (name, p = new HashMap <String, String> ());
+    final Map <String, String> p = addXdoclet (name);
     p.put (attribute, value);
     return p;
+  }
+
+  public Map <String, String> removeXdoclet (final String name)
+  {
+    return atXdoclets.remove (name);
   }
 
   public void generate (final JFormatter f)
@@ -225,6 +264,4 @@ public class JDocComment extends JCommentPart implements JGenerable
     }
     f.p (" */").nl ();
   }
-
-  private static final String INDENT = " *     ";
 }

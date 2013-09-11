@@ -54,7 +54,6 @@ import java.util.List;
  */
 public final class JBlock implements JGenerable, JStatement
 {
-
   /**
    * Declarations and statements contained in this block. Either
    * {@link JStatement} or {@link JDeclaration}.
@@ -97,6 +96,21 @@ public final class JBlock implements JGenerable, JStatement
     content.add (pos, statementOrDeclaration);
     pos++;
     return statementOrDeclaration;
+  }
+
+  public void remove (final Object o)
+  {
+    content.remove (o);
+  }
+
+  public void remove (final int index)
+  {
+    content.remove (index);
+  }
+
+  public void removeAll ()
+  {
+    content.clear ();
   }
 
   /**

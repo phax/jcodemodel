@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 /**
  * A return statement
  */
-class JReturn implements JStatement
+public class JReturn implements JStatement
 {
 
   /**
@@ -57,9 +57,14 @@ class JReturn implements JStatement
    * @param expr
    *        JExpression which evaluates to return value
    */
-  JReturn (final JExpression expr)
+  public JReturn (final JExpression expr)
   {
     this.expr = expr;
+  }
+
+  public JExpression expr ()
+  {
+    return expr;
   }
 
   public void state (final JFormatter f)
