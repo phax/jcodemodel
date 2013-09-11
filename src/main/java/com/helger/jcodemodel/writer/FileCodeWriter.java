@@ -53,74 +53,86 @@ import com.helger.jcodemodel.JPackage;
 /**
  * Writes all the source files under the specified file folder.
  * 
- * @author
- * 	Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class FileCodeWriter extends CodeWriter {
+public class FileCodeWriter extends CodeWriter
+{
 
-    /** The target directory to put source code. */
-    private final File target;
-    
-    /** specify whether or not to mark the generated files read-only */
-    private final boolean readOnly;
+  /** The target directory to put source code. */
+  private final File target;
 
-    /** Files that shall be marked as read only. */
-    private final Set<File> readonlyFiles = new HashSet<File>();
+  /** specify whether or not to mark the generated files read-only */
+  private final boolean readOnly;
 
-    public FileCodeWriter( File target ) throws IOException {
-        this(target,false);
-    }
-    
-    public FileCodeWriter( File target, String encoding ) throws IOException {
-        this(target,false, encoding);
+  /** Files that shall be marked as read only. */
+  private final Set <File> readonlyFiles = new HashSet <File> ();
+
+  public FileCodeWriter (final File target) throws IOException
+  {
+    this (target, false);
+  }
+
+  public FileCodeWriter (final File target, final String encoding) throws IOException
+  {
+    this (target, false, encoding);
+  }
+
+  public FileCodeWriter (final File target, final boolean readOnly) throws IOException
+  {
+    this (target, readOnly, null);
+  }
+
+  public FileCodeWriter (final File target, final boolean readOnly, final String encoding) throws IOException
+  {
+    this.target = target;
+    this.readOnly = readOnly;
+    this.encoding = encoding;
+    if (!target.exists () || !target.isDirectory ())
+      throw new IOException (target + ": non-existent directory");
+  }
+
+  @Override
+  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  {
+    return new FileOutputStream (getFile (pkg, fileName));
+  }
+
+  protected File getFile (final JPackage pkg, final String fileName) throws IOException
+  {
+    File dir;
+    if (pkg.isUnnamed ())
+      dir = target;
+    else
+      dir = new File (target, toDirName (pkg));
+
+    if (!dir.exists ())
+      dir.mkdirs ();
+
+    final File fn = new File (dir, fileName);
+
+    if (fn.exists ())
+    {
+      if (!fn.delete ())
+        throw new IOException (fn + ": Can't delete previous version");
     }
 
-    public FileCodeWriter( File target, boolean readOnly ) throws IOException {
-        this(target, readOnly, null);
-    }
+    if (readOnly)
+      readonlyFiles.add (fn);
+    return fn;
+  }
 
-    public FileCodeWriter( File target, boolean readOnly, String encoding ) throws IOException {
-        this.target = target;
-        this.readOnly = readOnly;
-        this.encoding = encoding;
-        if(!target.exists() || !target.isDirectory())
-            throw new IOException(target + ": non-existent directory");
-    }
-    
-    public OutputStream openBinary(JPackage pkg, String fileName) throws IOException {
-        return new FileOutputStream(getFile(pkg,fileName));
-    }
-    
-    protected File getFile(JPackage pkg, String fileName ) throws IOException {
-        File dir;
-        if(pkg.isUnnamed())
-            dir = target;
-        else
-            dir = new File(target, toDirName(pkg));
-        
-        if(!dir.exists())   dir.mkdirs();
-        
-        File fn = new File(dir,fileName);
-        
-        if (fn.exists()) {
-            if (!fn.delete())
-                throw new IOException(fn + ": Can't delete previous version");
-        }
-        
-        
-        if(readOnly)        readonlyFiles.add(fn);
-        return fn;
-    }
+  @Override
+  public void close () throws IOException
+  {
+    // mark files as read-onnly if necessary
+    for (final File f : readonlyFiles)
+      f.setReadOnly ();
+  }
 
-    public void close() throws IOException {
-        // mark files as read-onnly if necessary
-        for (File f : readonlyFiles)
-            f.setReadOnly();
-    }
-    
-    /** Converts a package name to the directory name. */
-    private static String toDirName( JPackage pkg ) {
-        return pkg.name().replace('.',File.separatorChar);
-    }
+  /** Converts a package name to the directory name. */
+  private static String toDirName (final JPackage pkg)
+  {
+    return pkg.name ().replace ('.', File.separatorChar);
+  }
 
 }

@@ -40,99 +40,117 @@
 
 package com.helger.jcodemodel;
 
-
 /**
- * Java built-in primitive types.
- *
- * Instances of this class can be obtained as constants of {@link JCodeModel},
- * such as {@link JCodeModel#BOOLEAN}.
+ * Java built-in primitive types. Instances of this class can be obtained as
+ * constants of {@link JCodeModel}, such as {@link JCodeModel#BOOLEAN}.
  */
-public final class JPrimitiveType extends JType {
+public final class JPrimitiveType extends JType
+{
 
-    private final String typeName;
-    private final JCodeModel owner;
-    /**
-     * Corresponding wrapper class.
-     * For example, this would be "java.lang.Short" for short.
-     */
-    private final JClass wrapperClass;
-    
-    JPrimitiveType(JCodeModel owner, String typeName, Class<?> wrapper ) {
-        this.owner = owner;
-        this.typeName = typeName;
-        this.wrapperClass = owner.ref(wrapper);
-    }
+  private final String typeName;
+  private final JCodeModel owner;
+  /**
+   * Corresponding wrapper class. For example, this would be "java.lang.Short"
+   * for short.
+   */
+  private final JClass wrapperClass;
 
-    public JCodeModel owner() { return owner; }
+  JPrimitiveType (final JCodeModel owner, final String typeName, final Class <?> wrapper)
+  {
+    this.owner = owner;
+    this.typeName = typeName;
+    this.wrapperClass = owner.ref (wrapper);
+  }
 
-    public String fullName() {
-        return typeName;
-    }
-        
-    public String name() {
-        return fullName();
-    }
+  @Override
+  public JCodeModel owner ()
+  {
+    return owner;
+  }
 
-    public boolean isPrimitive() {
-        return true;
-    }
+  @Override
+  public String fullName ()
+  {
+    return typeName;
+  }
 
-    private JClass arrayClass;
-    public JClass array() {
-        if(arrayClass==null)
-            arrayClass = new JArrayClass(owner,this);
-        return arrayClass;
-    }
-    
-    /**
-     * Obtains the wrapper class for this primitive type.
-     * For example, this method returns a reference to java.lang.Integer
-     * if this object represents int.
-     */
-    public JClass boxify() {
-        return wrapperClass;
-    }
+  @Override
+  public String name ()
+  {
+    return fullName ();
+  }
 
-    /**
-     * @deprecated calling this method from {@link JPrimitiveType}
-     * would be meaningless, since it's always guaranteed to
-     * return <tt>this</tt>.
-     */
-    public JType unboxify() {
-        return this;
-    }
+  @Override
+  public boolean isPrimitive ()
+  {
+    return true;
+  }
 
-    /**
-     * @deprecated
-     *      Use {@link #boxify()}.
-     */
-    public JClass getWrapperClass() {
-        return boxify();
-    }
+  private JClass arrayClass;
 
-    /**
-     * Wraps an expression of this type to the corresponding wrapper class.
-     * For example, if this class represents "float", this method will return
-     * the expression <code>new Float(x)</code> for the paramter x.
-     * 
-     * REVISIT: it's not clear how this method works for VOID.
-     */
-    public JExpression wrap( JExpression exp ) {
-        return JExpr._new(boxify()).arg(exp);
-    }
-    
-    /**
-     * Do the opposite of the wrap method.
-     * 
-     * REVISIT: it's not clear how this method works for VOID.
-     */
-    public JExpression unwrap( JExpression exp ) {
-        // it just so happens that the unwrap method is always
-        // things like "intValue" or "booleanValue".
-        return exp.invoke(typeName+"Value");
-    }
+  @Override
+  public JClass array ()
+  {
+    if (arrayClass == null)
+      arrayClass = new JArrayClass (owner, this);
+    return arrayClass;
+  }
 
-    public void generate(JFormatter f) {
-        f.p(typeName);
-    }
+  /**
+   * Obtains the wrapper class for this primitive type. For example, this method
+   * returns a reference to java.lang.Integer if this object represents int.
+   */
+  @Override
+  public JClass boxify ()
+  {
+    return wrapperClass;
+  }
+
+  /**
+   * @deprecated calling this method from {@link JPrimitiveType} would be
+   *             meaningless, since it's always guaranteed to return
+   *             <tt>this</tt>.
+   */
+  @Deprecated
+  @Override
+  public JType unboxify ()
+  {
+    return this;
+  }
+
+  /**
+   * @deprecated Use {@link #boxify()}.
+   */
+  @Deprecated
+  public JClass getWrapperClass ()
+  {
+    return boxify ();
+  }
+
+  /**
+   * Wraps an expression of this type to the corresponding wrapper class. For
+   * example, if this class represents "float", this method will return the
+   * expression <code>new Float(x)</code> for the paramter x. REVISIT: it's not
+   * clear how this method works for VOID.
+   */
+  public JExpression wrap (final JExpression exp)
+  {
+    return JExpr._new (boxify ()).arg (exp);
+  }
+
+  /**
+   * Do the opposite of the wrap method. REVISIT: it's not clear how this method
+   * works for VOID.
+   */
+  public JExpression unwrap (final JExpression exp)
+  {
+    // it just so happens that the unwrap method is always
+    // things like "intValue" or "booleanValue".
+    return exp.invoke (typeName + "Value");
+  }
+
+  public void generate (final JFormatter f)
+  {
+    f.p (typeName);
+  }
 }

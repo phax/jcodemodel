@@ -45,18 +45,19 @@ import java.util.Comparator;
 import com.helger.jcodemodel.JClass;
 
 /**
- * Comparator object that sorts {@link JClass}es in the order
- * of their names.
+ * Comparator object that sorts {@link JClass}es in the order of their names.
  * 
- * @author
- * 	Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class ClassNameComparator implements Comparator<JClass> {
-    private ClassNameComparator() {}
-    
-    public int compare(JClass l, JClass r) {
-        return l.fullName().compareTo(r.fullName());
-    }
+public class ClassNameComparator implements Comparator <JClass>
+{
+  private ClassNameComparator ()
+  {}
 
-    public static final Comparator<JClass> theInstance = new ClassNameComparator();
+  public int compare (final JClass l, final JClass r)
+  {
+    return l.fullName ().compareTo (r.fullName ());
+  }
+
+  public static final Comparator <JClass> theInstance = new ClassNameComparator ();
 }

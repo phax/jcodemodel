@@ -47,90 +47,109 @@ import java.util.List;
  * Type variable used to declare generics.
  * 
  * @see JGenerifiable
- * @author
- *     Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JTypeVar extends JClass implements JDeclaration {
-    
-    private final String name;
-    
-    private JClass bound;
+public final class JTypeVar extends JClass implements JDeclaration
+{
 
-    JTypeVar(JCodeModel owner, String _name) {
-        super(owner);
-        this.name = _name;
-    }
-    
-    public String name() {
-        return name;
-    }
+  private final String name;
 
-    public String fullName() {
-        return name;
-    }
+  private JClass bound;
 
-    public JPackage _package() {
-        return null;
-    }
-    
-    /**
-     * Adds a bound to this variable.
-     * 
-     * @return  this
-     */
-    public JTypeVar bound( JClass c ) {
-        if(bound!=null)
-            throw new IllegalArgumentException("type variable has an existing class bound "+bound);
-        bound = c;
-        return this;
-    }
+  JTypeVar (final JCodeModel owner, final String _name)
+  {
+    super (owner);
+    this.name = _name;
+  }
 
-    /**
-     * Returns the class bound of this variable.
-     * 
-     * <p>
-     * If no bound is given, this method returns {@link Object}.
-     */
-    public JClass _extends() {
-        if(bound!=null)
-            return bound;
-        else
-            return owner().ref(Object.class);
-    }
+  @Override
+  public String name ()
+  {
+    return name;
+  }
 
-    /**
-     * Returns the interface bounds of this variable.
-     */
-    public Iterator<JClass> _implements() {
-        return bound._implements();
-    }
+  @Override
+  public String fullName ()
+  {
+    return name;
+  }
 
-    public boolean isInterface() {
-        return false;
-    }
+  @Override
+  public JPackage _package ()
+  {
+    return null;
+  }
 
-    public boolean isAbstract() {
-        return false;
-    }
+  /**
+   * Adds a bound to this variable.
+   * 
+   * @return this
+   */
+  public JTypeVar bound (final JClass c)
+  {
+    if (bound != null)
+      throw new IllegalArgumentException ("type variable has an existing class bound " + bound);
+    bound = c;
+    return this;
+  }
 
-    /**
-     * Prints out the declaration of the variable.
-     */
-    public void declare(JFormatter f) {
-        f.id(name);
-        if(bound!=null)
-            f.p("extends").g(bound);
-    }
+  /**
+   * Returns the class bound of this variable.
+   * <p>
+   * If no bound is given, this method returns {@link Object}.
+   */
+  @Override
+  public JClass _extends ()
+  {
+    if (bound != null)
+      return bound;
+    else
+      return owner ().ref (Object.class);
+  }
 
+  /**
+   * Returns the interface bounds of this variable.
+   */
+  @Override
+  public Iterator <JClass> _implements ()
+  {
+    return bound._implements ();
+  }
 
-    protected JClass substituteParams(JTypeVar[] variables, List<JClass> bindings) {
-        for(int i=0;i<variables.length;i++)
-            if(variables[i]==this)
-                return bindings.get(i);
-        return this;
-    }
+  @Override
+  public boolean isInterface ()
+  {
+    return false;
+  }
 
-    public void generate(JFormatter f) {
-        f.id(name);
-    }
+  @Override
+  public boolean isAbstract ()
+  {
+    return false;
+  }
+
+  /**
+   * Prints out the declaration of the variable.
+   */
+  public void declare (final JFormatter f)
+  {
+    f.id (name);
+    if (bound != null)
+      f.p ("extends").g (bound);
+  }
+
+  @Override
+  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  {
+    for (int i = 0; i < variables.length; i++)
+      if (variables[i] == this)
+        return bindings.get (i);
+    return this;
+  }
+
+  @Override
+  public void generate (final JFormatter f)
+  {
+    f.id (name);
+  }
 }

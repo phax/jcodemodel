@@ -40,48 +40,55 @@
 
 package com.helger.jcodemodel;
 
-
 /**
  * Do loops
  */
 
-public class JDoLoop implements JStatement {
+public class JDoLoop implements JStatement
+{
 
-    /**
-     * Test part of Do statement for determining exit state
-     */
-    private JExpression test;
+  /**
+   * Test part of Do statement for determining exit state
+   */
+  private final JExpression test;
 
-    /**
-     * JBlock of statements which makes up body of this Do statement
-     */
-    private JBlock body = null;
+  /**
+   * JBlock of statements which makes up body of this Do statement
+   */
+  private JBlock body = null;
 
-    /**
-     * Construct a Do statment
-     */
-    JDoLoop(JExpression test) {
-        this.test = test;
+  /**
+   * Construct a Do statment
+   */
+  JDoLoop (final JExpression test)
+  {
+    this.test = test;
+  }
+
+  public JBlock body ()
+  {
+    if (body == null)
+      body = new JBlock ();
+    return body;
+  }
+
+  public void state (final JFormatter f)
+  {
+    f.p ("do");
+    if (body != null)
+      f.g (body);
+    else
+      f.p ("{ }");
+
+    if (JOp.hasTopOp (test))
+    {
+      f.p ("while ").g (test);
     }
-
-    public JBlock body() {
-        if (body == null) body = new JBlock();
-        return body;
+    else
+    {
+      f.p ("while (").g (test).p (')');
     }
-
-    public void state(JFormatter f) {
-        f.p("do");
-        if (body != null)
-            f.g(body);
-        else
-            f.p("{ }");
-
-        if (JOp.hasTopOp(test)) {
-            f.p("while ").g(test);
-        } else {
-            f.p("while (").g(test).p(')');
-        }
-        f.p(';').nl();
-    }
+    f.p (';').nl ();
+  }
 
 }

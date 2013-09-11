@@ -43,25 +43,27 @@ package com.helger.jcodemodel;
 /**
  * Label that can be used for continue and break.
  * 
- * @author
- *     Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class JLabel implements JStatement {
-    
-    final String label;
-    
-    /**
-     * JBreak constructor
-     * 
-     * @param   _label
-     *      break label or null.
-     */
-    JLabel( String _label ) {
-        this.label = _label;
-    }
+public class JLabel implements JStatement
+{
 
-    public void state(JFormatter f) {
-        f.p(label+':').nl();
-    }
+  final String label;
+
+  /**
+   * JBreak constructor
+   * 
+   * @param _label
+   *        break label or null.
+   */
+  JLabel (final String _label)
+  {
+    this.label = _label;
+  }
+
+  public void state (final JFormatter f)
+  {
+    f.p (label + ':').nl ();
+  }
 
 }

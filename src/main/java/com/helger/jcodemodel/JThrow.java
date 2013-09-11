@@ -40,32 +40,34 @@
 
 package com.helger.jcodemodel;
 
-
 /**
  * JThrow statement
  */
 
-class JThrow implements JStatement {
+class JThrow implements JStatement
+{
 
-    /**
-     * JExpression to throw
-     */
-    private JExpression expr;
+  /**
+   * JExpression to throw
+   */
+  private final JExpression expr;
 
-    /**
-     * JThrow constructor
-     *
-     * @param expr
-     *        JExpression which evaluates to JThrow value
-     */
-    JThrow(JExpression expr) {
-       this.expr = expr;
-    }
+  /**
+   * JThrow constructor
+   * 
+   * @param expr
+   *        JExpression which evaluates to JThrow value
+   */
+  JThrow (final JExpression expr)
+  {
+    this.expr = expr;
+  }
 
-    public void state(JFormatter f) {
-        f.p("throw");
-        f.g(expr);
-        f.p(';').nl();
-    }
+  public void state (final JFormatter f)
+  {
+    f.p ("throw");
+    f.g (expr);
+    f.p (';').nl ();
+  }
 
 }

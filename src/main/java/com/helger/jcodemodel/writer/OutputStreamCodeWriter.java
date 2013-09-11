@@ -57,32 +57,43 @@ import java.io.UnsupportedEncodingException;
 import com.helger.jcodemodel.CodeWriter;
 import com.helger.jcodemodel.JPackage;
 
-public class OutputStreamCodeWriter extends CodeWriter {
-	private final PrintStream out;
+public class OutputStreamCodeWriter extends CodeWriter
+{
+  private final PrintStream out;
 
-	/**
-	 * @param os
-	 *            This stream will be closed at the end of the code generation.
-	 */
-	public OutputStreamCodeWriter(OutputStream os, String encoding) {
-		try {
-			this.out = new PrintStream(os, false, encoding);
-		} catch (UnsupportedEncodingException ueex) {
-			throw new IllegalArgumentException(ueex);
-		}
-		this.encoding = encoding;
-	}
+  /**
+   * @param os
+   *        This stream will be closed at the end of the code generation.
+   */
+  public OutputStreamCodeWriter (final OutputStream os, final String encoding)
+  {
+    try
+    {
+      this.out = new PrintStream (os, false, encoding);
+    }
+    catch (final UnsupportedEncodingException ueex)
+    {
+      throw new IllegalArgumentException (ueex);
+    }
+    this.encoding = encoding;
+  }
 
-	public OutputStream openBinary(JPackage pkg, String fileName)
-			throws IOException {
-		return new FilterOutputStream(out) {
-			public void close() {
-				// don't let this stream close
-			}
-		};
-	}
+  @Override
+  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  {
+    return new FilterOutputStream (out)
+    {
+      @Override
+      public void close ()
+      {
+        // don't let this stream close
+      }
+    };
+  }
 
-	public void close() throws IOException {
-		out.close();
-	}
+  @Override
+  public void close () throws IOException
+  {
+    out.close ();
+  }
 }

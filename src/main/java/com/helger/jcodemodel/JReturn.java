@@ -40,31 +40,34 @@
 
 package com.helger.jcodemodel;
 
-
 /**
  * A return statement
  */
-class JReturn implements JStatement {
+class JReturn implements JStatement
+{
 
-    /**
-     * JExpression to return; may be null.
-     */
-    private JExpression expr;
+  /**
+   * JExpression to return; may be null.
+   */
+  private final JExpression expr;
 
-    /**
-     * JReturn constructor
-     *
-     * @param expr
-     *        JExpression which evaluates to return value
-     */
-    JReturn(JExpression expr) {
-       this.expr = expr;
-    }
+  /**
+   * JReturn constructor
+   * 
+   * @param expr
+   *        JExpression which evaluates to return value
+   */
+  JReturn (final JExpression expr)
+  {
+    this.expr = expr;
+  }
 
-    public void state(JFormatter f) {
-        f.p("return ");
-        if (expr != null) f.g(expr);
-        f.p(';').nl();
-    }
+  public void state (final JFormatter f)
+  {
+    f.p ("return ");
+    if (expr != null)
+      f.g (expr);
+    f.p (';').nl ();
+  }
 
 }

@@ -8,7 +8,7 @@
   </parent>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>2.7-SNAPSHOT</version>
+  <version>2.6.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>jcodemodel</name>
   <description>Java code generation library</description>
@@ -71,9 +71,10 @@
   
   <dependencies>
     <dependency>
+      <!-- Stick with 1.0.8 as it is the last JDK 1.5 version -->
       <groupId>com.google.code.javaparser</groupId>
       <artifactId>javaparser</artifactId>
-      <version>1.0.9</version>
+      <version>1.0.8</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

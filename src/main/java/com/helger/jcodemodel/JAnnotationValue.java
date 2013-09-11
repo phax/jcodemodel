@@ -42,9 +42,8 @@ package com.helger.jcodemodel;
 
 /**
  * Things that can be values of an annotation element.
- *
- * @author
- *     Bhakti Mehta (bhakti.mehta@sun.com)
+ * 
+ * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public abstract class JAnnotationValue implements JGenerable {
-}
+public abstract class JAnnotationValue implements JGenerable
+{}

@@ -52,123 +52,137 @@ import java.nio.charset.CoderResult;
 
 import sun.nio.cs.Surrogate;
 
-
-abstract class SingleByteEncoder
-    extends CharsetEncoder
+abstract class SingleByteEncoder extends CharsetEncoder
 {
 
-    private final short index1[];
-    private final String index2;
-    private final int mask1;
-    private final int mask2;
-    private final int shift;
+  private final short index1[];
+  private final String index2;
+  private final int mask1;
+  private final int mask2;
+  private final int shift;
 
-    private final Surrogate.Parser sgp = new Surrogate.Parser();
+  private final Surrogate.Parser sgp = new Surrogate.Parser ();
 
-    protected SingleByteEncoder(Charset cs,
-				short[] index1, String index2,
-				int mask1, int mask2, int shift)
+  protected SingleByteEncoder (final Charset cs,
+                               final short [] index1,
+                               final String index2,
+                               final int mask1,
+                               final int mask2,
+                               final int shift)
+  {
+    super (cs, 1.0f, 1.0f);
+    this.index1 = index1;
+    this.index2 = index2;
+    this.mask1 = mask1;
+    this.mask2 = mask2;
+    this.shift = shift;
+  }
+
+  @Override
+  public boolean canEncode (final char c)
+  {
+    char testEncode;
+    testEncode = index2.charAt (index1[(c & mask1) >> shift] + (c & mask2));
+    if (testEncode == '\u0000')
+      return false;
+    else
+      return true;
+  }
+
+  private CoderResult encodeArrayLoop (final CharBuffer src, final ByteBuffer dst)
+  {
+    final char [] sa = src.array ();
+    int sp = src.arrayOffset () + src.position ();
+    final int sl = src.arrayOffset () + src.limit ();
+    sp = (sp <= sl ? sp : sl);
+    final byte [] da = dst.array ();
+    int dp = dst.arrayOffset () + dst.position ();
+    final int dl = dst.arrayOffset () + dst.limit ();
+    dp = (dp <= dl ? dp : dl);
+
+    try
     {
-	super(cs, 1.0f, 1.0f);
-	this.index1 = index1;
-	this.index2 = index2;
-	this.mask1 = mask1;
-	this.mask2 = mask2;
-	this.shift = shift;
+      while (sp < sl)
+      {
+        final char c = sa[sp];
+        if (Surrogate.is (c))
+        {
+          if (sgp.parse (c, sa, sp, sl) < 0)
+            return sgp.error ();
+          return sgp.unmappableResult ();
+        }
+        if (c >= '\uFFFE')
+          return CoderResult.unmappableForLength (1);
+        if (dl - dp < 1)
+          return CoderResult.OVERFLOW;
+
+        final char e = index2.charAt (index1[(c & mask1) >> shift] + (c & mask2));
+
+        // If output byte is zero because input char is zero
+        // then character is mappable, o.w. fail
+        if (e == '\u0000' && c != '\u0000')
+          return CoderResult.unmappableForLength (1);
+
+        sp++;
+        da[dp++] = (byte) e;
+      }
+      return CoderResult.UNDERFLOW;
     }
-
-    public boolean canEncode(char c) {
-	char testEncode;
-	testEncode = index2.charAt(index1[(c & mask1) >> shift]
-				   + (c & mask2));
-	if (testEncode == '\u0000')
-	    return false;
-	else
-	    return true;
+    finally
+    {
+      src.position (sp - src.arrayOffset ());
+      dst.position (dp - dst.arrayOffset ());
     }
+  }
 
-    private CoderResult encodeArrayLoop(CharBuffer src, ByteBuffer dst) {
-	char[] sa = src.array();
-	int sp = src.arrayOffset() + src.position();
-	int sl = src.arrayOffset() + src.limit();
-	sp = (sp <= sl ? sp : sl);
-	byte[] da = dst.array();
-	int dp = dst.arrayOffset() + dst.position();
-	int dl = dst.arrayOffset() + dst.limit();
-	dp = (dp <= dl ? dp : dl);
+  private CoderResult encodeBufferLoop (final CharBuffer src, final ByteBuffer dst)
+  {
+    int mark = src.position ();
+    try
+    {
+      while (src.hasRemaining ())
+      {
+        final char c = src.get ();
+        if (Surrogate.is (c))
+        {
+          if (sgp.parse (c, src) < 0)
+            return sgp.error ();
+          return sgp.unmappableResult ();
+        }
+        if (c >= '\uFFFE')
+          return CoderResult.unmappableForLength (1);
+        if (!dst.hasRemaining ())
+          return CoderResult.OVERFLOW;
 
-	try {
-	    while (sp < sl) {
-		char c = sa[sp];
-		if (Surrogate.is(c)) {
-		    if (sgp.parse(c, sa, sp, sl) < 0)
-			return sgp.error();
-		    return sgp.unmappableResult();
-		}
-		if (c >= '\uFFFE')
-		    return CoderResult.unmappableForLength(1);
-		if (dl - dp < 1)
-		    return CoderResult.OVERFLOW;
+        final char e = index2.charAt (index1[(c & mask1) >> shift] + (c & mask2));
 
-		char e = index2.charAt(index1[(c & mask1) >> shift]
-				       + (c & mask2));
+        // If output byte is zero because input char is zero
+        // then character is mappable, o.w. fail
+        if (e == '\u0000' && c != '\u0000')
+          return CoderResult.unmappableForLength (1);
 
-		// If output byte is zero because input char is zero
-		// then character is mappable, o.w. fail
-		if (e == '\u0000' && c != '\u0000')
-		    return CoderResult.unmappableForLength(1);
-
-		sp++;
-		da[dp++] = (byte)e;
-	    }
-	    return CoderResult.UNDERFLOW;
-	} finally {
-	    src.position(sp - src.arrayOffset());
-	    dst.position(dp - dst.arrayOffset());
-	}
+        mark++;
+        dst.put ((byte) e);
+      }
+      return CoderResult.UNDERFLOW;
     }
-
-    private CoderResult encodeBufferLoop(CharBuffer src, ByteBuffer dst) {
-	int mark = src.position();
-	try {
-	    while (src.hasRemaining()) {
-		char c = src.get();
-		if (Surrogate.is(c)) {
-		    if (sgp.parse(c, src) < 0)
-			return sgp.error();
-		    return sgp.unmappableResult();
-		}
-		if (c >= '\uFFFE')
-		    return CoderResult.unmappableForLength(1);
-		if (!dst.hasRemaining())
-		    return CoderResult.OVERFLOW;
-
-		char e = index2.charAt(index1[(c & mask1) >> shift]
-				       + (c & mask2));
-
-		// If output byte is zero because input char is zero
-		// then character is mappable, o.w. fail
-		if (e == '\u0000' && c != '\u0000')
-		    return CoderResult.unmappableForLength(1);
-
-		mark++;
-		dst.put((byte)e);
-	    }
-	    return CoderResult.UNDERFLOW;
-	} finally {
-	    src.position(mark);
-	}
+    finally
+    {
+      src.position (mark);
     }
+  }
 
-    protected CoderResult encodeLoop(CharBuffer src, ByteBuffer dst) {
-	if (true && src.hasArray() && dst.hasArray())
-	    return encodeArrayLoop(src, dst);
-	else
-	    return encodeBufferLoop(src, dst);
-    }
+  @Override
+  protected CoderResult encodeLoop (final CharBuffer src, final ByteBuffer dst)
+  {
+    if (true && src.hasArray () && dst.hasArray ())
+      return encodeArrayLoop (src, dst);
+    else
+      return encodeBufferLoop (src, dst);
+  }
 
-    public byte encode(char inputChar) {
-	return (byte)index2.charAt(index1[(inputChar & mask1) >> shift] +
-		(inputChar & mask2));
-    }
+  public byte encode (final char inputChar)
+  {
+    return (byte) index2.charAt (index1[(inputChar & mask1) >> shift] + (inputChar & mask2));
+  }
 }

@@ -40,38 +40,37 @@
 
 package com.helger.jcodemodel;
 
-
-
 /**
  * A cast operation.
  */
-final class JCast extends JExpressionImpl {
-    /**
-     * JType to which the expression is to be cast.
-     */
-    private final JType type;
+final class JCast extends JExpressionImpl
+{
+  /**
+   * JType to which the expression is to be cast.
+   */
+  private final JType type;
 
-    /**
-     * JExpression to be cast.
-     */
-    private final JExpression object;
+  /**
+   * JExpression to be cast.
+   */
+  private final JExpression object;
 
-    /**
-     * JCast constructor 
-     *
-     * @param type
-     *        JType to which the expression is cast
-     *
-     * @param object
-     *        JExpression for the object upon which
-     *        the cast is applied
-     */
-    JCast(JType type, JExpression object) {
-        this.type = type;
-        this.object = object;
-    }
+  /**
+   * JCast constructor
+   * 
+   * @param type
+   *        JType to which the expression is cast
+   * @param object
+   *        JExpression for the object upon which the cast is applied
+   */
+  JCast (final JType type, final JExpression object)
+  {
+    this.type = type;
+    this.object = object;
+  }
 
-    public void generate(JFormatter f) {
-        f.p("((").g(type).p(')').g(object).p(')');
-    }
+  public void generate (final JFormatter f)
+  {
+    f.p ("((").g (type).p (')').g (object).p (')');
+  }
 }

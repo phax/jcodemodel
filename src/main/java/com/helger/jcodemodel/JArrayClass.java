@@ -40,99 +40,126 @@
 
 package com.helger.jcodemodel;
 
-import java.util.Iterator;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Array class.
  * 
- * @author
- * 	Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-final class JArrayClass extends JClass {
-    
-    // array component type
-    private final JType componentType;
-    
-    
-    JArrayClass( JCodeModel owner, JType component ) {
-        super(owner);
-        this.componentType = component;
-    }
-    
-    
-    public String name() {
-        return componentType.name()+"[]";
-    }
-    
-    public String fullName() {
-        return componentType.fullName()+"[]";
-    }
+final class JArrayClass extends JClass
+{
 
-    public String binaryName() {
-        return componentType.binaryName()+"[]";
-    }
+  // array component type
+  private final JType componentType;
 
-    public void generate(JFormatter f) {
-        f.g(componentType).p("[]");
-    }
+  JArrayClass (final JCodeModel owner, final JType component)
+  {
+    super (owner);
+    this.componentType = component;
+  }
 
-    public JPackage _package() {
-        return owner().rootPackage();
-    }
+  @Override
+  public String name ()
+  {
+    return componentType.name () + "[]";
+  }
 
-    public JClass _extends() {
-        return owner().ref(Object.class);
-    }
+  @Override
+  public String fullName ()
+  {
+    return componentType.fullName () + "[]";
+  }
 
-    public Iterator<JClass> _implements() {
-        return Collections.<JClass>emptyList().iterator();
-    }
+  @Override
+  public String binaryName ()
+  {
+    return componentType.binaryName () + "[]";
+  }
 
-    public boolean isInterface() {
-        return false;
-    }
+  @Override
+  public void generate (final JFormatter f)
+  {
+    f.g (componentType).p ("[]");
+  }
 
-    public boolean isAbstract() {
-        return false;
-    }
+  @Override
+  public JPackage _package ()
+  {
+    return owner ().rootPackage ();
+  }
 
-    public JType elementType() {
-        return componentType;
-    }
+  @Override
+  public JClass _extends ()
+  {
+    return owner ().ref (Object.class);
+  }
 
-    public boolean isArray() {
-        return true;
-    }
+  @Override
+  public Iterator <JClass> _implements ()
+  {
+    return Collections.<JClass> emptyList ().iterator ();
+  }
 
+  @Override
+  public boolean isInterface ()
+  {
+    return false;
+  }
 
-    //
-    // Equality is based on value
-    //
+  @Override
+  public boolean isAbstract ()
+  {
+    return false;
+  }
 
-    public boolean equals(Object obj) {
-        if(!(obj instanceof JArrayClass))   return false;
-        
-        if( componentType.equals( ((JArrayClass)obj).componentType ) )
-            return true;
-        
-        return false;
-    }
+  @Override
+  public JType elementType ()
+  {
+    return componentType;
+  }
 
-    public int hashCode() {
-        return componentType.hashCode();
-    }
+  @Override
+  public boolean isArray ()
+  {
+    return true;
+  }
 
-    protected JClass substituteParams(JTypeVar[] variables, List<JClass> bindings) {
-        if( componentType.isPrimitive() )
-            return this;
-        
-        JClass c = ((JClass)componentType).substituteParams(variables,bindings);
-        if(c==componentType)
-            return this;
-        
-        return new JArrayClass(owner(),c);
-    }
+  //
+  // Equality is based on value
+  //
+
+  @Override
+  public boolean equals (final Object obj)
+  {
+    if (!(obj instanceof JArrayClass))
+      return false;
+
+    if (componentType.equals (((JArrayClass) obj).componentType))
+      return true;
+
+    return false;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return componentType.hashCode ();
+  }
+
+  @Override
+  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  {
+    if (componentType.isPrimitive ())
+      return this;
+
+    final JClass c = ((JClass) componentType).substituteParams (variables, bindings);
+    if (c == componentType)
+      return this;
+
+    return new JArrayClass (owner (), c);
+  }
 
 }

@@ -40,14 +40,14 @@
 
 package com.helger.jcodemodel;
 
-
 /**
- * Common interface for code components that can generate
- * uses of themselves as statements.
+ * Common interface for code components that can generate uses of themselves as
+ * statements.
  */
 
-public interface JStatement {
+public interface JStatement
+{
 
-    public void state(JFormatter f);
+  public void state (JFormatter f);
 
 }

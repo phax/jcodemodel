@@ -40,8 +40,8 @@
 
 package com.helger.jcodemodel.writer;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 
 import com.helger.jcodemodel.CodeWriter;
@@ -49,25 +49,33 @@ import com.helger.jcodemodel.JPackage;
 
 /**
  * {@link CodeWriter} that delegates to another {@link CodeWriter}.
- *
+ * 
  * @author Kohsuke Kawaguchi
  */
-public class FilterCodeWriter extends CodeWriter {
-    protected CodeWriter core;
+public class FilterCodeWriter extends CodeWriter
+{
+  protected CodeWriter core;
 
-    public FilterCodeWriter(CodeWriter core) {
-        this.core = core;
-    }
+  public FilterCodeWriter (final CodeWriter core)
+  {
+    this.core = core;
+  }
 
-    public OutputStream openBinary( JPackage pkg, String fileName ) throws IOException {
-        return core.openBinary(pkg, fileName);
-    }
+  @Override
+  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  {
+    return core.openBinary (pkg, fileName);
+  }
 
-    public Writer openSource( JPackage pkg, String fileName ) throws IOException {
-        return core.openSource(pkg, fileName);
-    }
+  @Override
+  public Writer openSource (final JPackage pkg, final String fileName) throws IOException
+  {
+    return core.openSource (pkg, fileName);
+  }
 
-    public void close() throws IOException {
-        core.close();
-    }
+  @Override
+  public void close () throws IOException
+  {
+    core.close ();
+  }
 }

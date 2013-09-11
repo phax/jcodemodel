@@ -46,34 +46,64 @@ import java.util.List;
 
 /**
  * Special class object that represents the type of "null".
- * 
  * <p>
  * Use this class with care.
  * 
- * @author
- * 	Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JNullType extends JClass {
+public final class JNullType extends JClass
+{
 
-    JNullType(JCodeModel _owner) {
-        super(_owner);
-    }
+  JNullType (final JCodeModel _owner)
+  {
+    super (_owner);
+  }
 
-    public String name() { return "null"; }
-    public String fullName() { return "null"; }
+  @Override
+  public String name ()
+  {
+    return "null";
+  }
 
-    public JPackage _package() { return owner()._package(""); }
+  @Override
+  public String fullName ()
+  {
+    return "null";
+  }
 
-    public JClass _extends() { return null; }
+  @Override
+  public JPackage _package ()
+  {
+    return owner ()._package ("");
+  }
 
-    public Iterator<JClass> _implements() {
-        return Collections.<JClass>emptyList().iterator();
-    }
+  @Override
+  public JClass _extends ()
+  {
+    return null;
+  }
 
-    public boolean isInterface() { return false; }
-    public boolean isAbstract() { return false; }
+  @Override
+  public Iterator <JClass> _implements ()
+  {
+    return Collections.<JClass> emptyList ().iterator ();
+  }
 
-    protected JClass substituteParams(JTypeVar[] variables, List<JClass> bindings) {
-        return this;
-    }
+  @Override
+  public boolean isInterface ()
+  {
+    return false;
+  }
+
+  @Override
+  public boolean isAbstract ()
+  {
+    return false;
+  }
+
+  @Override
+  protected JClass substituteParams (final JTypeVar [] variables, final List <JClass> bindings)
+  {
+    return this;
+  }
 }

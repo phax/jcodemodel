@@ -46,31 +46,34 @@ import java.io.OutputStream;
 
 import com.helger.jcodemodel.JResourceFile;
 
-
 /**
- * A simple class that takes an object and serializes it into a file
- * in the parent package with the given name.
+ * A simple class that takes an object and serializes it into a file in the
+ * parent package with the given name.
  */
-public class JSerializedObject extends JResourceFile {
+public class JSerializedObject extends JResourceFile
+{
 
-    private final Object obj;
-    
-    /**
-     * @exception   IOException
-     *      If the serialization fails, this exception is thrown
-     */
-    public JSerializedObject( String name, Object obj ) throws IOException {
-        super(name);
-        this.obj = obj;
-    }
-    
-    /**
-     * called by JPackage to serialize the object 
-     */
-    protected void build( OutputStream os ) throws IOException {
-        // serialize the obj into a ByteArrayOutputStream
-        ObjectOutputStream oos = new ObjectOutputStream(os);
-        oos.writeObject(obj);
-        oos.close();
-    }
+  private final Object obj;
+
+  /**
+   * @exception IOException
+   *            If the serialization fails, this exception is thrown
+   */
+  public JSerializedObject (final String name, final Object obj) throws IOException
+  {
+    super (name);
+    this.obj = obj;
+  }
+
+  /**
+   * called by JPackage to serialize the object
+   */
+  @Override
+  protected void build (final OutputStream os) throws IOException
+  {
+    // serialize the obj into a ByteArrayOutputStream
+    final ObjectOutputStream oos = new ObjectOutputStream (os);
+    oos.writeObject (obj);
+    oos.close ();
+  }
 }

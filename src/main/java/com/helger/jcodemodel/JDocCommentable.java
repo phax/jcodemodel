@@ -45,9 +45,10 @@ package com.helger.jcodemodel;
  * 
  * @author Jonas von Malottki
  */
-public interface JDocCommentable {
-    /**
-     * @return the JavaDoc of the Element
-     */
-    JDocComment javadoc();
+public interface JDocCommentable
+{
+  /**
+   * @return the JavaDoc of the Element
+   */
+  JDocComment javadoc ();
 }

@@ -53,35 +53,40 @@ import com.helger.jcodemodel.JPackage;
  * Filter CodeWriter that writes a progress message to the specified
  * PrintStream.
  * 
- * @author
- * 	Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class ProgressCodeWriter extends FilterCodeWriter {
-    public ProgressCodeWriter( CodeWriter output, PrintStream progress ) {
-        super(output);
-        this.progress = progress;
-        if(progress==null)
-            throw new IllegalArgumentException();
-    }
+public class ProgressCodeWriter extends FilterCodeWriter
+{
+  public ProgressCodeWriter (final CodeWriter output, final PrintStream progress)
+  {
+    super (output);
+    this.progress = progress;
+    if (progress == null)
+      throw new IllegalArgumentException ();
+  }
 
-    private final PrintStream progress;
-    
-    public OutputStream openBinary(JPackage pkg, String fileName) throws IOException {
-        report(pkg, fileName);
-        return super.openBinary(pkg,fileName);
-    }
+  private final PrintStream progress;
 
-    public Writer openSource(JPackage pkg, String fileName) throws IOException {
-        report(pkg, fileName);
-        return super.openSource(pkg,fileName);
-    }
-    
-    private void report(JPackage pkg, String fileName) {
-        if(pkg.isUnnamed()) progress.println(fileName);
-        else
-            progress.println(
-                pkg.name().replace('.',File.separatorChar)
-                    +File.separatorChar+fileName);
-    }
+  @Override
+  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  {
+    report (pkg, fileName);
+    return super.openBinary (pkg, fileName);
+  }
+
+  @Override
+  public Writer openSource (final JPackage pkg, final String fileName) throws IOException
+  {
+    report (pkg, fileName);
+    return super.openSource (pkg, fileName);
+  }
+
+  private void report (final JPackage pkg, final String fileName)
+  {
+    if (pkg.isUnnamed ())
+      progress.println (fileName);
+    else
+      progress.println (pkg.name ().replace ('.', File.separatorChar) + File.separatorChar + fileName);
+  }
 
 }

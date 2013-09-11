@@ -40,14 +40,13 @@
 
 package com.helger.jcodemodel;
 
-
 /**
- * Common interface for code components that can generate
- * uses of themselves.
+ * Common interface for code components that can generate uses of themselves.
  */
 
-public interface JGenerable {
+public interface JGenerable
+{
 
-    public void generate(JFormatter f);
+  public void generate (JFormatter f);
 
 }

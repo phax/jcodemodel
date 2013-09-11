@@ -47,28 +47,30 @@ import java.io.Writer;
 
 import com.helger.jcodemodel.JResourceFile;
 
-
 /**
  * Simple text file.
  * 
- * @author
- * 	Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JTextFile extends JResourceFile
 {
-    public JTextFile( String name ) {
-        super(name);
-    }
-    
-    private String contents = null;
-    
-    public void setContents( String _contents ) {
-        this.contents = _contents;
-    }
-    
-    public void build( OutputStream out ) throws IOException {
-        Writer w = new OutputStreamWriter(out);
-        w.write(contents);
-        w.close();
-    }
+  public JTextFile (final String name)
+  {
+    super (name);
+  }
+
+  private String contents = null;
+
+  public void setContents (final String _contents)
+  {
+    this.contents = _contents;
+  }
+
+  @Override
+  public void build (final OutputStream out) throws IOException
+  {
+    final Writer w = new OutputStreamWriter (out);
+    w.write (contents);
+    w.close ();
+  }
 }

@@ -51,22 +51,22 @@
  * The AST looks like this:
  *
  * {@DotDiagram
-    digraph G {
-        cls1 [label="JDefinedClass"];
-        cls2 [label="JDefinedClass"];
-        JCodeModel -> cls1 [label="generated class"];
-        JCodeModel -> cls2 [label="generated class"];
+ digraph G {
+ cls1 [label="JDefinedClass"];
+ cls2 [label="JDefinedClass"];
+ JCodeModel -> cls1 [label="generated class"];
+ JCodeModel -> cls2 [label="generated class"];
 
-        m1 [label="JMethod"];
-        m2 [label="JMethod"];
+ m1 [label="JMethod"];
+ m2 [label="JMethod"];
 
-        cls1 -> m1;
-        cls1 -> m2;
-        cls1 -> JField;
+ cls1 -> m1;
+ cls1 -> m2;
+ cls1 -> JField;
 
-        m1 -> JVar [label="method parameter"];
-        m1 -> JBlock [label="code"];
-    }
+ m1 -> JVar [label="method parameter"];
+ m1 -> JBlock [label="code"];
+ }
  * }
  *
  * <p>
@@ -126,5 +126,3 @@
  */
 package com.helger.jcodemodel;
 
-import java.util.List;
-import java.util.Map;

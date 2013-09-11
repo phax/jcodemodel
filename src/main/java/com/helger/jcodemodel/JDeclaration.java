@@ -40,14 +40,12 @@
 
 package com.helger.jcodemodel;
 
-
 /**
- * Common interface for code components that can generate declarations
- * of themselves.
+ * Common interface for code components that can generate declarations of
+ * themselves.
  */
 
-public interface JDeclaration {
-
-    public void declare(JFormatter f);
-
+public interface JDeclaration
+{
+  void declare (JFormatter f);
 }
