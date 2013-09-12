@@ -49,12 +49,12 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 /**
- * Enum Constant. When used as an {@link JExpression}, this object represents a
+ * Enum Constant. When used as an {@link IJExpression}, this object represents a
  * reference to the enum constant.
  * 
  * @author Bhakti Mehta (Bhakti.Mehta@sun.com)
  */
-public class JEnumConstant extends AbstractJExpressionImpl implements JDeclaration, JAnnotatable, JDocCommentable
+public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclaration, IJAnnotatable, IJDocCommentable
 {
   /**
    * The enum class.
@@ -79,7 +79,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
   /**
    * List of the constructor argument expressions. Lazily constructed.
    */
-  private List <JExpression> args;
+  private List <IJExpression> args;
 
   protected JEnumConstant (@Nonnull final JDefinedClass type, @Nonnull final String name)
   {
@@ -109,21 +109,21 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
    *        Argument to add to argument list
    */
   @Nonnull
-  public JEnumConstant arg (@Nonnull final JExpression arg)
+  public JEnumConstant arg (@Nonnull final IJExpression arg)
   {
     if (arg == null)
       throw new IllegalArgumentException ();
     if (args == null)
-      args = new ArrayList <JExpression> ();
+      args = new ArrayList <IJExpression> ();
     args.add (arg);
     return this;
   }
 
   @Nonnull
-  public List <JExpression> args ()
+  public List <IJExpression> args ()
   {
     if (args == null)
-      args = new ArrayList <JExpression> ();
+      args = new ArrayList <IJExpression> ();
     return Collections.unmodifiableList (args);
   }
 
@@ -184,13 +184,13 @@ public class JEnumConstant extends AbstractJExpressionImpl implements JDeclarati
     return annotate (type.owner ().ref (clazz));
   }
 
-  public <W extends JAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }
 
   /**
-   * {@link JAnnotatable#annotations()}
+   * {@link IJAnnotatable#annotations()}
    */
   @Nonnull
   public Collection <JAnnotationUse> annotations ()

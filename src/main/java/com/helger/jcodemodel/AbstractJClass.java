@@ -375,7 +375,7 @@ public abstract class AbstractJClass extends AbstractJType
     return this.getClass ().getName () + '(' + name () + ')';
   }
 
-  public final JExpression dotclass ()
+  public final IJExpression dotclass ()
   {
     return JExpr.dotclass (this);
   }

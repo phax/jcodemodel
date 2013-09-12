@@ -52,15 +52,15 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
   /**
    * The value of the Annotation member
    */
-  private final JExpression value;
+  private final IJExpression value;
 
-  protected JAnnotationStringValue (@Nonnull final JExpression value)
+  protected JAnnotationStringValue (@Nonnull final IJExpression value)
   {
     this.value = value;
   }
 
   @Nonnull
-  public JExpression value ()
+  public IJExpression value ()
   {
     return value;
   }

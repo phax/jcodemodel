@@ -47,9 +47,8 @@ import javax.annotation.Nonnull;
 /**
  * Modifier groups.
  */
-public class JMods implements JGenerable
+public class JMods implements IJGenerable
 {
-
   //
   // mask
   //

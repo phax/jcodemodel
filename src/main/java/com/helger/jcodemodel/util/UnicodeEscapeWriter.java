@@ -53,7 +53,6 @@ import java.io.Writer;
  */
 public class UnicodeEscapeWriter extends FilterWriter
 {
-
   public UnicodeEscapeWriter (final Writer next)
   {
     super (next);

@@ -41,14 +41,13 @@
 package com.helger.jcodemodel;
 
 /**
- * Program elements that can have Javadoc
- * 
- * @author Jonas von Malottki
+ * Marker interface for code components that can be placed to the left of '=' in
+ * an assignment. A left hand value can always be a right hand value, so this
+ * interface derives from {@link IJExpression}.
  */
-public interface JDocCommentable
+public interface IJAssignmentTarget extends  IJExpression
 {
-  /**
-   * @return the JavaDoc of the Element
-   */
-  JDocComment javadoc ();
+  IJExpression assign (IJExpression rhs);
+
+  IJExpression assignPlus (IJExpression rhs);
 }

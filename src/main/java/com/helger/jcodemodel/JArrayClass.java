@@ -51,7 +51,6 @@ import java.util.List;
  */
 public class JArrayClass extends AbstractJClass
 {
-
   // array component type
   private final AbstractJType componentType;
 

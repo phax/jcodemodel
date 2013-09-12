@@ -45,14 +45,12 @@ import javax.annotation.Nonnull;
 /**
  * Do loops
  */
-
-public class JDoLoop implements JStatement
+public class JDoLoop implements IJStatement
 {
-
   /**
    * Test part of Do statement for determining exit state
    */
-  private final JExpression test;
+  private final IJExpression test;
 
   /**
    * JBlock of statements which makes up body of this Do statement
@@ -62,13 +60,13 @@ public class JDoLoop implements JStatement
   /**
    * Construct a Do statment
    */
-  protected JDoLoop (@Nonnull final JExpression test)
+  protected JDoLoop (@Nonnull final IJExpression test)
   {
     this.test = test;
   }
 
   @Nonnull
-  public JExpression test ()
+  public IJExpression test ()
   {
     return test;
   }

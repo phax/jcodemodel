@@ -45,9 +45,8 @@ import javax.annotation.Nonnull;
 /**
  * Catch block for a try/catch/finally statement
  */
-public class JCatchBlock implements JGenerable
+public class JCatchBlock implements IJGenerable
 {
-
   private final AbstractJClass exception;
   private JVar var;
   private final JBlock body = new JBlock ();

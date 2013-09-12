@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 /**
  * A field that can have a {@link JDocComment} associated with it
  */
-public class JFieldVar extends JVar implements JDocCommentable
+public class JFieldVar extends JVar implements IJDocCommentable
 {
   private final JDefinedClass owner;
 
@@ -69,7 +69,7 @@ public class JFieldVar extends JVar implements JDocCommentable
                        @Nonnull final JMods mods,
                        @Nonnull final AbstractJType type,
                        @Nonnull final String name,
-                       @Nullable final JExpression init)
+                       @Nullable final IJExpression init)
   {
     super (mods, type, name, init);
     this.owner = owner;

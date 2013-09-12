@@ -56,7 +56,7 @@ public final class JOp
   /**
    * Determine whether the top level of an expression involves an operator.
    */
-  static boolean hasTopOp (@Nullable final JExpression e)
+  static boolean hasTopOp (@Nullable final IJExpression e)
   {
     return (e instanceof UnaryOp) || (e instanceof BinaryOp);
   }
@@ -66,17 +66,17 @@ public final class JOp
   public static class UnaryOp extends AbstractJExpressionImpl
   {
     private final String op;
-    private final JExpression e;
+    private final IJExpression e;
     private final boolean opFirst;
 
-    protected UnaryOp (@Nonnull final String op, @Nonnull final JExpression e)
+    protected UnaryOp (@Nonnull final String op, @Nonnull final IJExpression e)
     {
       this.op = op;
       this.e = e;
       opFirst = false;
     }
 
-    protected UnaryOp (@Nonnull final JExpression e, @Nonnull final String op)
+    protected UnaryOp (@Nonnull final IJExpression e, @Nonnull final String op)
     {
       this.op = op;
       this.e = e;
@@ -90,7 +90,7 @@ public final class JOp
     }
 
     @Nonnull
-    public JExpression expr ()
+    public IJExpression expr ()
     {
       return e;
     }
@@ -111,7 +111,7 @@ public final class JOp
   }
 
   @Nonnull
-  public static JExpression minus (@Nonnull final JExpression e)
+  public static IJExpression minus (@Nonnull final IJExpression e)
   {
     return new UnaryOp ("-", e);
   }
@@ -120,7 +120,7 @@ public final class JOp
    * Logical not <tt>'!x'</tt>.
    */
   @Nonnull
-  public static JExpression not (@Nonnull final JExpression e)
+  public static IJExpression not (@Nonnull final IJExpression e)
   {
     if (e == JExpr.TRUE)
       return JExpr.FALSE;
@@ -130,14 +130,14 @@ public final class JOp
   }
 
   @Nonnull
-  public static JExpression complement (@Nonnull final JExpression e)
+  public static IJExpression complement (@Nonnull final IJExpression e)
   {
     return new UnaryOp ("~", e);
   }
 
   public static class TightUnaryOp extends UnaryOp
   {
-    protected TightUnaryOp (@Nonnull final JExpression e, @Nonnull final String op)
+    protected TightUnaryOp (@Nonnull final IJExpression e, @Nonnull final String op)
     {
       super (e, op);
     }
@@ -153,13 +153,13 @@ public final class JOp
   }
 
   @Nonnull
-  public static JExpression incr (@Nonnull final JExpression e)
+  public static IJExpression incr (@Nonnull final IJExpression e)
   {
     return new TightUnaryOp (e, "++");
   }
 
   @Nonnull
-  public static JExpression decr (@Nonnull final JExpression e)
+  public static IJExpression decr (@Nonnull final IJExpression e)
   {
     return new TightUnaryOp (e, "--");
   }
@@ -168,11 +168,11 @@ public final class JOp
 
   public static class BinaryOp extends AbstractJExpressionImpl
   {
-    private final JExpression left;
+    private final IJExpression left;
     private final String op;
-    private final JGenerable right;
+    private final IJGenerable right;
 
-    protected BinaryOp (@Nonnull final JExpression left, @Nonnull final String op, @Nonnull final JGenerable right)
+    protected BinaryOp (@Nonnull final IJExpression left, @Nonnull final String op, @Nonnull final IJGenerable right)
     {
       this.left = left;
       this.op = op;
@@ -180,7 +180,7 @@ public final class JOp
     }
 
     @Nonnull
-    public JExpression left ()
+    public IJExpression left ()
     {
       return left;
     }
@@ -192,7 +192,7 @@ public final class JOp
     }
 
     @Nonnull
-    public JGenerable right ()
+    public IJGenerable right ()
     {
       return right;
     }
@@ -205,67 +205,67 @@ public final class JOp
   }
 
   @Nonnull
-  public static JExpression plus (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression plus (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "+", right);
   }
 
   @Nonnull
-  public static JExpression minus (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression minus (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "-", right);
   }
 
   @Nonnull
-  public static JExpression mul (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression mul (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "*", right);
   }
 
   @Nonnull
-  public static JExpression div (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression div (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "/", right);
   }
 
   @Nonnull
-  public static JExpression mod (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression mod (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "%", right);
   }
 
   @Nonnull
-  public static JExpression shl (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression shl (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "<<", right);
   }
 
   @Nonnull
-  public static JExpression shr (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression shr (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, ">>", right);
   }
 
   @Nonnull
-  public static JExpression shrz (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression shrz (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, ">>>", right);
   }
 
   @Nonnull
-  public static JExpression band (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression band (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "&", right);
   }
 
   @Nonnull
-  public static JExpression bor (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression bor (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "|", right);
   }
 
   @Nonnull
-  public static JExpression cand (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression cand (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     if (left == JExpr.TRUE)
       return right;
@@ -279,7 +279,7 @@ public final class JOp
   }
 
   @Nonnull
-  public static JExpression cor (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression cor (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     if (left == JExpr.TRUE)
       return left; // JExpr.TRUE
@@ -293,49 +293,49 @@ public final class JOp
   }
 
   @Nonnull
-  public static JExpression xor (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression xor (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "^", right);
   }
 
   @Nonnull
-  public static JExpression lt (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression lt (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "<", right);
   }
 
   @Nonnull
-  public static JExpression lte (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression lte (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "<=", right);
   }
 
   @Nonnull
-  public static JExpression gt (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression gt (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, ">", right);
   }
 
   @Nonnull
-  public static JExpression gte (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression gte (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, ">=", right);
   }
 
   @Nonnull
-  public static JExpression eq (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression eq (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "==", right);
   }
 
   @Nonnull
-  public static JExpression ne (@Nonnull final JExpression left, @Nonnull final JExpression right)
+  public static IJExpression ne (@Nonnull final IJExpression left, @Nonnull final IJExpression right)
   {
     return new BinaryOp (left, "!=", right);
   }
 
   @Nonnull
-  public static JExpression _instanceof (@Nonnull final JExpression left, @Nonnull final AbstractJType right)
+  public static IJExpression _instanceof (@Nonnull final IJExpression left, @Nonnull final AbstractJType right)
   {
     return new BinaryOp (left, "instanceof", right);
   }
@@ -344,17 +344,17 @@ public final class JOp
 
   public static class TernaryOp extends AbstractJExpressionImpl
   {
-    private final JExpression e1;
+    private final IJExpression e1;
     private final String op1;
-    private final JExpression e2;
+    private final IJExpression e2;
     private final String op2;
-    private final JExpression e3;
+    private final IJExpression e3;
 
-    protected TernaryOp (@Nonnull final JExpression e1,
+    protected TernaryOp (@Nonnull final IJExpression e1,
                          @Nonnull final String op1,
-                         @Nonnull final JExpression e2,
+                         @Nonnull final IJExpression e2,
                          @Nonnull final String op2,
-                         @Nonnull final JExpression e3)
+                         @Nonnull final IJExpression e3)
     {
       this.e1 = e1;
       this.op1 = op1;
@@ -364,7 +364,7 @@ public final class JOp
     }
 
     @Nonnull
-    public JExpression expr1 ()
+    public IJExpression expr1 ()
     {
       return e1;
     }
@@ -376,7 +376,7 @@ public final class JOp
     }
 
     @Nonnull
-    public JGenerable expr2 ()
+    public IJGenerable expr2 ()
     {
       return e2;
     }
@@ -388,7 +388,7 @@ public final class JOp
     }
 
     @Nonnull
-    public JGenerable expr3 ()
+    public IJGenerable expr3 ()
     {
       return e3;
     }
@@ -401,9 +401,9 @@ public final class JOp
   }
 
   @Nonnull
-  public static JExpression cond (@Nonnull final JExpression cond,
-                                  @Nonnull final JExpression ifTrue,
-                                  @Nonnull final JExpression ifFalse)
+  public static IJExpression cond (@Nonnull final IJExpression cond,
+                                  @Nonnull final IJExpression ifTrue,
+                                  @Nonnull final IJExpression ifFalse)
   {
     return new TernaryOp (cond, "?", ifTrue, ":", ifFalse);
   }

@@ -45,7 +45,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Factory methods that generate various {@link JExpression}s.
+ * Factory methods that generate various {@link IJExpression}s.
  */
 public final class JExpr
 {
@@ -59,13 +59,13 @@ public final class JExpr
   {}
 
   @Nonnull
-  public static JExpression assign (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression rhs)
+  public static IJExpression assign (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     return new JAssignment (lhs, rhs);
   }
 
   @Nonnull
-  public static JExpression assignPlus (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression rhs)
+  public static IJExpression assignPlus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     return new JAssignment (lhs, rhs, "+");
   }
@@ -85,23 +85,23 @@ public final class JExpr
   @Nonnull
   public static JInvocation invoke (@Nonnull final String method)
   {
-    return new JInvocation ((JExpression) null, method);
+    return new JInvocation ((IJExpression) null, method);
   }
 
   @Nonnull
   public static JInvocation invoke (@Nonnull final JMethod method)
   {
-    return new JInvocation ((JExpression) null, method);
+    return new JInvocation ((IJExpression) null, method);
   }
 
   @Nonnull
-  public static JInvocation invoke (@Nullable final JExpression lhs, @Nonnull final JMethod method)
+  public static JInvocation invoke (@Nullable final IJExpression lhs, @Nonnull final JMethod method)
   {
     return new JInvocation (lhs, method);
   }
 
   @Nonnull
-  public static JInvocation invoke (@Nullable final JExpression lhs, @Nonnull final String method)
+  public static JInvocation invoke (@Nullable final IJExpression lhs, @Nonnull final String method)
   {
     return new JInvocation (lhs, method);
   }
@@ -109,17 +109,17 @@ public final class JExpr
   @Nonnull
   public static JFieldRef ref (@Nonnull final String field)
   {
-    return new JFieldRef ((JExpression) null, field);
+    return new JFieldRef ((IJExpression) null, field);
   }
 
   @Nonnull
-  public static JFieldRef ref (@Nullable final JExpression lhs, @Nonnull final JVar field)
+  public static JFieldRef ref (@Nullable final IJExpression lhs, @Nonnull final JVar field)
   {
     return new JFieldRef (lhs, field);
   }
 
   @Nonnull
-  public static JFieldRef ref (@Nullable final JExpression lhs, @Nonnull final String field)
+  public static JFieldRef ref (@Nullable final IJExpression lhs, @Nonnull final String field)
   {
     return new JFieldRef (lhs, field);
   }
@@ -131,7 +131,7 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JExpression dotclass (@Nonnull final AbstractJClass cl)
+  public static IJExpression dotclass (@Nonnull final AbstractJClass cl)
   {
     return new AbstractJExpressionImpl ()
     {
@@ -148,13 +148,13 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JArrayCompRef component (@Nonnull final JExpression lhs, @Nonnull final JExpression index)
+  public static JArrayCompRef component (@Nonnull final IJExpression lhs, @Nonnull final IJExpression index)
   {
     return new JArrayCompRef (lhs, index);
   }
 
   @Nonnull
-  public static JCast cast (@Nonnull final AbstractJType type, @Nonnull final JExpression expr)
+  public static JCast cast (@Nonnull final AbstractJType type, @Nonnull final IJExpression expr)
   {
     return new JCast (type, expr);
   }
@@ -172,7 +172,7 @@ public final class JExpr
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
   @Nonnull
-  public static JArray newArray (@Nonnull final AbstractJType type, @Nullable final JExpression size)
+  public static JArray newArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
   {
     // you cannot create an array whose component type is a generic
     return new JArray (type.erasure (), size);
@@ -190,34 +190,34 @@ public final class JExpr
     return newArray (type, lit (size));
   }
 
-  private static final JExpression __this = new JAtom ("this");
+  private static final IJExpression __this = new JAtom ("this");
 
   /**
    * Returns a reference to "this", an implicit reference to the current object.
    */
   @Nonnull
-  public static JExpression _this ()
+  public static IJExpression _this ()
   {
     return __this;
   }
 
-  private static final JExpression __super = new JAtom ("super");
+  private static final IJExpression __super = new JAtom ("super");
 
   /**
    * Returns a reference to "super", an implicit reference to the super class.
    */
   @Nonnull
-  public static JExpression _super ()
+  public static IJExpression _super ()
   {
     return __super;
   }
 
   /* -- Literals -- */
 
-  private static final JExpression __null = new JAtom ("null");
+  private static final IJExpression __null = new JAtom ("null");
 
   @Nonnull
-  public static JExpression _null ()
+  public static IJExpression _null ()
   {
     return __null;
   }
@@ -226,34 +226,34 @@ public final class JExpr
    * Boolean constant that represents <code>true</code>
    */
   @Nonnull
-  public static final JExpression TRUE = new JAtom ("true");
+  public static final IJExpression TRUE = new JAtom ("true");
 
   /**
    * Boolean constant that represents <code>false</code>
    */
   @Nonnull
-  public static final JExpression FALSE = new JAtom ("false");
+  public static final IJExpression FALSE = new JAtom ("false");
 
   @Nonnull
-  public static JExpression lit (final boolean b)
+  public static IJExpression lit (final boolean b)
   {
     return b ? TRUE : FALSE;
   }
 
   @Nonnull
-  public static JExpression lit (final int n)
+  public static IJExpression lit (final int n)
   {
     return new JAtom (Integer.toString (n));
   }
 
   @Nonnull
-  public static JExpression lit (final long n)
+  public static IJExpression lit (final long n)
   {
     return new JAtom (Long.toString (n) + "L");
   }
 
   @Nonnull
-  public static JExpression lit (final float f)
+  public static IJExpression lit (final float f)
   {
     if (f == Float.NEGATIVE_INFINITY)
       return new JAtom ("java.lang.Float.NEGATIVE_INFINITY");
@@ -265,7 +265,7 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JExpression lit (final double d)
+  public static IJExpression lit (final double d)
   {
     if (d == Double.NEGATIVE_INFINITY)
       return new JAtom ("java.lang.Double.NEGATIVE_INFINITY");
@@ -331,13 +331,13 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JExpression lit (final char c)
+  public static IJExpression lit (final char c)
   {
     return new JAtom (quotify ('\'', "" + c));
   }
 
   @Nonnull
-  public static JExpression lit (@Nonnull final String s)
+  public static IJExpression lit (@Nonnull final String s)
   {
     return new JStringLiteral (s);
   }
@@ -353,7 +353,7 @@ public final class JExpr
    * object model.
    */
   @Nonnull
-  public static JExpression direct (@Nonnull final String source)
+  public static IJExpression direct (@Nonnull final String source)
   {
     return new AbstractJExpressionImpl ()
     {

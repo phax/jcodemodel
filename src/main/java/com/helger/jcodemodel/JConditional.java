@@ -45,14 +45,12 @@ import javax.annotation.Nonnull;
 /**
  * If statement, with optional else clause
  */
-
-public class JConditional implements JStatement
+public class JConditional implements IJStatement
 {
-
   /**
    * JExpression to test to determine branching
    */
-  private final JExpression test;
+  private final IJExpression test;
 
   /**
    * JBlock of statements for "then" clause
@@ -70,13 +68,13 @@ public class JConditional implements JStatement
    * @param test
    *        JExpression which will determine branching
    */
-  protected JConditional (@Nonnull final JExpression test)
+  protected JConditional (@Nonnull final IJExpression test)
   {
     this.test = test;
   }
 
   @Nonnull
-  public JExpression test ()
+  public IJExpression test ()
   {
     return test;
   }
@@ -109,7 +107,7 @@ public class JConditional implements JStatement
    * Creates <tt>... else if(...) ...</tt> code.
    */
   @Nonnull
-  public JConditional _elseif (@Nonnull final JExpression boolExp)
+  public JConditional _elseif (@Nonnull final IJExpression boolExp)
   {
     return _else ()._if (boolExp);
   }

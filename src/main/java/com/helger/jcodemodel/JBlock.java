@@ -54,11 +54,11 @@ import javax.annotation.Nonnull;
  * inserted into the {@link #pos() "current position"}. The position advances
  * one every time you add a new instruction.
  */
-public class JBlock implements JGenerable, JStatement
+public class JBlock implements IJGenerable, IJStatement
 {
   /**
    * Declarations and statements contained in this block. Either
-   * {@link JStatement} or {@link JDeclaration}.
+   * {@link IJStatement} or {@link IJDeclaration}.
    */
   private final List <Object> content = new ArrayList <Object> ();
 
@@ -85,7 +85,7 @@ public class JBlock implements JGenerable, JStatement
   }
 
   /**
-   * Returns a read-only view of {@link JStatement}s and {@link JDeclaration} in
+   * Returns a read-only view of {@link IJStatement}s and {@link IJDeclaration} in
    * this block.
    */
   @Nonnull
@@ -182,7 +182,7 @@ public class JBlock implements JGenerable, JStatement
    * @return Newly generated JVar
    */
   @Nonnull
-  public JVar decl (final AbstractJType type, final String name, final JExpression init)
+  public JVar decl (final AbstractJType type, final String name, final IJExpression init)
   {
     return decl (JMod.NONE, type, name, init);
   }
@@ -201,7 +201,7 @@ public class JBlock implements JGenerable, JStatement
    * @return Newly generated JVar
    */
   @Nonnull
-  public JVar decl (final int mods, final AbstractJType type, final String name, final JExpression init)
+  public JVar decl (final int mods, final AbstractJType type, final String name, final IJExpression init)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, name, init);
     _insert (v);
@@ -219,14 +219,14 @@ public class JBlock implements JGenerable, JStatement
    *        Right hand side expression
    */
   @Nonnull
-  public JBlock assign (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression exp)
+  public JBlock assign (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression exp)
   {
     _insert (new JAssignment (lhs, exp));
     return this;
   }
 
   @Nonnull
-  public JBlock assignPlus (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression exp)
+  public JBlock assignPlus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression exp)
   {
     _insert (new JAssignment (lhs, exp, "+"));
     return this;
@@ -243,7 +243,7 @@ public class JBlock implements JGenerable, JStatement
    * @return Newly generated JInvocation
    */
   @Nonnull
-  public JInvocation invoke (final JExpression expr, final String method)
+  public JInvocation invoke (final IJExpression expr, final String method)
   {
     final JInvocation i = new JInvocation (expr, method);
     _insert (i);
@@ -260,7 +260,7 @@ public class JBlock implements JGenerable, JStatement
    *        JMethod to invoke
    * @return Newly generated JInvocation
    */
-  public JInvocation invoke (final JExpression expr, final JMethod method)
+  public JInvocation invoke (final IJExpression expr, final JMethod method)
   {
     return _insert (new JInvocation (expr, method));
   }
@@ -282,7 +282,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JInvocation invoke (final String method)
   {
-    return _insert (new JInvocation ((JExpression) null, method));
+    return _insert (new JInvocation ((IJExpression) null, method));
   }
 
   /**
@@ -294,7 +294,7 @@ public class JBlock implements JGenerable, JStatement
    */
   public JInvocation invoke (final JMethod method)
   {
-    return _insert (new JInvocation ((JExpression) null, method));
+    return _insert (new JInvocation ((IJExpression) null, method));
   }
 
   /**
@@ -304,7 +304,7 @@ public class JBlock implements JGenerable, JStatement
    *        JStatement to be added
    * @return This block
    */
-  public JBlock add (final JStatement s)
+  public JBlock add (final IJStatement s)
   { // ## Needed?
     _insert (s);
     return this;
@@ -317,7 +317,7 @@ public class JBlock implements JGenerable, JStatement
    *        JExpression to be tested to determine branching
    * @return Newly generated conditional statement
    */
-  public JConditional _if (final JExpression expr)
+  public JConditional _if (final IJExpression expr)
   {
     return _insert (new JConditional (expr));
   }
@@ -337,7 +337,7 @@ public class JBlock implements JGenerable, JStatement
    * 
    * @return Newly generated While statement
    */
-  public JWhileLoop _while (final JExpression test)
+  public JWhileLoop _while (final IJExpression test)
   {
     return _insert (new JWhileLoop (test));
   }
@@ -345,7 +345,7 @@ public class JBlock implements JGenerable, JStatement
   /**
    * Create a switch/case statement and add it to this block
    */
-  public JSwitch _switch (final JExpression test)
+  public JSwitch _switch (final IJExpression test)
   {
     return _insert (new JSwitch (test));
   }
@@ -355,7 +355,7 @@ public class JBlock implements JGenerable, JStatement
    * 
    * @return Newly generated Do statement
    */
-  public JDoLoop _do (final JExpression test)
+  public JDoLoop _do (final IJExpression test)
   {
     return _insert (new JDoLoop (test));
   }
@@ -381,7 +381,7 @@ public class JBlock implements JGenerable, JStatement
   /**
    * Create a return statement and add it to this block
    */
-  public void _return (final JExpression exp)
+  public void _return (final IJExpression exp)
   {
     _insert (new JReturn (exp));
   }
@@ -389,7 +389,7 @@ public class JBlock implements JGenerable, JStatement
   /**
    * Create a throw statement and add it to this block
    */
-  public void _throw (final JExpression exp)
+  public void _throw (final IJExpression exp)
   {
     _insert (new JThrow (exp));
   }
@@ -450,9 +450,9 @@ public class JBlock implements JGenerable, JStatement
    * For example, you can invoke this method as:
    * <code>directStatement("a=b+c;")</code>.
    */
-  public JStatement directStatement (final String source)
+  public IJStatement directStatement (final String source)
   {
-    final JStatement s = new JStatement ()
+    final IJStatement s = new IJStatement ()
     {
       public void state (final JFormatter f)
       {
@@ -480,10 +480,10 @@ public class JBlock implements JGenerable, JStatement
   {
     for (final Object o : content)
     {
-      if (o instanceof JDeclaration)
-        f.declaration ((JDeclaration) o);
+      if (o instanceof IJDeclaration)
+        f.declaration ((IJDeclaration) o);
       else
-        f.statement ((JStatement) o);
+        f.statement ((IJStatement) o);
     }
   }
 
@@ -493,7 +493,7 @@ public class JBlock implements JGenerable, JStatement
    * 
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
-  public JForEach forEach (final AbstractJType varType, final String name, final JExpression collection)
+  public JForEach forEach (final AbstractJType varType, final String name, final IJExpression collection)
   {
     return _insert (new JForEach (varType, name, collection));
 

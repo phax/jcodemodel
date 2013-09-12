@@ -46,9 +46,8 @@ import javax.annotation.Nullable;
 /**
  * JBreak statement
  */
-public class JBreak implements JStatement
+public class JBreak implements IJStatement
 {
-
   private final JLabel label;
 
   /**

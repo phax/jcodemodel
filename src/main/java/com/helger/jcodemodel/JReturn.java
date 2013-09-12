@@ -46,13 +46,12 @@ import javax.annotation.Nullable;
 /**
  * A return statement
  */
-public class JReturn implements JStatement
+public class JReturn implements IJStatement
 {
-
   /**
    * JExpression to return; may be null.
    */
-  private final JExpression expr;
+  private final IJExpression expr;
 
   /**
    * JReturn constructor
@@ -60,13 +59,13 @@ public class JReturn implements JStatement
    * @param expr
    *        JExpression which evaluates to return value
    */
-  protected JReturn (@Nullable final JExpression expr)
+  protected JReturn (@Nullable final IJExpression expr)
   {
     this.expr = expr;
   }
 
   @Nullable
-  public JExpression expr ()
+  public IJExpression expr ()
   {
     return expr;
   }

@@ -49,13 +49,13 @@ import javax.annotation.Nullable;
 /**
  * JMethod invocation
  */
-public class JInvocation extends AbstractJExpressionImpl implements JStatement
+public class JInvocation extends AbstractJExpressionImpl implements IJStatement
 {
   /**
    * Object expression upon which this method will be invoked, or null if this
    * is a constructor invocation
    */
-  private JGenerable object;
+  private IJGenerable object;
 
   /**
    * Name of the method to be invoked. Either this field is set, or
@@ -72,7 +72,7 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
   /**
    * List of argument expressions for this method invocation
    */
-  private final List <JExpression> args = new ArrayList <JExpression> ();
+  private final List <IJExpression> args = new ArrayList <IJExpression> ();
 
   /**
    * If isConstructor==true, this field keeps the type to be created.
@@ -88,14 +88,14 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    * @param name
    *        Name of method to invoke
    */
-  protected JInvocation (@Nullable final JExpression object, @Nonnull final String name)
+  protected JInvocation (@Nullable final IJExpression object, @Nonnull final String name)
   {
-    this ((JGenerable) object, name);
+    this ((IJGenerable) object, name);
   }
 
-  protected JInvocation (@Nullable final JExpression object, @Nonnull final JMethod method)
+  protected JInvocation (@Nullable final IJExpression object, @Nonnull final JMethod method)
   {
-    this ((JGenerable) object, method);
+    this ((IJGenerable) object, method);
   }
 
   /**
@@ -103,15 +103,15 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    */
   protected JInvocation (@Nonnull final AbstractJClass type, @Nonnull final String name)
   {
-    this ((JGenerable) type, name);
+    this ((IJGenerable) type, name);
   }
 
   protected JInvocation (@Nonnull final AbstractJClass type, @Nonnull final JMethod method)
   {
-    this ((JGenerable) type, method);
+    this ((IJGenerable) type, method);
   }
 
-  private JInvocation (@Nullable final JGenerable object, @Nonnull final String name)
+  private JInvocation (@Nullable final IJGenerable object, @Nonnull final String name)
   {
     this.object = object;
     if (name.indexOf ('.') >= 0)
@@ -119,7 +119,7 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
     this.name = name;
   }
 
-  private JInvocation (@Nullable final JGenerable object, @Nonnull final JMethod method)
+  private JInvocation (@Nullable final IJGenerable object, @Nonnull final JMethod method)
   {
     this.object = object;
     this.method = method;
@@ -151,7 +151,7 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    *        Argument to add to argument list
    */
   @Nonnull
-  public JInvocation arg (@Nonnull final JExpression arg)
+  public JInvocation arg (@Nonnull final IJExpression arg)
   {
     if (arg == null)
       throw new IllegalArgumentException ();
@@ -174,9 +174,9 @@ public class JInvocation extends AbstractJExpressionImpl implements JStatement
    * @return If there's no arguments, an empty array will be returned.
    */
   @Nonnull
-  public JExpression [] listArgs ()
+  public IJExpression [] listArgs ()
   {
-    return args.toArray (new JExpression [args.size ()]);
+    return args.toArray (new IJExpression [args.size ()]);
   }
 
   public void generate (@Nonnull final JFormatter f)

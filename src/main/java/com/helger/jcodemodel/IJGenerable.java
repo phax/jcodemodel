@@ -43,11 +43,9 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 
 /**
- * Common interface for code components that can generate declarations of
- * themselves.
+ * Common interface for code components that can generate uses of themselves.
  */
-
-public interface JDeclaration
+public interface IJGenerable
 {
-  void declare (@Nonnull JFormatter f);
+  void generate (@Nonnull JFormatter f);
 }

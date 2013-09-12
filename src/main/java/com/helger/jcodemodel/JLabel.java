@@ -47,7 +47,7 @@ import javax.annotation.Nonnull;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class JLabel implements JStatement
+public class JLabel implements IJStatement
 {
   final String label;
 

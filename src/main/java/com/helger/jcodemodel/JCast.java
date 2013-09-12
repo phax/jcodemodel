@@ -55,7 +55,7 @@ public class JCast extends AbstractJExpressionImpl
   /**
    * JExpression to be cast.
    */
-  private final JExpression object;
+  private final IJExpression object;
 
   /**
    * JCast constructor
@@ -65,7 +65,7 @@ public class JCast extends AbstractJExpressionImpl
    * @param object
    *        JExpression for the object upon which the cast is applied
    */
-  protected JCast (@Nonnull final AbstractJType type, @Nonnull final JExpression object)
+  protected JCast (@Nonnull final AbstractJType type, @Nonnull final IJExpression object)
   {
     this.type = type;
     this.object = object;
@@ -78,7 +78,7 @@ public class JCast extends AbstractJExpressionImpl
   }
 
   @Nonnull
-  public JExpression object ()
+  public IJExpression object ()
   {
     return object;
   }

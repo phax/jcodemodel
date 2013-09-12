@@ -40,34 +40,15 @@
 
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-
 /**
- * This helps enable whether the JDefinedClass is a Class or Interface or
- * AnnotationTypeDeclaration or Enum
+ * Program elements that can have Javadoc
  * 
- * @author Bhakti Mehta (bhakti.mehta@sun.com)
+ * @author Jonas von Malottki
  */
-public enum ClassType
+public interface IJDocCommentable
 {
-  CLASS ("class"),
-  INTERFACE ("interface"),
-  ANNOTATION_TYPE_DECL ("@interface"),
-  ENUM ("enum");
-
   /**
-   * The keyword used to declare this type.
+   * @return the JavaDoc of the Element
    */
-  private final String declarationToken;
-
-  private ClassType (@Nonnull final String token)
-  {
-    this.declarationToken = token;
-  }
-
-  @Nonnull
-  public String declarationToken ()
-  {
-    return declarationToken;
-  }
+  JDocComment javadoc ();
 }

@@ -45,14 +45,12 @@ import javax.annotation.Nonnull;
 /**
  * JThrow statement
  */
-
-public class JThrow implements JStatement
+public class JThrow implements IJStatement
 {
-
   /**
    * JExpression to throw
    */
-  private final JExpression expr;
+  private final IJExpression expr;
 
   /**
    * JThrow constructor
@@ -60,13 +58,13 @@ public class JThrow implements JStatement
    * @param expr
    *        JExpression which evaluates to JThrow value
    */
-  protected JThrow (@Nonnull final JExpression expr)
+  protected JThrow (@Nonnull final IJExpression expr)
   {
     this.expr = expr;
   }
 
   @Nonnull
-  public JExpression expr ()
+  public IJExpression expr ()
   {
     return expr;
   }

@@ -44,11 +44,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Implementation of {@link JGenerifiable}.
+ * Implementation of {@link IJGenerifiable}.
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public abstract class AbstractJGenerifiableImpl implements JGenerifiable, JDeclaration
+public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDeclaration
 {
 
   /** Lazily created list of {@link JTypeVar}s. */

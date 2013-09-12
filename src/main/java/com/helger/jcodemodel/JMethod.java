@@ -56,9 +56,8 @@ import com.helger.jcodemodel.util.ClassNameComparator;
 /**
  * Java method.
  */
-public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, JDocCommentable
+public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable, IJDocCommentable
 {
-
   /**
    * Modifiers for this method
    */
@@ -110,7 +109,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, 
   /**
    * To set the default value for the annotation member
    */
-  private JExpression defaultValue;
+  private IJExpression defaultValue;
 
   /**
    * JMethod constructor
@@ -330,7 +329,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, 
   }
 
   @Nonnull
-  public <W extends JAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }
@@ -460,7 +459,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements JAnnotatable, 
    * @param value
    *        Default value for the annotation member
    */
-  public void declareDefaultValue (final JExpression value)
+  public void declareDefaultValue (final IJExpression value)
   {
     this.defaultValue = value;
   }

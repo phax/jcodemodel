@@ -51,12 +51,12 @@ import javax.annotation.Nonnull;
 /**
  * Represents an arrays as annotation members
  * <p>
- * This class implements {@link JAnnotatable} to allow new annotations to be
+ * This class implements {@link IJAnnotatable} to allow new annotations to be
  * added as a member of the array.
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public class JAnnotationArrayMember extends AbstractJAnnotationValue implements JAnnotatable
+public class JAnnotationArrayMember extends AbstractJAnnotationValue implements IJAnnotatable
 {
   private final List <AbstractJAnnotationValue> values = new ArrayList <AbstractJAnnotationValue> ();
   private final JCodeModel owner;
@@ -257,7 +257,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *         the same method multiple times
    */
   @Nonnull
-  public JAnnotationArrayMember param (final JExpression value)
+  public JAnnotationArrayMember param (final IJExpression value)
   {
     final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (value);
     values.add (annotationValue);
@@ -315,13 +315,13 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     return a;
   }
 
-  public <W extends JAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }
 
   /**
-   * {@link JAnnotatable#annotations()}
+   * {@link IJAnnotatable#annotations()}
    */
   @SuppressWarnings ({ "unchecked", "rawtypes" })
   public Collection <JAnnotationUse> annotations ()

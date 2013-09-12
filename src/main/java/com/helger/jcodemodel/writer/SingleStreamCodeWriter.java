@@ -58,7 +58,6 @@ import com.helger.jcodemodel.JPackage;
  */
 public class SingleStreamCodeWriter extends AbstractCodeWriter
 {
-
   private final PrintStream out;
 
   /**

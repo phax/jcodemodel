@@ -50,11 +50,11 @@ import javax.annotation.Nullable;
 /**
  * For statement
  */
-public class JForLoop implements JStatement
+public class JForLoop implements IJStatement
 {
   private final List <Object> inits = new ArrayList <Object> ();
-  private JExpression test;
-  private final List <JExpression> updates = new ArrayList <JExpression> ();
+  private IJExpression test;
+  private final List <IJExpression> updates = new ArrayList <IJExpression> ();
   private JBlock body;
 
   protected JForLoop ()
@@ -64,25 +64,25 @@ public class JForLoop implements JStatement
   public JVar init (final int mods,
                     @Nonnull final AbstractJType type,
                     @Nonnull final String var,
-                    @Nullable final JExpression e)
+                    @Nullable final IJExpression e)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, var, e);
     inits.add (v);
     return v;
   }
 
-  public JVar init (final AbstractJType type, final String var, final JExpression e)
+  public JVar init (final AbstractJType type, final String var, final IJExpression e)
   {
     return init (JMod.NONE, type, var, e);
   }
 
-  public void init (@Nonnull final JVar v, @Nonnull final JExpression e)
+  public void init (@Nonnull final JVar v, @Nonnull final IJExpression e)
   {
     inits.add (JExpr.assign (v, e));
   }
 
   /**
-   * @return List of {@link JExpression} or {@link JVar}
+   * @return List of {@link IJExpression} or {@link JVar}
    */
   @Nonnull
   public List <Object> inits ()
@@ -90,24 +90,24 @@ public class JForLoop implements JStatement
     return Collections.unmodifiableList (inits);
   }
 
-  public void test (@Nullable final JExpression e)
+  public void test (@Nullable final IJExpression e)
   {
     this.test = e;
   }
 
   @Nullable
-  public JExpression test ()
+  public IJExpression test ()
   {
     return test;
   }
 
-  public void update (final JExpression e)
+  public void update (final IJExpression e)
   {
     updates.add (e);
   }
 
   @Nonnull
-  public List <JExpression> updates ()
+  public List <IJExpression> updates ()
   {
     return Collections.unmodifiableList (updates);
   }
@@ -131,7 +131,7 @@ public class JForLoop implements JStatement
       if (o instanceof JVar)
         f.var ((JVar) o);
       else
-        f.generable ((JExpression) o);
+        f.generable ((IJExpression) o);
       first = false;
     }
     f.print (';').generable (test).print (';').g (updates).print (')');

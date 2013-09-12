@@ -46,12 +46,12 @@ import javax.annotation.Nullable;
 /**
  * Case statement
  */
-public class JCase implements JStatement
+public class JCase implements IJStatement
 {
   /**
    * label part of the case statement
    */
-  private final JExpression label;
+  private final IJExpression label;
 
   /**
    * is this a regular case statement or a default case statement?
@@ -66,7 +66,7 @@ public class JCase implements JStatement
   /**
    * Construct a case statement
    */
-  protected JCase (@Nonnull final JExpression label)
+  protected JCase (@Nonnull final IJExpression label)
   {
     this (label, false);
   }
@@ -75,14 +75,14 @@ public class JCase implements JStatement
    * Construct a case statement. If isDefaultCase is true, then label should be
    * null since default cases don't have a label.
    */
-  protected JCase (@Nullable final JExpression label, final boolean isDefaultCase)
+  protected JCase (@Nullable final IJExpression label, final boolean isDefaultCase)
   {
     this.label = label;
     this.isDefaultCase = isDefaultCase;
   }
 
   @Nullable
-  public JExpression label ()
+  public IJExpression label ()
   {
     return label;
   }

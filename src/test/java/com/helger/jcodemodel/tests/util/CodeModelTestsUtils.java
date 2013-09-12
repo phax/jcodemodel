@@ -42,10 +42,10 @@ package com.helger.jcodemodel.tests.util;
 
 import java.io.StringWriter;
 
-import com.helger.jcodemodel.JDeclaration;
-import com.helger.jcodemodel.JExpression;
+import com.helger.jcodemodel.IJDeclaration;
+import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JFormatter;
-import com.helger.jcodemodel.JGenerable;
+import com.helger.jcodemodel.IJGenerable;
 
 /**
  * Various utilities for codemodel tests.
@@ -66,7 +66,7 @@ public class CodeModelTestsUtils
    *        expression to print into a string.
    * @return Expression formatted as a string.
    */
-  public static String toString (final JExpression expression)
+  public static String toString (final IJExpression expression)
   {
     if (expression == null)
     {
@@ -78,7 +78,7 @@ public class CodeModelTestsUtils
     return stringWriter.toString ();
   }
 
-  public static String declare (final JDeclaration declaration)
+  public static String declare (final IJDeclaration declaration)
   {
     if (declaration == null)
     {
@@ -90,7 +90,7 @@ public class CodeModelTestsUtils
     return stringWriter.toString ();
   }
 
-  public static String generate (final JGenerable generable)
+  public static String generate (final IJGenerable generable)
   {
     if (generable == null)
     {

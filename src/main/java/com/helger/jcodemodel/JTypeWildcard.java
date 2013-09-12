@@ -43,6 +43,9 @@ package com.helger.jcodemodel;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Represents a wildcard type like "? extends Foo".
  * <p>
@@ -57,33 +60,36 @@ import java.util.List;
  */
 public class JTypeWildcard extends AbstractJClass
 {
-
   private final AbstractJClass bound;
 
-  protected JTypeWildcard (final AbstractJClass bound)
+  protected JTypeWildcard (@Nonnull final AbstractJClass bound)
   {
     super (bound.owner ());
     this.bound = bound;
   }
 
+  @Nonnull
   public AbstractJClass bound ()
   {
     return bound;
   }
 
   @Override
+  @Nonnull
   public String name ()
   {
     return "? extends " + bound.name ();
   }
 
   @Override
+  @Nonnull
   public String fullName ()
   {
     return "? extends " + bound.fullName ();
   }
 
   @Override
+  @Nullable
   public JPackage _package ()
   {
     return null;
@@ -107,6 +113,7 @@ public class JTypeWildcard extends AbstractJClass
    * Returns the interface bounds of this variable.
    */
   @Override
+  @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
     return bound._implements ();
@@ -125,6 +132,7 @@ public class JTypeWildcard extends AbstractJClass
   }
 
   @Override
+  @Nonnull
   protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
     final AbstractJClass nb = bound.substituteParams (variables, bindings);
@@ -135,7 +143,7 @@ public class JTypeWildcard extends AbstractJClass
   }
 
   @Override
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     if (bound._extends () == null)
       f.print ("?"); // instead of "? extends Object"

@@ -41,9 +41,9 @@
 package com.helger.jcodemodel;
 
 /**
- * Provides default implementations for {@link JExpression}.
+ * Provides default implementations for {@link IJExpression}.
  */
-public abstract class AbstractJExpressionImpl implements JExpression
+public abstract class AbstractJExpressionImpl implements IJExpression
 {
   protected AbstractJExpressionImpl ()
   {}
@@ -53,7 +53,7 @@ public abstract class AbstractJExpressionImpl implements JExpression
   // from JOp
   //
   //
-  public final JExpression minus ()
+  public final IJExpression minus ()
   {
     return JOp.minus (this);
   }
@@ -61,122 +61,122 @@ public abstract class AbstractJExpressionImpl implements JExpression
   /**
    * Logical not <tt>'!x'</tt>.
    */
-  public final JExpression not ()
+  public final IJExpression not ()
   {
     return JOp.not (this);
   }
 
-  public final JExpression complement ()
+  public final IJExpression complement ()
   {
     return JOp.complement (this);
   }
 
-  public final JExpression incr ()
+  public final IJExpression incr ()
   {
     return JOp.incr (this);
   }
 
-  public final JExpression decr ()
+  public final IJExpression decr ()
   {
     return JOp.decr (this);
   }
 
-  public final JExpression plus (final JExpression right)
+  public final IJExpression plus (final IJExpression right)
   {
     return JOp.plus (this, right);
   }
 
-  public final JExpression minus (final JExpression right)
+  public final IJExpression minus (final IJExpression right)
   {
     return JOp.minus (this, right);
   }
 
-  public final JExpression mul (final JExpression right)
+  public final IJExpression mul (final IJExpression right)
   {
     return JOp.mul (this, right);
   }
 
-  public final JExpression div (final JExpression right)
+  public final IJExpression div (final IJExpression right)
   {
     return JOp.div (this, right);
   }
 
-  public final JExpression mod (final JExpression right)
+  public final IJExpression mod (final IJExpression right)
   {
     return JOp.mod (this, right);
   }
 
-  public final JExpression shl (final JExpression right)
+  public final IJExpression shl (final IJExpression right)
   {
     return JOp.shl (this, right);
   }
 
-  public final JExpression shr (final JExpression right)
+  public final IJExpression shr (final IJExpression right)
   {
     return JOp.shr (this, right);
   }
 
-  public final JExpression shrz (final JExpression right)
+  public final IJExpression shrz (final IJExpression right)
   {
     return JOp.shrz (this, right);
   }
 
-  public final JExpression band (final JExpression right)
+  public final IJExpression band (final IJExpression right)
   {
     return JOp.band (this, right);
   }
 
-  public final JExpression bor (final JExpression right)
+  public final IJExpression bor (final IJExpression right)
   {
     return JOp.bor (this, right);
   }
 
-  public final JExpression cand (final JExpression right)
+  public final IJExpression cand (final IJExpression right)
   {
     return JOp.cand (this, right);
   }
 
-  public final JExpression cor (final JExpression right)
+  public final IJExpression cor (final IJExpression right)
   {
     return JOp.cor (this, right);
   }
 
-  public final JExpression xor (final JExpression right)
+  public final IJExpression xor (final IJExpression right)
   {
     return JOp.xor (this, right);
   }
 
-  public final JExpression lt (final JExpression right)
+  public final IJExpression lt (final IJExpression right)
   {
     return JOp.lt (this, right);
   }
 
-  public final JExpression lte (final JExpression right)
+  public final IJExpression lte (final IJExpression right)
   {
     return JOp.lte (this, right);
   }
 
-  public final JExpression gt (final JExpression right)
+  public final IJExpression gt (final IJExpression right)
   {
     return JOp.gt (this, right);
   }
 
-  public final JExpression gte (final JExpression right)
+  public final IJExpression gte (final IJExpression right)
   {
     return JOp.gte (this, right);
   }
 
-  public final JExpression eq (final JExpression right)
+  public final IJExpression eq (final IJExpression right)
   {
     return JOp.eq (this, right);
   }
 
-  public final JExpression ne (final JExpression right)
+  public final IJExpression ne (final IJExpression right)
   {
     return JOp.ne (this, right);
   }
 
-  public final JExpression _instanceof (final AbstractJType right)
+  public final IJExpression _instanceof (final AbstractJType right)
   {
     return JOp._instanceof (this, right);
   }
@@ -206,7 +206,7 @@ public abstract class AbstractJExpressionImpl implements JExpression
     return JExpr.ref (this, field);
   }
 
-  public final JArrayCompRef component (final JExpression index)
+  public final JArrayCompRef component (final IJExpression index)
   {
     return JExpr.component (this, index);
   }

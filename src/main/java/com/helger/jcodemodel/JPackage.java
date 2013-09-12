@@ -62,9 +62,8 @@ import java.util.TreeMap;
 /**
  * A Java package.
  */
-public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnnotatable, Comparable <JPackage>, JDocCommentable
+public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, IJAnnotatable, Comparable <JPackage>, IJDocCommentable
 {
-
   /**
    * Name of the package. May be the empty string for the root package.
    */
@@ -126,7 +125,7 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
     this.name = name;
   }
 
-  public JClassContainer parentContainer ()
+  public IJClassContainer parentContainer ()
   {
     return parent ();
   }
@@ -171,10 +170,10 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
    */
   public JDefinedClass _class (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.CLASS);
+    return _class (mods, name, EClassType.CLASS);
   }
 
-  public JDefinedClass _class (final int mods, final String name, final ClassType classTypeVal) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, final String name, final EClassType classTypeVal) throws JClassAlreadyExistsException
   {
     if (classes.containsKey (name))
       throw new JClassAlreadyExistsException (classes.get (name));
@@ -235,7 +234,7 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
    */
   public JDefinedClass _interface (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.INTERFACE);
+    return _class (mods, name, EClassType.INTERFACE);
   }
 
   /**
@@ -257,7 +256,7 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
    */
   public JDefinedClass _annotationTypeDeclaration (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, ClassType.ANNOTATION_TYPE_DECL);
+    return _class (JMod.PUBLIC, name, EClassType.ANNOTATION_TYPE_DECL);
   }
 
   /**
@@ -271,7 +270,7 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
    */
   public JDefinedClass _enum (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, ClassType.ENUM);
+    return _class (JMod.PUBLIC, name, EClassType.ENUM);
   }
 
   /**
@@ -426,7 +425,7 @@ public class JPackage implements JDeclaration, JGenerable, JClassContainer, JAnn
     return annotate (owner.ref (clazz));
   }
 
-  public <W extends JAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }

@@ -47,7 +47,6 @@ package com.helger.jcodemodel;
  */
 public class JAnonymousClass extends JDefinedClass
 {
-
   /**
    * Base interface/class from which this anonymous class is built.
    */

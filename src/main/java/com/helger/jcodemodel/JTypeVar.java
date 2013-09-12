@@ -46,12 +46,11 @@ import java.util.List;
 /**
  * Type variable used to declare generics.
  * 
- * @see JGenerifiable
+ * @see IJGenerifiable
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class JTypeVar extends AbstractJClass implements JDeclaration
+public class JTypeVar extends AbstractJClass implements IJDeclaration
 {
-
   private final String name;
 
   private AbstractJClass bound;

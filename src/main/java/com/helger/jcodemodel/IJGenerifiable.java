@@ -40,28 +40,31 @@
 
 package com.helger.jcodemodel;
 
-import java.lang.annotation.Annotation;
-
 /**
- * Base interface for typed annotation writer.
- * <p>
- * Annotation compiler can generate a strongly typed annotation writer to assist
- * applications to write uses of annotations. Such typed annotation writer
- * interfaces all derive from this common interface.
- * <p>
- * The type parameter 'A' represents the
+ * Declarations that can have type variables. Something that can be made into a
+ * generic.
  * 
- * @author Kohsuke Kawaguchi
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public interface JAnnotationWriter <A extends Annotation>
+public interface IJGenerifiable
 {
   /**
-   * Gets the underlying annotation use object to which we are writing.
+   * Adds a new type variable to this declaration.
    */
-  JAnnotationUse getAnnotationUse ();
+  JTypeVar generify (String name);
 
   /**
-   * The type of the annotation that this writer is writing.
+   * Adds a new type variable to this declaration with a bound.
    */
-  Class <A> getAnnotationType ();
+  JTypeVar generify (String name, Class <?> bound);
+
+  /**
+   * Adds a new type variable to this declaration with a bound.
+   */
+  JTypeVar generify (String name, AbstractJClass bound);
+
+  /**
+   * Iterates all the type parameters of this class/interface.
+   */
+  JTypeVar [] typeParams ();
 }

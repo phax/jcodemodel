@@ -49,133 +49,133 @@ import javax.annotation.Nonnull;
  * start from leaves and then gradually build compliated expressions by
  * combining them.)
  * <p>
- * {@link JExpression} defines a series of composer methods, which returns a
- * complicated expression (by often taking other {@link JExpression}s as
+ * {@link IJExpression} defines a series of composer methods, which returns a
+ * complicated expression (by often taking other {@link IJExpression}s as
  * parameters. For example, you can build "5+2" by
  * <tt>JExpr.lit(5).add(JExpr.lit(2))</tt>
  */
-public interface JExpression extends JGenerable
+public interface IJExpression extends IJGenerable
 {
   /**
    * Returns "-[this]" from "[this]".
    */
   @Nonnull
-  JExpression minus ();
+  IJExpression minus ();
 
   /**
    * Returns "![this]" from "[this]".
    */
   @Nonnull
-  JExpression not ();
+  IJExpression not ();
 
   /**
    * Returns "~[this]" from "[this]".
    */
   @Nonnull
-  JExpression complement ();
+  IJExpression complement ();
 
   /**
    * Returns "[this]++" from "[this]".
    */
   @Nonnull
-  JExpression incr ();
+  IJExpression incr ();
 
   /**
    * Returns "[this]--" from "[this]".
    */
   @Nonnull
-  JExpression decr ();
+  IJExpression decr ();
 
   /**
    * Returns "[this]+[right]"
    */
   @Nonnull
-  JExpression plus (JExpression right);
+  IJExpression plus (IJExpression right);
 
   /**
    * Returns "[this]-[right]"
    */
   @Nonnull
-  JExpression minus (JExpression right);
+  IJExpression minus (IJExpression right);
 
   /**
    * Returns "[this]*[right]"
    */
   @Nonnull
-  JExpression mul (JExpression right);
+  IJExpression mul (IJExpression right);
 
   /**
    * Returns "[this]/[right]"
    */
   @Nonnull
-  JExpression div (JExpression right);
+  IJExpression div (IJExpression right);
 
   /**
    * Returns "[this]%[right]"
    */
   @Nonnull
-  JExpression mod (JExpression right);
+  IJExpression mod (IJExpression right);
 
   /**
    * Returns "[this]&lt;&lt;[right]"
    */
   @Nonnull
-  JExpression shl (JExpression right);
+  IJExpression shl (IJExpression right);
 
   /**
    * Returns "[this]>>[right]"
    */
   @Nonnull
-  JExpression shr (JExpression right);
+  IJExpression shr (IJExpression right);
 
   /**
    * Returns "[this]>>>[right]"
    */
   @Nonnull
-  JExpression shrz (JExpression right);
+  IJExpression shrz (IJExpression right);
 
   /** Bit-wise AND '&amp;'. */
   @Nonnull
-  JExpression band (JExpression right);
+  IJExpression band (IJExpression right);
 
   /** Bit-wise OR '|'. */
   @Nonnull
-  JExpression bor (JExpression right);
+  IJExpression bor (IJExpression right);
 
   /** Logical AND '&amp;&amp;'. */
   @Nonnull
-  JExpression cand (JExpression right);
+  IJExpression cand (IJExpression right);
 
   /** Logical OR '||'. */
   @Nonnull
-  JExpression cor (JExpression right);
+  IJExpression cor (IJExpression right);
 
   @Nonnull
-  JExpression xor (JExpression right);
+  IJExpression xor (IJExpression right);
 
   @Nonnull
-  JExpression lt (JExpression right);
+  IJExpression lt (IJExpression right);
 
   @Nonnull
-  JExpression lte (JExpression right);
+  IJExpression lte (IJExpression right);
 
   @Nonnull
-  JExpression gt (JExpression right);
+  IJExpression gt (IJExpression right);
 
   @Nonnull
-  JExpression gte (JExpression right);
+  IJExpression gte (IJExpression right);
 
   @Nonnull
-  JExpression eq (JExpression right);
+  IJExpression eq (IJExpression right);
 
   @Nonnull
-  JExpression ne (JExpression right);
+  IJExpression ne (IJExpression right);
 
   /**
    * Returns "[this] instanceof [right]"
    */
   @Nonnull
-  JExpression _instanceof (AbstractJType right);
+  IJExpression _instanceof (AbstractJType right);
 
   /**
    * Returns "[this].[method]". Arguments shall be added to the returned
@@ -198,5 +198,5 @@ public interface JExpression extends JGenerable
   JFieldRef ref (String field);
 
   @Nonnull
-  JArrayCompRef component (JExpression index);
+  JArrayCompRef component (IJExpression index);
 }

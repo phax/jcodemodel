@@ -370,7 +370,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final JExpression value)
+  public JAnnotationUse param (final String name, final IJExpression value)
   {
     addValue (name, new JAnnotationStringValue (value));
     return this;

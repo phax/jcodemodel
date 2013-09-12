@@ -60,7 +60,7 @@ import com.helger.jcodemodel.util.SecureLoader;
  * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings ({ "unchecked", "rawtypes" })
-public class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationWriter <A>> implements InvocationHandler, JAnnotationWriter <A>
+public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotationWriter <A>> implements InvocationHandler, IJAnnotationWriter <A>
 {
   /**
    * This is what we are writing to.
@@ -101,7 +101,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationW
 
   public Object invoke (final Object proxy, final Method method, final Object [] args) throws Throwable
   {
-    if (method.getDeclaringClass () == JAnnotationWriter.class)
+    if (method.getDeclaringClass () == IJAnnotationWriter.class)
     {
       try
       {
@@ -205,7 +205,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationW
     if (Annotation.class.isAssignableFrom (itemType))
     {
       final Class <? extends Annotation> r = (Class <? extends Annotation>) itemType;
-      if (!JAnnotationWriter.class.isAssignableFrom (expectedReturnType))
+      if (!IJAnnotationWriter.class.isAssignableFrom (expectedReturnType))
         throw new IllegalArgumentException ("Unexpected return type " + expectedReturnType);
       return new TypedAnnotationWriter (r, expectedReturnType, m.annotate (r)).createProxy ();
     }
@@ -270,7 +270,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationW
    * Creates a new typed annotation writer.
    */
   @Nonnull
-  static <W extends JAnnotationWriter <?>> W create (final Class <W> w, final JAnnotatable annotatable)
+  static <W extends IJAnnotationWriter <?>> W create (final Class <W> w, final IJAnnotatable annotatable)
   {
     final Class <? extends Annotation> a = findAnnotationType (w);
     return (W) new TypedAnnotationWriter (a, w, annotatable.annotate (a)).createProxy ();
@@ -283,7 +283,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends JAnnotationW
       if (t instanceof ParameterizedType)
       {
         final ParameterizedType p = (ParameterizedType) t;
-        if (p.getRawType () == JAnnotationWriter.class)
+        if (p.getRawType () == IJAnnotationWriter.class)
           return (Class <? extends Annotation>) p.getActualTypeArguments ()[0];
       }
       if (t instanceof Class <?>)

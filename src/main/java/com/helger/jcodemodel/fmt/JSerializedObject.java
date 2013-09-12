@@ -52,7 +52,6 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  */
 public class JSerializedObject extends AbstractJResourceFile
 {
-
   private final Object obj;
 
   /**

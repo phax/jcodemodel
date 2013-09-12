@@ -45,14 +45,12 @@ import javax.annotation.Nonnull;
 /**
  * While statement
  */
-
-public class JWhileLoop implements JStatement
+public class JWhileLoop implements IJStatement
 {
-
   /**
    * Test part of While statement for determining exit state
    */
-  private final JExpression test;
+  private final IJExpression test;
 
   /**
    * JBlock of statements which makes up body of this While statement
@@ -62,13 +60,13 @@ public class JWhileLoop implements JStatement
   /**
    * Construct a While statment
    */
-  protected JWhileLoop (@Nonnull final JExpression test)
+  protected JWhileLoop (@Nonnull final IJExpression test)
   {
     this.test = test;
   }
 
   @Nonnull
-  public JExpression test ()
+  public IJExpression test ()
   {
     return test;
   }

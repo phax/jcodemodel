@@ -48,17 +48,17 @@ import javax.annotation.Nonnull;
  * 
  * @author Bhakti
  */
-public class JForEach implements JStatement
+public class JForEach implements IJStatement
 {
   private final AbstractJType type;
   private final String var;
   private JBlock body; // lazily created
-  private final JExpression collection;
+  private final IJExpression collection;
   private final JVar loopVar;
 
   protected JForEach (@Nonnull final AbstractJType vartype,
                       @Nonnull final String variable,
-                      @Nonnull final JExpression collection)
+                      @Nonnull final IJExpression collection)
   {
     this.type = vartype;
     this.var = variable;
@@ -82,7 +82,7 @@ public class JForEach implements JStatement
   }
 
   @Nonnull
-  public JExpression collection ()
+  public IJExpression collection ()
   {
     return collection;
   }

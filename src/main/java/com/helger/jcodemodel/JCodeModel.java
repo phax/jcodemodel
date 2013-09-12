@@ -81,13 +81,13 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  * fashion. For example, you create a class from {@link JCodeModel}, which gives
  * you a {@link JDefinedClass}. Then you invoke a method on it to generate a new
  * method, which gives you {@link JMethod}, and so on. There are a few
- * exceptions to this, most notably building {@link JExpression}s, but generally
+ * exceptions to this, most notably building {@link IJExpression}s, but generally
  * you work with CodeModel in a top-down fashion. Because of this design, most
  * of the CodeModel classes aren't directly instanciable.
  * <h2>Where to go from here?</h2>
  * <p>
  * Most of the time you'd want to populate new type definitions in a
- * {@link JCodeModel}. See {@link #_class(String, ClassType)}.
+ * {@link JCodeModel}. See {@link #_class(String, EClassType)}.
  */
 public final class JCodeModel
 {
@@ -177,7 +177,7 @@ public final class JCodeModel
    */
   public JDefinedClass _class (final String fullyqualifiedName) throws JClassAlreadyExistsException
   {
-    return _class (fullyqualifiedName, ClassType.CLASS);
+    return _class (fullyqualifiedName, EClassType.CLASS);
   }
 
   /**
@@ -199,7 +199,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (final int mods, final String fullyqualifiedName, final ClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
   {
     final int idx = fullyqualifiedName.lastIndexOf ('.');
     if (idx < 0)
@@ -214,7 +214,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (final String fullyqualifiedName, final ClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
   {
     return _class (JMod.PUBLIC, fullyqualifiedName, t);
   }
@@ -582,7 +582,7 @@ public final class JCodeModel
    * the _package() method, which obtains the owner JPackage object, which is
    * scoped to JCodeModel.
    */
-  private class JReferencedClass extends AbstractJClass implements JDeclaration
+  private class JReferencedClass extends AbstractJClass implements IJDeclaration
   {
     private final Class <?> _class;
 

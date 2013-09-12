@@ -45,19 +45,18 @@ import javax.annotation.Nonnull;
 /**
  * Assignment statements, which are also expressions.
  */
-public class JAssignment extends AbstractJExpressionImpl implements JStatement
+public class JAssignment extends AbstractJExpressionImpl implements IJStatement
 {
-
-  private final JAssignmentTarget lhs;
-  private final JExpression rhs;
+  private final IJAssignmentTarget lhs;
+  private final IJExpression rhs;
   private final String op;
 
-  protected JAssignment (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression rhs)
+  protected JAssignment (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     this (lhs, rhs, "");
   }
 
-  protected JAssignment (@Nonnull final JAssignmentTarget lhs, @Nonnull final JExpression rhs, @Nonnull final String op)
+  protected JAssignment (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs, @Nonnull final String op)
   {
     this.lhs = lhs;
     this.rhs = rhs;
@@ -65,13 +64,13 @@ public class JAssignment extends AbstractJExpressionImpl implements JStatement
   }
 
   @Nonnull
-  public JAssignmentTarget lhs ()
+  public IJAssignmentTarget lhs ()
   {
     return lhs;
   }
 
   @Nonnull
-  public JExpression rhs ()
+  public IJExpression rhs ()
   {
     return rhs;
   }

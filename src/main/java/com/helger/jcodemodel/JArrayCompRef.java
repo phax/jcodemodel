@@ -45,17 +45,17 @@ import javax.annotation.Nonnull;
 /**
  * array component reference.
  */
-public class JArrayCompRef extends AbstractJExpressionImpl implements JAssignmentTarget
+public class JArrayCompRef extends AbstractJExpressionImpl implements IJAssignmentTarget
 {
   /**
    * JArray expression upon which this component will be accessed.
    */
-  private final JExpression array;
+  private final IJExpression array;
 
   /**
    * Integer expression representing index of the component
    */
-  private final JExpression index;
+  private final IJExpression index;
 
   /**
    * JArray component reference constructor given an array expression and index.
@@ -65,7 +65,7 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements JAssignmen
    * @param index
    *        JExpression for index of component to access
    */
-  protected JArrayCompRef (@Nonnull final JExpression array, @Nonnull final JExpression index)
+  protected JArrayCompRef (@Nonnull final IJExpression array, @Nonnull final IJExpression index)
   {
     if (array == null || index == null)
       throw new NullPointerException ();
@@ -74,13 +74,13 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements JAssignmen
   }
 
   @Nonnull
-  public JExpression array ()
+  public IJExpression array ()
   {
     return array;
   }
 
   @Nonnull
-  public JExpression index ()
+  public IJExpression index ()
   {
     return index;
   }
@@ -91,13 +91,13 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements JAssignmen
   }
 
   @Nonnull
-  public JExpression assign (@Nonnull final JExpression rhs)
+  public IJExpression assign (@Nonnull final IJExpression rhs)
   {
     return JExpr.assign (this, rhs);
   }
 
   @Nonnull
-  public JExpression assignPlus (@Nonnull final JExpression rhs)
+  public IJExpression assignPlus (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignPlus (this, rhs);
   }

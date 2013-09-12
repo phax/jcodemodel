@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 /**
  * JContinue statement
  */
-public class JContinue implements JStatement
+public class JContinue implements IJStatement
 {
   private final JLabel label;
 

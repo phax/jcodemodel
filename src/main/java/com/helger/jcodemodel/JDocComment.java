@@ -55,7 +55,7 @@ import javax.annotation.Nullable;
  * would be nice if we have JComment class and we can derive this class from
  * there.
  */
-public class JDocComment extends JCommentPart implements JGenerable
+public class JDocComment extends JCommentPart implements IJGenerable
 {
   private static final String INDENT = " *     ";
 

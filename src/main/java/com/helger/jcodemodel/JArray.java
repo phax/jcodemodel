@@ -53,10 +53,10 @@ import javax.annotation.Nullable;
 public class JArray extends AbstractJExpressionImpl
 {
   private final AbstractJType type;
-  private final JExpression size;
-  private List <JExpression> exprs;
+  private final IJExpression size;
+  private List <IJExpression> exprs;
 
-  protected JArray (@Nonnull final AbstractJType type, @Nullable final JExpression size)
+  protected JArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
   {
     this.type = type;
     this.size = size;
@@ -69,7 +69,7 @@ public class JArray extends AbstractJExpressionImpl
   }
 
   @Nullable
-  public JExpression size ()
+  public IJExpression size ()
   {
     return size;
   }
@@ -78,19 +78,19 @@ public class JArray extends AbstractJExpressionImpl
    * Add an element to the array initializer
    */
   @Nonnull
-  public JArray add (@Nonnull final JExpression e)
+  public JArray add (@Nonnull final IJExpression e)
   {
     if (exprs == null)
-      exprs = new ArrayList <JExpression> ();
+      exprs = new ArrayList <IJExpression> ();
     exprs.add (e);
     return this;
   }
 
   @Nonnull
-  public List <JExpression> exprs ()
+  public List <IJExpression> exprs ()
   {
     if (exprs == null)
-      exprs = new ArrayList <JExpression> ();
+      exprs = new ArrayList <IJExpression> ();
     return Collections.unmodifiableList (exprs);
   }
 

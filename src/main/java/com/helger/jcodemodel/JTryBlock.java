@@ -47,10 +47,8 @@ import java.util.List;
 /**
  * Try statement with Catch and/or Finally clause
  */
-
-public class JTryBlock implements JStatement
+public class JTryBlock implements IJStatement
 {
-
   private final JBlock body = new JBlock ();
   private final List <JCatchBlock> catches = new ArrayList <JCatchBlock> ();
   private JBlock _finally;

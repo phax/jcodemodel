@@ -40,14 +40,42 @@
 
 package com.helger.jcodemodel;
 
-/**
- * Marker interface for code components that can be placed to the left of '=' in
- * an assignment. A left hand value can always be a right hand value, so this
- * interface derives from {@link JExpression}.
- */
-public interface JAssignmentTarget extends  JExpression
-{
-  JExpression assign (JExpression rhs);
+import java.lang.annotation.Annotation;
+import java.util.Collection;
 
-  JExpression assignPlus (JExpression rhs);
+/**
+ * Annotatable program elements.
+ * 
+ * @author Kohsuke Kawaguchi
+ */
+public interface IJAnnotatable
+{
+  /**
+   * Adds an annotation to this program element.
+   * 
+   * @param clazz
+   *        The annotation class to annotate the program element with
+   */
+  JAnnotationUse annotate (AbstractJClass clazz);
+
+  /**
+   * Adds an annotation to this program element.
+   * 
+   * @param clazz
+   *        The annotation class to annotate the program element with
+   */
+  JAnnotationUse annotate (Class <? extends Annotation> clazz);
+
+  /**
+   * Adds an annotation to this program element and returns a type-safe writer
+   * to fill in the values of such annotations.
+   */
+  <W extends IJAnnotationWriter <?>> W annotate2 (Class <W> clazz);
+
+  /**
+   * Read-only live view of all annotations on this {@link IJAnnotatable}
+   * 
+   * @return Can be empty but never null.
+   */
+  Collection <JAnnotationUse> annotations ();
 }

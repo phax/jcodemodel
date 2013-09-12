@@ -44,7 +44,7 @@ package com.helger.jcodemodel;
  * A representation of a type in codeModel. A type is always either primitive (
  * {@link JPrimitiveType}) or a reference type ({@link AbstractJClass}).
  */
-public abstract class AbstractJType implements JGenerable, Comparable <AbstractJType>
+public abstract class AbstractJType implements IJGenerable, Comparable <AbstractJType>
 {
 
   /**

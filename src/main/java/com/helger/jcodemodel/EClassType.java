@@ -40,31 +40,34 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
- * Declarations that can have type variables. Something that can be made into a
- * generic.
+ * This helps enable whether the JDefinedClass is a Class or Interface or
+ * AnnotationTypeDeclaration or Enum
  * 
- * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public interface JGenerifiable
+public enum EClassType
 {
-  /**
-   * Adds a new type variable to this declaration.
-   */
-  JTypeVar generify (String name);
+  CLASS ("class"),
+  INTERFACE ("interface"),
+  ANNOTATION_TYPE_DECL ("@interface"),
+  ENUM ("enum");
 
   /**
-   * Adds a new type variable to this declaration with a bound.
+   * The keyword used to declare this type.
    */
-  JTypeVar generify (String name, Class <?> bound);
+  private final String declarationToken;
 
-  /**
-   * Adds a new type variable to this declaration with a bound.
-   */
-  JTypeVar generify (String name, AbstractJClass bound);
+  private EClassType (@Nonnull final String token)
+  {
+    this.declarationToken = token;
+  }
 
-  /**
-   * Iterates all the type parameters of this class/interface.
-   */
-  JTypeVar [] typeParams ();
+  @Nonnull
+  public String declarationToken ()
+  {
+    return declarationToken;
+  }
 }

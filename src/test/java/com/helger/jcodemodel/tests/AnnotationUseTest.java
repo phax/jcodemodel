@@ -43,7 +43,7 @@ import org.junit.Test;
 
 import com.helger.jcodemodel.JAnnotationArrayMember;
 import com.helger.jcodemodel.JAnnotationUse;
-import com.helger.jcodemodel.JAnnotationWriter;
+import com.helger.jcodemodel.IJAnnotationWriter;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JEnumConstant;
@@ -129,7 +129,7 @@ public class AnnotationUseTest
     String ns();
   }
 
-  interface XmlElementW extends JAnnotationWriter <XmlElement>
+  interface XmlElementW extends IJAnnotationWriter <XmlElement>
   {
     XmlElementW value (String s);
 

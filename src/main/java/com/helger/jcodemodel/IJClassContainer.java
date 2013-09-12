@@ -45,7 +45,7 @@ import java.util.Iterator;
 /**
  * The common aspect of a package and a class.
  */
-public interface JClassContainer
+public interface IJClassContainer
 {
   /**
    * Returns true if the container is a class.
@@ -102,7 +102,7 @@ public interface JClassContainer
   /**
    * Creates a new class/enum/interface/annotation.
    */
-  JDefinedClass _class (int mods, String name, ClassType kind) throws JClassAlreadyExistsException;
+  JDefinedClass _class (int mods, String name, EClassType kind) throws JClassAlreadyExistsException;
 
   /**
    * Returns an iterator that walks the nested classes defined in this class.
@@ -115,7 +115,7 @@ public interface JClassContainer
    * outer-most class, this method returns a package to which it belongs. If
    * this is an inner class, this method returns the outer class.
    */
-  JClassContainer parentContainer ();
+  IJClassContainer parentContainer ();
 
   /**
    * Gets the nearest package parent.

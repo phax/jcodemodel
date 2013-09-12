@@ -55,7 +55,6 @@ import com.helger.jcodemodel.JPackage;
  */
 public class PrologCodeWriter extends FilterCodeWriter
 {
-
   /** prolog comment */
   private final String prolog;
 

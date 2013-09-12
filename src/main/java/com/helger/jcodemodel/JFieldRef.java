@@ -46,14 +46,13 @@ import javax.annotation.Nullable;
 /**
  * Field Reference
  */
-
-public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTarget
+public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTarget
 {
   /**
    * Object expression upon which this field will be accessed, or null for the
    * implicit 'this'.
    */
-  private final JGenerable object;
+  private final IJGenerable object;
 
   /**
    * Name of the field to be accessed. Either this or {@link #var} is set.
@@ -79,12 +78,12 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
    * @param name
    *        Name of field to access
    */
-  protected JFieldRef (@Nullable final JExpression object, @Nonnull final String name)
+  protected JFieldRef (@Nullable final IJExpression object, @Nonnull final String name)
   {
     this (object, name, false);
   }
 
-  protected JFieldRef (@Nullable final JExpression object, @Nonnull final JVar v)
+  protected JFieldRef (@Nullable final IJExpression object, @Nonnull final JVar v)
   {
     this (object, v, false);
   }
@@ -102,7 +101,7 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
     this (type, v, false);
   }
 
-  protected JFieldRef (@Nullable final JGenerable object, @Nonnull final String name, final boolean explicitThis)
+  protected JFieldRef (@Nullable final IJGenerable object, @Nonnull final String name, final boolean explicitThis)
   {
     this.explicitThis = explicitThis;
     this.object = object;
@@ -111,7 +110,7 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
     this.name = name;
   }
 
-  protected JFieldRef (@Nullable final JGenerable object, @Nonnull final JVar var, final boolean explicitThis)
+  protected JFieldRef (@Nullable final IJGenerable object, @Nonnull final JVar var, final boolean explicitThis)
   {
     this.explicitThis = explicitThis;
     this.object = object;
@@ -160,13 +159,13 @@ public class JFieldRef extends AbstractJExpressionImpl implements JAssignmentTar
   }
 
   @Nonnull
-  public JExpression assign (@Nonnull final JExpression rhs)
+  public IJExpression assign (@Nonnull final IJExpression rhs)
   {
     return JExpr.assign (this, rhs);
   }
 
   @Nonnull
-  public JExpression assignPlus (@Nonnull final JExpression rhs)
+  public IJExpression assignPlus (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignPlus (this, rhs);
   }

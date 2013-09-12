@@ -62,26 +62,25 @@ import com.helger.jcodemodel.util.SecureLoader;
 /**
  * Statically generated Java soruce file.
  * <p>
- * This {@link AbstractJResourceFile} implementation will generate a Java source file by
- * copying the source code from a resource.
+ * This {@link AbstractJResourceFile} implementation will generate a Java source
+ * file by copying the source code from a resource.
  * <p>
  * While copying a resource, we look for a package declaration and replace it
  * with the target package name. This allows the static Java source code to have
  * an arbitrary package declaration.
  * <p>
- * You can also use the getJClass method to obtain a {@link AbstractJClass} object that
- * represents the static file. This allows the client code to refer to the class
- * from other CodeModel generated code.
+ * You can also use the getJClass method to obtain a {@link AbstractJClass}
+ * object that represents the static file. This allows the client code to refer
+ * to the class from other CodeModel generated code.
  * <p>
  * Note that because we don't parse the static Java source code, the returned
- * {@link AbstractJClass} object doesn't respond to methods like "isInterface" or
- * "_extends",
+ * {@link AbstractJClass} object doesn't respond to methods like "isInterface"
+ * or "_extends",
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JStaticJavaFile extends AbstractJResourceFile
+public class JStaticJavaFile extends AbstractJResourceFile
 {
-
   private final JPackage pkg;
   private final String className;
   private final URL source;

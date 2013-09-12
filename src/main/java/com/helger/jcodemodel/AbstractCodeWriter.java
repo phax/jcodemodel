@@ -40,12 +40,15 @@
 
 package com.helger.jcodemodel;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+
+import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
@@ -54,18 +57,19 @@ import com.helger.jcodemodel.util.UnicodeEscapeWriter;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public abstract class AbstractCodeWriter
+public abstract class AbstractCodeWriter implements Closeable
 {
   /**
    * Encoding to be used by the writer. Null means platform specific encoding.
    */
   private final Charset encoding;
 
-  protected AbstractCodeWriter (final Charset encoding)
+  protected AbstractCodeWriter (@Nullable final Charset encoding)
   {
     this.encoding = encoding;
   }
 
+  @Nullable
   public Charset encoding ()
   {
     return encoding;

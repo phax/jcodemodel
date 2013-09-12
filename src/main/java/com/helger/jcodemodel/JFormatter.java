@@ -424,22 +424,22 @@ public class JFormatter implements Closeable
    *        the JGenerable object
    */
   @Nonnull
-  public JFormatter generable (@Nonnull final JGenerable g)
+  public JFormatter generable (@Nonnull final IJGenerable g)
   {
     g.generate (this);
     return this;
   }
 
   /**
-   * Produces {@link JGenerable}s separated by ','
+   * Produces {@link IJGenerable}s separated by ','
    */
   @Nonnull
-  public JFormatter g (@Nonnull final Collection <? extends JGenerable> list)
+  public JFormatter g (@Nonnull final Collection <? extends IJGenerable> list)
   {
     boolean first = true;
     if (!list.isEmpty ())
     {
-      for (final JGenerable item : list)
+      for (final IJGenerable item : list)
       {
         if (!first)
           print (',');
@@ -457,7 +457,7 @@ public class JFormatter implements Closeable
    *        the JDeclaration object
    */
   @Nonnull
-  public JFormatter declaration (@Nonnull final JDeclaration d)
+  public JFormatter declaration (@Nonnull final IJDeclaration d)
   {
     d.declare (this);
     return this;
@@ -470,7 +470,7 @@ public class JFormatter implements Closeable
    *        the JStatement object
    */
   @Nonnull
-  public JFormatter statement (@Nonnull final JStatement s)
+  public JFormatter statement (@Nonnull final IJStatement s)
   {
     s.state (this);
     return this;

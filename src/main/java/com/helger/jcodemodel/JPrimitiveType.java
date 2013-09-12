@@ -133,7 +133,7 @@ public class JPrimitiveType extends AbstractJType
    * clear how this method works for VOID.
    */
   @Nonnull
-  public JExpression wrap (@Nonnull final JExpression exp)
+  public IJExpression wrap (@Nonnull final IJExpression exp)
   {
     return JExpr._new (boxify ()).arg (exp);
   }
@@ -143,7 +143,7 @@ public class JPrimitiveType extends AbstractJType
    * works for VOID.
    */
   @Nonnull
-  public JExpression unwrap (@Nonnull final JExpression exp)
+  public IJExpression unwrap (@Nonnull final IJExpression exp)
   {
     // it just so happens that the unwrap method is always
     // things like "intValue" or "booleanValue".

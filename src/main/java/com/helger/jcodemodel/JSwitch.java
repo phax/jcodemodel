@@ -49,13 +49,12 @@ import javax.annotation.Nonnull;
 /**
  * Switch statement
  */
-public class JSwitch implements JStatement
+public class JSwitch implements IJStatement
 {
-
   /**
    * Test part of switch statement.
    */
-  private final JExpression test;
+  private final IJExpression test;
 
   /**
    * vector of JCases.
@@ -70,13 +69,13 @@ public class JSwitch implements JStatement
   /**
    * Construct a While statment
    */
-  protected JSwitch (@Nonnull final JExpression test)
+  protected JSwitch (@Nonnull final IJExpression test)
   {
     this.test = test;
   }
 
   @Nonnull
-  public JExpression test ()
+  public IJExpression test ()
   {
     return test;
   }
@@ -88,7 +87,7 @@ public class JSwitch implements JStatement
   }
 
   @Nonnull
-  public JCase _case (@Nonnull final JExpression label)
+  public JCase _case (@Nonnull final IJExpression label)
   {
     final JCase c = new JCase (label);
     cases.add (c);

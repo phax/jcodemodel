@@ -43,11 +43,11 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 
 /**
- * Common interface for code components that can generate uses of themselves as
- * statements.
+ * Common interface for code components that can generate declarations of
+ * themselves.
  */
 
-public interface JStatement
+public interface IJDeclaration
 {
-  void state (@Nonnull JFormatter f);
+  void declare (@Nonnull JFormatter f);
 }

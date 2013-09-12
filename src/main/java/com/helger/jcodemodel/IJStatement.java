@@ -40,42 +40,13 @@
 
 package com.helger.jcodemodel;
 
-import java.lang.annotation.Annotation;
-import java.util.Collection;
+import javax.annotation.Nonnull;
 
 /**
- * Annotatable program elements.
- * 
- * @author Kohsuke Kawaguchi
+ * Common interface for code components that can generate uses of themselves as
+ * statements.
  */
-public interface JAnnotatable
+public interface IJStatement
 {
-  /**
-   * Adds an annotation to this program element.
-   * 
-   * @param clazz
-   *        The annotation class to annotate the program element with
-   */
-  JAnnotationUse annotate (AbstractJClass clazz);
-
-  /**
-   * Adds an annotation to this program element.
-   * 
-   * @param clazz
-   *        The annotation class to annotate the program element with
-   */
-  JAnnotationUse annotate (Class <? extends Annotation> clazz);
-
-  /**
-   * Adds an annotation to this program element and returns a type-safe writer
-   * to fill in the values of such annotations.
-   */
-  <W extends JAnnotationWriter <?>> W annotate2 (Class <W> clazz);
-
-  /**
-   * Read-only live view of all annotations on this {@link JAnnotatable}
-   * 
-   * @return Can be empty but never null.
-   */
-  Collection <JAnnotationUse> annotations ();
+  void state (@Nonnull JFormatter f);
 }

@@ -63,7 +63,6 @@ import javax.annotation.Nullable;
  */
 public class JCommentPart extends ArrayList <Object>
 {
-
   private static final long serialVersionUID = 1L;
 
   public JCommentPart ()

@@ -45,5 +45,5 @@ package com.helger.jcodemodel;
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public abstract class AbstractJAnnotationValue implements JGenerable
+public abstract class AbstractJAnnotationValue implements IJGenerable
 {}

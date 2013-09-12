@@ -40,13 +40,28 @@
 
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
+import java.lang.annotation.Annotation;
 
 /**
- * Common interface for code components that can generate uses of themselves.
+ * Base interface for typed annotation writer.
+ * <p>
+ * Annotation compiler can generate a strongly typed annotation writer to assist
+ * applications to write uses of annotations. Such typed annotation writer
+ * interfaces all derive from this common interface.
+ * <p>
+ * The type parameter 'A' represents the
+ * 
+ * @author Kohsuke Kawaguchi
  */
-
-public interface JGenerable
+public interface IJAnnotationWriter <A extends Annotation>
 {
-  void generate (@Nonnull JFormatter f);
+  /**
+   * Gets the underlying annotation use object to which we are writing.
+   */
+  JAnnotationUse getAnnotationUse ();
+
+  /**
+   * The type of the annotation that this writer is writing.
+   */
+  Class <A> getAnnotationType ();
 }

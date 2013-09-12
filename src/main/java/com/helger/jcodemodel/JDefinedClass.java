@@ -66,9 +66,8 @@ import javax.annotation.Nullable;
  * {@link #method(int, AbstractJType, String)} and
  * {@link #field(int, AbstractJType, String)}.
  */
-public class JDefinedClass extends AbstractJClass implements JDeclaration, JClassContainer, JGenerifiable, JAnnotatable, JDocCommentable
+public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJClassContainer, IJGenerifiable, IJAnnotatable, IJDocCommentable
 {
-
   /** Name of this class. Null if anonymous. */
   private final String name;
 
@@ -132,12 +131,12 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    * nested class, this is {@link JDefinedClass}. If this is an anonymous class,
    * this constructor shouldn't be used.
    */
-  private final JClassContainer outer;
+  private final IJClassContainer outer;
 
   /**
    * Default value is class or interface or annotationTypeDeclaration or enum
    */
-  private final ClassType classType;
+  private final EClassType classType;
 
   /**
    * List containing the enum value declarations
@@ -157,7 +156,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   private List <JAnnotationUse> annotations;
 
   /**
-   * Helper class to implement {@link JGenerifiable}.
+   * Helper class to implement {@link IJGenerifiable}.
    */
   private final AbstractJGenerifiableImpl generifiable = new AbstractJGenerifiableImpl ()
   {
@@ -168,7 +167,10 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
     }
   };
 
-  protected JDefinedClass (final JClassContainer parent, final int mods, final String name, final ClassType classTypeval)
+  protected JDefinedClass (final IJClassContainer parent,
+                           final int mods,
+                           final String name,
+                           final EClassType classTypeval)
   {
     this (mods, name, parent, parent.owner (), classTypeval);
   }
@@ -181,9 +183,9 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
     this (mods, name, null, owner);
   }
 
-  private JDefinedClass (final int mods, final String name, final JClassContainer parent, final JCodeModel owner)
+  private JDefinedClass (final int mods, final String name, final IJClassContainer parent, final JCodeModel owner)
   {
-    this (mods, name, parent, owner, ClassType.CLASS);
+    this (mods, name, parent, owner, EClassType.CLASS);
   }
 
   /**
@@ -196,9 +198,9 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   private JDefinedClass (final int mods,
                          final String name,
-                         final JClassContainer parent,
+                         final IJClassContainer parent,
                          final JCodeModel owner,
-                         final ClassType classTypeVal)
+                         final EClassType classTypeVal)
   {
     super (owner);
 
@@ -254,7 +256,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _extends (final AbstractJClass superClass)
   {
-    if (this.classType == ClassType.INTERFACE)
+    if (this.classType == EClassType.INTERFACE)
       if (superClass.isInterface ())
       {
         return this._implements (superClass);
@@ -385,7 +387,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   @Override
   public boolean isInterface ()
   {
-    return this.classType == ClassType.INTERFACE;
+    return this.classType == EClassType.INTERFACE;
   }
 
   @Override
@@ -428,7 +430,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    *        Initial value of this field.
    * @return Newly generated field
    */
-  public JFieldVar field (final int mods, final AbstractJType type, final String name, final JExpression init)
+  public JFieldVar field (final int mods, final AbstractJType type, final String name, final IJExpression init)
   {
     final JFieldVar f = new JFieldVar (this, JMods.forField (mods), type, name, init);
 
@@ -446,7 +448,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public boolean isAnnotationTypeDeclaration ()
   {
-    return this.classType == ClassType.ANNOTATION_TYPE_DECL;
+    return this.classType == EClassType.ANNOTATION_TYPE_DECL;
 
   }
 
@@ -461,7 +463,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _annotationTypeDeclaration (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, ClassType.ANNOTATION_TYPE_DECL);
+    return _class (JMod.PUBLIC, name, EClassType.ANNOTATION_TYPE_DECL);
   }
 
   /**
@@ -475,7 +477,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _enum (final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, ClassType.ENUM);
+    return _class (JMod.PUBLIC, name, EClassType.ENUM);
   }
 
   /**
@@ -491,15 +493,15 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _enum (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.ENUM);
+    return _class (mods, name, EClassType.ENUM);
   }
 
-  public ClassType getClassType ()
+  public EClassType getClassType ()
   {
     return this.classType;
   }
 
-  public JFieldVar field (final int mods, final Class <?> type, final String name, final JExpression init)
+  public JFieldVar field (final int mods, final Class <?> type, final String name, final IJExpression init)
   {
     return field (mods, owner ()._ref (type), name, init);
   }
@@ -663,10 +665,10 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _class (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.CLASS);
+    return _class (mods, name, EClassType.CLASS);
   }
 
-  public JDefinedClass _class (final int mods, final String name, final ClassType classTypeVal) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, final String name, final EClassType classTypeVal) throws JClassAlreadyExistsException
   {
 
     String NAME;
@@ -703,7 +705,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
    */
   public JDefinedClass _interface (final int mods, final String name) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, ClassType.INTERFACE);
+    return _class (mods, name, EClassType.INTERFACE);
   }
 
   /**
@@ -802,7 +804,7 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
     {
       if (superClass == null)
         f.newline ();
-      f.indent ().print (classType == ClassType.INTERFACE ? "extends" : "implements");
+      f.indent ().print (classType == EClassType.INTERFACE ? "extends" : "implements");
       f.g (interfaces);
       f.newline ().outdent ();
     }
@@ -868,13 +870,13 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
   @Override
   public final JPackage _package ()
   {
-    JClassContainer p = outer;
+    IJClassContainer p = outer;
     while (!(p instanceof JPackage))
       p = p.parentContainer ();
     return (JPackage) p;
   }
 
-  public final JClassContainer parentContainer ()
+  public final IJClassContainer parentContainer ()
   {
     return outer;
   }
@@ -932,13 +934,13 @@ public class JDefinedClass extends AbstractJClass implements JDeclaration, JClas
     return a;
   }
 
-  public <W extends JAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }
 
   /**
-   * {@link JAnnotatable#annotations()}
+   * {@link IJAnnotatable#annotations()}
    */
   public Collection <JAnnotationUse> annotations ()
   {
