@@ -494,6 +494,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     // write resources
     for (final AbstractJResourceFile rsrc : resources)
     {
+      @SuppressWarnings ("resource")
       final AbstractCodeWriter cw = rsrc.isResource () ? res : src;
       final OutputStream os = new BufferedOutputStream (cw.openBinary (this, rsrc.name ()));
       rsrc.build (os);
