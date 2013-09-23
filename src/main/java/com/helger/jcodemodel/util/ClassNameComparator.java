@@ -52,7 +52,7 @@ import com.helger.jcodemodel.AbstractJClass;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class ClassNameComparator implements Comparator <AbstractJClass>
+public final class ClassNameComparator implements Comparator <AbstractJClass>
 {
   public static final Comparator <AbstractJClass> theInstance = new ClassNameComparator ();
 

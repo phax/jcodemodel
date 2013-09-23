@@ -44,6 +44,9 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+
 /**
  * {@link Writer} that escapes characters that are unsafe as Javadoc comments.
  * Such characters include '&lt;' and '&amp;'.
@@ -60,7 +63,7 @@ import java.io.Writer;
  */
 public class JavadocEscapeWriter extends FilterWriter
 {
-  public JavadocEscapeWriter (final Writer next)
+  public JavadocEscapeWriter (@Nonnull final Writer next)
   {
     super (next);
   }
@@ -78,28 +81,27 @@ public class JavadocEscapeWriter extends FilterWriter
   }
 
   @Override
-  public void write (final char [] buf, final int off, final int len) throws IOException
+  public void write (@Nonnull final char [] buf, @Nonnegative final int off, @Nonnegative final int len) throws IOException
   {
     for (int i = 0; i < len; i++)
       write (buf[off + i]);
   }
 
   @Override
-  public void write (final char [] buf) throws IOException
+  public void write (@Nonnull final char [] buf) throws IOException
   {
     write (buf, 0, buf.length);
   }
 
   @Override
-  public void write (final String buf, final int off, final int len) throws IOException
+  public void write (@Nonnull final String buf, @Nonnegative final int off, @Nonnegative final int len) throws IOException
   {
     write (buf.toCharArray (), off, len);
   }
 
   @Override
-  public void write (final String buf) throws IOException
+  public void write (@Nonnull final String buf) throws IOException
   {
     write (buf.toCharArray (), 0, buf.length ());
   }
-
 }

@@ -36,12 +36,9 @@ package com.helger.jcodemodel.tests;
  * holder.
  */
 
-import java.io.IOException;
-
 import org.junit.Test;
 
 import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
@@ -75,64 +72,46 @@ public class VarArgsTest
   @Test
   public void main () throws Exception
   {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("Test");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
+    m.param (String.class, "param1");
+    m.param (Integer.class, "param2");
+    final JVar var = m.varParam (Object.class, "param3");
+    System.out.println ("First varParam " + var);
 
-    try
-    {
-      final JCodeModel cm = new JCodeModel ();
-      final JDefinedClass cls = cm._class ("Test");
-      final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
-      m.param (String.class, "param1");
-      m.param (Integer.class, "param2");
-      final JVar var = m.varParam (Object.class, "param3");
-      System.out.println ("First varParam " + var);
+    // checking for param after varParam it behaves ok
+    // JVar[] var1 = m.varParam(Float.class, "param4");
+    final AbstractJClass string = cm.ref (String.class);
+    final AbstractJClass stringArray = string.array ();
+    // JVar param5 =
+    m.param (String.class, "param5");
 
-      // checking for param after varParam it behaves ok
-      // JVar[] var1 = m.varParam(Float.class, "param4");
-      final AbstractJClass string = cm.ref (String.class);
-      final AbstractJClass stringArray = string.array ();
-      // JVar param5 =
-      m.param (String.class, "param5");
+    final JForLoop forloop = m.body ()._for ();
 
-      final JForLoop forloop = m.body ()._for ();
+    final JVar $count = forloop.init (cm.INT, "count", JExpr.lit (0));
 
-      final JVar $count = forloop.init (cm.INT, "count", JExpr.lit (0));
+    forloop.test ($count.lt (JExpr.direct ("param3.length")));
+    forloop.update ($count.incr ());
 
-      forloop.test ($count.lt (JExpr.direct ("param3.length")));
-      forloop.update ($count.incr ());
+    final JFieldRef out = cm.ref (System.class).staticRef ("out");
 
-      final JFieldRef out = cm.ref (System.class).staticRef ("out");
+    // JVar typearray =
+    m.listVarParam ();
 
-      // JVar typearray =
-      m.listVarParam ();
+    // JInvocation invocation =
+    forloop.body ().invoke (out, "println").arg (JExpr.direct ("param3[count]"));
 
-      // JInvocation invocation =
-      forloop.body ().invoke (out, "println").arg (JExpr.direct ("param3[count]"));
+    final JMethod main = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "main");
+    main.param (stringArray, "args");
+    main.body ()
+        .directStatement ("new Test().foo(new String(\"Param1\"),new Integer(5),null,new String(\"Param3\"),new String(\"Param4\"));");// new
+                                                                                                                                       // String("Param1"))"");//
+                                                                                                                                       // "new Integer(5),+//                "null," +//                "new
+                                                                                                                                       // String("first")," +//                "
+                                                                                                                                       // new
+                                                                                                                                       // String("Second"))");
 
-      final JMethod main = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "main");
-      main.param (stringArray, "args");
-      main.body ()
-          .directStatement ("new Test().foo(new String(\"Param1\"),new Integer(5),null,new String(\"Param3\"),new String(\"Param4\"));");// new
-                                                                                                                                         // String("Param1"))"");//
-                                                                                                                                         // "new Integer(5),+//                "null," +//                "new
-                                                                                                                                         // String("first")," +//                "
-                                                                                                                                         // new
-                                                                                                                                         // String("Second"))");
-
-      cm.build (new SingleStreamCodeWriter (System.out));
-    }
-    catch (final JClassAlreadyExistsException e)
-    {
-
-      e.printStackTrace ();
-    }
-    catch (final IOException e)
-    {
-
-      e.printStackTrace ();
-    }
-    catch (final Exception e)
-    {
-      e.printStackTrace ();
-    }
+    cm.build (new SingleStreamCodeWriter (System.out));
   }
 }

@@ -43,6 +43,10 @@ package com.helger.jcodemodel.util;
 import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.BitSet;
+
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
 
 /**
  * {@link Writer} that escapes non US-ASCII characters into Java Unicode escape
@@ -53,7 +57,16 @@ import java.io.Writer;
  */
 public class UnicodeEscapeWriter extends FilterWriter
 {
-  public UnicodeEscapeWriter (final Writer next)
+  private static final BitSet escape = new BitSet (128);
+
+  static
+  {
+    for (int i = 0; i < 0x20; i++)
+      if (i != '\t' && i != '\r' && i != '\n')
+        escape.set (i, true);
+  }
+
+  public UnicodeEscapeWriter (@Nonnull final Writer next)
   {
     super (next);
   }
@@ -61,9 +74,7 @@ public class UnicodeEscapeWriter extends FilterWriter
   @Override
   public final void write (final int ch) throws IOException
   {
-    if (!requireEscaping (ch))
-      out.write (ch);
-    else
+    if (requireEscaping (ch))
     {
       // need to escape
       out.write ("\\u");
@@ -72,6 +83,8 @@ public class UnicodeEscapeWriter extends FilterWriter
         out.write ('0');
       out.write (s);
     }
+    else
+      out.write (ch);
   }
 
   /**
@@ -79,37 +92,31 @@ public class UnicodeEscapeWriter extends FilterWriter
    */
   protected boolean requireEscaping (final int ch)
   {
-    if (ch >= 128)
-      return true;
-
     // control characters
-    if (ch < 0x20 && " \t\r\n".indexOf (ch) == -1)
-      return true;
-
-    return false;
+    return ch >= 128 || escape.get (ch);
   }
 
   @Override
-  public final void write (final char [] buf, final int off, final int len) throws IOException
+  public final void write (@Nonnull final char [] buf, @Nonnegative final int off, @Nonnegative final int len) throws IOException
   {
     for (int i = 0; i < len; i++)
       write (buf[off + i]);
   }
 
   @Override
-  public final void write (final char [] buf) throws IOException
+  public final void write (@Nonnull final char [] buf) throws IOException
   {
     write (buf, 0, buf.length);
   }
 
   @Override
-  public final void write (final String buf, final int off, final int len) throws IOException
+  public final void write (@Nonnull final String buf, @Nonnegative final int off, @Nonnegative final int len) throws IOException
   {
     write (buf.toCharArray (), off, len);
   }
 
   @Override
-  public final void write (final String buf) throws IOException
+  public final void write (@Nonnull final String buf) throws IOException
   {
     write (buf.toCharArray (), 0, buf.length ());
   }

@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
@@ -58,7 +60,7 @@ public class JSerializedObject extends AbstractJResourceFile
    * @exception IOException
    *            If the serialization fails, this exception is thrown
    */
-  public JSerializedObject (final String name, final Object obj) throws IOException
+  public JSerializedObject (@Nonnull final String name, @Nonnull final Object obj) throws IOException
   {
     super (name);
     this.obj = obj;
@@ -68,7 +70,7 @@ public class JSerializedObject extends AbstractJResourceFile
    * called by JPackage to serialize the object
    */
   @Override
-  protected void build (final OutputStream os) throws IOException
+  protected void build (@Nonnull final OutputStream os) throws IOException
   {
     // serialize the obj into a ByteArrayOutputStream
     final ObjectOutputStream oos = new ObjectOutputStream (os);

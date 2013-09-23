@@ -45,6 +45,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
@@ -64,14 +66,14 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
    * @param os
    *        This stream will be closed at the end of the code generation.
    */
-  public SingleStreamCodeWriter (final OutputStream os)
+  public SingleStreamCodeWriter (@Nonnull final OutputStream os)
   {
     super (null);
     out = new PrintStream (os);
   }
 
   @Override
-  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     String pkgName = pkg.name ();
     if (pkgName.length () != 0)
@@ -94,5 +96,4 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
   {
     out.close ();
   }
-
 }

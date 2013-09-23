@@ -44,6 +44,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Writer;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
@@ -69,14 +72,14 @@ public class PrologCodeWriter extends FilterCodeWriter
    *        the beginning of each line to make it a valid Java comment, so the
    *        caller can just pass strings like "abc\ndef"
    */
-  public PrologCodeWriter (final AbstractCodeWriter core, final String prolog)
+  public PrologCodeWriter (@Nonnull final AbstractCodeWriter core, @Nullable final String prolog)
   {
     super (core);
     this.prolog = prolog;
   }
 
   @Override
-  public Writer openSource (final JPackage pkg, final String fileName) throws IOException
+  public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     final Writer w = super.openSource (pkg, fileName);
 

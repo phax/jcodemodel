@@ -28,6 +28,7 @@ public final class NameUtilities
     while ((klaus = klaus.getEnclosingClass ()) != null)
       enclosingClasses.add (klaus);
 
+    // Back to front
     for (int i = enclosingClasses.size () - 1; i >= 0; i--)
       name.append (enclosingClasses.get (i).getSimpleName ()).append (".");
 

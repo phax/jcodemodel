@@ -55,6 +55,9 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
@@ -66,7 +69,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
    * @param os
    *        This stream will be closed at the end of the code generation.
    */
-  public OutputStreamCodeWriter (final OutputStream os, final Charset encoding)
+  public OutputStreamCodeWriter (@Nonnull final OutputStream os, @Nullable final Charset encoding)
   {
     super (encoding);
     try
@@ -80,7 +83,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     return new FilterOutputStream (out)
     {

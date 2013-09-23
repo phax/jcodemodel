@@ -45,6 +45,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
@@ -54,20 +57,26 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  */
 public class JTextFile extends AbstractJResourceFile
 {
-  public JTextFile (final String name)
+  private String contents;
+
+  public JTextFile (@Nonnull final String name)
   {
     super (name);
   }
 
-  private String contents = null;
-
-  public void setContents (final String _contents)
+  public void setContents (@Nullable final String _contents)
   {
     this.contents = _contents;
   }
 
+  @Nullable
+  public String contents ()
+  {
+    return contents;
+  }
+
   @Override
-  public void build (final OutputStream out) throws IOException
+  public void build (@Nonnull final OutputStream out) throws IOException
   {
     final Writer w = new OutputStreamWriter (out);
     w.write (contents);

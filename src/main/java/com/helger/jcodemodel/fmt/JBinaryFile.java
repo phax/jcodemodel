@@ -44,6 +44,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
@@ -52,12 +54,11 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JBinaryFile extends AbstractJResourceFile
+public class JBinaryFile extends AbstractJResourceFile
 {
-
   private final ByteArrayOutputStream baos = new ByteArrayOutputStream ();
 
-  public JBinaryFile (final String name)
+  public JBinaryFile (@Nonnull final String name)
   {
     super (name);
   }
@@ -72,8 +73,8 @@ public final class JBinaryFile extends AbstractJResourceFile
   }
 
   @Override
-  public void build (final OutputStream os) throws IOException
+  public void build (@Nonnull final OutputStream os) throws IOException
   {
-    os.write (baos.toByteArray ());
+    baos.writeTo (os);
   }
 }

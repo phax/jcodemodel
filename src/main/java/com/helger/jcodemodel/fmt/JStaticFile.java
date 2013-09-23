@@ -44,6 +44,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.AbstractJResourceFile;
 import com.helger.jcodemodel.util.SecureLoader;
 
@@ -52,19 +54,18 @@ import com.helger.jcodemodel.util.SecureLoader;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class JStaticFile extends AbstractJResourceFile
+public class JStaticFile extends AbstractJResourceFile
 {
-
   private final ClassLoader classLoader;
   private final String resourceName;
   private final boolean isResource;
 
-  public JStaticFile (final String _resourceName)
+  public JStaticFile (@Nonnull final String _resourceName)
   {
     this (_resourceName, !_resourceName.endsWith (".java"));
   }
 
-  public JStaticFile (final String _resourceName, final boolean isResource)
+  public JStaticFile (@Nonnull final String _resourceName, final boolean isResource)
   {
     this (SecureLoader.getClassClassLoader (JStaticFile.class), _resourceName, isResource);
   }
@@ -74,7 +75,9 @@ public final class JStaticFile extends AbstractJResourceFile
    *        false if this is a Java source file. True if this is other resource
    *        files.
    */
-  public JStaticFile (final ClassLoader _classLoader, final String _resourceName, final boolean isResource)
+  public JStaticFile (@Nonnull final ClassLoader _classLoader,
+                      @Nonnull final String _resourceName,
+                      final boolean isResource)
   {
     super (_resourceName.substring (_resourceName.lastIndexOf ('/') + 1));
     this.classLoader = _classLoader;
@@ -89,7 +92,7 @@ public final class JStaticFile extends AbstractJResourceFile
   }
 
   @Override
-  protected void build (final OutputStream os) throws IOException
+  protected void build (@Nonnull final OutputStream os) throws IOException
   {
     final DataInputStream dis = new DataInputStream (classLoader.getResourceAsStream (resourceName));
 
@@ -100,5 +103,4 @@ public final class JStaticFile extends AbstractJResourceFile
 
     dis.close ();
   }
-
 }

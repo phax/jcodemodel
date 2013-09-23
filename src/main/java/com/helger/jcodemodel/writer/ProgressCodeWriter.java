@@ -46,6 +46,8 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Writer;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
@@ -57,36 +59,35 @@ import com.helger.jcodemodel.JPackage;
  */
 public class ProgressCodeWriter extends FilterCodeWriter
 {
-  public ProgressCodeWriter (final AbstractCodeWriter output, final PrintStream progress)
-  {
-    super (output);
-    this.progress = progress;
-    if (progress == null)
-      throw new IllegalArgumentException ();
-  }
-
   private final PrintStream progress;
 
+  public ProgressCodeWriter (@Nonnull final AbstractCodeWriter output, @Nonnull final PrintStream progress)
+  {
+    super (output);
+    if (progress == null)
+      throw new IllegalArgumentException ();
+    this.progress = progress;
+  }
+
   @Override
-  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     report (pkg, fileName);
     return super.openBinary (pkg, fileName);
   }
 
   @Override
-  public Writer openSource (final JPackage pkg, final String fileName) throws IOException
+  public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     report (pkg, fileName);
     return super.openSource (pkg, fileName);
   }
 
-  private void report (final JPackage pkg, final String fileName)
+  private void report (@Nonnull final JPackage pkg, @Nonnull final String fileName)
   {
     if (pkg.isUnnamed ())
       progress.println (fileName);
     else
       progress.println (pkg.name ().replace ('.', File.separatorChar) + File.separatorChar + fileName);
   }
-
 }

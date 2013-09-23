@@ -46,6 +46,8 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
@@ -56,11 +58,14 @@ import com.helger.jcodemodel.JPackage;
  */
 public class ZipCodeWriter extends AbstractCodeWriter
 {
+  private final ZipOutputStream zip;
+  private final OutputStream filter;
+
   /**
    * @param target
    *        Zip file will be written to this stream.
    */
-  public ZipCodeWriter (final OutputStream target)
+  public ZipCodeWriter (@Nonnull final OutputStream target)
   {
     super (null);
     zip = new ZipOutputStream (target);
@@ -73,23 +78,19 @@ public class ZipCodeWriter extends AbstractCodeWriter
     };
   }
 
-  private final ZipOutputStream zip;
-
-  private final OutputStream filter;
-
   @Override
-  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     String name = fileName;
     if (!pkg.isUnnamed ())
-      name = toDirName (pkg) + name;
+      name = _toDirName (pkg) + name;
 
     zip.putNextEntry (new ZipEntry (name));
     return filter;
   }
 
   /** Converts a package name to the directory name. */
-  private static String toDirName (final JPackage pkg)
+  private static String _toDirName (@Nonnull final JPackage pkg)
   {
     return pkg.name ().replace ('.', '/') + '/';
   }
@@ -99,5 +100,4 @@ public class ZipCodeWriter extends AbstractCodeWriter
   {
     zip.close ();
   }
-
 }

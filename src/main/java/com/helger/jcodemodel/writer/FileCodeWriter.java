@@ -48,6 +48,9 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
@@ -67,22 +70,22 @@ public class FileCodeWriter extends AbstractCodeWriter
   /** Files that shall be marked as read only. */
   private final Set <File> readonlyFiles = new HashSet <File> ();
 
-  public FileCodeWriter (final File target) throws IOException
+  public FileCodeWriter (@Nonnull final File target) throws IOException
   {
     this (target, false);
   }
 
-  public FileCodeWriter (final File target, final Charset encoding) throws IOException
+  public FileCodeWriter (@Nonnull final File target, @Nullable final Charset encoding) throws IOException
   {
     this (target, false, encoding);
   }
 
-  public FileCodeWriter (final File target, final boolean readOnly) throws IOException
+  public FileCodeWriter (@Nonnull final File target, final boolean readOnly) throws IOException
   {
     this (target, readOnly, null);
   }
 
-  public FileCodeWriter (final File target, final boolean readOnly, final Charset encoding) throws IOException
+  public FileCodeWriter (@Nonnull final File target, final boolean readOnly, @Nullable final Charset encoding) throws IOException
   {
     super (encoding);
     this.target = target;
@@ -92,12 +95,14 @@ public class FileCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  @Nonnull
+  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     return new FileOutputStream (getFile (pkg, fileName));
   }
 
-  protected File getFile (final JPackage pkg, final String fileName) throws IOException
+  @Nonnull
+  protected File getFile (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     File dir;
     if (pkg.isUnnamed ())
@@ -130,7 +135,7 @@ public class FileCodeWriter extends AbstractCodeWriter
   }
 
   /** Converts a package name to the directory name. */
-  private static String _toDirName (final JPackage pkg)
+  private static String _toDirName (@Nonnull final JPackage pkg)
   {
     return pkg.name ().replace ('.', File.separatorChar);
   }

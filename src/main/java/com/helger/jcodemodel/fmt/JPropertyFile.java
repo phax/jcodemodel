@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
@@ -51,18 +53,18 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  */
 public class JPropertyFile extends AbstractJResourceFile
 {
-  public JPropertyFile (final String name)
+  private final Properties data = new Properties ();
+
+  public JPropertyFile (@Nonnull final String name)
   {
     super (name);
   }
-
-  private final Properties data = new Properties ();
 
   /**
    * Adds key/value pair into the property file. If you call this method twice
    * with the same key, the old one is overriden by the new one.
    */
-  public void add (final String key, final String value)
+  public void add (@Nonnull final String key, @Nonnull final String value)
   {
     data.put (key, value);
   }
@@ -72,7 +74,7 @@ public class JPropertyFile extends AbstractJResourceFile
   // public Properties body() { return data; } ?
 
   @Override
-  public void build (final OutputStream out) throws IOException
+  public void build (@Nonnull final OutputStream out) throws IOException
   {
     data.store (out, null);
   }

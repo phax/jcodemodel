@@ -48,6 +48,7 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
@@ -88,7 +89,8 @@ public abstract class AbstractCodeWriter implements Closeable
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
    */
-  public abstract OutputStream openBinary (JPackage pkg, String fileName) throws IOException;
+  @Nonnull
+  public abstract OutputStream openBinary (@Nonnull JPackage pkg, @Nonnull String fileName) throws IOException;
 
   /**
    * Called by CodeModel to store the specified file. The callee must allocate a
@@ -103,7 +105,8 @@ public abstract class AbstractCodeWriter implements Closeable
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
    */
-  public Writer openSource (final JPackage pkg, final String fileName) throws IOException
+  @Nonnull
+  public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     final OutputStreamWriter bw = encoding != null ? new OutputStreamWriter (openBinary (pkg, fileName), encoding)
                                                   : new OutputStreamWriter (openBinary (pkg, fileName));

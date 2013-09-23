@@ -44,6 +44,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Writer;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
@@ -57,25 +59,26 @@ public class FilterCodeWriter extends AbstractCodeWriter
 {
   private final AbstractCodeWriter core;
 
-  public FilterCodeWriter (final AbstractCodeWriter core)
+  public FilterCodeWriter (@Nonnull final AbstractCodeWriter core)
   {
     super (core.encoding ());
     this.core = core;
   }
 
+  @Nonnull
   protected AbstractCodeWriter core ()
   {
     return core;
   }
 
   @Override
-  public OutputStream openBinary (final JPackage pkg, final String fileName) throws IOException
+  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     return core.openBinary (pkg, fileName);
   }
 
   @Override
-  public Writer openSource (final JPackage pkg, final String fileName) throws IOException
+  public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     return core.openSource (pkg, fileName);
   }

@@ -53,6 +53,9 @@ import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJResourceFile;
 import com.helger.jcodemodel.JPackage;
@@ -85,14 +88,19 @@ public class JStaticJavaFile extends AbstractJResourceFile
   private final String className;
   private final URL source;
   private final JStaticClass clazz;
-  private final LineFilter filter;
+  private final ILineFilter filter;
 
-  public JStaticJavaFile (final JPackage _pkg, final String className, final String _resourceName)
+  public JStaticJavaFile (@Nonnull final JPackage _pkg,
+                          @Nonnull final String className,
+                          @Nonnull final String _resourceName)
   {
     this (_pkg, className, SecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (_resourceName), null);
   }
 
-  public JStaticJavaFile (final JPackage _pkg, final String _className, final URL _source, final LineFilter _filter)
+  public JStaticJavaFile (@Nonnull final JPackage _pkg,
+                          @Nonnull final String _className,
+                          @Nonnull final URL _source,
+                          @Nullable final ILineFilter _filter)
   {
     super (_className + ".java");
     if (_source == null)
@@ -107,6 +115,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
   /**
    * Returns a class object that represents a statically generated code.
    */
+  @Nonnull
   public final AbstractJClass getJClass ()
   {
     return clazz;
@@ -119,13 +128,13 @@ public class JStaticJavaFile extends AbstractJResourceFile
   }
 
   @Override
-  protected void build (final OutputStream os) throws IOException
+  protected void build (@Nonnull final OutputStream os) throws IOException
   {
     final InputStream is = source.openStream ();
 
     final BufferedReader r = new BufferedReader (new InputStreamReader (is));
     final PrintWriter w = new PrintWriter (new BufferedWriter (new OutputStreamWriter (os)));
-    final LineFilter filter = createLineFilter ();
+    final ILineFilter filter = _createLineFilter ();
     int lineNumber = 1;
 
     try
@@ -149,32 +158,33 @@ public class JStaticJavaFile extends AbstractJResourceFile
   }
 
   /**
-   * Creates a {@link LineFilter}.
+   * Creates a {@link ILineFilter}.
    * <p>
    * A derived class can override this method to process the contents of the
    * source file.
    */
-  private LineFilter createLineFilter ()
+  @Nonnull
+  private ILineFilter _createLineFilter ()
   {
     // this filter replaces the package declaration.
-    final LineFilter f = new LineFilter ()
+    final ILineFilter f = new ILineFilter ()
     {
-      public String process (final String line)
+      @Nullable
+      public String process (@Nonnull final String line)
       {
-        if (!line.startsWith ("package "))
-          return line;
-
-        // replace package decl
-        if (pkg.isUnnamed ())
-          return null;
-        else
+        if (line.startsWith ("package "))
+        {
+          // replace package decl
+          if (pkg.isUnnamed ())
+            return null;
           return "package " + pkg.name () + ";";
+        }
+        return line;
       }
     };
     if (filter != null)
       return new ChainFilter (filter, f);
-    else
-      return f;
+    return f;
   }
 
   /**
@@ -183,7 +193,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
    * By implementing this interface, derived classes can modify the Java source
    * file before it's written out.
    */
-  public interface LineFilter
+  public interface ILineFilter
   {
     /**
      * @param line
@@ -194,23 +204,25 @@ public class JStaticJavaFile extends AbstractJResourceFile
      * @exception ParseException
      *            when for some reason there's an error in the line.
      */
-    String process (String line) throws ParseException;
+    @Nullable
+    String process (@Nonnull String line) throws ParseException;
   }
 
   /**
-   * A {@link LineFilter} that combines two {@link LineFilter}s.
+   * A {@link ILineFilter} that combines two {@link ILineFilter}s.
    */
-  public static final class ChainFilter implements LineFilter
+  public static final class ChainFilter implements ILineFilter
   {
-    private final LineFilter first, second;
+    private final ILineFilter first, second;
 
-    public ChainFilter (final LineFilter first, final LineFilter second)
+    public ChainFilter (@Nonnull final ILineFilter first, @Nonnull final ILineFilter second)
     {
       this.first = first;
       this.second = second;
     }
 
-    public String process (final String sLine) throws ParseException
+    @Nullable
+    public String process (@Nonnull final String sLine) throws ParseException
     {
       final String line = first.process (sLine);
       if (line == null)
@@ -241,8 +253,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
     {
       if (pkg.isUnnamed ())
         return className;
-      else
-        return pkg.name () + '.' + className;
+      return pkg.name () + '.' + className;
     }
 
     @Override

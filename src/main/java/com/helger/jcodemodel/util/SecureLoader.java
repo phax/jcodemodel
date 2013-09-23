@@ -39,6 +39,9 @@
  */
 package com.helger.jcodemodel.util;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
 /**
  * Class defined for safe calls of getClassLoader methods of any kind
  * (context/system/class classloader. This MUST be package private and defined
@@ -57,16 +60,13 @@ public final class SecureLoader
     {
       return Thread.currentThread ().getContextClassLoader ();
     }
-    else
+    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
     {
-      return java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <ClassLoader> ()
+      public ClassLoader run ()
       {
-        public ClassLoader run ()
-        {
-          return Thread.currentThread ().getContextClassLoader ();
-        }
-      });
-    }
+        return Thread.currentThread ().getContextClassLoader ();
+      }
+    });
   }
 
   public static ClassLoader getClassClassLoader (final Class <?> c)
@@ -75,16 +75,13 @@ public final class SecureLoader
     {
       return c.getClassLoader ();
     }
-    else
+    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
     {
-      return java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <ClassLoader> ()
+      public ClassLoader run ()
       {
-        public ClassLoader run ()
-        {
-          return c.getClassLoader ();
-        }
-      });
-    }
+        return c.getClassLoader ();
+      }
+    });
   }
 
   public static ClassLoader getSystemClassLoader ()
@@ -93,16 +90,13 @@ public final class SecureLoader
     {
       return ClassLoader.getSystemClassLoader ();
     }
-    else
+    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
     {
-      return java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <ClassLoader> ()
+      public ClassLoader run ()
       {
-        public ClassLoader run ()
-        {
-          return ClassLoader.getSystemClassLoader ();
-        }
-      });
-    }
+        return ClassLoader.getSystemClassLoader ();
+      }
+    });
   }
 
   public static void setContextClassLoader (final ClassLoader cl)
@@ -111,16 +105,13 @@ public final class SecureLoader
     {
       Thread.currentThread ().setContextClassLoader (cl);
     }
-    else
+    AccessController.doPrivileged (new PrivilegedAction <Object> ()
     {
-      java.security.AccessController.doPrivileged (new java.security.PrivilegedAction <Object> ()
+      public java.lang.Object run ()
       {
-        public java.lang.Object run ()
-        {
-          Thread.currentThread ().setContextClassLoader (cl);
-          return null;
-        }
-      });
-    }
+        Thread.currentThread ().setContextClassLoader (cl);
+        return null;
+      }
+    });
   }
 }
