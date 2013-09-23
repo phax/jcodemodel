@@ -307,7 +307,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        The annotation class to annotate the field with
    */
   @Nonnull
-  public JAnnotationUse annotate (final AbstractJClass clazz)
+  public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     if (annotations == null)
       annotations = new ArrayList <JAnnotationUse> ();
@@ -323,13 +323,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        The annotation class to annotate the field with
    */
   @Nonnull
-  public JAnnotationUse annotate (final Class <? extends Annotation> clazz)
+  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
     return annotate (owner ().ref (clazz));
   }
 
   @Nonnull
-  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }

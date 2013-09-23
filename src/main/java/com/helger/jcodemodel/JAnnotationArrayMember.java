@@ -65,6 +65,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
 
   protected JAnnotationArrayMember (@Nonnull final JCodeModel owner)
   {
+    if (owner == null)
+      throw new NullPointerException ("owner");
     this.owner = owner;
   }
 
@@ -301,6 +303,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
   /**
    * Adds a new annotation to the array.
    */
+  @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
     return annotate (owner.ref (clazz));
@@ -317,7 +320,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     return a;
   }
 
-  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  @Nonnull
+  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }
@@ -326,11 +330,12 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    * {@link IJAnnotatable#annotations()}
    */
   @SuppressWarnings ({ "unchecked", "rawtypes" })
+  @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    // this invocation is invalid if the caller isn't adding annotations into an
-    // array
-    // so this potentially type-unsafe conversion would be justified.
+    // FIXME this invocation is invalid if the caller isn't adding annotations
+    // into an array so this potentially type-unsafe conversion would be
+    // justified.
     return Collections.<JAnnotationUse> unmodifiableList ((List) values);
   }
 

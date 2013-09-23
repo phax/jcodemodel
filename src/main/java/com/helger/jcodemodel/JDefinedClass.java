@@ -929,7 +929,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * @param clazz
    *        The annotation class to annotate the class with
    */
-  public JAnnotationUse annotate (final Class <? extends Annotation> clazz)
+  @Nonnull
+  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
     return annotate (owner ().ref (clazz));
   }
@@ -940,7 +941,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * @param clazz
    *        The annotation class to annotate the class with
    */
-  public JAnnotationUse annotate (final AbstractJClass clazz)
+  @Nonnull
+  public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     if (annotations == null)
       annotations = new ArrayList <JAnnotationUse> ();
@@ -949,7 +951,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
     return a;
   }
 
-  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  @Nonnull
+  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }
@@ -957,6 +960,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /**
    * {@link IJAnnotatable#annotations()}
    */
+  @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
     if (annotations == null)

@@ -167,7 +167,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
    *        The annotation class to annotate the field with
    */
   @Nonnull
-  public JAnnotationUse annotate (final AbstractJClass clazz)
+  public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     if (annotations == null)
       annotations = new ArrayList <JAnnotationUse> ();
@@ -183,7 +183,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
    *        The annotation class to annotate the field with
    */
   @Nonnull
-  public JAnnotationUse annotate (final Class <? extends Annotation> clazz)
+  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
     return annotate (type.owner ().ref (clazz));
   }

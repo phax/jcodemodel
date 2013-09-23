@@ -195,16 +195,19 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
    * @param clazz
    *        The annotation class to annotate the field with
    */
-  public JAnnotationUse annotate (final Class <? extends Annotation> clazz)
+  @Nonnull
+  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
     return annotate (type.owner ().ref (clazz));
   }
 
-  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  @Nonnull
+  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }
 
+  @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
     if (annotations == null)

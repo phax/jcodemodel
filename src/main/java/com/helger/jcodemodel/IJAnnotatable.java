@@ -43,6 +43,8 @@ package com.helger.jcodemodel;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 
+import javax.annotation.Nonnull;
+
 /**
  * Annotatable program elements.
  * 
@@ -56,7 +58,8 @@ public interface IJAnnotatable
    * @param clazz
    *        The annotation class to annotate the program element with
    */
-  JAnnotationUse annotate (AbstractJClass clazz);
+  @Nonnull
+  JAnnotationUse annotate (@Nonnull AbstractJClass clazz);
 
   /**
    * Adds an annotation to this program element.
@@ -64,18 +67,21 @@ public interface IJAnnotatable
    * @param clazz
    *        The annotation class to annotate the program element with
    */
-  JAnnotationUse annotate (Class <? extends Annotation> clazz);
+  @Nonnull
+  JAnnotationUse annotate (@Nonnull Class <? extends Annotation> clazz);
 
   /**
    * Adds an annotation to this program element and returns a type-safe writer
    * to fill in the values of such annotations.
    */
-  <W extends IJAnnotationWriter <?>> W annotate2 (Class <W> clazz);
+  @Nonnull
+  <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull Class <W> clazz);
 
   /**
    * Read-only live view of all annotations on this {@link IJAnnotatable}
    * 
    * @return Can be empty but never null.
    */
+  @Nonnull
   Collection <JAnnotationUse> annotations ();
 }
