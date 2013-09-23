@@ -48,6 +48,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.NameUtilities;
+
 /**
  * Represents an arrays as annotation members
  * <p>
@@ -279,7 +281,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     {
       public void generate (final JFormatter f)
       {
-        f.print (value.getName ().replace ('$', '.'));
+        f.print (NameUtilities.getFullName (value));
         f.print (".class");
       }
     });

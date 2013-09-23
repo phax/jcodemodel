@@ -81,10 +81,22 @@ public interface IJExpression extends IJGenerable
   IJExpression incr ();
 
   /**
+   * Returns "++[this]" from "[this]".
+   */
+  @Nonnull
+  IJExpression preincr ();
+
+  /**
    * Returns "[this]--" from "[this]".
    */
   @Nonnull
   IJExpression decr ();
+
+  /**
+   * Returns "--[this]" from "[this]".
+   */
+  @Nonnull
+  IJExpression predecr ();
 
   /**
    * Returns "[this]+[right]"

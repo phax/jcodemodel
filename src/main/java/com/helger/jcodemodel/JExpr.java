@@ -59,15 +59,60 @@ public final class JExpr
   {}
 
   @Nonnull
-  public static IJExpression assign (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static IJExpressionStatement assign (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     return new JAssignment (lhs, rhs);
   }
 
   @Nonnull
-  public static IJExpression assignPlus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static IJExpressionStatement assignPlus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     return new JAssignment (lhs, rhs, "+");
+  }
+
+  @Nonnull
+  public static IJExpressionStatement assignMinus (@Nonnull final IJAssignmentTarget lhs,
+                                                   @Nonnull final IJExpression rhs)
+  {
+    return new JAssignment (lhs, rhs, "-");
+  }
+
+  @Nonnull
+  public static IJExpressionStatement assignTimes (@Nonnull final IJAssignmentTarget lhs,
+                                                   @Nonnull final IJExpression rhs)
+  {
+    return new JAssignment (lhs, rhs, "*");
+  }
+
+  @Nonnull
+  public static IJExpressionStatement assignDivide (@Nonnull final IJAssignmentTarget lhs,
+                                                    @Nonnull final IJExpression rhs)
+  {
+    return new JAssignment (lhs, rhs, "/");
+  }
+
+  @Nonnull
+  public static IJExpressionStatement incr (@Nonnull final IJExpression expression)
+  {
+    return new JExpressionStatementWrapper (JOp.incr (expression));
+  }
+
+  @Nonnull
+  public static IJStatement preincr (@Nonnull final IJExpression expression)
+  {
+    return new JExpressionStatementWrapper (JOp.preincr (expression));
+  }
+
+  @Nonnull
+  public static IJStatement decr (@Nonnull final IJExpression expression)
+  {
+    return new JExpressionStatementWrapper (JOp.decr (expression));
+  }
+
+  @Nonnull
+  public static IJStatement predecr (@Nonnull final IJExpression expression)
+  {
+    return new JExpressionStatementWrapper (JOp.predecr (expression));
   }
 
   @Nonnull
@@ -362,5 +407,31 @@ public final class JExpr
         f.print ('(').print (source).print (')');
       }
     };
+  }
+
+  public static class JExpressionStatementWrapper extends AbstractJExpressionImpl implements IJExpressionStatement
+  {
+    final IJExpression expr;
+
+    public JExpressionStatementWrapper (@Nonnull final IJExpression expression)
+    {
+      this.expr = expression;
+    }
+
+    @Nonnull
+    public IJExpression expr ()
+    {
+      return expr;
+    }
+
+    public void generate (@Nonnull final JFormatter f)
+    {
+      expr.generate (f);
+    }
+
+    public void state (@Nonnull final JFormatter f)
+    {
+      f.generable (expr).print (';').newline ();
+    }
   }
 }

@@ -521,7 +521,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     f.outdent ().print (')');
     if (_throws != null && !_throws.isEmpty ())
     {
-      f.newline ().indent ().print ("throws").g (_throws).newline ().outdent ();
+      f.newline ().indent ().print ("throws").generable (_throws).newline ().outdent ();
     }
 
     if (defaultValue != null)

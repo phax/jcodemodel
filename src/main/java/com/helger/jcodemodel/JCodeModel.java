@@ -55,6 +55,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.NameUtilities;
 import com.helger.jcodemodel.util.SecureLoader;
 import com.helger.jcodemodel.writer.FileCodeWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter;
@@ -81,9 +82,9 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  * fashion. For example, you create a class from {@link JCodeModel}, which gives
  * you a {@link JDefinedClass}. Then you invoke a method on it to generate a new
  * method, which gives you {@link JMethod}, and so on. There are a few
- * exceptions to this, most notably building {@link IJExpression}s, but generally
- * you work with CodeModel in a top-down fashion. Because of this design, most
- * of the CodeModel classes aren't directly instanciable.
+ * exceptions to this, most notably building {@link IJExpression}s, but
+ * generally you work with CodeModel in a top-down fashion. Because of this
+ * design, most of the CodeModel classes aren't directly instanciable.
  * <h2>Where to go from here?</h2>
  * <p>
  * Most of the time you'd want to populate new type definitions in a
@@ -596,13 +597,13 @@ public final class JCodeModel
     @Override
     public String name ()
     {
-      return _class.getSimpleName ().replace ('$', '.');
+      return _class.getSimpleName ();
     }
 
     @Override
     public String fullName ()
     {
-      return _class.getName ().replace ('$', '.');
+      return NameUtilities.getFullName (_class);
     }
 
     @Override

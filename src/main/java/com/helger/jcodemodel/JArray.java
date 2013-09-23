@@ -125,7 +125,7 @@ public class JArray extends AbstractJExpressionImpl
     if (size == null || hasExprs)
       f.print ('{');
     if (hasExprs)
-      f.g (exprs);
+      f.generable (exprs);
     else
       f.print (' ');
     if (size == null || hasExprs)

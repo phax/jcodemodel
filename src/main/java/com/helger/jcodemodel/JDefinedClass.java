@@ -805,7 +805,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
       if (superClass == null)
         f.newline ();
       f.indent ().print (classType == EClassType.INTERFACE ? "extends" : "implements");
-      f.g (interfaces);
+      f.generable (interfaces);
       f.newline ().outdent ();
     }
     declareBody (f);

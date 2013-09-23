@@ -142,31 +142,41 @@ public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTa
     final String name = name ();
 
     if (object != null)
-    {
       f.generable (object).print ('.').print (name);
-    }
     else
-    {
       if (explicitThis)
-      {
         f.print ("this.").print (name);
-      }
       else
-      {
         f.id (name);
-      }
-    }
   }
 
   @Nonnull
-  public IJExpression assign (@Nonnull final IJExpression rhs)
+  public IJExpressionStatement assign (@Nonnull final IJExpression rhs)
   {
     return JExpr.assign (this, rhs);
   }
 
   @Nonnull
-  public IJExpression assignPlus (@Nonnull final IJExpression rhs)
+  public IJExpressionStatement assignPlus (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignPlus (this, rhs);
+  }
+
+  @Nonnull
+  public IJExpressionStatement assignMinus (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignMinus (this, rhs);
+  }
+
+  @Nonnull
+  public IJExpressionStatement assignTimes (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignTimes (this, rhs);
+  }
+
+  @Nonnull
+  public IJExpressionStatement assignDivide (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignDivide (this, rhs);
   }
 }

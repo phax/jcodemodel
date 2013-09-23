@@ -151,7 +151,7 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public void generate (final JFormatter f)
   {
-    f.type (basis).print ('<').g (args).print (JFormatter.CLOSE_TYPE_ARGS);
+    f.type (basis).print ('<').generable (args).print (JFormatter.CLOSE_TYPE_ARGS);
   }
 
   @Override

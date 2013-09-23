@@ -134,7 +134,7 @@ public class JForLoop implements IJStatement
         f.generable ((IJExpression) o);
       first = false;
     }
-    f.print (';').generable (test).print (';').g (updates).print (')');
+    f.print (';').generable (test).print (';').generable (updates).print (')');
     if (body != null)
       f.generable (body).newline ();
     else

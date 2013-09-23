@@ -203,7 +203,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
       }
     }
 
-    f.g (args);
+    f.generable (args);
 
     if (isConstructor && type.isArray ())
       f.print ('}');

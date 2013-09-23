@@ -209,7 +209,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
         f.generable (annotation).newline ();
     f.id (name);
     if (args != null)
-      f.print ('(').g (args).print (')');
+      f.print ('(').generable (args).print (')');
   }
 
   public void generate (@Nonnull final JFormatter f)

@@ -142,6 +142,11 @@ public final class JOp
       super (e, op);
     }
 
+    protected TightUnaryOp (@Nonnull final String op, @Nonnull final IJExpression e)
+    {
+      super (op, e);
+    }
+
     @Override
     public void generate (@Nonnull final JFormatter f)
     {
@@ -159,9 +164,21 @@ public final class JOp
   }
 
   @Nonnull
+  public static IJExpression preincr (@Nonnull final IJExpression e)
+  {
+    return new TightUnaryOp ("++", e);
+  }
+
+  @Nonnull
   public static IJExpression decr (@Nonnull final IJExpression e)
   {
     return new TightUnaryOp (e, "--");
+  }
+
+  @Nonnull
+  public static IJExpression predecr (@Nonnull final IJExpression e)
+  {
+    return new TightUnaryOp ("--", e);
   }
 
   /* -- Binary operators -- */
@@ -402,8 +419,8 @@ public final class JOp
 
   @Nonnull
   public static IJExpression cond (@Nonnull final IJExpression cond,
-                                  @Nonnull final IJExpression ifTrue,
-                                  @Nonnull final IJExpression ifFalse)
+                                   @Nonnull final IJExpression ifTrue,
+                                   @Nonnull final IJExpression ifFalse)
   {
     return new TernaryOp (cond, "?", ifTrue, ":", ifFalse);
   }

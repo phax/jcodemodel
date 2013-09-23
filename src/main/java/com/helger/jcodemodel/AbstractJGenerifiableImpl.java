@@ -67,7 +67,7 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
           f.print (',');
         f.declaration (typeVariables.get (i));
       }
-      f.print ('>');
+      f.print (JFormatter.CLOSE_TYPE_ARGS);
     }
   }
 

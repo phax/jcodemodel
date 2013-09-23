@@ -79,9 +79,21 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   }
 
   @Nonnull
+  public final IJExpression preincr ()
+  {
+    return JOp.preincr (this);
+  }
+
+  @Nonnull
   public final IJExpression decr ()
   {
     return JOp.decr (this);
+  }
+
+  @Nonnull
+  public final IJExpression predecr ()
+  {
+    return JOp.predecr (this);
   }
 
   @Nonnull

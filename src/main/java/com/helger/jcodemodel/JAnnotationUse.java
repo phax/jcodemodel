@@ -42,6 +42,8 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.NameUtilities;
+
 /**
  * Represents an annotation on a program element. TODO How to add enums to the
  * annotations
@@ -333,7 +335,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
     {
       public void generate (@Nonnull final JFormatter f)
       {
-        f.print (value.getName ().replace ('$', '.'));
+        f.print (NameUtilities.getFullName (value));
         f.print (".class");
       }
     }));
