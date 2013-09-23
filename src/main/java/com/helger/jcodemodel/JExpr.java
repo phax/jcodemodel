@@ -49,8 +49,23 @@ import javax.annotation.Nullable;
  */
 public final class JExpr
 {
+  /**
+   * Boolean constant that represents <code>true</code>
+   */
+  @Nonnull
+  public static final IJExpression TRUE = new JAtom ("true");
+
+  /**
+   * Boolean constant that represents <code>false</code>
+   */
+  @Nonnull
+  public static final IJExpression FALSE = new JAtom ("false");
+
   private static final String charEscape = "\b\t\n\f\r\"\'\\";
   private static final String charMacro = "btnfr\"'\\";
+  private static final IJExpression __this = new JAtom ("this");
+  private static final IJExpression __super = new JAtom ("super");
+  private static final IJExpression __null = new JAtom ("null");
 
   /**
    * This class is not instanciable.
@@ -184,7 +199,7 @@ public final class JExpr
       {
         AbstractJClass c;
         if (cl instanceof JNarrowedClass)
-          c = ((JNarrowedClass) cl).basis;
+          c = ((JNarrowedClass) cl).basis ();
         else
           c = cl;
         f.generable (c).print (".class");
@@ -235,8 +250,6 @@ public final class JExpr
     return newArray (type, lit (size));
   }
 
-  private static final IJExpression __this = new JAtom ("this");
-
   /**
    * Returns a reference to "this", an implicit reference to the current object.
    */
@@ -245,8 +258,6 @@ public final class JExpr
   {
     return __this;
   }
-
-  private static final IJExpression __super = new JAtom ("super");
 
   /**
    * Returns a reference to "super", an implicit reference to the super class.
@@ -259,25 +270,11 @@ public final class JExpr
 
   /* -- Literals -- */
 
-  private static final IJExpression __null = new JAtom ("null");
-
   @Nonnull
   public static IJExpression _null ()
   {
     return __null;
   }
-
-  /**
-   * Boolean constant that represents <code>true</code>
-   */
-  @Nonnull
-  public static final IJExpression TRUE = new JAtom ("true");
-
-  /**
-   * Boolean constant that represents <code>false</code>
-   */
-  @Nonnull
-  public static final IJExpression FALSE = new JAtom ("false");
 
   @Nonnull
   public static IJExpression lit (final boolean b)

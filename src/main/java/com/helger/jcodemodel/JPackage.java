@@ -59,6 +59,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * A Java package.
  */
@@ -91,31 +94,33 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Lazily created list of package annotations.
    */
-  private List <JAnnotationUse> annotations = null;
+  private List <JAnnotationUse> annotations;
 
   /**
    * package javadoc.
    */
-  private JDocComment jdoc = null;
+  private JDocComment jdoc;
 
   /**
    * JPackage constructor
    * 
    * @param name
-   *        Name of package
+   *        Name of package. May not be <code>null</code> but empty.
    * @param cw
    *        The code writer being used to create this package
    * @throws IllegalArgumentException
    *         If each part of the package name is not a valid identifier
    */
-  protected JPackage (final String name, final JCodeModel cw)
+  protected JPackage (@Nonnull final String name, @Nonnull final JCodeModel cw)
   {
-    this.owner = cw;
+    if (name == null)
+      throw new NullPointerException ("name");
     if (name.equals ("."))
-    {
-      final String msg = "Package name . is not allowed";
-      throw new IllegalArgumentException (msg);
-    }
+      throw new IllegalArgumentException ("Package name . is not allowed");
+    if (cw == null)
+      throw new NullPointerException ("codeModel");
+
+    this.owner = cw;
 
     if (owner.isCaseSensitiveFileSystem)
       upperCaseClassMap = null;
@@ -125,6 +130,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     this.name = name;
   }
 
+  @Nullable
   public IJClassContainer parentContainer ()
   {
     return parent ();
@@ -133,6 +139,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Gets the parent package, or null if this class is the root package.
    */
+  @Nullable
   public JPackage parent ()
   {
     if (name.length () == 0)
@@ -152,6 +159,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     return true;
   }
 
+  @Nonnull
   public JPackage getPackage ()
   {
     return this;
@@ -168,36 +176,38 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (final int mods, final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _class (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
   {
     return _class (mods, name, EClassType.CLASS);
   }
 
-  public JDefinedClass _class (final int mods, final String name, final EClassType classTypeVal) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _class (final int mods, @Nonnull final String name, @Nonnull final EClassType classTypeVal) throws JClassAlreadyExistsException
   {
     if (classes.containsKey (name))
       throw new JClassAlreadyExistsException (classes.get (name));
-    else
-    {
-      // XXX problems caught in the NC constructor
-      final JDefinedClass c = new JDefinedClass (this, mods, name, classTypeVal);
 
-      if (upperCaseClassMap != null)
-      {
-        final JDefinedClass dc = upperCaseClassMap.get (name.toUpperCase ());
-        if (dc != null)
-          throw new JClassAlreadyExistsException (dc);
-        upperCaseClassMap.put (name.toUpperCase (), c);
-      }
-      classes.put (name, c);
-      return c;
+    // XXX problems caught in the NC constructor
+    final JDefinedClass c = new JDefinedClass (this, mods, name, classTypeVal);
+
+    if (upperCaseClassMap != null)
+    {
+      final String sUpperName = name.toUpperCase ();
+      final JDefinedClass dc = upperCaseClassMap.get (sUpperName);
+      if (dc != null)
+        throw new JClassAlreadyExistsException (dc);
+      upperCaseClassMap.put (sUpperName, c);
     }
+    classes.put (name, c);
+    return c;
   }
 
   /**
    * Adds a public class to this package.
    */
-  public JDefinedClass _class (final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _class (@Nonnull final String name) throws JClassAlreadyExistsException
   {
     return _class (JMod.PUBLIC, name);
   }
@@ -207,18 +217,16 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    * 
    * @return null If the class is not yet created.
    */
-  public JDefinedClass _getClass (final String name)
+  @Nullable
+  public JDefinedClass _getClass (@Nullable final String name)
   {
-    if (classes.containsKey (name))
-      return classes.get (name);
-    else
-      return null;
+    return classes.get (name);
   }
 
   /**
    * Order is based on the lexicological order of the package name.
    */
-  public int compareTo (final JPackage that)
+  public int compareTo (@Nonnull final JPackage that)
   {
     return this.name.compareTo (that.name);
   }
@@ -232,7 +240,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    *        Name of interface to be added to this package
    * @return Newly generated interface
    */
-  public JDefinedClass _interface (final int mods, final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _interface (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
   {
     return _class (mods, name, EClassType.INTERFACE);
   }
@@ -240,13 +249,31 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Adds a public interface to this package.
    */
-  public JDefinedClass _interface (final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _interface (@Nonnull final String name) throws JClassAlreadyExistsException
   {
     return _interface (JMod.PUBLIC, name);
   }
 
   /**
-   * Add an annotationType Declaration to this package
+   * Add a annotationType Declaration to this package
+   * 
+   * @param mods
+   *        Modifiers for this annotationType declaration
+   * @param name
+   *        Name of the annotation Type declaration to be added to this package
+   * @return newly created Annotation Type Declaration
+   * @exception JClassAlreadyExistsException
+   *            When the specified class/interface was already created.
+   */
+  @Nonnull
+  public JDefinedClass _annotationTypeDeclaration (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
+  {
+    return _class (mods, name, EClassType.ANNOTATION_TYPE_DECL);
+  }
+
+  /**
+   * Add a public annotationType Declaration to this package
    * 
    * @param name
    *        Name of the annotation Type declaration to be added to this package
@@ -254,9 +281,27 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _annotationTypeDeclaration (final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _annotationTypeDeclaration (@Nonnull final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, EClassType.ANNOTATION_TYPE_DECL);
+    return _annotationTypeDeclaration (JMod.PUBLIC, name);
+  }
+
+  /**
+   * Add a enum to this package
+   * 
+   * @param mods
+   *        Modifiers for this enum declaration
+   * @param name
+   *        Name of the enum to be added to this package
+   * @return newly created Enum
+   * @exception JClassAlreadyExistsException
+   *            When the specified class/interface was already created.
+   */
+  @Nonnull
+  public JDefinedClass _enum (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
+  {
+    return _class (mods, name, EClassType.ENUM);
   }
 
   /**
@@ -268,15 +313,17 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _enum (final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _enum (@Nonnull final String name) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name, EClassType.ENUM);
+    return _enum (JMod.PUBLIC, name);
   }
 
   /**
    * Adds a new resource file to this package.
    */
-  public AbstractJResourceFile addResourceFile (final AbstractJResourceFile rsrc)
+  @Nonnull
+  public AbstractJResourceFile addResourceFile (@Nonnull final AbstractJResourceFile rsrc)
   {
     resources.add (rsrc);
     return rsrc;
@@ -285,7 +332,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Checks if a resource of the given name exists.
    */
-  public boolean hasResourceFile (final String name)
+  public boolean hasResourceFile (@Nullable final String name)
   {
     for (final AbstractJResourceFile r : resources)
       if (r.name ().equals (name))
@@ -296,6 +343,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Iterates all resource files in this package.
    */
+  @Nonnull
   public Iterator <AbstractJResourceFile> propertyFiles ()
   {
     return resources.iterator ();
@@ -307,6 +355,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    * 
    * @return JDocComment containing javadocs for this class
    */
+  @Nonnull
   public JDocComment javadoc ()
   {
     if (jdoc == null)
@@ -317,7 +366,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Removes a class from this package.
    */
-  public void remove (final AbstractJClass c)
+  public void remove (@Nonnull final AbstractJClass c)
   {
     if (c._package () != this)
       throw new IllegalArgumentException ("the specified class is not a member of this package,"
@@ -333,14 +382,15 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Reference a class within this package.
    */
-  public AbstractJClass ref (final String name) throws ClassNotFoundException
+  @Nonnull
+  public AbstractJClass ref (@Nonnull final String name) throws ClassNotFoundException
   {
     if (name.indexOf ('.') >= 0)
       throw new IllegalArgumentException ("JClass name contains '.': " + name);
 
     String n = "";
     if (!isUnnamed ())
-      n = this.name + '.';
+      n = name + '.';
     n += name;
 
     return owner.ref (Class.forName (n));
@@ -349,18 +399,19 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Gets a reference to a sub package of this package.
    */
-  public JPackage subPackage (final String pkg)
+  @Nonnull
+  public JPackage subPackage (@Nonnull final String pkg)
   {
     if (isUnnamed ())
       return owner ()._package (pkg);
-    else
-      return owner ()._package (name + '.' + pkg);
+    return owner ()._package (name + '.' + pkg);
   }
 
   /**
    * Returns an iterator that walks the top-level classes defined in this
    * package.
    */
+  @Nonnull
   public Iterator <JDefinedClass> classes ()
   {
     return classes.values ().iterator ();
@@ -369,15 +420,11 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Checks if a given name is already defined as a class/interface
    */
-  public boolean isDefined (final String classLocalName)
+  public boolean isDefined (@Nullable final String classLocalName)
   {
-    final Iterator <JDefinedClass> itr = classes ();
-    while (itr.hasNext ())
-    {
-      if ((itr.next ()).name ().equals (classLocalName))
+    for (final JDefinedClass clazz : classes.values ())
+      if (clazz.name ().equals (classLocalName))
         return true;
-    }
-
     return false;
   }
 
@@ -396,6 +443,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    *         package. For example, this method returns strings like
    *         <code>"java.lang"</code>
    */
+  @Nonnull
   public String name ()
   {
     return name;
@@ -404,32 +452,39 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Return the code model root object being used to create this package.
    */
+  @Nonnull
   public final JCodeModel owner ()
   {
     return owner;
   }
 
-  public JAnnotationUse annotate (final AbstractJClass clazz)
+  @Nonnull
+  public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     if (isUnnamed ())
       throw new IllegalArgumentException ("the root package cannot be annotated");
+
     if (annotations == null)
       annotations = new ArrayList <JAnnotationUse> ();
+
     final JAnnotationUse a = new JAnnotationUse (clazz);
     annotations.add (a);
     return a;
   }
 
-  public JAnnotationUse annotate (final Class <? extends Annotation> clazz)
+  @Nonnull
+  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
     return annotate (owner.ref (clazz));
   }
 
-  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  @Nonnull
+  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }
 
+  @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
     if (annotations == null)
@@ -440,34 +495,34 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Convert the package name to directory path equivalent
    */
-  File toPath (final File dir)
+  @Nonnull
+  File toPath (@Nonnull final File dir)
   {
     if (name == null)
       return dir;
     return new File (dir, name.replace ('.', File.separatorChar));
   }
 
-  public void declare (final JFormatter f)
+  public void declare (@Nonnull final JFormatter f)
   {
     if (name.length () != 0)
       f.print ("package").print (name).print (';').newline ();
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.print (name);
   }
 
   void build (final AbstractCodeWriter src, final AbstractCodeWriter res) throws IOException
   {
-
     // write classes
     for (final JDefinedClass c : classes.values ())
     {
       if (c.isHidden ())
         continue; // don't generate this file
 
-      final JFormatter f = createJavaSourceFileWriter (src, c.name ());
+      final JFormatter f = _createJavaSourceFileWriter (src, c.name ());
       f.write (c);
       f.close ();
     }
@@ -475,7 +530,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     // write package annotations
     if (annotations != null || jdoc != null)
     {
-      final JFormatter f = createJavaSourceFileWriter (src, "package-info");
+      final JFormatter f = _createJavaSourceFileWriter (src, "package-info");
 
       if (jdoc != null)
         f.generable (jdoc);
@@ -522,7 +577,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     return r;
   }
 
-  private JFormatter createJavaSourceFileWriter (final AbstractCodeWriter src, final String className) throws IOException
+  @Nonnull
+  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter src, @Nonnull final String className) throws IOException
   {
     final Writer bw = new BufferedWriter (src.openSource (this, className + ".java"));
     return new JFormatter (new PrintWriter (bw));

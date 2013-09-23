@@ -58,12 +58,20 @@ import javax.annotation.Nullable;
  */
 public abstract class AbstractJClass extends AbstractJType
 {
+  /**
+   * Sometimes useful reusable empty array.
+   */
+  public static final JTypeVar [] EMPTY_ARRAY = new JTypeVar [0];
+
   private final JCodeModel _owner;
   private AbstractJClass arrayClass;
 
-  protected AbstractJClass (@Nonnull final JCodeModel _owner)
+  protected AbstractJClass (@Nonnull final JCodeModel owner)
   {
-    this._owner = _owner;
+    if (owner == null)
+      throw new NullPointerException ("owner");
+
+    this._owner = owner;
   }
 
   /**
@@ -73,18 +81,20 @@ public abstract class AbstractJClass extends AbstractJType
    *         method returns "String" for <code>java.lang.String</code>.
    */
   @Override
-  abstract public String name ();
+  public abstract String name ();
 
   /**
    * Gets the package to which this class belongs. TODO: shall we move move this
    * down?
    */
-  abstract public JPackage _package ();
+  @Nonnull
+  public abstract JPackage _package ();
 
   /**
    * Returns the class in which this class is nested, or <tt>null</tt> if this
    * is a top-level class.
    */
+  @Nullable
   public AbstractJClass outer ()
   {
     return null;
@@ -108,7 +118,8 @@ public abstract class AbstractJClass extends AbstractJType
    *         for {@link Object}. If this JClass represents {@link Object},
    *         return null.
    */
-  abstract public AbstractJClass _extends ();
+  @Nullable
+  public abstract AbstractJClass _extends ();
 
   /**
    * Iterates all super interfaces directly implemented by this class/interface.
@@ -117,7 +128,8 @@ public abstract class AbstractJClass extends AbstractJType
    *         objects that represents those interfaces implemented by this
    *         object.
    */
-  abstract public Iterator <AbstractJClass> _implements ();
+  @Nonnull
+  public abstract Iterator <AbstractJClass> _implements ();
 
   /**
    * Iterates all the type parameters of this class/interface.
@@ -131,11 +143,6 @@ public abstract class AbstractJClass extends AbstractJType
   {
     return EMPTY_ARRAY;
   }
-
-  /**
-   * Sometimes useful reusable empty array.
-   */
-  static final JTypeVar [] EMPTY_ARRAY = new JTypeVar [0];
 
   /**
    * Checks if this object represents an interface.
@@ -249,6 +256,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return The use of {@code baseType} in {@code this} type. or null if the
    *         type is not assignable to the base type.
    */
+  @Nullable
   public final AbstractJClass getBaseClass (@Nonnull final AbstractJClass baseType)
   {
     if (this.erasure ().equals (baseType))
@@ -273,12 +281,14 @@ public abstract class AbstractJClass extends AbstractJType
     return null;
   }
 
+  @Nullable
   public final AbstractJClass getBaseClass (@Nonnull final Class <?> baseType)
   {
     return getBaseClass (owner ().ref (baseType));
   }
 
   @Override
+  @Nonnull
   public AbstractJClass array ()
   {
     if (arrayClass == null)

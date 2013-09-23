@@ -62,6 +62,8 @@ public class JDoLoop implements IJStatement
    */
   protected JDoLoop (@Nonnull final IJExpression test)
   {
+    if (test == null)
+      throw new NullPointerException ("test");
     this.test = test;
   }
 

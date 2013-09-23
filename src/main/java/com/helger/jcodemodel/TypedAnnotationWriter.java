@@ -270,13 +270,14 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
    * Creates a new typed annotation writer.
    */
   @Nonnull
-  static <W extends IJAnnotationWriter <?>> W create (final Class <W> w, final IJAnnotatable annotatable)
+  static <W extends IJAnnotationWriter <?>> W create (@Nonnull final Class <W> w,
+                                                      @Nonnull final IJAnnotatable annotatable)
   {
     final Class <? extends Annotation> a = findAnnotationType (w);
     return (W) new TypedAnnotationWriter (a, w, annotatable.annotate (a)).createProxy ();
   }
 
-  private static Class <? extends Annotation> findAnnotationType (final Class <?> clazz)
+  private static Class <? extends Annotation> findAnnotationType (@Nonnull final Class <?> clazz)
   {
     for (final Type t : clazz.getGenericInterfaces ())
     {

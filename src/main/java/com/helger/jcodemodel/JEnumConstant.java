@@ -83,6 +83,10 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
 
   protected JEnumConstant (@Nonnull final JDefinedClass type, @Nonnull final String name)
   {
+    if (type == null)
+      throw new NullPointerException ("type");
+    if (name == null)
+      throw new NullPointerException ("name");
     this.type = type;
     this.name = name;
   }
@@ -112,7 +116,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   public JEnumConstant arg (@Nonnull final IJExpression arg)
   {
     if (arg == null)
-      throw new IllegalArgumentException ();
+      throw new IllegalArgumentException ("arg");
     if (args == null)
       args = new ArrayList <IJExpression> ();
     args.add (arg);
@@ -184,7 +188,8 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
     return annotate (type.owner ().ref (clazz));
   }
 
-  public <W extends IJAnnotationWriter <?>> W annotate2 (final Class <W> clazz)
+  @Nonnull
+  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
   {
     return TypedAnnotationWriter.create (clazz, this);
   }

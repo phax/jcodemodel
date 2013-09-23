@@ -57,13 +57,14 @@ public class JDirectClass extends AbstractJClass
 {
   private final String fullName;
 
-  protected JDirectClass (@Nonnull final JCodeModel _owner, final String fullName)
+  protected JDirectClass (@Nonnull final JCodeModel _owner, @Nonnull final String fullName)
   {
     super (_owner);
     this.fullName = fullName;
   }
 
   @Override
+  @Nonnull
   public String name ()
   {
     final int i = fullName.lastIndexOf ('.');
@@ -73,28 +74,31 @@ public class JDirectClass extends AbstractJClass
   }
 
   @Override
+  @Nonnull
   public String fullName ()
   {
     return fullName;
   }
 
   @Override
+  @Nonnull
   public JPackage _package ()
   {
     final int i = fullName.lastIndexOf ('.');
     if (i >= 0)
       return owner ()._package (fullName.substring (0, i));
-    else
-      return owner ().rootPackage ();
+    return owner ().rootPackage ();
   }
 
   @Override
+  @Nonnull
   public AbstractJClass _extends ()
   {
     return owner ().ref (Object.class);
   }
 
   @Override
+  @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
     return Collections.<AbstractJClass> emptyList ().iterator ();
@@ -113,6 +117,7 @@ public class JDirectClass extends AbstractJClass
   }
 
   @Override
+  @Nonnull
   protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
     return this;

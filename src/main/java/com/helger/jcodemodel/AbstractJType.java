@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * A representation of a type in codeModel. A type is always either primitive (
  * {@link JPrimitiveType}) or a reference type ({@link AbstractJClass}).
@@ -50,7 +52,8 @@ public abstract class AbstractJType implements IJGenerable, Comparable <Abstract
   /**
    * Obtains a reference to the primitive type object from a type name.
    */
-  public static JPrimitiveType parse (final JCodeModel codeModel, final String typeName)
+  @Nonnull
+  public static JPrimitiveType parse (@Nonnull final JCodeModel codeModel, @Nonnull final String typeName)
   {
     if (typeName.equals ("void"))
       return codeModel.VOID;
@@ -179,7 +182,7 @@ public abstract class AbstractJType implements IJGenerable, Comparable <Abstract
    * to packages java and javax over all others. This method is used to sort
    * generated import statments in a conventional way for readability.
    */
-  public int compareTo (final AbstractJType o)
+  public int compareTo (@Nonnull final AbstractJType o)
   {
     final String lhs = fullName ();
     final String rhs = o.fullName ();

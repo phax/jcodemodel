@@ -167,10 +167,10 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
     }
   };
 
-  protected JDefinedClass (final IJClassContainer parent,
+  protected JDefinedClass (@Nonnull final IJClassContainer parent,
                            final int mods,
                            final String name,
-                           final EClassType classTypeval)
+                           @Nonnull final EClassType classTypeval)
   {
     this (mods, name, parent, parent.owner (), classTypeval);
   }
@@ -178,12 +178,15 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /**
    * Constructor for creating anonymous inner class.
    */
-  protected JDefinedClass (final JCodeModel owner, final int mods, final String name)
+  protected JDefinedClass (@Nonnull final JCodeModel owner, final int mods, @Nullable final String name)
   {
     this (mods, name, null, owner);
   }
 
-  private JDefinedClass (final int mods, final String name, final IJClassContainer parent, final JCodeModel owner)
+  private JDefinedClass (final int mods,
+                         @Nullable final String name,
+                         @Nonnull final IJClassContainer parent,
+                         @Nonnull final JCodeModel owner)
   {
     this (mods, name, parent, owner, EClassType.CLASS);
   }
@@ -197,10 +200,10 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    *        Name of this class
    */
   private JDefinedClass (final int mods,
-                         final String name,
-                         final IJClassContainer parent,
-                         final JCodeModel owner,
-                         final EClassType classTypeVal)
+                         @Nullable final String name,
+                         @Nonnull final IJClassContainer parent,
+                         @Nonnull final JCodeModel owner,
+                         @Nonnull final EClassType classTypeVal)
   {
     super (owner);
 
@@ -254,15 +257,15 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    *        Superclass for this class
    * @return This class
    */
-  public JDefinedClass _extends (final AbstractJClass superClass)
+  @Nonnull
+  public JDefinedClass _extends (@Nonnull final AbstractJClass superClass)
   {
     if (this.classType == EClassType.INTERFACE)
+    {
       if (superClass.isInterface ())
-      {
         return this._implements (superClass);
-      }
-      else
-        throw new IllegalArgumentException ("unable to set the super class for an interface");
+      throw new IllegalArgumentException ("unable to set the super class for an interface");
+    }
     if (superClass == null)
       throw new NullPointerException ();
 
@@ -282,7 +285,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
     return this;
   }
 
-  public JDefinedClass _extends (final Class <?> superClass)
+  @Nonnull
+  public JDefinedClass _extends (@Nonnull final Class <?> superClass)
   {
     return _extends (owner ().ref (superClass));
   }
@@ -291,6 +295,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * Returns the class extended by this class.
    */
   @Override
+  @Nonnull
   public AbstractJClass _extends ()
   {
     if (superClass == null)
@@ -305,13 +310,15 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    *        Interface that this class implements
    * @return This class
    */
-  public JDefinedClass _implements (final AbstractJClass iface)
+  @Nonnull
+  public JDefinedClass _implements (@Nonnull final AbstractJClass iface)
   {
     interfaces.add (iface);
     return this;
   }
 
-  public JDefinedClass _implements (final Class <?> iface)
+  @Nonnull
+  public JDefinedClass _implements (@Nonnull final Class <?> iface)
   {
     return _implements (owner ().ref (iface));
   }
@@ -320,6 +327,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * Returns an iterator that walks the nested classes defined in this class.
    */
   @Override
+  @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
     return interfaces.iterator ();
@@ -334,6 +342,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * @return Name of this class
    */
   @Override
+  @Nullable
   public String name ()
   {
     return name;
@@ -348,7 +357,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    *        The name of the constant.
    * @return The generated type-safe enum constant.
    */
-  public JEnumConstant enumConstant (final String name)
+  @Nonnull
+  public JEnumConstant enumConstant (@Nonnull final String name)
   {
     JEnumConstant ec = enumConstantsByName.get (name);
     if (null == ec)
@@ -363,6 +373,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * Gets the fully qualified name of this class.
    */
   @Override
+  @Nullable
   public String fullName ()
   {
     if (outer instanceof JDefinedClass)
@@ -371,8 +382,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
     final JPackage p = _package ();
     if (p.isUnnamed ())
       return name ();
-    else
-      return p.name () + '.' + name ();
+    return p.name () + '.' + name ();
   }
 
   @Override
@@ -380,8 +390,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   {
     if (outer instanceof JDefinedClass)
       return ((JDefinedClass) outer).binaryName () + '$' + name ();
-    else
-      return fullName ();
+    return fullName ();
   }
 
   @Override
@@ -663,33 +672,37 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    *        Name of class to be added to this package
    * @return Newly generated class
    */
-  public JDefinedClass _class (final int mods, final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _class (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
   {
     return _class (mods, name, EClassType.CLASS);
   }
 
-  public JDefinedClass _class (final int mods, final String name, final EClassType classTypeVal) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _class (final int mods, @Nonnull final String name, @Nonnull final EClassType classTypeVal) throws JClassAlreadyExistsException
   {
 
-    String NAME;
+    String sRealName;
     if (owner ().isCaseSensitiveFileSystem)
-      NAME = name.toUpperCase ();
+      sRealName = name.toUpperCase ();
     else
-      NAME = name;
+      sRealName = name;
 
-    if (_getClasses ().containsKey (NAME))
-      throw new JClassAlreadyExistsException (_getClasses ().get (NAME));
+    final JDefinedClass aExistingClass = _getClasses ().get (sRealName);
+    if (aExistingClass != null)
+      throw new JClassAlreadyExistsException (aExistingClass);
 
     // XXX problems caught in the NC constructor
     final JDefinedClass c = new JDefinedClass (this, mods, name, classTypeVal);
-    _getClasses ().put (NAME, c);
+    _getClasses ().put (sRealName, c);
     return c;
   }
 
   /**
    * Add a new public nested class to this class.
    */
-  public JDefinedClass _class (final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _class (@Nonnull final String name) throws JClassAlreadyExistsException
   {
     return _class (JMod.PUBLIC, name);
   }
@@ -703,7 +716,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    *        Name of interface to be added to this package
    * @return Newly generated interface
    */
-  public JDefinedClass _interface (final int mods, final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _interface (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
   {
     return _class (mods, name, EClassType.INTERFACE);
   }
@@ -711,7 +725,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /**
    * Adds a public interface to this package.
    */
-  public JDefinedClass _interface (final String name) throws JClassAlreadyExistsException
+  @Nonnull
+  public JDefinedClass _interface (@Nonnull final String name) throws JClassAlreadyExistsException
   {
     return _interface (JMod.PUBLIC, name);
   }
@@ -721,6 +736,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * 
    * @return JDocComment containing javadocs for this class
    */
+  @Nonnull
   public JDocComment javadoc ()
   {
     if (jdoc == null)
@@ -752,8 +768,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   {
     if (classes == null)
       return Collections.<JDefinedClass> emptyList ().iterator ();
-    else
-      return classes.values ().iterator ();
+    return classes.values ().iterator ();
   }
 
   @Nonnull

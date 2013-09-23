@@ -118,6 +118,11 @@ public final class JCodeModel
    */
   protected final boolean isCaseSensitiveFileSystem = getFileSystemCaseSensitivity ();
 
+  /**
+   * Cached for {@link #wildcard()}.
+   */
+  private AbstractJClass wildcard;
+
   protected boolean getFileSystemCaseSensitivity ()
   {
     try
@@ -165,6 +170,7 @@ public final class JCodeModel
   /**
    * Returns an iterator that walks the packages defined using this code writer.
    */
+  @Nonnull
   public Iterator <JPackage> packages ()
   {
     return packages.values ().iterator ();
@@ -189,7 +195,8 @@ public final class JCodeModel
    * user-specified class that may or may not exist, and only thing known about
    * it is a class name.
    */
-  public AbstractJClass directClass (final String name)
+  @Nonnull
+  public AbstractJClass directClass (@Nonnull final String name)
   {
     return new JDirectClass (this, name);
   }
@@ -200,13 +207,12 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (final int mods, final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, @Nonnull final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
   {
     final int idx = fullyqualifiedName.lastIndexOf ('.');
     if (idx < 0)
       return rootPackage ()._class (fullyqualifiedName);
-    else
-      return _package (fullyqualifiedName.substring (0, idx))._class (mods, fullyqualifiedName.substring (idx + 1), t);
+    return _package (fullyqualifiedName.substring (0, idx))._class (mods, fullyqualifiedName.substring (idx + 1), t);
   }
 
   /**
@@ -344,6 +350,7 @@ public final class JCodeModel
    * 
    * @see #_ref(Class) for the version that handles more cases.
    */
+  @Nonnull
   public AbstractJClass ref (@Nonnull final Class <?> clazz)
   {
     JReferencedClass jrc = refClasses.get (clazz);
@@ -352,18 +359,14 @@ public final class JCodeModel
       if (clazz.isPrimitive ())
         throw new IllegalArgumentException (clazz + " is a primitive");
       if (clazz.isArray ())
-      {
         return new JArrayClass (this, _ref (clazz.getComponentType ()));
-      }
-      else
-      {
-        jrc = new JReferencedClass (clazz);
-        refClasses.put (clazz, jrc);
-      }
+      jrc = new JReferencedClass (clazz);
+      refClasses.put (clazz, jrc);
     }
     return jrc;
   }
 
+  @Nonnull
   public AbstractJType _ref (@Nonnull final Class <?> c)
   {
     if (c.isPrimitive ())
@@ -380,7 +383,7 @@ public final class JCodeModel
    * and return a {@link AbstractJClass}.
    */
   @Nonnull
-  public AbstractJClass ref (final String fullyQualifiedClassName)
+  public AbstractJClass ref (@Nonnull final String fullyQualifiedClassName)
   {
     try
     {
@@ -405,11 +408,6 @@ public final class JCodeModel
     // assume it's not visible to us.
     return new JDirectClass (this, fullyQualifiedClassName);
   }
-
-  /**
-   * Cached for {@link #wildcard()}.
-   */
-  private AbstractJClass wildcard;
 
   /**
    * Gets a {@link AbstractJClass} representation for "?", which is equivalent

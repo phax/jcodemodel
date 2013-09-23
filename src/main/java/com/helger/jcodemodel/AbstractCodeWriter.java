@@ -47,6 +47,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
+import java.util.BitSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -60,6 +61,42 @@ import com.helger.jcodemodel.util.UnicodeEscapeWriter;
  */
 public abstract class AbstractCodeWriter implements Closeable
 {
+  private static final class JavaUnicodeEscapeWriter extends UnicodeEscapeWriter
+  {
+    private static final BitSet escape = new BitSet (128);
+
+    static
+    {
+      for (int i = 0; i < 0x20; i++)
+        if (i != '\t' && i != '\r' && i != '\n')
+          escape.set (i, true);
+    }
+
+    // can't change this signature to Encoder because
+    // we can't have Encoder in method signature
+    private final CharsetEncoder encoder;
+
+    private JavaUnicodeEscapeWriter (@Nonnull final OutputStreamWriter bw)
+    {
+      super (bw);
+      encoder = Charset.forName (bw.getEncoding ()).newEncoder ();
+    }
+
+    @Override
+    protected boolean requireEscaping (final int ch)
+    {
+      // control characters
+      if (escape.get (ch))
+        return true;
+
+      // check ASCII chars, for better performance
+      if (ch < 0x80)
+        return false;
+
+      return !encoder.canEncode ((char) ch);
+    }
+  }
+
   /**
    * Encoding to be used by the writer. Null means platform specific encoding.
    */
@@ -108,31 +145,14 @@ public abstract class AbstractCodeWriter implements Closeable
   @Nonnull
   public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
-    final OutputStreamWriter bw = encoding != null ? new OutputStreamWriter (openBinary (pkg, fileName), encoding)
-                                                  : new OutputStreamWriter (openBinary (pkg, fileName));
+    final OutputStream os = openBinary (pkg, fileName);
+    final OutputStreamWriter bw = encoding != null ? new OutputStreamWriter (os, encoding)
+                                                  : new OutputStreamWriter (os);
 
     // create writer
     try
     {
-      return new UnicodeEscapeWriter (bw)
-      {
-        // can't change this signature to Encoder because
-        // we can't have Encoder in method signature
-        private final CharsetEncoder encoder = Charset.forName (bw.getEncoding ()).newEncoder ();
-
-        @Override
-        protected boolean requireEscaping (final int ch)
-        {
-          // control characters
-          if (ch < 0x20 && " \t\r\n".indexOf (ch) == -1)
-            return true;
-          // check ASCII chars, for better performance
-          if (ch < 0x80)
-            return false;
-
-          return !encoder.canEncode ((char) ch);
-        }
-      };
+      return new JavaUnicodeEscapeWriter (bw);
     }
     catch (final Throwable t)
     {

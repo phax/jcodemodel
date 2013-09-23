@@ -46,6 +46,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * Represents X&lt;Y>. TODO: consider separating the decl and the use.
  * 
@@ -56,23 +58,29 @@ public class JNarrowedClass extends AbstractJClass
   /**
    * A generic class with type parameters.
    */
-  final AbstractJClass basis;
+  private final AbstractJClass basis;
   /**
    * Arguments to those parameters.
    */
   private final List <AbstractJClass> args;
 
-  protected JNarrowedClass (final AbstractJClass basis, final AbstractJClass arg)
+  protected JNarrowedClass (@Nonnull final AbstractJClass basis, final AbstractJClass arg)
   {
     this (basis, Collections.singletonList (arg));
   }
 
-  protected JNarrowedClass (final AbstractJClass basis, final List <AbstractJClass> args)
+  protected JNarrowedClass (@Nonnull final AbstractJClass basis, final List <AbstractJClass> args)
   {
     super (basis.owner ());
     this.basis = basis;
     assert !(basis instanceof JNarrowedClass);
     this.args = args;
+  }
+
+  @Nonnull
+  public AbstractJClass basis ()
+  {
+    return basis ();
   }
 
   @Override
@@ -95,8 +103,7 @@ public class JNarrowedClass extends AbstractJClass
   public String name ()
   {
     final StringBuilder buf = new StringBuilder ();
-    buf.append (basis.name ());
-    buf.append ('<');
+    buf.append (basis.name ()).append ('<');
     boolean first = true;
     for (final AbstractJClass c : args)
     {
