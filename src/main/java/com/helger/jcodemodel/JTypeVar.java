@@ -43,6 +43,9 @@ package com.helger.jcodemodel;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 /**
  * Type variable used to declare generics.
  * 
@@ -52,28 +55,30 @@ import java.util.List;
 public class JTypeVar extends AbstractJClass implements IJDeclaration
 {
   private final String name;
-
   private AbstractJClass bound;
 
-  protected JTypeVar (final JCodeModel owner, final String _name)
+  protected JTypeVar (@Nonnull final JCodeModel owner, @Nonnull final String _name)
   {
     super (owner);
     this.name = _name;
   }
 
   @Override
+  @Nonnull
   public String name ()
   {
     return name;
   }
 
   @Override
+  @Nonnull
   public String fullName ()
   {
     return name;
   }
 
   @Override
+  @Nullable
   public JPackage _package ()
   {
     return null;
@@ -84,6 +89,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    * 
    * @return this
    */
+  @Nonnull
   public JTypeVar bound (final AbstractJClass c)
   {
     if (bound != null)
@@ -98,18 +104,19 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    * If no bound is given, this method returns {@link Object}.
    */
   @Override
+  @Nonnull
   public AbstractJClass _extends ()
   {
     if (bound != null)
       return bound;
-    else
-      return owner ().ref (Object.class);
+    return owner ().ref (Object.class);
   }
 
   /**
    * Returns the interface bounds of this variable.
    */
   @Override
+  @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
     return bound._implements ();
@@ -130,7 +137,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   /**
    * Prints out the declaration of the variable.
    */
-  public void declare (final JFormatter f)
+  public void declare (@Nonnull final JFormatter f)
   {
     f.id (name);
     if (bound != null)
@@ -138,7 +145,8 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] variables,
+                                             @Nonnull final List <AbstractJClass> bindings)
   {
     for (int i = 0; i < variables.length; i++)
       if (variables[i] == this)
@@ -147,7 +155,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.id (name);
   }

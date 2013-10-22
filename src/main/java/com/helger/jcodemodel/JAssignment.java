@@ -51,11 +51,29 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
   private final IJExpression rhs;
   private final String op;
 
+  /**
+   * Constructor for "=" operator
+   * 
+   * @param lhs
+   *        left
+   * @param rhs
+   *        right
+   */
   protected JAssignment (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     this (lhs, rhs, "");
   }
 
+  /**
+   * Constructor for <code>op + "="</code> operator
+   * 
+   * @param lhs
+   *        left
+   * @param rhs
+   *        right
+   * @param op
+   *        additional operator
+   */
   protected JAssignment (@Nonnull final IJAssignmentTarget lhs,
                          @Nonnull final IJExpression rhs,
                          @Nonnull final String op)
@@ -77,6 +95,9 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
     return rhs;
   }
 
+  /**
+   * @return The additional operator (without the "=")
+   */
   @Nonnull
   public String op ()
   {

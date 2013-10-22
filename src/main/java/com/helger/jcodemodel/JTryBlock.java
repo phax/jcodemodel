@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * Try statement with Catch and/or Finally clause
  */
@@ -56,23 +58,27 @@ public class JTryBlock implements IJStatement
   protected JTryBlock ()
   {}
 
+  @Nonnull
   public JBlock body ()
   {
     return body;
   }
 
-  public JCatchBlock _catch (final AbstractJClass exception)
+  @Nonnull
+  public JCatchBlock _catch (@Nonnull final AbstractJClass exception)
   {
     final JCatchBlock cb = new JCatchBlock (exception);
     catches.add (cb);
     return cb;
   }
 
+  @Nonnull
   public List <JCatchBlock> catches ()
   {
     return Collections.unmodifiableList (catches);
   }
 
+  @Nonnull
   public JBlock _finally ()
   {
     if (_finally == null)
@@ -80,7 +86,7 @@ public class JTryBlock implements IJStatement
     return _finally;
   }
 
-  public void state (final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
     f.print ("try").generable (body);
     for (final JCatchBlock cb : catches)
