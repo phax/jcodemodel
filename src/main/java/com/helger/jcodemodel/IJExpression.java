@@ -102,113 +102,224 @@ public interface IJExpression extends IJGenerable
    * Returns "[this]+[right]"
    */
   @Nonnull
-  IJExpression plus (IJExpression right);
+  IJExpression plus (@Nonnull IJExpression right);
+
+  /**
+   * Returns "[this]+[right]"
+   */
+  @Nonnull
+  IJExpression plus (double right);
+
+  /**
+   * Returns "[this]+[right]"
+   */
+  @Nonnull
+  IJExpression plus (float right);
+
+  /**
+   * Returns "[this]+[right]"
+   */
+  @Nonnull
+  IJExpression plus (int right);
+
+  /**
+   * Returns "[this]+[right]"
+   */
+  @Nonnull
+  IJExpression plus (long right);
+
+  /**
+   * Returns "[this]+[right]"
+   */
+  @Nonnull
+  IJExpression plus (@Nonnull String right);
 
   /**
    * Returns "[this]-[right]"
    */
   @Nonnull
-  IJExpression minus (IJExpression right);
+  IJExpression minus (@Nonnull IJExpression right);
+
+  /**
+   * Returns "[this]-[right]"
+   */
+  @Nonnull
+  IJExpression minus (double right);
+
+  /**
+   * Returns "[this]-[right]"
+   */
+  @Nonnull
+  IJExpression minus (float right);
+
+  /**
+   * Returns "[this]-[right]"
+   */
+  @Nonnull
+  IJExpression minus (int right);
+
+  /**
+   * Returns "[this]-[right]"
+   */
+  @Nonnull
+  IJExpression minus (long right);
 
   /**
    * Returns "[this]*[right]"
    */
   @Nonnull
-  IJExpression mul (IJExpression right);
+  IJExpression mul (@Nonnull IJExpression right);
+
+  /**
+   * Returns "[this]*[right]"
+   */
+  @Nonnull
+  IJExpression mul (double right);
+
+  /**
+   * Returns "[this]*[right]"
+   */
+  @Nonnull
+  IJExpression mul (float right);
+
+  /**
+   * Returns "[this]*[right]"
+   */
+  @Nonnull
+  IJExpression mul (int right);
+
+  /**
+   * Returns "[this]*[right]"
+   */
+  @Nonnull
+  IJExpression mul (long right);
 
   /**
    * Returns "[this]/[right]"
    */
   @Nonnull
-  IJExpression div (IJExpression right);
+  IJExpression div (@Nonnull IJExpression right);
+
+  /**
+   * Returns "[this]/[right]"
+   */
+  @Nonnull
+  IJExpression div (double right);
+
+  /**
+   * Returns "[this]/[right]"
+   */
+  @Nonnull
+  IJExpression div (float right);
+
+  /**
+   * Returns "[this]/[right]"
+   */
+  @Nonnull
+  IJExpression div (int right);
+
+  /**
+   * Returns "[this]/[right]"
+   */
+  @Nonnull
+  IJExpression div (long right);
 
   /**
    * Returns "[this]%[right]"
    */
   @Nonnull
-  IJExpression mod (IJExpression right);
+  IJExpression mod (@Nonnull IJExpression right);
 
   /**
    * Returns "[this]&lt;&lt;[right]"
    */
   @Nonnull
-  IJExpression shl (IJExpression right);
+  IJExpression shl (@Nonnull IJExpression right);
 
   /**
    * Returns "[this]>>[right]"
    */
   @Nonnull
-  IJExpression shr (IJExpression right);
+  IJExpression shr (@Nonnull IJExpression right);
 
   /**
    * Returns "[this]>>>[right]"
    */
   @Nonnull
-  IJExpression shrz (IJExpression right);
+  IJExpression shrz (@Nonnull IJExpression right);
 
   /** Bit-wise AND '&amp;'. */
   @Nonnull
-  IJExpression band (IJExpression right);
+  IJExpression band (@Nonnull IJExpression right);
 
   /** Bit-wise OR '|'. */
   @Nonnull
-  IJExpression bor (IJExpression right);
+  IJExpression bor (@Nonnull IJExpression right);
 
   /** Logical AND '&amp;&amp;'. */
   @Nonnull
-  IJExpression cand (IJExpression right);
+  IJExpression cand (@Nonnull IJExpression right);
 
   /** Logical OR '||'. */
   @Nonnull
-  IJExpression cor (IJExpression right);
+  IJExpression cor (@Nonnull IJExpression right);
 
   @Nonnull
-  IJExpression xor (IJExpression right);
+  IJExpression xor (@Nonnull IJExpression right);
 
   @Nonnull
-  IJExpression lt (IJExpression right);
+  IJExpression lt (@Nonnull IJExpression right);
 
   @Nonnull
-  IJExpression lte (IJExpression right);
+  IJExpression lte (@Nonnull IJExpression right);
 
   @Nonnull
-  IJExpression gt (IJExpression right);
+  IJExpression gt (@Nonnull IJExpression right);
 
   @Nonnull
-  IJExpression gte (IJExpression right);
+  IJExpression gte (@Nonnull IJExpression right);
 
   @Nonnull
-  IJExpression eq (IJExpression right);
+  IJExpression eq (@Nonnull IJExpression right);
 
   @Nonnull
-  IJExpression ne (IJExpression right);
+  IJExpression ne (@Nonnull IJExpression right);
 
   /**
    * Returns "[this] instanceof [right]"
    */
   @Nonnull
-  IJExpression _instanceof (AbstractJType right);
+  IJExpression _instanceof (@Nonnull AbstractJType right);
 
   /**
    * Returns "[this].[method]". Arguments shall be added to the returned
    * {@link JInvocation} object.
    */
   @Nonnull
-  JInvocation invoke (JMethod method);
+  JInvocation invoke (@Nonnull JMethod method);
 
   /**
    * Returns "[this].[method]". Arguments shall be added to the returned
    * {@link JInvocation} object.
    */
   @Nonnull
-  JInvocation invoke (String method);
+  JInvocation invoke (@Nonnull String method);
 
   @Nonnull
-  JFieldRef ref (JVar field);
+  JFieldRef ref (@Nonnull JVar field);
 
   @Nonnull
-  JFieldRef ref (String field);
+  JFieldRef ref (@Nonnull String field);
 
   @Nonnull
-  JArrayCompRef component (IJExpression index);
+  JArrayCompRef component (@Nonnull IJExpression index);
+
+  @Nonnull
+  JArrayCompRef component (int index);
+
+  @Nonnull
+  JArrayCompRef component (long index);
+
+  @Nonnull
+  JArrayCompRef component0 ();
 }

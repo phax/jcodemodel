@@ -103,9 +103,63 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   }
 
   @Nonnull
+  public final IJExpression plus (final double right)
+  {
+    return plus (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression plus (final float right)
+  {
+    return plus (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression plus (final int right)
+  {
+    return plus (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression plus (final long right)
+  {
+    return plus (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression plus (@Nonnull final String right)
+  {
+    return plus (JExpr.lit (right));
+  }
+
+  @Nonnull
   public final IJExpression minus (@Nonnull final IJExpression right)
   {
     return JOp.minus (this, right);
+  }
+
+  @Nonnull
+  public final IJExpression minus (final double right)
+  {
+    return minus (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression minus (final float right)
+  {
+    return minus (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression minus (final int right)
+  {
+    return minus (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression minus (final long right)
+  {
+    return minus (JExpr.lit (right));
   }
 
   @Nonnull
@@ -115,9 +169,57 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   }
 
   @Nonnull
+  public final IJExpression mul (final double right)
+  {
+    return mul (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression mul (final float right)
+  {
+    return mul (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression mul (final int right)
+  {
+    return mul (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression mul (final long right)
+  {
+    return mul (JExpr.lit (right));
+  }
+
+  @Nonnull
   public final IJExpression div (@Nonnull final IJExpression right)
   {
     return JOp.div (this, right);
+  }
+
+  @Nonnull
+  public final IJExpression div (final double right)
+  {
+    return div (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression div (final float right)
+  {
+    return div (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression div (final int right)
+  {
+    return div (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final IJExpression div (final long right)
+  {
+    return div (JExpr.lit (right));
   }
 
   @Nonnull
@@ -249,5 +351,23 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   public final JArrayCompRef component (@Nonnull final IJExpression index)
   {
     return JExpr.component (this, index);
+  }
+
+  @Nonnull
+  public final JArrayCompRef component (final int index)
+  {
+    return component (JExpr.lit (index));
+  }
+
+  @Nonnull
+  public final JArrayCompRef component (final long index)
+  {
+    return component (JExpr.lit (index));
+  }
+
+  @Nonnull
+  public final JArrayCompRef component0 ()
+  {
+    return component (JExpr.lit (0));
   }
 }

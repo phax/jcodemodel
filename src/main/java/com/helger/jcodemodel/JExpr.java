@@ -285,37 +285,25 @@ public final class JExpr
   @Nonnull
   public static IJExpression lit (final int n)
   {
-    return new JAtom (Integer.toString (n));
+    return new JAtomLong (n);
   }
 
   @Nonnull
   public static IJExpression lit (final long n)
   {
-    return new JAtom (Long.toString (n) + "L");
+    return new JAtomLong (n);
   }
 
   @Nonnull
   public static IJExpression lit (final float f)
   {
-    if (f == Float.NEGATIVE_INFINITY)
-      return new JAtom ("java.lang.Float.NEGATIVE_INFINITY");
-    if (f == Float.POSITIVE_INFINITY)
-      return new JAtom ("java.lang.Float.POSITIVE_INFINITY");
-    if (Float.isNaN (f))
-      return new JAtom ("java.lang.Float.NaN");
-    return new JAtom (Float.toString (f) + "F");
+    return new JAtomFloat (f);
   }
 
   @Nonnull
   public static IJExpression lit (final double d)
   {
-    if (d == Double.NEGATIVE_INFINITY)
-      return new JAtom ("java.lang.Double.NEGATIVE_INFINITY");
-    if (d == Double.POSITIVE_INFINITY)
-      return new JAtom ("java.lang.Double.POSITIVE_INFINITY");
-    if (Double.isNaN (d))
-      return new JAtom ("java.lang.Double.NaN");
-    return new JAtom (Double.toString (d) + "D");
+    return new JAtomDouble (d);
   }
 
   /**
@@ -375,7 +363,7 @@ public final class JExpr
   @Nonnull
   public static IJExpression lit (final char c)
   {
-    return new JAtom (quotify ('\'', "" + c));
+    return new JAtom (quotify ('\'', Character.toString (c)));
   }
 
   @Nonnull

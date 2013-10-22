@@ -43,27 +43,24 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 
 /**
- * JAtoms: Simple code components that merely generate themselves.
+ * A special atom for int values
  */
-public class JAtom extends AbstractJExpressionImpl
+public class JAtomInt extends AbstractJExpressionImpl
 {
-  private final String what;
+  private final int what;
 
-  protected JAtom (@Nonnull final String what)
+  protected JAtomInt (final int what)
   {
-    if (what == null)
-      throw new NullPointerException ("what");
     this.what = what;
   }
 
-  @Nonnull
-  public String what ()
+  public int what ()
   {
     return what;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (what);
+    f.print (Integer.toString (what));
   }
 }

@@ -43,27 +43,24 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 
 /**
- * JAtoms: Simple code components that merely generate themselves.
+ * A special atom for long values
  */
-public class JAtom extends AbstractJExpressionImpl
+public class JAtomLong extends AbstractJExpressionImpl
 {
-  private final String what;
+  private final long what;
 
-  protected JAtom (@Nonnull final String what)
+  protected JAtomLong (final long what)
   {
-    if (what == null)
-      throw new NullPointerException ("what");
     this.what = what;
   }
 
-  @Nonnull
-  public String what ()
+  public long what ()
   {
     return what;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (what);
+    f.print (Long.toString (what) + "L");
   }
 }

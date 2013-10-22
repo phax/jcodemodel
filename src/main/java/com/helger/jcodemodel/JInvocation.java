@@ -163,6 +163,60 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
    * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
    */
   @Nonnull
+  public JInvocation arg (@Nonnull final boolean v)
+  {
+    return arg (JExpr.lit (v));
+  }
+
+  /**
+   * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   */
+  @Nonnull
+  public JInvocation arg (@Nonnull final char v)
+  {
+    return arg (JExpr.lit (v));
+  }
+
+  /**
+   * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   */
+  @Nonnull
+  public JInvocation arg (@Nonnull final double v)
+  {
+    return arg (JExpr.lit (v));
+  }
+
+  /**
+   * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   */
+  @Nonnull
+  public JInvocation arg (@Nonnull final float v)
+  {
+    return arg (JExpr.lit (v));
+  }
+
+  /**
+   * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   */
+  @Nonnull
+  public JInvocation arg (@Nonnull final int v)
+  {
+    return arg (JExpr.lit (v));
+  }
+
+  /**
+   * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   */
+  @Nonnull
+  public JInvocation arg (@Nonnull final long v)
+  {
+    return arg (JExpr.lit (v));
+  }
+
+  /**
+   * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   */
+  @Nonnull
   public JInvocation arg (@Nonnull final String v)
   {
     return arg (JExpr.lit (v));
@@ -177,6 +231,17 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
   public IJExpression [] listArgs ()
   {
     return args.toArray (new IJExpression [args.size ()]);
+  }
+
+  /**
+   * Returns all arguments of the invocation.
+   * 
+   * @return If there's no arguments, an empty list will be returned.
+   */
+  @Nonnull
+  public List <IJExpression> args ()
+  {
+    return new ArrayList <IJExpression> (args);
   }
 
   public void generate (@Nonnull final JFormatter f)

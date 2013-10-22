@@ -43,27 +43,33 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 
 /**
- * JAtoms: Simple code components that merely generate themselves.
+ * A special atom for double values
  */
-public class JAtom extends AbstractJExpressionImpl
+public class JAtomDouble extends AbstractJExpressionImpl
 {
-  private final String what;
+  private final double what;
 
-  protected JAtom (@Nonnull final String what)
+  protected JAtomDouble (final double what)
   {
-    if (what == null)
-      throw new NullPointerException ("what");
     this.what = what;
   }
 
-  @Nonnull
-  public String what ()
+  public double what ()
   {
     return what;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (what);
+    if (what == Double.NEGATIVE_INFINITY)
+      f.print ("java.lang.Double.NEGATIVE_INFINITY");
+    else
+      if (what == Double.POSITIVE_INFINITY)
+        f.print ("java.lang.Double.POSITIVE_INFINITY");
+      else
+        if (Double.isNaN (what))
+          f.print ("java.lang.Double.NaN");
+        else
+          f.print (Double.toString (what));
   }
 }
