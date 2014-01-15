@@ -108,7 +108,7 @@
   <distributionManagement>
     <repository>
       <id>repo.phloc.public</id>
-      <url>sftp://www.phloc.com/var/www/html-repo/maven2</url>
+      <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
     </repository>
   </distributionManagement>
   
