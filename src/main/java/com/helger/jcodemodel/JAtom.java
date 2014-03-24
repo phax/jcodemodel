@@ -47,23 +47,23 @@ import javax.annotation.Nonnull;
  */
 public class JAtom extends AbstractJExpressionImpl
 {
-  private final String what;
+  private final String _what;
 
   protected JAtom (@Nonnull final String what)
   {
     if (what == null)
       throw new NullPointerException ("what");
-    this.what = what;
+    this._what = what;
   }
 
   @Nonnull
   public String what ()
   {
-    return what;
+    return _what;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (what);
+    f.print (_what);
   }
 }

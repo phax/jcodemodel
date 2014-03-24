@@ -59,14 +59,14 @@ import com.helger.jcodemodel.JPackage;
  */
 public class ProgressCodeWriter extends FilterCodeWriter
 {
-  private final PrintStream progress;
+  private final PrintStream _progress;
 
   public ProgressCodeWriter (@Nonnull final AbstractCodeWriter output, @Nonnull final PrintStream progress)
   {
     super (output);
     if (progress == null)
       throw new IllegalArgumentException ();
-    this.progress = progress;
+    this._progress = progress;
   }
 
   @Override
@@ -86,8 +86,8 @@ public class ProgressCodeWriter extends FilterCodeWriter
   private void report (@Nonnull final JPackage pkg, @Nonnull final String fileName)
   {
     if (pkg.isUnnamed ())
-      progress.println (fileName);
+      _progress.println (fileName);
     else
-      progress.println (pkg.name ().replace ('.', File.separatorChar) + File.separatorChar + fileName);
+      _progress.println (pkg.name ().replace ('.', File.separatorChar) + File.separatorChar + fileName);
   }
 }

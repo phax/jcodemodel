@@ -48,8 +48,8 @@ import javax.annotation.Nonnull;
  */
 public class JPrimitiveType extends AbstractJType
 {
-  private final JCodeModel owner;
-  private final String typeName;
+  private final JCodeModel _owner;
+  private final String _typeName;
   /**
    * Corresponding wrapper class. For example, this would be "java.lang.Short"
    * for short.
@@ -61,8 +61,8 @@ public class JPrimitiveType extends AbstractJType
                             @Nonnull final String typeName,
                             @Nonnull final Class <?> wrapper)
   {
-    this.owner = owner;
-    this.typeName = typeName;
+    this._owner = owner;
+    this._typeName = typeName;
     this.wrapperClass = owner.ref (wrapper);
   }
 
@@ -70,14 +70,14 @@ public class JPrimitiveType extends AbstractJType
   @Nonnull
   public JCodeModel owner ()
   {
-    return owner;
+    return _owner;
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    return typeName;
+    return _typeName;
   }
 
   @Override
@@ -98,7 +98,7 @@ public class JPrimitiveType extends AbstractJType
   public AbstractJClass array ()
   {
     if (arrayClass == null)
-      arrayClass = new JArrayClass (owner, this);
+      arrayClass = new JArrayClass (_owner, this);
     return arrayClass;
   }
 
@@ -147,11 +147,11 @@ public class JPrimitiveType extends AbstractJType
   {
     // it just so happens that the unwrap method is always
     // things like "intValue" or "booleanValue".
-    return exp.invoke (typeName + "Value");
+    return exp.invoke (_typeName + "Value");
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (typeName);
+    f.print (_typeName);
   }
 }

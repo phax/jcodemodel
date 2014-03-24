@@ -57,22 +57,22 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   /**
    * Modifiers.
    */
-  private final JMods mods;
+  private final JMods _mods;
 
   /**
    * JType of the variable
    */
-  private AbstractJType type;
+  private AbstractJType _type;
 
   /**
    * Name of the variable
    */
-  private String name;
+  private String _name;
 
   /**
    * Initialization of the variable in its declaration
    */
-  private IJExpression init;
+  private IJExpression _init;
 
   /**
    * Annotations on this variable. Lazily created.
@@ -96,10 +96,10 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   {
     if (!JJavaName.isJavaIdentifier (name))
       throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
-    this.mods = mods;
-    this.type = type;
-    this.name = name;
-    this.init = init;
+    this._mods = mods;
+    this._type = type;
+    this._name = name;
+    this._init = init;
   }
 
   /**
@@ -111,7 +111,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   @Nonnull
   public JVar init (@Nullable final IJExpression init)
   {
-    this.init = init;
+    this._init = init;
     return this;
   }
 
@@ -123,7 +123,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   @Nonnull
   public String name ()
   {
-    return name;
+    return _name;
   }
 
   /**
@@ -133,7 +133,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   {
     if (!JJavaName.isJavaIdentifier (name))
       throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
-    this.name = name;
+    this._name = name;
   }
 
   /**
@@ -143,7 +143,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
    */
   public AbstractJType type ()
   {
-    return type;
+    return _type;
   }
 
   /**
@@ -153,7 +153,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   @Nonnull
   public JMods mods ()
   {
-    return mods;
+    return _mods;
   }
 
   /**
@@ -168,8 +168,8 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   {
     if (newType == null)
       throw new IllegalArgumentException ();
-    final AbstractJType r = type;
-    type = newType;
+    final AbstractJType r = _type;
+    _type = newType;
     return r;
   }
 
@@ -198,7 +198,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
-    return annotate (type.owner ().ref (clazz));
+    return annotate (_type.owner ().ref (clazz));
   }
 
   @Nonnull
@@ -225,9 +225,9 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
     if (annotations != null)
       for (final JAnnotationUse annotation : annotations)
         f.generable (annotation).newline ();
-    f.generable (mods).generable (type).id (name);
-    if (init != null)
-      f.print ('=').generable (init);
+    f.generable (_mods).generable (_type).id (_name);
+    if (_init != null)
+      f.print ('=').generable (_init);
   }
 
   public void declare (@Nonnull final JFormatter f)
@@ -237,7 +237,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.id (name);
+    f.id (_name);
   }
 
   @Nonnull

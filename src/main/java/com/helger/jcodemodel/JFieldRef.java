@@ -52,22 +52,22 @@ public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTa
    * Object expression upon which this field will be accessed, or null for the
    * implicit 'this'.
    */
-  private final IJGenerable object;
+  private final IJGenerable _object;
 
   /**
-   * Name of the field to be accessed. Either this or {@link #var} is set.
+   * Name of the field to be accessed. Either this or {@link #_var} is set.
    */
-  private String name;
+  private String _name;
 
   /**
    * Variable to be accessed.
    */
-  private JVar var;
+  private JVar _var;
 
   /**
    * Indicates if an explicit this should be generated
    */
-  private final boolean explicitThis;
+  private final boolean _explicitThis;
 
   /**
    * Field reference constructor given an object expression and field name
@@ -103,48 +103,48 @@ public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTa
 
   protected JFieldRef (@Nullable final IJGenerable object, @Nonnull final String name, final boolean explicitThis)
   {
-    this.explicitThis = explicitThis;
-    this.object = object;
+    this._explicitThis = explicitThis;
+    this._object = object;
     if (name.indexOf ('.') >= 0)
       throw new IllegalArgumentException ("Field name contains '.': " + name);
-    this.name = name;
+    this._name = name;
   }
 
   protected JFieldRef (@Nullable final IJGenerable object, @Nonnull final JVar var, final boolean explicitThis)
   {
-    this.explicitThis = explicitThis;
-    this.object = object;
-    this.var = var;
+    this._explicitThis = explicitThis;
+    this._object = object;
+    this._var = var;
   }
 
   @Nonnull
   public String name ()
   {
-    String name = this.name;
+    String name = this._name;
     if (name == null)
-      name = var.name ();
+      name = _var.name ();
     return name;
   }
 
   @Nullable
   public JVar var ()
   {
-    return var;
+    return _var;
   }
 
   public boolean explicitThis ()
   {
-    return explicitThis;
+    return _explicitThis;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
     final String name = name ();
 
-    if (object != null)
-      f.generable (object).print ('.').print (name);
+    if (_object != null)
+      f.generable (_object).print ('.').print (name);
     else
-      if (explicitThis)
+      if (_explicitThis)
         f.print ("this.").print (name);
       else
         f.id (name);

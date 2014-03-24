@@ -50,7 +50,7 @@ public class JDoLoop implements IJStatement
   /**
    * Test part of Do statement for determining exit state
    */
-  private final IJExpression test;
+  private final IJExpression _test;
 
   /**
    * JBlock of statements which makes up body of this Do statement
@@ -64,13 +64,13 @@ public class JDoLoop implements IJStatement
   {
     if (test == null)
       throw new NullPointerException ("test");
-    this.test = test;
+    this._test = test;
   }
 
   @Nonnull
   public IJExpression test ()
   {
-    return test;
+    return _test;
   }
 
   @Nonnull
@@ -89,13 +89,13 @@ public class JDoLoop implements IJStatement
     else
       f.print ("{ }");
 
-    if (JOp.hasTopOp (test))
+    if (JOp.hasTopOp (_test))
     {
-      f.print ("while ").generable (test);
+      f.print ("while ").generable (_test);
     }
     else
     {
-      f.print ("while (").generable (test).print (')');
+      f.print ("while (").generable (_test).print (')');
     }
     f.print (';').newline ();
   }

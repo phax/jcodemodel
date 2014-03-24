@@ -67,8 +67,8 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Whether or not this block must be braced and indented
    */
-  private boolean bracesRequired = true;
-  private boolean indentRequired = true;
+  private boolean _bracesRequired = true;
+  private boolean _indentRequired = true;
 
   /**
    * Current position.
@@ -82,8 +82,8 @@ public class JBlock implements IJGenerable, IJStatement
 
   protected JBlock (final boolean bracesRequired, final boolean indentRequired)
   {
-    this.bracesRequired = bracesRequired;
-    this.indentRequired = indentRequired;
+    this._bracesRequired = bracesRequired;
+    this._indentRequired = indentRequired;
   }
 
   /**
@@ -231,8 +231,8 @@ public class JBlock implements IJGenerable, IJStatement
   {
     final JVar v = new JVar (JMods.forVar (mods), type, name, init);
     _insert (v);
-    bracesRequired = true;
-    indentRequired = true;
+    _bracesRequired = true;
+    _indentRequired = true;
     return v;
   }
 
@@ -543,14 +543,14 @@ public class JBlock implements IJGenerable, IJStatement
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (bracesRequired)
+    if (_bracesRequired)
       f.print ('{').newline ();
-    if (indentRequired)
+    if (_indentRequired)
       f.indent ();
     generateBody (f);
-    if (indentRequired)
+    if (_indentRequired)
       f.outdent ();
-    if (bracesRequired)
+    if (_bracesRequired)
       f.print ('}');
   }
 
@@ -568,7 +568,7 @@ public class JBlock implements IJGenerable, IJStatement
   public void state (@Nonnull final JFormatter f)
   {
     f.generable (this);
-    if (bracesRequired)
+    if (_bracesRequired)
       f.newline ();
   }
 

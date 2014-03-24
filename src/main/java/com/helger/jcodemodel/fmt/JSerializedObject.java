@@ -54,7 +54,7 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  */
 public class JSerializedObject extends AbstractJResourceFile
 {
-  private final Object obj;
+  private final Object _obj;
 
   /**
    * @exception IOException
@@ -63,7 +63,7 @@ public class JSerializedObject extends AbstractJResourceFile
   public JSerializedObject (@Nonnull final String name, @Nonnull final Object obj) throws IOException
   {
     super (name);
-    this.obj = obj;
+    this._obj = obj;
   }
 
   /**
@@ -74,7 +74,7 @@ public class JSerializedObject extends AbstractJResourceFile
   {
     // serialize the obj into a ByteArrayOutputStream
     final ObjectOutputStream oos = new ObjectOutputStream (os);
-    oos.writeObject (obj);
+    oos.writeObject (_obj);
     oos.close ();
   }
 }

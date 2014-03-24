@@ -61,7 +61,7 @@ public class JDocComment extends JCommentPart implements IJGenerable
 
   private static final long serialVersionUID = 1L;
 
-  private final JCodeModel owner;
+  private final JCodeModel _owner;
 
   /** list of @param tags */
   private final Map <String, JCommentPart> atParams = new LinkedHashMap <String, JCommentPart> ();
@@ -87,13 +87,13 @@ public class JDocComment extends JCommentPart implements IJGenerable
 
   protected JDocComment (@Nonnull final JCodeModel owner)
   {
-    this.owner = owner;
+    this._owner = owner;
   }
 
   @Nonnull
   public JCodeModel owner ()
   {
-    return owner;
+    return _owner;
   }
 
   @Override
@@ -156,7 +156,7 @@ public class JDocComment extends JCommentPart implements IJGenerable
    */
   public JCommentPart addThrows (@Nonnull final Class <? extends Throwable> exception)
   {
-    return addThrows (owner.ref (exception));
+    return addThrows (_owner.ref (exception));
   }
 
   /**
@@ -176,7 +176,7 @@ public class JDocComment extends JCommentPart implements IJGenerable
   @Nullable
   public JCommentPart removeThrows (@Nonnull final Class <? extends Throwable> exception)
   {
-    return removeThrows (owner.ref (exception));
+    return removeThrows (_owner.ref (exception));
   }
 
   @Nullable
@@ -193,7 +193,7 @@ public class JDocComment extends JCommentPart implements IJGenerable
   @Nullable
   public JCommentPart getThrows (@Nonnull final Class <? extends Throwable> exception)
   {
-    return getThrows (owner.ref (exception));
+    return getThrows (_owner.ref (exception));
   }
 
   @Nullable

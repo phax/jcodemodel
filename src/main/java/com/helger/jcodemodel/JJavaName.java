@@ -53,28 +53,25 @@ public class JJavaName
 {
   private static class Entry
   {
-    private final Pattern pattern;
-    private final String replacement;
+    private final Pattern _pattern;
+    private final String _replacement;
 
     public Entry (final String pattern, final String replacement)
     {
-      this.pattern = Pattern.compile (pattern, Pattern.CASE_INSENSITIVE);
-      this.replacement = replacement;
+      this._pattern = Pattern.compile (pattern, Pattern.CASE_INSENSITIVE);
+      this._replacement = replacement;
     }
 
     String apply (final String word)
     {
-      final Matcher m = pattern.matcher (word);
+      final Matcher m = _pattern.matcher (word);
       if (m.matches ())
       {
         final StringBuffer buf = new StringBuffer ();
-        m.appendReplacement (buf, replacement);
+        m.appendReplacement (buf, _replacement);
         return buf.toString ();
       }
-      else
-      {
-        return null;
-      }
+      return null;
     }
   }
 
@@ -83,51 +80,51 @@ public class JJavaName
   static
   {
     final String [] source = { "(.*)child",
-                              "$1children",
-                              "(.+)fe",
-                              "$1ves",
-                              "(.*)mouse",
-                              "$1mise",
-                              "(.+)f",
-                              "$1ves",
-                              "(.+)ch",
-                              "$1ches",
-                              "(.+)sh",
-                              "$1shes",
-                              "(.*)tooth",
-                              "$1teeth",
-                              "(.+)um",
-                              "$1a",
-                              "(.+)an",
-                              "$1en",
-                              "(.+)ato",
-                              "$1atoes",
-                              "(.*)basis",
-                              "$1bases",
-                              "(.*)axis",
-                              "$1axes",
-                              "(.+)is",
-                              "$1ises",
-                              "(.+)ss",
-                              "$1sses",
-                              "(.+)us",
-                              "$1uses",
-                              "(.+)s",
-                              "$1s",
-                              "(.*)foot",
-                              "$1feet",
-                              "(.+)ix",
-                              "$1ixes",
-                              "(.+)ex",
-                              "$1ices",
-                              "(.+)nx",
-                              "$1nxes",
-                              "(.+)x",
-                              "$1xes",
-                              "(.+)y",
-                              "$1ies",
-                              "(.+)",
-                              "$1s", };
+                               "$1children",
+                               "(.+)fe",
+                               "$1ves",
+                               "(.*)mouse",
+                               "$1mise",
+                               "(.+)f",
+                               "$1ves",
+                               "(.+)ch",
+                               "$1ches",
+                               "(.+)sh",
+                               "$1shes",
+                               "(.*)tooth",
+                               "$1teeth",
+                               "(.+)um",
+                               "$1a",
+                               "(.+)an",
+                               "$1en",
+                               "(.+)ato",
+                               "$1atoes",
+                               "(.*)basis",
+                               "$1bases",
+                               "(.*)axis",
+                               "$1axes",
+                               "(.+)is",
+                               "$1ises",
+                               "(.+)ss",
+                               "$1sses",
+                               "(.+)us",
+                               "$1uses",
+                               "(.+)s",
+                               "$1s",
+                               "(.*)foot",
+                               "$1feet",
+                               "(.+)ix",
+                               "$1ixes",
+                               "(.+)ex",
+                               "$1ices",
+                               "(.+)nx",
+                               "$1nxes",
+                               "(.+)x",
+                               "$1xes",
+                               "(.+)y",
+                               "$1ies",
+                               "(.+)",
+                               "$1s", };
 
     TABLE = new Entry [source.length / 2];
 
@@ -145,67 +142,67 @@ public class JJavaName
     // see
     // http://java.sun.com/docs/books/tutorial/java/nutsandbolts/_keywords.html
     final String [] words = new String [] { "abstract",
-                                           "boolean",
-                                           "break",
-                                           "byte",
-                                           "case",
-                                           "catch",
-                                           "char",
-                                           "class",
-                                           "const",
-                                           "continue",
-                                           "default",
-                                           "do",
-                                           "double",
-                                           "else",
-                                           "extends",
-                                           "final",
-                                           "finally",
-                                           "float",
-                                           "for",
-                                           "goto",
-                                           "if",
-                                           "implements",
-                                           "import",
-                                           "instanceof",
-                                           "int",
-                                           "interface",
-                                           "long",
-                                           "native",
-                                           "new",
-                                           "package",
-                                           "private",
-                                           "protected",
-                                           "public",
-                                           "return",
-                                           "short",
-                                           "static",
-                                           "strictfp",
-                                           "super",
-                                           "switch",
-                                           "synchronized",
-                                           "this",
-                                           "throw",
-                                           "throws",
-                                           "transient",
-                                           "try",
-                                           "void",
-                                           "volatile",
-                                           "while",
+                                            "boolean",
+                                            "break",
+                                            "byte",
+                                            "case",
+                                            "catch",
+                                            "char",
+                                            "class",
+                                            "const",
+                                            "continue",
+                                            "default",
+                                            "do",
+                                            "double",
+                                            "else",
+                                            "extends",
+                                            "final",
+                                            "finally",
+                                            "float",
+                                            "for",
+                                            "goto",
+                                            "if",
+                                            "implements",
+                                            "import",
+                                            "instanceof",
+                                            "int",
+                                            "interface",
+                                            "long",
+                                            "native",
+                                            "new",
+                                            "package",
+                                            "private",
+                                            "protected",
+                                            "public",
+                                            "return",
+                                            "short",
+                                            "static",
+                                            "strictfp",
+                                            "super",
+                                            "switch",
+                                            "synchronized",
+                                            "this",
+                                            "throw",
+                                            "throws",
+                                            "transient",
+                                            "try",
+                                            "void",
+                                            "volatile",
+                                            "while",
 
-                                           // technically these are not reserved
-                                           // words but they cannot be used as
-                                           // identifiers.
-                                           "true",
-                                           "false",
-                                           "null",
+                                            // technically these are not reserved
+                                            // words but they cannot be used as
+                                            // identifiers.
+                                            "true",
+                                            "false",
+                                            "null",
 
-                                           // and I believe assert is also a new
-                                           // keyword
-                                           "assert",
+                                            // and I believe assert is also a new
+                                            // keyword
+                                            "assert",
 
-                                           // and 5.0 keywords
-                                           "enum" };
+                                            // and 5.0 keywords
+    "enum" };
     for (final String w : words)
       reservedKeywords.add (w);
   }
@@ -261,7 +258,7 @@ public class JJavaName
 
   /**
    * <b>Experimental API:</b> converts an English word into a plural form.
-   * 
+   *
    * @param word
    *        a word, such as "child", "apple". Must not be null. It accepts word
    *        concatanation forms that are common in programming languages, such

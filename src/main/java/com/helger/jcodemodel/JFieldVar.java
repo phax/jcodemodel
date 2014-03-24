@@ -48,7 +48,7 @@ import javax.annotation.Nullable;
  */
 public class JFieldVar extends JVar implements IJDocCommentable
 {
-  private final JDefinedClass owner;
+  private final JDefinedClass _owner;
 
   /**
    * javadoc comments for this JFieldVar
@@ -72,25 +72,25 @@ public class JFieldVar extends JVar implements IJDocCommentable
                        @Nullable final IJExpression init)
   {
     super (mods, type, name, init);
-    this.owner = owner;
+    this._owner = owner;
   }
 
   @Nonnull
   public JDefinedClass owner ()
   {
-    return owner;
+    return _owner;
   }
 
   @Override
   public void name (final String name)
   {
     // make sure that the new name is available
-    if (owner.fields.containsKey (name))
+    if (_owner.fields.containsKey (name))
       throw new IllegalArgumentException ("name " + name + " is already in use");
     final String oldName = name ();
     super.name (name);
-    owner.fields.remove (oldName);
-    owner.fields.put (name, this);
+    _owner.fields.remove (oldName);
+    _owner.fields.put (name, this);
   }
 
   /**
@@ -102,7 +102,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
   public JDocComment javadoc ()
   {
     if (jdoc == null)
-      jdoc = new JDocComment (owner.owner ());
+      jdoc = new JDocComment (_owner.owner ());
     return jdoc;
   }
 

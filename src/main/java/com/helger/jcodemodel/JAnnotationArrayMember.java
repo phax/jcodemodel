@@ -61,13 +61,13 @@ import com.helger.jcodemodel.util.NameUtilities;
 public class JAnnotationArrayMember extends AbstractJAnnotationValue implements IJAnnotatable
 {
   private final List <AbstractJAnnotationValue> values = new ArrayList <AbstractJAnnotationValue> ();
-  private final JCodeModel owner;
+  private final JCodeModel _owner;
 
   protected JAnnotationArrayMember (@Nonnull final JCodeModel owner)
   {
     if (owner == null)
       throw new NullPointerException ("owner");
-    this.owner = owner;
+    this._owner = owner;
   }
 
   /**
@@ -229,7 +229,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     {
       public void generate (final JFormatter f)
       {
-        f.type (owner.ref (value.getDeclaringClass ())).print ('.').print (value.name ());
+        f.type (_owner.ref (value.getDeclaringClass ())).print ('.').print (value.name ());
       }
     };
     values.add (annotationValue);
@@ -306,7 +306,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
-    return annotate (owner.ref (clazz));
+    return annotate (_owner.ref (clazz));
   }
 
   /**

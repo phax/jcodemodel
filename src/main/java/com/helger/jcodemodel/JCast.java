@@ -50,12 +50,12 @@ public class JCast extends AbstractJExpressionImpl
   /**
    * JType to which the expression is to be cast.
    */
-  private final AbstractJType type;
+  private final AbstractJType _type;
 
   /**
    * JExpression to be cast.
    */
-  private final IJExpression object;
+  private final IJExpression _object;
 
   /**
    * JCast constructor
@@ -67,24 +67,24 @@ public class JCast extends AbstractJExpressionImpl
    */
   protected JCast (@Nonnull final AbstractJType type, @Nonnull final IJExpression object)
   {
-    this.type = type;
-    this.object = object;
+    this._type = type;
+    this._object = object;
   }
 
   @Nonnull
   public AbstractJType type ()
   {
-    return type;
+    return _type;
   }
 
   @Nonnull
   public IJExpression object ()
   {
-    return object;
+    return _object;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print ("((").generable (type).print (')').generable (object).print (')');
+    f.print ("((").generable (_type).print (')').generable (_object).print (')');
   }
 }

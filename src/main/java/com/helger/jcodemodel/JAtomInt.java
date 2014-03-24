@@ -47,20 +47,20 @@ import javax.annotation.Nonnull;
  */
 public class JAtomInt extends AbstractJExpressionImpl
 {
-  private final int what;
+  private final int _what;
 
   protected JAtomInt (final int what)
   {
-    this.what = what;
+    this._what = what;
   }
 
   public int what ()
   {
-    return what;
+    return _what;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (Integer.toString (what));
+    f.print (Integer.toString (_what));
   }
 }

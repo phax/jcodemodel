@@ -50,26 +50,26 @@ import javax.annotation.Nonnull;
  */
 public class JForEach implements IJStatement
 {
-  private final AbstractJType type;
-  private final String var;
+  private final AbstractJType _type;
+  private final String _var;
   private JBlock body; // lazily created
-  private final IJExpression collection;
+  private final IJExpression _collection;
   private final JVar loopVar;
 
   protected JForEach (@Nonnull final AbstractJType vartype,
                       @Nonnull final String variable,
                       @Nonnull final IJExpression collection)
   {
-    this.type = vartype;
-    this.var = variable;
-    this.collection = collection;
-    loopVar = new JVar (JMods.forVar (JMod.FINAL), type, var, collection);
+    this._type = vartype;
+    this._var = variable;
+    this._collection = collection;
+    loopVar = new JVar (JMods.forVar (JMod.FINAL), _type, _var, collection);
   }
 
   @Nonnull
   public AbstractJType type ()
   {
-    return type;
+    return _type;
   }
 
   /**
@@ -84,7 +84,7 @@ public class JForEach implements IJStatement
   @Nonnull
   public IJExpression collection ()
   {
-    return collection;
+    return _collection;
   }
 
   @Nonnull
@@ -98,7 +98,7 @@ public class JForEach implements IJStatement
   public void state (@Nonnull final JFormatter f)
   {
     f.print ("for (");
-    f.generable (type).id (var).print (": ").generable (collection);
+    f.generable (_type).id (_var).print (": ").generable (_collection);
     f.print (')');
     if (body != null)
       f.generable (body).newline ();

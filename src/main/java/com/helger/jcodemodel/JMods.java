@@ -72,11 +72,11 @@ public class JMods implements IJGenerable
   private static int INTERFACE = JMod.PUBLIC;
 
   /** bit-packed representation of modifiers. */
-  private int mods;
+  private int _mods;
 
   protected JMods (final int mods)
   {
-    this.mods = mods;
+    this._mods = mods;
   }
 
   /**
@@ -84,7 +84,7 @@ public class JMods implements IJGenerable
    */
   public int getValue ()
   {
-    return mods;
+    return _mods;
   }
 
   private static void _check (final int mods, final int legal, final String what)
@@ -133,17 +133,17 @@ public class JMods implements IJGenerable
 
   public boolean isAbstract ()
   {
-    return (mods & JMod.ABSTRACT) != 0;
+    return (_mods & JMod.ABSTRACT) != 0;
   }
 
   public boolean isNative ()
   {
-    return (mods & JMod.NATIVE) != 0;
+    return (_mods & JMod.NATIVE) != 0;
   }
 
   public boolean isSynchronized ()
   {
-    return (mods & JMod.SYNCHRONIZED) != 0;
+    return (_mods & JMod.SYNCHRONIZED) != 0;
   }
 
   public void setSynchronized (final boolean newValue)
@@ -179,30 +179,30 @@ public class JMods implements IJGenerable
 
   private void _setFlag (final int bit, final boolean newValue)
   {
-    mods = (mods & ~bit) | (newValue ? bit : 0);
+    _mods = (_mods & ~bit) | (newValue ? bit : 0);
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if ((mods & JMod.PUBLIC) != 0)
+    if ((_mods & JMod.PUBLIC) != 0)
       f.print ("public");
-    if ((mods & JMod.PROTECTED) != 0)
+    if ((_mods & JMod.PROTECTED) != 0)
       f.print ("protected");
-    if ((mods & JMod.PRIVATE) != 0)
+    if ((_mods & JMod.PRIVATE) != 0)
       f.print ("private");
-    if ((mods & JMod.FINAL) != 0)
+    if ((_mods & JMod.FINAL) != 0)
       f.print ("final");
-    if ((mods & JMod.STATIC) != 0)
+    if ((_mods & JMod.STATIC) != 0)
       f.print ("static");
-    if ((mods & JMod.ABSTRACT) != 0)
+    if ((_mods & JMod.ABSTRACT) != 0)
       f.print ("abstract");
-    if ((mods & JMod.NATIVE) != 0)
+    if ((_mods & JMod.NATIVE) != 0)
       f.print ("native");
-    if ((mods & JMod.SYNCHRONIZED) != 0)
+    if ((_mods & JMod.SYNCHRONIZED) != 0)
       f.print ("synchronized");
-    if ((mods & JMod.TRANSIENT) != 0)
+    if ((_mods & JMod.TRANSIENT) != 0)
       f.print ("transient");
-    if ((mods & JMod.VOLATILE) != 0)
+    if ((_mods & JMod.VOLATILE) != 0)
       f.print ("volatile");
   }
 

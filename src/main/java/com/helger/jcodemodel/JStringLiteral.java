@@ -49,21 +49,21 @@ import javax.annotation.Nonnull;
  */
 public class JStringLiteral extends AbstractJExpressionImpl
 {
-  public final String what;
+  public final String _what;
 
   protected JStringLiteral (@Nonnull final String what)
   {
-    this.what = what;
+    this._what = what;
   }
 
   @Nonnull
   public String what ()
   {
-    return what;
+    return _what;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (JExpr.quotify ('"', what));
+    f.print (JExpr.quotify ('"', _what));
   }
 }

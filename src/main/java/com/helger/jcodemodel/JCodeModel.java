@@ -64,14 +64,14 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  * Root of the code DOM.
  * <p>
  * Here's your typical CodeModel application.
- * 
+ *
  * <pre>
  * JCodeModel cm = new JCodeModel();
- * 
+ *
  * // generate source code by populating the 'cm' tree.
  * cm._class(...);
  * ...
- * 
+ *
  * // write them out
  * cm.build(new File("."));
  * </pre>
@@ -144,7 +144,7 @@ public final class JCodeModel
 
   /**
    * Add a package to the list of packages to be generated
-   * 
+   *
    * @param name
    *        Name of the package. Use "" to indicate the root package.
    * @return Newly generated package
@@ -178,7 +178,7 @@ public final class JCodeModel
 
   /**
    * Creates a new generated class.
-   * 
+   *
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -203,7 +203,7 @@ public final class JCodeModel
 
   /**
    * Creates a new generated class.
-   * 
+   *
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -217,7 +217,7 @@ public final class JCodeModel
 
   /**
    * Creates a new generated class.
-   * 
+   *
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -228,7 +228,7 @@ public final class JCodeModel
 
   /**
    * Gets a reference to the already created generated class.
-   * 
+   *
    * @return null If the class is not yet created.
    * @see JPackage#_getClass(String)
    */
@@ -237,8 +237,7 @@ public final class JCodeModel
     final int idx = fullyQualifiedName.lastIndexOf ('.');
     if (idx < 0)
       return rootPackage ()._getClass (fullyQualifiedName);
-    else
-      return _package (fullyQualifiedName.substring (0, idx))._getClass (fullyQualifiedName.substring (idx + 1));
+    return _package (fullyQualifiedName.substring (0, idx))._getClass (fullyQualifiedName.substring (idx + 1));
   }
 
   /**
@@ -257,7 +256,7 @@ public final class JCodeModel
   /**
    * Generates Java source code. A convenience method for
    * <code>build(destDir,destDir,System.out)</code>.
-   * 
+   *
    * @param destDir
    *        source files are generated into this directory.
    * @param status
@@ -271,7 +270,7 @@ public final class JCodeModel
   /**
    * Generates Java source code. A convenience method that calls
    * {@link #build(AbstractCodeWriter,AbstractCodeWriter)}.
-   * 
+   *
    * @param srcDir
    *        Java source files are generated into this directory.
    * @param resourceDir
@@ -347,7 +346,7 @@ public final class JCodeModel
    * Obtains a reference to an existing class from its Class object.
    * <p>
    * The parameter may not be primitive.
-   * 
+   *
    * @see #_ref(Class) for the version that handles more cases.
    */
   @Nonnull
@@ -425,7 +424,7 @@ public final class JCodeModel
    * Obtains a type object from a type name.
    * <p>
    * This method handles primitive types, arrays, and existing {@link Class}es.
-   * 
+   *
    * @exception ClassNotFoundException
    *            If the specified type is not found.
    */
@@ -449,30 +448,30 @@ public final class JCodeModel
 
   private final class TypeNameParser
   {
-    private final String s;
+    private final String _s;
     private int idx;
 
     public TypeNameParser (final String s)
     {
-      this.s = s;
+      this._s = s;
     }
 
     /**
      * Parses a type name token T (which can be potentially of the form
      * Tr&ly;T1,T2,...>, or "? extends/super T".)
-     * 
+     *
      * @return the index of the character next to T.
      */
     AbstractJClass parseTypeName () throws ClassNotFoundException
     {
       final int start = idx;
 
-      if (s.charAt (idx) == '?')
+      if (_s.charAt (idx) == '?')
       {
         // wildcard
         idx++;
         ws ();
-        final String head = s.substring (idx);
+        final String head = _s.substring (idx);
         if (head.startsWith ("extends"))
         {
           idx += 7;
@@ -487,20 +486,20 @@ public final class JCodeModel
           else
           {
             // not supported
-            throw new IllegalArgumentException ("only extends/super can follow ?, but found " + s.substring (idx));
+            throw new IllegalArgumentException ("only extends/super can follow ?, but found " + _s.substring (idx));
           }
       }
 
-      while (idx < s.length ())
+      while (idx < _s.length ())
       {
-        final char ch = s.charAt (idx);
+        final char ch = _s.charAt (idx);
         if (Character.isJavaIdentifierStart (ch) || Character.isJavaIdentifierPart (ch) || ch == '.')
           idx++;
         else
           break;
       }
 
-      final AbstractJClass clazz = ref (s.substring (start, idx));
+      final AbstractJClass clazz = ref (_s.substring (start, idx));
 
       return parseSuffix (clazz);
     }
@@ -511,22 +510,22 @@ public final class JCodeModel
      */
     private AbstractJClass parseSuffix (final AbstractJClass clazz) throws ClassNotFoundException
     {
-      if (idx == s.length ())
+      if (idx == _s.length ())
         return clazz; // hit EOL
 
-      final char ch = s.charAt (idx);
+      final char ch = _s.charAt (idx);
 
       if (ch == '<')
         return parseSuffix (parseArguments (clazz));
 
       if (ch == '[')
       {
-        if (s.charAt (idx + 1) == ']')
+        if (_s.charAt (idx + 1) == ']')
         {
           idx += 2;
           return parseSuffix (clazz.array ());
         }
-        throw new IllegalArgumentException ("Expected ']' but found " + s.substring (idx + 1));
+        throw new IllegalArgumentException ("Expected ']' but found " + _s.substring (idx + 1));
       }
 
       return clazz;
@@ -537,18 +536,18 @@ public final class JCodeModel
      */
     private void ws ()
     {
-      while (Character.isWhitespace (s.charAt (idx)) && idx < s.length ())
+      while (Character.isWhitespace (_s.charAt (idx)) && idx < _s.length ())
         idx++;
     }
 
     /**
      * Parses '&lt;T1,T2,...,Tn>'
-     * 
+     *
      * @return the index of the character next to '>'
      */
     private AbstractJClass parseArguments (final AbstractJClass rawType) throws ClassNotFoundException
     {
-      if (s.charAt (idx) != '<')
+      if (_s.charAt (idx) != '<')
         throw new IllegalArgumentException ();
       idx++;
 
@@ -557,14 +556,14 @@ public final class JCodeModel
       while (true)
       {
         args.add (parseTypeName ());
-        if (idx == s.length ())
-          throw new IllegalArgumentException ("Missing '>' in " + s);
-        final char ch = s.charAt (idx);
+        if (idx == _s.length ())
+          throw new IllegalArgumentException ("Missing '>' in " + _s);
+        final char ch = _s.charAt (idx);
         if (ch == '>')
           return rawType.narrow (args.toArray (new AbstractJClass [args.size ()]));
 
         if (ch != ',')
-          throw new IllegalArgumentException (s);
+          throw new IllegalArgumentException (_s);
         idx++;
       }
 
@@ -632,8 +631,7 @@ public final class JCodeModel
       final int idx = name.lastIndexOf ('.');
       if (idx < 0)
         return JCodeModel.this._package ("");
-      else
-        return JCodeModel.this._package (name.substring (0, idx));
+      return JCodeModel.this._package (name.substring (0, idx));
     }
 
     @Override
@@ -646,8 +644,7 @@ public final class JCodeModel
           return owner ().ref (Object.class);
         return null;
       }
-      else
-        return ref (sp);
+      return ref (sp);
     }
 
     @Override
@@ -655,7 +652,7 @@ public final class JCodeModel
     {
       final Class <?> [] interfaces = _class.getInterfaces ();
       return new Iterator <AbstractJClass> ()
-      {
+          {
         private int idx = 0;
 
         public boolean hasNext ()
@@ -672,7 +669,7 @@ public final class JCodeModel
         {
           throw new UnsupportedOperationException ();
         }
-      };
+          };
     }
 
     @Override
@@ -694,8 +691,7 @@ public final class JCodeModel
       final Class <?> v = boxToPrimitive.get (_class);
       if (v != null)
         return AbstractJType.parse (JCodeModel.this, v.getName ());
-      else
-        return null;
+      return null;
     }
 
     @Override

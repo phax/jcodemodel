@@ -72,6 +72,6 @@ public class JBreak implements IJStatement
     if (label == null)
       f.print ("break;").newline ();
     else
-      f.print ("break ").print (label.label).print (';').newline ();
+      f.print ("break ").print (label._label).print (';').newline ();
   }
 }

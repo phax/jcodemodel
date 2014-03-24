@@ -70,9 +70,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Name of the package. May be the empty string for the root package.
    */
-  private final String name;
+  private final String _name;
 
-  private final JCodeModel owner;
+  private final JCodeModel _owner;
 
   /**
    * List of classes contained within this package keyed by their name.
@@ -120,14 +120,14 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     if (cw == null)
       throw new NullPointerException ("codeModel");
 
-    this.owner = cw;
+    this._owner = cw;
 
-    if (owner.isCaseSensitiveFileSystem)
+    if (_owner.isCaseSensitiveFileSystem)
       upperCaseClassMap = null;
     else
       upperCaseClassMap = new HashMap <String, JDefinedClass> ();
 
-    this.name = name;
+    this._name = name;
   }
 
   @Nullable
@@ -142,11 +142,11 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nullable
   public JPackage parent ()
   {
-    if (name.length () == 0)
+    if (_name.length () == 0)
       return null;
 
-    final int idx = name.lastIndexOf ('.');
-    return owner._package (name.substring (0, idx));
+    final int idx = _name.lastIndexOf ('.');
+    return _owner._package (_name.substring (0, idx));
   }
 
   public boolean isClass ()
@@ -228,7 +228,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    */
   public int compareTo (@Nonnull final JPackage that)
   {
-    return this.name.compareTo (that.name);
+    return this._name.compareTo (that._name);
   }
 
   /**
@@ -393,7 +393,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
       n = name + '.';
     n += name;
 
-    return owner.ref (Class.forName (n));
+    return _owner.ref (Class.forName (n));
   }
 
   /**
@@ -404,7 +404,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   {
     if (isUnnamed ())
       return owner ()._package (pkg);
-    return owner ()._package (name + '.' + pkg);
+    return owner ()._package (_name + '.' + pkg);
   }
 
   /**
@@ -433,7 +433,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    */
   public final boolean isUnnamed ()
   {
-    return name.length () == 0;
+    return _name.length () == 0;
   }
 
   /**
@@ -446,7 +446,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public String name ()
   {
-    return name;
+    return _name;
   }
 
   /**
@@ -455,7 +455,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public final JCodeModel owner ()
   {
-    return owner;
+    return _owner;
   }
 
   @Nonnull
@@ -475,7 +475,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
-    return annotate (owner.ref (clazz));
+    return annotate (_owner.ref (clazz));
   }
 
   @Nonnull
@@ -498,20 +498,20 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   File toPath (@Nonnull final File dir)
   {
-    if (name == null)
+    if (_name == null)
       return dir;
-    return new File (dir, name.replace ('.', File.separatorChar));
+    return new File (dir, _name.replace ('.', File.separatorChar));
   }
 
   public void declare (@Nonnull final JFormatter f)
   {
-    if (name.length () != 0)
-      f.print ("package").print (name).print (';').newline ();
+    if (_name.length () != 0)
+      f.print ("package").print (_name).print (';').newline ();
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (name);
+    f.print (_name);
   }
 
   void build (final AbstractCodeWriter src, final AbstractCodeWriter res) throws IOException

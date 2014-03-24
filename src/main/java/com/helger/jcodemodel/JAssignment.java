@@ -47,9 +47,9 @@ import javax.annotation.Nonnull;
  */
 public class JAssignment extends AbstractJExpressionImpl implements IJExpressionStatement
 {
-  private final IJAssignmentTarget lhs;
-  private final IJExpression rhs;
-  private final String op;
+  private final IJAssignmentTarget _lhs;
+  private final IJExpression _rhs;
+  private final String _op;
 
   /**
    * Constructor for "=" operator
@@ -78,21 +78,21 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
                          @Nonnull final IJExpression rhs,
                          @Nonnull final String op)
   {
-    this.lhs = lhs;
-    this.rhs = rhs;
-    this.op = op;
+    this._lhs = lhs;
+    this._rhs = rhs;
+    this._op = op;
   }
 
   @Nonnull
   public IJAssignmentTarget lhs ()
   {
-    return lhs;
+    return _lhs;
   }
 
   @Nonnull
   public IJExpression rhs ()
   {
-    return rhs;
+    return _rhs;
   }
 
   /**
@@ -101,12 +101,12 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
   @Nonnull
   public String op ()
   {
-    return op;
+    return _op;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.generable (lhs).print (op + '=').generable (rhs);
+    f.generable (_lhs).print (_op + '=').generable (_rhs);
   }
 
   public void state (@Nonnull final JFormatter f)

@@ -45,7 +45,7 @@ import java.util.List;
 
 /**
  * Implementation of {@link IJGenerifiable}.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDeclaration
@@ -94,8 +94,6 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   {
     if (typeVariables == null)
       return AbstractJClass.EMPTY_ARRAY;
-    else
-      return typeVariables.toArray (new JTypeVar [typeVariables.size ()]);
+    return typeVariables.toArray (new JTypeVar [typeVariables.size ()]);
   }
-
 }

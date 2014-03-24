@@ -59,12 +59,12 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   /**
    * The enum class.
    */
-  private final JDefinedClass type;
+  private final JDefinedClass _type;
 
   /**
    * The constant.
    */
-  private final String name;
+  private final String _name;
 
   /**
    * javadoc comments, if any.
@@ -87,14 +87,14 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
       throw new NullPointerException ("type");
     if (name == null)
       throw new NullPointerException ("name");
-    this.type = type;
-    this.name = name;
+    this._type = type;
+    this._name = name;
   }
 
   @Nonnull
   public JDefinedClass type ()
   {
-    return type;
+    return _type;
   }
 
   /**
@@ -103,7 +103,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public String name ()
   {
-    return name;
+    return _name;
   }
 
   /**
@@ -144,7 +144,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public String getName ()
   {
-    return type.fullName () + '.' + name;
+    return _type.fullName () + '.' + _name;
   }
 
   /**
@@ -156,7 +156,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   public JDocComment javadoc ()
   {
     if (jdoc == null)
-      jdoc = new JDocComment (type.owner ());
+      jdoc = new JDocComment (_type.owner ());
     return jdoc;
   }
 
@@ -185,7 +185,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
-    return annotate (type.owner ().ref (clazz));
+    return annotate (_type.owner ().ref (clazz));
   }
 
   @Nonnull
@@ -212,13 +212,13 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
     if (annotations != null)
       for (final JAnnotationUse annotation : annotations)
         f.generable (annotation).newline ();
-    f.id (name);
+    f.id (_name);
     if (args != null)
       f.print ('(').generable (args).print (')');
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.type (type).print ('.').print (name);
+    f.type (_type).print ('.').print (_name);
   }
 }

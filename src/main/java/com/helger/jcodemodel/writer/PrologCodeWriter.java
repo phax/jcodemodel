@@ -59,7 +59,7 @@ import com.helger.jcodemodel.JPackage;
 public class PrologCodeWriter extends FilterCodeWriter
 {
   /** prolog comment */
-  private final String prolog;
+  private final String _prolog;
 
   /**
    * @param core
@@ -75,7 +75,7 @@ public class PrologCodeWriter extends FilterCodeWriter
   public PrologCodeWriter (@Nonnull final AbstractCodeWriter core, @Nullable final String prolog)
   {
     super (core);
-    this.prolog = prolog;
+    this._prolog = prolog;
   }
 
   @Override
@@ -86,11 +86,11 @@ public class PrologCodeWriter extends FilterCodeWriter
     final PrintWriter out = new PrintWriter (w);
 
     // write prolog if this is a java source file
-    if (prolog != null)
+    if (_prolog != null)
     {
       out.println ("//");
 
-      String s = prolog;
+      String s = _prolog;
       int idx;
       while ((idx = s.indexOf ('\n')) != -1)
       {

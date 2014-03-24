@@ -52,23 +52,23 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
   /**
    * The value of the Annotation member
    */
-  private final IJExpression value;
+  private final IJExpression _value;
 
   protected JAnnotationStringValue (@Nonnull final IJExpression value)
   {
     if (value == null)
       throw new NullPointerException ("value");
-    this.value = value;
+    this._value = value;
   }
 
   @Nonnull
   public IJExpression value ()
   {
-    return value;
+    return _value;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.generable (value);
+    f.generable (_value);
   }
 }

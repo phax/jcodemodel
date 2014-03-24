@@ -62,10 +62,10 @@ import com.helger.jcodemodel.JPackage;
 public class FileCodeWriter extends AbstractCodeWriter
 {
   /** The target directory to put source code. */
-  private final File target;
+  private final File _target;
 
   /** specify whether or not to mark the generated files read-only */
-  private final boolean readOnly;
+  private final boolean _readOnly;
 
   /** Files that shall be marked as read only. */
   private final Set <File> readonlyFiles = new HashSet <File> ();
@@ -88,8 +88,8 @@ public class FileCodeWriter extends AbstractCodeWriter
   public FileCodeWriter (@Nonnull final File target, final boolean readOnly, @Nullable final Charset encoding) throws IOException
   {
     super (encoding);
-    this.target = target;
-    this.readOnly = readOnly;
+    this._target = target;
+    this._readOnly = readOnly;
     if (!target.exists () || !target.isDirectory ())
       throw new IOException (target + ": non-existent directory");
   }
@@ -106,9 +106,9 @@ public class FileCodeWriter extends AbstractCodeWriter
   {
     File dir;
     if (pkg.isUnnamed ())
-      dir = target;
+      dir = _target;
     else
-      dir = new File (target, _toDirName (pkg));
+      dir = new File (_target, _toDirName (pkg));
 
     if (!dir.exists ())
       dir.mkdirs ();
@@ -121,7 +121,7 @@ public class FileCodeWriter extends AbstractCodeWriter
         throw new IOException (fn + ": Can't delete previous version");
     }
 
-    if (readOnly)
+    if (_readOnly)
       readonlyFiles.add (fn);
     return fn;
   }

@@ -55,19 +55,19 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
    * Object expression upon which this method will be invoked, or null if this
    * is a constructor invocation
    */
-  private IJGenerable object;
+  private IJGenerable _object;
 
   /**
    * Name of the method to be invoked. Either this field is set, or
-   * {@link #method}, or {@link #type} (in which case it's a constructor
+   * {@link #_method}, or {@link #_type} (in which case it's a constructor
    * invocation.) This allows {@link JMethod#name(String) the name of the method
    * to be changed later}.
    */
-  private String name;
+  private String _name;
 
-  private JMethod method;
+  private JMethod _method;
 
-  private boolean isConstructor = false;
+  private boolean _isConstructor = false;
 
   /**
    * List of argument expressions for this method invocation
@@ -77,7 +77,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
   /**
    * If isConstructor==true, this field keeps the type to be created.
    */
-  private AbstractJType type;
+  private AbstractJType _type;
 
   /**
    * Invokes a method on an object.
@@ -113,16 +113,16 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
 
   private JInvocation (@Nullable final IJGenerable object, @Nonnull final String name)
   {
-    this.object = object;
+    this._object = object;
     if (name.indexOf ('.') >= 0)
       throw new IllegalArgumentException ("method name contains '.': " + name);
-    this.name = name;
+    this._name = name;
   }
 
   private JInvocation (@Nullable final IJGenerable object, @Nonnull final JMethod method)
   {
-    this.object = object;
-    this.method = method;
+    this._object = object;
+    this._method = method;
   }
 
   /**
@@ -135,13 +135,13 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
    */
   protected JInvocation (@Nonnull final AbstractJType c)
   {
-    this.isConstructor = true;
-    this.type = c;
+    this._isConstructor = true;
+    this._type = c;
   }
 
   public boolean isConstructor ()
   {
-    return isConstructor;
+    return _isConstructor;
   }
 
   /**
@@ -246,23 +246,23 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (isConstructor && type.isArray ())
+    if (_isConstructor && _type.isArray ())
     {
       // [RESULT] new T[]{arg1,arg2,arg3,...};
-      f.print ("new").generable (type).print ('{');
+      f.print ("new").generable (_type).print ('{');
     }
     else
     {
-      if (isConstructor)
-        f.print ("new").generable (type).print ('(');
+      if (_isConstructor)
+        f.print ("new").generable (_type).print ('(');
       else
       {
-        String name = this.name;
+        String name = this._name;
         if (name == null)
-          name = this.method.name ();
+          name = this._method.name ();
 
-        if (object != null)
-          f.generable (object).print ('.').print (name).print ('(');
+        if (_object != null)
+          f.generable (_object).print ('.').print (name).print ('(');
         else
           f.id (name).print ('(');
       }
@@ -270,14 +270,14 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
 
     f.generable (args);
 
-    if (isConstructor && type.isArray ())
+    if (_isConstructor && _type.isArray ())
       f.print ('}');
     else
       f.print (')');
 
-    if (type instanceof JDefinedClass && ((JDefinedClass) type).isAnonymous ())
+    if (_type instanceof JDefinedClass && ((JDefinedClass) _type).isAnonymous ())
     {
-      ((JAnonymousClass) type).declareBody (f);
+      ((JAnonymousClass) _type).declareBody (f);
     }
   }
 

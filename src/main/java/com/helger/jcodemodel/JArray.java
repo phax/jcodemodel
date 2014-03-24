@@ -52,26 +52,26 @@ import javax.annotation.Nullable;
  */
 public class JArray extends AbstractJExpressionImpl
 {
-  private final AbstractJType type;
-  private final IJExpression size;
+  private final AbstractJType _type;
+  private final IJExpression _size;
   private List <IJExpression> exprs;
 
   protected JArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
   {
-    this.type = type;
-    this.size = size;
+    this._type = type;
+    this._size = size;
   }
 
   @Nonnull
   public AbstractJType type ()
   {
-    return type;
+    return _type;
   }
 
   @Nullable
   public IJExpression size ()
   {
-    return size;
+    return _size;
   }
 
   /**
@@ -105,7 +105,7 @@ public class JArray extends AbstractJExpressionImpl
     // generally we produce new T[x], but when T is an array type (T=T'[])
     // then new T'[][x] is wrong. It has to be new T'[x][].
     int arrayCount = 0;
-    AbstractJType t = type;
+    AbstractJType t = _type;
     final boolean hasExprs = hasExprs ();
 
     while (t.isArray ())
@@ -115,20 +115,20 @@ public class JArray extends AbstractJExpressionImpl
     }
 
     f.print ("new").generable (t).print ('[');
-    if (size != null)
-      f.generable (size);
+    if (_size != null)
+      f.generable (_size);
     f.print (']');
 
     for (int i = 0; i < arrayCount; i++)
       f.print ("[]");
 
-    if (size == null || hasExprs)
+    if (_size == null || hasExprs)
       f.print ('{');
     if (hasExprs)
       f.generable (exprs);
     else
       f.print (' ');
-    if (size == null || hasExprs)
+    if (_size == null || hasExprs)
       f.print ('}');
   }
 }

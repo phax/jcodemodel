@@ -50,12 +50,12 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements IJAssignme
   /**
    * JArray expression upon which this component will be accessed.
    */
-  private final IJExpression array;
+  private final IJExpression _array;
 
   /**
    * Integer expression representing index of the component
    */
-  private final IJExpression index;
+  private final IJExpression _index;
 
   /**
    * JArray component reference constructor given an array expression and index.
@@ -69,25 +69,25 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements IJAssignme
   {
     if (array == null || index == null)
       throw new NullPointerException ();
-    this.array = array;
-    this.index = index;
+    this._array = array;
+    this._index = index;
   }
 
   @Nonnull
   public IJExpression array ()
   {
-    return array;
+    return _array;
   }
 
   @Nonnull
   public IJExpression index ()
   {
-    return index;
+    return _index;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.generable (array).print ('[').generable (index).print (']');
+    f.generable (_array).print ('[').generable (_index).print (']');
   }
 
   @Nonnull

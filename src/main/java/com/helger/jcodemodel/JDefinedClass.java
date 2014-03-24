@@ -69,13 +69,13 @@ import javax.annotation.Nullable;
 public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJClassContainer, IJGenerifiable, IJAnnotatable, IJDocCommentable
 {
   /** Name of this class. Null if anonymous. */
-  private final String name;
+  private final String _name;
 
   /** Modifiers for the class declaration */
-  private JMods mods;
+  private JMods _mods;
 
   /** Name of the super class of this class. */
-  private AbstractJClass superClass;
+  private AbstractJClass _superClass;
 
   /** List of interfaces that this class implements */
   private final Set <AbstractJClass> interfaces = new TreeSet <AbstractJClass> ();
@@ -84,7 +84,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /* package */final Map <String, JFieldVar> fields = new LinkedHashMap <String, JFieldVar> ();
 
   /** Static initializer, if this class has one */
-  private JBlock init;
+  private JBlock _init;
 
   /** Instance initializer, if this class has one */
   private JBlock instanceInit;
@@ -233,11 +233,11 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
     this.classType = classTypeVal;
     if (isInterface ())
-      this.mods = JMods.forInterface (mods);
+      this._mods = JMods.forInterface (mods);
     else
-      this.mods = JMods.forClass (mods);
+      this._mods = JMods.forClass (mods);
 
-    this.name = name;
+    this._name = name;
 
     this.outer = parent;
   }
@@ -247,7 +247,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    */
   public final boolean isAnonymous ()
   {
-    return name == null;
+    return _name == null;
   }
 
   /**
@@ -275,13 +275,13 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
       {
         throw new IllegalArgumentException ("Illegal class inheritance loop." +
                                             "  Outer class " +
-                                            this.name +
+                                            this._name +
                                             " may not subclass from inner class: " +
                                             o.name ());
       }
     }
 
-    this.superClass = superClass;
+    this._superClass = superClass;
     return this;
   }
 
@@ -298,9 +298,9 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public AbstractJClass _extends ()
   {
-    if (superClass == null)
-      superClass = owner ().ref (Object.class);
-    return superClass;
+    if (_superClass == null)
+      _superClass = owner ().ref (Object.class);
+    return _superClass;
   }
 
   /**
@@ -345,7 +345,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nullable
   public String name ()
   {
-    return name;
+    return _name;
   }
 
   /**
@@ -402,7 +402,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Override
   public boolean isAbstract ()
   {
-    return mods.isAbstract ();
+    return _mods.isAbstract ();
   }
 
   /**
@@ -545,9 +545,9 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    */
   public JBlock init ()
   {
-    if (init == null)
-      init = new JBlock ();
-    return init;
+    if (_init == null)
+      _init = new JBlock ();
+    return _init;
   }
 
   /**
@@ -810,14 +810,14 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
         f.generable (annotation).newline ();
     }
 
-    f.generable (mods).print (classType.declarationToken ()).id (name).declaration (generifiable);
+    f.generable (_mods).print (classType.declarationToken ()).id (_name).declaration (generifiable);
 
-    if (superClass != null && superClass != owner ().ref (Object.class))
-      f.newline ().indent ().print ("extends").generable (superClass).newline ().outdent ();
+    if (_superClass != null && _superClass != owner ().ref (Object.class))
+      f.newline ().indent ().print ("extends").generable (_superClass).newline ().outdent ();
 
     if (!interfaces.isEmpty ())
     {
-      if (superClass == null)
+      if (_superClass == null)
         f.newline ();
       f.indent ().print (classType == EClassType.INTERFACE ? "extends" : "implements");
       f.generable (interfaces);
@@ -848,8 +848,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
     for (final JFieldVar field : fields.values ())
       f.declaration (field);
-    if (init != null)
-      f.newline ().print ("static").statement (init);
+    if (_init != null)
+      f.newline ().print ("static").statement (_init);
     if (instanceInit != null)
       f.newline ().statement (instanceInit);
     for (final JMethod m : constructors)
@@ -974,6 +974,6 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    */
   public JMods mods ()
   {
-    return mods;
+    return _mods;
   }
 }

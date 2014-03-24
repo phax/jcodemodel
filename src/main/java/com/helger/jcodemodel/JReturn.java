@@ -51,7 +51,7 @@ public class JReturn implements IJStatement
   /**
    * JExpression to return; may be null.
    */
-  private final IJExpression expr;
+  private final IJExpression _expr;
 
   /**
    * JReturn constructor
@@ -61,20 +61,20 @@ public class JReturn implements IJStatement
    */
   protected JReturn (@Nullable final IJExpression expr)
   {
-    this.expr = expr;
+    this._expr = expr;
   }
 
   @Nullable
   public IJExpression expr ()
   {
-    return expr;
+    return _expr;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
     f.print ("return ");
-    if (expr != null)
-      f.generable (expr);
+    if (_expr != null)
+      f.generable (_expr);
     f.print (';').newline ();
   }
 }

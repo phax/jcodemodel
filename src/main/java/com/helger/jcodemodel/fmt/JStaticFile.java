@@ -51,23 +51,23 @@ import com.helger.jcodemodel.util.SecureLoader;
 
 /**
  * Allows an application to copy a resource file to the output.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JStaticFile extends AbstractJResourceFile
 {
-  private final ClassLoader classLoader;
-  private final String resourceName;
-  private final boolean isResource;
+  private final ClassLoader _classLoader;
+  private final String _resourceName;
+  private final boolean _isResource;
 
-  public JStaticFile (@Nonnull final String _resourceName)
+  public JStaticFile (@Nonnull final String resourceName)
   {
-    this (_resourceName, !_resourceName.endsWith (".java"));
+    this (resourceName, !resourceName.endsWith (".java"));
   }
 
-  public JStaticFile (@Nonnull final String _resourceName, final boolean isResource)
+  public JStaticFile (@Nonnull final String resourceName, final boolean isResource)
   {
-    this (SecureLoader.getClassClassLoader (JStaticFile.class), _resourceName, isResource);
+    this (SecureLoader.getClassClassLoader (JStaticFile.class), resourceName, isResource);
   }
 
   /**
@@ -75,26 +75,26 @@ public class JStaticFile extends AbstractJResourceFile
    *        false if this is a Java source file. True if this is other resource
    *        files.
    */
-  public JStaticFile (@Nonnull final ClassLoader _classLoader,
-                      @Nonnull final String _resourceName,
+  public JStaticFile (@Nonnull final ClassLoader classLoader,
+                      @Nonnull final String resourceName,
                       final boolean isResource)
   {
-    super (_resourceName.substring (_resourceName.lastIndexOf ('/') + 1));
-    this.classLoader = _classLoader;
-    this.resourceName = _resourceName;
-    this.isResource = isResource;
+    super (resourceName.substring (resourceName.lastIndexOf ('/') + 1));
+    this._classLoader = classLoader;
+    this._resourceName = resourceName;
+    this._isResource = isResource;
   }
 
   @Override
   protected boolean isResource ()
   {
-    return isResource;
+    return _isResource;
   }
 
   @Override
   protected void build (@Nonnull final OutputStream os) throws IOException
   {
-    final DataInputStream dis = new DataInputStream (classLoader.getResourceAsStream (resourceName));
+    final DataInputStream dis = new DataInputStream (_classLoader.getResourceAsStream (_resourceName));
 
     final byte [] buf = new byte [256];
     int sz;

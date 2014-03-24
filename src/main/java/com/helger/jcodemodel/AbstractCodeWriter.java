@@ -100,17 +100,17 @@ public abstract class AbstractCodeWriter implements Closeable
   /**
    * Encoding to be used by the writer. Null means platform specific encoding.
    */
-  private final Charset encoding;
+  private final Charset _encoding;
 
   protected AbstractCodeWriter (@Nullable final Charset encoding)
   {
-    this.encoding = encoding;
+    this._encoding = encoding;
   }
 
   @Nullable
   public Charset encoding ()
   {
-    return encoding;
+    return _encoding;
   }
 
   /**
@@ -146,7 +146,7 @@ public abstract class AbstractCodeWriter implements Closeable
   public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     final OutputStream os = openBinary (pkg, fileName);
-    final OutputStreamWriter bw = encoding != null ? new OutputStreamWriter (os, encoding)
+    final OutputStreamWriter bw = _encoding != null ? new OutputStreamWriter (os, _encoding)
                                                   : new OutputStreamWriter (os);
 
     // create writer

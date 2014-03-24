@@ -50,7 +50,7 @@ public class JConditional implements IJStatement
   /**
    * JExpression to test to determine branching
    */
-  private final IJExpression test;
+  private final IJExpression _test;
 
   /**
    * JBlock of statements for "then" clause
@@ -70,13 +70,13 @@ public class JConditional implements IJStatement
    */
   protected JConditional (@Nonnull final IJExpression test)
   {
-    this.test = test;
+    this._test = test;
   }
 
   @Nonnull
   public IJExpression test ()
   {
-    return test;
+    return _test;
   }
 
   /**
@@ -114,24 +114,24 @@ public class JConditional implements IJStatement
 
   public void state (@Nonnull final JFormatter f)
   {
-    if (test == JExpr.TRUE)
+    if (_test == JExpr.TRUE)
     {
       _then.generateBody (f);
       return;
     }
-    if (test == JExpr.FALSE)
+    if (_test == JExpr.FALSE)
     {
       _else.generateBody (f);
       return;
     }
 
-    if (JOp.hasTopOp (test))
+    if (JOp.hasTopOp (_test))
     {
-      f.print ("if ").generable (test);
+      f.print ("if ").generable (_test);
     }
     else
     {
-      f.print ("if (").generable (test).print (')');
+      f.print ("if (").generable (_test).print (')');
     }
     f.generable (_then);
     if (_else != null)

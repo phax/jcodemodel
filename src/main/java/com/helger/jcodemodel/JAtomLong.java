@@ -47,20 +47,20 @@ import javax.annotation.Nonnull;
  */
 public class JAtomLong extends AbstractJExpressionImpl
 {
-  private final long what;
+  private final long _what;
 
   protected JAtomLong (final long what)
   {
-    this.what = what;
+    this._what = what;
   }
 
   public long what ()
   {
-    return what;
+    return _what;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (Long.toString (what) + "L");
+    f.print (Long.toString (_what) + "L");
   }
 }

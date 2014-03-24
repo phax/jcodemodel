@@ -65,34 +65,34 @@ public final class JOp
 
   public static class UnaryOp extends AbstractJExpressionImpl
   {
-    private final String op;
-    private final IJExpression e;
+    private final String _op;
+    private final IJExpression _e;
     private final boolean opFirst;
 
     protected UnaryOp (@Nonnull final String op, @Nonnull final IJExpression e)
     {
-      this.op = op;
-      this.e = e;
+      this._op = op;
+      this._e = e;
       opFirst = false;
     }
 
     protected UnaryOp (@Nonnull final IJExpression e, @Nonnull final String op)
     {
-      this.op = op;
-      this.e = e;
+      this._op = op;
+      this._e = e;
       opFirst = false;
     }
 
     @Nonnull
     public String op ()
     {
-      return op;
+      return _op;
     }
 
     @Nonnull
     public IJExpression expr ()
     {
-      return e;
+      return _e;
     }
 
     public boolean opFirst ()
@@ -103,9 +103,9 @@ public final class JOp
     public void generate (@Nonnull final JFormatter f)
     {
       if (opFirst)
-        f.print ('(').print (op).generable (e).print (')');
+        f.print ('(').print (_op).generable (_e).print (')');
       else
-        f.print ('(').generable (e).print (op).print (')');
+        f.print ('(').generable (_e).print (_op).print (')');
     }
 
   }
@@ -185,38 +185,38 @@ public final class JOp
 
   public static class BinaryOp extends AbstractJExpressionImpl
   {
-    private final IJExpression left;
-    private final String op;
-    private final IJGenerable right;
+    private final IJExpression _left;
+    private final String _op;
+    private final IJGenerable _right;
 
     protected BinaryOp (@Nonnull final IJExpression left, @Nonnull final String op, @Nonnull final IJGenerable right)
     {
-      this.left = left;
-      this.op = op;
-      this.right = right;
+      this._left = left;
+      this._op = op;
+      this._right = right;
     }
 
     @Nonnull
     public IJExpression left ()
     {
-      return left;
+      return _left;
     }
 
     @Nonnull
     public String op ()
     {
-      return op;
+      return _op;
     }
 
     @Nonnull
     public IJGenerable right ()
     {
-      return right;
+      return _right;
     }
 
     public void generate (@Nonnull final JFormatter f)
     {
-      f.print ('(').generable (left).print (op).generable (right).print (')');
+      f.print ('(').generable (_left).print (_op).generable (_right).print (')');
     }
 
   }
@@ -361,11 +361,11 @@ public final class JOp
 
   public static class TernaryOp extends AbstractJExpressionImpl
   {
-    private final IJExpression e1;
-    private final String op1;
-    private final IJExpression e2;
-    private final String op2;
-    private final IJExpression e3;
+    private final IJExpression _e1;
+    private final String _op1;
+    private final IJExpression _e2;
+    private final String _op2;
+    private final IJExpression _e3;
 
     protected TernaryOp (@Nonnull final IJExpression e1,
                          @Nonnull final String op1,
@@ -373,46 +373,46 @@ public final class JOp
                          @Nonnull final String op2,
                          @Nonnull final IJExpression e3)
     {
-      this.e1 = e1;
-      this.op1 = op1;
-      this.e2 = e2;
-      this.op2 = op2;
-      this.e3 = e3;
+      this._e1 = e1;
+      this._op1 = op1;
+      this._e2 = e2;
+      this._op2 = op2;
+      this._e3 = e3;
     }
 
     @Nonnull
     public IJExpression expr1 ()
     {
-      return e1;
+      return _e1;
     }
 
     @Nonnull
     public String op1 ()
     {
-      return op1;
+      return _op1;
     }
 
     @Nonnull
     public IJGenerable expr2 ()
     {
-      return e2;
+      return _e2;
     }
 
     @Nonnull
     public String op2 ()
     {
-      return op2;
+      return _op2;
     }
 
     @Nonnull
     public IJGenerable expr3 ()
     {
-      return e3;
+      return _e3;
     }
 
     public void generate (@Nonnull final JFormatter f)
     {
-      f.print ('(').generable (e1).print (op1).generable (e2).print (op2).generable (e3).print (')');
+      f.print ('(').generable (_e1).print (_op1).generable (_e2).print (_op2).generable (_e3).print (')');
     }
 
   }

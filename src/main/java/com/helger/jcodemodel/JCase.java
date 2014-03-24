@@ -51,12 +51,12 @@ public class JCase implements IJStatement
   /**
    * label part of the case statement
    */
-  private final IJExpression label;
+  private final IJExpression _label;
 
   /**
    * is this a regular case statement or a default case statement?
    */
-  private boolean isDefaultCase = false;
+  private boolean _isDefaultCase = false;
 
   /**
    * JBlock of statements which makes up body of this While statement
@@ -77,19 +77,19 @@ public class JCase implements IJStatement
    */
   protected JCase (@Nullable final IJExpression label, final boolean isDefaultCase)
   {
-    this.label = label;
-    this.isDefaultCase = isDefaultCase;
+    this._label = label;
+    this._isDefaultCase = isDefaultCase;
   }
 
   @Nullable
   public IJExpression label ()
   {
-    return label;
+    return _label;
   }
 
   public boolean isDefaultCase ()
   {
-    return isDefaultCase;
+    return _isDefaultCase;
   }
 
   @Nonnull
@@ -103,9 +103,9 @@ public class JCase implements IJStatement
   public void state (@Nonnull final JFormatter f)
   {
     f.indent ();
-    if (!isDefaultCase)
+    if (!_isDefaultCase)
     {
-      f.print ("case ").generable (label).print (':').newline ();
+      f.print ("case ").generable (_label).print (':').newline ();
     }
     else
     {

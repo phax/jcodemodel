@@ -47,29 +47,29 @@ import javax.annotation.Nonnull;
  */
 public class JAtomFloat extends AbstractJExpressionImpl
 {
-  private final float what;
+  private final float _what;
 
   protected JAtomFloat (final float what)
   {
-    this.what = what;
+    this._what = what;
   }
 
   public float what ()
   {
-    return what;
+    return _what;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (what == Float.NEGATIVE_INFINITY)
+    if (_what == Float.NEGATIVE_INFINITY)
       f.print ("java.lang.Float.NEGATIVE_INFINITY");
     else
-      if (what == Float.POSITIVE_INFINITY)
+      if (_what == Float.POSITIVE_INFINITY)
         f.print ("java.lang.Float.POSITIVE_INFINITY");
       else
-        if (Float.isNaN (what))
+        if (Float.isNaN (_what))
           f.print ("java.lang.Float.NaN");
         else
-          f.print (Float.toString (what) + "F");
+          f.print (Float.toString (_what) + "F");
   }
 }

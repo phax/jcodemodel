@@ -55,38 +55,38 @@ import javax.annotation.Nonnull;
  */
 public class JDirectClass extends AbstractJClass
 {
-  private final String fullName;
+  private final String _fullName;
 
   protected JDirectClass (@Nonnull final JCodeModel _owner, @Nonnull final String fullName)
   {
     super (_owner);
-    this.fullName = fullName;
+    this._fullName = fullName;
   }
 
   @Override
   @Nonnull
   public String name ()
   {
-    final int i = fullName.lastIndexOf ('.');
+    final int i = _fullName.lastIndexOf ('.');
     if (i >= 0)
-      return fullName.substring (i + 1);
-    return fullName;
+      return _fullName.substring (i + 1);
+    return _fullName;
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    return fullName;
+    return _fullName;
   }
 
   @Override
   @Nonnull
   public JPackage _package ()
   {
-    final int i = fullName.lastIndexOf ('.');
+    final int i = _fullName.lastIndexOf ('.');
     if (i >= 0)
-      return owner ()._package (fullName.substring (0, i));
+      return owner ()._package (_fullName.substring (0, i));
     return owner ().rootPackage ();
   }
 

@@ -72,6 +72,6 @@ public class JContinue implements IJStatement
     if (label == null)
       f.print ("continue;").newline ();
     else
-      f.print ("continue ").print (label.label).print (';').newline ();
+      f.print ("continue ").print (label._label).print (';').newline ();
   }
 }

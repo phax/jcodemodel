@@ -47,19 +47,19 @@ import javax.annotation.Nonnull;
  */
 public class JCatchBlock implements IJGenerable
 {
-  private final AbstractJClass exception;
+  private final AbstractJClass _exception;
   private JVar var;
   private final JBlock body = new JBlock ();
 
   protected JCatchBlock (@Nonnull final AbstractJClass exception)
   {
-    this.exception = exception;
+    this._exception = exception;
   }
 
   @Nonnull
   public AbstractJClass exception ()
   {
-    return exception;
+    return _exception;
   }
 
   @Nonnull
@@ -67,7 +67,7 @@ public class JCatchBlock implements IJGenerable
   {
     if (var != null)
       throw new IllegalStateException ();
-    var = new JVar (JMods.forVar (JMod.FINAL), exception, name, null);
+    var = new JVar (JMods.forVar (JMod.FINAL), _exception, name, null);
     return var;
   }
 
@@ -85,7 +85,7 @@ public class JCatchBlock implements IJGenerable
   public void generate (@Nonnull final JFormatter f)
   {
     if (var == null)
-      var = new JVar (JMods.forVar (JMod.FINAL), exception, "ex", null);
+      var = new JVar (JMods.forVar (JMod.FINAL), _exception, "ex", null);
     f.print ("catch (").var (var).print (')').generable (body);
   }
 }

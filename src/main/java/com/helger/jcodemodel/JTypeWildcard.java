@@ -55,37 +55,37 @@ import javax.annotation.Nullable;
  * <p>
  * Our modeling of types are starting to look really ugly. ideally it should
  * have been done somewhat like APT, but it's too late now.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public class JTypeWildcard extends AbstractJClass
 {
-  private final AbstractJClass bound;
+  private final AbstractJClass _bound;
 
   protected JTypeWildcard (@Nonnull final AbstractJClass bound)
   {
     super (bound.owner ());
-    this.bound = bound;
+    this._bound = bound;
   }
 
   @Nonnull
   public AbstractJClass bound ()
   {
-    return bound;
+    return _bound;
   }
 
   @Override
   @Nonnull
   public String name ()
   {
-    return "? extends " + bound.name ();
+    return "? extends " + _bound.name ();
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    return "? extends " + bound.fullName ();
+    return "? extends " + _bound.fullName ();
   }
 
   @Override
@@ -103,10 +103,9 @@ public class JTypeWildcard extends AbstractJClass
   @Override
   public AbstractJClass _extends ()
   {
-    if (bound != null)
-      return bound;
-    else
-      return owner ().ref (Object.class);
+    if (_bound != null)
+      return _bound;
+    return owner ().ref (Object.class);
   }
 
   /**
@@ -116,7 +115,7 @@ public class JTypeWildcard extends AbstractJClass
   @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
-    return bound._implements ();
+    return _bound._implements ();
   }
 
   @Override
@@ -135,19 +134,18 @@ public class JTypeWildcard extends AbstractJClass
   @Nonnull
   protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
   {
-    final AbstractJClass nb = bound.substituteParams (variables, bindings);
-    if (nb == bound)
+    final AbstractJClass nb = _bound.substituteParams (variables, bindings);
+    if (nb == _bound)
       return this;
-    else
-      return new JTypeWildcard (nb);
+    return new JTypeWildcard (nb);
   }
 
   @Override
   public void generate (@Nonnull final JFormatter f)
   {
-    if (bound._extends () == null)
+    if (_bound._extends () == null)
       f.print ("?"); // instead of "? extends Object"
     else
-      f.print ("? extends").generable (bound);
+      f.print ("? extends").generable (_bound);
   }
 }

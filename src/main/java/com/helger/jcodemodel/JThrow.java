@@ -50,7 +50,7 @@ public class JThrow implements IJStatement
   /**
    * JExpression to throw
    */
-  private final IJExpression expr;
+  private final IJExpression _expr;
 
   /**
    * JThrow constructor
@@ -60,19 +60,19 @@ public class JThrow implements IJStatement
    */
   protected JThrow (@Nonnull final IJExpression expr)
   {
-    this.expr = expr;
+    this._expr = expr;
   }
 
   @Nonnull
   public IJExpression expr ()
   {
-    return expr;
+    return _expr;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
     f.print ("throw");
-    f.generable (expr);
+    f.generable (_expr);
     f.print (';').newline ();
   }
 

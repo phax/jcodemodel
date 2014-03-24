@@ -54,7 +54,7 @@ public class JSwitch implements IJStatement
   /**
    * Test part of switch statement.
    */
-  private final IJExpression test;
+  private final IJExpression _test;
 
   /**
    * vector of JCases.
@@ -71,13 +71,13 @@ public class JSwitch implements IJStatement
    */
   protected JSwitch (@Nonnull final IJExpression test)
   {
-    this.test = test;
+    this._test = test;
   }
 
   @Nonnull
   public IJExpression test ()
   {
-    return test;
+    return _test;
   }
 
   @Nonnull
@@ -107,13 +107,13 @@ public class JSwitch implements IJStatement
 
   public void state (@Nonnull final JFormatter f)
   {
-    if (JOp.hasTopOp (test))
+    if (JOp.hasTopOp (_test))
     {
-      f.print ("switch ").generable (test).print (" {").newline ();
+      f.print ("switch ").generable (_test).print (" {").newline ();
     }
     else
     {
-      f.print ("switch (").generable (test).print (')').print (" {").newline ();
+      f.print ("switch (").generable (_test).print (')').print (" {").newline ();
     }
     for (final JCase c : cases)
       f.statement (c);

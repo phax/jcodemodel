@@ -50,11 +50,11 @@ import javax.annotation.Nonnull;
  */
 public abstract class AbstractJResourceFile
 {
-  private final String name;
+  private final String _name;
 
   protected AbstractJResourceFile (@Nonnull final String name)
   {
-    this.name = name;
+    this._name = name;
   }
 
   /**
@@ -63,7 +63,7 @@ public abstract class AbstractJResourceFile
   @Nonnull
   public final String name ()
   {
-    return name;
+    return _name;
   }
 
   /**

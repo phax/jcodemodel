@@ -56,7 +56,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
   /**
    * The {@link Annotation} class
    */
-  private final AbstractJClass clazz;
+  private final AbstractJClass _clazz;
 
   /**
    * Map of member values.
@@ -65,13 +65,13 @@ public class JAnnotationUse extends AbstractJAnnotationValue
 
   protected JAnnotationUse (@Nonnull final AbstractJClass clazz)
   {
-    this.clazz = clazz;
+    this._clazz = clazz;
   }
 
   @Nonnull
   public AbstractJClass getAnnotationClass ()
   {
-    return clazz;
+    return _clazz;
   }
 
   @Nonnull
@@ -82,7 +82,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
 
   private JCodeModel _owner ()
   {
-    return clazz.owner ();
+    return _clazz.owner ();
   }
 
   private void addValue (final String name, final AbstractJAnnotationValue annotationValue)
@@ -396,7 +396,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
 
   public void generate (final JFormatter f)
   {
-    f.print ('@').generable (clazz);
+    f.print ('@').generable (_clazz);
     if (memberValues != null)
     {
       f.print ('(');

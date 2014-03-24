@@ -57,35 +57,35 @@ import com.helger.jcodemodel.JPackage;
  */
 public class FilterCodeWriter extends AbstractCodeWriter
 {
-  private final AbstractCodeWriter core;
+  private final AbstractCodeWriter _core;
 
   public FilterCodeWriter (@Nonnull final AbstractCodeWriter core)
   {
     super (core.encoding ());
-    this.core = core;
+    this._core = core;
   }
 
   @Nonnull
   protected AbstractCodeWriter core ()
   {
-    return core;
+    return _core;
   }
 
   @Override
   public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
-    return core.openBinary (pkg, fileName);
+    return _core.openBinary (pkg, fileName);
   }
 
   @Override
   public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
-    return core.openSource (pkg, fileName);
+    return _core.openSource (pkg, fileName);
   }
 
   @Override
   public void close () throws IOException
   {
-    core.close ();
+    _core.close ();
   }
 }
