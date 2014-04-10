@@ -47,6 +47,8 @@ import javax.annotation.Nonnull;
  */
 public class JAtomLong extends AbstractJExpressionImpl
 {
+  public static final String SUFFIX_LONG = "L";
+
   private final long _what;
 
   protected JAtomLong (final long what)
@@ -61,6 +63,6 @@ public class JAtomLong extends AbstractJExpressionImpl
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (Long.toString (_what) + "L");
+    f.print (Long.toString (_what) + SUFFIX_LONG);
   }
 }

@@ -40,10 +40,12 @@
 
 package com.helger.jcodemodel.tests;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.JAtomDouble;
+import com.helger.jcodemodel.JAtomFloat;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
 
@@ -52,26 +54,34 @@ import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
  */
 public class JExprTest
 {
-
   /**
    * Tests double literal expression.
    */
   @Test
   public void testLitDouble () throws Exception
   {
-    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Double.POSITIVE_INFINITY)).endsWith ("POSITIVE_INFINITY"));
-    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Double.NEGATIVE_INFINITY)).endsWith ("NEGATIVE_INFINITY"));
-    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Double.NaN)).endsWith ("NaN"));
-
+    assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_POSITIVE_INFINITY,
+                  CodeModelTestsUtils.toString (JExpr.lit (Double.POSITIVE_INFINITY)));
+    assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_NEGATIVE_INFINITY,
+                  CodeModelTestsUtils.toString (JExpr.lit (Double.NEGATIVE_INFINITY)));
+    assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_NAN, CodeModelTestsUtils.toString (JExpr.lit (Double.NaN)));
   }
 
   @Test
   public void testLitFloat () throws Exception
   {
-    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Float.POSITIVE_INFINITY)).endsWith ("POSITIVE_INFINITY"));
-    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Float.NEGATIVE_INFINITY)).endsWith ("NEGATIVE_INFINITY"));
-    assertTrue (CodeModelTestsUtils.toString (JExpr.lit (Float.NaN)).endsWith ("NaN"));
-
+    assertEquals (JAtomFloat.JAVA_LANG_FLOAT_POSITIVE_INFINITY,
+                  CodeModelTestsUtils.toString (JExpr.lit (Float.POSITIVE_INFINITY)));
+    assertEquals (JAtomFloat.JAVA_LANG_FLOAT_NEGATIVE_INFINITY,
+                  CodeModelTestsUtils.toString (JExpr.lit (Float.NEGATIVE_INFINITY)));
+    assertEquals (JAtomFloat.JAVA_LANG_FLOAT_NAN, CodeModelTestsUtils.toString (JExpr.lit (Float.NaN)));
   }
 
+  @Test
+  public void testLitIntAndLong () throws Exception
+  {
+    assertEquals ("5", CodeModelTestsUtils.toString (JExpr.lit (5)));
+    assertEquals ("5L", CodeModelTestsUtils.toString (JExpr.lit (5l)));
+    assertEquals ("5L", CodeModelTestsUtils.toString (JExpr.lit ((long) 5)));
+  }
 }

@@ -47,6 +47,10 @@ import javax.annotation.Nonnull;
  */
 public class JAtomDouble extends AbstractJExpressionImpl
 {
+  public static final String JAVA_LANG_DOUBLE_NEGATIVE_INFINITY = "java.lang.Double.NEGATIVE_INFINITY";
+  public static final String JAVA_LANG_DOUBLE_POSITIVE_INFINITY = "java.lang.Double.POSITIVE_INFINITY";
+  public static final String JAVA_LANG_DOUBLE_NAN = "java.lang.Double.NaN";
+
   private final double _what;
 
   protected JAtomDouble (final double what)
@@ -62,13 +66,13 @@ public class JAtomDouble extends AbstractJExpressionImpl
   public void generate (@Nonnull final JFormatter f)
   {
     if (_what == Double.NEGATIVE_INFINITY)
-      f.print ("java.lang.Double.NEGATIVE_INFINITY");
+      f.print (JAVA_LANG_DOUBLE_NEGATIVE_INFINITY);
     else
       if (_what == Double.POSITIVE_INFINITY)
-        f.print ("java.lang.Double.POSITIVE_INFINITY");
+        f.print (JAVA_LANG_DOUBLE_POSITIVE_INFINITY);
       else
         if (Double.isNaN (_what))
-          f.print ("java.lang.Double.NaN");
+          f.print (JAVA_LANG_DOUBLE_NAN);
         else
           f.print (Double.toString (_what));
   }
