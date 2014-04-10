@@ -227,7 +227,7 @@ public final class JExpr
 
   /**
    * Generates {@code new T[size]}.
-   * 
+   *
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
@@ -240,7 +240,7 @@ public final class JExpr
 
   /**
    * Generates {@code new T[size]}.
-   * 
+   *
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
@@ -285,7 +285,7 @@ public final class JExpr
   @Nonnull
   public static IJExpression lit (final int n)
   {
-    return new JAtomLong (n);
+    return new JAtomInt (n);
   }
 
   @Nonnull

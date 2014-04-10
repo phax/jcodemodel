@@ -147,7 +147,7 @@ public abstract class AbstractCodeWriter implements Closeable
   {
     final OutputStream os = openBinary (pkg, fileName);
     final OutputStreamWriter bw = _encoding != null ? new OutputStreamWriter (os, _encoding)
-                                                  : new OutputStreamWriter (os);
+                                                   : new OutputStreamWriter (os);
 
     // create writer
     try

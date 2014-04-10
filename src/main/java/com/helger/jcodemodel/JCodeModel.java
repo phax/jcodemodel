@@ -67,11 +67,11 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  *
  * <pre>
  * JCodeModel cm = new JCodeModel();
- *
+ * 
  * // generate source code by populating the 'cm' tree.
  * cm._class(...);
  * ...
- *
+ * 
  * // write them out
  * cm.build(new File("."));
  * </pre>
@@ -652,7 +652,7 @@ public final class JCodeModel
     {
       final Class <?> [] interfaces = _class.getInterfaces ();
       return new Iterator <AbstractJClass> ()
-          {
+      {
         private int idx = 0;
 
         public boolean hasNext ()
@@ -669,7 +669,7 @@ public final class JCodeModel
         {
           throw new UnsupportedOperationException ();
         }
-          };
+      };
     }
 
     @Override

@@ -197,7 +197,7 @@ public class JNarrowedClass extends AbstractJClass
   public Iterator <AbstractJClass> _implements ()
   {
     return new Iterator <AbstractJClass> ()
-        {
+    {
       private final Iterator <AbstractJClass> core = _basis._implements ();
 
       public void remove ()
@@ -214,7 +214,7 @@ public class JNarrowedClass extends AbstractJClass
       {
         return core.hasNext ();
       }
-        };
+    };
   }
 
   @Override
