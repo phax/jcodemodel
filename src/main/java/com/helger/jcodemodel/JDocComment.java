@@ -97,7 +97,7 @@ public class JDocComment extends JCommentPart implements IJGenerable
   }
 
   @Override
-  public JDocComment append (final Object o)
+  public JDocComment append (@Nullable final Object o)
   {
     add (o);
     return this;
@@ -106,11 +106,15 @@ public class JDocComment extends JCommentPart implements IJGenerable
   /**
    * Append a text to a @param tag to the javadoc
    */
+  @Nonnull
   public JCommentPart addParam (final String param)
   {
     JCommentPart p = atParams.get (param);
     if (p == null)
-      atParams.put (param, p = new JCommentPart ());
+    {
+      p = new JCommentPart ();
+      atParams.put (param, p);
+    }
     return p;
   }
 
