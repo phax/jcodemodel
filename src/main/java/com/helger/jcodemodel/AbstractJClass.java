@@ -333,12 +333,18 @@ public abstract class AbstractJClass extends AbstractJType
 
   public AbstractJClass narrow (final AbstractJClass... clazz)
   {
-    return new JNarrowedClass (this, Arrays.asList (clazz.clone ()));
+    if (clazz.length == 0)
+      return this;
+    else
+      return new JNarrowedClass (this, Arrays.asList (clazz.clone ()));
   }
 
   public AbstractJClass narrow (final List <? extends AbstractJClass> clazz)
   {
-    return new JNarrowedClass (this, new ArrayList <AbstractJClass> (clazz));
+    if (clazz.isEmpty())
+      return this;
+    else
+      return new JNarrowedClass (this, new ArrayList <AbstractJClass> (clazz));
   }
 
   /**
