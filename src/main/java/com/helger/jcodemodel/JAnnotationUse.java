@@ -52,7 +52,6 @@ import com.helger.jcodemodel.util.NameUtilities;
  */
 public class JAnnotationUse extends AbstractJAnnotationValue
 {
-
   /**
    * The {@link Annotation} class
    */

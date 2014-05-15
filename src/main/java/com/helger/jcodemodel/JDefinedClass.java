@@ -153,7 +153,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> annotations;
+  private List <JAnnotationUse> m_aAnnotations;
 
   /**
    * Helper class to implement {@link IJGenerifiable}.
@@ -804,9 +804,9 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
     if (jdoc != null)
       f.newline ().generable (jdoc);
 
-    if (annotations != null)
+    if (m_aAnnotations != null)
     {
-      for (final JAnnotationUse annotation : annotations)
+      for (final JAnnotationUse annotation : m_aAnnotations)
         f.generable (annotation).newline ();
     }
 
@@ -940,14 +940,15 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * 
    * @param clazz
    *        The annotation class to annotate the class with
+   * @return The created annotation use. Never <code>null</code>.
    */
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    annotations.add (a);
+    m_aAnnotations.add (a);
     return a;
   }
 
@@ -963,15 +964,16 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
-    return Collections.unmodifiableCollection (annotations);
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+    return Collections.unmodifiableCollection (m_aAnnotations);
   }
 
   /**
    * @return the current modifiers of this class. Always return non-null valid
    *         object.
    */
+  @Nonnull
   public JMods mods ()
   {
     return _mods;

@@ -147,7 +147,7 @@ public class JFormatter implements Closeable
    */
   public JFormatter (@Nonnull final Writer w)
   {
-    this (new PrintWriter (w));
+    this (w instanceof PrintWriter ? (PrintWriter) w : new PrintWriter (w));
   }
 
   /**
@@ -328,18 +328,17 @@ public class JFormatter implements Closeable
     {
       case PRINTING:
         // many of the JTypes in this list are either primitive or belong to
-        // package java
-        // so we don't need a FQCN
+        // package java so we don't need a FQCN
         if (importedClasses.contains (type))
         {
-          // FQCN imported or not necessary, so generate short
+          // FQCN imported or not necessary, so generate short name
           print (type.name ());
-          // name
         }
         else
         {
-          if (type.outer () != null)
-            type (type.outer ()).print ('.').print (type.name ());
+          final AbstractJClass aOuterClass = type.outer ();
+          if (aOuterClass != null)
+            type (aOuterClass).print ('.').print (type.name ());
           else
           {
             // collision was detected, so generate FQCN
@@ -603,7 +602,7 @@ public class JFormatter implements Closeable
    */
   private final class ReferenceList
   {
-    private final ArrayList <AbstractJClass> classes = new ArrayList <AbstractJClass> ();
+    private final List <AbstractJClass> classes = new ArrayList <AbstractJClass> ();
 
     /** true if this name is used as an identifier (like a variable name.) **/
     private boolean id;
@@ -671,7 +670,7 @@ public class JFormatter implements Closeable
     }
 
     /**
-     * Return true iff this is strictly an id, meaning that there are no
+     * Return true if this is strictly an id, meaning that there are no
      * collisions with type names.
      */
     public boolean isId ()

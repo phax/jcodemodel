@@ -107,7 +107,7 @@ public final class SecureLoader
     }
     AccessController.doPrivileged (new PrivilegedAction <Object> ()
     {
-      public java.lang.Object run ()
+      public Object run ()
       {
         Thread.currentThread ().setContextClassLoader (cl);
         return null;

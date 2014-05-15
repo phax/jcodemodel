@@ -64,7 +64,7 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  * Root of the code DOM.
  * <p>
  * Here's your typical CodeModel application.
- *
+ * 
  * <pre>
  * JCodeModel cm = new JCodeModel();
  * 
@@ -144,7 +144,7 @@ public final class JCodeModel
 
   /**
    * Add a package to the list of packages to be generated
-   *
+   * 
    * @param name
    *        Name of the package. Use "" to indicate the root package.
    * @return Newly generated package
@@ -178,7 +178,7 @@ public final class JCodeModel
 
   /**
    * Creates a new generated class.
-   *
+   * 
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -203,7 +203,7 @@ public final class JCodeModel
 
   /**
    * Creates a new generated class.
-   *
+   * 
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -217,7 +217,7 @@ public final class JCodeModel
 
   /**
    * Creates a new generated class.
-   *
+   * 
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -228,7 +228,7 @@ public final class JCodeModel
 
   /**
    * Gets a reference to the already created generated class.
-   *
+   * 
    * @return null If the class is not yet created.
    * @see JPackage#_getClass(String)
    */
@@ -256,7 +256,7 @@ public final class JCodeModel
   /**
    * Generates Java source code. A convenience method for
    * <code>build(destDir,destDir,System.out)</code>.
-   *
+   * 
    * @param destDir
    *        source files are generated into this directory.
    * @param status
@@ -270,7 +270,7 @@ public final class JCodeModel
   /**
    * Generates Java source code. A convenience method that calls
    * {@link #build(AbstractCodeWriter,AbstractCodeWriter)}.
-   *
+   * 
    * @param srcDir
    *        Java source files are generated into this directory.
    * @param resourceDir
@@ -346,7 +346,7 @@ public final class JCodeModel
    * Obtains a reference to an existing class from its Class object.
    * <p>
    * The parameter may not be primitive.
-   *
+   * 
    * @see #_ref(Class) for the version that handles more cases.
    */
   @Nonnull
@@ -424,7 +424,7 @@ public final class JCodeModel
    * Obtains a type object from a type name.
    * <p>
    * This method handles primitive types, arrays, and existing {@link Class}es.
-   *
+   * 
    * @exception ClassNotFoundException
    *            If the specified type is not found.
    */
@@ -459,7 +459,7 @@ public final class JCodeModel
     /**
      * Parses a type name token T (which can be potentially of the form
      * Tr&ly;T1,T2,...>, or "? extends/super T".)
-     *
+     * 
      * @return the index of the character next to T.
      */
     AbstractJClass parseTypeName () throws ClassNotFoundException
@@ -542,7 +542,7 @@ public final class JCodeModel
 
     /**
      * Parses '&lt;T1,T2,...,Tn>'
-     *
+     * 
      * @return the index of the character next to '>'
      */
     private AbstractJClass parseArguments (final AbstractJClass rawType) throws ClassNotFoundException
@@ -566,7 +566,6 @@ public final class JCodeModel
           throw new IllegalArgumentException (_s);
         idx++;
       }
-
     }
   }
 
@@ -584,7 +583,7 @@ public final class JCodeModel
   {
     private final Class <?> _class;
 
-    JReferencedClass (final Class <?> _clazz)
+    JReferencedClass (@Nonnull final Class <?> _clazz)
     {
       super (JCodeModel.this);
       this._class = _clazz;
@@ -660,6 +659,7 @@ public final class JCodeModel
           return idx < interfaces.length;
         }
 
+        @Nonnull
         public AbstractJClass next ()
         {
           return JCodeModel.this.ref (interfaces[idx++]);

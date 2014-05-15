@@ -21,8 +21,10 @@ public final class NameUtilities
       throw new IllegalArgumentException ("class cannot be null");
 
     final StringBuilder name = new StringBuilder ();
-    name.append (c.getPackage ().getName ()).append (".");
+    // Package name
+    name.append (c.getPackage ().getName ()).append ('.');
 
+    // Get all enclosing classes
     Class <?> klaus = c;
     final List <Class <?>> enclosingClasses = new ArrayList <Class <?>> ();
     while ((klaus = klaus.getEnclosingClass ()) != null)
@@ -30,8 +32,9 @@ public final class NameUtilities
 
     // Back to front
     for (int i = enclosingClasses.size () - 1; i >= 0; i--)
-      name.append (enclosingClasses.get (i).getSimpleName ()).append (".");
+      name.append (enclosingClasses.get (i).getSimpleName ()).append ('.');
 
+    // Append main class name
     name.append (c.getSimpleName ());
     return name.toString ();
   }

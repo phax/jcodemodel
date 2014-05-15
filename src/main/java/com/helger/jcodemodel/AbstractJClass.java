@@ -208,8 +208,7 @@ public abstract class AbstractJClass extends AbstractJType
     if (this == derived)
       return true;
 
-    // the only class that is assignable from an interface is
-    // java.lang.Object
+    // the only class that is assignable from an interface is java.lang.Object
     if (this == _package ().owner ().ref (Object.class))
       return true;
 
@@ -302,12 +301,12 @@ public abstract class AbstractJClass extends AbstractJType
    * <p>
    * <code>.narrow(X)</code> builds <code>Set&lt;X></code> from <code>Set</code>.
    */
-  public AbstractJClass narrow (final Class <?> clazz)
+  public AbstractJClass narrow (@Nonnull final Class <?> clazz)
   {
     return narrow (owner ().ref (clazz));
   }
 
-  public AbstractJClass narrow (final Class <?>... clazz)
+  public AbstractJClass narrow (@Nonnull final Class <?>... clazz)
   {
     final AbstractJClass [] r = new AbstractJClass [clazz.length];
     for (int i = 0; i < clazz.length; i++)
@@ -389,36 +388,41 @@ public abstract class AbstractJClass extends AbstractJType
     return this.getClass ().getName () + '(' + name () + ')';
   }
 
+  @Nonnull
   public final IJExpression dotclass ()
   {
     return JExpr.dotclass (this);
   }
 
   /** Generates a static method invocation. */
+  @Nonnull
   public final JInvocation staticInvoke (final JMethod method)
   {
     return new JInvocation (this, method);
   }
 
   /** Generates a static method invocation. */
+  @Nonnull
   public final JInvocation staticInvoke (final String method)
   {
     return new JInvocation (this, method);
   }
 
   /** Static field reference. */
+  @Nonnull
   public final JFieldRef staticRef (final String field)
   {
     return new JFieldRef (this, field);
   }
 
   /** Static field reference. */
+  @Nonnull
   public final JFieldRef staticRef (final JVar field)
   {
     return new JFieldRef (this, field);
   }
 
-  public void generate (final JFormatter f)
+  public void generate (@Nonnull final JFormatter f)
   {
     f.type (this);
   }
@@ -426,7 +430,7 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Prints the class name in javadoc @link format.
    */
-  void printLink (final JFormatter f)
+  void printLink (@Nonnull final JFormatter f)
   {
     f.print ("{@link ").generable (this).print ('}');
   }
