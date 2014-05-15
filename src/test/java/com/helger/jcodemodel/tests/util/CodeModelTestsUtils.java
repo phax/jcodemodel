@@ -42,19 +42,20 @@ package com.helger.jcodemodel.tests.util;
 
 import java.io.StringWriter;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.JFormatter;
 import com.helger.jcodemodel.IJGenerable;
+import com.helger.jcodemodel.JFormatter;
 
 /**
  * Various utilities for codemodel tests.
  * 
  * @author Aleksei Valikov
  */
-public class CodeModelTestsUtils
+public final class CodeModelTestsUtils
 {
-
   /** Hidden constructor. */
   private CodeModelTestsUtils ()
   {}
@@ -66,36 +67,36 @@ public class CodeModelTestsUtils
    *        expression to print into a string.
    * @return Expression formatted as a string.
    */
-  public static String toString (final IJExpression expression)
+  @Nonnull
+  public static String toString (@Nonnull final IJExpression expression)
   {
     if (expression == null)
-    {
       throw new IllegalArgumentException ("Generable must not be null.");
-    }
+
     final StringWriter stringWriter = new StringWriter ();
     final JFormatter formatter = new JFormatter (stringWriter);
     expression.generate (formatter);
     return stringWriter.toString ();
   }
 
-  public static String declare (final IJDeclaration declaration)
+  @Nonnull
+  public static String declare (@Nonnull final IJDeclaration declaration)
   {
     if (declaration == null)
-    {
       throw new IllegalArgumentException ("Declaration must not be null.");
-    }
+
     final StringWriter stringWriter = new StringWriter ();
     final JFormatter formatter = new JFormatter (stringWriter);
     declaration.declare (formatter);
     return stringWriter.toString ();
   }
 
-  public static String generate (final IJGenerable generable)
+  @Nonnull
+  public static String generate (@Nonnull final IJGenerable generable)
   {
     if (generable == null)
-    {
       throw new IllegalArgumentException ("Generable must not be null.");
-    }
+
     final StringWriter stringWriter = new StringWriter ();
     final JFormatter formatter = new JFormatter (stringWriter);
     generable.generate (formatter);

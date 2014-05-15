@@ -246,30 +246,36 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (_isConstructor && _type.isArray ())
+    if (_isConstructor)
     {
-      // [RESULT] new T[]{arg1,arg2,arg3,...};
-      f.print ("new").generable (_type).print ('{');
+      if (_type.isArray ())
+      {
+        // [RESULT] new T[]{arg1,arg2,arg3,...};
+        f.print ("new").generable (_type).print ('{');
+      }
+      else
+      {
+        // [RESULT] new T(
+        f.print ("new").generable (_type).print ('(');
+      }
     }
     else
     {
-      if (_isConstructor)
-        f.print ("new").generable (_type).print ('(');
-      else
-      {
-        String name = this._name;
-        if (name == null)
-          name = this._method.name ();
+      // method name
+      String name = this._name;
+      if (name == null)
+        name = this._method.name ();
 
-        if (_object != null)
-          f.generable (_object).print ('.').print (name).print ('(');
-        else
-          f.id (name).print ('(');
-      }
+      if (_object != null)
+        f.generable (_object).print ('.').print (name).print ('(');
+      else
+        f.id (name).print ('(');
     }
 
+    // Method arguments
     f.generable (args);
 
+    // Close arg list
     if (_isConstructor && _type.isArray ())
       f.print ('}');
     else

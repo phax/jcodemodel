@@ -39,17 +39,19 @@ package com.helger.jcodemodel.tests;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
 
 public class JMethodTest
 {
-
   @Test
-  public void main () throws Exception
+  public void main () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
@@ -59,5 +61,18 @@ public class JMethodTest
 
     Assert.assertEquals (1, m.params ().size ());
     Assert.assertSame (foo, m.params ().get (0));
+  }
+
+  @Test
+  public void main2 () throws JClassAlreadyExistsException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("Test");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
+    final JTypeVar tv = m.generify ("T");
+    m.param (JMod.FINAL, tv, "foo");
+    m.body ().invoke ("bar");
+
+    System.out.println (CodeModelTestsUtils.declare (cls));
   }
 }

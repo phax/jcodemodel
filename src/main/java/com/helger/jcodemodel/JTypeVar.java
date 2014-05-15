@@ -90,7 +90,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    * @return this
    */
   @Nonnull
-  public JTypeVar bound (final AbstractJClass c)
+  public JTypeVar bound (@Nonnull final AbstractJClass c)
   {
     if (bound != null)
       throw new IllegalArgumentException ("type variable has an existing class bound " + bound);
