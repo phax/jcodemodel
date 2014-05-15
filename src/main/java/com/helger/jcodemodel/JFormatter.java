@@ -563,13 +563,13 @@ public class JFormatter implements Closeable
   private boolean _supressImport (@Nonnull final AbstractJClass aImportClass, @Nonnull final AbstractJClass c)
   {
     AbstractJClass clazz = aImportClass;
-    if (clazz instanceof JNarrowedClass)
-    {
-      clazz = clazz.erasure ();
-    }
     if (clazz instanceof JAnonymousClass)
     {
       clazz = clazz._extends ();
+    }
+    if (clazz instanceof JNarrowedClass)
+    {
+      clazz = clazz.erasure ();
     }
 
     if (clazz._package ().isUnnamed ())
