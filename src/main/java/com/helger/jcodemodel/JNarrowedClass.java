@@ -50,7 +50,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Represents X&lt;Y>. TODO: consider separating the decl and the use.
- *
+ * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JNarrowedClass extends AbstractJClass
@@ -80,7 +80,7 @@ public class JNarrowedClass extends AbstractJClass
   @Nonnull
   public AbstractJClass basis ()
   {
-    return basis ();
+    return _basis;
   }
 
   @Override

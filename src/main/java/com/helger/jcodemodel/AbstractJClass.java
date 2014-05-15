@@ -326,25 +326,23 @@ public abstract class AbstractJClass extends AbstractJType
     return new JNarrowedClass (this, clazz);
   }
 
-  public AbstractJClass narrow (final AbstractJType type)
+  public AbstractJClass narrow (@Nonnull final AbstractJType type)
   {
     return narrow (type.boxify ());
   }
 
-  public AbstractJClass narrow (final AbstractJClass... clazz)
+  public AbstractJClass narrow (@Nonnull final AbstractJClass... clazz)
   {
     if (clazz.length == 0)
       return this;
-    else
-      return new JNarrowedClass (this, Arrays.asList (clazz.clone ()));
+    return new JNarrowedClass (this, Arrays.asList (clazz.clone ()));
   }
 
-  public AbstractJClass narrow (final List <? extends AbstractJClass> clazz)
+  public AbstractJClass narrow (@Nonnull final List <? extends AbstractJClass> clazz)
   {
-    if (clazz.isEmpty())
+    if (clazz.isEmpty ())
       return this;
-    else
-      return new JNarrowedClass (this, new ArrayList <AbstractJClass> (clazz));
+    return new JNarrowedClass (this, new ArrayList <AbstractJClass> (clazz));
   }
 
   /**
