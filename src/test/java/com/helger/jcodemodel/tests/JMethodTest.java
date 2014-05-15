@@ -36,6 +36,8 @@ package com.helger.jcodemodel.tests;
  * holder.
  */
 
+import java.io.IOException;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -46,7 +48,7 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.JVar;
-import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 public class JMethodTest
 {
@@ -64,7 +66,7 @@ public class JMethodTest
   }
 
   @Test
-  public void main2 () throws JClassAlreadyExistsException
+  public void main2 () throws JClassAlreadyExistsException, IOException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
@@ -73,6 +75,6 @@ public class JMethodTest
     m.param (JMod.FINAL, tv, "foo");
     m.body ().invoke ("bar");
 
-    System.out.println (CodeModelTestsUtils.declare (cls));
+    cm.build (new SingleStreamCodeWriter (System.out));
   }
 }

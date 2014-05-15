@@ -55,16 +55,17 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   /** Lazily created list of {@link JTypeVar}s. */
   private List <JTypeVar> typeVariables;
 
+  @Nonnull
   protected abstract JCodeModel owner ();
 
-  public void declare (final JFormatter f)
+  public void declare (@Nonnull final JFormatter f)
   {
     if (typeVariables != null)
     {
       f.print ('<');
       for (int i = 0; i < typeVariables.size (); i++)
       {
-        if (i != 0)
+        if (i > 0)
           f.print (',');
         f.declaration (typeVariables.get (i));
       }

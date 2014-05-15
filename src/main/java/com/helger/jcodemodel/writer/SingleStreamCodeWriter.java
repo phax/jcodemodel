@@ -60,7 +60,7 @@ import com.helger.jcodemodel.JPackage;
  */
 public class SingleStreamCodeWriter extends AbstractCodeWriter
 {
-  private final PrintStream out;
+  private final PrintStream _out;
 
   /**
    * @param os
@@ -69,7 +69,7 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
   public SingleStreamCodeWriter (@Nonnull final OutputStream os)
   {
     super (null);
-    out = new PrintStream (os);
+    _out = new PrintStream (os);
   }
 
   @Override
@@ -79,9 +79,9 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
     if (pkgName.length () != 0)
       pkgName += '.';
 
-    out.println ("-----------------------------------" + pkgName + fileName + "-----------------------------------");
+    _out.println ("-----------------------------------" + pkgName + fileName + "-----------------------------------");
 
-    return new FilterOutputStream (out)
+    return new FilterOutputStream (_out)
     {
       @Override
       public void close ()
@@ -94,6 +94,6 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
   @Override
   public void close () throws IOException
   {
-    out.close ();
+    _out.close ();
   }
 }

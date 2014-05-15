@@ -396,14 +396,14 @@ public abstract class AbstractJClass extends AbstractJType
 
   /** Generates a static method invocation. */
   @Nonnull
-  public final JInvocation staticInvoke (final JMethod method)
+  public final JInvocation staticInvoke (@Nonnull final JMethod method)
   {
     return new JInvocation (this, method);
   }
 
   /** Generates a static method invocation. */
   @Nonnull
-  public final JInvocation staticInvoke (final String method)
+  public final JInvocation staticInvoke (@Nonnull final String method)
   {
     return new JInvocation (this, method);
   }

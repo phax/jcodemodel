@@ -40,6 +40,7 @@
 
 package com.helger.jcodemodel;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -93,7 +94,11 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   public JTypeVar bound (@Nonnull final AbstractJClass c)
   {
     if (bound != null)
-      throw new IllegalArgumentException ("type variable has an existing class bound " + bound);
+      throw new IllegalArgumentException ("type variable has an existing class bound " +
+                                          bound +
+                                          " so the new bound " +
+                                          c +
+                                          " cannot be set");
     bound = c;
     return this;
   }
@@ -109,6 +114,8 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   {
     if (bound != null)
       return bound;
+
+    // implicit "extends Object"
     return owner ().ref (Object.class);
   }
 
@@ -119,7 +126,11 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
-    return bound._implements ();
+    if (bound != null)
+      return bound._implements ();
+
+    // Nothing
+    return Collections.<AbstractJClass> emptyList ().iterator ();
   }
 
   @Override
@@ -134,6 +145,17 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
     return false;
   }
 
+  @Override
+  @Nonnull
+  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] variables,
+                                             @Nonnull final List <AbstractJClass> bindings)
+  {
+    for (int i = 0; i < variables.length; i++)
+      if (variables[i] == this)
+        return bindings.get (i);
+    return this;
+  }
+
   /**
    * Prints out the declaration of the variable.
    */
@@ -142,16 +164,6 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
     f.id (name);
     if (bound != null)
       f.print ("extends").generable (bound);
-  }
-
-  @Override
-  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] variables,
-                                             @Nonnull final List <AbstractJClass> bindings)
-  {
-    for (int i = 0; i < variables.length; i++)
-      if (variables[i] == this)
-        return bindings.get (i);
-    return this;
   }
 
   @Override

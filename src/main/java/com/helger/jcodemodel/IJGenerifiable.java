@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Declarations that can have type variables. Something that can be made into a
  * generic.
@@ -51,20 +53,24 @@ public interface IJGenerifiable
   /**
    * Adds a new type variable to this declaration.
    */
-  JTypeVar generify (String name);
+  @Nonnull
+  JTypeVar generify (@Nonnull String name);
 
   /**
    * Adds a new type variable to this declaration with a bound.
    */
-  JTypeVar generify (String name, Class <?> bound);
+  @Nonnull
+  JTypeVar generify (@Nonnull String name, @Nonnull Class <?> bound);
 
   /**
    * Adds a new type variable to this declaration with a bound.
    */
-  JTypeVar generify (String name, AbstractJClass bound);
+  @Nonnull
+  JTypeVar generify (@Nonnull String name, @Nonnull AbstractJClass bound);
 
   /**
    * Iterates all the type parameters of this class/interface.
    */
+  @Nonnull
   JTypeVar [] typeParams ();
 }

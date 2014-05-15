@@ -113,7 +113,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * JMethod constructor
-   *
+   * 
    * @param mods
    *        Modifiers for this method's declaration
    * @param type
@@ -131,7 +131,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Constructor constructor
-   *
+   * 
    * @param mods
    *        Modifiers for this constructor's declaration
    * @param _class
@@ -160,7 +160,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Add an exception to the list of exceptions that this method may throw.
-   *
+   * 
    * @param exception
    *        Name of an exception that this method may throw
    */
@@ -179,7 +179,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Returns the list of variable of this method.
-   *
+   * 
    * @return List of parameters of this method. This list is not modifiable.
    */
   @Nonnull
@@ -197,7 +197,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Add the specified variable to the list of parameters for this method
    * signature.
-   *
+   * 
    * @param type
    *        JType of the parameter being added
    * @param name
@@ -242,7 +242,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Add the specified variable argument to the list of parameters for this
    * method signature.
-   *
+   * 
    * @param type
    *        Type of the parameter being added.
    * @param name
@@ -270,7 +270,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Add the specified variable argument to the list of parameters for this
    * method signature.
-   *
+   * 
    * @param mods
    *        mods to use
    * @param type
@@ -302,7 +302,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Adds an annotation to this variable.
-   *
+   * 
    * @param clazz
    *        The annotation class to annotate the field with
    */
@@ -318,7 +318,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Adds an annotation to this variable.
-   *
+   * 
    * @param clazz
    *        The annotation class to annotate the field with
    */
@@ -381,7 +381,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Returns all the parameter types in an array.
-   *
+   * 
    * @return If there's no parameter, an empty array will be returned.
    */
   public AbstractJType [] listParamTypes ()
@@ -394,7 +394,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Returns the varags parameter type.
-   *
+   * 
    * @return If there's no vararg parameter type, null will be returned.
    */
   public AbstractJType listVarParamType ()
@@ -406,7 +406,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Returns all the parameters in an array.
-   *
+   * 
    * @return If there's no parameter, an empty array will be returned.
    */
   public JVar [] listParams ()
@@ -416,7 +416,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Returns the variable parameter
-   *
+   * 
    * @return If there's no parameter, null will be returned.
    */
   public JVar listVarParam ()
@@ -427,7 +427,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Returns true if the method has the specified signature.
    */
-  public boolean hasSignature (final AbstractJType [] argTypes)
+  public boolean hasSignature (@Nonnull final AbstractJType [] argTypes)
   {
     final JVar [] p = listParams ();
     if (p.length != argTypes.length)
@@ -442,7 +442,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Get the block that makes up body of this method
-   *
+   * 
    * @return Body of method
    */
   public JBlock body ()
@@ -454,7 +454,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Specify the default value for this annotation member
-   *
+   * 
    * @param value
    *        Default value for the annotation member
    */
@@ -465,7 +465,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Creates, if necessary, and returns the class javadoc for this JDefinedClass
-   *
+   * 
    * @return JDocComment containing javadocs for this class
    */
   @Nonnull
@@ -557,7 +557,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Override
-  protected JCodeModel owner ()
+  public JCodeModel owner ()
   {
     return _outer.owner ();
   }

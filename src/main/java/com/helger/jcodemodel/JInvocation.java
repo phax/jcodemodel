@@ -51,11 +51,13 @@ import javax.annotation.Nullable;
  */
 public class JInvocation extends AbstractJExpressionImpl implements IJStatement
 {
+  private final JCodeModel _owner;
+
   /**
    * Object expression upon which this method will be invoked, or null if this
    * is a constructor invocation
    */
-  private IJGenerable _object;
+  private final IJGenerable _object;
 
   /**
    * Name of the method to be invoked. Either this field is set, or
@@ -63,11 +65,11 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
    * invocation.) This allows {@link JMethod#name(String) the name of the method
    * to be changed later}.
    */
-  private String _name;
+  private final String _name;
 
-  private JMethod _method;
+  private final JMethod _method;
 
-  private boolean _isConstructor = false;
+  private final boolean _isConstructor;
 
   /**
    * List of argument expressions for this method invocation
@@ -77,7 +79,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
   /**
    * If isConstructor==true, this field keeps the type to be created.
    */
-  private AbstractJType _type;
+  private final AbstractJType _type;
 
   /**
    * Invokes a method on an object.
@@ -90,12 +92,13 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
    */
   protected JInvocation (@Nullable final IJExpression object, @Nonnull final String name)
   {
-    this ((IJGenerable) object, name);
+    // Not possible to determine an owner :(
+    this (null, object, name);
   }
 
   protected JInvocation (@Nullable final IJExpression object, @Nonnull final JMethod method)
   {
-    this ((IJGenerable) object, method);
+    this (method.owner (), object, method);
   }
 
   /**
@@ -103,26 +106,36 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
    */
   protected JInvocation (@Nonnull final AbstractJClass type, @Nonnull final String name)
   {
-    this ((IJGenerable) type, name);
+    this (type.owner (), type, name);
   }
 
   protected JInvocation (@Nonnull final AbstractJClass type, @Nonnull final JMethod method)
   {
-    this ((IJGenerable) type, method);
+    this (type.owner (), type, method);
   }
 
-  private JInvocation (@Nullable final IJGenerable object, @Nonnull final String name)
+  private JInvocation (@Nullable final JCodeModel owner, @Nullable final IJGenerable object, @Nonnull final String name)
   {
-    this._object = object;
     if (name.indexOf ('.') >= 0)
       throw new IllegalArgumentException ("method name contains '.': " + name);
-    this._name = name;
+    _owner = owner;
+    _object = object;
+    _name = name;
+    _method = null;
+    _isConstructor = false;
+    _type = null;
   }
 
-  private JInvocation (@Nullable final IJGenerable object, @Nonnull final JMethod method)
+  private JInvocation (@Nonnull final JCodeModel owner,
+                       @Nullable final IJGenerable object,
+                       @Nonnull final JMethod method)
   {
-    this._object = object;
-    this._method = method;
+    _owner = owner;
+    _object = object;
+    _name = null;
+    _method = method;
+    _isConstructor = false;
+    _type = null;
   }
 
   /**
@@ -135,8 +148,12 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
    */
   protected JInvocation (@Nonnull final AbstractJType c)
   {
-    this._isConstructor = true;
-    this._type = c;
+    _owner = c.owner ();
+    _object = null;
+    _name = null;
+    _method = null;
+    _isConstructor = true;
+    _type = c;
   }
 
   public boolean isConstructor ()
@@ -262,9 +279,9 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
     else
     {
       // method name
-      String name = this._name;
+      String name = _name;
       if (name == null)
-        name = this._method.name ();
+        name = _method.name ();
 
       if (_object != null)
         f.generable (_object).print ('.').print (name).print ('(');

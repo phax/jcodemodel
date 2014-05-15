@@ -72,18 +72,18 @@ public class ProgressCodeWriter extends FilterCodeWriter
   @Override
   public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
-    report (pkg, fileName);
+    _report (pkg, fileName);
     return super.openBinary (pkg, fileName);
   }
 
   @Override
   public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
-    report (pkg, fileName);
+    _report (pkg, fileName);
     return super.openSource (pkg, fileName);
   }
 
-  private void report (@Nonnull final JPackage pkg, @Nonnull final String fileName)
+  private void _report (@Nonnull final JPackage pkg, @Nonnull final String fileName)
   {
     if (pkg.isUnnamed ())
       _progress.println (fileName);

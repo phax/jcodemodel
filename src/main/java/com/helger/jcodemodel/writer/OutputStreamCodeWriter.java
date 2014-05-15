@@ -63,7 +63,7 @@ import com.helger.jcodemodel.JPackage;
 
 public class OutputStreamCodeWriter extends AbstractCodeWriter
 {
-  private final PrintStream out;
+  private final PrintStream _out;
 
   /**
    * @param os
@@ -74,7 +74,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
     super (encoding);
     try
     {
-      this.out = encoding == null ? new PrintStream (os, false) : new PrintStream (os, false, encoding.name ());
+      this._out = encoding == null ? new PrintStream (os, false) : new PrintStream (os, false, encoding.name ());
     }
     catch (final UnsupportedEncodingException ueex)
     {
@@ -85,7 +85,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   @Override
   public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
-    return new FilterOutputStream (out)
+    return new FilterOutputStream (_out)
     {
       @Override
       public void close ()
@@ -98,6 +98,6 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   @Override
   public void close () throws IOException
   {
-    out.close ();
+    _out.close ();
   }
 }
