@@ -69,7 +69,7 @@ public class JMods implements IJGenerable
                               JMod.NATIVE |
                               JMod.SYNCHRONIZED;
   private static int CLASS = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED | JMod.STATIC | JMod.FINAL | JMod.ABSTRACT;
-  private static int INTERFACE = JMod.PUBLIC | JMod.PRIVATE;
+  private static int INTERFACE = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED;
 
   /** bit-packed representation of modifiers. */
   private int _mods;
@@ -156,6 +156,13 @@ public class JMods implements IJGenerable
     _setFlag (JMod.PUBLIC, false);
     _setFlag (JMod.PROTECTED, false);
     _setFlag (JMod.PRIVATE, true);
+  }
+
+  public void setPackagePrivate ()
+  {
+    _setFlag (JMod.PUBLIC, false);
+    _setFlag (JMod.PROTECTED, false);
+    _setFlag (JMod.PRIVATE, false);
   }
 
   public void setProtected ()
