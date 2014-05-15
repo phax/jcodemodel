@@ -44,6 +44,8 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.JOp.TernaryOp;
+
 /**
  * Factory methods that generate various {@link IJExpression}s.
  */
@@ -227,7 +229,7 @@ public final class JExpr
 
   /**
    * Generates {@code new T[size]}.
-   *
+   * 
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
@@ -240,7 +242,7 @@ public final class JExpr
 
   /**
    * Generates {@code new T[size]}.
-   *
+   * 
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
@@ -396,7 +398,7 @@ public final class JExpr
 
   public static class JExpressionStatementWrapper extends AbstractJExpressionImpl implements IJExpressionStatement
   {
-    final IJExpression expr;
+    private final IJExpression expr;
 
     public JExpressionStatementWrapper (@Nonnull final IJExpression expression)
     {
@@ -418,5 +420,26 @@ public final class JExpr
     {
       f.generable (expr).print (';').newline ();
     }
+  }
+
+  /**
+   * Just a sanity wrapper around
+   * {@link JOp#cond(IJExpression, IJExpression, IJExpression)} for easier
+   * finding.
+   * 
+   * @param cond
+   *        Condition
+   * @param ifTrue
+   *        True condition
+   * @param ifFalse
+   *        False condition
+   * @return The created expression
+   */
+  @Nonnull
+  public static TernaryOp cond (@Nonnull final IJExpression cond,
+                                @Nonnull final IJExpression ifTrue,
+                                @Nonnull final IJExpression ifFalse)
+  {
+    return JOp.cond (cond, ifTrue, ifFalse);
   }
 }
