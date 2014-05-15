@@ -76,7 +76,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * List of parameters for this method's declaration
    */
-  private final List <JVar> params = new ArrayList <JVar> ();
+  private final List <JVar> _params = new ArrayList <JVar> ();
 
   /**
    * Set of exceptions that this method may throw. A set instance lazily
@@ -87,29 +87,29 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * JBlock of statements that makes up the body this method
    */
-  private JBlock body;
+  private JBlock _body;
 
   private final JDefinedClass _outer;
 
   /**
    * javadoc comments for this JMethod
    */
-  private JDocComment jdoc;
+  private JDocComment _jdoc;
 
   /**
    * Variable parameter for this method's varargs declaration introduced in J2SE
    * 1.5
    */
-  private JVar varParam;
+  private JVar _varParam;
 
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> annotations;
+  private List <JAnnotationUse> _annotations;
   /**
    * To set the default value for the annotation member
    */
-  private IJExpression defaultValue;
+  private IJExpression _defaultValue;
 
   /**
    * JMethod constructor
@@ -185,13 +185,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public List <JVar> params ()
   {
-    return Collections.<JVar> unmodifiableList (params);
+    return Collections.<JVar> unmodifiableList (_params);
   }
 
   @Nonnull
   public JVar paramAtIndex (final int index)
   {
-    return params.get (index);
+    return _params.get (index);
   }
 
   /**
@@ -208,7 +208,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public JVar param (final int mods, final AbstractJType type, final String name)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, name, null);
-    params.add (v);
+    _params.add (v);
     return v;
   }
 
@@ -290,14 +290,14 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
                                        + "Check if varParam method of JMethod is"
                                        + " invoked more than once");
 
-    varParam = new JVar (JMods.forVar (mods), type.array (), name, null);
-    return varParam;
+    _varParam = new JVar (JMods.forVar (mods), type.array (), name, null);
+    return _varParam;
   }
 
   @Nullable
   public JVar varParam ()
   {
-    return varParam;
+    return _varParam;
   }
 
   /**
@@ -309,10 +309,10 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
+    if (_annotations == null)
+      _annotations = new ArrayList <JAnnotationUse> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    annotations.add (a);
+    _annotations.add (a);
     return a;
   }
 
@@ -337,9 +337,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
-    return Collections.unmodifiableList (annotations);
+    if (_annotations == null)
+      _annotations = new ArrayList <JAnnotationUse> ();
+    return Collections.unmodifiableList (_annotations);
   }
 
   /**
@@ -347,7 +347,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public boolean hasVarArgs ()
   {
-    return this.varParam != null;
+    return this._varParam != null;
   }
 
   public String name ()
@@ -386,9 +386,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public AbstractJType [] listParamTypes ()
   {
-    final AbstractJType [] r = new AbstractJType [params.size ()];
+    final AbstractJType [] r = new AbstractJType [_params.size ()];
     for (int i = 0; i < r.length; i++)
-      r[i] = params.get (i).type ();
+      r[i] = _params.get (i).type ();
     return r;
   }
 
@@ -399,8 +399,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public AbstractJType listVarParamType ()
   {
-    if (varParam != null)
-      return varParam.type ();
+    if (_varParam != null)
+      return _varParam.type ();
     return null;
   }
 
@@ -411,7 +411,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public JVar [] listParams ()
   {
-    return params.toArray (new JVar [params.size ()]);
+    return _params.toArray (new JVar [_params.size ()]);
   }
 
   /**
@@ -421,7 +421,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public JVar listVarParam ()
   {
-    return varParam;
+    return _varParam;
   }
 
   /**
@@ -447,9 +447,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public JBlock body ()
   {
-    if (body == null)
-      body = new JBlock ();
-    return body;
+    if (_body == null)
+      _body = new JBlock ();
+    return _body;
   }
 
   /**
@@ -460,7 +460,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public void declareDefaultValue (final IJExpression value)
   {
-    this.defaultValue = value;
+    this._defaultValue = value;
   }
 
   /**
@@ -471,19 +471,19 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JDocComment javadoc ()
   {
-    if (jdoc == null)
-      jdoc = new JDocComment (owner ());
-    return jdoc;
+    if (_jdoc == null)
+      _jdoc = new JDocComment (owner ());
+    return _jdoc;
   }
 
   @Override
   public void declare (final JFormatter f)
   {
-    if (jdoc != null)
-      f.generable (jdoc);
+    if (_jdoc != null)
+      f.generable (_jdoc);
 
-    if (annotations != null)
-      for (final JAnnotationUse a : annotations)
+    if (_annotations != null)
+      for (final JAnnotationUse a : _annotations)
         f.generable (a).newline ();
 
     f.generable (_mods);
@@ -497,7 +497,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     // when parameters are printed in new lines, we want them to be indented.
     // there's a good chance no newlines happen, too, but just in case it does.
     boolean first = true;
-    for (final JVar var : params)
+    for (final JVar var : _params)
     {
       if (!first)
         f.print (',');
@@ -510,11 +510,11 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     {
       if (!first)
         f.print (',');
-      for (final JAnnotationUse annotation : varParam.annotations ())
+      for (final JAnnotationUse annotation : _varParam.annotations ())
         f.generable (annotation).newline ();
-      f.generable (varParam.mods ()).generable (varParam.type ().elementType ());
+      f.generable (_varParam.mods ()).generable (_varParam.type ().elementType ());
       f.print ("... ");
-      f.id (varParam.name ());
+      f.id (_varParam.name ());
     }
 
     f.outdent ().print (')');
@@ -523,14 +523,14 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       f.newline ().indent ().print ("throws").generable (_throws).newline ().outdent ();
     }
 
-    if (defaultValue != null)
+    if (_defaultValue != null)
     {
       f.print ("default ");
-      f.generable (defaultValue);
+      f.generable (_defaultValue);
     }
-    if (body != null)
+    if (_body != null)
     {
-      f.statement (body);
+      f.statement (_body);
     }
     else
       if (!_outer.isInterface () &&
@@ -551,12 +551,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @return the current modifiers of this method. Always return non-null valid
    *         object.
    */
+  @Nonnull
   public JMods mods ()
   {
     return _mods;
   }
 
-  @Override
+  @Nonnull
   public JCodeModel owner ()
   {
     return _outer.owner ();

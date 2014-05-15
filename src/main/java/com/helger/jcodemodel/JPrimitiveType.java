@@ -54,8 +54,8 @@ public class JPrimitiveType extends AbstractJType
    * Corresponding wrapper class. For example, this would be "java.lang.Short"
    * for short.
    */
-  private final AbstractJClass wrapperClass;
-  private AbstractJClass arrayClass;
+  private final AbstractJClass _wrapperClass;
+  private AbstractJClass _arrayClass;
 
   protected JPrimitiveType (@Nonnull final JCodeModel owner,
                             @Nonnull final String typeName,
@@ -63,10 +63,9 @@ public class JPrimitiveType extends AbstractJType
   {
     this._owner = owner;
     this._typeName = typeName;
-    this.wrapperClass = owner.ref (wrapper);
+    this._wrapperClass = owner.ref (wrapper);
   }
 
-  @Override
   @Nonnull
   public JCodeModel owner ()
   {
@@ -97,9 +96,9 @@ public class JPrimitiveType extends AbstractJType
   @Nonnull
   public AbstractJClass array ()
   {
-    if (arrayClass == null)
-      arrayClass = new JArrayClass (_owner, this);
-    return arrayClass;
+    if (_arrayClass == null)
+      _arrayClass = new JArrayClass (_owner, this);
+    return _arrayClass;
   }
 
   /**
@@ -110,7 +109,7 @@ public class JPrimitiveType extends AbstractJType
   @Nonnull
   public AbstractJClass boxify ()
   {
-    return wrapperClass;
+    return _wrapperClass;
   }
 
   /**

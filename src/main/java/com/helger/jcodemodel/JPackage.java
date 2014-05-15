@@ -106,21 +106,21 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    * 
    * @param name
    *        Name of package. May not be <code>null</code> but empty.
-   * @param cw
+   * @param owner
    *        The code writer being used to create this package
    * @throws IllegalArgumentException
    *         If each part of the package name is not a valid identifier
    */
-  protected JPackage (@Nonnull final String name, @Nonnull final JCodeModel cw)
+  protected JPackage (@Nonnull final String name, @Nonnull final JCodeModel owner)
   {
     if (name == null)
       throw new NullPointerException ("name");
     if (name.equals ("."))
       throw new IllegalArgumentException ("Package name . is not allowed");
-    if (cw == null)
+    if (owner == null)
       throw new NullPointerException ("codeModel");
 
-    this._owner = cw;
+    this._owner = owner;
 
     if (_owner.isCaseSensitiveFileSystem)
       upperCaseClassMap = null;

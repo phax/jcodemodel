@@ -58,7 +58,7 @@ import com.helger.jcodemodel.util.NameUtilities;
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public class JAnnotationArrayMember extends AbstractJAnnotationValue implements IJAnnotatable
+public class JAnnotationArrayMember extends AbstractJAnnotationValue implements IJAnnotatable, IJOwned
 {
   private final List <AbstractJAnnotationValue> values = new ArrayList <AbstractJAnnotationValue> ();
   private final JCodeModel _owner;
@@ -68,6 +68,12 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     if (owner == null)
       throw new NullPointerException ("owner");
     this._owner = owner;
+  }
+
+  @Nonnull
+  public JCodeModel owner ()
+  {
+    return _owner;
   }
 
   /**

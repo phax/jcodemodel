@@ -45,7 +45,7 @@ import java.util.Iterator;
 /**
  * The common aspect of a package and a class.
  */
-public interface IJClassContainer
+public interface IJClassContainer extends IJOwned
 {
   /**
    * Returns true if the container is a class.
@@ -123,11 +123,6 @@ public interface IJClassContainer
    * If <tt>this.isPackage()</tt>, then return <tt>this</tt>.
    */
   JPackage getPackage ();
-
-  /**
-   * Get the root code model object.
-   */
-  JCodeModel owner ();
 
   /**
    * Add an annotationType Declaration to this package

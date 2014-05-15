@@ -57,193 +57,193 @@ import javax.annotation.Nonnull;
 public interface IJExpression extends IJGenerable
 {
   /**
-   * Returns "-[this]" from "[this]".
+   * @return "-[this]" from "[this]".
    */
   @Nonnull
   IJExpression minus ();
 
   /**
-   * Returns "![this]" from "[this]".
+   * @return "![this]" from "[this]".
    */
   @Nonnull
   IJExpression not ();
 
   /**
-   * Returns "~[this]" from "[this]".
+   * @return "~[this]" from "[this]".
    */
   @Nonnull
   IJExpression complement ();
 
   /**
-   * Returns "[this]++" from "[this]".
+   * @return "[this]++" from "[this]".
    */
   @Nonnull
   IJExpression incr ();
 
   /**
-   * Returns "++[this]" from "[this]".
+   * @return "++[this]" from "[this]".
    */
   @Nonnull
   IJExpression preincr ();
 
   /**
-   * Returns "[this]--" from "[this]".
+   * @return "[this]--" from "[this]".
    */
   @Nonnull
   IJExpression decr ();
 
   /**
-   * Returns "--[this]" from "[this]".
+   * @return "--[this]" from "[this]".
    */
   @Nonnull
   IJExpression predecr ();
 
   /**
-   * Returns "[this]+[right]"
+   * @return "[this]+[right]"
    */
   @Nonnull
   IJExpression plus (@Nonnull IJExpression right);
 
   /**
-   * Returns "[this]+[right]"
+   * @return "[this]+[right]"
    */
   @Nonnull
   IJExpression plus (double right);
 
   /**
-   * Returns "[this]+[right]"
+   * @return "[this]+[right]"
    */
   @Nonnull
   IJExpression plus (float right);
 
   /**
-   * Returns "[this]+[right]"
+   * @return "[this]+[right]"
    */
   @Nonnull
   IJExpression plus (int right);
 
   /**
-   * Returns "[this]+[right]"
+   * @return "[this]+[right]"
    */
   @Nonnull
   IJExpression plus (long right);
 
   /**
-   * Returns "[this]+[right]"
+   * @return "[this]+[right]"
    */
   @Nonnull
   IJExpression plus (@Nonnull String right);
 
   /**
-   * Returns "[this]-[right]"
+   * @return "[this]-[right]"
    */
   @Nonnull
   IJExpression minus (@Nonnull IJExpression right);
 
   /**
-   * Returns "[this]-[right]"
+   * @return "[this]-[right]"
    */
   @Nonnull
   IJExpression minus (double right);
 
   /**
-   * Returns "[this]-[right]"
+   * @return "[this]-[right]"
    */
   @Nonnull
   IJExpression minus (float right);
 
   /**
-   * Returns "[this]-[right]"
+   * @return "[this]-[right]"
    */
   @Nonnull
   IJExpression minus (int right);
 
   /**
-   * Returns "[this]-[right]"
+   * @return "[this]-[right]"
    */
   @Nonnull
   IJExpression minus (long right);
 
   /**
-   * Returns "[this]*[right]"
+   * @return "[this]*[right]"
    */
   @Nonnull
   IJExpression mul (@Nonnull IJExpression right);
 
   /**
-   * Returns "[this]*[right]"
+   * @return "[this]*[right]"
    */
   @Nonnull
   IJExpression mul (double right);
 
   /**
-   * Returns "[this]*[right]"
+   * @return "[this]*[right]"
    */
   @Nonnull
   IJExpression mul (float right);
 
   /**
-   * Returns "[this]*[right]"
+   * @return "[this]*[right]"
    */
   @Nonnull
   IJExpression mul (int right);
 
   /**
-   * Returns "[this]*[right]"
+   * @return "[this]*[right]"
    */
   @Nonnull
   IJExpression mul (long right);
 
   /**
-   * Returns "[this]/[right]"
+   * @return "[this]/[right]"
    */
   @Nonnull
   IJExpression div (@Nonnull IJExpression right);
 
   /**
-   * Returns "[this]/[right]"
+   * @return "[this]/[right]"
    */
   @Nonnull
   IJExpression div (double right);
 
   /**
-   * Returns "[this]/[right]"
+   * @return "[this]/[right]"
    */
   @Nonnull
   IJExpression div (float right);
 
   /**
-   * Returns "[this]/[right]"
+   * @return "[this]/[right]"
    */
   @Nonnull
   IJExpression div (int right);
 
   /**
-   * Returns "[this]/[right]"
+   * @return "[this]/[right]"
    */
   @Nonnull
   IJExpression div (long right);
 
   /**
-   * Returns "[this]%[right]"
+   * @return "[this]%[right]"
    */
   @Nonnull
   IJExpression mod (@Nonnull IJExpression right);
 
   /**
-   * Returns "[this]&lt;&lt;[right]"
+   * @return "[this]&lt;&lt;[right]"
    */
   @Nonnull
   IJExpression shl (@Nonnull IJExpression right);
 
   /**
-   * Returns "[this]>>[right]"
+   * @return "[this]>>[right]"
    */
   @Nonnull
   IJExpression shr (@Nonnull IJExpression right);
 
   /**
-   * Returns "[this]>>>[right]"
+   * @return "[this]>>>[right]"
    */
   @Nonnull
   IJExpression shrz (@Nonnull IJExpression right);
@@ -279,28 +279,58 @@ public interface IJExpression extends IJGenerable
   @Nonnull
   IJExpression gte (@Nonnull IJExpression right);
 
+  /**
+   * Equals
+   * 
+   * @param right
+   *        expression to compare to
+   * @return <code><em>expr</em> == <em>right</em></code>
+   */
   @Nonnull
   IJExpression eq (@Nonnull IJExpression right);
 
+  /**
+   * Shortcut for <code>eq (JExpr._null ())</code>
+   * 
+   * @return <code><em>expr</em> == null</code>
+   */
+  @Nonnull
+  IJExpression eqNull ();
+
+  /**
+   * Not equals
+   * 
+   * @param right
+   *        expression to compare to
+   * @return <code><em>expr</em> != <em>right</em></code>
+   */
   @Nonnull
   IJExpression ne (@Nonnull IJExpression right);
 
   /**
-   * Returns "[this] instanceof [right]"
+   * Shortcut for <code>ne (JExpr._null ())</code>
+   * 
+   * @return Never <code><em>expr</em> != null</code>
+   */
+  @Nonnull
+  IJExpression neNull ();
+
+  /**
+   * @return "[this] instanceof [right]"
    */
   @Nonnull
   IJExpression _instanceof (@Nonnull AbstractJType right);
 
   /**
-   * Returns "[this].[method]". Arguments shall be added to the returned
-   * {@link JInvocation} object.
+   * @return "[this].[method]". Arguments shall be added to the returned
+   *         {@link JInvocation} object.
    */
   @Nonnull
   JInvocation invoke (@Nonnull JMethod method);
 
   /**
-   * Returns "[this].[method]". Arguments shall be added to the returned
-   * {@link JInvocation} object.
+   * @return "[this].[method]". Arguments shall be added to the returned
+   *         {@link JInvocation} object.
    */
   @Nonnull
   JInvocation invoke (@Nonnull String method);

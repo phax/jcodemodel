@@ -46,9 +46,8 @@ import javax.annotation.Nonnull;
  * A representation of a type in codeModel. A type is always either primitive (
  * {@link JPrimitiveType}) or a reference type ({@link AbstractJClass}).
  */
-public abstract class AbstractJType implements IJGenerable, Comparable <AbstractJType>
+public abstract class AbstractJType implements IJGenerable, IJOwned, Comparable <AbstractJType>
 {
-
   /**
    * Obtains a reference to the primitive type object from a type name.
    */
@@ -75,9 +74,6 @@ public abstract class AbstractJType implements IJGenerable, Comparable <Abstract
       return codeModel.DOUBLE;
     throw new IllegalArgumentException ("Not a primitive type: " + typeName);
   }
-
-  /** Gets the owner code model object. */
-  public abstract JCodeModel owner ();
 
   /**
    * Gets the full name of the type. See

@@ -160,8 +160,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    */
   private final AbstractJGenerifiableImpl _generifiable = new AbstractJGenerifiableImpl ()
   {
-    @Override
-    protected JCodeModel owner ()
+    @Nonnull
+    public JCodeModel owner ()
     {
       // The owner is same as the owner of this defined class's owner
       return JDefinedClass.this.owner ();

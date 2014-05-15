@@ -50,7 +50,7 @@ import com.helger.jcodemodel.util.NameUtilities;
  * 
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public class JAnnotationUse extends AbstractJAnnotationValue
+public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 {
   /**
    * The {@link Annotation} class
@@ -79,7 +79,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue
     return Collections.unmodifiableMap (memberValues);
   }
 
-  private JCodeModel _owner ()
+  @Nonnull
+  public JCodeModel owner ()
   {
     return _clazz.owner ();
   }
@@ -263,7 +264,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
   @Nonnull
   public JAnnotationUse annotationParam (final String name, final Class <? extends Annotation> value)
   {
-    final JAnnotationUse annotationUse = new JAnnotationUse (_owner ().ref (value));
+    final JAnnotationUse annotationUse = new JAnnotationUse (owner ().ref (value));
     addValue (name, annotationUse);
     return annotationUse;
   }
@@ -285,7 +286,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
     {
       public void generate (final JFormatter f)
       {
-        f.type (_owner ().ref (value.getDeclaringClass ())).print ('.').print (value.name ());
+        f.type (owner ().ref (value.getDeclaringClass ())).print ('.').print (value.name ());
       }
     });
     return this;
@@ -388,7 +389,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue
   @Nonnull
   public JAnnotationArrayMember paramArray (final String name)
   {
-    final JAnnotationArrayMember arrayMember = new JAnnotationArrayMember (_owner ());
+    final JAnnotationArrayMember arrayMember = new JAnnotationArrayMember (owner ());
     addValue (name, arrayMember);
     return arrayMember;
   }

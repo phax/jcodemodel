@@ -62,7 +62,7 @@ public class JBlock implements IJGenerable, IJStatement
    * Declarations and statements contained in this block. Either
    * {@link IJStatement} or {@link IJDeclaration}.
    */
-  private final List <Object> content = new ArrayList <Object> ();
+  private final List <Object> _content = new ArrayList <Object> ();
 
   /**
    * Whether or not this block must be braced and indented
@@ -73,7 +73,7 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Current position.
    */
-  private int pos;
+  private int _pos;
 
   protected JBlock ()
   {
@@ -93,7 +93,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   public List <Object> getContents ()
   {
-    return Collections.unmodifiableList (content);
+    return Collections.unmodifiableList (_content);
   }
 
   @Nonnull
@@ -102,24 +102,24 @@ public class JBlock implements IJGenerable, IJStatement
     if (statementOrDeclaration == null)
       throw new NullPointerException ("statementOrDeclaration");
 
-    content.add (pos, statementOrDeclaration);
-    pos++;
+    _content.add (_pos, statementOrDeclaration);
+    _pos++;
     return statementOrDeclaration;
   }
 
   public void remove (final Object o)
   {
-    content.remove (o);
+    _content.remove (o);
   }
 
   public void remove (@Nonnegative final int index)
   {
-    content.remove (index);
+    _content.remove (index);
   }
 
   public void removeAll ()
   {
-    content.clear ();
+    _content.clear ();
   }
 
   /**
@@ -132,7 +132,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnegative
   public int pos ()
   {
-    return pos;
+    return _pos;
   }
 
   /**
@@ -146,10 +146,10 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnegative
   public int pos (@Nonnegative final int newPos)
   {
-    final int r = pos;
-    if (newPos > content.size () || newPos < 0)
+    final int r = _pos;
+    if (newPos > _content.size () || newPos < 0)
       throw new IllegalArgumentException ("Illegal position provided: " + newPos);
-    pos = newPos;
+    _pos = newPos;
     return r;
   }
 
@@ -158,7 +158,7 @@ public class JBlock implements IJGenerable, IJStatement
    */
   public boolean isEmpty ()
   {
-    return content.isEmpty ();
+    return _content.isEmpty ();
   }
 
   /**
@@ -556,7 +556,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   void generateBody (@Nonnull final JFormatter f)
   {
-    for (final Object o : content)
+    for (final Object o : _content)
     {
       if (o instanceof IJDeclaration)
         f.declaration ((IJDeclaration) o);

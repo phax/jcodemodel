@@ -101,7 +101,6 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /** Gets the JCodeModel object to which this object belongs. */
-  @Override
   @Nonnull
   public final JCodeModel owner ()
   {

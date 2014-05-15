@@ -50,13 +50,10 @@ import javax.annotation.Nonnull;
  * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDeclaration
+public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDeclaration, IJOwned
 {
   /** Lazily created list of {@link JTypeVar}s. */
   private List <JTypeVar> typeVariables;
-
-  @Nonnull
-  protected abstract JCodeModel owner ();
 
   public void declare (@Nonnull final JFormatter f)
   {

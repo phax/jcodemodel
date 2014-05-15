@@ -307,9 +307,21 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   }
 
   @Nonnull
+  public final IJExpression eqNull ()
+  {
+    return eq (JExpr._null ());
+  }
+
+  @Nonnull
   public final IJExpression ne (@Nonnull final IJExpression right)
   {
     return JOp.ne (this, right);
+  }
+
+  @Nonnull
+  public final IJExpression neNull ()
+  {
+    return ne (JExpr._null ());
   }
 
   @Nonnull
