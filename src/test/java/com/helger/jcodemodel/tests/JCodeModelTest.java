@@ -51,5 +51,4 @@ public class JCodeModelTest
     final JCodeModel cm = new JCodeModel ();
     cm.parseType ("java.util.ArrayList<java.lang.String[]>[]");
   }
-
 }

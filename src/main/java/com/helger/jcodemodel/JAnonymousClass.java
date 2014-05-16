@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Anonymous class quick hack.
  * 
@@ -52,12 +54,13 @@ public class JAnonymousClass extends JDefinedClass
    */
   private final AbstractJClass _base;
 
-  protected JAnonymousClass (final AbstractJClass base)
+  protected JAnonymousClass (@Nonnull final AbstractJClass base)
   {
     super (base.owner (), 0, null);
     _base = base;
   }
 
+  @Nonnull
   public AbstractJClass base ()
   {
     return _base;

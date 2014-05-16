@@ -55,8 +55,31 @@ import javax.annotation.Nullable;
  */
 public class JTypeVar extends AbstractJClass implements IJDeclaration
 {
+  public static enum EBoundMode
+  {
+    EXTENDS ("extends"),
+    SUPER ("super");
+
+    /**
+     * The keyword used to declare this type.
+     */
+    private final String _declarationToken;
+
+    private EBoundMode (@Nonnull final String token)
+    {
+      _declarationToken = token;
+    }
+
+    @Nonnull
+    public String declarationToken ()
+    {
+      return _declarationToken;
+    }
+  }
+
   private final String _name;
   private AbstractJClass _bound;
+  private EBoundMode _boundMode;
 
   protected JTypeVar (@Nonnull final JCodeModel owner, @Nonnull final String name)
   {
@@ -93,15 +116,31 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    * @return this
    */
   @Nonnull
-  public JTypeVar bound (@Nonnull final AbstractJClass c)
+  public JTypeVar bound (@Nonnull final AbstractJClass bound)
   {
+    return bound (bound, EBoundMode.EXTENDS);
+  }
+
+  /**
+   * Adds a bound to this variable.
+   * 
+   * @return this
+   */
+  @Nonnull
+  public JTypeVar bound (@Nonnull final AbstractJClass bound, @Nonnull final EBoundMode eMode)
+  {
+    if (bound == null)
+      throw new IllegalArgumentException ("bound may not be null");
+    if (eMode == null)
+      throw new IllegalArgumentException ("bound mode may not be null");
     if (_bound != null)
-      throw new IllegalArgumentException ("type variable has an existing class bound " +
-                                          _bound +
-                                          " so the new bound " +
-                                          c +
-                                          " cannot be set");
-    _bound = c;
+      throw new IllegalStateException ("type variable has an existing class bound " +
+                                       _bound +
+                                       " so the new bound " +
+                                       bound +
+                                       " cannot be set");
+    _bound = bound;
+    _boundMode = eMode;
     return this;
   }
 
@@ -165,7 +204,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   {
     f.id (_name);
     if (_bound != null)
-      f.print ("extends").generable (_bound);
+      f.print (_boundMode.declarationToken ()).generable (_bound);
   }
 
   @Override

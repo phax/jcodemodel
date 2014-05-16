@@ -55,7 +55,7 @@ public class JPrimitiveType extends AbstractJType
    * for short.
    */
   private final AbstractJClass _wrapperClass;
-  private AbstractJClass _arrayClass;
+  private JArrayClass _arrayClass;
 
   protected JPrimitiveType (@Nonnull final JCodeModel owner,
                             @Nonnull final String typeName,
@@ -94,7 +94,7 @@ public class JPrimitiveType extends AbstractJType
 
   @Override
   @Nonnull
-  public AbstractJClass array ()
+  public JArrayClass array ()
   {
     if (_arrayClass == null)
       _arrayClass = new JArrayClass (_owner, this);

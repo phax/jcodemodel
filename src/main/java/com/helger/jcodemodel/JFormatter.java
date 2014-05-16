@@ -75,7 +75,7 @@ public class JFormatter implements Closeable
   }
 
   /**
-   * Special character token we use to differenciate '>' as an operator and '>'
+   * Special character token we use to differentiate '>' as an operator and '>'
    * as the end of the type arguments. The former uses '>' and it requires a
    * preceding whitespace. The latter uses this, and it does not have a
    * preceding whitespace.
@@ -329,7 +329,7 @@ public class JFormatter implements Closeable
       case PRINTING:
         // many of the JTypes in this list are either primitive or belong to
         // package java so we don't need a FQCN
-        if (_importedClasses.contains (type))
+        if (_importedClasses.contains (type) || type._package () == _javaLang)
         {
           // FQCN imported or not necessary, so generate short name
           print (type.name ());
@@ -376,17 +376,12 @@ public class JFormatter implements Closeable
         ReferenceList tl = _collectedReferences.get (id);
         if (tl != null)
         {
-          if (!tl.getClasses ().isEmpty ())
-          {
-            for (final AbstractJClass type : tl.getClasses ())
+          for (final AbstractJClass type : tl.getClasses ())
+            if (type.outer () != null)
             {
-              if (type.outer () != null)
-              {
-                tl.setId (false);
-                return this;
-              }
+              tl.setId (false);
+              return this;
             }
-          }
           tl.setId (true);
         }
         else
@@ -494,11 +489,11 @@ public class JFormatter implements Closeable
    */
   void write (@Nonnull final JDefinedClass c)
   {
+    _javaLang = c.owner ()._package ("java.lang");
+
     // first collect all the types and identifiers
     _mode = EMode.COLLECTING;
     declaration (c);
-
-    _javaLang = c.owner ()._package ("java.lang");
 
     // collate type names and identifiers to determine which types can be
     // imported
@@ -551,7 +546,7 @@ public class JFormatter implements Closeable
   }
 
   /**
-   * determine if an import statement should be supressed
+   * determine if an import statement should be suppressed
    * 
    * @param clazz
    *        JType that may or may not have an import
@@ -571,17 +566,22 @@ public class JFormatter implements Closeable
       clazz = clazz.erasure ();
     }
 
-    if (clazz._package ().isUnnamed ())
+    final JPackage pkg = clazz._package ();
+    if (pkg == null)
+    {
+      // May be null for JTypeVar
+      return true;
+    }
+    if (pkg.isUnnamed ())
       return true;
 
-    final String packageName = clazz._package ().name ();
-    if (packageName.equals ("java.lang"))
+    if (pkg == _javaLang)
     {
       // no need to explicitly import java.lang classes
       return true;
     }
 
-    if (clazz._package () == c._package ())
+    if (pkg == c._package ())
     {
       // inner classes require an import stmt.
       // All other pkg local classes do not need an
@@ -629,7 +629,7 @@ public class JFormatter implements Closeable
         {
           c = c._extends ();
         }
-        if (c._package () == _javaLang)
+        if (c._package () == JFormatter.this._javaLang)
         {
           // make sure that there's no other class with this name within the
           // same package

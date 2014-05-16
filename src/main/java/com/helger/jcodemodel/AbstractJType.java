@@ -92,6 +92,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned, Comparable 
    * @return Name like "Foo$Bar", "int", "java.lang.String", "java.io.File[]".
    *         Never null.
    */
+  @Nonnull
   public String binaryName ()
   {
     return fullName ();
@@ -102,16 +103,17 @@ public abstract class AbstractJType implements IJGenerable, IJOwned, Comparable 
    * 
    * @return Names like "int", "void", "BigInteger".
    */
+  @Nonnull
   public abstract String name ();
 
   /**
    * Create an array type of this type. This method is undefined for primitive
    * void type, which doesn't have any corresponding array representation.
    * 
-   * @return A {@link AbstractJClass} representing the array type whose element
+   * @return A {@link JArrayClass} representing the array type whose element
    *         type is this type
    */
-  public abstract AbstractJClass array ();
+  public abstract JArrayClass array ();
 
   /** Tell whether or not this is an array type. */
   public boolean isArray ()

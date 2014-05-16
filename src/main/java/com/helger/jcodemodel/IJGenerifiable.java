@@ -44,6 +44,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.JTypeVar.EBoundMode;
+
 /**
  * Declarations that can have type variables. Something that can be made into a
  * generic.
@@ -65,10 +67,22 @@ public interface IJGenerifiable
   JTypeVar generify (@Nonnull String name, @Nonnull Class <?> bound);
 
   /**
+   * Adds a new type variable to this declaration with a bound and a bound mode.
+   */
+  @Nonnull
+  JTypeVar generify (@Nonnull String name, @Nonnull Class <?> bound, @Nonnull EBoundMode eMode);
+
+  /**
    * Adds a new type variable to this declaration with a bound.
    */
   @Nonnull
   JTypeVar generify (@Nonnull String name, @Nonnull AbstractJClass bound);
+
+  /**
+   * Adds a new type variable to this declaration with a bound and a bound mode.
+   */
+  @Nonnull
+  JTypeVar generify (@Nonnull String name, @Nonnull AbstractJClass bound, @Nonnull EBoundMode eMode);
 
   /**
    * Iterates all the type parameters of this declaration.

@@ -64,13 +64,12 @@ public abstract class AbstractJClass extends AbstractJType
   public static final JTypeVar [] EMPTY_ARRAY = new JTypeVar [0];
 
   private final JCodeModel _owner;
-  private AbstractJClass _arrayClass;
+  private JArrayClass _arrayClass;
 
   protected AbstractJClass (@Nonnull final JCodeModel owner)
   {
     if (owner == null)
       throw new NullPointerException ("owner");
-
     _owner = owner;
   }
 
@@ -273,7 +272,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   @Override
   @Nonnull
-  public AbstractJClass array ()
+  public JArrayClass array ()
   {
     if (_arrayClass == null)
       _arrayClass = new JArrayClass (owner (), this);

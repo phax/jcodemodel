@@ -40,34 +40,59 @@
 
 package com.helger.jcodemodel;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * This helps enable whether the JDefinedClass is a Class or Interface or
- * AnnotationTypeDeclaration or Enum
- * 
- * @author Bhakti Mehta (bhakti.mehta@sun.com)
+ * A special type variable that is used inside {@link JInvocation} objects if
+ * the parameter type is an {@link AbstractJClass}
  */
-public enum EClassType
+public class JTypeVarClass extends JTypeVar
 {
-  CLASS ("class"),
-  INTERFACE ("interface"),
-  ANNOTATION_TYPE_DECL ("@interface"),
-  ENUM ("enum");
+  private final AbstractJClass _cls;
 
-  /**
-   * The keyword used to declare this type.
-   */
-  private final String _declarationToken;
-
-  private EClassType (@Nonnull final String token)
+  protected JTypeVarClass (@Nonnull final AbstractJClass cls)
   {
-    this._declarationToken = token;
+    super (cls.owner (), cls.name ());
+    _cls = cls;
   }
 
+  @Override
   @Nonnull
-  public String declarationToken ()
+  public String name ()
   {
-    return _declarationToken;
+    // This method is used for the main printing
+    if (_cls instanceof JDefinedClass)
+    {
+      final List <JTypeVar> aTypeParams = ((JDefinedClass) _cls).typeParamList ();
+      if (!aTypeParams.isEmpty ())
+      {
+        // We need the type params here!
+        return new JNarrowedClass (_cls, aTypeParams).name ();
+      }
+    }
+    return _cls.name ();
+  }
+
+  @Override
+  @Nonnull
+  public String fullName ()
+  {
+    // This method is e.g. used for import statements
+    if (_cls instanceof JNarrowedClass)
+    {
+      // Avoid the type parameters
+      return ((JNarrowedClass) _cls).erasure ().fullName ();
+    }
+    return _cls.fullName ();
+  }
+
+  @Override
+  @Nullable
+  public JPackage _package ()
+  {
+    return _cls._package ();
   }
 }

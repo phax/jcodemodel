@@ -18,7 +18,7 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 public class JInvocationTest
 {
   @Test
-  public void main () throws JClassAlreadyExistsException, IOException
+  public void testWithGenerics () throws JClassAlreadyExistsException, IOException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("TestInvocation");
@@ -44,11 +44,17 @@ public class JInvocationTest
     final JMethod minvoke = cls.method (JMod.PUBLIC, cm.VOID, "bar");
     minvoke.body ()._new (cls).generify (Integer.class).arg (cm.INT.wrap (JExpr.lit (17)));
     minvoke.body ().invokeThis (m1).generify (String.class).arg ("jippie");
+    minvoke.body ().invoke (m1).arg ("jippie");
     minvoke.body ()
            .invokeThis (m2)
            .generify (String.class)
            .generify (cls)
            .generify (cm.ref (List.class).narrow (Long.class))
+           .arg ("jippie")
+           .arg (JExpr._this ())
+           .arg (JExpr._new (cm.ref (ArrayList.class).narrow (Long.class)));
+    minvoke.body ()
+           .invoke (m2)
            .arg ("jippie")
            .arg (JExpr._this ())
            .arg (JExpr._new (cm.ref (ArrayList.class).narrow (Long.class)));

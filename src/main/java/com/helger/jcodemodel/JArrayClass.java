@@ -44,6 +44,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 /**
  * Array class.
  * 
@@ -133,13 +135,13 @@ public class JArrayClass extends AbstractJClass
   @Override
   public boolean equals (final Object obj)
   {
-    if (!(obj instanceof JArrayClass))
+    if (obj == this)
+      return true;
+    if (obj == null || !getClass ().equals (obj.getClass ()))
       return false;
 
-    if (_componentType.equals (((JArrayClass) obj)._componentType))
-      return true;
-
-    return false;
+    final JArrayClass rhs = (JArrayClass) obj;
+    return _componentType.equals (rhs._componentType);
   }
 
   @Override
@@ -149,6 +151,7 @@ public class JArrayClass extends AbstractJClass
   }
 
   @Override
+  @Nonnull
   protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
     if (_componentType.isPrimitive ())
@@ -160,5 +163,4 @@ public class JArrayClass extends AbstractJClass
 
     return new JArrayClass (owner (), c);
   }
-
 }

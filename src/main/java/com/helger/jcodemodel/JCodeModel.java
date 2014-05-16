@@ -94,10 +94,10 @@ public final class JCodeModel
 {
 
   /** The packages that this JCodeWriter contains. */
-  private final HashMap <String, JPackage> packages = new HashMap <String, JPackage> ();
+  private final HashMap <String, JPackage> _packages = new HashMap <String, JPackage> ();
 
   /** All JReferencedClasses are pooled here. */
-  private final HashMap <Class <?>, JReferencedClass> refClasses = new HashMap <Class <?>, JReferencedClass> ();
+  private final HashMap <Class <?>, JReferencedClass> _refClasses = new HashMap <Class <?>, JReferencedClass> ();
 
   /** Obtains a reference to the special "null" type. */
   public final JNullType NULL = new JNullType (this);
@@ -121,7 +121,7 @@ public final class JCodeModel
   /**
    * Cached for {@link #wildcard()}.
    */
-  private AbstractJClass wildcard;
+  private AbstractJClass _wildcard;
 
   protected boolean getFileSystemCaseSensitivity ()
   {
@@ -152,11 +152,11 @@ public final class JCodeModel
   @Nonnull
   public JPackage _package (@Nonnull final String name)
   {
-    JPackage p = packages.get (name);
+    JPackage p = _packages.get (name);
     if (p == null)
     {
       p = new JPackage (name, this);
-      packages.put (name, p);
+      _packages.put (name, p);
     }
     return p;
   }
@@ -173,7 +173,7 @@ public final class JCodeModel
   @Nonnull
   public Iterator <JPackage> packages ()
   {
-    return packages.values ().iterator ();
+    return _packages.values ().iterator ();
   }
 
   /**
@@ -207,6 +207,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
+  @Nonnull
   public JDefinedClass _class (final int mods, @Nonnull final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
   {
     final int idx = fullyqualifiedName.lastIndexOf ('.');
@@ -221,6 +222,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
+  @Nonnull
   public JDefinedClass _class (final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
   {
     return _class (JMod.PUBLIC, fullyqualifiedName, t);
@@ -232,6 +234,7 @@ public final class JCodeModel
    * @return null If the class is not yet created.
    * @see JPackage#_getClass(String)
    */
+  @Nullable
   public JDefinedClass _getClass (final String fullyQualifiedName)
   {
     final int idx = fullyQualifiedName.lastIndexOf ('.');
@@ -243,12 +246,14 @@ public final class JCodeModel
   /**
    * Creates a new anonymous class.
    */
-  public JDefinedClass anonymousClass (final AbstractJClass baseType)
+  @Nonnull
+  public JDefinedClass anonymousClass (@Nonnull final AbstractJClass baseType)
   {
     return new JAnonymousClass (baseType);
   }
 
-  public JDefinedClass anonymousClass (final Class <?> baseType)
+  @Nonnull
+  public JDefinedClass anonymousClass (@Nonnull final Class <?> baseType)
   {
     return anonymousClass (ref (baseType));
   }
@@ -262,7 +267,7 @@ public final class JCodeModel
    * @param status
    *        if non-null, progress indication will be sent to this stream.
    */
-  public void build (final File destDir, final PrintStream status) throws IOException
+  public void build (@Nonnull final File destDir, @Nullable final PrintStream status) throws IOException
   {
     build (destDir, destDir, status);
   }
@@ -278,10 +283,10 @@ public final class JCodeModel
    * @param status
    *        if non-null, progress indication will be sent to this stream.
    */
-  public void build (final File srcDir, final File resourceDir, final PrintStream status) throws IOException
+  public void build (@Nonnull final File srcDir, @Nonnull final File resourceDir, @Nullable final PrintStream status) throws IOException
   {
-    AbstractCodeWriter src = new FileCodeWriter (srcDir);
     AbstractCodeWriter res = new FileCodeWriter (resourceDir);
+    AbstractCodeWriter src = new FileCodeWriter (srcDir);
     if (status != null)
     {
       src = new ProgressCodeWriter (src, status);
@@ -309,7 +314,7 @@ public final class JCodeModel
   /**
    * A convenience method for <code>build(out,out)</code>.
    */
-  public void build (final AbstractCodeWriter out) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter out) throws IOException
   {
     build (out, out);
   }
@@ -317,14 +322,20 @@ public final class JCodeModel
   /**
    * Generates Java source code.
    */
-  public void build (final AbstractCodeWriter source, final AbstractCodeWriter resource) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter source, @Nonnull final AbstractCodeWriter resource) throws IOException
   {
-    final JPackage [] pkgs = packages.values ().toArray (new JPackage [packages.size ()]);
-    // avoid concurrent modification exception
-    for (final JPackage pkg : pkgs)
-      pkg.build (source, resource);
-    source.close ();
-    resource.close ();
+    try
+    {
+      final JPackage [] pkgs = _packages.values ().toArray (new JPackage [_packages.size ()]);
+      // avoid concurrent modification exception
+      for (final JPackage pkg : pkgs)
+        pkg.build (source, resource);
+    }
+    finally
+    {
+      source.close ();
+      resource.close ();
+    }
   }
 
   /**
@@ -335,7 +346,7 @@ public final class JCodeModel
   public int countArtifacts ()
   {
     int r = 0;
-    final JPackage [] pkgs = packages.values ().toArray (new JPackage [packages.size ()]);
+    final JPackage [] pkgs = _packages.values ().toArray (new JPackage [_packages.size ()]);
     // avoid concurrent modification exception
     for (final JPackage pkg : pkgs)
       r += pkg.countArtifacts ();
@@ -352,7 +363,7 @@ public final class JCodeModel
   @Nonnull
   public AbstractJClass ref (@Nonnull final Class <?> clazz)
   {
-    JReferencedClass jrc = refClasses.get (clazz);
+    JReferencedClass jrc = _refClasses.get (clazz);
     if (jrc == null)
     {
       if (clazz.isPrimitive ())
@@ -360,7 +371,7 @@ public final class JCodeModel
       if (clazz.isArray ())
         return new JArrayClass (this, _ref (clazz.getComponentType ()));
       jrc = new JReferencedClass (clazz);
-      refClasses.put (clazz, jrc);
+      _refClasses.put (clazz, jrc);
     }
     return jrc;
   }
@@ -415,9 +426,9 @@ public final class JCodeModel
   @Nonnull
   public AbstractJClass wildcard ()
   {
-    if (wildcard == null)
-      wildcard = ref (Object.class).wildcard ();
-    return wildcard;
+    if (_wildcard == null)
+      _wildcard = ref (Object.class).wildcard ();
+    return _wildcard;
   }
 
   /**

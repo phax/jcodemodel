@@ -42,9 +42,7 @@ package com.helger.jcodemodel;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -87,7 +85,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   /**
    * Lazily created list of {@link JTypeVar}s.
    */
-  private Map <String, JTypeVar> _typeVariables;
+  private List <JTypeVar> _typeVariables;
 
   /**
    * Invokes a method on an object.
@@ -276,33 +274,38 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   }
 
   @Nonnull
+  private JCodeModel _ownerGenerify ()
+  {
+    final JCodeModel owner = owner ();
+    if (owner == null)
+      throw new IllegalStateException ("No owner is present, so this invocation cannot be generified!");
+    return owner;
+  }
+
+  @Nonnull
   public JInvocation generify (@Nonnull final String name)
   {
-    final JTypeVar v = new JTypeVar (owner (), name);
+    final JTypeVar v = new JTypeVar (_ownerGenerify (), name);
     if (_typeVariables == null)
-      _typeVariables = new LinkedHashMap <String, JTypeVar> (3);
-    else
-      if (_typeVariables.containsKey (name))
-        throw new IllegalArgumentException ("A type parameter with name '" + name + "' is already present!");
-    _typeVariables.put (name, v);
+      _typeVariables = new ArrayList <JTypeVar> (3);
+    _typeVariables.add (v);
     return this;
   }
 
   @Nonnull
   public JInvocation generify (@Nonnull final Class <?> bound)
   {
-    return generify (owner ().ref (bound));
+    return generify (_ownerGenerify ().ref (bound));
   }
 
   @Nonnull
   public JInvocation generify (@Nonnull final AbstractJClass bound)
   {
-    String name;
-    if (bound instanceof JDefinedClass)
-      name = ((JDefinedClass) bound).narrowedName ();
-    else
-      name = bound.name ();
-    return generify (name);
+    final JTypeVar v = new JTypeVarClass (bound);
+    if (_typeVariables == null)
+      _typeVariables = new ArrayList <JTypeVar> (3);
+    _typeVariables.add (v);
+    return this;
   }
 
   @Nonnull
@@ -310,7 +313,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   {
     if (_typeVariables == null)
       return Collections.<JTypeVar> emptyList ();
-    return new ArrayList <JTypeVar> (_typeVariables.values ());
+    return new ArrayList <JTypeVar> (_typeVariables);
   }
 
   private void _addTypeVars (@Nonnull final JFormatter f)
@@ -319,11 +322,12 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     {
       f.print ('<');
       int nIndex = 0;
-      for (final JTypeVar aTypeVar : _typeVariables.values ())
+      for (final JTypeVar aTypeVar : _typeVariables)
       {
         if (nIndex++ > 0)
           f.print (',');
-        f.declaration (aTypeVar);
+        // Use type here to get the import (if needed)
+        f.type (aTypeVar);
       }
       f.print (JFormatter.CLOSE_TYPE_ARGS);
     }
