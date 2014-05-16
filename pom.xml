@@ -144,7 +144,7 @@
         <configuration>
           <instructions>
             <Export-Package>
-              com.helger.codemodel.*
+              com.helger.jcodemodel.*
             </Export-Package>
           </instructions>
         </configuration>
