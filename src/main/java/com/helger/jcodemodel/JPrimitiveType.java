@@ -61,9 +61,9 @@ public class JPrimitiveType extends AbstractJType
                             @Nonnull final String typeName,
                             @Nonnull final Class <?> wrapper)
   {
-    this._owner = owner;
-    this._typeName = typeName;
-    this._wrapperClass = owner.ref (wrapper);
+    _owner = owner;
+    _typeName = typeName;
+    _wrapperClass = owner.ref (wrapper);
   }
 
   @Nonnull

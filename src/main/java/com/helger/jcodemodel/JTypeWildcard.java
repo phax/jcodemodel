@@ -130,7 +130,7 @@ public class JTypeWildcard extends AbstractJClass
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
     final AbstractJClass nb = _bound.substituteParams (variables, bindings);
     if (nb == _bound)

@@ -62,17 +62,20 @@ public class JNarrowedClass extends AbstractJClass
   /**
    * Arguments to those parameters.
    */
-  private final List <AbstractJClass> _args;
+  private final List <? extends AbstractJClass> _args;
 
-  protected JNarrowedClass (@Nonnull final AbstractJClass basis, final AbstractJClass arg)
+  public JNarrowedClass (@Nonnull final AbstractJClass basis, @Nonnull final AbstractJClass arg)
   {
     this (basis, Collections.singletonList (arg));
   }
 
-  protected JNarrowedClass (@Nonnull final AbstractJClass basis, final List <AbstractJClass> args)
+  public JNarrowedClass (@Nonnull final AbstractJClass basis, @Nonnull final List <? extends AbstractJClass> args)
   {
     super (basis.owner ());
-    assert !(basis instanceof JNarrowedClass);
+    if (basis instanceof JNarrowedClass)
+      throw new IllegalArgumentException ("basis may not be a narrowed class: " + basis);
+    if (args == null || args.isEmpty ())
+      throw new IllegalArgumentException ("Arguments are missing");
     _basis = basis;
     _args = args;
   }
@@ -86,6 +89,9 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public JNarrowedClass narrow (@Nonnull final AbstractJClass clazz)
   {
+    if (clazz == null)
+      throw new IllegalArgumentException ("Narrowing class is missing");
+
     final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (_args);
     newArgs.add (clazz);
     return new JNarrowedClass (_basis, newArgs);
@@ -94,6 +100,9 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public JNarrowedClass narrow (@Nonnull final AbstractJClass... clazz)
   {
+    if (clazz == null || clazz.length == 0)
+      throw new IllegalArgumentException ("Narrowing classes are missing");
+
     final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (_args);
     for (final AbstractJClass aClass : clazz)
       newArgs.add (aClass);
@@ -244,6 +253,12 @@ public class JNarrowedClass extends AbstractJClass
     return false;
   }
 
+  @Override
+  public List <? extends AbstractJClass> getTypeParameters ()
+  {
+    return _args;
+  }
+
   //
   // Equality is based on value
   //
@@ -266,7 +281,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
     final AbstractJClass b = _basis.substituteParams (variables, bindings);
     boolean different = b != _basis;
@@ -282,11 +297,5 @@ public class JNarrowedClass extends AbstractJClass
     if (different)
       return new JNarrowedClass (b, clazz);
     return this;
-  }
-
-  @Override
-  public List <AbstractJClass> getTypeParameters ()
-  {
-    return _args;
   }
 }

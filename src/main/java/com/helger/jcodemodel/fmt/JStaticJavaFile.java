@@ -79,7 +79,7 @@ import com.helger.jcodemodel.util.SecureLoader;
  * Note that because we don't parse the static Java source code, the returned
  * {@link AbstractJClass} object doesn't respond to methods like "isInterface"
  * or "_extends",
- *
+ * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JStaticJavaFile extends AbstractJResourceFile
@@ -293,7 +293,8 @@ public class JStaticJavaFile extends AbstractJResourceFile
     }
 
     @Override
-    protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
+    protected AbstractJClass substituteParams (final JTypeVar [] variables,
+                                               final List <? extends AbstractJClass> bindings)
     {
       return this;
     }

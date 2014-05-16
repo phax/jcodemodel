@@ -134,7 +134,7 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JInvocation _new (final AbstractJType t)
+  public static JInvocation _new (@Nonnull final AbstractJType t)
   {
     return new JInvocation (t);
   }
@@ -181,6 +181,11 @@ public final class JExpr
     return new JFieldRef (lhs, field);
   }
 
+  /**
+   * @param field
+   *        field name to reference
+   * @return [this].[field]
+   */
   @Nonnull
   public static JFieldRef refthis (@Nonnull final String field)
   {
@@ -407,8 +412,8 @@ public final class JExpr
    */
   @Nonnull
   public static JOpTernary cond (@Nonnull final IJExpression cond,
-                                @Nonnull final IJExpression ifTrue,
-                                @Nonnull final IJExpression ifFalse)
+                                 @Nonnull final IJExpression ifTrue,
+                                 @Nonnull final IJExpression ifFalse)
   {
     return JOp.cond (cond, ifTrue, ifFalse);
   }

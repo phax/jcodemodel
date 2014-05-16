@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -69,8 +71,14 @@ public interface IJGenerifiable
   JTypeVar generify (@Nonnull String name, @Nonnull AbstractJClass bound);
 
   /**
-   * Iterates all the type parameters of this class/interface.
+   * Iterates all the type parameters of this declaration.
    */
   @Nonnull
   JTypeVar [] typeParams ();
+
+  /**
+   * Get a list of all type parameters of this declaration.
+   */
+  @Nonnull
+  List <JTypeVar> typeParamList ();
 }

@@ -41,13 +41,16 @@
 package com.helger.jcodemodel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * JMethod invocation
+ * {@link JMethod} invocation
  */
 public class JInvocation extends AbstractJExpressionImpl implements IJStatement, IJOwnedMaybe
 {
@@ -80,6 +83,11 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
    * If isConstructor==true, this field keeps the type to be created.
    */
   private final AbstractJType _type;
+
+  /**
+   * Lazily created list of {@link JTypeVar}s.
+   */
+  private Map <String, JTypeVar> _typeVariables;
 
   /**
    * Invokes a method on an object.
@@ -267,6 +275,60 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     return new ArrayList <IJExpression> (_args);
   }
 
+  @Nonnull
+  public JInvocation generify (@Nonnull final String name)
+  {
+    final JTypeVar v = new JTypeVar (owner (), name);
+    if (_typeVariables == null)
+      _typeVariables = new LinkedHashMap <String, JTypeVar> (3);
+    else
+      if (_typeVariables.containsKey (name))
+        throw new IllegalArgumentException ("A type parameter with name '" + name + "' is already present!");
+    _typeVariables.put (name, v);
+    return this;
+  }
+
+  @Nonnull
+  public JInvocation generify (@Nonnull final Class <?> bound)
+  {
+    return generify (owner ().ref (bound));
+  }
+
+  @Nonnull
+  public JInvocation generify (@Nonnull final AbstractJClass bound)
+  {
+    String name;
+    if (bound instanceof JDefinedClass)
+      name = ((JDefinedClass) bound).narrowedName ();
+    else
+      name = bound.name ();
+    return generify (name);
+  }
+
+  @Nonnull
+  public List <JTypeVar> typeParamList ()
+  {
+    if (_typeVariables == null)
+      return Collections.<JTypeVar> emptyList ();
+    return new ArrayList <JTypeVar> (_typeVariables.values ());
+  }
+
+  private void _addTypeVars (@Nonnull final JFormatter f)
+  {
+    if (_typeVariables != null && !_typeVariables.isEmpty ())
+    {
+      f.print ('<');
+      int nIndex = 0;
+      for (final JTypeVar aTypeVar : _typeVariables.values ())
+      {
+        if (nIndex++ > 0)
+          f.print (',');
+        f.declaration (aTypeVar);
+      }
+      f.print (JFormatter.CLOSE_TYPE_ARGS);
+    }
+  }
+
   public void generate (@Nonnull final JFormatter f)
   {
     if (_isConstructor)
@@ -274,12 +336,16 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
       if (_type.isArray ())
       {
         // [RESULT] new T[]{arg1,arg2,arg3,...};
-        f.print ("new").generable (_type).print ('{');
+        f.print ("new").generable (_type);
+        _addTypeVars (f);
+        f.print ('{');
       }
       else
       {
         // [RESULT] new T(
-        f.print ("new").generable (_type).print ('(');
+        f.print ("new").generable (_type);
+        _addTypeVars (f);
+        f.print ('(');
       }
     }
     else
@@ -290,9 +356,17 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
         name = _method.name ();
 
       if (_object != null)
-        f.generable (_object).print ('.').print (name).print ('(');
+      {
+        // object.<generics> name (
+        f.generable (_object).print ('.');
+        _addTypeVars (f);
+        f.print (name).print ('(');
+      }
       else
+      {
+        // name (
         f.id (name).print ('(');
+      }
     }
 
     // Method arguments

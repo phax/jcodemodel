@@ -110,7 +110,7 @@ public final class JNullType extends AbstractJClass
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
     return this;
   }

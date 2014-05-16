@@ -41,7 +41,10 @@
 package com.helger.jcodemodel;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nonnull;
 
@@ -52,19 +55,22 @@ import javax.annotation.Nonnull;
  */
 public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDeclaration, IJOwned
 {
-  /** Lazily created list of {@link JTypeVar}s. */
-  private List <JTypeVar> typeVariables;
+  /**
+   * Lazily created list of {@link JTypeVar}s.
+   */
+  private Map <String, JTypeVar> _typeVariables;
 
   public void declare (@Nonnull final JFormatter f)
   {
-    if (typeVariables != null)
+    if (_typeVariables != null && !_typeVariables.isEmpty ())
     {
       f.print ('<');
-      for (int i = 0; i < typeVariables.size (); i++)
+      int nIndex = 0;
+      for (final JTypeVar aTypeVar : _typeVariables.values ())
       {
-        if (i > 0)
+        if (nIndex++ > 0)
           f.print (',');
-        f.declaration (typeVariables.get (i));
+        f.declaration (aTypeVar);
       }
       f.print (JFormatter.CLOSE_TYPE_ARGS);
     }
@@ -74,9 +80,12 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   public JTypeVar generify (@Nonnull final String name)
   {
     final JTypeVar v = new JTypeVar (owner (), name);
-    if (typeVariables == null)
-      typeVariables = new ArrayList <JTypeVar> (3);
-    typeVariables.add (v);
+    if (_typeVariables == null)
+      _typeVariables = new LinkedHashMap <String, JTypeVar> (3);
+    else
+      if (_typeVariables.containsKey (name))
+        throw new IllegalArgumentException ("A type parameter with name '" + name + "' is already present!");
+    _typeVariables.put (name, v);
     return v;
   }
 
@@ -95,8 +104,16 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   @Nonnull
   public JTypeVar [] typeParams ()
   {
-    if (typeVariables == null)
+    if (_typeVariables == null)
       return AbstractJClass.EMPTY_ARRAY;
-    return typeVariables.toArray (new JTypeVar [typeVariables.size ()]);
+    return _typeVariables.values ().toArray (new JTypeVar [_typeVariables.size ()]);
+  }
+
+  @Nonnull
+  public List <JTypeVar> typeParamList ()
+  {
+    if (_typeVariables == null)
+      return Collections.<JTypeVar> emptyList ();
+    return new ArrayList <JTypeVar> (_typeVariables.values ());
   }
 }

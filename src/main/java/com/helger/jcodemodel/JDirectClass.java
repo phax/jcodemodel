@@ -60,7 +60,7 @@ public class JDirectClass extends AbstractJClass
   protected JDirectClass (@Nonnull final JCodeModel _owner, @Nonnull final String fullName)
   {
     super (_owner);
-    this._fullName = fullName;
+    _fullName = fullName;
   }
 
   @Override
@@ -118,7 +118,7 @@ public class JDirectClass extends AbstractJClass
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
     return this;
   }

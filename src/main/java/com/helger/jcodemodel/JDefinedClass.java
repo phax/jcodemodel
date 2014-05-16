@@ -68,34 +68,54 @@ import javax.annotation.Nullable;
  */
 public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJClassContainer, IJGenerifiable, IJAnnotatable, IJDocCommentable
 {
-  /** Name of this class. Null if anonymous. */
+  /**
+   * Name of this class. Null if anonymous.
+   */
   private final String _name;
 
-  /** Modifiers for the class declaration */
+  /**
+   * Modifiers for the class declaration
+   */
   private JMods _mods;
 
-  /** Name of the super class of this class. */
+  /**
+   * Name of the super class of this class.
+   */
   private AbstractJClass _superClass;
 
-  /** List of interfaces that this class implements */
+  /**
+   * List of interfaces that this class implements
+   */
   private final Set <AbstractJClass> _interfaces = new TreeSet <AbstractJClass> ();
 
-  /** Fields keyed by their names. */
+  /**
+   * Fields keyed by their names.
+   */
   /* package */final Map <String, JFieldVar> fields = new LinkedHashMap <String, JFieldVar> ();
 
-  /** Static initializer, if this class has one */
+  /**
+   * Static initializer, if this class has one
+   */
   private JBlock _staticInit;
 
-  /** Instance initializer, if this class has one */
+  /**
+   * Instance initializer, if this class has one
+   */
   private JBlock _instanceInit;
 
-  /** class javadoc */
+  /**
+   * class javadoc
+   */
   private JDocComment _jdoc;
 
-  /** Set of constructors for this class, if any */
+  /**
+   * Set of constructors for this class, if any
+   */
   private final List <JMethod> _constructors = new ArrayList <JMethod> ();
 
-  /** Set of methods that are members of this class */
+  /**
+   * Set of methods that are members of this class
+   */
   private final List <JMethod> _methods = new ArrayList <JMethod> ();
 
   /**
@@ -111,13 +131,13 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /**
    * Flag that controls whether this class should be really generated or not.
    * Sometimes it is useful to generate code that refers to class X, without
-   * actually generating the code of X. This flag is used to supress X.java file
-   * in the output.
+   * actually generating the code of X. This flag is used to suppress X.java
+   * file in the output.
    */
   private boolean _hideFile = false;
 
   /**
-   * Client-app spcific metadata associated with this user-created class.
+   * Client-app specific metadata associated with this user-created class.
    */
   public Object metadata;
 
@@ -346,6 +366,14 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   public String name ()
   {
     return _name;
+  }
+
+  @Nullable
+  public String narrowedName ()
+  {
+    if (_name == null)
+      return null;
+    return new JNarrowedClass (this, _generifiable.typeParamList ()).name ();
   }
 
   /**
@@ -946,13 +974,20 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   }
 
   @Override
+  @Nonnull
   public JTypeVar [] typeParams ()
   {
     return _generifiable.typeParams ();
   }
 
+  @Nonnull
+  public List <JTypeVar> typeParamList ()
+  {
+    return _generifiable.typeParamList ();
+  }
+
   @Override
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
     return this;
   }

@@ -149,7 +149,7 @@ public class JArrayClass extends AbstractJClass
   }
 
   @Override
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
     if (_componentType.isPrimitive ())
       return this;

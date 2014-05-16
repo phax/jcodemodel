@@ -283,11 +283,11 @@ public class JBlock implements IJGenerable, IJStatement
    * Creates an invocation statement and adds it to this block.
    * 
    * @param expr
-   *        JExpression evaluating to the class or object upon which the named
-   *        method will be invoked
+   *        {@link IJExpression} evaluating to the class or object upon which
+   *        the named method will be invoked
    * @param method
    *        Name of method to invoke
-   * @return Newly generated JInvocation
+   * @return Newly generated {@link JInvocation}
    */
   @Nonnull
   public JInvocation invoke (@Nonnull final IJExpression expr, @Nonnull final String method)
@@ -298,17 +298,43 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Creates an invocation statement and adds it to this block.
    * 
-   * @param expr
-   *        JExpression evaluating to the class or object upon which the method
-   *        will be invoked
    * @param method
-   *        JMethod to invoke
-   * @return Newly generated JInvocation
+   *        Name of method to invoke on this
+   * @return Newly generated {@link JInvocation}
+   */
+  @Nonnull
+  public JInvocation invokeThis (@Nonnull final String method)
+  {
+    return invoke (JExpr._this (), method);
+  }
+
+  /**
+   * Creates an invocation statement and adds it to this block.
+   * 
+   * @param expr
+   *        {@link IJExpression} evaluating to the class or object upon which
+   *        the method will be invoked
+   * @param method
+   *        {@link JMethod} to invoke
+   * @return Newly generated {@link JInvocation}
    */
   @Nonnull
   public JInvocation invoke (@Nonnull final IJExpression expr, @Nonnull final JMethod method)
   {
     return _insert (new JInvocation (expr, method));
+  }
+
+  /**
+   * Creates an invocation statement and adds it to this block.
+   * 
+   * @param method
+   *        {@link JMethod} to invoke on this
+   * @return Newly generated {@link JInvocation}
+   */
+  @Nonnull
+  public JInvocation invokeThis (@Nonnull final JMethod method)
+  {
+    return invoke (JExpr._this (), method);
   }
 
   /**
@@ -344,6 +370,18 @@ public class JBlock implements IJGenerable, IJStatement
   public JInvocation invoke (@Nonnull final JMethod method)
   {
     return _insert (new JInvocation ((IJExpression) null, method));
+  }
+
+  @Nonnull
+  public JInvocation _new (@Nonnull final AbstractJClass c)
+  {
+    return _insert (new JInvocation (c));
+  }
+
+  @Nonnull
+  public JInvocation _new (@Nonnull final AbstractJType t)
+  {
+    return _insert (new JInvocation (t));
   }
 
   /**

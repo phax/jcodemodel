@@ -580,7 +580,7 @@ public final class JCodeModel
     JReferencedClass (@Nonnull final Class <?> _clazz)
     {
       super (JCodeModel.this);
-      this._class = _clazz;
+      _class = _clazz;
       assert !_class.isArray ();
     }
 
@@ -705,7 +705,8 @@ public final class JCodeModel
     }
 
     @Override
-    protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <AbstractJClass> bindings)
+    protected AbstractJClass substituteParams (final JTypeVar [] variables,
+                                               final List <? extends AbstractJClass> bindings)
     {
       // TODO: does JDK 1.5 reflection provides these information?
       return this;
@@ -737,11 +738,11 @@ public final class JCodeModel
     m1.put (Short.class, Short.TYPE);
     m1.put (Void.class, Void.TYPE);
 
+    // Swap keys and values
     for (final Map.Entry <Class <?>, Class <?>> e : m1.entrySet ())
       m2.put (e.getValue (), e.getKey ());
 
     boxToPrimitive = Collections.unmodifiableMap (m1);
     primitiveToBox = Collections.unmodifiableMap (m2);
-
   }
 }

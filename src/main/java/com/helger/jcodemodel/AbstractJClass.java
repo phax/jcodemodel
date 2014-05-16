@@ -100,7 +100,6 @@ public abstract class AbstractJClass extends AbstractJType
     return null;
   }
 
-  /** Gets the JCodeModel object to which this object belongs. */
   @Nonnull
   public final JCodeModel owner ()
   {
@@ -110,12 +109,12 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Gets the super class of this class.
    * 
-   * @return Returns the JClass representing the superclass of the entity (class
-   *         or interface) represented by this {@link AbstractJClass}. Even if
-   *         no super class is given explicitly or this {@link AbstractJClass}
-   *         is not a class, this method still returns {@link AbstractJClass}
-   *         for {@link Object}. If this JClass represents {@link Object},
-   *         return null.
+   * @return Returns the {@link AbstractJClass} representing the superclass of
+   *         the entity (class or interface) represented by this
+   *         {@link AbstractJClass}. Even if no super class is given explicitly
+   *         or this {@link AbstractJClass} is not a class, this method still
+   *         returns {@link AbstractJClass} for {@link Object}. If this
+   *         {@link AbstractJClass} represents {@link Object}, return null.
    */
   @Nullable
   public abstract AbstractJClass _extends ();
@@ -129,19 +128,6 @@ public abstract class AbstractJClass extends AbstractJType
    */
   @Nonnull
   public abstract Iterator <AbstractJClass> _implements ();
-
-  /**
-   * Iterates all the type parameters of this class/interface.
-   * <p>
-   * For example, if this {@link AbstractJClass} represents
-   * <code>Set&lt;T></code>, this method returns an array that contains single
-   * {@link JTypeVar} for 'T'.
-   */
-  @Nonnull
-  public JTypeVar [] typeParams ()
-  {
-    return EMPTY_ARRAY;
-  }
 
   /**
    * Checks if this object represents an interface.
@@ -354,9 +340,22 @@ public abstract class AbstractJClass extends AbstractJType
    * index.
    */
   @Nonnull
-  public List <AbstractJClass> getTypeParameters ()
+  public List <? extends AbstractJClass> getTypeParameters ()
   {
     return Collections.emptyList ();
+  }
+
+  /**
+   * Iterates all the type parameters of this class/interface.
+   * <p>
+   * For example, if this {@link AbstractJClass} represents
+   * <code>Set&lt;T></code>, this method returns an array that contains single
+   * {@link JTypeVar} for 'T'.
+   */
+  @Nonnull
+  public JTypeVar [] typeParams ()
+  {
+    return EMPTY_ARRAY;
   }
 
   /**
@@ -387,7 +386,8 @@ public abstract class AbstractJClass extends AbstractJType
    * <p>
    * This method needs to work recursively.
    */
-  protected abstract AbstractJClass substituteParams (JTypeVar [] variables, List <AbstractJClass> bindings);
+  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] variables,
+                                                      @Nonnull List <? extends AbstractJClass> bindings);
 
   @Override
   public String toString ()

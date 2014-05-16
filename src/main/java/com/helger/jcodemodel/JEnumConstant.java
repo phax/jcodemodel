@@ -87,8 +87,8 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
       throw new NullPointerException ("type");
     if (name == null)
       throw new NullPointerException ("name");
-    this._type = type;
-    this._name = name;
+    _type = type;
+    _name = name;
   }
 
   @Nonnull

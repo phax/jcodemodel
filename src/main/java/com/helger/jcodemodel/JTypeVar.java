@@ -58,10 +58,12 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   private final String _name;
   private AbstractJClass _bound;
 
-  protected JTypeVar (@Nonnull final JCodeModel owner, @Nonnull final String _name)
+  protected JTypeVar (@Nonnull final JCodeModel owner, @Nonnull final String name)
   {
     super (owner);
-    this._name = _name;
+    if (name == null || name.length () == 0)
+      throw new IllegalArgumentException ("Name may not be empty!");
+    _name = name;
   }
 
   @Override
@@ -148,7 +150,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Override
   @Nonnull
   protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] variables,
-                                             @Nonnull final List <AbstractJClass> bindings)
+                                             @Nonnull final List <? extends AbstractJClass> bindings)
   {
     for (int i = 0; i < variables.length; i++)
       if (variables[i] == this)

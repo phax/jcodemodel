@@ -49,7 +49,7 @@ import javax.annotation.Nullable;
 public class JReturn implements IJStatement
 {
   /**
-   * JExpression to return; may be null.
+   * {@link IJExpression} to return; may be null.
    */
   private final IJExpression _expr;
 
@@ -57,11 +57,11 @@ public class JReturn implements IJStatement
    * JReturn constructor
    * 
    * @param expr
-   *        JExpression which evaluates to return value
+   *        {@link IJExpression} which evaluates to return value
    */
   protected JReturn (@Nullable final IJExpression expr)
   {
-    this._expr = expr;
+    _expr = expr;
   }
 
   @Nullable
@@ -72,9 +72,9 @@ public class JReturn implements IJStatement
 
   public void state (@Nonnull final JFormatter f)
   {
-    f.print ("return ");
+    f.print ("return");
     if (_expr != null)
-      f.generable (_expr);
+      f.print (' ').generable (_expr);
     f.print (';').newline ();
   }
 }
