@@ -274,7 +274,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   }
 
   @Nonnull
-  private JCodeModel _ownerGenerify ()
+  private JCodeModel _narrowOwner ()
   {
     final JCodeModel owner = owner ();
     if (owner == null)
@@ -283,9 +283,9 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   }
 
   @Nonnull
-  public JInvocation generify (@Nonnull final String name)
+  public JInvocation narrow (@Nonnull final String name)
   {
-    final JTypeVar v = new JTypeVar (_ownerGenerify (), name);
+    final JTypeVar v = new JTypeVar (_narrowOwner (), name);
     if (_typeVariables == null)
       _typeVariables = new ArrayList <JTypeVar> (3);
     _typeVariables.add (v);
@@ -293,13 +293,13 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   }
 
   @Nonnull
-  public JInvocation generify (@Nonnull final Class <?> bound)
+  public JInvocation narrow (@Nonnull final Class <?> bound)
   {
-    return generify (_ownerGenerify ().ref (bound));
+    return narrow (_narrowOwner ().ref (bound));
   }
 
   @Nonnull
-  public JInvocation generify (@Nonnull final AbstractJClass bound)
+  public JInvocation narrow (@Nonnull final AbstractJClass bound)
   {
     final JTypeVar v = new JTypeVarClass (bound);
     if (_typeVariables == null)

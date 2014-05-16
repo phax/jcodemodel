@@ -53,14 +53,14 @@ public class JInvocationTest
     m2.body ()._return ();
 
     final JMethod minvoke = cls.method (JMod.PUBLIC, cm.VOID, "bar");
-    minvoke.body ()._new (cls).generify (Integer.class).arg (cm.INT.wrap (JExpr.lit (17)));
-    minvoke.body ().invokeThis (m1).generify (String.class).arg ("jippie");
+    minvoke.body ()._new (cls).narrow (Integer.class).arg (cm.INT.wrap (JExpr.lit (17)));
+    minvoke.body ().invokeThis (m1).narrow (String.class).arg ("jippie");
     minvoke.body ().invoke (m1).arg ("jippie");
     minvoke.body ()
            .invokeThis (m2)
-           .generify (String.class)
-           .generify (cls)
-           .generify (cm.ref (List.class).narrow (Long.class))
+           .narrow (String.class)
+           .narrow (cls)
+           .narrow (cm.ref (List.class).narrow (Long.class))
            .arg ("jippie")
            .arg (JExpr._this ())
            .arg (JExpr._new (cm.ref (ArrayList.class).narrow (Long.class)));
