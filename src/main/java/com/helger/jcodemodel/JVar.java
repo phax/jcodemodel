@@ -96,10 +96,10 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   {
     if (!JJavaName.isJavaIdentifier (name))
       throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
-    this._mods = mods;
-    this._type = type;
-    this._name = name;
-    this._init = init;
+    _mods = mods;
+    _type = type;
+    _name = name;
+    _init = init;
   }
 
   /**
@@ -111,7 +111,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   @Nonnull
   public JVar init (@Nullable final IJExpression init)
   {
-    this._init = init;
+    _init = init;
     return this;
   }
 
@@ -133,7 +133,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   {
     if (!JJavaName.isJavaIdentifier (name))
       throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
-    this._name = name;
+    _name = name;
   }
 
   /**

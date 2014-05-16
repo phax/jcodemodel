@@ -58,7 +58,7 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
   {
     if (value == null)
       throw new NullPointerException ("value");
-    this._value = value;
+    _value = value;
   }
 
   @Nonnull

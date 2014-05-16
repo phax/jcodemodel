@@ -47,11 +47,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Represents a wildcard type like "? extends Foo".
+ * Represents a wildcard type like "? extends Foo" or "? super Foo".
  * <p>
  * Instances of this class can be obtained from
- * {@link AbstractJClass#wildcard()} TODO: extend this to cover
- * "? super Integer".
+ * {@link AbstractJClass#wildcard()}
  * <p>
  * Our modeling of types are starting to look really ugly. ideally it should
  * have been done somewhat like APT, but it's too late now.
@@ -173,7 +172,7 @@ public class JTypeWildcard extends AbstractJClass
   {
     if (_bound._extends () == null)
     {
-      // instead of "? extends Object"
+      // instead of "? extends Object" or "? super Object"
       f.print ("?");
     }
     else

@@ -64,7 +64,9 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   protected JAnnotationUse (@Nonnull final AbstractJClass clazz)
   {
-    this._clazz = clazz;
+    if (clazz == null)
+      throw new NullPointerException ("clazz");
+    _clazz = clazz;
   }
 
   @Nonnull
