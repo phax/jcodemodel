@@ -269,4 +269,40 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   {
     return JExpr.assignDivide (this, rhs);
   }
+
+  @Nonnull
+  public JAssignment assignShl (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignShl (this, rhs);
+  }
+
+  @Nonnull
+  public JAssignment assignShr (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignShr (this, rhs);
+  }
+
+  @Nonnull
+  public JAssignment assignShrz (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignShrz (this, rhs);
+  }
+
+  @Nonnull
+  public JAssignment assignBand (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignBand (this, rhs);
+  }
+
+  @Nonnull
+  public JAssignment assignXor (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignXor (this, rhs);
+  }
+
+  @Nonnull
+  public JAssignment assignBor (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignBor (this, rhs);
+  }
 }

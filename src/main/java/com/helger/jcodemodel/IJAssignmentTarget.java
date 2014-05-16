@@ -88,4 +88,52 @@ public interface IJAssignmentTarget extends IJExpression
    */
   @Nonnull
   IJExpressionStatement assignDivide (@Nonnull IJExpression rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this &lt;&lt;= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignShl (@Nonnull IJExpression rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this &gt;&gt;= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignShr (@Nonnull IJExpression rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this &gt;&gt;&gt;= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignShrz (@Nonnull IJExpression rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this &amp;= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignBand (@Nonnull IJExpression rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this ^= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignXor (@Nonnull IJExpression rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this |= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignBor (@Nonnull IJExpression rhs);
 }

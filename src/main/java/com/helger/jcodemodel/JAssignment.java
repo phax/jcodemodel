@@ -78,9 +78,9 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
                          @Nonnull final IJExpression rhs,
                          @Nonnull final String op)
   {
-    this._lhs = lhs;
-    this._rhs = rhs;
-    this._op = op;
+    _lhs = lhs;
+    _rhs = rhs;
+    _op = op;
   }
 
   @Nonnull

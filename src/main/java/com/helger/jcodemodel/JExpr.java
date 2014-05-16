@@ -104,6 +104,42 @@ public final class JExpr
   }
 
   @Nonnull
+  public static JAssignment assignShl (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  {
+    return new JAssignment (lhs, rhs, "<<");
+  }
+
+  @Nonnull
+  public static JAssignment assignShr (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  {
+    return new JAssignment (lhs, rhs, ">>");
+  }
+
+  @Nonnull
+  public static JAssignment assignShrz (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  {
+    return new JAssignment (lhs, rhs, ">>>");
+  }
+
+  @Nonnull
+  public static JAssignment assignBand (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  {
+    return new JAssignment (lhs, rhs, "&");
+  }
+
+  @Nonnull
+  public static JAssignment assignXor (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  {
+    return new JAssignment (lhs, rhs, "^");
+  }
+
+  @Nonnull
+  public static JAssignment assignBor (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  {
+    return new JAssignment (lhs, rhs, "|");
+  }
+
+  @Nonnull
   public static JExprStatementWrapper <JOpUnaryTight> incr (@Nonnull final IJExpression expression)
   {
     return JExprStatementWrapper.create (JOp.incr (expression));
