@@ -48,8 +48,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.JTypeVar.EBoundMode;
-
 /**
  * Implementation of {@link IJGenerifiable}.
  * 
@@ -98,25 +96,9 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   }
 
   @Nonnull
-  public JTypeVar generify (@Nonnull final String name,
-                            @Nonnull final Class <?> _extends,
-                            @Nonnull final EBoundMode eMode)
-  {
-    return generify (name, owner ().ref (_extends), eMode);
-  }
-
-  @Nonnull
   public JTypeVar generify (@Nonnull final String name, @Nonnull final AbstractJClass _extends)
   {
     return generify (name).bound (_extends);
-  }
-
-  @Nonnull
-  public JTypeVar generify (@Nonnull final String name,
-                            @Nonnull final AbstractJClass _extends,
-                            @Nonnull final EBoundMode eMode)
-  {
-    return generify (name).bound (_extends, eMode);
   }
 
   @Nonnull

@@ -55,8 +55,6 @@ import java.util.TreeSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.JTypeVar.EBoundMode;
-
 /**
  * A generated Java class/interface/enum/....
  * <p>
@@ -962,23 +960,9 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   }
 
   @Nonnull
-  public JTypeVar generify (@Nonnull final String name, @Nonnull final Class <?> bound, @Nonnull final EBoundMode eMode)
-  {
-    return _generifiable.generify (name, bound, eMode);
-  }
-
-  @Nonnull
   public JTypeVar generify (@Nonnull final String name, @Nonnull final AbstractJClass bound)
   {
     return _generifiable.generify (name, bound);
-  }
-
-  @Nonnull
-  public JTypeVar generify (@Nonnull final String name,
-                            @Nonnull final AbstractJClass bound,
-                            @Nonnull final EBoundMode eMode)
-  {
-    return _generifiable.generify (name, bound, eMode);
   }
 
   @Override

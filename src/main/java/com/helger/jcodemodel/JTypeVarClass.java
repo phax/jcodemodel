@@ -48,6 +48,8 @@ import javax.annotation.Nullable;
 /**
  * A special type variable that is used inside {@link JInvocation} objects if
  * the parameter type is an {@link AbstractJClass}
+ * 
+ * @author Philip Helger
  */
 public class JTypeVarClass extends JTypeVar
 {

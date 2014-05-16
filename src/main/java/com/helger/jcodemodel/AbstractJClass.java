@@ -49,6 +49,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.JTypeWildcard.EBoundMode;
+
 /**
  * Represents a Java reference type, such as a class, an interface, an enum, an
  * array type, a parameterized type.
@@ -373,7 +375,31 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public final JTypeWildcard wildcard ()
   {
-    return new JTypeWildcard (this);
+    return wildcard (EBoundMode.EXTENDS);
+  }
+
+  /**
+   * Create "? super T" from T.
+   * 
+   * @return never null
+   */
+  @Nonnull
+  public final JTypeWildcard wildcardSuper ()
+  {
+    return wildcard (EBoundMode.SUPER);
+  }
+
+  /**
+   * Create "? extends T" from T or "? super T" from T.
+   * 
+   * @param eMode
+   *        "extends" or "super"
+   * @return never null
+   */
+  @Nonnull
+  public final JTypeWildcard wildcard (@Nonnull final EBoundMode eMode)
+  {
+    return new JTypeWildcard (this, eMode);
   }
 
   /**

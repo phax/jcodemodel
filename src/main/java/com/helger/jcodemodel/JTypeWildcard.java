@@ -60,12 +60,36 @@ import javax.annotation.Nullable;
  */
 public class JTypeWildcard extends AbstractJClass
 {
-  private final AbstractJClass _bound;
+  public static enum EBoundMode
+  {
+    EXTENDS ("? extends "),
+    SUPER ("? super ");
 
-  protected JTypeWildcard (@Nonnull final AbstractJClass bound)
+    /**
+     * The keyword used to declare this type.
+     */
+    private final String _declarationTokens;
+
+    private EBoundMode (@Nonnull final String token)
+    {
+      _declarationTokens = token;
+    }
+
+    @Nonnull
+    public String declarationTokens ()
+    {
+      return _declarationTokens;
+    }
+  }
+
+  private final AbstractJClass _bound;
+  private final EBoundMode _boundMode;
+
+  protected JTypeWildcard (@Nonnull final AbstractJClass bound, @Nonnull final EBoundMode eMode)
   {
     super (bound.owner ());
     _bound = bound;
+    _boundMode = eMode;
   }
 
   @Nonnull
@@ -74,18 +98,24 @@ public class JTypeWildcard extends AbstractJClass
     return _bound;
   }
 
+  @Nonnull
+  public EBoundMode boundMode ()
+  {
+    return _boundMode;
+  }
+
   @Override
   @Nonnull
   public String name ()
   {
-    return "? extends " + _bound.name ();
+    return _boundMode.declarationTokens () + _bound.name ();
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    return "? extends " + _bound.fullName ();
+    return _boundMode.declarationTokens () + _bound.fullName ();
   }
 
   @Override
@@ -135,7 +165,7 @@ public class JTypeWildcard extends AbstractJClass
     final AbstractJClass nb = _bound.substituteParams (variables, bindings);
     if (nb == _bound)
       return this;
-    return new JTypeWildcard (nb);
+    return new JTypeWildcard (nb, EBoundMode.EXTENDS);
   }
 
   @Override
@@ -147,6 +177,6 @@ public class JTypeWildcard extends AbstractJClass
       f.print ("?");
     }
     else
-      f.print ("? extends").generable (_bound);
+      f.print (_boundMode.declarationTokens ()).generable (_bound);
   }
 }

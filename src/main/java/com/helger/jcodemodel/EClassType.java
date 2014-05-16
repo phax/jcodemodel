@@ -62,7 +62,7 @@ public enum EClassType
 
   private EClassType (@Nonnull final String token)
   {
-    this._declarationToken = token;
+    _declarationToken = token;
   }
 
   @Nonnull
