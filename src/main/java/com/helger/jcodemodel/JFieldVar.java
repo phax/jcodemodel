@@ -53,7 +53,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
   /**
    * javadoc comments for this JFieldVar
    */
-  private JDocComment jdoc;
+  private JDocComment _jdoc;
 
   /**
    * JFieldVar constructor
@@ -101,16 +101,16 @@ public class JFieldVar extends JVar implements IJDocCommentable
   @Nonnull
   public JDocComment javadoc ()
   {
-    if (jdoc == null)
-      jdoc = new JDocComment (_owner.owner ());
-    return jdoc;
+    if (_jdoc == null)
+      _jdoc = new JDocComment (_owner.owner ());
+    return _jdoc;
   }
 
   @Override
   public void declare (@Nonnull final JFormatter f)
   {
-    if (jdoc != null)
-      f.generable (jdoc);
+    if (_jdoc != null)
+      f.generable (_jdoc);
     super.declare (f);
   }
 }

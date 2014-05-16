@@ -74,7 +74,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   /**
    * List of argument expressions for this method invocation
    */
-  private final List <IJExpression> args = new ArrayList <IJExpression> ();
+  private final List <IJExpression> _args = new ArrayList <IJExpression> ();
 
   /**
    * If isConstructor==true, this field keeps the type to be created.
@@ -178,7 +178,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   {
     if (arg == null)
       throw new IllegalArgumentException ("argument may not be null");
-    args.add (arg);
+    _args.add (arg);
     return this;
   }
 
@@ -253,7 +253,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   @Nonnull
   public IJExpression [] listArgs ()
   {
-    return args.toArray (new IJExpression [args.size ()]);
+    return _args.toArray (new IJExpression [_args.size ()]);
   }
 
   /**
@@ -264,7 +264,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   @Nonnull
   public List <IJExpression> args ()
   {
-    return new ArrayList <IJExpression> (args);
+    return new ArrayList <IJExpression> (_args);
   }
 
   public void generate (@Nonnull final JFormatter f)
@@ -296,7 +296,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     }
 
     // Method arguments
-    f.generable (args);
+    f.generable (_args);
 
     // Close arg list
     if (_isConstructor && _type.isArray ())

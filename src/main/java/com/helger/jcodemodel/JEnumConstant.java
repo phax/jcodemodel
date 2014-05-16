@@ -69,17 +69,17 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   /**
    * javadoc comments, if any.
    */
-  private JDocComment jdoc;
+  private JDocComment _jdoc;
 
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> annotations;
+  private List <JAnnotationUse> _annotations;
 
   /**
    * List of the constructor argument expressions. Lazily constructed.
    */
-  private List <IJExpression> args;
+  private List <IJExpression> _args;
 
   protected JEnumConstant (@Nonnull final JDefinedClass type, @Nonnull final String name)
   {
@@ -117,23 +117,23 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   {
     if (arg == null)
       throw new IllegalArgumentException ("arg");
-    if (args == null)
-      args = new ArrayList <IJExpression> ();
-    args.add (arg);
+    if (_args == null)
+      _args = new ArrayList <IJExpression> ();
+    _args.add (arg);
     return this;
   }
 
   @Nonnull
   public List <IJExpression> args ()
   {
-    if (args == null)
-      args = new ArrayList <IJExpression> ();
-    return Collections.unmodifiableList (args);
+    if (_args == null)
+      _args = new ArrayList <IJExpression> ();
+    return Collections.unmodifiableList (_args);
   }
 
   public boolean hasArgs ()
   {
-    return args != null && !args.isEmpty ();
+    return _args != null && !_args.isEmpty ();
   }
 
   /**
@@ -155,9 +155,9 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public JDocComment javadoc ()
   {
-    if (jdoc == null)
-      jdoc = new JDocComment (_type.owner ());
-    return jdoc;
+    if (_jdoc == null)
+      _jdoc = new JDocComment (_type.owner ());
+    return _jdoc;
   }
 
   /**
@@ -169,10 +169,10 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
+    if (_annotations == null)
+      _annotations = new ArrayList <JAnnotationUse> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    annotations.add (a);
+    _annotations.add (a);
     return a;
   }
 
@@ -200,21 +200,21 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
-    return Collections.unmodifiableList (annotations);
+    if (_annotations == null)
+      _annotations = new ArrayList <JAnnotationUse> ();
+    return Collections.unmodifiableList (_annotations);
   }
 
   public void declare (@Nonnull final JFormatter f)
   {
-    if (jdoc != null)
-      f.newline ().generable (jdoc);
-    if (annotations != null)
-      for (final JAnnotationUse annotation : annotations)
+    if (_jdoc != null)
+      f.newline ().generable (_jdoc);
+    if (_annotations != null)
+      for (final JAnnotationUse annotation : _annotations)
         f.generable (annotation).newline ();
     f.id (_name);
-    if (args != null)
-      f.print ('(').generable (args).print (')');
+    if (_args != null)
+      f.print ('(').generable (_args).print (')');
   }
 
   public void generate (@Nonnull final JFormatter f)

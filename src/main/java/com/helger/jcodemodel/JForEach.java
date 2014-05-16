@@ -52,9 +52,9 @@ public class JForEach implements IJStatement
 {
   private final AbstractJType _type;
   private final String _var;
-  private JBlock body; // lazily created
+  private JBlock _body; // lazily created
   private final IJExpression _collection;
-  private final JVar loopVar;
+  private final JVar _loopVar;
 
   protected JForEach (@Nonnull final AbstractJType vartype,
                       @Nonnull final String variable,
@@ -63,7 +63,7 @@ public class JForEach implements IJStatement
     this._type = vartype;
     this._var = variable;
     this._collection = collection;
-    loopVar = new JVar (JMods.forVar (JMod.FINAL), _type, _var, collection);
+    _loopVar = new JVar (JMods.forVar (JMod.FINAL), _type, _var, collection);
   }
 
   @Nonnull
@@ -78,7 +78,7 @@ public class JForEach implements IJStatement
   @Nonnull
   public JVar var ()
   {
-    return loopVar;
+    return _loopVar;
   }
 
   @Nonnull
@@ -90,9 +90,9 @@ public class JForEach implements IJStatement
   @Nonnull
   public JBlock body ()
   {
-    if (body == null)
-      body = new JBlock ();
-    return body;
+    if (_body == null)
+      _body = new JBlock ();
+    return _body;
   }
 
   public void state (@Nonnull final JFormatter f)
@@ -100,8 +100,8 @@ public class JForEach implements IJStatement
     f.print ("for (");
     f.generable (_type).id (_var).print (": ").generable (_collection);
     f.print (')');
-    if (body != null)
-      f.generable (body).newline ();
+    if (_body != null)
+      f.generable (_body).newline ();
     else
       f.print (';').newline ();
   }

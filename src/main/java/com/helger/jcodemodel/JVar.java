@@ -77,7 +77,7 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> annotations;
+  private List <JAnnotationUse> _annotations;
 
   /**
    * JVar constructor
@@ -182,10 +182,10 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
+    if (_annotations == null)
+      _annotations = new ArrayList <JAnnotationUse> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    annotations.add (a);
+    _annotations.add (a);
     return a;
   }
 
@@ -210,20 +210,20 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
-    return Collections.unmodifiableList (annotations);
+    if (_annotations == null)
+      _annotations = new ArrayList <JAnnotationUse> ();
+    return Collections.unmodifiableList (_annotations);
   }
 
   protected boolean isAnnotated ()
   {
-    return annotations != null;
+    return _annotations != null;
   }
 
   public void bind (@Nonnull final JFormatter f)
   {
-    if (annotations != null)
-      for (final JAnnotationUse annotation : annotations)
+    if (_annotations != null)
+      for (final JAnnotationUse annotation : _annotations)
         f.generable (annotation).newline ();
     f.generable (_mods).generable (_type).id (_name);
     if (_init != null)

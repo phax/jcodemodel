@@ -68,7 +68,7 @@ public class FileCodeWriter extends AbstractCodeWriter
   private final boolean _readOnly;
 
   /** Files that shall be marked as read only. */
-  private final Set <File> readonlyFiles = new HashSet <File> ();
+  private final Set <File> _readonlyFiles = new HashSet <File> ();
 
   public FileCodeWriter (@Nonnull final File target) throws IOException
   {
@@ -122,7 +122,7 @@ public class FileCodeWriter extends AbstractCodeWriter
     }
 
     if (_readOnly)
-      readonlyFiles.add (fn);
+      _readonlyFiles.add (fn);
     return fn;
   }
 
@@ -130,7 +130,7 @@ public class FileCodeWriter extends AbstractCodeWriter
   public void close () throws IOException
   {
     // mark files as read-onnly if necessary
-    for (final File f : readonlyFiles)
+    for (final File f : _readonlyFiles)
       f.setReadOnly ();
   }
 

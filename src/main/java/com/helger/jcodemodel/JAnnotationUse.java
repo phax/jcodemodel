@@ -60,7 +60,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   /**
    * Map of member values.
    */
-  private Map <String, AbstractJAnnotationValue> memberValues;
+  private Map <String, AbstractJAnnotationValue> _memberValues;
 
   protected JAnnotationUse (@Nonnull final AbstractJClass clazz)
   {
@@ -76,7 +76,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
-    return Collections.unmodifiableMap (memberValues);
+    return Collections.unmodifiableMap (_memberValues);
   }
 
   @Nonnull
@@ -85,13 +85,13 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
     return _clazz.owner ();
   }
 
-  private void addValue (final String name, final AbstractJAnnotationValue annotationValue)
+  private void _addValue (final String name, final AbstractJAnnotationValue annotationValue)
   {
     // Use ordered map to keep the code generation the same on any JVM.
     // Lazily created.
-    if (memberValues == null)
-      memberValues = new LinkedHashMap <String, AbstractJAnnotationValue> ();
-    memberValues.put (name, annotationValue);
+    if (_memberValues == null)
+      _memberValues = new LinkedHashMap <String, AbstractJAnnotationValue> ();
+    _memberValues.put (name, annotationValue);
   }
 
   /**
@@ -107,7 +107,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final boolean value)
   {
-    addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
+    _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
   }
 
@@ -124,7 +124,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final byte value)
   {
-    addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
+    _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
   }
 
@@ -141,7 +141,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final char value)
   {
-    addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
+    _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
   }
 
@@ -158,7 +158,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final double value)
   {
-    addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
+    _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
   }
 
@@ -175,7 +175,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final float value)
   {
-    addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
+    _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
   }
 
@@ -192,7 +192,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final long value)
   {
-    addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
+    _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
   }
 
@@ -209,7 +209,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final short value)
   {
-    addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
+    _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
   }
 
@@ -226,7 +226,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final int value)
   {
-    addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
+    _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
   }
 
@@ -245,7 +245,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   {
     // Escape string values with quotes so that they can
     // be generated accordingly
-    addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
+    _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
   }
 
@@ -265,7 +265,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   public JAnnotationUse annotationParam (final String name, final Class <? extends Annotation> value)
   {
     final JAnnotationUse annotationUse = new JAnnotationUse (owner ().ref (value));
-    addValue (name, annotationUse);
+    _addValue (name, annotationUse);
     return annotationUse;
   }
 
@@ -282,7 +282,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final Enum <?> value)
   {
-    addValue (name, new AbstractJAnnotationValue ()
+    _addValue (name, new AbstractJAnnotationValue ()
     {
       public void generate (final JFormatter f)
       {
@@ -305,7 +305,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final JEnumConstant value)
   {
-    addValue (name, new JAnnotationStringValue (value));
+    _addValue (name, new JAnnotationStringValue (value));
     return this;
   }
 
@@ -331,7 +331,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final Class <?> value)
   {
-    addValue (name, new JAnnotationStringValue (new AbstractJExpressionImpl ()
+    _addValue (name, new JAnnotationStringValue (new AbstractJExpressionImpl ()
     {
       public void generate (@Nonnull final JFormatter f)
       {
@@ -357,7 +357,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   public JAnnotationUse param (final String name, @Nonnull final AbstractJType type)
   {
     final AbstractJClass c = type.boxify ();
-    addValue (name, new JAnnotationStringValue (c.dotclass ()));
+    _addValue (name, new JAnnotationStringValue (c.dotclass ()));
     return this;
   }
 
@@ -374,7 +374,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   @Nonnull
   public JAnnotationUse param (final String name, final IJExpression value)
   {
-    addValue (name, new JAnnotationStringValue (value));
+    _addValue (name, new JAnnotationStringValue (value));
     return this;
   }
 
@@ -390,26 +390,26 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   public JAnnotationArrayMember paramArray (final String name)
   {
     final JAnnotationArrayMember arrayMember = new JAnnotationArrayMember (owner ());
-    addValue (name, arrayMember);
+    _addValue (name, arrayMember);
     return arrayMember;
   }
 
   public void generate (final JFormatter f)
   {
     f.print ('@').generable (_clazz);
-    if (memberValues != null)
+    if (_memberValues != null)
     {
       f.print ('(');
       boolean first = true;
 
-      if (isOptimizable ())
+      if (_isOptimizable ())
       {
         // short form
-        f.generable (memberValues.get ("value"));
+        f.generable (_memberValues.get ("value"));
       }
       else
       {
-        for (final Map.Entry <String, AbstractJAnnotationValue> mapEntry : memberValues.entrySet ())
+        for (final Map.Entry <String, AbstractJAnnotationValue> mapEntry : _memberValues.entrySet ())
         {
           if (!first)
             f.print (',');
@@ -421,8 +421,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
     }
   }
 
-  private boolean isOptimizable ()
+  private boolean _isOptimizable ()
   {
-    return memberValues.size () == 1 && memberValues.containsKey ("value");
+    return _memberValues.size () == 1 && _memberValues.containsKey ("value");
   }
 }

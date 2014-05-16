@@ -75,17 +75,17 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
   /**
    * The type of the writer.
    */
-  private final Class <W> writerType;
+  private final Class <W> _writerType;
 
   /**
    * Keeps track of writers for array members. Lazily created.
    */
-  private Map <String, JAnnotationArrayMember> arrays;
+  private Map <String, JAnnotationArrayMember> _arrays;
 
   protected TypedAnnotationWriter (final Class <A> annotation, final Class <W> writer, final JAnnotationUse use)
   {
     this._annotation = annotation;
-    this.writerType = writer;
+    this._writerType = writer;
     this._use = use;
   }
 
@@ -125,14 +125,14 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
     // array value
     if (rt.isArray ())
     {
-      return addArrayValue (proxy, name, rt.getComponentType (), method.getReturnType (), arg);
+      return _addArrayValue (proxy, name, rt.getComponentType (), method.getReturnType (), arg);
     }
 
     // sub annotation
     if (Annotation.class.isAssignableFrom (rt))
     {
       final Class <? extends Annotation> r = (Class <? extends Annotation>) rt;
-      return new TypedAnnotationWriter (r, method.getReturnType (), _use.annotationParam (name, r)).createProxy ();
+      return new TypedAnnotationWriter (r, method.getReturnType (), _use.annotationParam (name, r))._createProxy ();
     }
 
     // scalar value
@@ -140,7 +140,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
     if (arg instanceof AbstractJType)
     {
       final AbstractJType targ = (AbstractJType) arg;
-      checkType (Class.class, rt);
+      _checkType (Class.class, rt);
       if (m.getDefaultValue () != null)
       {
         // check the default
@@ -152,7 +152,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
     }
 
     // other Java built-in types
-    checkType (arg.getClass (), rt);
+    _checkType (arg.getClass (), rt);
     if (m.getDefaultValue () != null && m.getDefaultValue ().equals (arg))
       // defaulted. no need to write out.
       return proxy;
@@ -186,19 +186,19 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
     throw new IllegalArgumentException ("Unable to handle this method call " + method.toString ());
   }
 
-  private Object addArrayValue (final Object proxy,
+  private Object _addArrayValue (final Object proxy,
                                 final String name,
                                 final Class <?> itemType,
                                 final Class <?> expectedReturnType,
                                 final Object arg)
   {
-    if (arrays == null)
-      arrays = new HashMap <String, JAnnotationArrayMember> ();
-    JAnnotationArrayMember m = arrays.get (name);
+    if (_arrays == null)
+      _arrays = new HashMap <String, JAnnotationArrayMember> ();
+    JAnnotationArrayMember m = _arrays.get (name);
     if (m == null)
     {
       m = _use.paramArray (name);
-      arrays.put (name, m);
+      _arrays.put (name, m);
     }
 
     // sub annotation
@@ -207,17 +207,17 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
       final Class <? extends Annotation> r = (Class <? extends Annotation>) itemType;
       if (!IJAnnotationWriter.class.isAssignableFrom (expectedReturnType))
         throw new IllegalArgumentException ("Unexpected return type " + expectedReturnType);
-      return new TypedAnnotationWriter (r, expectedReturnType, m.annotate (r)).createProxy ();
+      return new TypedAnnotationWriter (r, expectedReturnType, m.annotate (r))._createProxy ();
     }
 
     // primitive
     if (arg instanceof AbstractJType)
     {
-      checkType (Class.class, itemType);
+      _checkType (Class.class, itemType);
       m.param ((AbstractJType) arg);
       return proxy;
     }
-    checkType (arg.getClass (), itemType);
+    _checkType (arg.getClass (), itemType);
     if (arg instanceof String)
     {
       m.param ((String) arg);
@@ -247,7 +247,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
    * Check if the type of the argument matches our expectation. If not, report
    * an error.
    */
-  private void checkType (final Class <?> actual, final Class <?> expected)
+  private void _checkType (final Class <?> actual, final Class <?> expected)
   {
     if (expected == actual || expected.isAssignableFrom (actual))
       return; // no problem
@@ -261,9 +261,9 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
   /**
    * Creates a proxy and returns it.
    */
-  private W createProxy ()
+  private W _createProxy ()
   {
-    return (W) Proxy.newProxyInstance (SecureLoader.getClassClassLoader (writerType), new Class [] { writerType }, this);
+    return (W) Proxy.newProxyInstance (SecureLoader.getClassClassLoader (_writerType), new Class [] { _writerType }, this);
   }
 
   /**
@@ -273,11 +273,11 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
   static <W extends IJAnnotationWriter <?>> W create (@Nonnull final Class <W> w,
                                                       @Nonnull final IJAnnotatable annotatable)
   {
-    final Class <? extends Annotation> a = findAnnotationType (w);
-    return (W) new TypedAnnotationWriter (a, w, annotatable.annotate (a)).createProxy ();
+    final Class <? extends Annotation> a = _findAnnotationType (w);
+    return (W) new TypedAnnotationWriter (a, w, annotatable.annotate (a))._createProxy ();
   }
 
-  private static Class <? extends Annotation> findAnnotationType (@Nonnull final Class <?> clazz)
+  private static Class <? extends Annotation> _findAnnotationType (@Nonnull final Class <?> clazz)
   {
     for (final Type t : clazz.getGenericInterfaces ())
     {
@@ -290,7 +290,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
       if (t instanceof Class <?>)
       {
         // recursive search
-        final Class <? extends Annotation> r = findAnnotationType ((Class <?>) t);
+        final Class <? extends Annotation> r = _findAnnotationType ((Class <?>) t);
         if (r != null)
           return r;
       }

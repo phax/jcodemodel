@@ -49,7 +49,7 @@ import javax.annotation.Nonnull;
  */
 public class JStringLiteral extends AbstractJExpressionImpl
 {
-  public final String _what;
+  private final String _what;
 
   protected JStringLiteral (@Nonnull final String what)
   {

@@ -56,7 +56,7 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  */
 public class JBinaryFile extends AbstractJResourceFile
 {
-  private final ByteArrayOutputStream baos = new ByteArrayOutputStream ();
+  private final ByteArrayOutputStream _baos = new ByteArrayOutputStream ();
 
   public JBinaryFile (@Nonnull final String name)
   {
@@ -69,12 +69,12 @@ public class JBinaryFile extends AbstractJResourceFile
    */
   public OutputStream getDataStore ()
   {
-    return baos;
+    return _baos;
   }
 
   @Override
   public void build (@Nonnull final OutputStream os) throws IOException
   {
-    baos.writeTo (os);
+    _baos.writeTo (os);
   }
 }

@@ -54,12 +54,12 @@ public class JArray extends AbstractJExpressionImpl
 {
   private final AbstractJType _type;
   private final IJExpression _size;
-  private List <IJExpression> exprs;
+  private List <IJExpression> _exprs;
 
   protected JArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
   {
-    this._type = type;
-    this._size = size;
+    _type = type;
+    _size = size;
   }
 
   @Nonnull
@@ -76,32 +76,45 @@ public class JArray extends AbstractJExpressionImpl
 
   /**
    * Add an element to the array initializer
+   * 
+   * @return this
    */
   @Nonnull
   public JArray add (@Nonnull final IJExpression e)
   {
-    if (exprs == null)
-      exprs = new ArrayList <IJExpression> ();
-    exprs.add (e);
+    if (_exprs == null)
+      _exprs = new ArrayList <IJExpression> ();
+    _exprs.add (e);
+    return this;
+  }
+
+  /**
+   * Remove all elements from the array initializer
+   * 
+   * @return this
+   */
+  @Nonnull
+  public JArray removeAll ()
+  {
+    _exprs = null;
     return this;
   }
 
   @Nonnull
   public List <IJExpression> exprs ()
   {
-    if (exprs == null)
-      exprs = new ArrayList <IJExpression> ();
-    return Collections.unmodifiableList (exprs);
+    if (_exprs == null)
+      _exprs = new ArrayList <IJExpression> ();
+    return Collections.unmodifiableList (_exprs);
   }
 
   public boolean hasExprs ()
   {
-    return exprs != null && !exprs.isEmpty ();
+    return _exprs != null && !_exprs.isEmpty ();
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-
     // generally we produce new T[x], but when T is an array type (T=T'[])
     // then new T'[][x] is wrong. It has to be new T'[x][].
     int arrayCount = 0;
@@ -125,7 +138,7 @@ public class JArray extends AbstractJExpressionImpl
     if (_size == null || hasExprs)
       f.print ('{');
     if (hasExprs)
-      f.generable (exprs);
+      f.generable (_exprs);
     else
       f.print (' ');
     if (_size == null || hasExprs)

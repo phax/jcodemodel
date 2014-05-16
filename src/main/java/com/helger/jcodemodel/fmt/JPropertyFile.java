@@ -53,7 +53,7 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  */
 public class JPropertyFile extends AbstractJResourceFile
 {
-  private final Properties data = new Properties ();
+  private final Properties _data = new Properties ();
 
   public JPropertyFile (@Nonnull final String name)
   {
@@ -66,7 +66,7 @@ public class JPropertyFile extends AbstractJResourceFile
    */
   public void add (@Nonnull final String key, @Nonnull final String value)
   {
-    data.put (key, value);
+    _data.put (key, value);
   }
 
   // TODO: method to iterate values in data?
@@ -76,6 +76,6 @@ public class JPropertyFile extends AbstractJResourceFile
   @Override
   public void build (@Nonnull final OutputStream out) throws IOException
   {
-    data.store (out, null);
+    _data.store (out, null);
   }
 }

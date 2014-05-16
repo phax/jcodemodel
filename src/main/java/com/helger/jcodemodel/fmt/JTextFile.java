@@ -57,7 +57,7 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  */
 public class JTextFile extends AbstractJResourceFile
 {
-  private String contents;
+  private String _contents;
 
   public JTextFile (@Nonnull final String name)
   {
@@ -66,20 +66,20 @@ public class JTextFile extends AbstractJResourceFile
 
   public void setContents (@Nullable final String _contents)
   {
-    this.contents = _contents;
+    this._contents = _contents;
   }
 
   @Nullable
   public String contents ()
   {
-    return contents;
+    return _contents;
   }
 
   @Override
   public void build (@Nonnull final OutputStream out) throws IOException
   {
     final Writer w = new OutputStreamWriter (out);
-    w.write (contents);
+    w.write (_contents);
     w.close ();
   }
 }

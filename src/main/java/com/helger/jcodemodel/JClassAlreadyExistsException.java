@@ -49,11 +49,11 @@ public class JClassAlreadyExistsException extends Exception
 {
   private static final long serialVersionUID = 1L;
 
-  private final JDefinedClass existing;
+  private final JDefinedClass _existing;
 
-  public JClassAlreadyExistsException (final JDefinedClass _existing)
+  public JClassAlreadyExistsException (final JDefinedClass existing)
   {
-    this.existing = _existing;
+    this._existing = existing;
   }
 
   /**
@@ -63,6 +63,6 @@ public class JClassAlreadyExistsException extends Exception
    */
   public JDefinedClass getExistingClass ()
   {
-    return existing;
+    return _existing;
   }
 }

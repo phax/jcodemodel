@@ -59,12 +59,12 @@ public class JSwitch implements IJStatement
   /**
    * vector of JCases.
    */
-  private final List <JCase> cases = new ArrayList <JCase> ();
+  private final List <JCase> _cases = new ArrayList <JCase> ();
 
   /**
    * a single default case
    */
-  private JCase defaultCase;
+  private JCase _defaultCase;
 
   /**
    * Construct a While statment
@@ -83,26 +83,26 @@ public class JSwitch implements IJStatement
   @Nonnull
   public Iterator <JCase> cases ()
   {
-    return cases.iterator ();
+    return _cases.iterator ();
   }
 
   @Nonnull
   public JCase _case (@Nonnull final IJExpression label)
   {
     final JCase c = new JCase (label);
-    cases.add (c);
+    _cases.add (c);
     return c;
   }
 
   @Nonnull
   public JCase _default ()
   {
-    if (defaultCase == null)
+    if (_defaultCase == null)
     {
       // default cases statements don't have a label
-      defaultCase = new JCase (null, true);
+      _defaultCase = new JCase (null, true);
     }
-    return defaultCase;
+    return _defaultCase;
   }
 
   public void state (@Nonnull final JFormatter f)
@@ -115,10 +115,10 @@ public class JSwitch implements IJStatement
     {
       f.print ("switch (").generable (_test).print (')').print (" {").newline ();
     }
-    for (final JCase c : cases)
+    for (final JCase c : _cases)
       f.statement (c);
-    if (defaultCase != null)
-      f.statement (defaultCase);
+    if (_defaultCase != null)
+      f.statement (_defaultCase);
     f.print ('}').newline ();
   }
 }

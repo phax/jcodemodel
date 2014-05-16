@@ -49,7 +49,7 @@ import javax.annotation.Nonnull;
  */
 public class JLabel implements IJStatement
 {
-  final String _label;
+  private final String _label;
 
   /**
    * JLabel constructor
@@ -59,7 +59,7 @@ public class JLabel implements IJStatement
    */
   protected JLabel (@Nonnull final String label)
   {
-    this._label = label;
+    _label = label;
   }
 
   @Nonnull

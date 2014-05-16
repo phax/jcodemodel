@@ -518,8 +518,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   }
 
   /**
-   * Returns all the fields declred in this class. The returned {@link Map} is a
-   * read-only live view.
+   * Returns all the fields declared in this class. The returned {@link Map} is
+   * a read-only live view.
    * 
    * @return always non-null.
    */
@@ -535,7 +535,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * @throws IllegalArgumentException
    *         if the given field is not a field on this class.
    */
-  public void removeField (final JFieldVar field)
+  public void removeField (@Nonnull final JFieldVar field)
   {
     if (fields.remove (field.name ()) != field)
       throw new IllegalArgumentException ();

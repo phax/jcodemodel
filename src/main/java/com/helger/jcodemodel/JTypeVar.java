@@ -55,27 +55,27 @@ import javax.annotation.Nullable;
  */
 public class JTypeVar extends AbstractJClass implements IJDeclaration
 {
-  private final String name;
-  private AbstractJClass bound;
+  private final String _name;
+  private AbstractJClass _bound;
 
   protected JTypeVar (@Nonnull final JCodeModel owner, @Nonnull final String _name)
   {
     super (owner);
-    this.name = _name;
+    this._name = _name;
   }
 
   @Override
   @Nonnull
   public String name ()
   {
-    return name;
+    return _name;
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    return name;
+    return _name;
   }
 
   @Override
@@ -93,13 +93,13 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Nonnull
   public JTypeVar bound (@Nonnull final AbstractJClass c)
   {
-    if (bound != null)
+    if (_bound != null)
       throw new IllegalArgumentException ("type variable has an existing class bound " +
-                                          bound +
+                                          _bound +
                                           " so the new bound " +
                                           c +
                                           " cannot be set");
-    bound = c;
+    _bound = c;
     return this;
   }
 
@@ -112,8 +112,8 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Nonnull
   public AbstractJClass _extends ()
   {
-    if (bound != null)
-      return bound;
+    if (_bound != null)
+      return _bound;
 
     // implicit "extends Object"
     return owner ().ref (Object.class);
@@ -126,8 +126,8 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
-    if (bound != null)
-      return bound._implements ();
+    if (_bound != null)
+      return _bound._implements ();
 
     // Nothing
     return Collections.<AbstractJClass> emptyList ().iterator ();
@@ -161,14 +161,14 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    */
   public void declare (@Nonnull final JFormatter f)
   {
-    f.id (name);
-    if (bound != null)
-      f.print ("extends").generable (bound);
+    f.id (_name);
+    if (_bound != null)
+      f.print ("extends").generable (_bound);
   }
 
   @Override
   public void generate (@Nonnull final JFormatter f)
   {
-    f.id (name);
+    f.id (_name);
   }
 }

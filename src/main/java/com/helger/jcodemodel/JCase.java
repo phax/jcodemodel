@@ -61,7 +61,7 @@ public class JCase implements IJStatement
   /**
    * JBlock of statements which makes up body of this While statement
    */
-  private JBlock body;
+  private JBlock _body;
 
   /**
    * Construct a case statement
@@ -95,9 +95,9 @@ public class JCase implements IJStatement
   @Nonnull
   public JBlock body ()
   {
-    if (body == null)
-      body = new JBlock (false, true);
-    return body;
+    if (_body == null)
+      _body = new JBlock (false, true);
+    return _body;
   }
 
   public void state (@Nonnull final JFormatter f)
@@ -111,8 +111,8 @@ public class JCase implements IJStatement
     {
       f.print ("default:").newline ();
     }
-    if (body != null)
-      f.statement (body);
+    if (_body != null)
+      f.statement (_body);
     f.outdent ();
   }
 }

@@ -50,28 +50,28 @@ public class JAnonymousClass extends JDefinedClass
   /**
    * Base interface/class from which this anonymous class is built.
    */
-  private final AbstractJClass base;
+  private final AbstractJClass _base;
 
-  protected JAnonymousClass (final AbstractJClass _base)
+  protected JAnonymousClass (final AbstractJClass base)
   {
-    super (_base.owner (), 0, null);
-    this.base = _base;
+    super (base.owner (), 0, null);
+    _base = base;
   }
 
   public AbstractJClass base ()
   {
-    return base;
+    return _base;
   }
 
   @Override
   public String fullName ()
   {
-    return base.fullName ();
+    return _base.fullName ();
   }
 
   @Override
   public void generate (final JFormatter f)
   {
-    f.type (base);
+    f.type (_base);
   }
 }

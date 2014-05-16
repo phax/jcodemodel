@@ -55,7 +55,7 @@ public class JWhileLoop implements IJStatement
   /**
    * JBlock of statements which makes up body of this While statement
    */
-  private JBlock body;
+  private JBlock _body;
 
   /**
    * Construct a While statment
@@ -74,9 +74,9 @@ public class JWhileLoop implements IJStatement
   @Nonnull
   public JBlock body ()
   {
-    if (body == null)
-      body = new JBlock ();
-    return body;
+    if (_body == null)
+      _body = new JBlock ();
+    return _body;
   }
 
   public void state (@Nonnull final JFormatter f)
@@ -89,8 +89,8 @@ public class JWhileLoop implements IJStatement
     {
       f.print ("while (").generable (_test).print (')');
     }
-    if (body != null)
-      f.statement (body);
+    if (_body != null)
+      f.statement (_body);
     else
       f.print (';').newline ();
   }

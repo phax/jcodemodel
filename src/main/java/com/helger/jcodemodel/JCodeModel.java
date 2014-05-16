@@ -449,11 +449,11 @@ public final class JCodeModel
   private final class TypeNameParser
   {
     private final String _s;
-    private int idx;
+    private int _idx;
 
     public TypeNameParser (final String s)
     {
-      this._s = s;
+      _s = s;
     }
 
     /**
@@ -464,68 +464,62 @@ public final class JCodeModel
      */
     AbstractJClass parseTypeName () throws ClassNotFoundException
     {
-      final int start = idx;
+      final int start = _idx;
 
-      if (_s.charAt (idx) == '?')
+      if (_s.charAt (_idx) == '?')
       {
         // wildcard
-        idx++;
-        ws ();
-        final String head = _s.substring (idx);
+        _idx++;
+        _skipWs ();
+        final String head = _s.substring (_idx);
         if (head.startsWith ("extends"))
         {
-          idx += 7;
-          ws ();
+          _idx += 7;
+          _skipWs ();
           return parseTypeName ().wildcard ();
         }
-        else
-          if (head.startsWith ("super"))
-          {
-            throw new UnsupportedOperationException ("? super T not implemented");
-          }
-          else
-          {
-            // not supported
-            throw new IllegalArgumentException ("only extends/super can follow ?, but found " + _s.substring (idx));
-          }
+        if (head.startsWith ("super"))
+          throw new UnsupportedOperationException ("? super T not implemented");
+        // not supported
+        throw new IllegalArgumentException ("only extends/super can follow ?, but found " + _s.substring (_idx));
       }
 
-      while (idx < _s.length ())
+      while (_idx < _s.length ())
       {
-        final char ch = _s.charAt (idx);
+        final char ch = _s.charAt (_idx);
         if (Character.isJavaIdentifierStart (ch) || Character.isJavaIdentifierPart (ch) || ch == '.')
-          idx++;
+          _idx++;
         else
           break;
       }
 
-      final AbstractJClass clazz = ref (_s.substring (start, idx));
+      final AbstractJClass clazz = ref (_s.substring (start, _idx));
 
-      return parseSuffix (clazz);
+      return _parseSuffix (clazz);
     }
 
     /**
      * Parses additional left-associative suffixes, like type arguments and
      * array specifiers.
      */
-    private AbstractJClass parseSuffix (final AbstractJClass clazz) throws ClassNotFoundException
+    private AbstractJClass _parseSuffix (final AbstractJClass clazz) throws ClassNotFoundException
     {
-      if (idx == _s.length ())
+      if (_idx == _s.length ())
         return clazz; // hit EOL
 
-      final char ch = _s.charAt (idx);
+      final char ch = _s.charAt (_idx);
 
       if (ch == '<')
-        return parseSuffix (parseArguments (clazz));
+        return _parseSuffix (_parseArguments (clazz));
 
       if (ch == '[')
       {
-        if (_s.charAt (idx + 1) == ']')
+        if (_s.charAt (_idx + 1) == ']')
         {
-          idx += 2;
-          return parseSuffix (clazz.array ());
+          _idx += 2;
+          return _parseSuffix (clazz.array ());
         }
-        throw new IllegalArgumentException ("Expected ']' but found " + _s.substring (idx + 1));
+        throw new IllegalArgumentException ("Expected ']' but found " + _s.substring (_idx + 1));
       }
 
       return clazz;
@@ -534,10 +528,10 @@ public final class JCodeModel
     /**
      * Skips whitespaces
      */
-    private void ws ()
+    private void _skipWs ()
     {
-      while (Character.isWhitespace (_s.charAt (idx)) && idx < _s.length ())
-        idx++;
+      while (Character.isWhitespace (_s.charAt (_idx)) && _idx < _s.length ())
+        _idx++;
     }
 
     /**
@@ -545,26 +539,26 @@ public final class JCodeModel
      * 
      * @return the index of the character next to '>'
      */
-    private AbstractJClass parseArguments (final AbstractJClass rawType) throws ClassNotFoundException
+    private AbstractJClass _parseArguments (final AbstractJClass rawType) throws ClassNotFoundException
     {
-      if (_s.charAt (idx) != '<')
+      if (_s.charAt (_idx) != '<')
         throw new IllegalArgumentException ();
-      idx++;
+      _idx++;
 
       final List <AbstractJClass> args = new ArrayList <AbstractJClass> ();
 
       while (true)
       {
         args.add (parseTypeName ());
-        if (idx == _s.length ())
+        if (_idx == _s.length ())
           throw new IllegalArgumentException ("Missing '>' in " + _s);
-        final char ch = _s.charAt (idx);
+        final char ch = _s.charAt (_idx);
         if (ch == '>')
           return rawType.narrow (args.toArray (new AbstractJClass [args.size ()]));
 
         if (ch != ',')
           throw new IllegalArgumentException (_s);
-        idx++;
+        _idx++;
       }
     }
   }

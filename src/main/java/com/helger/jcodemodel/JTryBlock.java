@@ -51,8 +51,8 @@ import javax.annotation.Nonnull;
  */
 public class JTryBlock implements IJStatement
 {
-  private final JBlock body = new JBlock ();
-  private final List <JCatchBlock> catches = new ArrayList <JCatchBlock> ();
+  private final JBlock _body = new JBlock ();
+  private final List <JCatchBlock> _catches = new ArrayList <JCatchBlock> ();
   private JBlock _finally;
 
   protected JTryBlock ()
@@ -61,21 +61,21 @@ public class JTryBlock implements IJStatement
   @Nonnull
   public JBlock body ()
   {
-    return body;
+    return _body;
   }
 
   @Nonnull
   public JCatchBlock _catch (@Nonnull final AbstractJClass exception)
   {
     final JCatchBlock cb = new JCatchBlock (exception);
-    catches.add (cb);
+    _catches.add (cb);
     return cb;
   }
 
   @Nonnull
   public List <JCatchBlock> catches ()
   {
-    return Collections.unmodifiableList (catches);
+    return Collections.unmodifiableList (_catches);
   }
 
   @Nonnull
@@ -88,8 +88,8 @@ public class JTryBlock implements IJStatement
 
   public void state (@Nonnull final JFormatter f)
   {
-    f.print ("try").generable (body);
-    for (final JCatchBlock cb : catches)
+    f.print ("try").generable (_body);
+    for (final JCatchBlock cb : _catches)
       f.generable (cb);
     if (_finally != null)
       f.print ("finally").generable (_finally);

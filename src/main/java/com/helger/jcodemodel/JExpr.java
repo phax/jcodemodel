@@ -61,8 +61,8 @@ public final class JExpr
   @Nonnull
   public static final JAtom FALSE = new JAtom ("false");
 
-  private static final String charEscape = "\b\t\n\f\r\"\'\\";
-  private static final String charMacro = "btnfr\"'\\";
+  private static final String _charEscape = "\b\t\n\f\r\"\'\\";
+  private static final String _charMacro = "btnfr\"'\\";
   private static final JAtom __this = new JAtom ("this");
   private static final JAtom __super = new JAtom ("super");
   private static final JAtom __null = new JAtom ("null");
@@ -316,7 +316,7 @@ public final class JExpr
     for (int i = 0; i < n; i++)
     {
       final char c = s.charAt (i);
-      final int j = charEscape.indexOf (c);
+      final int j = _charEscape.indexOf (c);
       if (j >= 0)
       {
         if ((quote == '"' && c == '\'') || (quote == '\'' && c == '"'))
@@ -326,7 +326,7 @@ public final class JExpr
         else
         {
           sb.append ('\\');
-          sb.append (charMacro.charAt (j));
+          sb.append (_charMacro.charAt (j));
         }
       }
       else

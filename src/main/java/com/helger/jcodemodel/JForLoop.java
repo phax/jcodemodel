@@ -52,10 +52,10 @@ import javax.annotation.Nullable;
  */
 public class JForLoop implements IJStatement
 {
-  private final List <Object> inits = new ArrayList <Object> ();
-  private IJExpression test;
-  private final List <IJExpression> updates = new ArrayList <IJExpression> ();
-  private JBlock body;
+  private final List <Object> _inits = new ArrayList <Object> ();
+  private IJExpression _test;
+  private final List <IJExpression> _updates = new ArrayList <IJExpression> ();
+  private JBlock _body;
 
   protected JForLoop ()
   {}
@@ -67,7 +67,7 @@ public class JForLoop implements IJStatement
                     @Nullable final IJExpression e)
   {
     final JVar v = new JVar (JMods.forVar (mods), type, var, e);
-    inits.add (v);
+    _inits.add (v);
     return v;
   }
 
@@ -78,7 +78,7 @@ public class JForLoop implements IJStatement
 
   public void init (@Nonnull final JVar v, @Nonnull final IJExpression e)
   {
-    inits.add (JExpr.assign (v, e));
+    _inits.add (JExpr.assign (v, e));
   }
 
   /**
@@ -87,44 +87,44 @@ public class JForLoop implements IJStatement
   @Nonnull
   public List <Object> inits ()
   {
-    return Collections.unmodifiableList (inits);
+    return Collections.unmodifiableList (_inits);
   }
 
   public void test (@Nullable final IJExpression e)
   {
-    this.test = e;
+    this._test = e;
   }
 
   @Nullable
   public IJExpression test ()
   {
-    return test;
+    return _test;
   }
 
   public void update (final IJExpression e)
   {
-    updates.add (e);
+    _updates.add (e);
   }
 
   @Nonnull
   public List <IJExpression> updates ()
   {
-    return Collections.unmodifiableList (updates);
+    return Collections.unmodifiableList (_updates);
   }
 
   @Nonnull
   public JBlock body ()
   {
-    if (body == null)
-      body = new JBlock ();
-    return body;
+    if (_body == null)
+      _body = new JBlock ();
+    return _body;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
     f.print ("for (");
     boolean first = true;
-    for (final Object o : inits)
+    for (final Object o : _inits)
     {
       if (!first)
         f.print (',');
@@ -134,9 +134,9 @@ public class JForLoop implements IJStatement
         f.generable ((IJExpression) o);
       first = false;
     }
-    f.print (';').generable (test).print (';').generable (updates).print (')');
-    if (body != null)
-      f.generable (body).newline ();
+    f.print (';').generable (_test).print (';').generable (_updates).print (')');
+    if (_body != null)
+      f.generable (_body).newline ();
     else
       f.print (';').newline ();
   }

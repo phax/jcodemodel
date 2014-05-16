@@ -58,8 +58,8 @@ import com.helger.jcodemodel.JPackage;
  */
 public class ZipCodeWriter extends AbstractCodeWriter
 {
-  private final ZipOutputStream zip;
-  private final OutputStream filter;
+  private final ZipOutputStream _zip;
+  private final OutputStream _filter;
 
   /**
    * @param target
@@ -68,9 +68,9 @@ public class ZipCodeWriter extends AbstractCodeWriter
   public ZipCodeWriter (@Nonnull final OutputStream target)
   {
     super (null);
-    zip = new ZipOutputStream (target);
+    _zip = new ZipOutputStream (target);
     // nullify the close method.
-    filter = new FilterOutputStream (zip)
+    _filter = new FilterOutputStream (_zip)
     {
       @Override
       public void close ()
@@ -85,8 +85,8 @@ public class ZipCodeWriter extends AbstractCodeWriter
     if (!pkg.isUnnamed ())
       name = _toDirName (pkg) + name;
 
-    zip.putNextEntry (new ZipEntry (name));
-    return filter;
+    _zip.putNextEntry (new ZipEntry (name));
+    return _filter;
   }
 
   /** Converts a package name to the directory name. */
@@ -98,6 +98,6 @@ public class ZipCodeWriter extends AbstractCodeWriter
   @Override
   public void close () throws IOException
   {
-    zip.close ();
+    _zip.close ();
   }
 }

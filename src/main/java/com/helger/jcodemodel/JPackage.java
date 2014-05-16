@@ -77,29 +77,29 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * List of classes contained within this package keyed by their name.
    */
-  private final Map <String, JDefinedClass> classes = new TreeMap <String, JDefinedClass> ();
+  private final Map <String, JDefinedClass> _classes = new TreeMap <String, JDefinedClass> ();
 
   /**
    * List of resources files inside this package.
    */
-  private final Set <AbstractJResourceFile> resources = new HashSet <AbstractJResourceFile> ();
+  private final Set <AbstractJResourceFile> _resources = new HashSet <AbstractJResourceFile> ();
 
   /**
    * All {@link AbstractJClass}s in this package keyed the upper case class
    * name. This field is non-null only on Windows, to detect "Foo" and "foo" as
    * a collision.
    */
-  private final Map <String, JDefinedClass> upperCaseClassMap;
+  private final Map <String, JDefinedClass> _upperCaseClassMap;
 
   /**
    * Lazily created list of package annotations.
    */
-  private List <JAnnotationUse> annotations;
+  private List <JAnnotationUse> _annotations;
 
   /**
    * package javadoc.
    */
-  private JDocComment jdoc;
+  private JDocComment _jdoc;
 
   /**
    * JPackage constructor
@@ -123,9 +123,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     this._owner = owner;
 
     if (_owner.isCaseSensitiveFileSystem)
-      upperCaseClassMap = null;
+      _upperCaseClassMap = null;
     else
-      upperCaseClassMap = new HashMap <String, JDefinedClass> ();
+      _upperCaseClassMap = new HashMap <String, JDefinedClass> ();
 
     this._name = name;
   }
@@ -185,21 +185,21 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public JDefinedClass _class (final int mods, @Nonnull final String name, @Nonnull final EClassType classTypeVal) throws JClassAlreadyExistsException
   {
-    if (classes.containsKey (name))
-      throw new JClassAlreadyExistsException (classes.get (name));
+    if (_classes.containsKey (name))
+      throw new JClassAlreadyExistsException (_classes.get (name));
 
     // XXX problems caught in the NC constructor
     final JDefinedClass c = new JDefinedClass (this, mods, name, classTypeVal);
 
-    if (upperCaseClassMap != null)
+    if (_upperCaseClassMap != null)
     {
       final String sUpperName = name.toUpperCase ();
-      final JDefinedClass dc = upperCaseClassMap.get (sUpperName);
+      final JDefinedClass dc = _upperCaseClassMap.get (sUpperName);
       if (dc != null)
         throw new JClassAlreadyExistsException (dc);
-      upperCaseClassMap.put (sUpperName, c);
+      _upperCaseClassMap.put (sUpperName, c);
     }
-    classes.put (name, c);
+    _classes.put (name, c);
     return c;
   }
 
@@ -220,7 +220,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nullable
   public JDefinedClass _getClass (@Nullable final String name)
   {
-    return classes.get (name);
+    return _classes.get (name);
   }
 
   /**
@@ -325,7 +325,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public AbstractJResourceFile addResourceFile (@Nonnull final AbstractJResourceFile rsrc)
   {
-    resources.add (rsrc);
+    _resources.add (rsrc);
     return rsrc;
   }
 
@@ -334,7 +334,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    */
   public boolean hasResourceFile (@Nullable final String name)
   {
-    for (final AbstractJResourceFile r : resources)
+    for (final AbstractJResourceFile r : _resources)
       if (r.name ().equals (name))
         return true;
     return false;
@@ -346,7 +346,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public Iterator <AbstractJResourceFile> propertyFiles ()
   {
-    return resources.iterator ();
+    return _resources.iterator ();
   }
 
   /**
@@ -358,9 +358,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public JDocComment javadoc ()
   {
-    if (jdoc == null)
-      jdoc = new JDocComment (owner ());
-    return jdoc;
+    if (_jdoc == null)
+      _jdoc = new JDocComment (owner ());
+    return _jdoc;
   }
 
   /**
@@ -374,9 +374,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
     // note that c may not be a member of classes.
     // this happens when someone is trying to remove a non generated class
-    classes.remove (c.name ());
-    if (upperCaseClassMap != null)
-      upperCaseClassMap.remove (c.name ().toUpperCase ());
+    _classes.remove (c.name ());
+    if (_upperCaseClassMap != null)
+      _upperCaseClassMap.remove (c.name ().toUpperCase ());
   }
 
   /**
@@ -414,7 +414,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public Iterator <JDefinedClass> classes ()
   {
-    return classes.values ().iterator ();
+    return _classes.values ().iterator ();
   }
 
   /**
@@ -422,7 +422,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    */
   public boolean isDefined (@Nullable final String classLocalName)
   {
-    for (final JDefinedClass clazz : classes.values ())
+    for (final JDefinedClass clazz : _classes.values ())
       if (clazz.name ().equals (classLocalName))
         return true;
     return false;
@@ -464,11 +464,11 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     if (isUnnamed ())
       throw new IllegalArgumentException ("the root package cannot be annotated");
 
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
+    if (_annotations == null)
+      _annotations = new ArrayList <JAnnotationUse> ();
 
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    annotations.add (a);
+    _annotations.add (a);
     return a;
   }
 
@@ -487,9 +487,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    if (annotations == null)
-      annotations = new ArrayList <JAnnotationUse> ();
-    return Collections.unmodifiableList (annotations);
+    if (_annotations == null)
+      _annotations = new ArrayList <JAnnotationUse> ();
+    return Collections.unmodifiableList (_annotations);
   }
 
   /**
@@ -517,7 +517,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   void build (final AbstractCodeWriter src, final AbstractCodeWriter res) throws IOException
   {
     // write classes
-    for (final JDefinedClass c : classes.values ())
+    for (final JDefinedClass c : _classes.values ())
     {
       if (c.isHidden ())
         continue; // don't generate this file
@@ -528,17 +528,17 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     }
 
     // write package annotations
-    if (annotations != null || jdoc != null)
+    if (_annotations != null || _jdoc != null)
     {
       final JFormatter f = _createJavaSourceFileWriter (src, "package-info");
 
-      if (jdoc != null)
-        f.generable (jdoc);
+      if (_jdoc != null)
+        f.generable (_jdoc);
 
       // TODO: think about importing
-      if (annotations != null)
+      if (_annotations != null)
       {
-        for (final JAnnotationUse a : annotations)
+        for (final JAnnotationUse a : _annotations)
           f.generable (a).newline ();
       }
       f.declaration (this);
@@ -547,7 +547,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     }
 
     // write resources
-    for (final AbstractJResourceFile rsrc : resources)
+    for (final AbstractJResourceFile rsrc : _resources)
     {
       @SuppressWarnings ("resource")
       final AbstractCodeWriter cw = rsrc.isResource () ? res : src;
@@ -560,19 +560,19 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /* package */int countArtifacts ()
   {
     int r = 0;
-    for (final JDefinedClass c : classes.values ())
+    for (final JDefinedClass c : _classes.values ())
     {
       if (c.isHidden ())
         continue; // don't generate this file
       r++;
     }
 
-    if (annotations != null || jdoc != null)
+    if (_annotations != null || _jdoc != null)
     {
       r++;
     }
 
-    r += resources.size ();
+    r += _resources.size ();
 
     return r;
   }
