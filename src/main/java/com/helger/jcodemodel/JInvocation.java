@@ -49,7 +49,7 @@ import javax.annotation.Nullable;
 /**
  * JMethod invocation
  */
-public class JInvocation extends AbstractJExpressionImpl implements IJStatement
+public class JInvocation extends AbstractJExpressionImpl implements IJStatement, IJOwnedMaybe
 {
   private final JCodeModel _owner;
 
@@ -65,7 +65,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
    * invocation.) This allows {@link JMethod#name(String) the name of the method
    * to be changed later}.
    */
-  private final String _name;
+  private final String _methodName;
 
   private final JMethod _method;
 
@@ -120,7 +120,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
       throw new IllegalArgumentException ("method name contains '.': " + name);
     _owner = owner;
     _object = object;
-    _name = name;
+    _methodName = name;
     _method = null;
     _isConstructor = false;
     _type = null;
@@ -132,7 +132,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
   {
     _owner = owner;
     _object = object;
-    _name = null;
+    _methodName = null;
     _method = method;
     _isConstructor = false;
     _type = null;
@@ -150,10 +150,16 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
   {
     _owner = c.owner ();
     _object = null;
-    _name = null;
+    _methodName = null;
     _method = null;
     _isConstructor = true;
     _type = c;
+  }
+
+  @Nullable
+  public JCodeModel owner ()
+  {
+    return _owner;
   }
 
   public boolean isConstructor ()
@@ -171,7 +177,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
   public JInvocation arg (@Nonnull final IJExpression arg)
   {
     if (arg == null)
-      throw new IllegalArgumentException ();
+      throw new IllegalArgumentException ("argument may not be null");
     args.add (arg);
     return this;
   }
@@ -279,7 +285,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement
     else
     {
       // method name
-      String name = _name;
+      String name = _methodName;
       if (name == null)
         name = _method.name ();
 

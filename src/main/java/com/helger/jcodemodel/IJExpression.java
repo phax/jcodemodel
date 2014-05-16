@@ -16,14 +16,14 @@
  * file and include the License file at packager/legal/LICENSE.txt.
  *
  * GPL Classpath Exception:
- * Oracle designates this particular file as subject to the "Classpath"
+ * Oracle designates this particular file as subject to the "Classpath".
  * exception as provided by Oracle in the GPL Version 2 section of the License
  * file that accompanied this code.
  *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
  * enclosed by brackets [] replaced by your own identifying information:
- * "Portions Copyright [year] [name of copyright owner]"
+ * "Portions Copyright [year] [name of copyright owner]".
  *
  * Contributor(s):
  * If you wish your version of this file to be governed by only the CDDL or
@@ -46,7 +46,7 @@ import javax.annotation.Nonnull;
  * A Java expression.
  * <p>
  * Unlike most of CodeModel, JExpressions are built bottom-up ( meaning you
- * start from leaves and then gradually build compliated expressions by
+ * start from leaves and then gradually build complicated expressions by
  * combining them.)
  * <p>
  * {@link IJExpression} defines a series of composer methods, which returns a
@@ -57,227 +57,300 @@ import javax.annotation.Nonnull;
 public interface IJExpression extends IJGenerable
 {
   /**
-   * @return "-[this]" from "[this]".
+   * @return <code>-[this]" from "[this]</code>.
    */
   @Nonnull
   IJExpression minus ();
 
   /**
-   * @return "![this]" from "[this]".
+   * @return <code>![this]" from "[this]</code>.
    */
   @Nonnull
   IJExpression not ();
 
   /**
-   * @return "~[this]" from "[this]".
+   * @return <code>~[this]" from "[this]</code>.
    */
   @Nonnull
   IJExpression complement ();
 
   /**
-   * @return "[this]++" from "[this]".
+   * @return <code>[this]++" from "[this]</code>.
    */
   @Nonnull
   IJExpression incr ();
 
   /**
-   * @return "++[this]" from "[this]".
+   * @return <code>++[this]" from "[this]</code>.
    */
   @Nonnull
   IJExpression preincr ();
 
   /**
-   * @return "[this]--" from "[this]".
+   * @return <code>[this]--" from "[this]</code>.
    */
   @Nonnull
   IJExpression decr ();
 
   /**
-   * @return "--[this]" from "[this]".
+   * @return <code>--[this]" from "[this]</code>.
    */
   @Nonnull
   IJExpression predecr ();
 
   /**
-   * @return "[this]+[right]"
+   * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (@Nonnull IJExpression right);
 
   /**
-   * @return "[this]+[right]"
+   * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (double right);
 
   /**
-   * @return "[this]+[right]"
+   * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (float right);
 
   /**
-   * @return "[this]+[right]"
+   * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (int right);
 
   /**
-   * @return "[this]+[right]"
+   * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (long right);
 
   /**
-   * @return "[this]+[right]"
+   * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (@Nonnull String right);
 
   /**
-   * @return "[this]-[right]"
+   * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (@Nonnull IJExpression right);
 
   /**
-   * @return "[this]-[right]"
+   * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (double right);
 
   /**
-   * @return "[this]-[right]"
+   * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (float right);
 
   /**
-   * @return "[this]-[right]"
+   * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (int right);
 
   /**
-   * @return "[this]-[right]"
+   * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (long right);
 
   /**
-   * @return "[this]*[right]"
+   * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (@Nonnull IJExpression right);
 
   /**
-   * @return "[this]*[right]"
+   * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (double right);
 
   /**
-   * @return "[this]*[right]"
+   * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (float right);
 
   /**
-   * @return "[this]*[right]"
+   * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (int right);
 
   /**
-   * @return "[this]*[right]"
+   * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (long right);
 
   /**
-   * @return "[this]/[right]"
+   * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (@Nonnull IJExpression right);
 
   /**
-   * @return "[this]/[right]"
+   * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (double right);
 
   /**
-   * @return "[this]/[right]"
+   * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (float right);
 
   /**
-   * @return "[this]/[right]"
+   * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (int right);
 
   /**
-   * @return "[this]/[right]"
+   * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (long right);
 
   /**
-   * @return "[this]%[right]"
+   * @return <code>[this]%[right]</code>.
    */
   @Nonnull
   IJExpression mod (@Nonnull IJExpression right);
 
   /**
-   * @return "[this]&lt;&lt;[right]"
+   * @return <code>[this]&lt;&lt;[right]</code>.
    */
   @Nonnull
   IJExpression shl (@Nonnull IJExpression right);
 
   /**
-   * @return "[this]>>[right]"
+   * @return <code>[this]&lt;&lt;[right]</code>.
+   */
+  @Nonnull
+  IJExpression shl (int right);
+
+  /**
+   * @return <code>[this] >> [right]</code>.
    */
   @Nonnull
   IJExpression shr (@Nonnull IJExpression right);
 
   /**
-   * @return "[this]>>>[right]"
+   * @return <code>[this] >> [right]</code>.
+   */
+  @Nonnull
+  IJExpression shr (int right);
+
+  /**
+   * @return <code>[this] >>> [right]</code>.
    */
   @Nonnull
   IJExpression shrz (@Nonnull IJExpression right);
 
-  /** Bit-wise AND '&amp;'. */
+  /**
+   * @return <code>[this] >>> [right]</code>.
+   */
+  @Nonnull
+  IJExpression shrz (int right);
+
+  /**
+   * Bit-wise AND '&amp;'.
+   * 
+   * @return <code>[this] &amp; [right]</code>.
+   */
   @Nonnull
   IJExpression band (@Nonnull IJExpression right);
 
-  /** Bit-wise OR '|'. */
+  /**
+   * Bit-wise OR '|'.
+   * 
+   * @return <code>[this] | [right]</code>.
+   */
   @Nonnull
   IJExpression bor (@Nonnull IJExpression right);
 
-  /** Logical AND '&amp;&amp;'. */
+  /**
+   * Logical AND '&amp;&amp;'.
+   * 
+   * @return <code>[this] &amp;&amp; [right]</code>.
+   */
   @Nonnull
   IJExpression cand (@Nonnull IJExpression right);
 
-  /** Logical OR '||'. */
+  /**
+   * Logical OR '||'.
+   * 
+   * @return <code>[this] || [right]</code>.
+   */
   @Nonnull
   IJExpression cor (@Nonnull IJExpression right);
 
+  /**
+   * @return <code>[this] ^ [right]</code>.
+   */
   @Nonnull
   IJExpression xor (@Nonnull IJExpression right);
 
+  /**
+   * @return <code>[this] &lt; [right]</code>.
+   */
   @Nonnull
   IJExpression lt (@Nonnull IJExpression right);
 
+  /**
+   * @return <code>[this] &lt; 0</code>.
+   */
+  @Nonnull
+  IJExpression lt0 ();
+
+  /**
+   * @return <code>[this] &lt;= [right]</code>.
+   */
   @Nonnull
   IJExpression lte (@Nonnull IJExpression right);
 
+  /**
+   * @return <code>[this] &lt;= 0</code>.
+   */
+  @Nonnull
+  IJExpression lte0 ();
+
+  /**
+   * @return <code>[this] &gt; [right]</code>.
+   */
   @Nonnull
   IJExpression gt (@Nonnull IJExpression right);
 
+  /**
+   * @return <code>[this] &gt; 0</code>.
+   */
+  @Nonnull
+  IJExpression gt0 ();
+
+  /**
+   * @return <code>[this] &gt;= [right]</code>.
+   */
   @Nonnull
   IJExpression gte (@Nonnull IJExpression right);
+
+  /**
+   * @return <code>[this] &gt;= 0</code>.
+   */
+  @Nonnull
+  IJExpression gte0 ();
 
   /**
    * Equals
@@ -298,6 +371,14 @@ public interface IJExpression extends IJGenerable
   IJExpression eqNull ();
 
   /**
+   * Shortcut for <code>eq (JExpr.lit (0))</code>
+   * 
+   * @return <code><em>expr</em> == 0</code>
+   */
+  @Nonnull
+  IJExpression eq0 ();
+
+  /**
    * Not equals
    * 
    * @param right
@@ -316,20 +397,28 @@ public interface IJExpression extends IJGenerable
   IJExpression neNull ();
 
   /**
-   * @return "[this] instanceof [right]"
+   * Shortcut for <code>ne (JExpr.lit (0))</code>
+   * 
+   * @return Never <code><em>expr</em> != 0</code>
+   */
+  @Nonnull
+  IJExpression ne0 ();
+
+  /**
+   * @return <code>[this] instanceof [right]</code>.
    */
   @Nonnull
   IJExpression _instanceof (@Nonnull AbstractJType right);
 
   /**
-   * @return "[this].[method]". Arguments shall be added to the returned
+   * @return <code>[this].[method]". Arguments shall be added to the returned
    *         {@link JInvocation} object.
    */
   @Nonnull
   JInvocation invoke (@Nonnull JMethod method);
 
   /**
-   * @return "[this].[method]". Arguments shall be added to the returned
+   * @return <code>[this].[method]". Arguments shall be added to the returned
    *         {@link JInvocation} object.
    */
   @Nonnull
@@ -341,15 +430,27 @@ public interface IJExpression extends IJGenerable
   @Nonnull
   JFieldRef ref (@Nonnull String field);
 
+  /**
+   * @param index
+   *        array index
+   * @return <code>[this] [ [index] ]</code>
+   */
   @Nonnull
   JArrayCompRef component (@Nonnull IJExpression index);
 
+  /**
+   * @param index
+   *        array index
+   * @return <code>[this] [ [index] ]</code>
+   */
   @Nonnull
   JArrayCompRef component (int index);
 
-  @Nonnull
-  JArrayCompRef component (long index);
-
+  /**
+   * @param index
+   *        array index
+   * @return <code>[this] [0]</code>
+   */
   @Nonnull
   JArrayCompRef component0 ();
 }

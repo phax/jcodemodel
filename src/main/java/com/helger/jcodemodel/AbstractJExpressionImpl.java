@@ -52,7 +52,7 @@ public abstract class AbstractJExpressionImpl implements IJExpression
 
   // from JOp
   @Nonnull
-  public final IJExpression minus ()
+  public final JOpUnary minus ()
   {
     return JOp.minus (this);
   }
@@ -67,193 +67,211 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   }
 
   @Nonnull
-  public final IJExpression complement ()
+  public final JOpUnary complement ()
   {
     return JOp.complement (this);
   }
 
   @Nonnull
-  public final IJExpression incr ()
+  public final JOpUnaryTight incr ()
   {
     return JOp.incr (this);
   }
 
   @Nonnull
-  public final IJExpression preincr ()
+  public final JOpUnaryTight preincr ()
   {
     return JOp.preincr (this);
   }
 
   @Nonnull
-  public final IJExpression decr ()
+  public final JOpUnaryTight decr ()
   {
     return JOp.decr (this);
   }
 
   @Nonnull
-  public final IJExpression predecr ()
+  public final JOpUnaryTight predecr ()
   {
     return JOp.predecr (this);
   }
 
   @Nonnull
-  public final IJExpression plus (@Nonnull final IJExpression right)
+  public final JOpBinary plus (@Nonnull final IJExpression right)
   {
     return JOp.plus (this, right);
   }
 
   @Nonnull
-  public final IJExpression plus (final double right)
+  public final JOpBinary plus (final double right)
   {
     return plus (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression plus (final float right)
+  public final JOpBinary plus (final float right)
   {
     return plus (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression plus (final int right)
+  public final JOpBinary plus (final int right)
   {
     return plus (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression plus (final long right)
+  public final JOpBinary plus (final long right)
   {
     return plus (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression plus (@Nonnull final String right)
+  public final JOpBinary plus (@Nonnull final String right)
   {
     return plus (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression minus (@Nonnull final IJExpression right)
+  public final JOpBinary minus (@Nonnull final IJExpression right)
   {
     return JOp.minus (this, right);
   }
 
   @Nonnull
-  public final IJExpression minus (final double right)
+  public final JOpBinary minus (final double right)
   {
     return minus (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression minus (final float right)
+  public final JOpBinary minus (final float right)
   {
     return minus (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression minus (final int right)
+  public final JOpBinary minus (final int right)
   {
     return minus (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression minus (final long right)
+  public final JOpBinary minus (final long right)
   {
     return minus (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression mul (@Nonnull final IJExpression right)
+  public final JOpBinary mul (@Nonnull final IJExpression right)
   {
     return JOp.mul (this, right);
   }
 
   @Nonnull
-  public final IJExpression mul (final double right)
+  public final JOpBinary mul (final double right)
   {
     return mul (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression mul (final float right)
+  public final JOpBinary mul (final float right)
   {
     return mul (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression mul (final int right)
+  public final JOpBinary mul (final int right)
   {
     return mul (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression mul (final long right)
+  public final JOpBinary mul (final long right)
   {
     return mul (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression div (@Nonnull final IJExpression right)
+  public final JOpBinary div (@Nonnull final IJExpression right)
   {
     return JOp.div (this, right);
   }
 
   @Nonnull
-  public final IJExpression div (final double right)
+  public final JOpBinary div (final double right)
   {
     return div (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression div (final float right)
+  public final JOpBinary div (final float right)
   {
     return div (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression div (final int right)
+  public final JOpBinary div (final int right)
   {
     return div (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression div (final long right)
+  public final JOpBinary div (final long right)
   {
     return div (JExpr.lit (right));
   }
 
   @Nonnull
-  public final IJExpression mod (@Nonnull final IJExpression right)
+  public final JOpBinary mod (@Nonnull final IJExpression right)
   {
     return JOp.mod (this, right);
   }
 
   @Nonnull
-  public final IJExpression shl (@Nonnull final IJExpression right)
+  public final JOpBinary shl (@Nonnull final IJExpression right)
   {
     return JOp.shl (this, right);
   }
 
   @Nonnull
-  public final IJExpression shr (@Nonnull final IJExpression right)
+  public final JOpBinary shl (final int right)
+  {
+    return shl (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final JOpBinary shr (@Nonnull final IJExpression right)
   {
     return JOp.shr (this, right);
   }
 
   @Nonnull
-  public final IJExpression shrz (@Nonnull final IJExpression right)
+  public final JOpBinary shr (final int right)
+  {
+    return shr (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final JOpBinary shrz (@Nonnull final IJExpression right)
   {
     return JOp.shrz (this, right);
   }
 
   @Nonnull
-  public final IJExpression band (@Nonnull final IJExpression right)
+  public final JOpBinary shrz (final int right)
+  {
+    return shrz (JExpr.lit (right));
+  }
+
+  @Nonnull
+  public final JOpBinary band (@Nonnull final IJExpression right)
   {
     return JOp.band (this, right);
   }
 
   @Nonnull
-  public final IJExpression bor (@Nonnull final IJExpression right)
+  public final JOpBinary bor (@Nonnull final IJExpression right)
   {
     return JOp.bor (this, right);
   }
@@ -271,61 +289,97 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   }
 
   @Nonnull
-  public final IJExpression xor (@Nonnull final IJExpression right)
+  public final JOpBinary xor (@Nonnull final IJExpression right)
   {
     return JOp.xor (this, right);
   }
 
   @Nonnull
-  public final IJExpression lt (@Nonnull final IJExpression right)
+  public final JOpBinary lt (@Nonnull final IJExpression right)
   {
     return JOp.lt (this, right);
   }
 
   @Nonnull
-  public final IJExpression lte (@Nonnull final IJExpression right)
+  public final JOpBinary lt0 ()
+  {
+    return lt (JExpr.lit (0));
+  }
+
+  @Nonnull
+  public final JOpBinary lte (@Nonnull final IJExpression right)
   {
     return JOp.lte (this, right);
   }
 
   @Nonnull
-  public final IJExpression gt (@Nonnull final IJExpression right)
+  public final JOpBinary lte0 ()
+  {
+    return lte (JExpr.lit (0));
+  }
+
+  @Nonnull
+  public final JOpBinary gt (@Nonnull final IJExpression right)
   {
     return JOp.gt (this, right);
   }
 
   @Nonnull
-  public final IJExpression gte (@Nonnull final IJExpression right)
+  public final JOpBinary gt0 ()
+  {
+    return gt (JExpr.lit (0));
+  }
+
+  @Nonnull
+  public final JOpBinary gte (@Nonnull final IJExpression right)
   {
     return JOp.gte (this, right);
   }
 
   @Nonnull
-  public final IJExpression eq (@Nonnull final IJExpression right)
+  public final JOpBinary gte0 ()
+  {
+    return gte (JExpr.lit (0));
+  }
+
+  @Nonnull
+  public final JOpBinary eq (@Nonnull final IJExpression right)
   {
     return JOp.eq (this, right);
   }
 
   @Nonnull
-  public final IJExpression eqNull ()
+  public final JOpBinary eqNull ()
   {
     return eq (JExpr._null ());
   }
 
   @Nonnull
-  public final IJExpression ne (@Nonnull final IJExpression right)
+  public final JOpBinary eq0 ()
+  {
+    return eq (JExpr.lit (0));
+  }
+
+  @Nonnull
+  public final JOpBinary ne (@Nonnull final IJExpression right)
   {
     return JOp.ne (this, right);
   }
 
   @Nonnull
-  public final IJExpression neNull ()
+  public final JOpBinary neNull ()
   {
     return ne (JExpr._null ());
   }
 
   @Nonnull
-  public final IJExpression _instanceof (@Nonnull final AbstractJType right)
+  public final JOpBinary ne0 ()
+  {
+    return ne (JExpr.lit (0));
+  }
+
+  @Nonnull
+  public final JOpBinary _instanceof (@Nonnull final AbstractJType right)
   {
     return JOp._instanceof (this, right);
   }
@@ -367,12 +421,6 @@ public abstract class AbstractJExpressionImpl implements IJExpression
 
   @Nonnull
   public final JArrayCompRef component (final int index)
-  {
-    return component (JExpr.lit (index));
-  }
-
-  @Nonnull
-  public final JArrayCompRef component (final long index)
   {
     return component (JExpr.lit (index));
   }

@@ -241,31 +241,31 @@ public class JVar extends AbstractJExpressionImpl implements IJDeclaration, IJAs
   }
 
   @Nonnull
-  public IJExpressionStatement assign (@Nonnull final IJExpression rhs)
+  public JAssignment assign (@Nonnull final IJExpression rhs)
   {
     return JExpr.assign (this, rhs);
   }
 
   @Nonnull
-  public IJExpressionStatement assignPlus (@Nonnull final IJExpression rhs)
+  public JAssignment assignPlus (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignPlus (this, rhs);
   }
 
   @Nonnull
-  public IJExpressionStatement assignMinus (@Nonnull final IJExpression rhs)
+  public JAssignment assignMinus (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignMinus (this, rhs);
   }
 
   @Nonnull
-  public IJExpressionStatement assignTimes (@Nonnull final IJExpression rhs)
+  public JAssignment assignTimes (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignTimes (this, rhs);
   }
 
   @Nonnull
-  public IJExpressionStatement assignDivide (@Nonnull final IJExpression rhs)
+  public JAssignment assignDivide (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignDivide (this, rhs);
   }

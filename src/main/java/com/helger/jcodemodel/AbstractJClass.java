@@ -64,14 +64,14 @@ public abstract class AbstractJClass extends AbstractJType
   public static final JTypeVar [] EMPTY_ARRAY = new JTypeVar [0];
 
   private final JCodeModel _owner;
-  private AbstractJClass arrayClass;
+  private AbstractJClass _arrayClass;
 
   protected AbstractJClass (@Nonnull final JCodeModel owner)
   {
     if (owner == null)
       throw new NullPointerException ("owner");
 
-    this._owner = owner;
+    _owner = owner;
   }
 
   /**
@@ -212,14 +212,14 @@ public abstract class AbstractJClass extends AbstractJType
       return true;
 
     final AbstractJClass b = derived._extends ();
-    if (b != null && this.isAssignableFrom (b))
+    if (b != null && isAssignableFrom (b))
       return true;
 
-    if (this.isInterface ())
+    if (isInterface ())
     {
       final Iterator <AbstractJClass> itfs = derived._implements ();
       while (itfs.hasNext ())
-        if (this.isAssignableFrom (itfs.next ()))
+        if (isAssignableFrom (itfs.next ()))
           return true;
     }
 
@@ -257,7 +257,7 @@ public abstract class AbstractJClass extends AbstractJType
   @Nullable
   public final AbstractJClass getBaseClass (@Nonnull final AbstractJClass baseType)
   {
-    if (this.erasure ().equals (baseType))
+    if (erasure ().equals (baseType))
       return this;
 
     final AbstractJClass b = _extends ();
@@ -289,9 +289,9 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public AbstractJClass array ()
   {
-    if (arrayClass == null)
-      arrayClass = new JArrayClass (owner (), this);
-    return arrayClass;
+    if (_arrayClass == null)
+      _arrayClass = new JArrayClass (owner (), this);
+    return _arrayClass;
   }
 
   /**
@@ -300,11 +300,13 @@ public abstract class AbstractJClass extends AbstractJType
    * <p>
    * <code>.narrow(X)</code> builds <code>Set&lt;X></code> from <code>Set</code>.
    */
-  public AbstractJClass narrow (@Nonnull final Class <?> clazz)
+  @Nonnull
+  public JNarrowedClass narrow (@Nonnull final Class <?> clazz)
   {
     return narrow (owner ().ref (clazz));
   }
 
+  @Nonnull
   public AbstractJClass narrow (@Nonnull final Class <?>... clazz)
   {
     final AbstractJClass [] r = new AbstractJClass [clazz.length];
@@ -319,16 +321,19 @@ public abstract class AbstractJClass extends AbstractJType
    * <p>
    * <code>.narrow(X)</code> builds <code>Set&lt;X></code> from <code>Set</code>.
    */
-  public AbstractJClass narrow (final AbstractJClass clazz)
+  @Nonnull
+  public JNarrowedClass narrow (final AbstractJClass clazz)
   {
     return new JNarrowedClass (this, clazz);
   }
 
-  public AbstractJClass narrow (@Nonnull final AbstractJType type)
+  @Nonnull
+  public JNarrowedClass narrow (@Nonnull final AbstractJType type)
   {
     return narrow (type.boxify ());
   }
 
+  @Nonnull
   public AbstractJClass narrow (@Nonnull final AbstractJClass... clazz)
   {
     if (clazz.length == 0)
@@ -336,6 +341,7 @@ public abstract class AbstractJClass extends AbstractJType
     return new JNarrowedClass (this, Arrays.asList (clazz.clone ()));
   }
 
+  @Nonnull
   public AbstractJClass narrow (@Nonnull final List <? extends AbstractJClass> clazz)
   {
     if (clazz.isEmpty ())
@@ -347,6 +353,7 @@ public abstract class AbstractJClass extends AbstractJType
    * If this class is parameterized, return the type parameter of the given
    * index.
    */
+  @Nonnull
   public List <AbstractJClass> getTypeParameters ()
   {
     return Collections.emptyList ();
@@ -365,7 +372,8 @@ public abstract class AbstractJClass extends AbstractJType
    * 
    * @return never null
    */
-  public final AbstractJClass wildcard ()
+  @Nonnull
+  public final JTypeWildcard wildcard ()
   {
     return new JTypeWildcard (this);
   }
@@ -384,7 +392,7 @@ public abstract class AbstractJClass extends AbstractJType
   @Override
   public String toString ()
   {
-    return this.getClass ().getName () + '(' + name () + ')';
+    return getClass ().getName () + '(' + name () + ')';
   }
 
   @Nonnull
@@ -393,28 +401,36 @@ public abstract class AbstractJClass extends AbstractJType
     return JExpr.dotclass (this);
   }
 
-  /** Generates a static method invocation. */
+  /**
+   * Generates a static method invocation.
+   */
   @Nonnull
   public final JInvocation staticInvoke (@Nonnull final JMethod method)
   {
     return new JInvocation (this, method);
   }
 
-  /** Generates a static method invocation. */
+  /**
+   * Generates a static method invocation.
+   */
   @Nonnull
   public final JInvocation staticInvoke (@Nonnull final String method)
   {
     return new JInvocation (this, method);
   }
 
-  /** Static field reference. */
+  /**
+   * Static field reference.
+   */
   @Nonnull
   public final JFieldRef staticRef (final String field)
   {
     return new JFieldRef (this, field);
   }
 
-  /** Static field reference. */
+  /**
+   * Static field reference.
+   */
   @Nonnull
   public final JFieldRef staticRef (final JVar field)
   {

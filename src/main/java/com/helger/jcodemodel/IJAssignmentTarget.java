@@ -49,18 +49,43 @@ import javax.annotation.Nonnull;
  */
 public interface IJAssignmentTarget extends IJExpression
 {
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this = <em>rhs</em></code>
+   */
   @Nonnull
   IJExpressionStatement assign (@Nonnull IJExpression rhs);
 
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this += <em>rhs</em></code>
+   */
   @Nonnull
   IJExpressionStatement assignPlus (@Nonnull IJExpression rhs);
 
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this -= <em>rhs</em></code>
+   */
   @Nonnull
   IJExpressionStatement assignMinus (@Nonnull IJExpression rhs);
 
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this *= <em>rhs</em></code>
+   */
   @Nonnull
   IJExpressionStatement assignTimes (@Nonnull IJExpression rhs);
 
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this /= <em>rhs</em></code>
+   */
   @Nonnull
   IJExpressionStatement assignDivide (@Nonnull IJExpression rhs);
 }

@@ -46,8 +46,10 @@ import javax.annotation.Nullable;
 /**
  * Field Reference
  */
-public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTarget
+public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTarget, IJOwnedMaybe
 {
+  private final JCodeModel _owner;
+
   /**
    * Object expression upon which this field will be accessed, or null for the
    * implicit 'this'.
@@ -57,12 +59,12 @@ public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTa
   /**
    * Name of the field to be accessed. Either this or {@link #_var} is set.
    */
-  private String _name;
+  private final String _name;
 
   /**
    * Variable to be accessed.
    */
-  private JVar _var;
+  private final JVar _var;
 
   /**
    * Indicates if an explicit this should be generated
@@ -70,22 +72,24 @@ public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTa
   private final boolean _explicitThis;
 
   /**
-   * Field reference constructor given an object expression and field name
+   * Field reference constructor given an object expression and field name.
+   * <code>object.name</code> or just <code>name</code> if object is
+   * <code>null</code>.
    * 
    * @param object
    *        JExpression for the object upon which the named field will be
-   *        accessed,
+   *        accessed. May be <code>null</code>.
    * @param name
-   *        Name of field to access
+   *        Name of field to access. May not be <code>null</code>.
    */
   protected JFieldRef (@Nullable final IJExpression object, @Nonnull final String name)
   {
-    this (object, name, false);
+    this (null, object, name, (JVar) null, false);
   }
 
-  protected JFieldRef (@Nullable final IJExpression object, @Nonnull final JVar v)
+  protected JFieldRef (@Nullable final IJExpression object, @Nonnull final JVar var)
   {
-    this (object, v, false);
+    this (null, object, (String) null, var, false);
   }
 
   /**
@@ -93,34 +97,57 @@ public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTa
    */
   protected JFieldRef (final AbstractJType type, @Nonnull final String name)
   {
-    this (type, name, false);
+    this (type.owner (), type, name, (JVar) null, false);
   }
 
-  protected JFieldRef (final AbstractJType type, @Nonnull final JVar v)
+  protected JFieldRef (final AbstractJType type, @Nonnull final JVar var)
   {
-    this (type, v, false);
+    this (type.owner (), type, (String) null, var, false);
   }
 
   protected JFieldRef (@Nullable final IJGenerable object, @Nonnull final String name, final boolean explicitThis)
   {
-    this._explicitThis = explicitThis;
-    this._object = object;
-    if (name.indexOf ('.') >= 0)
-      throw new IllegalArgumentException ("Field name contains '.': " + name);
-    this._name = name;
+    this (null, object, name, (JVar) null, explicitThis);
   }
 
   protected JFieldRef (@Nullable final IJGenerable object, @Nonnull final JVar var, final boolean explicitThis)
   {
-    this._explicitThis = explicitThis;
-    this._object = object;
-    this._var = var;
+    this (null, object, (String) null, var, explicitThis);
+  }
+
+  private JFieldRef (@Nullable final JCodeModel owner,
+                     @Nullable final IJGenerable object,
+                     @Nullable final String name,
+                     @Nullable final JVar var,
+                     final boolean explicitThis)
+  {
+    if (name != null && name.indexOf ('.') >= 0)
+      throw new IllegalArgumentException ("Field name contains '.': " + name);
+    if (name == null && var == null)
+      throw new IllegalArgumentException ("name or var must be present");
+    _owner = owner;
+    _object = object;
+    _name = name;
+    _var = var;
+    _explicitThis = explicitThis;
+  }
+
+  @Nullable
+  public JCodeModel owner ()
+  {
+    return _owner;
+  }
+
+  @Nullable
+  public IJGenerable object ()
+  {
+    return _object;
   }
 
   @Nonnull
   public String name ()
   {
-    String name = this._name;
+    String name = _name;
     if (name == null)
       name = _var.name ();
     return name;
@@ -145,37 +172,37 @@ public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTa
       f.generable (_object).print ('.').print (name);
     else
       if (_explicitThis)
-        f.print ("this.").print (name);
+        f.print ("").print (name);
       else
         f.id (name);
   }
 
   @Nonnull
-  public IJExpressionStatement assign (@Nonnull final IJExpression rhs)
+  public JAssignment assign (@Nonnull final IJExpression rhs)
   {
     return JExpr.assign (this, rhs);
   }
 
   @Nonnull
-  public IJExpressionStatement assignPlus (@Nonnull final IJExpression rhs)
+  public JAssignment assignPlus (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignPlus (this, rhs);
   }
 
   @Nonnull
-  public IJExpressionStatement assignMinus (@Nonnull final IJExpression rhs)
+  public JAssignment assignMinus (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignMinus (this, rhs);
   }
 
   @Nonnull
-  public IJExpressionStatement assignTimes (@Nonnull final IJExpression rhs)
+  public JAssignment assignTimes (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignTimes (this, rhs);
   }
 
   @Nonnull
-  public IJExpressionStatement assignDivide (@Nonnull final IJExpression rhs)
+  public JAssignment assignDivide (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignDivide (this, rhs);
   }

@@ -41,12 +41,12 @@
 package com.helger.jcodemodel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Represents X&lt;Y>. TODO: consider separating the decl and the use.
@@ -72,9 +72,9 @@ public class JNarrowedClass extends AbstractJClass
   protected JNarrowedClass (@Nonnull final AbstractJClass basis, final List <AbstractJClass> args)
   {
     super (basis.owner ());
-    this._basis = basis;
     assert !(basis instanceof JNarrowedClass);
-    this._args = args;
+    _basis = basis;
+    _args = args;
   }
 
   @Nonnull
@@ -84,7 +84,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  public AbstractJClass narrow (final AbstractJClass clazz)
+  public JNarrowedClass narrow (@Nonnull final AbstractJClass clazz)
   {
     final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (_args);
     newArgs.add (clazz);
@@ -92,10 +92,11 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  public AbstractJClass narrow (final AbstractJClass... clazz)
+  public JNarrowedClass narrow (@Nonnull final AbstractJClass... clazz)
   {
     final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (_args);
-    newArgs.addAll (Arrays.asList (clazz));
+    for (final AbstractJClass aClass : clazz)
+      newArgs.add (aClass);
     return new JNarrowedClass (_basis, newArgs);
   }
 
@@ -185,6 +186,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
+  @Nullable
   public AbstractJClass _extends ()
   {
     final AbstractJClass base = _basis._extends ();
@@ -194,6 +196,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
+  @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
     return new Iterator <AbstractJClass> ()
@@ -248,9 +251,12 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public boolean equals (final Object obj)
   {
-    if (!(obj instanceof JNarrowedClass))
+    if (obj == this)
+      return true;
+    if (obj == null || !getClass ().equals (obj.getClass ()))
       return false;
-    return fullName ().equals (((AbstractJClass) obj).fullName ());
+    final JNarrowedClass rhs = this;
+    return fullName ().equals (rhs.fullName ());
   }
 
   @Override

@@ -55,7 +55,7 @@ import javax.annotation.Nullable;
  * <p>
  * Our modeling of types are starting to look really ugly. ideally it should
  * have been done somewhat like APT, but it's too late now.
- *
+ * 
  * @author Kohsuke Kawaguchi
  */
 public class JTypeWildcard extends AbstractJClass
@@ -65,7 +65,7 @@ public class JTypeWildcard extends AbstractJClass
   protected JTypeWildcard (@Nonnull final AbstractJClass bound)
   {
     super (bound.owner ());
-    this._bound = bound;
+    _bound = bound;
   }
 
   @Nonnull
@@ -103,9 +103,7 @@ public class JTypeWildcard extends AbstractJClass
   @Override
   public AbstractJClass _extends ()
   {
-    if (_bound != null)
-      return _bound;
-    return owner ().ref (Object.class);
+    return _bound;
   }
 
   /**
@@ -144,7 +142,10 @@ public class JTypeWildcard extends AbstractJClass
   public void generate (@Nonnull final JFormatter f)
   {
     if (_bound._extends () == null)
-      f.print ("?"); // instead of "? extends Object"
+    {
+      // instead of "? extends Object"
+      f.print ("?");
+    }
     else
       f.print ("? extends").generable (_bound);
   }

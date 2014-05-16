@@ -44,8 +44,6 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.JOp.TernaryOp;
-
 /**
  * Factory methods that generate various {@link IJExpression}s.
  */
@@ -55,19 +53,19 @@ public final class JExpr
    * Boolean constant that represents <code>true</code>
    */
   @Nonnull
-  public static final IJExpression TRUE = new JAtom ("true");
+  public static final JAtom TRUE = new JAtom ("true");
 
   /**
    * Boolean constant that represents <code>false</code>
    */
   @Nonnull
-  public static final IJExpression FALSE = new JAtom ("false");
+  public static final JAtom FALSE = new JAtom ("false");
 
   private static final String charEscape = "\b\t\n\f\r\"\'\\";
   private static final String charMacro = "btnfr\"'\\";
-  private static final IJExpression __this = new JAtom ("this");
-  private static final IJExpression __super = new JAtom ("super");
-  private static final IJExpression __null = new JAtom ("null");
+  private static final JAtom __this = new JAtom ("this");
+  private static final JAtom __super = new JAtom ("super");
+  private static final JAtom __null = new JAtom ("null");
 
   /**
    * This class is not instanciable.
@@ -76,60 +74,57 @@ public final class JExpr
   {}
 
   @Nonnull
-  public static IJExpressionStatement assign (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assign (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     return new JAssignment (lhs, rhs);
   }
 
   @Nonnull
-  public static IJExpressionStatement assignPlus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignPlus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     return new JAssignment (lhs, rhs, "+");
   }
 
   @Nonnull
-  public static IJExpressionStatement assignMinus (@Nonnull final IJAssignmentTarget lhs,
-                                                   @Nonnull final IJExpression rhs)
+  public static JAssignment assignMinus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     return new JAssignment (lhs, rhs, "-");
   }
 
   @Nonnull
-  public static IJExpressionStatement assignTimes (@Nonnull final IJAssignmentTarget lhs,
-                                                   @Nonnull final IJExpression rhs)
+  public static JAssignment assignTimes (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     return new JAssignment (lhs, rhs, "*");
   }
 
   @Nonnull
-  public static IJExpressionStatement assignDivide (@Nonnull final IJAssignmentTarget lhs,
-                                                    @Nonnull final IJExpression rhs)
+  public static JAssignment assignDivide (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
   {
     return new JAssignment (lhs, rhs, "/");
   }
 
   @Nonnull
-  public static IJExpressionStatement incr (@Nonnull final IJExpression expression)
+  public static JExprStatementWrapper <JOpUnaryTight> incr (@Nonnull final IJExpression expression)
   {
-    return new JExpressionStatementWrapper (JOp.incr (expression));
+    return JExprStatementWrapper.create (JOp.incr (expression));
   }
 
   @Nonnull
-  public static IJStatement preincr (@Nonnull final IJExpression expression)
+  public static JExprStatementWrapper <JOpUnaryTight> preincr (@Nonnull final IJExpression expression)
   {
-    return new JExpressionStatementWrapper (JOp.preincr (expression));
+    return JExprStatementWrapper.create (JOp.preincr (expression));
   }
 
   @Nonnull
-  public static IJStatement decr (@Nonnull final IJExpression expression)
+  public static JExprStatementWrapper <JOpUnaryTight> decr (@Nonnull final IJExpression expression)
   {
-    return new JExpressionStatementWrapper (JOp.decr (expression));
+    return JExprStatementWrapper.create (JOp.decr (expression));
   }
 
   @Nonnull
-  public static IJStatement predecr (@Nonnull final IJExpression expression)
+  public static JExprStatementWrapper <JOpUnaryTight> predecr (@Nonnull final IJExpression expression)
   {
-    return new JExpressionStatementWrapper (JOp.predecr (expression));
+    return JExprStatementWrapper.create (JOp.predecr (expression));
   }
 
   @Nonnull
@@ -193,7 +188,7 @@ public final class JExpr
   }
 
   @Nonnull
-  public static IJExpression dotclass (@Nonnull final AbstractJClass cl)
+  public static AbstractJExpressionImpl dotclass (@Nonnull final AbstractJClass cl)
   {
     return new AbstractJExpressionImpl ()
     {
@@ -256,7 +251,7 @@ public final class JExpr
    * Returns a reference to "this", an implicit reference to the current object.
    */
   @Nonnull
-  public static IJExpression _this ()
+  public static JAtom _this ()
   {
     return __this;
   }
@@ -265,7 +260,7 @@ public final class JExpr
    * Returns a reference to "super", an implicit reference to the super class.
    */
   @Nonnull
-  public static IJExpression _super ()
+  public static JAtom _super ()
   {
     return __super;
   }
@@ -273,37 +268,37 @@ public final class JExpr
   /* -- Literals -- */
 
   @Nonnull
-  public static IJExpression _null ()
+  public static JAtom _null ()
   {
     return __null;
   }
 
   @Nonnull
-  public static IJExpression lit (final boolean b)
+  public static JAtom lit (final boolean b)
   {
     return b ? TRUE : FALSE;
   }
 
   @Nonnull
-  public static IJExpression lit (final int n)
+  public static JAtomInt lit (final int n)
   {
     return new JAtomInt (n);
   }
 
   @Nonnull
-  public static IJExpression lit (final long n)
+  public static JAtomLong lit (final long n)
   {
     return new JAtomLong (n);
   }
 
   @Nonnull
-  public static IJExpression lit (final float f)
+  public static JAtomFloat lit (final float f)
   {
     return new JAtomFloat (f);
   }
 
   @Nonnull
-  public static IJExpression lit (final double d)
+  public static JAtomDouble lit (final double d)
   {
     return new JAtomDouble (d);
   }
@@ -312,6 +307,7 @@ public final class JExpr
    * Escapes the given string, then surrounds it by the specified quotation
    * mark.
    */
+  @Nonnull
   public static String quotify (final char quote, @Nonnull final String s)
   {
     final int n = s.length ();
@@ -363,13 +359,13 @@ public final class JExpr
   }
 
   @Nonnull
-  public static IJExpression lit (final char c)
+  public static JAtom lit (final char c)
   {
     return new JAtom (quotify ('\'', Character.toString (c)));
   }
 
   @Nonnull
-  public static IJExpression lit (@Nonnull final String s)
+  public static JStringLiteral lit (@Nonnull final String s)
   {
     return new JStringLiteral (s);
   }
@@ -385,7 +381,7 @@ public final class JExpr
    * object model.
    */
   @Nonnull
-  public static IJExpression direct (@Nonnull final String source)
+  public static AbstractJExpressionImpl direct (@Nonnull final String source)
   {
     return new AbstractJExpressionImpl ()
     {
@@ -394,32 +390,6 @@ public final class JExpr
         f.print ('(').print (source).print (')');
       }
     };
-  }
-
-  public static class JExpressionStatementWrapper extends AbstractJExpressionImpl implements IJExpressionStatement
-  {
-    private final IJExpression expr;
-
-    public JExpressionStatementWrapper (@Nonnull final IJExpression expression)
-    {
-      this.expr = expression;
-    }
-
-    @Nonnull
-    public IJExpression expr ()
-    {
-      return expr;
-    }
-
-    public void generate (@Nonnull final JFormatter f)
-    {
-      expr.generate (f);
-    }
-
-    public void state (@Nonnull final JFormatter f)
-    {
-      f.generable (expr).print (';').newline ();
-    }
   }
 
   /**
@@ -436,7 +406,7 @@ public final class JExpr
    * @return The created expression
    */
   @Nonnull
-  public static TernaryOp cond (@Nonnull final IJExpression cond,
+  public static JOpTernary cond (@Nonnull final IJExpression cond,
                                 @Nonnull final IJExpression ifTrue,
                                 @Nonnull final IJExpression ifFalse)
   {
