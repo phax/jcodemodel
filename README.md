@@ -7,8 +7,8 @@ with other `com.sun.codemodel` instances that might be floating around in the cl
 
 News and noteworthy:
 
-2014-04-10: Release 2.6.4
-2013-09-23: Changes from https://github.com/UnquietCode/JCodeModel have been incorporated.
+* 2014-04-10: Release 2.6.4
+* 2013-09-23: Changes from https://github.com/UnquietCode/JCodeModel have been incorporated.
 
 #Maven usage
 Add the following to your pom.xml to use this artifact:
