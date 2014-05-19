@@ -7,6 +7,8 @@ with other `com.sun.codemodel` instances that might be floating around in the cl
 
 News and noteworthy:
 
+* 2014-05-19: Release 2.7.1 - now as OSGi bundle
+* 2014-05-16: Release 2.7.0 - API extensions
 * 2014-04-10: Release 2.6.4
 * 2013-09-23: Changes from https://github.com/UnquietCode/JCodeModel have been incorporated.
 
