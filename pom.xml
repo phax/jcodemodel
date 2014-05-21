@@ -3,7 +3,7 @@
   <parent>
     <groupId>com.phloc</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>22.7</version>
+    <version>23.1</version>
   </parent>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
@@ -78,39 +78,6 @@
       <email>valikov@gmx.net</email>
     </contributor>
   </contributors>
-      
-  <repositories>
-    <repository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>phloc.com</id>
-      <url>http://repo.phloc.com/maven2</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>  
-
-  <distributionManagement>
-    <repository>
-      <id>repo.phloc.public</id>
-      <url>sftp://www.phloc.com:23040/var/www/html-repo/maven2</url>
-    </repository>
-  </distributionManagement>
   
   <dependencies>
     <dependency>
@@ -130,7 +97,7 @@
   
   <build>
     <plugins>
-    <plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
