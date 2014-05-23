@@ -172,7 +172,7 @@ public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTa
       f.generable (_object).print ('.').print (name);
     else
       if (_explicitThis)
-        f.print ("").print (name);
+        f.print ("this").print (name);
       else
         f.id (name);
   }
