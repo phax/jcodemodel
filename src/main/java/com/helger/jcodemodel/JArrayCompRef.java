@@ -45,7 +45,7 @@ import javax.annotation.Nonnull;
 /**
  * array component reference.
  */
-public class JArrayCompRef extends AbstractJExpressionImpl implements IJAssignmentTarget
+public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
 {
   /**
    * JArray expression upon which this component will be accessed.
@@ -88,71 +88,5 @@ public class JArrayCompRef extends AbstractJExpressionImpl implements IJAssignme
   public void generate (@Nonnull final JFormatter f)
   {
     f.generable (_array).print ('[').generable (_index).print (']');
-  }
-
-  @Nonnull
-  public JAssignment assign (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assign (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignPlus (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignPlus (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignMinus (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignMinus (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignTimes (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignTimes (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignDivide (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignDivide (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignShl (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignShl (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignShr (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignShr (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignShrz (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignShrz (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignBand (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignBand (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignXor (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignXor (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignBor (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignBor (this, rhs);
   }
 }

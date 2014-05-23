@@ -298,7 +298,7 @@ public class JFormatter implements Closeable
   @Nonnull
   public JFormatter print (@Nonnull final String s)
   {
-    if (!s.isEmpty() && _mode == EMode.PRINTING)
+    if (_mode == EMode.PRINTING && s.length () > 0)
     {
       _spaceIfNeeded (s.charAt (0));
       _pw.print (s);

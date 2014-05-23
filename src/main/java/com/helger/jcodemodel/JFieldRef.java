@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 /**
  * Field Reference
  */
-public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTarget, IJOwnedMaybe
+public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implements IJOwnedMaybe
 {
   private final JCodeModel _owner;
 
@@ -172,74 +172,8 @@ public class JFieldRef extends AbstractJExpressionImpl implements IJAssignmentTa
       f.generable (_object).print ('.').print (name);
     else
       if (_explicitThis)
-        f.print ("this").print (name);
+        f.print ("this.").print (name);
       else
         f.id (name);
-  }
-
-  @Nonnull
-  public JAssignment assign (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assign (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignPlus (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignPlus (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignMinus (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignMinus (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignTimes (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignTimes (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignDivide (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignDivide (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignShl (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignShl (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignShr (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignShr (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignShrz (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignShrz (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignBand (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignBand (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignXor (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignXor (this, rhs);
-  }
-
-  @Nonnull
-  public JAssignment assignBor (@Nonnull final IJExpression rhs)
-  {
-    return JExpr.assignBor (this, rhs);
   }
 }

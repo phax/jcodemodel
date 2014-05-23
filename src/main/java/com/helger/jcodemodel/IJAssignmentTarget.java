@@ -60,6 +60,62 @@ public interface IJAssignmentTarget extends IJExpression
   /**
    * @param rhs
    *        Expression to assign
+   * @return <code>this = <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assign (boolean rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this = <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assign (char rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this = <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assign (double rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this = <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assign (float rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this = <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assign (int rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this = <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assign (long rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this = <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assign (@Nonnull String rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
    * @return <code>this += <em>rhs</em></code>
    */
   @Nonnull

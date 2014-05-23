@@ -200,6 +200,12 @@ public final class JExpr
   }
 
   @Nonnull
+  public static JFieldRef ref (@Nonnull final JVar field)
+  {
+    return new JFieldRef ((IJExpression) null, field);
+  }
+
+  @Nonnull
   public static JFieldRef ref (@Nonnull final String field)
   {
     return new JFieldRef ((IJExpression) null, field);
@@ -223,9 +229,32 @@ public final class JExpr
    * @return [this].[field]
    */
   @Nonnull
+  public static JFieldRef refthis (@Nonnull final JVar field)
+  {
+    return new JFieldRef (null, field, true);
+  }
+
+  /**
+   * @param field
+   *        field name to reference
+   * @return [this].[field]
+   */
+  @Nonnull
   public static JFieldRef refthis (@Nonnull final String field)
   {
     return new JFieldRef (null, field, true);
+  }
+
+  @Nonnull
+  public static JFieldRef refthis (@Nullable final IJExpression lhs, @Nonnull final JVar field)
+  {
+    return new JFieldRef (lhs, field, true);
+  }
+
+  @Nonnull
+  public static JFieldRef refthis (@Nullable final IJExpression lhs, @Nonnull final String field)
+  {
+    return new JFieldRef (lhs, field, true);
   }
 
   @Nonnull

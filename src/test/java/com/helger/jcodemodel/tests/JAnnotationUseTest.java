@@ -10,13 +10,16 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
 
+/**
+ * Unit test for class {@link JAnnotationUse}.
+ * 
+ * @author Philip Helger
+ */
 public class JAnnotationUseTest
 {
-
   @Test
   public void generatesGenericParam () throws JClassAlreadyExistsException
   {
-
     final JCodeModel codeModel = new JCodeModel ();
     final JDefinedClass testClass = codeModel._class ("Test");
     final JAnnotationUse suppressWarningAnnotation = testClass.annotate (SuppressWarnings.class);
@@ -26,5 +29,4 @@ public class JAnnotationUseTest
                          CodeModelTestsUtils.generate (suppressWarningAnnotation));
 
   }
-
 }

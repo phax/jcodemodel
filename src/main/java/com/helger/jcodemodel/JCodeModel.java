@@ -182,23 +182,20 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
-  public JDefinedClass _class (final String fullyqualifiedName) throws JClassAlreadyExistsException
+  public JDefinedClass _class (@Nonnull final String fullyqualifiedName) throws JClassAlreadyExistsException
   {
     return _class (fullyqualifiedName, EClassType.CLASS);
   }
 
   /**
-   * Creates a dummy, unknown {@link AbstractJClass} that represents a given
-   * name.
-   * <p>
-   * This method is useful when the code generation needs to include the
-   * user-specified class that may or may not exist, and only thing known about
-   * it is a class name.
+   * Creates a new generated class.
+   * 
+   * @exception JClassAlreadyExistsException
+   *            When the specified class/interface was already created.
    */
-  @Nonnull
-  public AbstractJClass directClass (@Nonnull final String name)
+  public JDefinedClass _class (final int mods, @Nonnull final String fullyqualifiedName) throws JClassAlreadyExistsException
   {
-    return new JDirectClass (this, name);
+    return _class (mods, fullyqualifiedName, EClassType.CLASS);
   }
 
   /**
@@ -208,7 +205,7 @@ public final class JCodeModel
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int mods, @Nonnull final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int mods, @Nonnull final String fullyqualifiedName, @Nonnull final EClassType t) throws JClassAlreadyExistsException
   {
     final int idx = fullyqualifiedName.lastIndexOf ('.');
     if (idx < 0)
@@ -223,9 +220,23 @@ public final class JCodeModel
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final String fullyqualifiedName, final EClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (@Nonnull final String fullyqualifiedName, @Nonnull final EClassType t) throws JClassAlreadyExistsException
   {
     return _class (JMod.PUBLIC, fullyqualifiedName, t);
+  }
+
+  /**
+   * Creates a dummy, unknown {@link AbstractJClass} that represents a given
+   * name.
+   * <p>
+   * This method is useful when the code generation needs to include the
+   * user-specified class that may or may not exist, and only thing known about
+   * it is a class name.
+   */
+  @Nonnull
+  public AbstractJClass directClass (@Nonnull final String name)
+  {
+    return new JDirectClass (this, name);
   }
 
   /**
