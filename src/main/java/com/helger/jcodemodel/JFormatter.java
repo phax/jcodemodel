@@ -525,6 +525,7 @@ public class JFormatter implements Closeable
     // generate import statements
     final AbstractJClass [] imports = _importedClasses.toArray (new AbstractJClass [_importedClasses.size ()]);
     Arrays.sort (imports);
+    boolean bAnyImport = false;
     for (AbstractJClass clazz : imports)
     {
       // suppress import statements for primitive types, built-in types,
@@ -538,9 +539,12 @@ public class JFormatter implements Closeable
         }
 
         print ("import").print (clazz.fullName ()).print (';').newline ();
+        bAnyImport = true;
       }
     }
-    newline ();
+
+    if (bAnyImport)
+      newline ();
 
     declaration (c);
   }
@@ -549,46 +553,55 @@ public class JFormatter implements Closeable
    * determine if an import statement should be suppressed
    * 
    * @param clazz
-   *        JType that may or may not have an import
-   * @param c
-   *        JType that is the current class being processed
+   *        {@link AbstractJClass} that may or may not have an import
+   * @param aGeneratingClass
+   *        {@link AbstractJClass} that is the current class being processed
    * @return true if an import statement should be suppressed, false otherwise
    */
-  private boolean _supressImport (@Nonnull final AbstractJClass aImportClass, @Nonnull final AbstractJClass c)
+  private boolean _supressImport (@Nonnull final AbstractJClass aImportClass,
+                                  @Nonnull final AbstractJClass aGeneratingClass)
   {
-    AbstractJClass clazz = aImportClass;
-    if (clazz instanceof JAnonymousClass)
+    AbstractJClass aRealImportClass = aImportClass;
+    if (aRealImportClass instanceof JAnonymousClass)
     {
-      clazz = clazz._extends ();
+      aRealImportClass = aRealImportClass._extends ();
     }
-    if (clazz instanceof JNarrowedClass)
+    if (aRealImportClass instanceof JNarrowedClass)
     {
-      clazz = clazz.erasure ();
+      aRealImportClass = aRealImportClass.erasure ();
     }
 
-    final JPackage pkg = clazz._package ();
-    if (pkg == null)
+    final JPackage aImportPackage = aRealImportClass._package ();
+    if (aImportPackage == null)
     {
       // May be null for JTypeVar
       return true;
     }
-    if (pkg.isUnnamed ())
+    if (aImportPackage.isUnnamed ())
       return true;
 
-    if (pkg == _javaLang)
+    if (aImportPackage == _javaLang)
     {
       // no need to explicitly import java.lang classes
       return true;
     }
 
-    if (pkg == c._package ())
+    if (aImportPackage == aGeneratingClass._package ())
     {
       // inner classes require an import stmt.
       // All other pkg local classes do not need an
       // import stmt for ref.
-      if (clazz.outer () == null)
+      final AbstractJClass aOuterImportClass = aRealImportClass.outer ();
+      if (aOuterImportClass == null)
       {
-        return true; // no need to explicitly import a class into itself
+        // no need to explicitly import a class into itself
+        return true;
+      }
+
+      if (aOuterImportClass == aGeneratingClass)
+      {
+        // No need to generate an import on an inner class defined in this class
+        return true;
       }
     }
     return false;

@@ -878,10 +878,11 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
     {
       for (final JEnumConstant c : _enumConstantsByName.values ())
       {
-        if (!first)
+        if (first)
+          first = false;
+        else
           f.print (',').newline ();
         f.declaration (c);
-        first = false;
       }
       f.print (';').newline ();
     }

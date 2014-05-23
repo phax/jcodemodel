@@ -120,14 +120,14 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     if (owner == null)
       throw new NullPointerException ("codeModel");
 
-    this._owner = owner;
+    _owner = owner;
 
     if (_owner.isCaseSensitiveFileSystem)
       _upperCaseClassMap = null;
     else
       _upperCaseClassMap = new HashMap <String, JDefinedClass> ();
 
-    this._name = name;
+    _name = name;
   }
 
   @Nullable
@@ -520,7 +520,10 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     for (final JDefinedClass c : _classes.values ())
     {
       if (c.isHidden ())
-        continue; // don't generate this file
+      {
+        // don't generate this file
+        continue;
+      }
 
       final JFormatter f = _createJavaSourceFileWriter (src, c.name ());
       f.write (c);
@@ -559,22 +562,26 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /* package */int countArtifacts ()
   {
-    int r = 0;
+    int ret = 0;
     for (final JDefinedClass c : _classes.values ())
     {
       if (c.isHidden ())
-        continue; // don't generate this file
-      r++;
+      {
+        // don't generate this file
+        continue;
+      }
+      ret++;
     }
 
     if (_annotations != null || _jdoc != null)
     {
-      r++;
+      // package-info
+      ret++;
     }
 
-    r += _resources.size ();
+    ret += _resources.size ();
 
-    return r;
+    return ret;
   }
 
   @Nonnull
