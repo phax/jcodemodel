@@ -124,10 +124,90 @@ public interface IJAssignmentTarget extends IJExpression
   /**
    * @param rhs
    *        Expression to assign
+   * @return <code>this += <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignPlus (@Nonnull char rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this += <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignPlus (@Nonnull double rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this += <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignPlus (@Nonnull float rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this += <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignPlus (@Nonnull int rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this += <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignPlus (@Nonnull long rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this += <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignPlus (@Nonnull String rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
    * @return <code>this -= <em>rhs</em></code>
    */
   @Nonnull
   IJExpressionStatement assignMinus (@Nonnull IJExpression rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this -= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignMinus (double rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this -= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignMinus (float rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this -= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignMinus (int rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this -= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignMinus (long rhs);
 
   /**
    * @param rhs
@@ -140,10 +220,74 @@ public interface IJAssignmentTarget extends IJExpression
   /**
    * @param rhs
    *        Expression to assign
+   * @return <code>this *= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignTimes (double rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this *= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignTimes (float rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this *= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignTimes (int rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this *= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignTimes (long rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
    * @return <code>this /= <em>rhs</em></code>
    */
   @Nonnull
   IJExpressionStatement assignDivide (@Nonnull IJExpression rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this /= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignDivide (double rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this /= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignDivide (float rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this /= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignDivide (int rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this /= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignDivide (long rhs);
 
   /**
    * @param rhs
@@ -156,6 +300,14 @@ public interface IJAssignmentTarget extends IJExpression
   /**
    * @param rhs
    *        Expression to assign
+   * @return <code>this &lt;&lt;= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignShl (int rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
    * @return <code>this &gt;&gt;= <em>rhs</em></code>
    */
   @Nonnull
@@ -164,10 +316,26 @@ public interface IJAssignmentTarget extends IJExpression
   /**
    * @param rhs
    *        Expression to assign
+   * @return <code>this &gt;&gt;= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignShr (int rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
    * @return <code>this &gt;&gt;&gt;= <em>rhs</em></code>
    */
   @Nonnull
   IJExpressionStatement assignShrz (@Nonnull IJExpression rhs);
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this &gt;&gt;&gt;= <em>rhs</em></code>
+   */
+  @Nonnull
+  IJExpressionStatement assignShrz (int rhs);
 
   /**
    * @param rhs

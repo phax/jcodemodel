@@ -105,9 +105,69 @@ public abstract class AbstractJExpressionAssignmentTargetImpl extends AbstractJE
   }
 
   @Nonnull
+  public JAssignment assignPlus (final char rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignPlus (final double rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignPlus (final float rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignPlus (final int rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignPlus (final long rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignPlus (@Nonnull final String rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
+
+  @Nonnull
   public JAssignment assignMinus (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignMinus (this, rhs);
+  }
+
+  @Nonnull
+  public JAssignment assignMinus (final double rhs)
+  {
+    return assignMinus (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignMinus (final float rhs)
+  {
+    return assignMinus (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignMinus (final int rhs)
+  {
+    return assignMinus (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignMinus (final long rhs)
+  {
+    return assignMinus (JExpr.lit (rhs));
   }
 
   @Nonnull
@@ -117,9 +177,57 @@ public abstract class AbstractJExpressionAssignmentTargetImpl extends AbstractJE
   }
 
   @Nonnull
+  public JAssignment assignTimes (final double rhs)
+  {
+    return assignTimes (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignTimes (final float rhs)
+  {
+    return assignTimes (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignTimes (final int rhs)
+  {
+    return assignTimes (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignTimes (final long rhs)
+  {
+    return assignTimes (JExpr.lit (rhs));
+  }
+
+  @Nonnull
   public JAssignment assignDivide (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignDivide (this, rhs);
+  }
+
+  @Nonnull
+  public JAssignment assignDivide (final double rhs)
+  {
+    return assignDivide (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignDivide (final float rhs)
+  {
+    return assignDivide (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignDivide (final int rhs)
+  {
+    return assignDivide (JExpr.lit (rhs));
+  }
+
+  @Nonnull
+  public JAssignment assignDivide (final long rhs)
+  {
+    return assignDivide (JExpr.lit (rhs));
   }
 
   @Nonnull
@@ -129,15 +237,33 @@ public abstract class AbstractJExpressionAssignmentTargetImpl extends AbstractJE
   }
 
   @Nonnull
+  public JAssignment assignShl (final int rhs)
+  {
+    return assignShl (JExpr.lit (rhs));
+  }
+
+  @Nonnull
   public JAssignment assignShr (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignShr (this, rhs);
   }
 
   @Nonnull
+  public JAssignment assignShr (final int rhs)
+  {
+    return assignShr (JExpr.lit (rhs));
+  }
+
+  @Nonnull
   public JAssignment assignShrz (@Nonnull final IJExpression rhs)
   {
     return JExpr.assignShrz (this, rhs);
+  }
+
+  @Nonnull
+  public JAssignment assignShrz (final int rhs)
+  {
+    return assignShrz (JExpr.lit (rhs));
   }
 
   @Nonnull
