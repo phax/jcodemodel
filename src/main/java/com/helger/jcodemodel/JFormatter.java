@@ -593,15 +593,14 @@ public class JFormatter implements Closeable
        *     relies on programmers to explicitly import inner class
        *
        * We can classify these to cases like this:
-       *
-       *     // Import inner class in second case only:
-       *     if (reference.name().contains(outer.name()) && _isImportable(outer, clazz))
-       *       return true;
-       *
-       *     // Do not import inner classes to aid readability.
-       *     return false;
        */
-      return true;
+
+      // Import inner class in second case only:
+      if (reference.name().contains(outer.name()) && _isImportable(outer, clazz))
+        return true;
+
+      // Do not import inner classes to aid readability.
+      return false;
     }
 
     /*
