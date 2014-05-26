@@ -498,6 +498,8 @@ public class JFormatter implements Closeable
     _mode = EMode.COLLECTING;
     declaration (c);
 
+    _collectReferencesToOuterClasses(c);
+
     // collate type names and identifiers to determine which types can be
     // imported
     for (final Usages tl : _collectedReferences.values ())
@@ -659,6 +661,45 @@ public class JFormatter implements Closeable
       }
     }
     return false;
+  }
+
+  /**
+   * If inner class can't be imported, try to import it's outer class
+   */
+  private void _collectReferencesToOuterClasses(@Nonnull final JDefinedClass c) {
+    boolean newReferenceFound = true;
+    while (newReferenceFound)
+    {
+      newReferenceFound = false;
+      for (final Usages tl : _collectedReferences.values ())
+      {
+        if (!tl.isAmbiguousIn (c) && !tl.isVariableName ())
+        {
+          AbstractJClass reference = tl.getSingleReferencedType();
+          AbstractJClass outer = reference.outer ();
+          if (!_isImportable (reference, c) && outer != null)
+          {
+            reference = outer;
+            outer = reference.outer ();
+            while (!_isImportable (reference, c) && outer != null)
+            {
+                reference = outer;
+                outer = reference.outer ();
+            }
+            final String shortName = reference.name ();
+            Usages usages = _collectedReferences.get (shortName);
+            if (usages == null)
+            {
+              usages = new Usages ();
+              _collectedReferences.put (shortName, usages);
+            }
+            newReferenceFound = usages.addReferencedType (reference);
+            if (newReferenceFound)
+              break;
+          }
+        }
+      }
+    }
   }
 
   /**
