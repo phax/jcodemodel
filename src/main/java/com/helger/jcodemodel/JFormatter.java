@@ -562,6 +562,46 @@ public class JFormatter implements Closeable
    * @return true if an import statement can be used to shorten references to referenced class
    */
   private boolean _isImportable(@Nonnull AbstractJClass reference, @Nonnull JDefinedClass clazz) {
+    AbstractJClass outer = reference.outer ();
+    if (outer != null)
+    {
+      AbstractJClass topLevel = outer;
+      AbstractJClass topLevelOuter = topLevel.outer ();
+      while (topLevelOuter != null)
+      {
+        topLevel = topLevelOuter;
+        topLevelOuter = topLevel.outer ();
+      }
+
+      // Inner class can be private and be referenced from anywhere up to it's top level class.
+      // It's ok that private class is referenced in such case,
+      // but it's an error to import such class.
+      if (topLevel == clazz)
+        return false;
+
+      /*
+       * TODO: Do not import inner classes to aid readability.
+       * There are two main inner classes naming conventions.
+       * Each of them relies on different importing policy.
+       *
+       *  1. `Point.Double`
+       *     class relies on programmers not to import inner class
+       *
+       *  2. `AbstractList.AbstractListIterator`
+       *     relies on programmers to explicitly import inner class
+       *
+       * We can classify these to cases like this:
+       *
+       *     // Import inner class in second case only:
+       *     if (reference.name().contains(outer.name()) && _isImportable(outer, clazz))
+       *       return true;
+       *
+       *     // Do not import inner classes to aid readability.
+       *     return false;
+       */
+      return true;
+    }
+
     /*
      * if (reference.outer () != null) return false; // avoid importing inner class
      * to work around 6431987. // Also see jaxb issue 166
