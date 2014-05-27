@@ -377,28 +377,14 @@ public class JFormatter implements Closeable
       case COLLECTING:
         // see if there is a type name that collides with this id
         Usages usage = _collectedReferences.get (id);
-        if (usage != null)
-        {
-          // FIXME: Strangely special processing of inner-classes references
-          // Why is this?
-          // Should this be removed?
-          for (final AbstractJClass type : usage.getReferencedTypes ())
-            if (type.outer () != null)
-            {
-              usage.setVariableName (false);
-              return this;
-            }
-          usage.setVariableName (true);
-        }
-        else
+        if (usage == null)
         {
           // not a type, but we need to create a place holder to
           // see if there might be a collision with a type
           usage = new Usages ();
-          usage.setVariableName (true);
           _collectedReferences.put (id, usage);
         }
-
+        usage.setVariableName ();
         break;
     }
     return this;
@@ -502,18 +488,27 @@ public class JFormatter implements Closeable
     _mode = EMode.COLLECTING;
     declaration (c);
 
-    _collectReferencesToOuterClasses (c);
-
     // collate type names and identifiers to determine which types can be
     // imported
     for (final Usages usage : _collectedReferences.values ())
     {
       if (!usage.isAmbiguousIn (c) && !usage.isVariableName ())
       {
-        final AbstractJClass reference = usage.getFirstReferencedType ();
+        final AbstractJClass reference = usage.getSingleReferencedType ();
 
-        if (_isImportable (reference, c))
+        if (_shouldBeImported (reference, c))
           _importedClasses.add (reference);
+        else
+        {
+          _importOuterClassIfCausesNoAmbiguities (reference, c);
+        }
+      }
+      else
+      {
+        for (final AbstractJClass reference: usage.getReferencedTypes())
+        {
+          _importOuterClassIfCausesNoAmbiguities (reference, c);
+        }
       }
     }
 
@@ -559,7 +554,8 @@ public class JFormatter implements Closeable
   }
 
   /**
-   * determine if an import statement can be used for given class
+   * determine if an import statement should be used for given class.
+   * This is a matter of style and convention
    * 
    * @param reference
    *        {@link AbstractJClass} referenced class
@@ -568,50 +564,30 @@ public class JFormatter implements Closeable
    * @return true if an import statement can be used to shorten references to
    *         referenced class
    */
-  private boolean _isImportable (@Nonnull final AbstractJClass reference, @Nonnull final JDefinedClass clazz)
+  private boolean _shouldBeImported (@Nonnull AbstractJClass reference, @Nonnull final JDefinedClass clazz)
   {
+    if (reference instanceof JAnonymousClass)
+    {
+      reference = ((JAnonymousClass)reference)._extends ();
+    }
+    if (reference instanceof JNarrowedClass)
+    {
+      reference = reference.erasure ();
+    }
+
     final AbstractJClass outer = reference.outer ();
     if (outer != null)
     {
-      // "reference" is an inner class
-
-      // Find absolute outer class
-      AbstractJClass topLevel = outer;
-      AbstractJClass topLevelOuter = topLevel.outer ();
-      while (topLevelOuter != null)
-      {
-        topLevel = topLevelOuter;
-        topLevelOuter = topLevel.outer ();
-      }
-
-      // Inner class can be private and be referenced from anywhere up to it's
-      // top level class.
-      // It's ok that private class is referenced in such case,
-      // but it's an error to import such class.
-      if (topLevel == clazz)
-        return false;
-
-      /*
-       * TODO: Do not import inner classes to aid readability. There are two
-       * main inner classes naming conventions. Each of them relies on different
-       * importing policy. 1. `Point.Double` class relies on programmers not to
-       * import inner class 2. `AbstractList.AbstractListIterator` relies on
-       * programmers to explicitly import inner class We can classify these to
-       * cases like this:
-       */
-
-      // Import inner class in second case only:
-      if (reference.name ().contains (outer.name ()) && _isImportable (outer, clazz))
+      // Import inner class only when it's name contain a name of enclosing class.
+      // In such case no information is lost when we refer to inner class without mentioning
+      // it's enclosing class
+      if (reference.name ().contains (outer.name ()) && _shouldBeImported (outer, clazz))
         return true;
 
-      // Do not import inner classes to aid readability.
+      // Do not import inner classes in all other cases to aid understandability/readability.
       return false;
     }
 
-    /*
-     * if (reference.outer () != null) return false; // avoid importing inner
-     * class to work around 6431987. // Also see jaxb issue 166
-     */
     return true;
   }
 
@@ -624,88 +600,94 @@ public class JFormatter implements Closeable
    *        {@link AbstractJClass} that is the current class being processed
    * @return true if an import statement should be suppressed, false otherwise
    */
-  private boolean _isImplicitlyImported (@Nonnull final AbstractJClass aImportClass,
-                                         @Nonnull final AbstractJClass aGeneratingClass)
+  private boolean _isImplicitlyImported (@Nonnull AbstractJClass reference,
+                                         @Nonnull final AbstractJClass clazz)
   {
-    AbstractJClass aRealImportClass = aImportClass;
-    if (aRealImportClass instanceof JAnonymousClass)
+    if (reference instanceof JAnonymousClass)
     {
-      aRealImportClass = aRealImportClass._extends ();
+      reference = ((JAnonymousClass)reference)._extends ();
     }
-    if (aRealImportClass instanceof JNarrowedClass)
+    if (reference instanceof JNarrowedClass)
     {
-      aRealImportClass = aRealImportClass.erasure ();
+      reference = reference.erasure ();
     }
 
-    final JPackage aImportPackage = aRealImportClass._package ();
-    if (aImportPackage == null)
+    final JPackage pkg = reference._package ();
+
+    // FIXME: _package is defined as @Nonnull?
+    if (pkg == null)
     {
       // May be null for JTypeVar
       return true;
     }
-    if (aImportPackage.isUnnamed ())
+
+    if (pkg.isUnnamed ())
       return true;
 
-    if (aImportPackage == _javaLang)
+    if (pkg == _javaLang)
     {
       // no need to explicitly import java.lang classes
       return true;
     }
 
-    if (aImportPackage == aGeneratingClass._package ())
+    // All pkg local classes do not need an
+    // import stmt for ref, except for inner classes
+    if (pkg == clazz._package ())
     {
-      // inner classes require an import stmt.
-      // All other pkg local classes do not need an
-      // import stmt for ref.
-      final AbstractJClass aOuterImportClass = aRealImportClass.outer ();
-      if (aOuterImportClass == null)
+      AbstractJClass outer = reference.outer ();
+      if (outer == null) // top-level class
       {
-        // no need to explicitly import a class into itself
+        // top-level package-local class needs no explicit import
         return true;
+      }
+      else // inner-class
+      {
+        AbstractJClass topLevel = outer;
+        outer = topLevel.outer ();
+        while (outer != null)
+        {
+          topLevel = outer;
+          outer = topLevel.outer ();
+        }
+
+        // if reference is inner-class and
+        // reference's top-level class is generated clazz,
+        // i. e. reference is enclosed in generated clazz,
+        // then it needs no explicit import statement.
+        return topLevel == clazz;
       }
     }
     return false;
   }
 
   /**
-   * If inner class can't be imported, try to import it's outer class
+   * If reference is inner-class adds some outer class to the list of imported classes
+   * if it
+   *
+   * @param clazz
+   *        {@link AbstractJClass} that may or may not have an import
+   * @param aGeneratingClass
+   *        {@link AbstractJClass} that is the current class being processed
+   * @return true if an import statement should be suppressed, false otherwise
    */
-  private void _collectReferencesToOuterClasses (@Nonnull final JDefinedClass c)
+  private void _importOuterClassIfCausesNoAmbiguities (@Nonnull final AbstractJClass reference,
+                                                       @Nonnull final JDefinedClass clazz)
   {
-    boolean newReferenceFound = true;
-    while (newReferenceFound)
+    final AbstractJClass outer = reference.outer ();
+    if (outer != null)
     {
-      newReferenceFound = false;
-      // Avoid concurrent modification
-      for (final Usages usage : new ArrayList <Usages> (_collectedReferences.values ()))
-      {
-        if (!usage.isAmbiguousIn (c) && !usage.isVariableName ())
-        {
-          AbstractJClass reference = usage.getFirstReferencedType ();
-          AbstractJClass outer = reference.outer ();
-          if (outer != null && !_isImportable (reference, c))
-          {
-            reference = outer;
-            outer = reference.outer ();
-            while (!_isImportable (reference, c) && outer != null)
-            {
-              reference = outer;
-              outer = reference.outer ();
-            }
-            final String shortName = reference.name ();
-            Usages usageShort = _collectedReferences.get (shortName);
-            if (usageShort == null)
-            {
-              usageShort = new Usages ();
-              _collectedReferences.put (shortName, usageShort);
-            }
-            newReferenceFound = usageShort.addReferencedType (reference);
-            if (newReferenceFound)
-              break;
-          }
-        }
-      }
+      if (_causesNoAmbiguities (outer, clazz) && _shouldBeImported (outer, clazz))
+        _importedClasses.add (outer);
+      else
+        _importOuterClassIfCausesNoAmbiguities (outer, clazz);
     }
+  }
+
+  private boolean _causesNoAmbiguities (@Nonnull final AbstractJClass reference,
+                                        @Nonnull final JDefinedClass clazz)
+  {
+    Usages usage = _collectedReferences.get (reference.name());
+    return usage == null || (!usage.isAmbiguousIn(clazz) && usage.containsReferencedType(reference));
   }
 
   /**
@@ -771,21 +753,38 @@ public class JFormatter implements Closeable
       return _referencedClasses.add (clazz);
     }
 
+    public boolean containsReferencedType (final AbstractJClass clazz)
+    {
+      return _referencedClasses.contains (clazz);
+    }
+
+    @Nonnull
+    public AbstractJClass getSingleReferencedType ()
+    {
+      assert _referencedClasses.size () == 1;
+      return _referencedClasses.get (0);
+    }
+
     @Nonnull
     public List <AbstractJClass> getReferencedTypes ()
     {
       return _referencedClasses;
     }
 
-    public AbstractJClass getFirstReferencedType ()
+    public void setVariableName ()
     {
-      assert !_referencedClasses.isEmpty ();
-      return _referencedClasses.get (0);
-    }
-
-    public void setVariableName (final boolean isVariableName)
-    {
-      _isVariableName = isVariableName;
+      // FIXME: Strangely special processing of inner-classes references
+      // Why is this?
+      // Should this be removed?
+      for (final AbstractJClass type : _referencedClasses)
+      {
+        if (type.outer () != null)
+        {
+          _isVariableName = false;
+          return;
+        }
+      }
+      _isVariableName = true;
     }
 
     /**
