@@ -12,7 +12,7 @@ public class JOpUnary extends AbstractJExpressionImpl
   {
     this._op = op;
     this._e = e;
-    opFirst = false;
+    opFirst = true;
   }
 
   protected JOpUnary (@Nonnull final IJExpression e, @Nonnull final String op)

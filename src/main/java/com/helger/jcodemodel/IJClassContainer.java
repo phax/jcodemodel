@@ -40,6 +40,7 @@
 
 package com.helger.jcodemodel;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -107,7 +108,7 @@ public interface IJClassContainer extends IJOwned
   /**
    * Returns an iterator that walks the nested classes defined in this class.
    */
-  Iterator <JDefinedClass> classes ();
+  Collection <JDefinedClass> classes ();
 
   /**
    * Parent JClassContainer. If this is a package, this method returns a parent

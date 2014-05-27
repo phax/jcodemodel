@@ -412,9 +412,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    * package.
    */
   @Nonnull
-  public Iterator <JDefinedClass> classes ()
+  public Collection <JDefinedClass> classes ()
   {
-    return _classes.values ().iterator ();
+    return _classes.values ();
   }
 
   /**

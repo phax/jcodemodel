@@ -793,11 +793,11 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * Returns an iterator that walks the nested classes defined in this class.
    */
   @Nonnull
-  public final Iterator <JDefinedClass> classes ()
+  public final Collection <JDefinedClass> classes ()
   {
     if (_classes == null)
-      return Collections.<JDefinedClass> emptyList ().iterator ();
-    return _classes.values ().iterator ();
+      return Collections.<JDefinedClass> emptyList ();
+    return _classes.values ();
   }
 
   @Nonnull
