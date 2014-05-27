@@ -11,10 +11,10 @@ public class JOpTernary extends AbstractJExpressionImpl
   private final IJExpression _e3;
 
   protected JOpTernary (@Nonnull final IJExpression e1,
-                       @Nonnull final String op1,
-                       @Nonnull final IJExpression e2,
-                       @Nonnull final String op2,
-                       @Nonnull final IJExpression e3)
+                        @Nonnull final String op1,
+                        @Nonnull final IJExpression e2,
+                        @Nonnull final String op2,
+                        @Nonnull final IJExpression e3)
   {
     this._e1 = e1;
     this._op1 = op1;

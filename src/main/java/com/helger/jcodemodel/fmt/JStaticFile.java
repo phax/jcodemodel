@@ -51,7 +51,7 @@ import com.helger.jcodemodel.util.SecureLoader;
 
 /**
  * Allows an application to copy a resource file to the output.
- *
+ * 
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JStaticFile extends AbstractJResourceFile

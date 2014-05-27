@@ -258,7 +258,7 @@ public class JJavaName
 
   /**
    * <b>Experimental API:</b> converts an English word into a plural form.
-   *
+   * 
    * @param word
    *        a word, such as "child", "apple". Must not be null. It accepts word
    *        concatanation forms that are common in programming languages, such

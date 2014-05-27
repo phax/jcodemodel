@@ -41,7 +41,8 @@
 package com.helger.jcodemodel;
 
 import java.util.Collection;
-import java.util.Iterator;
+
+import javax.annotation.Nonnull;
 
 /**
  * The common aspect of a package and a class.
@@ -108,6 +109,7 @@ public interface IJClassContainer extends IJOwned
   /**
    * Returns an iterator that walks the nested classes defined in this class.
    */
+  @Nonnull
   Collection <JDefinedClass> classes ();
 
   /**

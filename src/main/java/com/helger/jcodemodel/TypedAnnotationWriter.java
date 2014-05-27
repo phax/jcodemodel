@@ -187,10 +187,10 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
   }
 
   private Object _addArrayValue (final Object proxy,
-                                final String name,
-                                final Class <?> itemType,
-                                final Class <?> expectedReturnType,
-                                final Object arg)
+                                 final String name,
+                                 final Class <?> itemType,
+                                 final Class <?> expectedReturnType,
+                                 final Object arg)
   {
     if (_arrays == null)
       _arrays = new HashMap <String, JAnnotationArrayMember> ();
@@ -263,7 +263,9 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
    */
   private W _createProxy ()
   {
-    return (W) Proxy.newProxyInstance (SecureLoader.getClassClassLoader (_writerType), new Class [] { _writerType }, this);
+    return (W) Proxy.newProxyInstance (SecureLoader.getClassClassLoader (_writerType),
+                                       new Class [] { _writerType },
+                                       this);
   }
 
   /**
