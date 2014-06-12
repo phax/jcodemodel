@@ -7,6 +7,7 @@ with other `com.sun.codemodel` instances that might be floating around in the cl
 
 News and noteworthy:
 
+* 2014-06-12: Release 2.7.4 - Bugfix release
 * 2014-05-23: Release 2.7.3 - Bugfix release
 * 2014-05-21: Release 2.7.2 - now on Maven Central
 * 2014-05-19: Release 2.7.1 - now as OSGi bundle
@@ -36,6 +37,6 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>2.7.3</version>
+  <version>2.7.4</version>
 </dependency>
 ```
