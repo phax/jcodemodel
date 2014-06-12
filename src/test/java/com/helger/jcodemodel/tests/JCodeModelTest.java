@@ -36,6 +36,8 @@ package com.helger.jcodemodel.tests;
  * holder.
  */
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
 import com.helger.jcodemodel.JCodeModel;
@@ -49,6 +51,7 @@ public class JCodeModelTest
   public void testParseArray () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
-    cm.parseType ("java.util.ArrayList<java.lang.String[]>[]");
+    assertNotNull (cm.parseType ("java.util.ArrayList<java.lang.String[]>[]"));
+    assertNotNull (cm.parseType ("java.util.ArrayList<java.util.ArrayList<java.util.ArrayList<java.lang.String[]>[]>[]>[]"));
   }
 }

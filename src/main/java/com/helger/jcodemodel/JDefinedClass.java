@@ -244,9 +244,10 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
       }
       for (int i = 1; i < name.length (); i++)
       {
-        if (!Character.isJavaIdentifierPart (name.charAt (i)))
+        final char c = name.charAt (i);
+        if (!Character.isJavaIdentifierPart (c))
         {
-          final String msg = "JClass name " + name + " contains illegal character " + name.charAt (i);
+          final String msg = "JClass name " + name + " contains illegal character " + c;
           throw new IllegalArgumentException (msg);
         }
       }
@@ -271,7 +272,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   }
 
   /**
-   * This class extends the specifed class.
+   * This class extends the specified class.
    * 
    * @param superClass
    *        Superclass for this class
@@ -934,6 +935,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   }
 
   @Override
+  @Nonnull
   public final JPackage _package ()
   {
     IJClassContainer p = _outer;

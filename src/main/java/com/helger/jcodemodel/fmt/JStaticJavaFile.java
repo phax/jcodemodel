@@ -257,6 +257,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
     }
 
     @Override
+    @Nonnull
     public JPackage _package ()
     {
       return _pkg;

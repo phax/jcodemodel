@@ -189,6 +189,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
+  @Nonnull
   public JPackage _package ()
   {
     return _basis._package ();

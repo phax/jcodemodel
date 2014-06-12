@@ -54,6 +54,7 @@ import java.util.Map;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.jcodemodel.util.NameUtilities;
 import com.helger.jcodemodel.util.SecureLoader;
@@ -92,12 +93,46 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  */
 public final class JCodeModel
 {
+  /**
+   * Conversion from primitive type {@link Class} (such as {@link Integer#TYPE})
+   * to its boxed type (such as <tt>Integer.class</tt>). It's an unmodifiable
+   * map.
+   */
+  public static final Map <Class <?>, Class <?>> primitiveToBox;
+
+  /**
+   * The reverse look up for {@link #primitiveToBox}. It's an unmodifiable map.
+   */
+  public static final Map <Class <?>, Class <?>> boxToPrimitive;
+
+  static
+  {
+    final Map <Class <?>, Class <?>> m1 = new HashMap <Class <?>, Class <?>> ();
+    final Map <Class <?>, Class <?>> m2 = new HashMap <Class <?>, Class <?>> ();
+
+    m1.put (Boolean.class, Boolean.TYPE);
+    m1.put (Byte.class, Byte.TYPE);
+    m1.put (Character.class, Character.TYPE);
+    m1.put (Double.class, Double.TYPE);
+    m1.put (Float.class, Float.TYPE);
+    m1.put (Integer.class, Integer.TYPE);
+    m1.put (Long.class, Long.TYPE);
+    m1.put (Short.class, Short.TYPE);
+    m1.put (Void.class, Void.TYPE);
+
+    // Swap keys and values
+    for (final Map.Entry <Class <?>, Class <?>> e : m1.entrySet ())
+      m2.put (e.getValue (), e.getKey ());
+
+    boxToPrimitive = Collections.unmodifiableMap (m1);
+    primitiveToBox = Collections.unmodifiableMap (m2);
+  }
 
   /** The packages that this JCodeWriter contains. */
-  private final HashMap <String, JPackage> _packages = new HashMap <String, JPackage> ();
+  private final Map <String, JPackage> _packages = new HashMap <String, JPackage> ();
 
   /** All JReferencedClasses are pooled here. */
-  private final HashMap <Class <?>, JReferencedClass> _refClasses = new HashMap <Class <?>, JReferencedClass> ();
+  private final Map <Class <?>, JReferencedClass> _refClasses = new HashMap <Class <?>, JReferencedClass> ();
 
   /** Obtains a reference to the special "null" type. */
   public final JNullType NULL = new JNullType (this);
@@ -131,12 +166,17 @@ public final class JCodeModel
       // wants to override.
       if (System.getProperty ("com.sun.codemodel.FileSystemCaseSensitive") != null)
         return true;
+
+      // Add special override to differentiate if Sun implementation is also in
+      // scope
+      if (System.getProperty ("com.helger.jcodemodel.FileSystemCaseSensitive") != null)
+        return true;
     }
     catch (final Exception e)
     {}
 
     // on Unix, it's case sensitive.
-    return (File.separatorChar == '/');
+    return File.separatorChar == '/';
   }
 
   public JCodeModel ()
@@ -182,6 +222,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
+  @Nonnull
   public JDefinedClass _class (@Nonnull final String fullyqualifiedName) throws JClassAlreadyExistsException
   {
     return _class (fullyqualifiedName, EClassType.CLASS);
@@ -193,6 +234,7 @@ public final class JCodeModel
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
+  @Nonnull
   public JDefinedClass _class (final int mods, @Nonnull final String fullyqualifiedName) throws JClassAlreadyExistsException
   {
     return _class (mods, fullyqualifiedName, EClassType.CLASS);
@@ -246,7 +288,7 @@ public final class JCodeModel
    * @see JPackage#_getClass(String)
    */
   @Nullable
-  public JDefinedClass _getClass (final String fullyQualifiedName)
+  public JDefinedClass _getClass (@Nonnull final String fullyQualifiedName)
   {
     final int idx = fullyQualifiedName.lastIndexOf ('.');
     if (idx < 0)
@@ -309,7 +351,7 @@ public final class JCodeModel
   /**
    * A convenience method for <code>build(destDir,System.out)</code>.
    */
-  public void build (final File destDir) throws IOException
+  public void build (@Nonnull final File destDir) throws IOException
   {
     build (destDir, System.out);
   }
@@ -317,7 +359,7 @@ public final class JCodeModel
   /**
    * A convenience method for <code>build(srcDir,resourceDir,System.out)</code>.
    */
-  public void build (final File srcDir, final File resourceDir) throws IOException
+  public void build (@Nonnull final File srcDir, @Nonnull final File resourceDir) throws IOException
   {
     build (srcDir, resourceDir, System.out);
   }
@@ -447,14 +489,17 @@ public final class JCodeModel
    * <p>
    * This method handles primitive types, arrays, and existing {@link Class}es.
    * 
-   * @exception ClassNotFoundException
-   *            If the specified type is not found.
+   * @return The internal representation of the specified name
    */
-  public AbstractJType parseType (@Nonnull final String name) throws ClassNotFoundException
+  @Nonnull
+  public AbstractJType parseType (@Nonnull final String name)
   {
     // array
     if (name.endsWith ("[]"))
+    {
+      // Simply remove trailing "[]"
       return parseType (name.substring (0, name.length () - 2)).array ();
+    }
 
     // try primitive type
     try
@@ -462,18 +507,21 @@ public final class JCodeModel
       return AbstractJType.parse (this, name);
     }
     catch (final IllegalArgumentException e)
-    {}
+    {
+      // NOt a primitive type
+    }
 
     // existing class
     return new TypeNameParser (name).parseTypeName ();
   }
 
+  @NotThreadSafe
   private final class TypeNameParser
   {
     private final String _s;
     private int _idx;
 
-    public TypeNameParser (final String s)
+    public TypeNameParser (@Nonnull final String s)
     {
       _s = s;
     }
@@ -482,9 +530,10 @@ public final class JCodeModel
      * Parses a type name token T (which can be potentially of the form
      * Tr&ly;T1,T2,...>, or "? extends/super T".)
      * 
-     * @return the index of the character next to T.
+     * @return The parsed type name
      */
-    AbstractJClass parseTypeName () throws ClassNotFoundException
+    @Nonnull
+    AbstractJClass parseTypeName ()
     {
       final int start = _idx;
 
@@ -524,7 +573,8 @@ public final class JCodeModel
      * Parses additional left-associative suffixes, like type arguments and
      * array specifiers.
      */
-    private AbstractJClass _parseSuffix (final AbstractJClass clazz) throws ClassNotFoundException
+    @Nonnull
+    private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass clazz)
     {
       if (_idx == _s.length ())
         return clazz; // hit EOL
@@ -561,7 +611,8 @@ public final class JCodeModel
      * 
      * @return the index of the character next to '>'
      */
-    private AbstractJClass _parseArguments (final AbstractJClass rawType) throws ClassNotFoundException
+    @Nonnull
+    private AbstractJClass _parseArguments (@Nonnull final AbstractJClass rawType)
     {
       if (_s.charAt (_idx) != '<')
         throw new IllegalArgumentException ();
@@ -634,6 +685,7 @@ public final class JCodeModel
     }
 
     @Override
+    @Nonnull
     public JPackage _package ()
     {
       final String name = fullName ();
@@ -733,38 +785,5 @@ public final class JCodeModel
       // TODO: does JDK 1.5 reflection provides these information?
       return this;
     }
-  }
-
-  /**
-   * Conversion from primitive type {@link Class} (such as {@link Integer#TYPE}
-   * to its boxed type (such as <tt>Integer.class</tt>)
-   */
-  public static final Map <Class <?>, Class <?>> primitiveToBox;
-  /**
-   * The reverse look up for {@link #primitiveToBox}
-   */
-  public static final Map <Class <?>, Class <?>> boxToPrimitive;
-
-  static
-  {
-    final Map <Class <?>, Class <?>> m1 = new HashMap <Class <?>, Class <?>> ();
-    final Map <Class <?>, Class <?>> m2 = new HashMap <Class <?>, Class <?>> ();
-
-    m1.put (Boolean.class, Boolean.TYPE);
-    m1.put (Byte.class, Byte.TYPE);
-    m1.put (Character.class, Character.TYPE);
-    m1.put (Double.class, Double.TYPE);
-    m1.put (Float.class, Float.TYPE);
-    m1.put (Integer.class, Integer.TYPE);
-    m1.put (Long.class, Long.TYPE);
-    m1.put (Short.class, Short.TYPE);
-    m1.put (Void.class, Void.TYPE);
-
-    // Swap keys and values
-    for (final Map.Entry <Class <?>, Class <?>> e : m1.entrySet ())
-      m2.put (e.getValue (), e.getKey ());
-
-    boxToPrimitive = Collections.unmodifiableMap (m1);
-    primitiveToBox = Collections.unmodifiableMap (m2);
   }
 }

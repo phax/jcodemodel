@@ -87,8 +87,11 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Gets the package to which this class belongs. TODO: shall we move move this
    * down?
+   * 
+   * @return The {@link JPackage} this class belongs to. Is usually not
+   *         <code>null</code> except for the {@link JTypeVar} and the
+   *         {@link JTypeWildcard} implementation.
    */
-  @Nonnull
   public abstract JPackage _package ();
 
   /**

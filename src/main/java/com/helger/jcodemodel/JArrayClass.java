@@ -87,6 +87,7 @@ public class JArrayClass extends AbstractJClass
   }
 
   @Override
+  @Nonnull
   public JPackage _package ()
   {
     return owner ().rootPackage ();
