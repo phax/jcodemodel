@@ -5,7 +5,6 @@
     <artifactId>parent-pom</artifactId>
     <version>1</version>
   </parent>
-  <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
   <version>2.7.5-SNAPSHOT</version>
   <packaging>bundle</packaging>
