@@ -294,7 +294,7 @@ public final class JExpr
 
   /**
    * Generates {@code new T[size]}.
-   * 
+   *
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
@@ -307,7 +307,7 @@ public final class JExpr
 
   /**
    * Generates {@code new T[size]}.
-   * 
+   *
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
    */
@@ -445,7 +445,7 @@ public final class JExpr
    * <p>
    * This method can be used as a short-cut to create a JExpression. For
    * example, instead of <code>_a.gt(_b)</code>, you can write it as:
-   * <code>JExpr.direct("a>b")</code>.
+   * <code>JExpr.direct("a&gt;b")</code>.
    * <p>
    * Be warned that there is a danger in using this method, as it obfuscates the
    * object model.
@@ -466,7 +466,7 @@ public final class JExpr
    * Just a sanity wrapper around
    * {@link JOp#cond(IJExpression, IJExpression, IJExpression)} for easier
    * finding.
-   * 
+   *
    * @param cond
    *        Condition
    * @param ifTrue

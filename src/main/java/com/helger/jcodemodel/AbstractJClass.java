@@ -77,7 +77,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Gets the name of this class.
-   * 
+   *
    * @return name of this class, without any qualification. For example, this
    *         method returns "String" for <code>java.lang.String</code>.
    */
@@ -87,7 +87,7 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Gets the package to which this class belongs. TODO: shall we move move this
    * down?
-   * 
+   *
    * @return The {@link JPackage} this class belongs to. Is usually not
    *         <code>null</code> except for the {@link JTypeVar} and the
    *         {@link JTypeWildcard} implementation.
@@ -112,7 +112,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Gets the super class of this class.
-   * 
+   *
    * @return Returns the {@link AbstractJClass} representing the superclass of
    *         the entity (class or interface) represented by this
    *         {@link AbstractJClass}. Even if no super class is given explicitly
@@ -125,7 +125,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Iterates all super interfaces directly implemented by this class/interface.
-   * 
+   *
    * @return A non-null valid iterator that iterates all {@link AbstractJClass}
    *         objects that represents those interfaces implemented by this
    *         object.
@@ -220,25 +220,25 @@ public abstract class AbstractJClass extends AbstractJType
    * Gets the parameterization of the given base type.
    * <p>
    * For example, given the following
-   * 
+   *
    * <pre>
-   * <xmp>
-   * interface Foo<T> extends List<List<T>> {}
-   * interface Bar extends Foo<String> {}
-   * </xmp>
+   * <code>
+   * interface Foo&lt;T&gt; extends List&lt;List&lt;T&gt;&gt; {}
+   * interface Bar extends Foo&lt;String&gt; {}
+   * </code>
    * </pre>
-   * 
+   *
    * This method works like this:
-   * 
+   *
    * <pre>
-   * <xmp>
-   * getBaseClass( Bar, List ) = List<List<String>
-   * getBaseClass( Bar, Foo  ) = Foo<String>
-   * getBaseClass( Foo<? extends Number>, Collection ) = Collection<List<? extends Number>>
-   * getBaseClass( ArrayList<? extends BigInteger>, List ) = List<? extends BigInteger>
-   * </xmp>
+   * <code>
+   * getBaseClass( Bar, List ) = List&lt;List&lt;String&gt;
+   * getBaseClass( Bar, Foo  ) = Foo&lt;String&gt;
+   * getBaseClass( Foo&lt;? extends Number&gt;, Collection ) = Collection&lt;List&lt;? extends Number&gt;&gt;
+   * getBaseClass( ArrayList&lt;? extends BigInteger&gt;, List ) = List&lt;? extends BigInteger&gt;
+   * </code>
    * </pre>
-   * 
+   *
    * @param baseType
    *        The class whose parameterization we are interested in.
    * @return The use of {@code baseType} in {@code this} type. or null if the
@@ -288,7 +288,8 @@ public abstract class AbstractJClass extends AbstractJType
    * "Narrows" a generic class to a concrete class by specifying a type
    * argument.
    * <p>
-   * <code>.narrow(X)</code> builds <code>Set&lt;X></code> from <code>Set</code>.
+   * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from
+   * <code>Set</code>.
    */
   @Nonnull
   public JNarrowedClass narrow (@Nonnull final Class <?> clazz)
@@ -309,7 +310,8 @@ public abstract class AbstractJClass extends AbstractJType
    * "Narrows" a generic class to a concrete class by specifying a type
    * argument.
    * <p>
-   * <code>.narrow(X)</code> builds <code>Set&lt;X></code> from <code>Set</code>.
+   * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from
+   * <code>Set</code>.
    */
   @Nonnull
   public JNarrowedClass narrow (final AbstractJClass clazz)
@@ -353,8 +355,8 @@ public abstract class AbstractJClass extends AbstractJType
    * Iterates all the type parameters of this class/interface.
    * <p>
    * For example, if this {@link AbstractJClass} represents
-   * <code>Set&lt;T></code>, this method returns an array that contains single
-   * {@link JTypeVar} for 'T'.
+   * <code>Set&lt;T&gt;</code>, this method returns an array that contains
+   * single {@link JTypeVar} for 'T'.
    */
   @Nonnull
   public JTypeVar [] typeParams ()
@@ -372,7 +374,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Create "? extends T" from T.
-   * 
+   *
    * @return never null
    */
   @Nonnull
@@ -383,7 +385,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Create "? super T" from T.
-   * 
+   *
    * @return never null
    */
   @Nonnull
@@ -394,7 +396,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Create "? extends T" from T or "? super T" from T.
-   * 
+   *
    * @param eMode
    *        "extends" or "super"
    * @return never null
@@ -408,9 +410,9 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Substitutes the type variables with their actual arguments.
    * <p>
-   * For example, when this class is Map&lt;String,Map&lt;V>>, (where V then
-   * doing substituteParams( V, Integer ) returns a {@link AbstractJClass} for
-   * <code>Map&lt;String,Map&lt;Integer>></code>.
+   * For example, when this class is Map&lt;String,Map&lt;V&gt;&gt;, (where V
+   * then doing substituteParams( V, Integer ) returns a {@link AbstractJClass}
+   * for <code>Map&lt;String,Map&lt;Integer&gt;&gt;</code>.
    * <p>
    * This method needs to work recursively.
    */

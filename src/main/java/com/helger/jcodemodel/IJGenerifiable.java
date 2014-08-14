@@ -47,37 +47,47 @@ import javax.annotation.Nonnull;
 /**
  * Declarations that can have type variables. Something that can be made into a
  * generic.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public interface IJGenerifiable
 {
   /**
    * Adds a new type variable to this declaration.
+   * 
+   * @return The created {@link JTypeVar}
    */
   @Nonnull
   JTypeVar generify (@Nonnull String name);
 
   /**
    * Adds a new type variable to this declaration with a bound.
+   * 
+   * @return The created {@link JTypeVar}
    */
   @Nonnull
   JTypeVar generify (@Nonnull String name, @Nonnull Class <?> bound);
 
   /**
    * Adds a new type variable to this declaration with a bound.
+   * 
+   * @return The created {@link JTypeVar}
    */
   @Nonnull
   JTypeVar generify (@Nonnull String name, @Nonnull AbstractJClass bound);
 
   /**
    * Iterates all the type parameters of this declaration.
+   *
+   * @return All type parameters
    */
   @Nonnull
   JTypeVar [] typeParams ();
 
   /**
    * Get a list of all type parameters of this declaration.
+   *
+   * @return All type parameters
    */
   @Nonnull
   List <JTypeVar> typeParamList ();

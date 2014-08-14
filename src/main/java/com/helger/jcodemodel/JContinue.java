@@ -48,30 +48,30 @@ import javax.annotation.Nullable;
  */
 public class JContinue implements IJStatement
 {
-  private final JLabel _label;
+  private final JLabel m_aLabel;
 
   /**
-   * JContinue constructor.
-   * 
-   * @param _label
-   *        a valid label or null.
+   * {@link JContinue} constructor.
+   *
+   * @param label
+   *        a valid label or <code>null</code>.
    */
-  protected JContinue (@Nullable final JLabel label)
+  public JContinue (@Nullable final JLabel label)
   {
-    this._label = label;
+    m_aLabel = label;
   }
 
   @Nullable
   public JLabel label ()
   {
-    return _label;
+    return m_aLabel;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
-    if (_label == null)
+    if (m_aLabel == null)
       f.print ("continue;").newline ();
     else
-      f.print ("continue ").print (_label.label ()).print (';').newline ();
+      f.print ("continue ").print (m_aLabel.label ()).print (';').newline ();
   }
 }

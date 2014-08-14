@@ -243,32 +243,32 @@ public interface IJExpression extends IJGenerable
   IJExpression shl (int right);
 
   /**
-   * @return <code>[this] >> [right]</code>.
+   * @return <code>[this] &gt;&gt; [right]</code>.
    */
   @Nonnull
   IJExpression shr (@Nonnull IJExpression right);
 
   /**
-   * @return <code>[this] >> [right]</code>.
+   * @return <code>[this] &gt;&gt; [right]</code>.
    */
   @Nonnull
   IJExpression shr (int right);
 
   /**
-   * @return <code>[this] >>> [right]</code>.
+   * @return <code>[this] &gt;&gt;&gt; [right]</code>.
    */
   @Nonnull
   IJExpression shrz (@Nonnull IJExpression right);
 
   /**
-   * @return <code>[this] >>> [right]</code>.
+   * @return <code>[this] &gt;&gt;&gt; [right]</code>.
    */
   @Nonnull
   IJExpression shrz (int right);
 
   /**
    * Bit-wise AND '&amp;'.
-   * 
+   *
    * @return <code>[this] &amp; [right]</code>.
    */
   @Nonnull
@@ -276,7 +276,7 @@ public interface IJExpression extends IJGenerable
 
   /**
    * Bit-wise OR '|'.
-   * 
+   *
    * @return <code>[this] | [right]</code>.
    */
   @Nonnull
@@ -284,7 +284,7 @@ public interface IJExpression extends IJGenerable
 
   /**
    * Logical AND '&amp;&amp;'.
-   * 
+   *
    * @return <code>[this] &amp;&amp; [right]</code>.
    */
   @Nonnull
@@ -292,7 +292,7 @@ public interface IJExpression extends IJGenerable
 
   /**
    * Logical OR '||'.
-   * 
+   *
    * @return <code>[this] || [right]</code>.
    */
   @Nonnull
@@ -354,7 +354,7 @@ public interface IJExpression extends IJGenerable
 
   /**
    * Equals
-   * 
+   *
    * @param right
    *        expression to compare to
    * @return <code><em>expr</em> == <em>right</em></code>
@@ -364,7 +364,7 @@ public interface IJExpression extends IJGenerable
 
   /**
    * Shortcut for <code>eq (JExpr._null ())</code>
-   * 
+   *
    * @return <code><em>expr</em> == null</code>
    */
   @Nonnull
@@ -372,7 +372,7 @@ public interface IJExpression extends IJGenerable
 
   /**
    * Shortcut for <code>eq (JExpr.lit (0))</code>
-   * 
+   *
    * @return <code><em>expr</em> == 0</code>
    */
   @Nonnull
@@ -380,7 +380,7 @@ public interface IJExpression extends IJGenerable
 
   /**
    * Not equals
-   * 
+   *
    * @param right
    *        expression to compare to
    * @return <code><em>expr</em> != <em>right</em></code>
@@ -390,7 +390,7 @@ public interface IJExpression extends IJGenerable
 
   /**
    * Shortcut for <code>ne (JExpr._null ())</code>
-   * 
+   *
    * @return Never <code><em>expr</em> != null</code>
    */
   @Nonnull
@@ -398,7 +398,7 @@ public interface IJExpression extends IJGenerable
 
   /**
    * Shortcut for <code>ne (JExpr.lit (0))</code>
-   * 
+   *
    * @return Never <code><em>expr</em> != 0</code>
    */
   @Nonnull
@@ -411,15 +411,15 @@ public interface IJExpression extends IJGenerable
   IJExpression _instanceof (@Nonnull AbstractJType right);
 
   /**
-   * @return <code>[this].[method]". Arguments shall be added to the returned
-   *         {@link JInvocation} object.
+   * @return <code>[this].[method]</code>. Arguments shall be added to the
+   *         returned {@link JInvocation} object.
    */
   @Nonnull
   JInvocation invoke (@Nonnull JMethod method);
 
   /**
-   * @return <code>[this].[method]". Arguments shall be added to the returned
-   *         {@link JInvocation} object.
+   * @return <code>[this].[method]</code>. Arguments shall be added to the
+   *         returned {@link JInvocation} object.
    */
   @Nonnull
   JInvocation invoke (@Nonnull String method);
@@ -447,8 +447,6 @@ public interface IJExpression extends IJGenerable
   JArrayCompRef component (int index);
 
   /**
-   * @param index
-   *        array index
    * @return <code>[this] [0]</code>
    */
   @Nonnull

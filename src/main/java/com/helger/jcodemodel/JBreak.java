@@ -48,30 +48,30 @@ import javax.annotation.Nullable;
  */
 public class JBreak implements IJStatement
 {
-  private final JLabel _label;
+  private final JLabel m_aLabel;
 
   /**
-   * JBreak constructor
-   * 
-   * @param _label
-   *        break label or null.
+   * {@link JBreak} constructor
+   *
+   * @param label
+   *        break label or <code>null</code>.
    */
-  protected JBreak (@Nullable final JLabel label)
+  public JBreak (@Nullable final JLabel label)
   {
-    _label = label;
+    m_aLabel = label;
   }
 
   @Nullable
   public JLabel label ()
   {
-    return _label;
+    return m_aLabel;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
-    if (_label == null)
+    if (m_aLabel == null)
       f.print ("break;").newline ();
     else
-      f.print ("break ").print (_label.label ()).print (';').newline ();
+      f.print ("break ").print (m_aLabel.label ()).print (';').newline ();
   }
 }

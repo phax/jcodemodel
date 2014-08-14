@@ -258,7 +258,7 @@ public class JJavaName
 
   /**
    * <b>Experimental API:</b> converts an English word into a plural form.
-   * 
+   *
    * @param word
    *        a word, such as "child", "apple". Must not be null. It accepts word
    *        concatanation forms that are common in programming languages, such
@@ -269,8 +269,8 @@ public class JJavaName
    *        <p>
    *        Although this method only works for English words, it handles
    *        non-English words gracefully (by just returning it as-is.) For
-   *        example, &#x65E5;&#x672C;&#x8A9E; will be returned as-is without
-   *        modified, not "&#x65E5;&#x672C;&#x8A9E;s"
+   *        example, \u65E5\u672C\u8A9E will be returned as-is without modified,
+   *        not "\u65E5\u672C\u8A9Es"
    *        <p>
    *        This method doesn't handle suffixes very well. For example, passing
    *        "person56" will return "person56s", not "people56".

@@ -49,8 +49,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * Represents X&lt;Y>. TODO: consider separating the decl and the use.
- * 
+ * Represents X&lt;Y&gt;. TODO: consider separating the decl and the use.
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JNarrowedClass extends AbstractJClass

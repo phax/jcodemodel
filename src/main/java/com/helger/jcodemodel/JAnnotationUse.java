@@ -47,7 +47,7 @@ import com.helger.jcodemodel.util.NameUtilities;
 /**
  * Represents an annotation on a program element. TODO How to add enums to the
  * annotations
- * 
+ *
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
 public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
@@ -98,7 +98,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -115,7 +115,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -132,7 +132,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -149,7 +149,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -166,7 +166,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -183,7 +183,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -200,7 +200,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -217,7 +217,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -234,7 +234,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -254,7 +254,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   /**
    * Adds a member value pair to this annotation For adding class values as
    * param
-   * 
+   *
    * @see #param(String, Class)
    * @param name
    *        The simple name for this annotation
@@ -273,7 +273,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -296,7 +296,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
@@ -314,15 +314,15 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   /**
    * Adds a member value pair to this annotation This can be used for e.g to
    * specify
-   * 
+   *
    * <pre>
    * &#64;XmlCollectionItem(type=Integer.class);
    *    *
    * </pre>
-   * 
-   * For adding a value of Class<? extends Annotation>
+   *
+   * For adding a value of Class&lt;? extends Annotation&gt;
    * {@link #annotationParam(String, Class)}
-   * 
+   *
    * @param name
    *        The simple name for this annotation param
    * @param value
@@ -347,7 +347,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   /**
    * Adds a member value pair to this annotation based on the type represented
    * by the given JType
-   * 
+   *
    * @param name
    *        The simple name for this annotation param
    * @param type
@@ -365,11 +365,12 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair to this annotation.
-   * 
+   *
    * @param name
    *        The simple name for this annotation
    * @param value
-   *        The JExpression which provides the contant value for this annotation
+   *        The {@link IJExpression} which provides the content value for this
+   *        annotation
    * @return The JAnnotationUse. More member value pairs can be added to it
    *         using the same or the overloaded methods.
    */
@@ -382,10 +383,10 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 
   /**
    * Adds a member value pair which is of type array to this annotation
-   * 
+   *
    * @param name
    *        The simple name for this annotation
-   * @return The JAnnotationArrayMember. For adding array values
+   * @return The {@link JAnnotationArrayMember}. For adding array values
    * @see JAnnotationArrayMember
    */
   @Nonnull

@@ -56,7 +56,7 @@ import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
 /**
  * Receives generated code and writes to the appropriate storage.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public abstract class AbstractCodeWriter implements Closeable
@@ -119,12 +119,13 @@ public abstract class AbstractCodeWriter implements Closeable
    * <p>
    * The returned stream will be closed before the next file is stored. So the
    * callee can assume that only one OutputStream is active at any given time.
-   * 
+   *
    * @param pkg
    *        The package of the file to be written.
    * @param fileName
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
+   * @return OutputStream to write to
    */
   @Nonnull
   public abstract OutputStream openBinary (@Nonnull JPackage pkg, @Nonnull String fileName) throws IOException;
@@ -135,12 +136,13 @@ public abstract class AbstractCodeWriter implements Closeable
    * <p>
    * The returned stream will be closed before the next file is stored. So the
    * callee can assume that only one OutputStream is active at any given time.
-   * 
+   *
    * @param pkg
    *        The package of the file to be written.
    * @param fileName
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
+   * @return Writer to write to
    */
   @Nonnull
   public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException

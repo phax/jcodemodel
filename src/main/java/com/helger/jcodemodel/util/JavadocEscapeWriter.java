@@ -52,13 +52,13 @@ import javax.annotation.Nonnull;
  * Such characters include '&lt;' and '&amp;'.
  * <p>
  * Note that this class doesn't escape other Unicode characters that are
- * typically unsafe. For example, &#x611B; (A kanji that means "love") can be
+ * typically unsafe. For example, \u611B (A kanji that means "love") can be
  * considered as unsafe because javac with English Windows cannot accept this
  * character in the source code.
  * <p>
  * If the application needs to escape such characters as well, then they are on
  * their own.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JavadocEscapeWriter extends FilterWriter

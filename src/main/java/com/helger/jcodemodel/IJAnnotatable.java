@@ -47,14 +47,14 @@ import javax.annotation.Nonnull;
 
 /**
  * Annotatable program elements.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public interface IJAnnotatable
 {
   /**
    * Adds an annotation to this program element.
-   * 
+   *
    * @param clazz
    *        The annotation class to annotate the program element with
    */
@@ -63,7 +63,7 @@ public interface IJAnnotatable
 
   /**
    * Adds an annotation to this program element.
-   * 
+   *
    * @param clazz
    *        The annotation class to annotate the program element with
    */
@@ -79,8 +79,8 @@ public interface IJAnnotatable
 
   /**
    * Read-only live view of all annotations on this {@link IJAnnotatable}
-   * 
-   * @return Can be empty but never null.
+   *
+   * @return Can be empty but never <code>null</code>.
    */
   @Nonnull
   Collection <JAnnotationUse> annotations ();
