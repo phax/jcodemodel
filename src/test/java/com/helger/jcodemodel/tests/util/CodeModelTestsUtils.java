@@ -93,7 +93,7 @@ public final class CodeModelTestsUtils
 
     final StringWriter stringWriter = new StringWriter ();
     final JFormatter formatter = new JFormatter (stringWriter);
-    declaration.declare(formatter);
+    declaration.declare (formatter);
     return stringWriter.toString ();
   }
 
