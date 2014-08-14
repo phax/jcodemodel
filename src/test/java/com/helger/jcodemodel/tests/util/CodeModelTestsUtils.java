@@ -40,14 +40,13 @@
 
 package com.helger.jcodemodel.tests.util;
 
-import java.io.StringWriter;
-
-import javax.annotation.Nonnull;
-
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.JFormatter;
+
+import javax.annotation.Nonnull;
+import java.io.StringWriter;
 
 /**
  * Various utilities for codemodel tests.
@@ -76,6 +75,25 @@ public final class CodeModelTestsUtils
     final StringWriter stringWriter = new StringWriter ();
     final JFormatter formatter = new JFormatter (stringWriter);
     expression.generate (formatter);
+    return stringWriter.toString ();
+  }
+
+  /**
+   * Prints a declaration into a string.
+   *
+   * @param declaration
+   *        declaration to print into a string.
+   * @return Declaration formatted as a string.
+   */
+  @Nonnull
+  public static String toString (@Nonnull final IJDeclaration declaration)
+  {
+    if (declaration == null)
+      throw new IllegalArgumentException ("Declaration must not be null.");
+
+    final StringWriter stringWriter = new StringWriter ();
+    final JFormatter formatter = new JFormatter (stringWriter);
+    declaration.declare(formatter);
     return stringWriter.toString ();
   }
 
