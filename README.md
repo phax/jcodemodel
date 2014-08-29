@@ -7,6 +7,7 @@ with other `com.sun.codemodel` instances that might be floating around in the cl
 
 News and noteworthy:
 
+* 2014-08-14: Release 2.7.5 - Suppert for multiple boundaries added (like `T extends AnyClass & Serializable`)
 * 2014-06-12: Release 2.7.4 - Bugfix release
 * 2014-05-23: Release 2.7.3 - Bugfix release
 * 2014-05-21: Release 2.7.2 - now on Maven Central
@@ -18,25 +19,9 @@ News and noteworthy:
 #Maven usage
 Add the following to your pom.xml to use this artifact:
 ```
-<!-- Required only for versions before 2.7.2 -->
-<repositories>
-  <repository>
-    <id>phloc.com</id>
-    <url>http://repo.phloc.com/maven2</url>
-    <releases>
-      <enabled>true</enabled>
-    </releases>
-    <snapshots>
-      <enabled>true</enabled>
-    </snapshots>
-  </repository>
-</repositories>
-
-...
-
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>2.7.4</version>
+  <version>2.7.5</version>
 </dependency>
 ```
