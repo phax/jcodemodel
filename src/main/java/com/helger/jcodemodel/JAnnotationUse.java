@@ -37,10 +37,12 @@ package com.helger.jcodemodel;
 
 import java.lang.annotation.Annotation;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.NameUtilities;
 
@@ -53,6 +55,12 @@ import com.helger.jcodemodel.util.NameUtilities;
 public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
 {
   /**
+   * The special parameter name that can be optimized away if used without any
+   * other parameter
+   */
+  public static final String SPECIAL_KEY_VALUE = "value";
+
+  /**
    * The {@link Annotation} class
    */
   private final AbstractJClass _clazz;
@@ -62,7 +70,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    */
   private Map <String, AbstractJAnnotationValue> _memberValues;
 
-  protected JAnnotationUse (@Nonnull final AbstractJClass clazz)
+  public JAnnotationUse (@Nonnull final AbstractJClass clazz)
   {
     if (clazz == null)
       throw new NullPointerException ("clazz");
@@ -76,19 +84,50 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   }
 
   @Nonnull
-  public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
-  {
-    return Collections.unmodifiableMap (_memberValues);
-  }
-
-  @Nonnull
   public JCodeModel owner ()
   {
     return _clazz.owner ();
   }
 
-  private void _addValue (final String name, final AbstractJAnnotationValue annotationValue)
+  @Nonnull
+  public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
+    return _memberValues == null ? new HashMap <String, AbstractJAnnotationValue> ()
+                                : Collections.unmodifiableMap (_memberValues);
+  }
+
+  public boolean hasAnnotationMembers ()
+  {
+    return _memberValues != null && !_memberValues.isEmpty ();
+  }
+
+  @Nullable
+  public AbstractJAnnotationValue getParam (@Nullable final String sName)
+  {
+    return _memberValues == null ? null : _memberValues.get (sName);
+  }
+
+  @Nullable
+  public JAnnotationStringValue getConstantParam (@Nullable final String sName)
+  {
+    final AbstractJAnnotationValue aParam = getParam (sName);
+    return aParam instanceof JAnnotationStringValue ? (JAnnotationStringValue) aParam : null;
+  }
+
+  @Nullable
+  public IJExpression getConstantParamValue (@Nullable final String sName)
+  {
+    final JAnnotationStringValue aParam = getConstantParam (sName);
+    return aParam != null ? aParam.value () : null;
+  }
+
+  private void _addValue (@Nonnull final String name, @Nonnull final AbstractJAnnotationValue annotationValue)
+  {
+    if (name == null || name.length () == 0)
+      throw new IllegalArgumentException ("Name must not be null or empty");
+    if (annotationValue == null)
+      throw new NullPointerException ("annotationValue may not be null!");
+
     // Use ordered map to keep the code generation the same on any JVM.
     // Lazily created.
     if (_memberValues == null)
@@ -107,7 +146,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final boolean value)
+  public JAnnotationUse param (@Nonnull final String name, final boolean value)
   {
     _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
@@ -124,7 +163,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final byte value)
+  public JAnnotationUse param (@Nonnull final String name, final byte value)
   {
     _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
@@ -141,7 +180,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final char value)
+  public JAnnotationUse param (@Nonnull final String name, final char value)
   {
     _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
@@ -158,7 +197,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final double value)
+  public JAnnotationUse param (@Nonnull final String name, final double value)
   {
     _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
@@ -175,7 +214,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final float value)
+  public JAnnotationUse param (@Nonnull final String name, final float value)
   {
     _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
@@ -192,7 +231,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final long value)
+  public JAnnotationUse param (@Nonnull final String name, final long value)
   {
     _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
@@ -209,7 +248,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final short value)
+  public JAnnotationUse param (@Nonnull final String name, final short value)
   {
     _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
@@ -226,7 +265,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final int value)
+  public JAnnotationUse param (@Nonnull final String name, final int value)
   {
     _addValue (name, new JAnnotationStringValue (JExpr.lit (value)));
     return this;
@@ -243,7 +282,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final String value)
+  public JAnnotationUse param (@Nonnull final String name, final String value)
   {
     // Escape string values with quotes so that they can
     // be generated accordingly
@@ -264,7 +303,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse annotationParam (final String name, final Class <? extends Annotation> value)
+  public JAnnotationUse annotationParam (@Nonnull final String name, @Nonnull final Class <? extends Annotation> value)
   {
     final JAnnotationUse annotationUse = new JAnnotationUse (owner ().ref (value));
     _addValue (name, annotationUse);
@@ -282,7 +321,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final Enum <?> value)
+  public JAnnotationUse param (@Nonnull final String name, @Nonnull final Enum <?> value)
   {
     _addValue (name, new AbstractJAnnotationValue ()
     {
@@ -305,7 +344,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final JEnumConstant value)
+  public JAnnotationUse param (@Nonnull final String name, @Nonnull final JEnumConstant value)
   {
     _addValue (name, new JAnnotationStringValue (value));
     return this;
@@ -331,7 +370,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final Class <?> value)
+  public JAnnotationUse param (@Nonnull final String name, @Nonnull final Class <?> value)
   {
     _addValue (name, new JAnnotationStringValue (new AbstractJExpressionImpl ()
     {
@@ -356,7 +395,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, @Nonnull final AbstractJType type)
+  public JAnnotationUse param (@Nonnull final String name, @Nonnull final AbstractJType type)
   {
     final AbstractJClass c = type.boxify ();
     _addValue (name, new JAnnotationStringValue (c.dotclass ()));
@@ -375,7 +414,7 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *         using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (final String name, final IJExpression value)
+  public JAnnotationUse param (@Nonnull final String name, @Nonnull final IJExpression value)
   {
     _addValue (name, new JAnnotationStringValue (value));
     return this;
@@ -390,11 +429,16 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    * @see JAnnotationArrayMember
    */
   @Nonnull
-  public JAnnotationArrayMember paramArray (final String name)
+  public JAnnotationArrayMember paramArray (@Nonnull final String name)
   {
     final JAnnotationArrayMember arrayMember = new JAnnotationArrayMember (owner ());
     _addValue (name, arrayMember);
     return arrayMember;
+  }
+
+  private boolean _isOptimizable ()
+  {
+    return _memberValues.size () == 1 && _memberValues.containsKey (SPECIAL_KEY_VALUE);
   }
 
   public void generate (final JFormatter f)
@@ -403,15 +447,15 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
     if (_memberValues != null)
     {
       f.print ('(');
-      boolean first = true;
 
       if (_isOptimizable ())
       {
         // short form
-        f.generable (_memberValues.get ("value"));
+        f.generable (_memberValues.get (SPECIAL_KEY_VALUE));
       }
       else
       {
+        boolean first = true;
         for (final Map.Entry <String, AbstractJAnnotationValue> mapEntry : _memberValues.entrySet ())
         {
           if (!first)
@@ -422,10 +466,5 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
       }
       f.print (')');
     }
-  }
-
-  private boolean _isOptimizable ()
-  {
-    return _memberValues.size () == 1 && _memberValues.containsKey ("value");
   }
 }

@@ -44,7 +44,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Captures the value of the annotation.
- * 
+ *
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
 public class JAnnotationStringValue extends AbstractJAnnotationValue
@@ -54,7 +54,7 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
    */
   private final IJExpression _value;
 
-  protected JAnnotationStringValue (@Nonnull final IJExpression value)
+  public JAnnotationStringValue (@Nonnull final IJExpression value)
   {
     if (value == null)
       throw new NullPointerException ("value");
