@@ -3,11 +3,14 @@ jcodemodel
 
 A fork of the com.sun.codemodel 2.7-SNAPSHOT.
 The classes in this project use a different package name `com.helger.jcodemodel` to avoid conflicts 
-with other `com.sun.codemodel` instances that might be floating around in the classpath.  
+with other `com.sun.codemodel` instances that might be floating around in the classpath.
+That of course implies, that this artefact cannot directly be used with JAXB, since the configuration of 
+this would be very tricky.
 
 News and noteworthy:
 
-* 2014-08-14: Release 2.7.5 - Suppert for multiple boundaries added (like `T extends AnyClass & Serializable`)
+* 2014-09-02: Release 2.7.6 - Extended annotation parameter handling API
+* 2014-08-14: Release 2.7.5 - Support for multiple boundaries added (like `T extends AnyClass & Serializable`)
 * 2014-06-12: Release 2.7.4 - Bugfix release
 * 2014-05-23: Release 2.7.3 - Bugfix release
 * 2014-05-21: Release 2.7.2 - now on Maven Central
@@ -22,6 +25,6 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>2.7.5</version>
+  <version>2.7.6</version>
 </dependency>
 ```
