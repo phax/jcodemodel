@@ -22,7 +22,7 @@
  *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
- * enclosed by brackets [] replaced by your own identifying information:
+ * enclosed by brackets ... replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
  *
  * Contributor(s):
@@ -46,6 +46,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 /**
@@ -58,8 +59,8 @@ import javax.annotation.Nonnull;
  */
 public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implements IJAnnotatable
 {
-  private final List <AbstractJAnnotationValue> _values = new ArrayList <AbstractJAnnotationValue> ();
   private final JCodeModel _owner;
+  private final List <AbstractJAnnotationValue> _values = new ArrayList <AbstractJAnnotationValue> ();
 
   public JAnnotationArrayMember (@Nonnull final JCodeModel owner)
   {
@@ -85,8 +86,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final String value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final String... values)
+  {
+    for (final String value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -101,8 +109,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final boolean value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final boolean... values)
+  {
+    for (final boolean value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -117,8 +132,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final byte value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final byte... values)
+  {
+    for (final byte value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -133,8 +155,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final char value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final char... values)
+  {
+    for (final char value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -149,8 +178,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final double value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final double... values)
+  {
+    for (final double value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -165,8 +201,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final long value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final long... values)
+  {
+    for (final long value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -181,8 +224,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final short value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final short... values)
+  {
+    for (final short value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -197,8 +247,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final int value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final int... values)
+  {
+    for (final int value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -213,8 +270,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final float value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (JExpr.lit (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final float... values)
+  {
+    for (final float value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -229,8 +293,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final Enum <?> value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationEnumValue (value);
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final Enum <?>... values)
+  {
+    for (final Enum <?> value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -245,8 +316,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final JEnumConstant value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (value);
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final JEnumConstant... values)
+  {
+    for (final JEnumConstant value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -261,8 +339,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final IJExpression value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (value);
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final IJExpression... values)
+  {
+    for (final IJExpression value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -277,17 +362,30 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final Class <?> value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (new FullClassNameExpr (value));
-    _values.add (annotationValue);
+    _values.add (wrap (value));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final Class <?>... values)
+  {
+    for (final Class <?> value : values)
+      _values.add (wrap (value));
     return this;
   }
 
   @Nonnull
   public JAnnotationArrayMember param (final AbstractJType type)
   {
-    final AbstractJClass clazz = type.boxify ();
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (clazz.dotclass ());
-    _values.add (annotationValue);
+    _values.add (wrap (type));
+    return this;
+  }
+
+  @Nonnull
+  public JAnnotationArrayMember params (@Nonnull final AbstractJType... values)
+  {
+    for (final AbstractJType value : values)
+      _values.add (wrap (value));
     return this;
   }
 
@@ -297,7 +395,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
-    return annotate (_owner.ref (clazz));
+    return annotate (owner ().ref (clazz));
   }
 
   /**
@@ -336,6 +434,12 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public Collection <AbstractJAnnotationValue> getAllAnnotations ()
   {
     return Collections.unmodifiableList (_values);
+  }
+
+  @Nonnegative
+  public int size ()
+  {
+    return _values.size ();
   }
 
   public void generate (@Nonnull final JFormatter f)

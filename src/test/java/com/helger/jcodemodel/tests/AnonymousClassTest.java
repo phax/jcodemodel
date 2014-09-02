@@ -1,5 +1,3 @@
-package com.helger.jcodemodel.tests;
-
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -35,6 +33,7 @@ package com.helger.jcodemodel.tests;
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.helger.jcodemodel.tests;
 
 import java.util.Iterator;
 
@@ -52,7 +51,6 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
  */
 public class AnonymousClassTest
 {
-
   @Test
   public void main () throws Exception
   {

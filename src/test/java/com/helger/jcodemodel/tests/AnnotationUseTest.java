@@ -41,9 +41,9 @@ import java.lang.annotation.Target;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.IJAnnotationWriter;
 import com.helger.jcodemodel.JAnnotationArrayMember;
 import com.helger.jcodemodel.JAnnotationUse;
-import com.helger.jcodemodel.IJAnnotationWriter;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JEnumConstant;
@@ -55,14 +55,62 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
  * A test program for the annotation use features Note: Not all the generated
  * code would make sense but just checking in all the different ways you can use
  * an annotation
- * 
+ *
  * @author Bhakti Mehta
  */
-public class AnnotationUseTest
+public final class AnnotationUseTest
 {
+  @interface XmlElement
+  {
+    String value();
 
+    String ns();
+  }
+
+  interface XmlElementW extends IJAnnotationWriter <XmlElement>
+  {
+    XmlElementW value (String s);
+
+    XmlElementW ns (String s);
+  }
+
+  /**
+   * *********************************************************************
+   * Generates this
+   * **********************************************************************
+   *
+   * <pre>
+   * import java.lang.annotation.Retention;
+   * import java.lang.annotation.RetentionPolicy;
+   * import java.lang.annotation.Target;
+   * import com.helger.jcodemodel.tests.AnnotationUseTest;
+   * 
+   * &#064;Retention (value = Test.Iamenum.GOOD, value1 = RetentionPolicy.RUNTIME)
+   * &#064;AnnotationUseTest.XmlElement (ns = &quot;##default&quot;, value = &quot;foobar&quot;)
+   * public class Test
+   * {
+   *   &#064;Retention (name = &quot;book&quot;,
+   *               targetNamespace = 5,
+   *               names = { &quot;Bob&quot;, &quot;Rob&quot;, &quot;Ted&quot; },
+   *               namesno = { 4, 5, 6 },
+   *               values = { @Target (type = java.lang.Integer.class), @Target (type = java.lang.Float.class) },
+   *               foo = @Target (junk = 7))
+   *   private double y;
+   * 
+   *   public void foo ()
+   *   {}
+   * 
+   *   public enum Iamenum
+   *   {
+   *     GOOD,
+   *     BAD;
+   *   }
+   * }
+   * 
+   * </pre>
+   */
   @Test
-  public void main () throws Exception
+  public void testMain () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
@@ -91,22 +139,20 @@ public class AnnotationUseTest
     final JFieldVar field = cls.field (JMod.PRIVATE, cm.DOUBLE, "y");
 
     // Adding more annotations which are member value pairs
-    final JAnnotationUse ause = field.annotate (Retention.class);
-    ause.param ("name", "book");
-    ause.param ("targetNamespace", 5);
+    final JAnnotationUse aUse = field.annotate (Retention.class);
+    aUse.param ("name", "book");
+    aUse.param ("targetNamespace", 5);
 
     // Adding arrays as member value pairs
-    final JAnnotationArrayMember arrayMember = ause.paramArray ("names");
+    final JAnnotationArrayMember arrayMember = aUse.paramArray ("names");
     arrayMember.param ("Bob");
     arrayMember.param ("Rob");
     arrayMember.param ("Ted");
 
-    final JAnnotationArrayMember arrayMember1 = ause.paramArray ("namesno");
-    arrayMember1.param (4);
-    arrayMember1.param (5);
-    arrayMember1.param (6);
+    // Shortcut
+    aUse.param ("namesno", 4, 5, 6);
 
-    final JAnnotationArrayMember arrayMember2 = ause.paramArray ("values");
+    final JAnnotationArrayMember arrayMember2 = aUse.paramArray ("values");
     // adding an annotation as a member value pair
     arrayMember2.annotate (Target.class).param ("type", Integer.class);
     arrayMember2.annotate (Target.class).param ("type", Float.class);
@@ -116,38 +162,9 @@ public class AnnotationUseTest
     w.ns ("##default").value ("foobar");
 
     // adding an annotation as a member value pair
-    final JAnnotationUse myuse = ause.annotationParam ("foo", Target.class);
+    final JAnnotationUse myuse = aUse.annotationParam ("foo", Target.class);
     myuse.param ("junk", 7);
 
     cm.build (new SingleStreamCodeWriter (System.out));
   }
-
-  @interface XmlElement
-  {
-    String value();
-
-    String ns();
-  }
-
-  interface XmlElementW extends IJAnnotationWriter <XmlElement>
-  {
-    XmlElementW value (String s);
-
-    XmlElementW ns (String s);
-  }
 }
-
-/*
- * *********************************************************************
- * Generates this
- * **********************************************************************
- * @java.lang.annotation.Retention(value1 =
- * java.lang.annotation.RetentionPolicy.RUNTIME, value = Test.Iamenum.GOOD)
- * public class Test {
- * @java.lang.annotation.Retention(foo = @java.lang.annotation.Target(junk = 7)
- * , targetNamespace = 5, namesno = { 4, 5, 6 }, values =
- * {@java.lang.annotation.Target(type = java.lang.Integer) ,
- * @java.lang.annotation.Target(type = java.lang.Float) }, names = {"Bob",
- * "Rob", "Ted"}, name = "book") private double y; public void foo() { } public
- * enum Iamenum { BAD, GOOD; } } }
- */

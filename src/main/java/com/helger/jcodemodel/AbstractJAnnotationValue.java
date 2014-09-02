@@ -40,10 +40,86 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Things that can be values of an annotation element.
- * 
+ *
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
 public abstract class AbstractJAnnotationValue implements IJGenerable
-{}
+{
+  @Nonnull
+  public static JAnnotationStringValue wrap (final boolean value)
+  {
+    return new JAnnotationStringValue (JExpr.lit (value));
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (final byte value)
+  {
+    return new JAnnotationStringValue (JExpr.lit (value));
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (final char value)
+  {
+    return new JAnnotationStringValue (JExpr.lit (value));
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (final double value)
+  {
+    return new JAnnotationStringValue (JExpr.lit (value));
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (final float value)
+  {
+    return new JAnnotationStringValue (JExpr.lit (value));
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (final int value)
+  {
+    return new JAnnotationStringValue (JExpr.lit (value));
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (final long value)
+  {
+    return new JAnnotationStringValue (JExpr.lit (value));
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (final short value)
+  {
+    return new JAnnotationStringValue (JExpr.lit (value));
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (@Nonnull final String value)
+  {
+    // Escape string values with quotes so that they can
+    // be generated accordingly
+    return new JAnnotationStringValue (JExpr.lit (value));
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (@Nonnull final JEnumConstant value)
+  {
+    return new JAnnotationStringValue (value);
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (@Nonnull final AbstractJType type)
+  {
+    return new JAnnotationStringValue (type.boxify ().dotclass ());
+  }
+
+  @Nonnull
+  public static JAnnotationStringValue wrap (@Nonnull final IJExpression expr)
+  {
+    return new JAnnotationStringValue (expr);
+  }
+}

@@ -40,6 +40,8 @@
 
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.util.NameUtilities;
 
 /**
@@ -54,7 +56,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
   {
     private final Enum <?> _value;
 
-    protected JAnnotationEnumValue (final Enum <?> value)
+    protected JAnnotationEnumValue (@Nonnull final Enum <?> value)
     {
       _value = value;
     }
@@ -69,7 +71,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
   {
     private final Class <?> _value;
 
-    protected FullClassNameExpr (final Class <?> value)
+    protected FullClassNameExpr (@Nonnull final Class <?> value)
     {
       _value = value;
     }
@@ -81,4 +83,15 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
     }
   }
 
+  @Nonnull
+  public AbstractJAnnotationValue wrap (@Nonnull final Enum <?> value)
+  {
+    return new JAnnotationEnumValue (value);
+  }
+
+  @Nonnull
+  public AbstractJAnnotationValue wrap (@Nonnull final Class <?> value)
+  {
+    return new JAnnotationStringValue (new FullClassNameExpr (value));
+  }
 }
