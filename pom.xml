@@ -115,6 +115,32 @@
           </instructions>
         </configuration>
       </plugin>
+      <!-- Adding this plugin is a workaround until parent POM 1.3 is out -->
+      <plugin>
+        <groupId>com.helger.maven</groupId>
+        <artifactId>ph-buildinfo-maven-plugin</artifactId>
+        <version>1.2.1</version><!--$NO-MVN-MAN-VER$-->
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate-buildinfo</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <formatProperties>false</formatProperties>
+          <formatXML>true</formatXML>
+          <withAllSystemProperties>true</withAllSystemProperties>
+          <selectedEnvVars>
+            <param>JAVA_.*</param>
+            <param>M2_.*</param>
+            <param>MAVEN_.*</param>
+            <param>NUMBER_OF_PROCESSORS</param>
+            <param>OS</param>
+            <param>PROCESSOR_.*</param>
+          </selectedEnvVars>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
