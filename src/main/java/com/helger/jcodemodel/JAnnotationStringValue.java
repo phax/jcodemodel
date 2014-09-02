@@ -53,18 +53,36 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
    * The value of the Annotation member
    */
   private final IJExpression _value;
+  /**
+   * The source object used to build the expression value.
+   */
+  private final Object _nativeValue;
 
   public JAnnotationStringValue (@Nonnull final IJExpression value)
   {
+    this (value, value);
+  }
+
+  public JAnnotationStringValue (@Nonnull final IJExpression value, @Nonnull final Object nativeValue)
+  {
     if (value == null)
       throw new NullPointerException ("value");
+    if (nativeValue == null)
+      throw new NullPointerException ("nativeValue");
     _value = value;
+    _nativeValue = nativeValue;
   }
 
   @Nonnull
   public IJExpression value ()
   {
     return _value;
+  }
+
+  @Nonnull
+  public Object nativeValue ()
+  {
+    return _nativeValue;
   }
 
   public void generate (@Nonnull final JFormatter f)

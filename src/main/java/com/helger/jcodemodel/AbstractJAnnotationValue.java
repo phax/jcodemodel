@@ -52,49 +52,49 @@ public abstract class AbstractJAnnotationValue implements IJGenerable
   @Nonnull
   public static JAnnotationStringValue wrap (final boolean value)
   {
-    return new JAnnotationStringValue (JExpr.lit (value));
+    return new JAnnotationStringValue (JExpr.lit (value), Boolean.valueOf (value));
   }
 
   @Nonnull
   public static JAnnotationStringValue wrap (final byte value)
   {
-    return new JAnnotationStringValue (JExpr.lit (value));
+    return new JAnnotationStringValue (JExpr.lit (value), Byte.valueOf (value));
   }
 
   @Nonnull
   public static JAnnotationStringValue wrap (final char value)
   {
-    return new JAnnotationStringValue (JExpr.lit (value));
+    return new JAnnotationStringValue (JExpr.lit (value), Character.valueOf (value));
   }
 
   @Nonnull
   public static JAnnotationStringValue wrap (final double value)
   {
-    return new JAnnotationStringValue (JExpr.lit (value));
+    return new JAnnotationStringValue (JExpr.lit (value), Double.valueOf (value));
   }
 
   @Nonnull
   public static JAnnotationStringValue wrap (final float value)
   {
-    return new JAnnotationStringValue (JExpr.lit (value));
+    return new JAnnotationStringValue (JExpr.lit (value), Float.valueOf (value));
   }
 
   @Nonnull
   public static JAnnotationStringValue wrap (final int value)
   {
-    return new JAnnotationStringValue (JExpr.lit (value));
+    return new JAnnotationStringValue (JExpr.lit (value), Integer.valueOf (value));
   }
 
   @Nonnull
   public static JAnnotationStringValue wrap (final long value)
   {
-    return new JAnnotationStringValue (JExpr.lit (value));
+    return new JAnnotationStringValue (JExpr.lit (value), Long.valueOf (value));
   }
 
   @Nonnull
   public static JAnnotationStringValue wrap (final short value)
   {
-    return new JAnnotationStringValue (JExpr.lit (value));
+    return new JAnnotationStringValue (JExpr.lit (value), Short.valueOf (value));
   }
 
   @Nonnull
@@ -102,7 +102,7 @@ public abstract class AbstractJAnnotationValue implements IJGenerable
   {
     // Escape string values with quotes so that they can
     // be generated accordingly
-    return new JAnnotationStringValue (JExpr.lit (value));
+    return new JAnnotationStringValue (JExpr.lit (value), value);
   }
 
   @Nonnull
@@ -114,7 +114,7 @@ public abstract class AbstractJAnnotationValue implements IJGenerable
   @Nonnull
   public static JAnnotationStringValue wrap (@Nonnull final AbstractJType type)
   {
-    return new JAnnotationStringValue (type.boxify ().dotclass ());
+    return new JAnnotationStringValue (type.boxify ().dotclass (), type);
   }
 
   @Nonnull

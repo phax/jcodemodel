@@ -92,6 +92,6 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
   @Nonnull
   public AbstractJAnnotationValue wrap (@Nonnull final Class <?> value)
   {
-    return new JAnnotationStringValue (new FullClassNameExpr (value));
+    return new JAnnotationStringValue (new FullClassNameExpr (value), value);
   }
 }
