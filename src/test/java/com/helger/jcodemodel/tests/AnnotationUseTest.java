@@ -107,6 +107,7 @@ public final class AnnotationUseTest
    *   }
    * }
    * 
+   *
    * </pre>
    */
   @Test
@@ -150,7 +151,7 @@ public final class AnnotationUseTest
     arrayMember.param ("Ted");
 
     // Shortcut
-    aUse.param ("namesno", 4, 5, 6);
+    aUse.paramArray ("namesno", 4, 5, 6);
 
     final JAnnotationArrayMember arrayMember2 = aUse.paramArray ("values");
     // adding an annotation as a member value pair

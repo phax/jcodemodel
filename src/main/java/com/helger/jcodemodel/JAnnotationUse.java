@@ -152,7 +152,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final boolean... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final boolean... values)
   {
     paramArray (name).params (values);
     return this;
@@ -176,7 +176,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final byte... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final byte... values)
   {
     paramArray (name).params (values);
     return this;
@@ -200,7 +200,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final char... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final char... values)
   {
     paramArray (name).params (values);
     return this;
@@ -224,7 +224,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final double... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final double... values)
   {
     paramArray (name).params (values);
     return this;
@@ -248,7 +248,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final float... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final float... values)
   {
     paramArray (name).params (values);
     return this;
@@ -272,7 +272,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final long... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final long... values)
   {
     paramArray (name).params (values);
     return this;
@@ -296,7 +296,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final short... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final short... values)
   {
     paramArray (name).params (values);
     return this;
@@ -320,7 +320,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final int... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final int... values)
   {
     paramArray (name).params (values);
     return this;
@@ -344,7 +344,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final String... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final String... values)
   {
     paramArray (name).params (values);
     return this;
@@ -368,7 +368,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final Enum <?>... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final Enum <?>... values)
   {
     paramArray (name).params (values);
     return this;
@@ -392,7 +392,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final JEnumConstant... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final JEnumConstant... values)
   {
     paramArray (name).params (values);
     return this;
@@ -424,7 +424,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final Class <?>... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final Class <?>... values)
   {
     paramArray (name).params (values);
     return this;
@@ -449,7 +449,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final AbstractJType... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final AbstractJType... values)
   {
     paramArray (name).params (values);
     return this;
@@ -476,7 +476,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
 
   @Nonnull
   @Deprecated
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final IJExpression... values)
+  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final IJExpression... values)
   {
     paramArray (name).params (values);
     return this;
