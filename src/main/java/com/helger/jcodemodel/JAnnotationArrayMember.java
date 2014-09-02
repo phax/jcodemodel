@@ -48,8 +48,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.NameUtilities;
-
 /**
  * Represents an arrays as annotation members
  * <p>
@@ -58,7 +56,7 @@ import com.helger.jcodemodel.util.NameUtilities;
  *
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public class JAnnotationArrayMember extends AbstractJAnnotationValue implements IJAnnotatable, IJOwned
+public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implements IJAnnotatable
 {
   private final List <AbstractJAnnotationValue> _values = new ArrayList <AbstractJAnnotationValue> ();
   private final JCodeModel _owner;
@@ -81,8 +79,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a string value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final String value)
@@ -97,8 +95,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a boolean value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final boolean value)
@@ -113,8 +111,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a byte value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final byte value)
@@ -129,8 +127,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a char value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final char value)
@@ -145,8 +143,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a double value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final double value)
@@ -161,8 +159,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a long value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final long value)
@@ -177,8 +175,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a short value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final short value)
@@ -193,8 +191,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds an int value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final int value)
@@ -209,8 +207,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a float value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final float value)
@@ -225,19 +223,13 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a enum value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final Enum <?> value)
   {
-    final AbstractJAnnotationValue annotationValue = new AbstractJAnnotationValue ()
-    {
-      public void generate (final JFormatter f)
-      {
-        f.type (_owner.ref (value.getDeclaringClass ())).print ('.').print (value.name ());
-      }
-    };
+    final AbstractJAnnotationValue annotationValue = new JAnnotationEnumValue (value);
     _values.add (annotationValue);
     return this;
   }
@@ -247,8 +239,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a enum value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final JEnumConstant value)
@@ -279,20 +271,13 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
    *
    * @param value
    *        Adds a class value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by
+   *         calling the same method multiple times
    */
   @Nonnull
   public JAnnotationArrayMember param (final Class <?> value)
   {
-    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (new AbstractJExpressionImpl ()
-    {
-      public void generate (final JFormatter f)
-      {
-        f.print (NameUtilities.getFullName (value));
-        f.print (".class");
-      }
-    });
+    final AbstractJAnnotationValue annotationValue = new JAnnotationStringValue (new FullClassNameExpr (value));
     _values.add (annotationValue);
     return this;
   }
@@ -334,6 +319,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
 
   /**
    * {@link IJAnnotatable#annotations()}
+   *
+   * @see #getAllAnnotations()
    */
   @SuppressWarnings ({ "unchecked", "rawtypes" })
   @Nonnull
@@ -343,6 +330,12 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValue implements 
     // into an array so this potentially type-unsafe conversion would be
     // justified.
     return Collections.<JAnnotationUse> unmodifiableList ((List) _values);
+  }
+
+  @Nonnull
+  public Collection <AbstractJAnnotationValue> getAllAnnotations ()
+  {
+    return Collections.unmodifiableList (_values);
   }
 
   public void generate (@Nonnull final JFormatter f)

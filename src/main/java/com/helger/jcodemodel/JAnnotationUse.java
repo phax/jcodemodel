@@ -44,15 +44,13 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.NameUtilities;
-
 /**
  * Represents an annotation on a program element. TODO How to add enums to the
  * annotations
  *
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
-public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
+public class JAnnotationUse extends AbstractJAnnotationValueOwned
 {
   /**
    * The special parameter name that can be optimized away if used without any
@@ -142,8 +140,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The boolean value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final boolean value)
@@ -159,8 +157,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The byte member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final byte value)
@@ -176,8 +174,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The char member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final char value)
@@ -193,8 +191,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The double member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final double value)
@@ -210,8 +208,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The float member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final float value)
@@ -227,8 +225,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The long member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final long value)
@@ -244,8 +242,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The short member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final short value)
@@ -261,8 +259,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The int member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final int value)
@@ -278,8 +276,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The String member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final String value)
@@ -299,8 +297,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The annotation class which is member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse annotationParam (@Nonnull final String name, @Nonnull final Class <? extends Annotation> value)
@@ -317,19 +315,13 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation
    * @param value
    *        The enum class which is member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final Enum <?> value)
   {
-    _addValue (name, new AbstractJAnnotationValue ()
-    {
-      public void generate (final JFormatter f)
-      {
-        f.type (owner ().ref (value.getDeclaringClass ())).print ('.').print (value.name ());
-      }
-    });
+    _addValue (name, new JAnnotationEnumValue (value));
     return this;
   }
 
@@ -339,9 +331,9 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    * @param name
    *        The simple name for this annotation
    * @param value
-   *        The JEnumConstant which is member value for this annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   *        The {@link JEnumConstant} which is member value for this annotation
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final JEnumConstant value)
@@ -356,7 +348,6 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *
    * <pre>
    * &#64;XmlCollectionItem(type=Integer.class);
-   *    *
    * </pre>
    *
    * For adding a value of Class&lt;? extends Annotation&gt;
@@ -366,33 +357,26 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    *        The simple name for this annotation param
    * @param value
    *        The class type of the param
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final Class <?> value)
   {
-    _addValue (name, new JAnnotationStringValue (new AbstractJExpressionImpl ()
-    {
-      public void generate (@Nonnull final JFormatter f)
-      {
-        f.print (NameUtilities.getFullName (value));
-        f.print (".class");
-      }
-    }));
+    _addValue (name, new JAnnotationStringValue (new FullClassNameExpr (value)));
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation based on the type represented
-   * by the given JType
+   * by the given {@link AbstractJType}
    *
    * @param name
    *        The simple name for this annotation param
    * @param type
-   *        the JType representing the actual type
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   *        the {@link AbstractJType} representing the actual type
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final AbstractJType type)
@@ -410,8 +394,8 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
    * @param value
    *        The {@link IJExpression} which provides the content value for this
    *        annotation
-   * @return The JAnnotationUse. More member value pairs can be added to it
-   *         using the same or the overloaded methods.
+   * @return The {@link JAnnotationUse}. More member value pairs can be added to
+   *         it using the same or the overloaded methods.
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final IJExpression value)
@@ -444,10 +428,9 @@ public class JAnnotationUse extends AbstractJAnnotationValue implements IJOwned
   public void generate (final JFormatter f)
   {
     f.print ('@').generable (_clazz);
-    if (_memberValues != null)
+    if (_memberValues != null && !_memberValues.isEmpty ())
     {
       f.print ('(');
-
       if (_isOptimizable ())
       {
         // short form
