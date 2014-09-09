@@ -10,6 +10,8 @@
   <packaging>bundle</packaging>
   <name>jcodemodel</name>
   <description>Java code generation library</description>
+  <url>https://github.com/phax/jcodemodel</url>
+  <inceptionYear>2013</inceptionYear>
   
   <licenses>
     <license>
