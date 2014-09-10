@@ -291,7 +291,7 @@ public class JNarrowedClass extends AbstractJClass
     for (final AbstractJClass aClass : _args)
     {
       final AbstractJClass c = aClass.substituteParams (variables, bindings);
-      clazz.add (aClass);
+      clazz.add (c);
       different |= c != aClass;
     }
 

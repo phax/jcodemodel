@@ -243,7 +243,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned, Comparable 
       final AbstractJClass thisClass = (AbstractJClass) this;
       final AbstractJClass thatClass = (AbstractJClass) that;
 
-      if (thisClass.erasure () != thatClass.erasure () && thisClass.isParameterized () && thatClass.isParameterized ())
+      if (thisClass.erasure () == thatClass.erasure () && thisClass.isParameterized () && thatClass.isParameterized ())
       {
         for (int i = 0; i < thisClass.getTypeParameters ().size (); i++)
         {
