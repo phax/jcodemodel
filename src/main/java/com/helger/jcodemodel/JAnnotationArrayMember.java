@@ -1,7 +1,8 @@
-/*
+/**
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Portions Copyright 2013-2014 Philip Helger
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -22,7 +23,7 @@
  *
  * Modifications:
  * If applicable, add the following below the License Header, with the fields
- * enclosed by brackets ... replaced by your own identifying information:
+ * enclosed by brackets [] replaced by your own identifying information:
  * "Portions Copyright [year] [name of copyright owner]"
  *
  * Contributor(s):
@@ -37,7 +38,6 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-
 package com.helger.jcodemodel;
 
 import java.lang.annotation.Annotation;
