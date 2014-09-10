@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel;
 
+import java.util.Iterator;
 import javax.annotation.Nonnull;
 
 /**
@@ -192,5 +193,114 @@ public abstract class AbstractJType implements IJGenerable, IJOwned, Comparable 
     if (!p && q)
       return 1;
     return lhs.compareTo (rhs);
+  }
+
+  public boolean isUnifiableWith (AbstractJType that) {
+    if (this == that)
+      return true;
+    else if (this instanceof JTypeWildcard && that instanceof JTypeWildcard) {
+      JTypeWildcard thisWildcard = (JTypeWildcard)this;
+      JTypeWildcard thatWildcard = (JTypeWildcard)that;
+      if (thisWildcard.boundMode () != thatWildcard.boundMode())
+          return false;
+      else {
+          if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS) {
+            return thisWildcard.bound ().isSubtypeOf (thatWildcard.bound ());
+          } else {
+            return thisWildcard.bound ().isSupertypeOf (thatWildcard.bound ());
+          }
+      }
+    } else if (this instanceof JTypeWildcard) {
+      JTypeWildcard thisWildcard = (JTypeWildcard)this;
+      if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS) {
+        AbstractJClass thisWildcardBase = thisWildcard.bound ();
+        return that.isSubtypeOf (thisWildcardBase);
+      } else {
+         AbstractJClass thisWildcardSuper = thisWildcard.bound ();
+         return that.isSupertypeOf (thisWildcardSuper);
+      }
+    } else if (that instanceof JTypeWildcard) {
+      JTypeWildcard thatWildcard = (JTypeWildcard)that;
+      if (thatWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS) {
+        AbstractJClass thatWildcardBase = thatWildcard.bound ();
+        return this.isSubtypeOf (thatWildcardBase);
+      } else {
+         AbstractJClass thatWildcardSuper = thatWildcard.bound ();
+         return this.isSupertypeOf (thatWildcardSuper);
+      }
+    } else if (this.isArray () && that.isArray ())
+      return this.elementType ().isUnifiableWith (that.elementType ());
+    else if (this.isReference () && that.isReference ()) {
+      AbstractJClass thisClass = (AbstractJClass)this;
+      AbstractJClass thatClass = (AbstractJClass)that;
+
+      if (thisClass.erasure () != thatClass.erasure ())
+        return false;
+      else {
+        if (thisClass.isParameterized () && thatClass.isParameterized ()) {
+          for (int i = 0; i < thisClass.getTypeParameters ().size (); i++) {
+            AbstractJClass parameter1 = thisClass.getTypeParameters ().get (i);
+            AbstractJClass parameter2 = thatClass.getTypeParameters ().get (i);
+            if (!parameter1.isUnifiableWith (parameter2)) {
+              return false;
+            }
+          }
+          return true;
+        } else
+          return false;
+      }
+    } else
+        return false;
+  }
+
+  /***
+   * Full fledged supertype relation using rules for generics and wildcards
+   */
+  public boolean isSupertypeOf (AbstractJType that) {
+      return that.isSubtypeOf (this);
+  }
+
+  /***
+   * Full fledged subtype relation using rules for generics and wildcards
+   */
+  public boolean isSubtypeOf (AbstractJType that) {
+    if (this.isUnifiableWith (that))
+        return true;
+    else if (this.isReference () && that.isReference ()) {
+      AbstractJClass thisClass = (AbstractJClass)this;
+      AbstractJClass thatClass = (AbstractJClass)that;
+
+      // Bottom
+      if (thisClass instanceof JNullType)
+        return true;
+
+      // Top
+      else if (thatClass == thatClass._package ().owner ().ref (Object.class))
+        return true;
+
+      // Raw classes: i. e.   List<T> <: List   and    List <: List<T>
+      else if (thisClass.erasure () == thatClass.erasure () && (!thatClass.isParameterized() || !thisClass.isParameterized()))
+        return true;
+
+      // Array covariance: i. e. Integer[] <: Object[]
+      else if (this.isArray () && that.isArray ())
+        return this.elementType ().isSubtypeOf (that.elementType ());
+
+      else {
+        AbstractJClass thisClassBase = thisClass._extends();
+        if (thisClassBase != null && thisClassBase.isSubtypeOf (thatClass))
+          return true;
+        else {
+          Iterator<AbstractJClass> i = thisClass._implements();
+          while (i.hasNext()) {
+            AbstractJClass thisClassInterface = i.next ();
+            if (thisClassInterface.isSubtypeOf (thatClass))
+              return true;
+          }
+          return false;
+        }
+      }
+    } else
+      return false;
   }
 }
