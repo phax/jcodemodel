@@ -287,8 +287,8 @@ public class JNarrowedClass extends AbstractJClass
     final AbstractJClass b = _basis.substituteParams (variables, bindings);
     boolean different = b != _basis;
 
-    final List <AbstractJClass> clazz = new ArrayList <AbstractJClass> (_args.size ());
-    for (int i = 0; i < clazz.size (); i++)
+    final List <AbstractJClass> clazz = new ArrayList <AbstractJClass> (_args);
+    for (int i = 0; i < _args.size (); i++)
     {
       final AbstractJClass c = _args.get (i).substituteParams (variables, bindings);
       clazz.set (i, c);
