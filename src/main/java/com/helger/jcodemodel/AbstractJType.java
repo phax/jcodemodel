@@ -177,116 +177,109 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     return this.getClass ().getName () + '(' + fullName () + ')';
   }
 
-  public boolean isUnifiableWith (final AbstractJType that)
+
+  /**
+   * Checks the relationship between two types.
+   * <p>
+   * This method performes superset of actions that are performed by {@link Class#isAssignableFrom(Class)}
+   * For example, baseClass.isAssignableFrom(derivedClass) is always true.
+   * <p>
+   * There are two differences of this method and {@link Class#isAssignableFrom(Class)}
+   * <ol>
+   *    <li>This method works with primitive types
+   *    <li>This method processes generic arguments and supports wildcards
+   * </ol>
+   * <p>
+   * Examples:
+   * <ol>
+   *    <li>[[List]].isAssignableFrom ([[List&lt;T&gt;]])
+   *    <li>[[List&lt;T&gt;]].isAssignableFrom ([[List]])
+   *    <li>[[List&lt;? extends Object&gt;]].isAssignableFrom ([[List&lt;Integer&gt;]])
+   *    <li>[[List&lt;? super Serializable&gt;]].isAssignableFrom ([[List&lt;String&gt;]])
+   *    <li>[[List&lt;? super Serializable&gt;]].isAssignableFrom ([[List&lt;String&gt;]])
+   *    <li>[[List&lt;? extends Object&gt;]].isAssignableFrom ([[List&lt;? extends Integer&gt;]])
+   *    <li>[[List&lt;? extends List&lt;? extends Object&gt;&gt;]].isAssignableFrom ([[List&lt;List&lt;Integer&gt;&gt;]])
+   * </ol>
+   */
+  public boolean isAssignableFrom (final AbstractJType that)
   {
-    if (this == that)
+      return isAssignableFrom(that, true);
+  }
+
+  public boolean isAssignableFrom (final AbstractJType that, boolean allowsRawTypeUnchekedConversion)
+  {
+    if (this.equals (that))
       return true;
-
-    if (this instanceof JTypeWildcard && that instanceof JTypeWildcard)
-    {
-      final JTypeWildcard thisWildcard = (JTypeWildcard) this;
-      final JTypeWildcard thatWildcard = (JTypeWildcard) that;
-      if (thisWildcard.boundMode () != thatWildcard.boundMode ())
-        return false;
-      if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS)
-        return thisWildcard.bound ().isSubtypeOf (thatWildcard.bound ());
-      return thisWildcard.bound ().isSupertypeOf (thatWildcard.bound ());
-    }
-    else
-      if (this instanceof JTypeWildcard)
-      {
-        final JTypeWildcard thisWildcard = (JTypeWildcard) this;
-        if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS)
-        {
-          final AbstractJClass thisWildcardBase = thisWildcard.bound ();
-          return that.isSubtypeOf (thisWildcardBase);
-        }
-        final AbstractJClass thisWildcardSuper = thisWildcard.bound ();
-        return that.isSupertypeOf (thisWildcardSuper);
-      }
-    if (that instanceof JTypeWildcard)
-    {
-      final JTypeWildcard thatWildcard = (JTypeWildcard) that;
-      if (thatWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS)
-      {
-        final AbstractJClass thatWildcardBase = thatWildcard.bound ();
-        return this.isSubtypeOf (thatWildcardBase);
-      }
-      final AbstractJClass thatWildcardSuper = thatWildcard.bound ();
-      return this.isSupertypeOf (thatWildcardSuper);
-    }
-
-    if (this.isArray () && that.isArray ())
-      return this.elementType ().isUnifiableWith (that.elementType ());
 
     if (this.isReference () && that.isReference ())
     {
       final AbstractJClass thisClass = (AbstractJClass) this;
       final AbstractJClass thatClass = (AbstractJClass) that;
 
-      if (thisClass.erasure () == thatClass.erasure () && thisClass.isParameterized () && thatClass.isParameterized ())
-      {
+      // Bottom: Anything anything = null
+      if (thatClass instanceof JNullType)
+        return true;
+
+      // Top: Object object = (Anything)anything
+      if (thisClass == thisClass._package ().owner ().ref (Object.class))
+        return true;
+
+      // Array covariance: i. e. Object[] array1 = (Integer[])array2
+      if (this.isArray () && that.isArray ())
+        return this.elementType ().isAssignableFrom (that.elementType (), false);
+
+      if (thisClass.erasure ().equals(thatClass.erasure ())) {
+        // Raw classes: i. e. List list1 = (List<T>)list2;
+        if (!thisClass.isParameterized ())
+          return true;
+
+        // Raw classes unchecked conversion: i. e. List<T> list1 = (List)list2
+        if (!thatClass.isParameterized ())
+          return allowsRawTypeUnchekedConversion;
+
         for (int i = 0; i < thisClass.getTypeParameters ().size (); i++)
         {
-          final AbstractJClass parameter1 = thisClass.getTypeParameters ().get (i);
-          final AbstractJClass parameter2 = thatClass.getTypeParameters ().get (i);
-          if (!parameter1.isUnifiableWith (parameter2))
+          final AbstractJClass thisParameter = thisClass.getTypeParameters ().get (i);
+          final AbstractJClass thatParameter = thatClass.getTypeParameters ().get (i);
+
+          if (thisParameter instanceof JTypeWildcard)
+          {
+            JTypeWildcard thisWildcard = (JTypeWildcard)thisParameter;
+
+            if (thatParameter instanceof JTypeWildcard)
+            {
+              JTypeWildcard thatWildcard = (JTypeWildcard)thatParameter;
+              if (thisWildcard.boundMode() != thatWildcard.boundMode())
+                return false;
+              if (thisWildcard.boundMode() == JTypeWildcard.EBoundMode.EXTENDS)
+                return thisWildcard.bound().isAssignableFrom(thatWildcard.bound(), false);
+              if (thisWildcard.boundMode() == JTypeWildcard.EBoundMode.SUPER)
+                return thatWildcard.bound().isAssignableFrom(thisWildcard.bound(), false);
+              throw new IllegalStateException("Unsupported wildcard bound mode: " + thisWildcard.boundMode());
+            }
+
+            if (thisWildcard.boundMode() == JTypeWildcard.EBoundMode.EXTENDS)
+              return thisWildcard.bound().isAssignableFrom(thatParameter, false);
+            if (thisWildcard.boundMode() == JTypeWildcard.EBoundMode.SUPER)
+              return thatParameter.isAssignableFrom(thisWildcard.bound(), false);
+            throw new IllegalStateException("Unsupported wildcard bound mode: " + thisWildcard.boundMode());
+          }
+
+          if (!thisParameter.equals(thatParameter))
             return false;
         }
         return true;
       }
-    }
 
-    return false;
-  }
-
-  /***
-   * Full fledged supertype relation using rules for generics and wildcards
-   */
-  public boolean isSupertypeOf (final AbstractJType that)
-  {
-    return that.isSubtypeOf (this);
-  }
-
-  /***
-   * Full fledged subtype relation using rules for generics and wildcards
-   */
-  public boolean isSubtypeOf (final AbstractJType that)
-  {
-    if (this.isUnifiableWith (that))
-      return true;
-
-    if (this.isReference () && that.isReference ())
-    {
-      final AbstractJClass thisClass = (AbstractJClass) this;
-      final AbstractJClass thatClass = (AbstractJClass) that;
-
-      // Bottom
-      if (thisClass instanceof JNullType)
+      final AbstractJClass thatClassBase = thatClass._extends ();
+      if (thatClassBase != null && this.isAssignableFrom (thatClassBase))
         return true;
 
-      // Top
-      if (thatClass == thatClass._package ().owner ().ref (Object.class))
-        return true;
-
-      // Raw classes: i. e. List<T> <: List and List <: List<T>
-      if (thisClass.erasure () == thatClass.erasure () &&
-          (!thatClass.isParameterized () || !thisClass.isParameterized ()))
-        return true;
-
-      // Array covariance: i. e. Integer[] <: Object[]
-      if (this.isArray () && that.isArray ())
-        return this.elementType ().isSubtypeOf (that.elementType ());
-
-      final AbstractJClass thisClassBase = thisClass._extends ();
-      if (thisClassBase != null && thisClassBase.isSubtypeOf (thatClass))
-        return true;
-
-      final Iterator <AbstractJClass> i = thisClass._implements ();
+      final Iterator <AbstractJClass> i = thatClass._implements ();
       while (i.hasNext ())
       {
-        final AbstractJClass thisClassInterface = i.next ();
-        if (thisClassInterface.isSubtypeOf (thatClass))
+        final AbstractJClass thatClassInterface = i.next ();
+        if (this.isAssignableFrom (thatClassInterface))
           return true;
       }
       // false so far

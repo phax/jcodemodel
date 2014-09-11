@@ -181,42 +181,6 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * Checks the relationship between two classes.
-   * <p>
-   * This method works in the same way as {@link Class#isAssignableFrom(Class)}
-   * works. For example, baseClass.isAssignableFrom(derivedClass)==true.
-   */
-  public final boolean isAssignableFrom (@Nonnull final AbstractJClass derived)
-  {
-    // to avoid the confusion, always use "this" explicitly in this method.
-
-    // null can be assigned to any type.
-    if (derived instanceof JNullType)
-      return true;
-
-    if (this == derived)
-      return true;
-
-    // the only class that is assignable from an interface is java.lang.Object
-    if (this == _package ().owner ().ref (Object.class))
-      return true;
-
-    final AbstractJClass b = derived._extends ();
-    if (b != null && isAssignableFrom (b))
-      return true;
-
-    if (isInterface ())
-    {
-      final Iterator <AbstractJClass> itfs = derived._implements ();
-      while (itfs.hasNext ())
-        if (isAssignableFrom (itfs.next ()))
-          return true;
-    }
-
-    return false;
-  }
-
-  /**
    * Gets the parameterization of the given base type.
    * <p>
    * For example, given the following
