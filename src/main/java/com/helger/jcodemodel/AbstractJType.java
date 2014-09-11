@@ -206,7 +206,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
       return isAssignableFrom(that, true);
   }
 
-  public boolean isAssignableFrom (final AbstractJType that, boolean allowsRawTypeUnchekedConversion)
+  protected boolean isAssignableFrom (final AbstractJType that, boolean allowsRawTypeUnchekedConversion)
   {
     if (this.equals (that))
       return true;
