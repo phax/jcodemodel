@@ -61,7 +61,6 @@ import javax.annotation.Nonnull;
  */
 public class JFormatter implements Closeable
 {
-
   private static enum EMode
   {
     /**
@@ -82,8 +81,6 @@ public class JFormatter implements Closeable
    * preceding whitespace.
    */
   /* package */static final char CLOSE_TYPE_ARGS = '\uFFFF';
-
-  private static final Comparator<AbstractJClass> IMPORTS_COMPARATOR = new ImportsComparator();
 
   /** all classes and ids encountered during the collection mode **/
   /**
@@ -125,7 +122,7 @@ public class JFormatter implements Closeable
 
   /**
    * Creates a JFormatter.
-   * 
+   *
    * @param aPW
    *        PrintWriter to JFormatter to use.
    * @param space
@@ -270,7 +267,7 @@ public class JFormatter implements Closeable
 
   /**
    * Print a char into the stream
-   * 
+   *
    * @param c
    *        the char
    * @return this
@@ -296,7 +293,7 @@ public class JFormatter implements Closeable
 
   /**
    * Print a String into the stream
-   * 
+   *
    * @param s
    *        the String
    * @return this
@@ -410,7 +407,7 @@ public class JFormatter implements Closeable
 
   /**
    * Cause the JGenerable object to generate source for iteself
-   * 
+   *
    * @param g
    *        the JGenerable object
    */
@@ -443,7 +440,7 @@ public class JFormatter implements Closeable
 
   /**
    * Cause the JDeclaration to generate source for itself
-   * 
+   *
    * @param d
    *        the JDeclaration object
    */
@@ -456,7 +453,7 @@ public class JFormatter implements Closeable
 
   /**
    * Cause the JStatement to generate source for itself
-   * 
+   *
    * @param s
    *        the JStatement object
    */
@@ -469,7 +466,7 @@ public class JFormatter implements Closeable
 
   /**
    * Cause the JVar to generate source for itself
-   * 
+   *
    * @param v
    *        the JVar object
    */
@@ -531,7 +528,7 @@ public class JFormatter implements Closeable
 
     // generate import statements
     final AbstractJClass [] imports = _importedClasses.toArray (new AbstractJClass [_importedClasses.size ()]);
-    Arrays.sort (imports, IMPORTS_COMPARATOR);
+    Arrays.sort (imports, new ImportsComparator ());
     boolean bAnyImport = false;
     for (AbstractJClass clazz : imports)
     {
@@ -559,7 +556,7 @@ public class JFormatter implements Closeable
   /**
    * determine if an import statement should be used for given class. This is a
    * matter of style and convention
-   * 
+   *
    * @param aReference
    *        {@link AbstractJClass} referenced class
    * @param clazz
@@ -600,7 +597,7 @@ public class JFormatter implements Closeable
 
   /**
    * determine if an import statement should be suppressed
-   * 
+   *
    * @param aReference
    *        {@link AbstractJClass} that may or may not have an import
    * @param aGeneratingClass
@@ -667,7 +664,7 @@ public class JFormatter implements Closeable
   /**
    * If reference is inner-class adds some outer class to the list of imported
    * classes if it
-   * 
+   *
    * @param clazz
    *        {@link AbstractJClass} that may or may not have an import
    * @param aGeneratingClass
@@ -696,7 +693,7 @@ public class JFormatter implements Closeable
   /**
    * Used during the optimization of class imports. List of
    * {@link AbstractJClass}es whose short name is the same.
-   * 
+   *
    * @author Ryan.Shoemaker@Sun.COM
    */
   private final class Usages
@@ -809,23 +806,24 @@ public class JFormatter implements Closeable
     }
   }
 
-  private static class ImportsComparator implements Comparator<AbstractJClass> {
+  private static class ImportsComparator implements Comparator <AbstractJClass>
+  {
     /**
-     * Compare two JTypes by FQCN, giving sorting precedence to types that belong
-     * to packages java and javax over all others. This method is used to sort
-     * generated import statments in a conventional way for readability.
+     * Compare two JTypes by FQCN, giving sorting precedence to types that
+     * belong to packages java and javax over all others. This method is used to
+     * sort generated import statments in a conventional way for readability.
      */
     public int compare (@Nonnull final AbstractJClass left, @Nonnull final AbstractJClass right)
     {
       final String lhs = left.fullName ();
       final String rhs = right.fullName ();
-      final boolean p = lhs.startsWith ("java");
-      final boolean q = rhs.startsWith ("java");
+      final boolean bLeftJava = lhs.startsWith ("java");
+      final boolean bRightJava = rhs.startsWith ("java");
 
-      if (p && !q)
+      if (bLeftJava && !bRightJava)
         return -1;
-      if (!p && q)
-        return 1;
+      if (!bLeftJava && bRightJava)
+        return +1;
       return lhs.compareTo (rhs);
     }
   }

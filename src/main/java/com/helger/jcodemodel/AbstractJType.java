@@ -46,7 +46,10 @@ import javax.annotation.Nonnull;
 
 /**
  * A representation of a type in codeModel. A type is always either primitive (
- * {@link JPrimitiveType}) or a reference type ({@link AbstractJClass}).
+ * {@link JPrimitiveType}) or a reference type ({@link AbstractJClass}).<br>
+ * Note: up to version 2.7.6 this class implemented
+ * <code>Comparable &lt;AbstractJType&gt;</code>. Since this was specific to
+ * import handling on emitting code, it was removed with 2.7.7!
  */
 public abstract class AbstractJType implements IJGenerable, IJOwned
 {
@@ -148,8 +151,12 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   public abstract AbstractJType unboxify ();
 
   /**
-   * Returns the erasure of this type.
+   * @return the erasure of this type. This is only relevant for narrowed
+   *         classes like <code>List&lt;Integer&gt;</code> in which case this
+   *         method returns the reference to <code>List</code> without any
+   *         generic type parameters.
    */
+  @Nonnull
   public AbstractJType erasure ()
   {
     return this;
@@ -177,36 +184,42 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     return this.getClass ().getName () + '(' + fullName () + ')';
   }
 
-
   /**
    * Checks the relationship between two types.
    * <p>
-   * This method performes superset of actions that are performed by {@link Class#isAssignableFrom(Class)}
-   * For example, baseClass.isAssignableFrom(derivedClass) is always true.
+   * This method performes superset of actions that are performed by
+   * {@link Class#isAssignableFrom(Class)} For example,
+   * baseClass.isAssignableFrom(derivedClass) is always true.
    * <p>
-   * There are two differences of this method and {@link Class#isAssignableFrom(Class)}
+   * There are two differences of this method and
+   * {@link Class#isAssignableFrom(Class)}
    * <ol>
-   *    <li>This method works with primitive types
-   *    <li>This method processes generic arguments and supports wildcards
+   * <li>This method works with primitive types
+   * <li>This method processes generic arguments and supports wildcards
    * </ol>
    * <p>
    * Examples:
    * <ol>
-   *    <li>[[List]].isAssignableFrom ([[List&lt;T&gt;]])
-   *    <li>[[List&lt;T&gt;]].isAssignableFrom ([[List]])
-   *    <li>[[List&lt;? extends Object&gt;]].isAssignableFrom ([[List&lt;Integer&gt;]])
-   *    <li>[[List&lt;? super Serializable&gt;]].isAssignableFrom ([[List&lt;String&gt;]])
-   *    <li>[[List&lt;? super Serializable&gt;]].isAssignableFrom ([[List&lt;String&gt;]])
-   *    <li>[[List&lt;? extends Object&gt;]].isAssignableFrom ([[List&lt;? extends Integer&gt;]])
-   *    <li>[[List&lt;? extends List&lt;? extends Object&gt;&gt;]].isAssignableFrom ([[List&lt;List&lt;Integer&gt;&gt;]])
+   * <li>[[List]].isAssignableFrom ([[List&lt;T&gt;]])</li>
+   * <li>[[List&lt;T&gt;]].isAssignableFrom ([[List]])</li>
+   * <li>[[List&lt;? extends Object&gt;]].isAssignableFrom
+   * ([[List&lt;Integer&gt;]])</li>
+   * <li>[[List&lt;? super Serializable&gt;]].isAssignableFrom
+   * ([[List&lt;String&gt;]])</li>
+   * <li>[[List&lt;? super Serializable&gt;]].isAssignableFrom
+   * ([[List&lt;String&gt;]])</li>
+   * <li>[[List&lt;? extends Object&gt;]].isAssignableFrom ([[List&lt;? extends
+   * Integer&gt;]])</li>
+   * <li>[[List&lt;? extends List&lt;? extends Object&gt;&gt;]].isAssignableFrom
+   * ([[List&lt;List&lt;Integer&gt;&gt;]])</li>
    * </ol>
    */
   public boolean isAssignableFrom (final AbstractJType that)
   {
-      return isAssignableFrom(that, true);
+    return isAssignableFrom (that, true);
   }
 
-  protected boolean isAssignableFrom (final AbstractJType that, boolean allowsRawTypeUnchekedConversion)
+  protected boolean isAssignableFrom (final AbstractJType that, final boolean allowsRawTypeUnchekedConversion)
   {
     if (this.equals (that))
       return true;
@@ -228,7 +241,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
       if (this.isArray () && that.isArray ())
         return this.elementType ().isAssignableFrom (that.elementType (), false);
 
-      if (thisClass.erasure ().equals(thatClass.erasure ())) {
+      if (thisClass.erasure ().equals (thatClass.erasure ()))
+      {
         // Raw classes: i. e. List list1 = (List<T>)list2;
         if (!thisClass.isParameterized ())
           return true;
@@ -244,28 +258,28 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
 
           if (thisParameter instanceof JTypeWildcard)
           {
-            JTypeWildcard thisWildcard = (JTypeWildcard)thisParameter;
+            final JTypeWildcard thisWildcard = (JTypeWildcard) thisParameter;
 
             if (thatParameter instanceof JTypeWildcard)
             {
-              JTypeWildcard thatWildcard = (JTypeWildcard)thatParameter;
-              if (thisWildcard.boundMode() != thatWildcard.boundMode())
+              final JTypeWildcard thatWildcard = (JTypeWildcard) thatParameter;
+              if (thisWildcard.boundMode () != thatWildcard.boundMode ())
                 return false;
-              if (thisWildcard.boundMode() == JTypeWildcard.EBoundMode.EXTENDS)
-                return thisWildcard.bound().isAssignableFrom(thatWildcard.bound(), false);
-              if (thisWildcard.boundMode() == JTypeWildcard.EBoundMode.SUPER)
-                return thatWildcard.bound().isAssignableFrom(thisWildcard.bound(), false);
-              throw new IllegalStateException("Unsupported wildcard bound mode: " + thisWildcard.boundMode());
+              if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS)
+                return thisWildcard.bound ().isAssignableFrom (thatWildcard.bound (), false);
+              if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.SUPER)
+                return thatWildcard.bound ().isAssignableFrom (thisWildcard.bound (), false);
+              throw new IllegalStateException ("Unsupported wildcard bound mode: " + thisWildcard.boundMode ());
             }
 
-            if (thisWildcard.boundMode() == JTypeWildcard.EBoundMode.EXTENDS)
-              return thisWildcard.bound().isAssignableFrom(thatParameter, false);
-            if (thisWildcard.boundMode() == JTypeWildcard.EBoundMode.SUPER)
-              return thatParameter.isAssignableFrom(thisWildcard.bound(), false);
-            throw new IllegalStateException("Unsupported wildcard bound mode: " + thisWildcard.boundMode());
+            if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS)
+              return thisWildcard.bound ().isAssignableFrom (thatParameter, false);
+            if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.SUPER)
+              return thatParameter.isAssignableFrom (thisWildcard.bound (), false);
+            throw new IllegalStateException ("Unsupported wildcard bound mode: " + thisWildcard.boundMode ());
           }
 
-          if (!thisParameter.equals(thatParameter))
+          if (!thisParameter.equals (thatParameter))
             return false;
         }
         return true;
