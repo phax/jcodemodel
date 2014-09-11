@@ -132,7 +132,7 @@ public class JTypeWildcard extends AbstractJClass
   @Override
   public AbstractJClass _extends ()
   {
-    return _bound;
+    return _boundMode == EBoundMode.EXTENDS ? _bound : _package ().owner ().ref (Object.class);
   }
 
   /**
