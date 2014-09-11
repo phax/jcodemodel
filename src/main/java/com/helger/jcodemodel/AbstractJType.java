@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
  * A representation of a type in codeModel. A type is always either primitive (
  * {@link JPrimitiveType}) or a reference type ({@link AbstractJClass}).
  */
-public abstract class AbstractJType implements IJGenerable, IJOwned, Comparable <AbstractJType>
+public abstract class AbstractJType implements IJGenerable, IJOwned
 {
   /**
    * Obtains a reference to the primitive type object from a type name.
@@ -175,25 +175,6 @@ public abstract class AbstractJType implements IJGenerable, IJOwned, Comparable 
   public String toString ()
   {
     return this.getClass ().getName () + '(' + fullName () + ')';
-  }
-
-  /**
-   * Compare two JTypes by FQCN, giving sorting precedence to types that belong
-   * to packages java and javax over all others. This method is used to sort
-   * generated import statments in a conventional way for readability.
-   */
-  public int compareTo (@Nonnull final AbstractJType o)
-  {
-    final String lhs = fullName ();
-    final String rhs = o.fullName ();
-    final boolean p = lhs.startsWith ("java");
-    final boolean q = rhs.startsWith ("java");
-
-    if (p && !q)
-      return -1;
-    if (!p && q)
-      return 1;
-    return lhs.compareTo (rhs);
   }
 
   public boolean isUnifiableWith (final AbstractJType that)

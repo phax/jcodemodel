@@ -46,6 +46,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -81,6 +82,8 @@ public class JFormatter implements Closeable
    * preceding whitespace.
    */
   /* package */static final char CLOSE_TYPE_ARGS = '\uFFFF';
+
+  private static final Comparator<AbstractJClass> IMPORTS_COMPARATOR = new ImportsComparator();
 
   /** all classes and ids encountered during the collection mode **/
   /**
@@ -528,7 +531,7 @@ public class JFormatter implements Closeable
 
     // generate import statements
     final AbstractJClass [] imports = _importedClasses.toArray (new AbstractJClass [_importedClasses.size ()]);
-    Arrays.sort (imports);
+    Arrays.sort (imports, IMPORTS_COMPARATOR);
     boolean bAnyImport = false;
     for (AbstractJClass clazz : imports)
     {
@@ -803,6 +806,27 @@ public class JFormatter implements Closeable
     public boolean isTypeName ()
     {
       return !_referencedClasses.isEmpty ();
+    }
+  }
+
+  private static class ImportsComparator implements Comparator<AbstractJClass> {
+    /**
+     * Compare two JTypes by FQCN, giving sorting precedence to types that belong
+     * to packages java and javax over all others. This method is used to sort
+     * generated import statments in a conventional way for readability.
+     */
+    public int compare (@Nonnull final AbstractJClass left, @Nonnull final AbstractJClass right)
+    {
+      final String lhs = left.fullName ();
+      final String rhs = right.fullName ();
+      final boolean p = lhs.startsWith ("java");
+      final boolean q = rhs.startsWith ("java");
+
+      if (p && !q)
+        return -1;
+      if (!p && q)
+        return 1;
+      return lhs.compareTo (rhs);
     }
   }
 }
