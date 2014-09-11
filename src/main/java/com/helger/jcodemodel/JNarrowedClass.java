@@ -269,10 +269,12 @@ public class JNarrowedClass extends AbstractJClass
   {
     if (obj == this)
       return true;
-    if (obj == null || !getClass ().equals (obj.getClass ()))
+    if (obj == null || !(obj instanceof JNarrowedClass))
       return false;
-    final JNarrowedClass rhs = this;
-    return fullName ().equals (rhs.fullName ());
+    final JNarrowedClass that = (JNarrowedClass)obj;
+    if (!this._basis.equals(that._basis))
+        return false;
+    return this._args.equals(that._args);
   }
 
   @Override
