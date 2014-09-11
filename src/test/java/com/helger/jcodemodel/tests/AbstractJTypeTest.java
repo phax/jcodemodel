@@ -97,8 +97,15 @@ public class AbstractJTypeTest
     final AbstractJClass _List = codeModel.ref (List.class);
 
     _assertIsAssignable (_Object, _Integer);
+    _assertIsNotAssignable (_Integer, _Object);
+    _assertIsNotAssignable (_Integer, _List);
+    _assertIsNotAssignable (_List, _Integer);
+    _assertIsAssignable (_Object, _List);
+    _assertIsNotAssignable (_List, _Object);
+
     _assertIsAssignable (_List.narrow (_Integer), _List.narrow (_Integer));
     _assertIsNotAssignable (_List.narrow (_Object), _List.narrow (_Integer));
+    _assertIsNotAssignable (_List.narrow (_Integer), _List.narrow (_Object));
     _assertIsAssignable (_List.narrow (_Object.wildcard ()), _List.narrow (_Integer));
     _assertIsAssignable (_List.narrow (_Object.wildcard ()), _List.narrow (_Integer.wildcard ()));
     _assertIsAssignable (_List.narrow (_Integer.wildcardSuper ()), _List.narrow (_Object));
@@ -114,7 +121,7 @@ public class AbstractJTypeTest
 
     // List<? super List<List<List>>> list1 = (List<List<? super List>>)list2
     _assertIsNotAssignable (_List.narrow (_List.narrow (_List.narrow (_List)).wildcardSuper ()),
-                           _List.narrow (_List.narrow (_List.wildcardSuper ())));
+                            _List.narrow (_List.narrow (_List.wildcardSuper ())));
   }
 
   @Test
@@ -157,10 +164,10 @@ public class AbstractJTypeTest
         }
         _assertIsAssignable (_List.narrow (assignment._variable.wildcard ()), _List.narrow (assignment._value));
         _assertIsAssignable (_List.narrow (assignment._variable.wildcard ()),
-                            _List.narrow (assignment._value.wildcard ()));
+                             _List.narrow (assignment._value.wildcard ()));
         _assertIsAssignable (_List.narrow (assignment._value.wildcardSuper ()), _List.narrow (assignment._variable));
         _assertIsAssignable (_List.narrow (assignment._value.wildcardSuper ()),
-                            _List.narrow (assignment._variable.wildcardSuper ()));
+                             _List.narrow (assignment._variable.wildcardSuper ()));
       }
     }
   }
