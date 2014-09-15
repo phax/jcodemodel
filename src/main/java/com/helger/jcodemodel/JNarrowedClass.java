@@ -280,7 +280,7 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public int hashCode ()
   {
-    return fullName ().hashCode ();
+    return _basis.hashCode () * 37 + _args.hashCode();
   }
 
   @Override
