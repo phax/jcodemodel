@@ -231,6 +231,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
+  @Nonnull
   public AbstractJClass erasure ()
   {
     return _basis;
@@ -260,29 +261,6 @@ public class JNarrowedClass extends AbstractJClass
     return _args;
   }
 
-  //
-  // Equality is based on value
-  //
-
-  @Override
-  public boolean equals (final Object obj)
-  {
-    if (obj == this)
-      return true;
-    if (obj == null || !(obj instanceof JNarrowedClass))
-      return false;
-    final JNarrowedClass that = (JNarrowedClass)obj;
-    if (!this._basis.equals(that._basis))
-        return false;
-    return this._args.equals(that._args);
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return _basis.hashCode () * 37 + _args.hashCode();
-  }
-
   @Override
   protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
@@ -300,5 +278,28 @@ public class JNarrowedClass extends AbstractJClass
     if (different)
       return new JNarrowedClass (b, clazz);
     return this;
+  }
+
+  //
+  // Equality is based on value
+  //
+
+  @Override
+  public boolean equals (final Object obj)
+  {
+    if (obj == this)
+      return true;
+    // This is important so that a JNarrowedClass class and a potential subclass
+    // are per-definitionem not identical!
+    if (obj == null || !getClass ().equals (obj.getClass ()))
+      return false;
+    final JNarrowedClass that = (JNarrowedClass) obj;
+    return _basis.equals (that._basis) && _args.equals (that._args);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return _basis.hashCode () * 37 + _args.hashCode();
   }
 }
