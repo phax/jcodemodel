@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.util.ClassNameComparator;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -86,7 +87,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /**
    * List of interfaces that this class implements
    */
-  private final Set <AbstractJClass> _interfaces = new TreeSet <AbstractJClass> ();
+  private final Set <AbstractJClass> _interfaces = new TreeSet <AbstractJClass> (ClassNameComparator.theInstance);
 
   /**
    * Fields keyed by their names.
