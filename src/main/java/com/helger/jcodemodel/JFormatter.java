@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.util.ClassNameComparator;
 import java.io.Closeable;
 import java.io.PrintWriter;
 import java.io.Writer;
@@ -528,7 +529,7 @@ public class JFormatter implements Closeable
 
     // generate import statements
     final AbstractJClass [] imports = _importedClasses.toArray (new AbstractJClass [_importedClasses.size ()]);
-    Arrays.sort (imports, new ImportsComparator ());
+    Arrays.sort (imports, ClassNameComparator.theInstance);
     boolean bAnyImport = false;
     for (AbstractJClass clazz : imports)
     {
@@ -803,28 +804,6 @@ public class JFormatter implements Closeable
     public boolean isTypeName ()
     {
       return !_referencedClasses.isEmpty ();
-    }
-  }
-
-  private static class ImportsComparator implements Comparator <AbstractJClass>
-  {
-    /**
-     * Compare two JTypes by FQCN, giving sorting precedence to types that
-     * belong to packages java and javax over all others. This method is used to
-     * sort generated import statments in a conventional way for readability.
-     */
-    public int compare (@Nonnull final AbstractJClass left, @Nonnull final AbstractJClass right)
-    {
-      final String lhs = left.fullName ();
-      final String rhs = right.fullName ();
-      final boolean bLeftJava = lhs.startsWith ("java");
-      final boolean bRightJava = rhs.startsWith ("java");
-
-      if (bLeftJava && !bRightJava)
-        return -1;
-      if (!bLeftJava && bRightJava)
-        return +1;
-      return lhs.compareTo (rhs);
     }
   }
 }
