@@ -151,11 +151,11 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Nonnull
-  private Set <AbstractJClass> _getThrows ()
+  public Collection <AbstractJClass> getThrows ()
   {
     if (_throws == null)
-      _throws = new TreeSet <AbstractJClass> (ClassNameComparator.theInstance);
-    return _throws;
+      return Collections.emptySet ();
+    return Collections.unmodifiableSet (_throws);
   }
 
   /**
@@ -167,7 +167,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JMethod _throws (final AbstractJClass exception)
   {
-    _getThrows ().add (exception);
+    if (_throws == null)
+      _throws = new TreeSet <AbstractJClass> (ClassNameComparator.theInstance);
+    _throws.add (exception);
     return this;
   }
 
