@@ -40,14 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.util.ClassNameComparator;
 import java.io.Closeable;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,6 +53,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+
+import com.helger.jcodemodel.util.ClassNameComparator;
 
 /**
  * This is a utility class for managing indentation and other basic formatting
