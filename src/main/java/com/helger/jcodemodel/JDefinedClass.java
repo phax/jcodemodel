@@ -40,7 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.util.ClassNameComparator;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -56,6 +55,8 @@ import java.util.TreeSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.ClassNameComparator;
+
 /**
  * A generated Java class/interface/enum/....
  * <p>
@@ -70,24 +71,24 @@ import javax.annotation.Nullable;
 public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJClassContainer, IJGenerifiable, IJAnnotatable, IJDocCommentable
 {
   /**
-   * Name of this class. Null if anonymous.
+   * Name of this class. <code>null</code> if anonymous.
    */
-  private final String _name;
+  private final String m_sName;
 
   /**
    * Modifiers for the class declaration
    */
-  private JMods _mods;
+  private JMods m_aMods;
 
   /**
    * Name of the super class of this class.
    */
-  private AbstractJClass _superClass;
+  private AbstractJClass m_aSuperClass;
 
   /**
    * List of interfaces that this class implements
    */
-  private final Set <AbstractJClass> _interfaces = new TreeSet <AbstractJClass> (ClassNameComparator.theInstance);
+  private final Set <AbstractJClass> m_aInterfaces = new TreeSet <AbstractJClass> (ClassNameComparator.getInstance ());
 
   /**
    * Fields keyed by their names.
@@ -97,37 +98,37 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /**
    * Static initializer, if this class has one
    */
-  private JBlock _staticInit;
+  private JBlock m_aStaticInit;
 
   /**
    * Instance initializer, if this class has one
    */
-  private JBlock _instanceInit;
+  private JBlock m_aInstanceInit;
 
   /**
    * class javadoc
    */
-  private JDocComment _jdoc;
+  private JDocComment m_aJDoc;
 
   /**
    * Set of constructors for this class, if any
    */
-  private final List <JMethod> _constructors = new ArrayList <JMethod> ();
+  private final List <JMethod> m_aConstructors = new ArrayList <JMethod> ();
 
   /**
    * Set of methods that are members of this class
    */
-  private final List <JMethod> _methods = new ArrayList <JMethod> ();
+  private final List <JMethod> m_aMethods = new ArrayList <JMethod> ();
 
   /**
    * Nested classes as a map from name to JDefinedClass. The name is all
    * capitalized in a case sensitive file system (
    * {@link JCodeModel#isCaseSensitiveFileSystem}) to avoid conflicts. Lazily
    * created to save footprint.
-   * 
+   *
    * @see #_getClasses()
    */
-  private Map <String, JDefinedClass> _classes;
+  private Map <String, JDefinedClass> m_aClasses;
 
   /**
    * Flag that controls whether this class should be really generated or not.
@@ -135,7 +136,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * actually generating the code of X. This flag is used to suppress X.java
    * file in the output.
    */
-  private boolean _hideFile = false;
+  private boolean m_bHideFile = false;
 
   /**
    * Client-app specific metadata associated with this user-created class.
@@ -145,19 +146,19 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /**
    * String that will be put directly inside the generated code. Can be null.
    */
-  private String _directBlock;
+  private String m_sDirectBlock;
 
   /**
    * If this is a package-member class, this is {@link JPackage}. If this is a
    * nested class, this is {@link JDefinedClass}. If this is an anonymous class,
    * this constructor shouldn't be used.
    */
-  private final IJClassContainer _outer;
+  private final IJClassContainer m_aOuter;
 
   /**
    * Default value is class or interface or annotationTypeDeclaration or enum
    */
-  private final EClassType _classType;
+  private final EClassType m_eClassType;
 
   /**
    * List containing the enum value declarations
@@ -169,17 +170,17 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * is actually significant, because of order ID they get. So let's preserve
    * the order.
    */
-  private final Map <String, JEnumConstant> _enumConstantsByName = new LinkedHashMap <String, JEnumConstant> ();
+  private final Map <String, JEnumConstant> m_aEnumConstantsByName = new LinkedHashMap <String, JEnumConstant> ();
 
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> _annotations;
+  private List <JAnnotationUse> m_aAnnotations;
 
   /**
    * Helper class to implement {@link IJGenerifiable}.
    */
-  private final AbstractJGenerifiableImpl _generifiable = new AbstractJGenerifiableImpl ()
+  private final AbstractJGenerifiableImpl m_aGenerifiable = new AbstractJGenerifiableImpl ()
   {
     @Nonnull
     public JCodeModel owner ()
@@ -215,7 +216,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * JClass constructor
-   * 
+   *
    * @param mods
    *        Modifiers for this class declaration
    * @param name
@@ -254,14 +255,14 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
       }
     }
 
-    _classType = classTypeVal;
+    m_eClassType = classTypeVal;
     if (isInterface ())
-      _mods = JMods.forInterface (mods);
+      m_aMods = JMods.forInterface (mods);
     else
-      _mods = JMods.forClass (mods);
+      m_aMods = JMods.forClass (mods);
 
-    _name = name;
-    _outer = parent;
+    m_sName = name;
+    m_aOuter = parent;
   }
 
   /**
@@ -269,12 +270,12 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    */
   public final boolean isAnonymous ()
   {
-    return _name == null;
+    return m_sName == null;
   }
 
   /**
    * This class extends the specified class.
-   * 
+   *
    * @param superClass
    *        Superclass for this class
    * @return This class
@@ -282,7 +283,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public JDefinedClass _extends (@Nonnull final AbstractJClass superClass)
   {
-    if (_classType == EClassType.INTERFACE)
+    if (m_eClassType == EClassType.INTERFACE)
     {
       if (superClass.isInterface ())
         return _implements (superClass);
@@ -297,13 +298,13 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
       {
         throw new IllegalArgumentException ("Illegal class inheritance loop." +
                                             "  Outer class " +
-                                            _name +
+                                            m_sName +
                                             " may not subclass from inner class: " +
                                             o.name ());
       }
     }
 
-    _superClass = superClass;
+    m_aSuperClass = superClass;
     return this;
   }
 
@@ -320,14 +321,14 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public AbstractJClass _extends ()
   {
-    if (_superClass == null)
-      _superClass = owner ().ref (Object.class);
-    return _superClass;
+    if (m_aSuperClass == null)
+      m_aSuperClass = owner ().ref (Object.class);
+    return m_aSuperClass;
   }
 
   /**
    * This class implements the specifed interface.
-   * 
+   *
    * @param iface
    *        Interface that this class implements
    * @return This class
@@ -335,7 +336,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public JDefinedClass _implements (@Nonnull final AbstractJClass iface)
   {
-    _interfaces.add (iface);
+    m_aInterfaces.add (iface);
     return this;
   }
 
@@ -352,7 +353,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
-    return _interfaces.iterator ();
+    return m_aInterfaces.iterator ();
   }
 
   /**
@@ -360,21 +361,21 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    * <p>
    * For example, for <code>java.util.List</code>, this method returns
    * <code>"List"</code>"
-   * 
+   *
    * @return Name of this class
    */
   @Override
   @Nullable
   public String name ()
   {
-    return _name;
+    return m_sName;
   }
 
   /**
    * If the named enum already exists, the reference to it is returned.
    * Otherwise this method generates a new enum reference with the given name
    * and returns it.
-   * 
+   *
    * @param name
    *        The name of the constant.
    * @return The generated type-safe enum constant.
@@ -382,11 +383,11 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public JEnumConstant enumConstant (@Nonnull final String name)
   {
-    JEnumConstant ec = _enumConstantsByName.get (name);
+    JEnumConstant ec = m_aEnumConstantsByName.get (name);
     if (null == ec)
     {
       ec = new JEnumConstant (this, name);
-      _enumConstantsByName.put (name, ec);
+      m_aEnumConstantsByName.put (name, ec);
     }
     return ec;
   }
@@ -398,8 +399,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nullable
   public String fullName ()
   {
-    if (_outer instanceof JDefinedClass)
-      return ((JDefinedClass) _outer).fullName () + '.' + name ();
+    if (m_aOuter instanceof JDefinedClass)
+      return ((JDefinedClass) m_aOuter).fullName () + '.' + name ();
 
     final JPackage p = _package ();
     if (p.isUnnamed ())
@@ -410,26 +411,26 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Override
   public String binaryName ()
   {
-    if (_outer instanceof JDefinedClass)
-      return ((JDefinedClass) _outer).binaryName () + '$' + name ();
+    if (m_aOuter instanceof JDefinedClass)
+      return ((JDefinedClass) m_aOuter).binaryName () + '$' + name ();
     return fullName ();
   }
 
   @Override
   public boolean isInterface ()
   {
-    return _classType == EClassType.INTERFACE;
+    return m_eClassType == EClassType.INTERFACE;
   }
 
   @Override
   public boolean isAbstract ()
   {
-    return _mods.isAbstract ();
+    return m_aMods.isAbstract ();
   }
 
   /**
    * Adds a field to the list of field members of this JDefinedClass.
-   * 
+   *
    * @param mods
    *        Modifiers for this field
    * @param type
@@ -450,7 +451,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Adds a field to the list of field members of this JDefinedClass.
-   * 
+   *
    * @param mods
    *        Modifiers for this field.
    * @param type
@@ -477,12 +478,12 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    */
   public boolean isAnnotationTypeDeclaration ()
   {
-    return _classType == EClassType.ANNOTATION_TYPE_DECL;
+    return m_eClassType == EClassType.ANNOTATION_TYPE_DECL;
   }
 
   /**
    * Add an annotationType Declaration to this package
-   * 
+   *
    * @param name
    *        Name of the annotation Type declaration to be added to this package
    * @return newly created Annotation Type Declaration
@@ -497,7 +498,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Add a public enum to this package
-   * 
+   *
    * @param name
    *        Name of the enum to be added to this package
    * @return newly created Enum
@@ -512,7 +513,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Add a public enum to this package
-   * 
+   *
    * @param name
    *        Name of the enum to be added to this package
    * @param mods
@@ -530,7 +531,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public EClassType getClassType ()
   {
-    return _classType;
+    return m_eClassType;
   }
 
   @Nonnull
@@ -542,7 +543,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   /**
    * Returns all the fields declared in this class. The returned {@link Map} is
    * a read-only live view.
-   * 
+   *
    * @return always non-null.
    */
   @Nonnull
@@ -553,7 +554,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Removes a {@link JFieldVar} from this class.
-   * 
+   *
    * @throws IllegalArgumentException
    *         if the given field is not a field on this class.
    */
@@ -565,33 +566,33 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Creates, if necessary, and returns the static initializer for this class.
-   * 
+   *
    * @return JBlock containing initialization statements for this class
    */
   @Nonnull
   public JBlock init ()
   {
-    if (_staticInit == null)
-      _staticInit = new JBlock ();
-    return _staticInit;
+    if (m_aStaticInit == null)
+      m_aStaticInit = new JBlock ();
+    return m_aStaticInit;
   }
 
   /**
    * Creates, if necessary, and returns the instance initializer for this class.
-   * 
+   *
    * @return JBlock containing initialization statements for this class
    */
   @Nonnull
   public JBlock instanceInit ()
   {
-    if (_instanceInit == null)
-      _instanceInit = new JBlock ();
-    return _instanceInit;
+    if (m_aInstanceInit == null)
+      m_aInstanceInit = new JBlock ();
+    return m_aInstanceInit;
   }
 
   /**
    * Adds a constructor to this class.
-   * 
+   *
    * @param mods
    *        Modifiers for this constructor
    */
@@ -599,7 +600,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   public JMethod constructor (final int mods)
   {
     final JMethod c = new JMethod (mods, this);
-    _constructors.add (c);
+    m_aConstructors.add (c);
     return c;
   }
 
@@ -609,18 +610,18 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public Iterator <JMethod> constructors ()
   {
-    return _constructors.iterator ();
+    return m_aConstructors.iterator ();
   }
 
   /**
    * Looks for a method that has the specified method signature and return it.
-   * 
+   *
    * @return null if not found.
    */
   @Nullable
   public JMethod getConstructor (@Nonnull final AbstractJType [] argTypes)
   {
-    for (final JMethod m : _constructors)
+    for (final JMethod m : m_aConstructors)
       if (m.hasSignature (argTypes))
         return m;
     return null;
@@ -628,7 +629,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Add a method to the list of method members of this JDefinedClass instance.
-   * 
+   *
    * @param mods
    *        Modifiers for this method
    * @param type
@@ -642,7 +643,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   {
     // XXX problems caught in M constructor
     final JMethod m = new JMethod (this, mods, type, name);
-    _methods.add (m);
+    m_aMethods.add (m);
     return m;
   }
 
@@ -658,18 +659,18 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public Collection <JMethod> methods ()
   {
-    return _methods;
+    return m_aMethods;
   }
 
   /**
    * Looks for a method that has the specified method signature and return it.
-   * 
+   *
    * @return null if not found.
    */
   @Nullable
   public JMethod getMethod (final String name, final AbstractJType [] argTypes)
   {
-    for (final JMethod m : _methods)
+    for (final JMethod m : m_aMethods)
     {
       if (!m.name ().equals (name))
         continue;
@@ -697,7 +698,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Add a new nested class to this class.
-   * 
+   *
    * @param mods
    *        Modifiers for this class declaration
    * @param name
@@ -740,7 +741,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Add an interface to this package.
-   * 
+   *
    * @param mods
    *        Modifiers for this interface declaration
    * @param name
@@ -764,15 +765,15 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Creates, if necessary, and returns the class javadoc for this JDefinedClass
-   * 
+   *
    * @return JDocComment containing javadocs for this class
    */
   @Nonnull
   public JDocComment javadoc ()
   {
-    if (_jdoc == null)
-      _jdoc = new JDocComment (owner ());
-    return _jdoc;
+    if (m_aJDoc == null)
+      m_aJDoc = new JDocComment (owner ());
+    return m_aJDoc;
   }
 
   /**
@@ -783,12 +784,12 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    */
   public void hide ()
   {
-    _hideFile = true;
+    m_bHideFile = true;
   }
 
   public boolean isHidden ()
   {
-    return _hideFile;
+    return m_bHideFile;
   }
 
   /**
@@ -797,17 +798,17 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public final Collection <JDefinedClass> classes ()
   {
-    if (_classes == null)
+    if (m_aClasses == null)
       return Collections.<JDefinedClass> emptyList ();
-    return _classes.values ();
+    return m_aClasses.values ();
   }
 
   @Nonnull
   private Map <String, JDefinedClass> _getClasses ()
   {
-    if (_classes == null)
-      _classes = new TreeMap <String, JDefinedClass> ();
-    return _classes;
+    if (m_aClasses == null)
+      m_aClasses = new TreeMap <String, JDefinedClass> ();
+    return m_aClasses;
   }
 
   /**
@@ -816,52 +817,52 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public final AbstractJClass [] listClasses ()
   {
-    if (_classes == null)
+    if (m_aClasses == null)
       return new AbstractJClass [0];
-    return _classes.values ().toArray (new AbstractJClass [_classes.values ().size ()]);
+    return m_aClasses.values ().toArray (new AbstractJClass [m_aClasses.values ().size ()]);
   }
 
   @Override
   @Nullable
   public AbstractJClass outer ()
   {
-    if (_outer.isClass ())
-      return (AbstractJClass) _outer;
+    if (m_aOuter.isClass ())
+      return (AbstractJClass) m_aOuter;
     return null;
   }
 
   public void declare (@Nonnull final JFormatter f)
   {
     // Java docs
-    if (_jdoc != null)
-      f.newline ().generable (_jdoc);
+    if (m_aJDoc != null)
+      f.newline ().generable (m_aJDoc);
 
     // Class annotations
-    if (_annotations != null)
-      for (final JAnnotationUse aAnnotation : _annotations)
+    if (m_aAnnotations != null)
+      for (final JAnnotationUse aAnnotation : m_aAnnotations)
         f.generable (aAnnotation).newline ();
 
     // Modifiers (private, protected, public)
     // Type of class (class, interface, enum, @interface)
     // Name of the class
     // Class wildcards
-    f.generable (_mods).print (_classType.declarationToken ()).id (_name).declaration (_generifiable);
+    f.generable (m_aMods).print (m_eClassType.declarationToken ()).id (m_sName).declaration (m_aGenerifiable);
 
     // If a super class is defined and is not "Object"
     boolean bHasSuperClass = false;
-    if (_superClass != null && _superClass != owner ().ref (Object.class))
+    if (m_aSuperClass != null && m_aSuperClass != owner ().ref (Object.class))
     {
       bHasSuperClass = true;
-      f.newline ().indent ().print ("extends").generable (_superClass).newline ().outdent ();
+      f.newline ().indent ().print ("extends").generable (m_aSuperClass).newline ().outdent ();
     }
 
     // Add all interfaces
-    if (!_interfaces.isEmpty ())
+    if (!m_aInterfaces.isEmpty ())
     {
       if (!bHasSuperClass)
         f.newline ();
-      f.indent ().print (_classType == EClassType.INTERFACE ? "extends" : "implements");
-      f.generable (_interfaces);
+      f.indent ().print (m_eClassType == EClassType.INTERFACE ? "extends" : "implements");
+      f.generable (m_aInterfaces);
       f.newline ().outdent ();
     }
 
@@ -876,9 +877,9 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
     f.print ('{').newline ().indent ();
     boolean first = true;
 
-    if (!_enumConstantsByName.isEmpty ())
+    if (!m_aEnumConstantsByName.isEmpty ())
     {
-      for (final JEnumConstant c : _enumConstantsByName.values ())
+      for (final JEnumConstant c : m_aEnumConstantsByName.values ())
       {
         if (first)
           first = false;
@@ -894,29 +895,29 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
       f.declaration (field);
 
     // Static init
-    if (_staticInit != null)
-      f.newline ().print ("static").statement (_staticInit);
+    if (m_aStaticInit != null)
+      f.newline ().print ("static").statement (m_aStaticInit);
 
     // Instance init
-    if (_instanceInit != null)
-      f.newline ().statement (_instanceInit);
+    if (m_aInstanceInit != null)
+      f.newline ().statement (m_aInstanceInit);
 
     // All constructors
-    for (final JMethod m : _constructors)
+    for (final JMethod m : m_aConstructors)
       f.newline ().declaration (m);
 
     // All regular methods
-    for (final JMethod m : _methods)
+    for (final JMethod m : m_aMethods)
       f.newline ().declaration (m);
 
     // All inner classes
-    if (_classes != null)
-      for (final JDefinedClass dc : _classes.values ())
+    if (m_aClasses != null)
+      for (final JDefinedClass dc : m_aClasses.values ())
         f.newline ().declaration (dc);
 
     // Hacks...
-    if (_directBlock != null)
-      f.print (_directBlock);
+    if (m_sDirectBlock != null)
+      f.print (m_sDirectBlock);
 
     f.outdent ().print ('}').newline ();
   }
@@ -928,18 +929,18 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    */
   public void direct (@Nullable final String string)
   {
-    if (_directBlock == null)
-      _directBlock = string;
+    if (m_sDirectBlock == null)
+      m_sDirectBlock = string;
     else
       if (string != null)
-        _directBlock += string;
+        m_sDirectBlock += string;
   }
 
   @Override
   @Nonnull
   public final JPackage _package ()
   {
-    IJClassContainer p = _outer;
+    IJClassContainer p = m_aOuter;
     while (!(p instanceof JPackage))
       p = p.parentContainer ();
     return (JPackage) p;
@@ -948,38 +949,38 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public final IJClassContainer parentContainer ()
   {
-    return _outer;
+    return m_aOuter;
   }
 
   @Nonnull
   public JTypeVar generify (@Nonnull final String name)
   {
-    return _generifiable.generify (name);
+    return m_aGenerifiable.generify (name);
   }
 
   @Nonnull
   public JTypeVar generify (@Nonnull final String name, @Nonnull final Class <?> bound)
   {
-    return _generifiable.generify (name, bound);
+    return m_aGenerifiable.generify (name, bound);
   }
 
   @Nonnull
   public JTypeVar generify (@Nonnull final String name, @Nonnull final AbstractJClass bound)
   {
-    return _generifiable.generify (name, bound);
+    return m_aGenerifiable.generify (name, bound);
   }
 
   @Override
   @Nonnull
   public JTypeVar [] typeParams ()
   {
-    return _generifiable.typeParams ();
+    return m_aGenerifiable.typeParams ();
   }
 
   @Nonnull
   public List <JTypeVar> typeParamList ()
   {
-    return _generifiable.typeParamList ();
+    return m_aGenerifiable.typeParamList ();
   }
 
   @Override
@@ -990,7 +991,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Adding ability to annotate a class
-   * 
+   *
    * @param clazz
    *        The annotation class to annotate the class with
    */
@@ -1002,7 +1003,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   /**
    * Adding ability to annotate a class
-   * 
+   *
    * @param clazz
    *        The annotation class to annotate the class with
    * @return The created annotation use. Never <code>null</code>.
@@ -1010,10 +1011,10 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
-    if (_annotations == null)
-      _annotations = new ArrayList <JAnnotationUse> ();
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    _annotations.add (a);
+    m_aAnnotations.add (a);
     return a;
   }
 
@@ -1029,9 +1030,9 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    if (_annotations == null)
-      _annotations = new ArrayList <JAnnotationUse> ();
-    return Collections.unmodifiableCollection (_annotations);
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+    return Collections.unmodifiableCollection (m_aAnnotations);
   }
 
   /**
@@ -1041,6 +1042,6 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   @Nonnull
   public JMods mods ()
   {
-    return _mods;
+    return m_aMods;
   }
 }

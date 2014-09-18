@@ -529,7 +529,7 @@ public class JFormatter implements Closeable
 
     // generate import statements
     final AbstractJClass [] imports = _importedClasses.toArray (new AbstractJClass [_importedClasses.size ()]);
-    Arrays.sort (imports, ClassNameComparator.theInstance);
+    Arrays.sort (imports, ClassNameComparator.getInstance ());
     boolean bAnyImport = false;
     for (AbstractJClass clazz : imports)
     {

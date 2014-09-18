@@ -49,20 +49,26 @@ import com.helger.jcodemodel.AbstractJClass;
 /**
  * Comparator object that sorts {@link AbstractJClass}es in the order of their
  * names.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public final class ClassNameComparator implements Comparator <AbstractJClass>
 {
-  public static final Comparator <AbstractJClass> theInstance = new ClassNameComparator ();
+  private static final ClassNameComparator s_aInstance = new ClassNameComparator ();
 
   private ClassNameComparator ()
   {}
 
+  @Nonnull
+  public static ClassNameComparator getInstance ()
+  {
+    return s_aInstance;
+  }
+
   /**
-   * Compare two JTypes by FQCN, giving sorting precedence to types that
-   * belong to packages java and javax over all others. This method is used to
-   * sort generated import statments in a conventional way for readability.
+   * Compare two JTypes by FQCN, giving sorting precedence to types that belong
+   * to packages java and javax over all others. This method is used to sort
+   * generated import statments in a conventional way for readability.
    */
   public int compare (@Nonnull final AbstractJClass left, @Nonnull final AbstractJClass right)
   {
