@@ -7,8 +7,11 @@ with other `com.sun.codemodel` instances that might be floating around in the cl
 That of course implies, that this artefact cannot directly be used with JAXB, since the configuration of 
 this would be very tricky.
 
+A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. is available.
+
 News and noteworthy:
 
+* 2014-09-17: Release 2.7.7 - mainly API extensions 
 * 2014-09-02: Release 2.7.6 - Extended annotation parameter handling API
 * 2014-08-14: Release 2.7.5 - Support for multiple boundaries added (like `T extends AnyClass & Serializable`)
 * 2014-06-12: Release 2.7.4 - Bugfix release
@@ -25,6 +28,6 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>2.7.6</version>
+  <version>2.7.7</version>
 </dependency>
 ```
