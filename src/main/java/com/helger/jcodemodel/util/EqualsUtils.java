@@ -33,17 +33,17 @@ public final class EqualsUtils
   private EqualsUtils ()
   {}
 
-  public static boolean equals (final boolean aObj1, final boolean aObj2)
+  public static boolean isEqual (final boolean aObj1, final boolean aObj2)
   {
     return aObj1 == aObj2;
   }
 
-  public static boolean equals (final byte aObj1, final byte aObj2)
+  public static boolean isEqual (final byte aObj1, final byte aObj2)
   {
     return aObj1 == aObj2;
   }
 
-  public static boolean equals (final char aObj1, final char aObj2)
+  public static boolean isEqual (final char aObj1, final char aObj2)
   {
     return aObj1 == aObj2;
   }
@@ -58,7 +58,7 @@ public final class EqualsUtils
    *        Second double
    * @return <code>true</code> if they are equal.
    */
-  public static boolean equals (final double aObj1, final double aObj2)
+  public static boolean isEqual (final double aObj1, final double aObj2)
   {
     // ESCA-JAVA0078:
     // Special overload for "double" required!
@@ -75,29 +75,29 @@ public final class EqualsUtils
    *        Second float
    * @return <code>true</code> if they are equal.
    */
-  public static boolean equals (final float aObj1, final float aObj2)
+  public static boolean isEqual (final float aObj1, final float aObj2)
   {
     // ESCA-JAVA0078:
     // Special overload for "float" required!
     return (aObj1 == aObj2) || (Float.floatToIntBits (aObj1) == Float.floatToIntBits (aObj2));
   }
 
-  public static boolean equals (final int aObj1, final int aObj2)
+  public static boolean isEqual (final int aObj1, final int aObj2)
   {
     return aObj1 == aObj2;
   }
 
-  public static boolean equals (final long aObj1, final long aObj2)
+  public static boolean isEqual (final long aObj1, final long aObj2)
   {
     return aObj1 == aObj2;
   }
 
-  public static boolean equals (final short aObj1, final short aObj2)
+  public static boolean isEqual (final short aObj1, final short aObj2)
   {
     return aObj1 == aObj2;
   }
 
-  public static boolean equals (@Nullable final Object aObj1, @Nullable final Object aObj2)
+  public static boolean isEqual (@Nullable final Object aObj1, @Nullable final Object aObj2)
   {
     // Same object - check first
     if (aObj1 == aObj2)
