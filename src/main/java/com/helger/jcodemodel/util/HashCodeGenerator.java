@@ -564,4 +564,42 @@ public final class HashCodeGenerator
       throw new IllegalArgumentException ("Passed hash code is invalid!");
     return new HashCodeGenerator (nSuperHashCode);
   }
+
+  /**
+   * Static helper method to create the hashcode of an object with a single
+   * invocation.
+   *
+   * @param aThis
+   *        <code>this</code>
+   * @param aMembers
+   *        A list of all members. Primitive types must be boxed.
+   * @return The generated hashCode.
+   */
+  public static int hashCode (@Nonnull final Object aThis, @Nullable final Object... aMembers)
+  {
+    final HashCodeGenerator aHCGen = new HashCodeGenerator (aThis);
+    if (aMembers != null)
+      for (final Object aMember : aMembers)
+        aHCGen.append (aMember);
+    return aHCGen.getHashCode ();
+  }
+
+  /**
+   * Static helper method to create the hashcode of an object with a single
+   * invocation.
+   *
+   * @param nSuperHashCode
+   *        The result of <code>super.hashCode()</code>
+   * @param aMembers
+   *        A list of all members. Primitive types must be boxed.
+   * @return The generated hashCode.
+   */
+  public static int hashCode (@Nonnull final int nSuperHashCode, @Nullable final Object... aMembers)
+  {
+    final HashCodeGenerator aHCGen = getDerived (nSuperHashCode);
+    if (aMembers != null)
+      for (final Object aMember : aMembers)
+        aHCGen.append (aMember);
+    return aHCGen.getHashCode ();
+  }
 }
