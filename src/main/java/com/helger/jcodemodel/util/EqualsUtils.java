@@ -16,6 +16,8 @@
  */
 package com.helger.jcodemodel.util;
 
+import java.util.Arrays;
+
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
@@ -107,6 +109,50 @@ public final class EqualsUtils
     if (aObj1 == null || aObj2 == null)
       return false;
 
+    // Check whether the implementation classes are identical
+    final Class <?> aClass1 = aObj1.getClass ();
+    final Class <?> aClass2 = aObj2.getClass ();
+    if (!aClass1.equals (aClass2))
+    {
+      // Not the same class -> not equal!
+      return false;
+    }
+
+    if (aClass1.isArray ())
+    {
+      // Special handling for arrays
+      final Object [] aArray1 = (Object []) aObj1;
+      final Object [] aArray2 = (Object []) aObj2;
+      // Size check
+      final int nLength = aArray1.length;
+      if (nLength != aArray2.length)
+        return false;
+      // Content check
+      for (int i = 0; i < nLength; i++)
+        if (!isEqual (aArray1[i], aArray2[i]))
+          return false;
+      return true;
+    }
+
+    // Primitive arrays
+    if (aClass1.equals (boolean [].class))
+      return Arrays.equals ((boolean []) aObj1, (boolean []) aObj2);
+    if (aClass1.equals (byte [].class))
+      return Arrays.equals ((byte []) aObj1, (byte []) aObj2);
+    if (aClass1.equals (char [].class))
+      return Arrays.equals ((char []) aObj1, (char []) aObj2);
+    if (aClass1.equals (double [].class))
+      return Arrays.equals ((double []) aObj1, (double []) aObj2);
+    if (aClass1.equals (float [].class))
+      return Arrays.equals ((float []) aObj1, (float []) aObj2);
+    if (aClass1.equals (int [].class))
+      return Arrays.equals ((int []) aObj1, (int []) aObj2);
+    if (aClass1.equals (long [].class))
+      return Arrays.equals ((long []) aObj1, (long []) aObj2);
+    if (aClass1.equals (short [].class))
+      return Arrays.equals ((short []) aObj1, (short []) aObj2);
+
+    // Non-array
     return aObj1.equals (aObj2);
   }
 
