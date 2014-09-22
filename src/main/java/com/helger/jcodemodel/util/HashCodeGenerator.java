@@ -567,7 +567,8 @@ public final class HashCodeGenerator
 
   /**
    * Static helper method to create the hashcode of an object with a single
-   * invocation.
+   * invocation. This method must be used by objects that directly derive from
+   * Object.
    *
    * @param aThis
    *        <code>this</code>
@@ -575,7 +576,7 @@ public final class HashCodeGenerator
    *        A list of all members. Primitive types must be boxed.
    * @return The generated hashCode.
    */
-  public static int hashCode (@Nonnull final Object aThis, @Nullable final Object... aMembers)
+  public static int getHashCode (@Nonnull final Object aThis, @Nullable final Object... aMembers)
   {
     final HashCodeGenerator aHCGen = new HashCodeGenerator (aThis);
     if (aMembers != null)
@@ -586,7 +587,8 @@ public final class HashCodeGenerator
 
   /**
    * Static helper method to create the hashcode of an object with a single
-   * invocation.
+   * invocation. This method must be used by objects that derive from a class
+   * other than Object.
    *
    * @param nSuperHashCode
    *        The result of <code>super.hashCode()</code>
@@ -594,7 +596,7 @@ public final class HashCodeGenerator
    *        A list of all members. Primitive types must be boxed.
    * @return The generated hashCode.
    */
-  public static int hashCode (@Nonnull final int nSuperHashCode, @Nullable final Object... aMembers)
+  public static int getHashCode (@Nonnull final int nSuperHashCode, @Nullable final Object... aMembers)
   {
     final HashCodeGenerator aHCGen = getDerived (nSuperHashCode);
     if (aMembers != null)
