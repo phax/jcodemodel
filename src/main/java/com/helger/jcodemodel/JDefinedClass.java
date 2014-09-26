@@ -208,7 +208,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
 
   private JDefinedClass (final int mods,
                          @Nullable final String name,
-                         @Nonnull final IJClassContainer parent,
+                         @Nullable final IJClassContainer parent,
                          @Nonnull final JCodeModel owner)
   {
     this (mods, name, parent, owner, EClassType.CLASS);
@@ -224,7 +224,7 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
    */
   private JDefinedClass (final int mods,
                          @Nullable final String name,
-                         @Nonnull final IJClassContainer parent,
+                         @Nullable final IJClassContainer parent,
                          @Nonnull final JCodeModel owner,
                          @Nonnull final EClassType classTypeVal)
   {
