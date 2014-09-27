@@ -40,12 +40,16 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.util.HashCodeGenerator;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 
 /**
  * {@link JMethod} invocation
@@ -333,6 +337,11 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     }
   }
 
+  private String methodName ()
+  {
+    return _methodName != null ? _methodName : _method.name ();
+  }
+
   public void generate (@Nonnull final JFormatter f)
   {
     if (_isConstructor)
@@ -354,10 +363,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     }
     else
     {
-      // method name
-      String name = _methodName;
-      if (name == null)
-        name = _method.name ();
+      String name = methodName ();
 
       if (_object != null)
       {
@@ -391,5 +397,50 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   public void state (@Nonnull final JFormatter f)
   {
     f.generable (this).print (';').newline ();
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JInvocation rhs = (JInvocation) o;
+    if (!(isEqual (_object, rhs._object) &&
+        isEqual (methodName (), rhs.methodName ()) &&
+        isEqual (_isConstructor, rhs._isConstructor) &&
+        isEqual (_args, rhs._args) &&
+        isEqual (_type.fullName (), rhs._type.fullName ())))
+    {
+      return false;
+    }
+    if (_typeVariables.size () != rhs._typeVariables.size ())
+      return false;
+    for (int i = 0; i < _typeVariables.size (); i++)
+    {
+      if (!isEqual (_typeVariables.get (i).fullName (),
+          rhs._typeVariables.get (i).fullName ()))
+        return false;
+    }
+    return true;
+  }
+
+  public int hashCode ()
+  {
+    HashCodeGenerator hashCodeGenerator = new HashCodeGenerator (this)
+        .append (_object)
+        .append (methodName ())
+        .append (_isConstructor)
+        .append (_args)
+        .append (_type.fullName ())
+        .append (_typeVariables.size ());
+    for (JTypeVar typeVariable : _typeVariables)
+    {
+      hashCodeGenerator = hashCodeGenerator.append (typeVariable.fullName ());
+    }
+    return hashCodeGenerator.getHashCode ();
   }
 }

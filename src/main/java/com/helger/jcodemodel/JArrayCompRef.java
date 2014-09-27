@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * array component reference.
  */
@@ -88,5 +91,23 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
   public void generate (@Nonnull final JFormatter f)
   {
     f.generable (_array).print ('[').generable (_index).print (']');
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JArrayCompRef rhs = (JArrayCompRef) o;
+    return isEqual (_array, rhs._array) && isEqual (_index, rhs._index);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _array, _index);
   }
 }

@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * JAtoms: Simple code components that merely generate themselves.
  */
@@ -65,5 +68,23 @@ public class JAtom extends AbstractJExpressionImpl
   public void generate (@Nonnull final JFormatter f)
   {
     f.print (_what);
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JAtom rhs = (JAtom) o;
+    return isEqual (_what, rhs._what);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _what);
   }
 }

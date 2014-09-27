@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * A special atom for long values
  */
@@ -64,5 +67,23 @@ public class JAtomLong extends AbstractJExpressionImpl
   public void generate (@Nonnull final JFormatter f)
   {
     f.print (Long.toString (_what) + SUFFIX_LONG);
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JAtomLong rhs = (JAtomLong) o;
+    return isEqual (_what, rhs._what);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _what);
   }
 }

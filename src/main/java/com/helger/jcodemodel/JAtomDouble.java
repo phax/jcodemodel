@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * A special atom for double values
  */
@@ -75,5 +78,23 @@ public class JAtomDouble extends AbstractJExpressionImpl
           f.print (JAVA_LANG_DOUBLE_NAN);
         else
           f.print (Double.toString (_what));
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JAtomDouble rhs = (JAtomDouble) o;
+    return isEqual (_what, rhs._what);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _what);
   }
 }

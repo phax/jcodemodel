@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 public class JOpUnary extends AbstractJExpressionImpl
 {
   private final String _op;
@@ -85,5 +88,24 @@ public class JOpUnary extends AbstractJExpressionImpl
       f.print ('(').print (_op).generable (_e).print (')');
     else
       f.print ('(').generable (_e).print (_op).print (')');
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (!(o instanceof JOpUnary))
+      return false;
+    JOpUnary rhs = (JOpUnary) o;
+    return isEqual (_op, rhs._op) && isEqual (_e, rhs._e) &&
+        isEqual (opFirst, rhs.opFirst);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _op, _e, opFirst);
   }
 }
