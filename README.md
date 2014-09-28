@@ -11,7 +11,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 News and noteworthy:
 
-* 2014-09-17: Release 2.7.7 - mainly API extensions 
+* 2014-09-17: Release 2.7.7 - mainly API extensions
 * 2014-09-02: Release 2.7.6 - Extended annotation parameter handling API
 * 2014-08-14: Release 2.7.5 - Support for multiple boundaries added (like `T extends AnyClass & Serializable`)
 * 2014-06-12: Release 2.7.4 - Bugfix release
@@ -31,3 +31,7 @@ Add the following to your pom.xml to use this artifact:
   <version>2.7.7</version>
 </dependency>
 ```
+
+---
+
+On Twitter: <a href="https://twitter.com/philiphelger">Follow @philiphelger</a>
