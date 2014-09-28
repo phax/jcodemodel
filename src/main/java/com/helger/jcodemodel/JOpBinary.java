@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 public class JOpBinary extends AbstractJExpressionImpl
 {
   private final IJExpression _left;
@@ -76,5 +79,24 @@ public class JOpBinary extends AbstractJExpressionImpl
   public void generate (@Nonnull final JFormatter f)
   {
     f.print ('(').generable (_left).print (_op).generable (_right).print (')');
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JOpBinary rhs = (JOpBinary) o;
+    return isEqual (_left, rhs._left) && isEqual (_op, rhs._op) &&
+        isEqual (_right, rhs._right);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _left, _op, _right);
   }
 }

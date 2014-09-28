@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+
 public class JExprStatementWrapper <T extends IJExpression> extends AbstractJExpressionImpl implements IJExpressionStatement
 {
   private final T _expr;
@@ -71,5 +73,26 @@ public class JExprStatementWrapper <T extends IJExpression> extends AbstractJExp
   public static <U extends IJExpression> JExprStatementWrapper <U> create (@Nonnull final U expr)
   {
     return new JExprStatementWrapper <U> (expr);
+  }
+
+  @Override
+  public IJExpression unwrapped ()
+  {
+    return _expr.unwrapped ();
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    return isEqual (unwrapped (), o);
+  }
+
+  public int hashCode ()
+  {
+    return unwrapped ().hashCode ();
   }
 }

@@ -49,6 +49,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * Variables and fields.
  */
@@ -238,5 +241,23 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   public void generate (@Nonnull final JFormatter f)
   {
     f.id (_name);
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (!(o instanceof JVar))
+      return false;
+    JVar rhs = (JVar) o;
+    return isEqual (_name, rhs._name);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _name);
   }
 }

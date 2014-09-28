@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * A special atom for int values
  */
@@ -62,5 +65,23 @@ public class JAtomInt extends AbstractJExpressionImpl
   public void generate (@Nonnull final JFormatter f)
   {
     f.print (Integer.toString (_what));
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JAtomInt rhs = (JAtomInt) o;
+    return isEqual (_what, rhs._what);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _what);
   }
 }

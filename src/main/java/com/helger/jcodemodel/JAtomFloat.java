@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * A special atom for float values
  */
@@ -76,5 +79,23 @@ public class JAtomFloat extends AbstractJExpressionImpl
           f.print (JAVA_LANG_FLOAT_NAN);
         else
           f.print (Float.toString (_what) + SUFFIX_FLOAT);
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JAtomFloat rhs = (JAtomFloat) o;
+    return isEqual (_what, rhs._what);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _what);
   }
 }

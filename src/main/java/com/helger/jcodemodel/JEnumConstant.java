@@ -48,6 +48,9 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * Enum Constant. When used as an {@link IJExpression}, this object represents a
  * reference to the enum constant.
@@ -220,5 +223,24 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   public void generate (@Nonnull final JFormatter f)
   {
     f.type (_type).print ('.').print (_name);
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JEnumConstant rhs = (JEnumConstant) o;
+    return isEqual (_type.fullName (), rhs._type.fullName ()) &&
+        isEqual (_name, rhs._name);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _type.fullName (), _name);
   }
 }

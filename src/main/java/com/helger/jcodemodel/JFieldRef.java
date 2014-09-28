@@ -43,6 +43,9 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * Field Reference
  */
@@ -175,5 +178,23 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
         f.print ("this.").print (name);
       else
         f.id (name);
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JFieldRef rhs = (JFieldRef) o;
+    return isEqual (_object, rhs._object) && isEqual (name (), rhs.name ());
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _object, name ());
   }
 }

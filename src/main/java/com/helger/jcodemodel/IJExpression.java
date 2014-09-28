@@ -451,4 +451,19 @@ public interface IJExpression extends IJGenerable
    */
   @Nonnull
   JArrayCompRef component0 ();
+
+  /**
+   * Returns the unwrapped expression instance. Most implementations returns
+   * itself.
+   *
+   * @return the unwrapped expression
+   */
+  IJExpression unwrapped ();
+
+  /**
+   * Two instances of <code>IJExpression</code> should be considered equal if
+   * their unwrapped forms represent expressions eligible for common
+   * subexpression elimination.
+   */
+  boolean equals (Object o);
 }

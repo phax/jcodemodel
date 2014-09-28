@@ -430,4 +430,9 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   {
     return component (JExpr.lit (0));
   }
+
+  public IJExpression unwrapped ()
+  {
+    return this;
+  }
 }

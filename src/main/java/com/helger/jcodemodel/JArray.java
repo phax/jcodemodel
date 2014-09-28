@@ -47,6 +47,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * array creation and initialization.
  */
@@ -143,5 +146,24 @@ public class JArray extends AbstractJExpressionImpl
       f.print (' ');
     if (_size == null || hasExprs)
       f.print ('}');
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JArray rhs = (JArray) o;
+    return isEqual (_type.fullName (), rhs._type.fullName ()) &&
+        isEqual (_size, rhs._size) && isEqual (_exprs, rhs._exprs);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _type.fullName (), _size, _exprs);
   }
 }

@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * Assignment statements, which are also expressions.
  */
@@ -112,5 +115,24 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
   public void state (@Nonnull final JFormatter f)
   {
     f.generable (this).print (';').newline ();
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JAssignment rhs = (JAssignment) o;
+    return isEqual (_lhs, rhs._lhs) && isEqual (_rhs, rhs._rhs) &&
+        isEqual (_op, rhs._op);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _lhs, _rhs, _op);
   }
 }

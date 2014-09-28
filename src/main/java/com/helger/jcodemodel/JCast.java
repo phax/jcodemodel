@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 /**
  * A cast operation.
  */
@@ -86,5 +89,24 @@ public class JCast extends AbstractJExpressionImpl
   public void generate (@Nonnull final JFormatter f)
   {
     f.print ("((").generable (_type).print (')').generable (_object).print (')');
+  }
+
+  public boolean equals (Object o)
+  {
+    if (o == this)
+      return true;
+    if (!(o instanceof IJExpression))
+      return false;
+    o = ((IJExpression) o).unwrapped ();
+    if (o == null || getClass () != o.getClass ())
+      return false;
+    JCast rhs = (JCast) o;
+    return isEqual (_type.fullName (), rhs._type.fullName ()) &&
+        isEqual (_object, rhs._object);
+  }
+
+  public int hashCode ()
+  {
+    return getHashCode (this, _type.fullName (), _object);
   }
 }
