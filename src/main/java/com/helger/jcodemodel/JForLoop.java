@@ -40,6 +40,11 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.optimize.ExpressionContainer;
+import com.helger.jcodemodel.optimize.Loop;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +55,7 @@ import javax.annotation.Nullable;
 /**
  * For statement
  */
-public class JForLoop implements IJStatement
+public class JForLoop implements IJStatement, Loop
 {
   private final List <Object> _inits = new ArrayList <Object> ();
   private IJExpression _test;
@@ -110,6 +115,51 @@ public class JForLoop implements IJStatement
   public List <IJExpression> updates ()
   {
     return Collections.unmodifiableList (_updates);
+  }
+
+  public ExpressionContainer statementsExecutedOnce ()
+  {
+    return new ExpressionContainer ()
+    {
+      public boolean forAllSubExpressions (ExpressionCallback callback)
+      {
+        for (Object init : _inits)
+        {
+          if (init instanceof IJExpression &&
+              !((IJExpression) init).forAllSubExpressions (callback))
+            return false;
+        }
+        return true;
+      }
+    };
+  }
+
+  public ExpressionContainer statementsExecutedOnEachIteration ()
+  {
+    return new ExpressionContainer ()
+    {
+      public boolean forAllSubExpressions (ExpressionCallback callback)
+      {
+        for (IJExpression update : _updates)
+        {
+          if (!update.forAllSubExpressions (callback))
+            return false;
+        }
+        return AbstractJExpressionImpl.visitWithSubExpressions (callback,
+            new ExpressionAccessor ()
+        {
+          public void set (IJExpression newExpression)
+          {
+            _test = newExpression;
+          }
+
+          public IJExpression get ()
+          {
+            return _test;
+          }
+        });
+      }
+    };
   }
 
   @Nonnull

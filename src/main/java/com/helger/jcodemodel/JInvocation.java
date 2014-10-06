@@ -40,6 +40,9 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.optimize.ExpressionContainer;
 import com.helger.jcodemodel.util.HashCodeGenerator;
 
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.StringUtils.upper;
 
 /**
  * {@link JMethod} invocation
@@ -62,7 +66,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
    * Object expression upon which this method will be invoked, or null if this
    * is a constructor invocation
    */
-  private final IJGenerable _object;
+  private IJGenerable _object;
 
   /**
    * Name of the method to be invoked. Either this field is set, or
@@ -454,5 +458,77 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
       }
     }
     return hashCodeGenerator.getHashCode ();
+  }
+
+  @Override
+  AbstractJType derivedType ()
+  {
+    if (_type != null)
+      return _type;
+    if (_method != null)
+      return _method.type ();
+    return null;
+  }
+
+  @Override
+  String derivedName ()
+  {
+    String name;
+    if (_object instanceof IJExpression)
+    {
+      name = ((IJExpression) _object).expressionName () +
+          upper (methodName ());
+    } else
+    {
+      name = methodName ();
+    }
+    for (IJExpression arg : _args)
+    {
+      name += upper (arg.expressionName ());
+    }
+    return name;
+  }
+
+  @Override
+  public boolean forAllSubExpressions (ExpressionCallback callback)
+  {
+    if (_object instanceof IJExpression)
+    {
+      if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
+      {
+        public void set (IJExpression newExpression)
+        {
+          _object = newExpression;
+        }
+
+        public IJExpression get ()
+        {
+          return (IJExpression) _object;
+        }
+      }))
+        return false;
+    }
+    for (int i = 0; i < _args.size (); i++)
+    {
+      final int finalI = i;
+      if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
+      {
+        public void set (IJExpression newExpression)
+        {
+          _args.set (finalI, newExpression);
+        }
+
+        public IJExpression get ()
+        {
+          return _args.get (finalI);
+        }
+      }))
+        return false;
+    }
+    if (_type instanceof ExpressionContainer)
+    {
+      return ((ExpressionContainer) _type).forAllSubExpressions (callback);
+    }
+    return true;
   }
 }

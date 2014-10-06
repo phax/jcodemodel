@@ -42,6 +42,9 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 

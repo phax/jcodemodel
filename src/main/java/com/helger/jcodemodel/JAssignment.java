@@ -40,6 +40,9 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+
 import javax.annotation.Nonnull;
 
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
@@ -51,7 +54,7 @@ import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 public class JAssignment extends AbstractJExpressionImpl implements IJExpressionStatement
 {
   private final IJAssignmentTarget _lhs;
-  private final IJExpression _rhs;
+  private IJExpression _rhs;
   private final String _op;
 
   /**
@@ -134,5 +137,40 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
   public int hashCode ()
   {
     return getHashCode (this, _lhs, _rhs, _op);
+  }
+
+  @Override
+  AbstractJType derivedType ()
+  {
+    AbstractJType type = _lhs.expressionType ();
+    if (type != null)
+      return type;
+    return _rhs.expressionType ();
+  }
+
+  @Override
+  String derivedName ()
+  {
+    return _lhs.expressionName () + "AssignedTo" + _rhs.expressionName ();
+  }
+
+  public boolean forAllSubExpressions (ExpressionCallback callback)
+  {
+    if (!_lhs.forAllSubExpressions (callback))
+      return false;
+    if (!callback.visitAssignmentTarget (_lhs))
+      return false;
+    return visitWithSubExpressions (callback, new ExpressionAccessor ()
+    {
+      public void set (IJExpression newExpression)
+      {
+        _rhs = newExpression;
+      }
+
+      public IJExpression get ()
+      {
+        return _rhs;
+      }
+    });
   }
 }

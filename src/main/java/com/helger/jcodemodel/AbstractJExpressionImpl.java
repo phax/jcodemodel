@@ -40,6 +40,9 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -47,6 +50,20 @@ import javax.annotation.Nonnull;
  */
 public abstract class AbstractJExpressionImpl implements IJExpression
 {
+
+  static boolean visitWithSubExpressions(ExpressionCallback callback,
+                                         ExpressionAccessor accessor)
+  {
+    IJExpression expression = accessor.get ();
+    if (!callback.visitExpression (expression, accessor))
+      return false;
+    return expression.forAllSubExpressions (callback);
+  }
+
+
+  private AbstractJType hintType;
+  private String hintName;
+
   protected AbstractJExpressionImpl ()
   {}
 
@@ -434,5 +451,49 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   public IJExpression unwrapped ()
   {
     return this;
+  }
+
+  public final AbstractJType expressionType ()
+  {
+    if (hintType != null)
+      return hintType;
+    return derivedType ();
+  }
+
+  public final AbstractJExpressionImpl hintType(AbstractJType hintType)
+  {
+    this.hintType = hintType;
+    return this;
+  }
+
+  //TODO remove this default and implement for all subclasses!
+  AbstractJType derivedType()
+  {
+    return null;
+  }
+
+  public final String expressionName ()
+  {
+    if (hintName != null)
+      return hintName;
+    return derivedName ();
+  }
+
+  public final AbstractJExpressionImpl hintName(String hintName)
+  {
+    this.hintName = hintName;
+    return this;
+  }
+
+  //TODO remove this default and implement for all subclasses!
+  String derivedName()
+  {
+    return null;
+  }
+
+  //TODO remove this default and implement for all subclasses!
+  public boolean forAllSubExpressions (ExpressionCallback callback)
+  {
+    return true;
   }
 }

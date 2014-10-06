@@ -40,6 +40,11 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.optimize.ExpressionContainer;
+import com.helger.jcodemodel.optimize.Loop;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -48,12 +53,12 @@ import javax.annotation.Nonnull;
  * 
  * @author Bhakti
  */
-public class JForEach implements IJStatement
+public class JForEach implements IJStatement, Loop
 {
   private final AbstractJType _type;
   private final String _var;
   private JBlock _body; // lazily created
-  private final IJExpression _collection;
+  private IJExpression _collection;
   private final JVar _loopVar;
 
   protected JForEach (@Nonnull final AbstractJType vartype,
@@ -85,6 +90,40 @@ public class JForEach implements IJStatement
   public IJExpression collection ()
   {
     return _collection;
+  }
+
+  public ExpressionContainer statementsExecutedOnce ()
+  {
+    return new ExpressionContainer ()
+    {
+      public boolean forAllSubExpressions (ExpressionCallback callback)
+      {
+        return AbstractJExpressionImpl.visitWithSubExpressions (callback,
+            new ExpressionAccessor ()
+        {
+          public void set (IJExpression newExpression)
+          {
+            _collection = newExpression;
+          }
+
+          public IJExpression get ()
+          {
+            return _collection;
+          }
+        });
+      }
+    };
+  }
+
+  public ExpressionContainer statementsExecutedOnEachIteration ()
+  {
+    return new ExpressionContainer ()
+    {
+      public boolean forAllSubExpressions (ExpressionCallback callback)
+      {
+        return callback.visitAssignmentTarget (_loopVar);
+      }
+    };
   }
 
   @Nonnull

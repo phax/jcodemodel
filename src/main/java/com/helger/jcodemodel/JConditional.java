@@ -40,12 +40,18 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.BranchingStatement;
+import com.helger.jcodemodel.optimize.BranchingStatementVisitor;
+
 import javax.annotation.Nonnull;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 /**
  * If statement, with optional else clause
  */
-public class JConditional implements IJStatement
+public class JConditional implements IJStatement, BranchingStatement
 {
   /**
    * JExpression to test to determine branching
@@ -137,5 +143,12 @@ public class JConditional implements IJStatement
     if (_else != null)
       f.print ("else").generable (_else);
     f.newline ();
+  }
+
+  public void apply (BranchingStatementVisitor visitor)
+  {
+    visitor.visit (_test);
+    visitor.visit (_else != null ? asList (_then, _else) :
+        singletonList (_then));
   }
 }

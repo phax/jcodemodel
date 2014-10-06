@@ -40,6 +40,10 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.util.StringUtils;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -57,7 +61,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
    * Object expression upon which this field will be accessed, or null for the
    * implicit 'this'.
    */
-  private final IJGenerable _object;
+  private IJGenerable _object;
 
   /**
    * Name of the field to be accessed. Either this or {@link #_var} is set.
@@ -72,7 +76,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
   /**
    * Indicates if an explicit this should be generated
    */
-  private final boolean _explicitThis;
+  private boolean _explicitThis;
 
   /**
    * Field reference constructor given an object expression and field name.
@@ -167,6 +171,12 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     return _explicitThis;
   }
 
+  public JFieldRef explicitThis (boolean explicitThis)
+  {
+    this._explicitThis = explicitThis;
+    return this;
+  }
+
   public void generate (@Nonnull final JFormatter f)
   {
     final String name = name ();
@@ -196,5 +206,49 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
   public int hashCode ()
   {
     return getHashCode (this, _object, name ());
+  }
+
+  @Override
+  AbstractJType derivedType ()
+  {
+    if (_var != null)
+    {
+      return _var.type ();
+    }
+    return null;
+  }
+
+  @Override
+  String derivedName ()
+  {
+    if (_object instanceof IJExpression)
+    {
+      return ((IJExpression) _object).expressionName () +
+          StringUtils.upper (name ());
+    }
+    else
+    {
+      return name ();
+    }
+  }
+
+  public boolean forAllSubExpressions (ExpressionCallback callback)
+  {
+    if (_object instanceof IJExpression)
+    {
+      return visitWithSubExpressions (callback, new ExpressionAccessor ()
+      {
+        public void set (IJExpression newExpression)
+        {
+          _object = newExpression;
+        }
+
+        public IJExpression get ()
+        {
+          return (IJExpression) _object;
+        }
+      });
+    }
+    return true;
   }
 }

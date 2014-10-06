@@ -40,6 +40,10 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,8 +59,8 @@ import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
  */
 public class JArray extends AbstractJExpressionImpl
 {
-  private final AbstractJType _type;
-  private final IJExpression _size;
+  private AbstractJType _type;
+  private IJExpression _size;
   private List <IJExpression> _exprs;
 
   protected JArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
@@ -165,5 +169,57 @@ public class JArray extends AbstractJExpressionImpl
   public int hashCode ()
   {
     return getHashCode (this, _type.fullName (), _size, _exprs);
+  }
+
+  @Override
+  AbstractJType derivedType ()
+  {
+    return _type.array ();
+  }
+
+  @Override
+  String derivedName ()
+  {
+    return StringUtils.lower (_type.name ()) + "ArrayOfSize" +
+        _size.expressionName ();
+  }
+
+  public boolean forAllSubExpressions (ExpressionCallback callback)
+  {
+    if (_size != null)
+    {
+      if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
+      {
+        public void set (IJExpression newExpression)
+        {
+          _size = newExpression;
+        }
+
+        public IJExpression get ()
+        {
+          return _size;
+        }
+      }))
+        return false;
+    }
+    for (int i = 0; i < (_exprs != null ? _exprs.size () : 0); i++)
+    {
+      IJExpression expr = _exprs.get (i);
+      final int finalI = i;
+      if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
+          {
+            public void set (IJExpression newExpression)
+            {
+              _exprs.set (finalI, newExpression);
+            }
+
+            public IJExpression get ()
+            {
+              return _exprs.get (finalI);
+            }
+          }))
+        return false;
+    }
+    return true;
   }
 }

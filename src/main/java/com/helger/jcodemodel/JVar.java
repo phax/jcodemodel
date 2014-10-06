@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -92,7 +94,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
    * @param init
    *        Value to initialize this variable to
    */
-  protected JVar (@Nonnull final JMods mods,
+  public JVar (@Nonnull final JMods mods,
                   @Nonnull final AbstractJType type,
                   @Nonnull final String name,
                   @Nullable final IJExpression init)
@@ -259,5 +261,17 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   public int hashCode ()
   {
     return getHashCode (this, _name);
+  }
+
+  @Override
+  AbstractJType derivedType ()
+  {
+    return _type;
+  }
+
+  @Override
+  String derivedName ()
+  {
+    return name ();
   }
 }
