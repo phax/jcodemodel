@@ -419,8 +419,8 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
       return false;
     JInvocation rhs = (JInvocation) o;
     if (!(isEqual (_object, rhs._object) &&
-        isEqual (methodName (), rhs.methodName ()) &&
         isEqual (_isConstructor, rhs._isConstructor) &&
+        (_isConstructor || isEqual (methodName (), rhs.methodName ())) &&
         isEqual (_args, rhs._args) &&
         isEqual (typeFullName (), rhs.typeFullName ())))
     {
@@ -445,8 +445,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   {
     HashCodeGenerator hashCodeGenerator = new HashCodeGenerator (this)
         .append (_object)
-        .append (methodName ())
-        .append (_isConstructor)
+        .append (_isConstructor);
+    if (!_isConstructor)
+      hashCodeGenerator = hashCodeGenerator.append (methodName ());
+    hashCodeGenerator = hashCodeGenerator
         .append (_args)
         .append (typeFullName ());
     if (_typeVariables != null)
