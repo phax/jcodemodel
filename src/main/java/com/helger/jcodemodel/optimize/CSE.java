@@ -38,7 +38,7 @@ import java.util.*;
  * track taken variable names, and even couldn't do that, because there could be
  * higher-level scopes, about which the algorithm is not aware), but it
  * shouldn't turn compiling and correct code into compiling, but invalid code,
- * it's premises met (single threading and absence of side effects).
+ * if the premises met (single threading and absence of side effects).
  *
  * @author Roman Leventov <leventov@ya.ru>
  * @see #optimize(JBlock)
