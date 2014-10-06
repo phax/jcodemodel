@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionContainer;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -54,7 +56,7 @@ import javax.annotation.Nonnull;
  * parameters. For example, you can build "5+2" by
  * <tt>JExpr.lit(5).add(JExpr.lit(2))</tt>
  */
-public interface IJExpression extends IJGenerable
+public interface IJExpression extends IJGenerable, ExpressionContainer
 {
   /**
    * @return <code>-[this]" from "[this]</code>.
@@ -466,4 +468,8 @@ public interface IJExpression extends IJGenerable
    * subexpression elimination.
    */
   boolean equals (Object o);
+
+  String expressionName();
+
+  AbstractJType expressionType();
 }

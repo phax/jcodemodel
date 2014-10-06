@@ -40,16 +40,47 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+
 import javax.annotation.Nonnull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 
 public class JOpBinary extends AbstractJExpressionImpl
 {
-  private final IJExpression _left;
+
+  private static AbstractJType moreGeneral(AbstractJType left,
+                                           AbstractJType right)
+  {
+    boolean leftIsDouble = left.name ().equals ("double");
+    if (leftIsDouble || right.name ().equals ("double"))
+      return leftIsDouble ? left : right;
+    boolean leftIsFloat = left.name ().equals ("float");
+    if (leftIsFloat || right.name ().equals ("float"))
+      return leftIsFloat ? left : right;
+    boolean leftIsLong = left.name ().equals ("long");
+    if (leftIsLong || right.name ().equals ("long"))
+      return leftIsLong ? left : right;
+    return left.owner ().INT;
+  }
+
+  private static Map<String, String> opNames =
+      new HashMap<String, String> () {{
+        put ("instanceof", "Instanceof");
+        put ("&", "BinaryAnd");
+        put ("|", "BinaryOr");
+        put ("+", "Plus");
+        put ("-", "Minus");
+        //TODO
+      }};
+  private IJExpression _left;
   private final String _op;
-  private final IJGenerable _right;
+  private IJGenerable _right;
 
   protected JOpBinary (@Nonnull final IJExpression left, @Nonnull final String op, @Nonnull final IJGenerable right)
   {
@@ -98,5 +129,85 @@ public class JOpBinary extends AbstractJExpressionImpl
   public int hashCode ()
   {
     return getHashCode (this, _left, _op, _right);
+  }
+
+  @Override
+  AbstractJType derivedType ()
+  {
+    AbstractJType leftExpressionType = _left.expressionType ();
+    if (_op.equals ("instanceof"))
+      return leftExpressionType.owner ().BOOLEAN;
+
+    AbstractJType rightExpressionType =
+        ((IJExpression) _right).expressionType ();
+    if (_op.equals ("+"))
+    {
+      boolean leftIsString =
+          leftExpressionType.fullName ().equals ("java.lang.String");
+      boolean rightIsString =
+          rightExpressionType.fullName ().equals ("java.lang.String");
+      if (leftIsString || rightIsString)
+      {
+        return leftIsString ? leftExpressionType : rightExpressionType;
+      }
+    }
+    if ("+-*/%^".indexOf (_op.charAt (0)) >= 0)
+    {
+      return moreGeneral (leftExpressionType, rightExpressionType);
+    }
+    if (_op.equals ("|") || _op.equals ("&"))
+    {
+      if (leftExpressionType.fullName ().equals ("boolean") &&
+          rightExpressionType.fullName ().equals ("boolean"))
+        return leftExpressionType;
+      return moreGeneral (leftExpressionType, rightExpressionType);
+    }
+    if (_op.startsWith (">>") || _op.equals ("<<"))
+    {
+      return leftExpressionType;
+    }
+    return leftExpressionType.owner ().BOOLEAN;
+  }
+
+  @Override
+  String derivedName ()
+  {
+    return _left.expressionName () + opNames.get (_op) +
+        (_right instanceof IJExpression ?
+            ((IJExpression) _right).expressionName () :
+            ((AbstractJType) _right).fullName ());
+  }
+
+  public boolean forAllSubExpressions (ExpressionCallback callback)
+  {
+    if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
+    {
+      public void set (IJExpression newExpression)
+      {
+        _left = newExpression;
+      }
+
+      public IJExpression get ()
+      {
+        return _left;
+      }
+    }))
+      return false;
+    if (_right instanceof IJExpression)
+    {
+      return visitWithSubExpressions (callback, new ExpressionAccessor ()
+      {
+        public void set (IJExpression newExpression)
+        {
+          _right = newExpression;
+        }
+
+        public IJExpression get ()
+        {
+          return (IJExpression) _right;
+        }
+      });
+    }
+    return true;
   }
 }

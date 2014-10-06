@@ -48,6 +48,17 @@ import javax.annotation.Nonnull;
  */
 public class JPrimitiveType extends AbstractJType
 {
+  private static final JCodeModel CODE_MODEL = new JCodeModel ();
+  public static final JPrimitiveType VOID = CODE_MODEL.VOID;
+  public static final JPrimitiveType BOOLEAN = CODE_MODEL.BOOLEAN;
+  public static final JPrimitiveType BYTE = CODE_MODEL.BYTE;
+  public static final JPrimitiveType SHORT = CODE_MODEL.SHORT;
+  public static final JPrimitiveType CHAR = CODE_MODEL.CHAR;
+  public static final JPrimitiveType INT = CODE_MODEL.INT;
+  public static final JPrimitiveType FLOAT = CODE_MODEL.FLOAT;
+  public static final JPrimitiveType LONG = CODE_MODEL.LONG;
+  public static final JPrimitiveType DOUBLE = CODE_MODEL.DOUBLE;
+
   private final JCodeModel _owner;
   private final String _typeName;
   /**

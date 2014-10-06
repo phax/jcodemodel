@@ -40,10 +40,15 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.util.StringUtils;
+
 import javax.annotation.Nonnull;
 
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+import static com.helger.jcodemodel.util.StringUtils.upper;
 
 /**
  * array component reference.
@@ -53,12 +58,12 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
   /**
    * JArray expression upon which this component will be accessed.
    */
-  private final IJExpression _array;
+  private IJExpression _array;
 
   /**
    * Integer expression representing index of the component
    */
-  private final IJExpression _index;
+  private IJExpression _index;
 
   /**
    * JArray component reference constructor given an array expression and index.
@@ -109,5 +114,47 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
   public int hashCode ()
   {
     return getHashCode (this, _array, _index);
+  }
+
+  @Override
+  AbstractJType derivedType ()
+  {
+    return _array.expressionType ().elementType ();
+  }
+
+  @Override
+  String derivedName ()
+  {
+    return _array.expressionName () + "ElementAt" +
+        upper (_index.expressionName ());
+  }
+
+  public boolean forAllSubExpressions (ExpressionCallback callback)
+  {
+    if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
+    {
+      public void set (IJExpression newExpression)
+      {
+        _array = newExpression;
+      }
+
+      public IJExpression get ()
+      {
+        return _array;
+      }
+    }))
+      return false;
+    return visitWithSubExpressions (callback, new ExpressionAccessor ()
+    {
+      public void set (IJExpression newExpression)
+      {
+        _index = newExpression;
+      }
+
+      public IJExpression get ()
+      {
+        return _index;
+      }
+    });
   }
 }

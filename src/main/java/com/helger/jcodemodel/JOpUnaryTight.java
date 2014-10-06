@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+
 import javax.annotation.Nonnull;
 
 public class JOpUnaryTight extends JOpUnary
@@ -61,5 +63,26 @@ public class JOpUnaryTight extends JOpUnary
       f.print (op ()).generable (expr ());
     else
       f.generable (expr ()).print (op ());
+  }
+
+  @Override
+  AbstractJType derivedType ()
+  {
+    return expr ().expressionType ();
+  }
+
+  @Override
+  String derivedName ()
+  {
+    return (opFirst () ? "pre" : "post") +
+        (op ().equals ("++") ? "Incremented" : "Decremented") +
+        expr ().expressionName ();
+  }
+
+  public boolean forAllSubExpressions (ExpressionCallback callback)
+  {
+    if (!expr ().forAllSubExpressions (callback))
+      return false;
+    return callback.visitAssignmentTarget ((IJAssignmentTarget) expr ());
   }
 }

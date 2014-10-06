@@ -40,6 +40,9 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.optimize.BranchingStatement;
+import com.helger.jcodemodel.optimize.BranchingStatementVisitor;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +52,7 @@ import javax.annotation.Nonnull;
 /**
  * Try statement with Catch and/or Finally clause
  */
-public class JTryBlock implements IJStatement
+public class JTryBlock implements IJStatement, BranchingStatement
 {
   private final JBlock _body = new JBlock ();
   private final List <JCatchBlock> _catches = new ArrayList <JCatchBlock> ();
@@ -94,5 +97,22 @@ public class JTryBlock implements IJStatement
     if (_finally != null)
       f.print ("finally").generable (_finally);
     f.newline ();
+  }
+
+  public void apply (BranchingStatementVisitor visitor)
+  {
+    visitor.visit (_body);
+    if (!catches ().isEmpty ())
+    {
+      ArrayList<JBlock> catchBlocks =
+          new ArrayList<JBlock> (catches ().size ());
+      for (JCatchBlock aCatch : _catches)
+      {
+        catchBlocks.add (aCatch.body ());
+      }
+      visitor.visit (catchBlocks);
+    }
+    if (_finally != null)
+      visitor.visit (_finally);
   }
 }

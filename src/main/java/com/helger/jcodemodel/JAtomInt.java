@@ -84,4 +84,10 @@ public class JAtomInt extends AbstractJExpressionImpl
   {
     return getHashCode (this, _what);
   }
+
+  @Override
+  AbstractJType derivedType ()
+  {
+    return JPrimitiveType.INT;
+  }
 }
