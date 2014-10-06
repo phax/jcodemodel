@@ -399,6 +399,11 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     f.generable (this).print (';').newline ();
   }
 
+  private String typeFullName ()
+  {
+    return _type != null ? _type.fullName () : "";
+  }
+
   public boolean equals (Object o)
   {
     if (o == this)
@@ -413,10 +418,14 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
         isEqual (methodName (), rhs.methodName ()) &&
         isEqual (_isConstructor, rhs._isConstructor) &&
         isEqual (_args, rhs._args) &&
-        isEqual (_type.fullName (), rhs._type.fullName ())))
+        isEqual (typeFullName (), rhs.typeFullName ())))
     {
       return false;
     }
+    if (_typeVariables == null)
+      return rhs._typeVariables == null;
+    if (rhs._typeVariables == null)
+      return false;
     if (_typeVariables.size () != rhs._typeVariables.size ())
       return false;
     for (int i = 0; i < _typeVariables.size (); i++)
@@ -435,11 +444,14 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
         .append (methodName ())
         .append (_isConstructor)
         .append (_args)
-        .append (_type.fullName ())
-        .append (_typeVariables.size ());
-    for (JTypeVar typeVariable : _typeVariables)
+        .append (typeFullName ());
+    if (_typeVariables != null)
     {
-      hashCodeGenerator = hashCodeGenerator.append (typeVariable.fullName ());
+      hashCodeGenerator = hashCodeGenerator.append (_typeVariables.size ());
+      for (JTypeVar typeVariable : _typeVariables)
+      {
+        hashCodeGenerator = hashCodeGenerator.append (typeVariable.fullName ());
+      }
     }
     return hashCodeGenerator.getHashCode ();
   }
