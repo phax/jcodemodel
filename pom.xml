@@ -155,6 +155,9 @@
             <Export-Package>
               com.helger.jcodemodel.*
             </Export-Package>
+            <Import-Package>
+              !javax.annotation.*,*
+            </Import-Package>
           </instructions>
         </configuration>
       </plugin>
