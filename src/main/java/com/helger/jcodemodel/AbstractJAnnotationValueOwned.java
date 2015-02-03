@@ -52,11 +52,11 @@ import com.helger.jcodemodel.util.NameUtilities;
  */
 public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationValue implements IJOwned
 {
-  protected final class JAnnotationEnumValue extends AbstractJAnnotationValue
+  protected final class JEnumConstantExpr extends AbstractJExpressionImpl
   {
     private final Enum <?> _value;
 
-    protected JAnnotationEnumValue (@Nonnull final Enum <?> value)
+    protected JEnumConstantExpr (@Nonnull final Enum <?> value)
     {
       _value = value;
     }
@@ -86,7 +86,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
   @Nonnull
   public AbstractJAnnotationValue wrap (@Nonnull final Enum <?> value)
   {
-    return new JAnnotationEnumValue (value);
+    return new JAnnotationStringValue (new JEnumConstantExpr (value), value);
   }
 
   @Nonnull
