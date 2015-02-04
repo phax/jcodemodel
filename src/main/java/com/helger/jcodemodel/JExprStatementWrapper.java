@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+
+import javax.annotation.Nonnull;
 
 public class JExprStatementWrapper <T extends IJExpression> extends AbstractJExpressionImpl implements IJExpressionStatement
 {
@@ -81,6 +81,7 @@ public class JExprStatementWrapper <T extends IJExpression> extends AbstractJExp
     return _expr.unwrapped ();
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -91,6 +92,7 @@ public class JExprStatementWrapper <T extends IJExpression> extends AbstractJExp
     return isEqual (unwrapped (), o);
   }
 
+  @Override
   public int hashCode ()
   {
     return unwrapped ().hashCode ();

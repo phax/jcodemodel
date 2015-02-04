@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 /**
  * Program elements that can have Javadoc
- * 
+ *
  * @author Jonas von Malottki
  */
 public interface IJDocCommentable

@@ -40,13 +40,13 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.BranchingStatement;
-import com.helger.jcodemodel.optimize.BranchingStatementVisitor;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 import javax.annotation.Nonnull;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
+import com.helger.jcodemodel.optimize.BranchingStatement;
+import com.helger.jcodemodel.optimize.BranchingStatementVisitor;
 
 /**
  * If statement, with optional else clause
@@ -70,7 +70,7 @@ public class JConditional implements IJStatement, BranchingStatement
 
   /**
    * Constructor
-   * 
+   *
    * @param test
    *        JExpression which will determine branching
    */
@@ -87,7 +87,7 @@ public class JConditional implements IJStatement, BranchingStatement
 
   /**
    * Return the block to be excuted by the "then" branch
-   * 
+   *
    * @return Then block
    */
   @Nonnull
@@ -98,7 +98,7 @@ public class JConditional implements IJStatement, BranchingStatement
 
   /**
    * Create a block to be executed by "else" branch
-   * 
+   *
    * @return Newly generated else block
    */
   @Nonnull
@@ -145,10 +145,9 @@ public class JConditional implements IJStatement, BranchingStatement
     f.newline ();
   }
 
-  public void apply (BranchingStatementVisitor visitor)
+  public void apply (final BranchingStatementVisitor visitor)
   {
     visitor.visit (_test);
-    visitor.visit (_else != null ? asList (_then, _else) :
-        singletonList (_then));
+    visitor.visit (_else != null ? asList (_then, _else) : singletonList (_then));
   }
 }

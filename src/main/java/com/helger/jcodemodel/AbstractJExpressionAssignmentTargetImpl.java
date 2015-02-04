@@ -45,7 +45,7 @@ import javax.annotation.Nonnull;
 /**
  * Abstract base class for expressions that also implement
  * {@link IJAssignmentTarget}.
- * 
+ *
  * @author Philip Helger
  */
 public abstract class AbstractJExpressionAssignmentTargetImpl extends AbstractJExpressionImpl implements IJAssignmentTarget

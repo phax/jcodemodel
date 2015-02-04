@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
+import javax.annotation.Nonnull;
 
 public class JOpTernary extends AbstractJExpressionImpl
 {
@@ -101,6 +101,7 @@ public class JOpTernary extends AbstractJExpressionImpl
     f.print ('(').generable (_e1).print (_op1).generable (_e2).print (_op2).generable (_e3).print (')');
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -110,12 +111,15 @@ public class JOpTernary extends AbstractJExpressionImpl
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JOpTernary rhs = (JOpTernary) o;
-    return isEqual (_e1, rhs._e1) && isEqual (_op1, rhs._op1) &&
-        isEqual (_e2, rhs._e2) && isEqual (_op2, rhs._op2) &&
-        isEqual (_e3, rhs._e3);
+    final JOpTernary rhs = (JOpTernary) o;
+    return isEqual (_e1, rhs._e1) &&
+           isEqual (_op1, rhs._op1) &&
+           isEqual (_e2, rhs._e2) &&
+           isEqual (_op2, rhs._op2) &&
+           isEqual (_e3, rhs._e3);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _e1, _op1, _e2, _op2, _e3);

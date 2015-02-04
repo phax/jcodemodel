@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
+import javax.annotation.Nonnull;
 
 /**
  * A cast operation.
@@ -62,7 +62,7 @@ public class JCast extends AbstractJExpressionImpl
 
   /**
    * JCast constructor
-   * 
+   *
    * @param type
    *        JType to which the expression is cast
    * @param object
@@ -91,6 +91,7 @@ public class JCast extends AbstractJExpressionImpl
     f.print ("((").generable (_type).print (')').generable (_object).print (')');
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -100,11 +101,11 @@ public class JCast extends AbstractJExpressionImpl
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JCast rhs = (JCast) o;
-    return isEqual (_type.fullName (), rhs._type.fullName ()) &&
-        isEqual (_object, rhs._object);
+    final JCast rhs = (JCast) o;
+    return isEqual (_type.fullName (), rhs._type.fullName ()) && isEqual (_object, rhs._object);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _type.fullName (), _object);

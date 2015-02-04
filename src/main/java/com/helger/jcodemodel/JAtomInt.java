@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
+import javax.annotation.Nonnull;
 
 /**
  * A special atom for int values
@@ -67,6 +67,7 @@ public class JAtomInt extends AbstractJExpressionImpl
     f.print (Integer.toString (_what));
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -76,10 +77,11 @@ public class JAtomInt extends AbstractJExpressionImpl
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JAtomInt rhs = (JAtomInt) o;
+    final JAtomInt rhs = (JAtomInt) o;
     return isEqual (_what, rhs._what);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _what);

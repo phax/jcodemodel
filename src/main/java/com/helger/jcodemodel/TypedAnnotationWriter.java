@@ -56,7 +56,7 @@ import com.helger.jcodemodel.util.SecureLoader;
 
 /**
  * Dynamically implements the typed annotation writer interfaces.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings ({ "unchecked", "rawtypes" })

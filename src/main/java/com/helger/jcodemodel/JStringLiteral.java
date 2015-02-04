@@ -40,14 +40,14 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 
+import javax.annotation.Nonnull;
+
 /**
  * String literal.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JStringLiteral extends AbstractJExpressionImpl
@@ -70,6 +70,7 @@ public class JStringLiteral extends AbstractJExpressionImpl
     f.print (JExpr.quotify ('"', _what));
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -79,10 +80,11 @@ public class JStringLiteral extends AbstractJExpressionImpl
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JStringLiteral rhs = (JStringLiteral) o;
+    final JStringLiteral rhs = (JStringLiteral) o;
     return isEqual (_what, rhs._what);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _what);

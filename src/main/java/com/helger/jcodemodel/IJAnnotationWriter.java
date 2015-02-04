@@ -50,7 +50,7 @@ import java.lang.annotation.Annotation;
  * interfaces all derive from this common interface.
  * <p>
  * The type parameter 'A' represents the
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public interface IJAnnotationWriter <A extends Annotation>

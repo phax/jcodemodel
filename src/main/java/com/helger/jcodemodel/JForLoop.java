@@ -40,17 +40,17 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.optimize.ExpressionContainer;
-import com.helger.jcodemodel.optimize.Loop;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.optimize.ExpressionContainer;
+import com.helger.jcodemodel.optimize.Loop;
 
 /**
  * For statement
@@ -121,12 +121,11 @@ public class JForLoop implements IJStatement, Loop
   {
     return new ExpressionContainer ()
     {
-      public boolean forAllSubExpressions (ExpressionCallback callback)
+      public boolean forAllSubExpressions (final ExpressionCallback callback)
       {
-        for (Object init : _inits)
+        for (final Object init : _inits)
         {
-          if (init instanceof IJExpression &&
-              !((IJExpression) init).forAllSubExpressions (callback))
+          if (init instanceof IJExpression && !((IJExpression) init).forAllSubExpressions (callback))
             return false;
         }
         return true;
@@ -138,17 +137,16 @@ public class JForLoop implements IJStatement, Loop
   {
     return new ExpressionContainer ()
     {
-      public boolean forAllSubExpressions (ExpressionCallback callback)
+      public boolean forAllSubExpressions (final ExpressionCallback callback)
       {
-        for (IJExpression update : _updates)
+        for (final IJExpression update : _updates)
         {
           if (!update.forAllSubExpressions (callback))
             return false;
         }
-        return AbstractJExpressionImpl.visitWithSubExpressions (callback,
-            new ExpressionAccessor ()
+        return AbstractJExpressionImpl.visitWithSubExpressions (callback, new ExpressionAccessor ()
         {
-          public void set (IJExpression newExpression)
+          public void set (final IJExpression newExpression)
           {
             _test = newExpression;
           }

@@ -50,7 +50,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Implementation of {@link IJGenerifiable}.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDeclaration, IJOwned

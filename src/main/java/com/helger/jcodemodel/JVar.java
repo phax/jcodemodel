@@ -40,7 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionCallback;
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -50,9 +51,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 
 /**
  * Variables and fields.
@@ -86,7 +84,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
 
   /**
    * JVar constructor
-   * 
+   *
    * @param type
    *        Datatype of this variable
    * @param name
@@ -95,9 +93,9 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
    *        Value to initialize this variable to
    */
   public JVar (@Nonnull final JMods mods,
-                  @Nonnull final AbstractJType type,
-                  @Nonnull final String name,
-                  @Nullable final IJExpression init)
+               @Nonnull final AbstractJType type,
+               @Nonnull final String name,
+               @Nullable final IJExpression init)
   {
     if (!JJavaName.isJavaIdentifier (name))
       throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
@@ -109,7 +107,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
 
   /**
    * Initialize this variable
-   * 
+   *
    * @param init
    *        JExpression to be used to initialize this field
    */
@@ -122,7 +120,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
 
   /**
    * Get the name of this variable
-   * 
+   *
    * @return Name of the variable
    */
   @Nonnull
@@ -143,7 +141,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
 
   /**
    * Return the type of this variable.
-   * 
+   *
    * @return always non-null.
    */
   public AbstractJType type ()
@@ -163,7 +161,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
 
   /**
    * Sets the type of this variable.
-   * 
+   *
    * @param newType
    *        must not be null.
    * @return the old type value. always non-null.
@@ -180,7 +178,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
 
   /**
    * Adds an annotation to this variable.
-   * 
+   *
    * @param clazz
    *        The annotation class to annotate the field with
    */
@@ -196,7 +194,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
 
   /**
    * Adds an annotation to this variable.
-   * 
+   *
    * @param clazz
    *        The annotation class to annotate the field with
    */
@@ -245,6 +243,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
     f.id (_name);
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -254,10 +253,11 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
     o = ((IJExpression) o).unwrapped ();
     if (!(o instanceof JVar))
       return false;
-    JVar rhs = (JVar) o;
+    final JVar rhs = (JVar) o;
     return isEqual (_name, rhs._name);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _name);

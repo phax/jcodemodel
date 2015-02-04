@@ -55,7 +55,7 @@ public class JReturn implements IJStatement
 
   /**
    * JReturn constructor
-   * 
+   *
    * @param expr
    *        {@link IJExpression} which evaluates to return value
    */

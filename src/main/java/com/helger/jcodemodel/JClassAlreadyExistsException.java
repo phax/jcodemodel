@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 /**
  * Indicates that the class is already created.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JClassAlreadyExistsException extends Exception
@@ -58,7 +58,7 @@ public class JClassAlreadyExistsException extends Exception
 
   /**
    * Gets a reference to the existing {@link JDefinedClass}.
-   * 
+   *
    * @return This method always return non-null valid object.
    */
   public JDefinedClass getExistingClass ()

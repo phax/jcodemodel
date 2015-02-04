@@ -40,13 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
+import javax.annotation.Nonnull;
 
 public class JOpUnary extends AbstractJExpressionImpl
 {
@@ -93,6 +90,7 @@ public class JOpUnary extends AbstractJExpressionImpl
       f.print ('(').generable (_e).print (_op).print (')');
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -102,13 +100,13 @@ public class JOpUnary extends AbstractJExpressionImpl
     o = ((IJExpression) o).unwrapped ();
     if (!(o instanceof JOpUnary))
       return false;
-    JOpUnary rhs = (JOpUnary) o;
-    return isEqual (_op, rhs._op) && isEqual (_e, rhs._e) &&
-        isEqual (opFirst, rhs.opFirst);
+    final JOpUnary rhs = (JOpUnary) o;
+    return isEqual (_op, rhs._op) && isEqual (_e, rhs._e) && isEqual (opFirst, rhs.opFirst);
   }
 
+  @Override
   public int hashCode ()
   {
-    return getHashCode (this, _op, _e, opFirst);
+    return getHashCode (this, _op, _e, Boolean.valueOf (opFirst));
   }
 }

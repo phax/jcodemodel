@@ -40,15 +40,15 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.util.StringUtils;
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.util.StringUtils;
 
 /**
  * Field Reference
@@ -82,7 +82,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
    * Field reference constructor given an object expression and field name.
    * <code>object.name</code> or just <code>name</code> if object is
    * <code>null</code>.
-   * 
+   *
    * @param object
    *        JExpression for the object upon which the named field will be
    *        accessed. May be <code>null</code>.
@@ -171,7 +171,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     return _explicitThis;
   }
 
-  public JFieldRef explicitThis (boolean explicitThis)
+  public JFieldRef explicitThis (final boolean explicitThis)
   {
     this._explicitThis = explicitThis;
     return this;
@@ -190,6 +190,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
         f.id (name);
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -199,10 +200,11 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JFieldRef rhs = (JFieldRef) o;
+    final JFieldRef rhs = (JFieldRef) o;
     return isEqual (_object, rhs._object) && isEqual (name (), rhs.name ());
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _object, name ());
@@ -223,8 +225,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
   {
     if (_object instanceof IJExpression)
     {
-      return ((IJExpression) _object).expressionName () +
-          StringUtils.upper (name ());
+      return ((IJExpression) _object).expressionName () + StringUtils.upper (name ());
     }
     else
     {
@@ -232,13 +233,14 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     }
   }
 
-  public boolean forAllSubExpressions (ExpressionCallback callback)
+  @Override
+  public boolean forAllSubExpressions (final ExpressionCallback callback)
   {
     if (_object instanceof IJExpression)
     {
       return visitWithSubExpressions (callback, new ExpressionAccessor ()
       {
-        public void set (IJExpression newExpression)
+        public void set (final IJExpression newExpression)
         {
           _object = newExpression;
         }

@@ -44,7 +44,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Anonymous class quick hack.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JAnonymousClass extends JDefinedClass

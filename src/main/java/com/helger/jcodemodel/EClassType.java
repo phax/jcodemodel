@@ -45,7 +45,7 @@ import javax.annotation.Nonnull;
 /**
  * This helps enable whether the JDefinedClass is a Class or Interface or
  * AnnotationTypeDeclaration or Enum
- * 
+ *
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
 public enum EClassType

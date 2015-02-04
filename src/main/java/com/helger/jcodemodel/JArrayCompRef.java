@@ -40,15 +40,14 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.util.StringUtils;
-
-import javax.annotation.Nonnull;
-
 import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
 import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 import static com.helger.jcodemodel.util.StringUtils.upper;
+
+import javax.annotation.Nonnull;
+
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
 
 /**
  * array component reference.
@@ -67,7 +66,7 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
 
   /**
    * JArray component reference constructor given an array expression and index.
-   * 
+   *
    * @param array
    *        JExpression for the array upon which the component will be accessed,
    * @param index
@@ -98,6 +97,7 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
     f.generable (_array).print ('[').generable (_index).print (']');
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -107,10 +107,11 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JArrayCompRef rhs = (JArrayCompRef) o;
+    final JArrayCompRef rhs = (JArrayCompRef) o;
     return isEqual (_array, rhs._array) && isEqual (_index, rhs._index);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _array, _index);
@@ -125,15 +126,15 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
   @Override
   String derivedName ()
   {
-    return _array.expressionName () + "ElementAt" +
-        upper (_index.expressionName ());
+    return _array.expressionName () + "ElementAt" + upper (_index.expressionName ());
   }
 
-  public boolean forAllSubExpressions (ExpressionCallback callback)
+  @Override
+  public boolean forAllSubExpressions (final ExpressionCallback callback)
   {
     if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
     {
-      public void set (IJExpression newExpression)
+      public void set (final IJExpression newExpression)
       {
         _array = newExpression;
       }
@@ -146,7 +147,7 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
       return false;
     return visitWithSubExpressions (callback, new ExpressionAccessor ()
     {
-      public void set (IJExpression newExpression)
+      public void set (final IJExpression newExpression)
       {
         _index = newExpression;
       }

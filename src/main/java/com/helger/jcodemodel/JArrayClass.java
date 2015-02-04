@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Array class.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JArrayClass extends AbstractJClass

@@ -40,46 +40,47 @@
  */
 package com.helger.jcodemodel.optimize;
 
-import com.helger.jcodemodel.IJExpression;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.helger.jcodemodel.IJExpression;
+
 class ExpressionState
 {
-  final IJExpression expression;
-  final BlockNode definitionBlock;
-  final Object definitionBefore;
-  final boolean mustBeDefinedHere;
-  Collection<ExpressionAccessor> sites;
-  ExpressionState parent;
-  List<ExpressionState> children;
+  final IJExpression _expression;
+  final BlockNode _definitionBlock;
+  final Object _definitionBefore;
+  final boolean _mustBeDefinedHere;
+  Collection <ExpressionAccessor> _sites;
+  ExpressionState _parent;
+  List <ExpressionState> _children;
 
-  ExpressionState (IJExpression expression,
-                   BlockNode definitionBlock, Object definitionBefore,
-                   boolean mustBeDefinedHere)
+  ExpressionState (final IJExpression expression,
+                   final BlockNode definitionBlock,
+                   final Object definitionBefore,
+                   final boolean mustBeDefinedHere)
   {
-    this.expression = expression;
-    this.definitionBlock = definitionBlock;
-    this.definitionBefore = definitionBefore;
-    this.mustBeDefinedHere = mustBeDefinedHere;
+    _expression = expression;
+    _definitionBlock = definitionBlock;
+    _definitionBefore = definitionBefore;
+    _mustBeDefinedHere = mustBeDefinedHere;
   }
 
-  void addSite (ExpressionAccessor... accessors)
+  void addSite (final ExpressionAccessor... accessors)
   {
-    if (sites == null)
-      sites = new ArrayList<ExpressionAccessor> (5);
-    Collections.addAll (sites, accessors);
+    if (_sites == null)
+      _sites = new ArrayList <ExpressionAccessor> (5);
+    Collections.addAll (_sites, accessors);
   }
 
   int size ()
   {
-    int size = sites != null ? sites.size () : 0;
-    if (children != null)
+    int size = _sites != null ? _sites.size () : 0;
+    if (_children != null)
     {
-      for (ExpressionState child : children)
+      for (final ExpressionState child : _children)
       {
         size += child.size ();
       }
@@ -87,48 +88,48 @@ class ExpressionState
     return size;
   }
 
-  ExpressionState definitionBase()
+  ExpressionState definitionBase ()
   {
-    if (!mustBeDefinedHere && sites == null && children.size () == 1)
-      return children.get (0).definitionBase ();
+    if (!_mustBeDefinedHere && _sites == null && _children.size () == 1)
+      return _children.get (0).definitionBase ();
     return this;
   }
 
   ExpressionState root ()
   {
-    if (parent == null)
+    if (_parent == null)
       return this;
-    return parent.root ();
+    return _parent.root ();
   }
 
-  private void addChild (ExpressionState state)
+  private void addChild (final ExpressionState state)
   {
-    if (children == null)
-      children = new ArrayList<ExpressionState> (5);
-    children.add (state);
-    state.parent = this;
+    if (_children == null)
+      _children = new ArrayList <ExpressionState> (5);
+    _children.add (state);
+    state._parent = this;
   }
 
-  void link (ExpressionState state)
+  void link (final ExpressionState state)
   {
-    if (!expression.equals (state.expression))
+    if (!_expression.equals (state._expression))
       throw new IllegalArgumentException ();
     root ().addChild (state.root ());
   }
 
-  boolean forAllSites (ExpressionCallback action)
+  boolean forAllSites (final ExpressionCallback action)
   {
-    if (sites != null)
+    if (_sites != null)
     {
-      for (ExpressionAccessor site : sites)
+      for (final ExpressionAccessor site : _sites)
       {
-        if (!action.visitExpression (expression, site))
+        if (!action.visitExpression (_expression, site))
           return false;
       }
     }
-    if (children != null)
+    if (_children != null)
     {
-      for (ExpressionState child : children)
+      for (final ExpressionState child : _children)
       {
         if (!child.forAllSites (action))
           return false;

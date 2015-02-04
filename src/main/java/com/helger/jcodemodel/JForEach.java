@@ -40,17 +40,17 @@
  */
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.optimize.ExpressionAccessor;
 import com.helger.jcodemodel.optimize.ExpressionCallback;
 import com.helger.jcodemodel.optimize.ExpressionContainer;
 import com.helger.jcodemodel.optimize.Loop;
 
-import javax.annotation.Nonnull;
-
 /**
  * ForEach Statement This will generate the code for statement based on the new
  * j2se 1.5 j.l.s.
- * 
+ *
  * @author Bhakti
  */
 public class JForEach implements IJStatement, Loop
@@ -96,12 +96,11 @@ public class JForEach implements IJStatement, Loop
   {
     return new ExpressionContainer ()
     {
-      public boolean forAllSubExpressions (ExpressionCallback callback)
+      public boolean forAllSubExpressions (final ExpressionCallback callback)
       {
-        return AbstractJExpressionImpl.visitWithSubExpressions (callback,
-            new ExpressionAccessor ()
+        return AbstractJExpressionImpl.visitWithSubExpressions (callback, new ExpressionAccessor ()
         {
-          public void set (IJExpression newExpression)
+          public void set (final IJExpression newExpression)
           {
             _collection = newExpression;
           }
@@ -119,7 +118,7 @@ public class JForEach implements IJStatement, Loop
   {
     return new ExpressionContainer ()
     {
-      public boolean forAllSubExpressions (ExpressionCallback callback)
+      public boolean forAllSubExpressions (final ExpressionCallback callback)
       {
         return callback.visitAssignmentTarget (_loopVar);
       }

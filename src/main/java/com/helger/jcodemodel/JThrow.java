@@ -54,7 +54,7 @@ public class JThrow implements IJStatement
 
   /**
    * JThrow constructor
-   * 
+   *
    * @param expr
    *        JExpression which evaluates to JThrow value
    */

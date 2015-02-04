@@ -58,7 +58,7 @@ import javax.annotation.Nullable;
  * <p>
  * Values can be added through the various append methods one by one or in a
  * bulk.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public class JCommentPart extends ArrayList <Object>

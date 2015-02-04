@@ -54,7 +54,7 @@ import javax.annotation.Nullable;
  * <p>
  * Our modeling of types are starting to look really ugly. ideally it should
  * have been done somewhat like APT, but it's too late now.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public class JTypeWildcard extends AbstractJClass

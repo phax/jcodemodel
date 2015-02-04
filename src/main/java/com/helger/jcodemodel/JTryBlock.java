@@ -40,14 +40,14 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.BranchingStatement;
-import com.helger.jcodemodel.optimize.BranchingStatementVisitor;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
+import com.helger.jcodemodel.optimize.BranchingStatement;
+import com.helger.jcodemodel.optimize.BranchingStatementVisitor;
 
 /**
  * Try statement with Catch and/or Finally clause
@@ -99,14 +99,13 @@ public class JTryBlock implements IJStatement, BranchingStatement
     f.newline ();
   }
 
-  public void apply (BranchingStatementVisitor visitor)
+  public void apply (final BranchingStatementVisitor visitor)
   {
     visitor.visit (_body);
     if (!catches ().isEmpty ())
     {
-      ArrayList<JBlock> catchBlocks =
-          new ArrayList<JBlock> (catches ().size ());
-      for (JCatchBlock aCatch : _catches)
+      final ArrayList <JBlock> catchBlocks = new ArrayList <JBlock> (catches ().size ());
+      for (final JCatchBlock aCatch : _catches)
       {
         catchBlocks.add (aCatch.body ());
       }

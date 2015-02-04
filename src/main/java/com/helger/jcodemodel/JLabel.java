@@ -44,7 +44,7 @@ import javax.annotation.Nonnull;
 
 /**
  * Label that can be used for continue and break.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JLabel implements IJStatement
@@ -53,7 +53,7 @@ public class JLabel implements IJStatement
 
   /**
    * JLabel constructor
-   * 
+   *
    * @param label
    *        label name.
    */

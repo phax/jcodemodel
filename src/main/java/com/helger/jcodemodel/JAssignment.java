@@ -40,13 +40,13 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
 
 /**
  * Assignment statements, which are also expressions.
@@ -59,7 +59,7 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
 
   /**
    * Constructor for "=" operator
-   * 
+   *
    * @param lhs
    *        left
    * @param rhs
@@ -72,7 +72,7 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
 
   /**
    * Constructor for <code>op + "="</code> operator
-   * 
+   *
    * @param lhs
    *        left
    * @param rhs
@@ -120,6 +120,7 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
     f.generable (this).print (';').newline ();
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -129,11 +130,11 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JAssignment rhs = (JAssignment) o;
-    return isEqual (_lhs, rhs._lhs) && isEqual (_rhs, rhs._rhs) &&
-        isEqual (_op, rhs._op);
+    final JAssignment rhs = (JAssignment) o;
+    return isEqual (_lhs, rhs._lhs) && isEqual (_rhs, rhs._rhs) && isEqual (_op, rhs._op);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _lhs, _rhs, _op);
@@ -142,7 +143,7 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
   @Override
   AbstractJType derivedType ()
   {
-    AbstractJType type = _lhs.expressionType ();
+    final AbstractJType type = _lhs.expressionType ();
     if (type != null)
       return type;
     return _rhs.expressionType ();
@@ -154,7 +155,8 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
     return _lhs.expressionName () + "AssignedTo" + _rhs.expressionName ();
   }
 
-  public boolean forAllSubExpressions (ExpressionCallback callback)
+  @Override
+  public boolean forAllSubExpressions (final ExpressionCallback callback)
   {
     if (!_lhs.forAllSubExpressions (callback))
       return false;
@@ -162,7 +164,7 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
       return false;
     return visitWithSubExpressions (callback, new ExpressionAccessor ()
     {
-      public void set (IJExpression newExpression)
+      public void set (final IJExpression newExpression)
       {
         _rhs = newExpression;
       }

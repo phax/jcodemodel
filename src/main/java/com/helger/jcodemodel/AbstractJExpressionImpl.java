@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.optimize.ExpressionAccessor;
 import com.helger.jcodemodel.optimize.ExpressionCallback;
-
-import javax.annotation.Nonnull;
 
 /**
  * Provides default implementations for {@link IJExpression}.
@@ -51,18 +51,16 @@ import javax.annotation.Nonnull;
 public abstract class AbstractJExpressionImpl implements IJExpression
 {
 
-  static boolean visitWithSubExpressions(ExpressionCallback callback,
-                                         ExpressionAccessor accessor)
+  static boolean visitWithSubExpressions (final ExpressionCallback callback, final ExpressionAccessor accessor)
   {
-    IJExpression expression = accessor.get ();
+    final IJExpression expression = accessor.get ();
     if (!callback.visitExpression (expression, accessor))
       return false;
     return expression.forAllSubExpressions (callback);
   }
 
-
-  private AbstractJType hintType;
-  private String hintName;
+  private AbstractJType _hintType;
+  private String _hintName;
 
   protected AbstractJExpressionImpl ()
   {}
@@ -455,44 +453,44 @@ public abstract class AbstractJExpressionImpl implements IJExpression
 
   public final AbstractJType expressionType ()
   {
-    if (hintType != null)
-      return hintType;
+    if (_hintType != null)
+      return _hintType;
     return derivedType ();
   }
 
-  public final AbstractJExpressionImpl hintType(AbstractJType hintType)
+  public final AbstractJExpressionImpl hintType (final AbstractJType hintType)
   {
-    this.hintType = hintType;
+    _hintType = hintType;
     return this;
   }
 
-  //TODO remove this default and implement for all subclasses!
-  AbstractJType derivedType()
+  // TODO remove this default and implement for all subclasses!
+  AbstractJType derivedType ()
   {
     return null;
   }
 
   public final String expressionName ()
   {
-    if (hintName != null)
-      return hintName;
+    if (_hintName != null)
+      return _hintName;
     return derivedName ();
   }
 
-  public final AbstractJExpressionImpl hintName(String hintName)
+  public final AbstractJExpressionImpl hintName (final String hintName)
   {
-    this.hintName = hintName;
+    _hintName = hintName;
     return this;
   }
 
-  //TODO remove this default and implement for all subclasses!
-  String derivedName()
+  // TODO remove this default and implement for all subclasses!
+  String derivedName ()
   {
     return null;
   }
 
-  //TODO remove this default and implement for all subclasses!
-  public boolean forAllSubExpressions (ExpressionCallback callback)
+  // TODO remove this default and implement for all subclasses!
+  public boolean forAllSubExpressions (final ExpressionCallback callback)
   {
     return true;
   }

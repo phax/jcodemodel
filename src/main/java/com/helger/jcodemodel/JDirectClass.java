@@ -49,7 +49,7 @@ import javax.annotation.Nonnull;
 /**
  * A special {@link AbstractJClass} that represents an unknown class (except its
  * name.)
- * 
+ *
  * @author Kohsuke Kawaguchi
  * @see JCodeModel#directClass(String)
  */

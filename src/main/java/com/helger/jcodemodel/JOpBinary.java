@@ -40,44 +40,45 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-
-import javax.annotation.Nonnull;
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+import javax.annotation.Nonnull;
+
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
 
 public class JOpBinary extends AbstractJExpressionImpl
 {
 
-  private static AbstractJType moreGeneral(AbstractJType left,
-                                           AbstractJType right)
+  private static AbstractJType moreGeneral (final AbstractJType left, final AbstractJType right)
   {
-    boolean leftIsDouble = left.name ().equals ("double");
+    final boolean leftIsDouble = left.name ().equals ("double");
     if (leftIsDouble || right.name ().equals ("double"))
       return leftIsDouble ? left : right;
-    boolean leftIsFloat = left.name ().equals ("float");
+    final boolean leftIsFloat = left.name ().equals ("float");
     if (leftIsFloat || right.name ().equals ("float"))
       return leftIsFloat ? left : right;
-    boolean leftIsLong = left.name ().equals ("long");
+    final boolean leftIsLong = left.name ().equals ("long");
     if (leftIsLong || right.name ().equals ("long"))
       return leftIsLong ? left : right;
     return left.owner ().INT;
   }
 
-  private static Map<String, String> opNames =
-      new HashMap<String, String> () {{
-        put ("instanceof", "Instanceof");
-        put ("&", "BinaryAnd");
-        put ("|", "BinaryOr");
-        put ("+", "Plus");
-        put ("-", "Minus");
-        //TODO
-      }};
+  private static Map <String, String> opNames = new HashMap <String, String> ()
+  {
+    {
+      put ("instanceof", "Instanceof");
+      put ("&", "BinaryAnd");
+      put ("|", "BinaryOr");
+      put ("+", "Plus");
+      put ("-", "Minus");
+      // TODO
+    }
+  };
   private IJExpression _left;
   private final String _op;
   private IJGenerable _right;
@@ -112,6 +113,7 @@ public class JOpBinary extends AbstractJExpressionImpl
     f.print ('(').generable (_left).print (_op).generable (_right).print (')');
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -121,11 +123,11 @@ public class JOpBinary extends AbstractJExpressionImpl
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JOpBinary rhs = (JOpBinary) o;
-    return isEqual (_left, rhs._left) && isEqual (_op, rhs._op) &&
-        isEqual (_right, rhs._right);
+    final JOpBinary rhs = (JOpBinary) o;
+    return isEqual (_left, rhs._left) && isEqual (_op, rhs._op) && isEqual (_right, rhs._right);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _left, _op, _right);
@@ -134,18 +136,15 @@ public class JOpBinary extends AbstractJExpressionImpl
   @Override
   AbstractJType derivedType ()
   {
-    AbstractJType leftExpressionType = _left.expressionType ();
+    final AbstractJType leftExpressionType = _left.expressionType ();
     if (_op.equals ("instanceof"))
       return leftExpressionType.owner ().BOOLEAN;
 
-    AbstractJType rightExpressionType =
-        ((IJExpression) _right).expressionType ();
+    final AbstractJType rightExpressionType = ((IJExpression) _right).expressionType ();
     if (_op.equals ("+"))
     {
-      boolean leftIsString =
-          leftExpressionType.fullName ().equals ("java.lang.String");
-      boolean rightIsString =
-          rightExpressionType.fullName ().equals ("java.lang.String");
+      final boolean leftIsString = leftExpressionType.fullName ().equals ("java.lang.String");
+      final boolean rightIsString = rightExpressionType.fullName ().equals ("java.lang.String");
       if (leftIsString || rightIsString)
       {
         return leftIsString ? leftExpressionType : rightExpressionType;
@@ -157,8 +156,7 @@ public class JOpBinary extends AbstractJExpressionImpl
     }
     if (_op.equals ("|") || _op.equals ("&"))
     {
-      if (leftExpressionType.fullName ().equals ("boolean") &&
-          rightExpressionType.fullName ().equals ("boolean"))
+      if (leftExpressionType.fullName ().equals ("boolean") && rightExpressionType.fullName ().equals ("boolean"))
         return leftExpressionType;
       return moreGeneral (leftExpressionType, rightExpressionType);
     }
@@ -172,17 +170,18 @@ public class JOpBinary extends AbstractJExpressionImpl
   @Override
   String derivedName ()
   {
-    return _left.expressionName () + opNames.get (_op) +
-        (_right instanceof IJExpression ?
-            ((IJExpression) _right).expressionName () :
-            ((AbstractJType) _right).fullName ());
+    return _left.expressionName () +
+           opNames.get (_op) +
+           (_right instanceof IJExpression ? ((IJExpression) _right).expressionName ()
+                                          : ((AbstractJType) _right).fullName ());
   }
 
-  public boolean forAllSubExpressions (ExpressionCallback callback)
+  @Override
+  public boolean forAllSubExpressions (final ExpressionCallback callback)
   {
     if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
     {
-      public void set (IJExpression newExpression)
+      public void set (final IJExpression newExpression)
       {
         _left = newExpression;
       }
@@ -197,7 +196,7 @@ public class JOpBinary extends AbstractJExpressionImpl
     {
       return visitWithSubExpressions (callback, new ExpressionAccessor ()
       {
-        public void set (IJExpression newExpression)
+        public void set (final IJExpression newExpression)
         {
           _right = newExpression;
         }

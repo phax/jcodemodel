@@ -40,6 +40,9 @@
  */
 package com.helger.jcodemodel;
 
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,13 +51,10 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
-
 /**
  * Enum Constant. When used as an {@link IJExpression}, this object represents a
  * reference to the enum constant.
- * 
+ *
  * @author Bhakti Mehta (Bhakti.Mehta@sun.com)
  */
 public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclaration, IJAnnotatable, IJDocCommentable
@@ -111,7 +111,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
 
   /**
    * Add an expression to this constructor's argument list
-   * 
+   *
    * @param arg
    *        Argument to add to argument list
    */
@@ -141,7 +141,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
 
   /**
    * Returns the name of this constant including the type name
-   * 
+   *
    * @return never null.
    */
   @Nonnull
@@ -152,7 +152,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
 
   /**
    * Creates, if necessary, and returns the enum constant javadoc.
-   * 
+   *
    * @return JDocComment containing javadocs for this constant.
    */
   @Nonnull
@@ -165,7 +165,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
 
   /**
    * Adds an annotation to this variable.
-   * 
+   *
    * @param clazz
    *        The annotation class to annotate the field with
    */
@@ -181,7 +181,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
 
   /**
    * Adds an annotation to this variable.
-   * 
+   *
    * @param clazz
    *        The annotation class to annotate the field with
    */
@@ -225,6 +225,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
     f.type (_type).print ('.').print (_name);
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -234,11 +235,11 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JEnumConstant rhs = (JEnumConstant) o;
-    return isEqual (_type.fullName (), rhs._type.fullName ()) &&
-        isEqual (_name, rhs._name);
+    final JEnumConstant rhs = (JEnumConstant) o;
+    return isEqual (_type.fullName (), rhs._type.fullName ()) && isEqual (_name, rhs._name);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _type.fullName (), _name);

@@ -57,7 +57,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
 
   /**
    * JFieldVar constructor
-   * 
+   *
    * @param type
    *        Datatype of this variable
    * @param name
@@ -95,7 +95,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
 
   /**
    * Creates, if necessary, and returns the class javadoc for this JDefinedClass
-   * 
+   *
    * @return JDocComment containing javadocs for this class
    */
   @Nonnull

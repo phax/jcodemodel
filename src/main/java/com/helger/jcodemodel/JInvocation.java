@@ -40,10 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.optimize.ExpressionContainer;
-import com.helger.jcodemodel.util.HashCodeGenerator;
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.StringUtils.upper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,8 +50,10 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.StringUtils.upper;
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.optimize.ExpressionContainer;
+import com.helger.jcodemodel.util.HashCodeGenerator;
 
 /**
  * {@link JMethod} invocation
@@ -97,7 +97,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Invokes a method on an object.
-   * 
+   *
    * @param object
    *        JExpression for the object upon which the named method will be
    *        invoked, or null if none
@@ -154,7 +154,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Invokes a constructor of an object (i.e., creates a new object.)
-   * 
+   *
    * @param c
    *        Type of the object to be created. If this type is an array type,
    *        added arguments are treated as array initializer. Thus you can
@@ -183,7 +183,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Add an expression to this invocation's argument list
-   * 
+   *
    * @param arg
    *        Argument to add to argument list
    */
@@ -261,7 +261,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Returns all arguments of the invocation.
-   * 
+   *
    * @return If there's no arguments, an empty array will be returned.
    */
   @Nonnull
@@ -272,7 +272,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Returns all arguments of the invocation.
-   * 
+   *
    * @return If there's no arguments, an empty list will be returned.
    */
   @Nonnull
@@ -367,7 +367,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     }
     else
     {
-      String name = methodName ();
+      final String name = methodName ();
 
       if (_object != null)
       {
@@ -408,6 +408,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     return _type != null ? _type.fullName () : "";
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -417,12 +418,11 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JInvocation rhs = (JInvocation) o;
+    final JInvocation rhs = (JInvocation) o;
     if (!(isEqual (_object, rhs._object) &&
-        isEqual (_isConstructor, rhs._isConstructor) &&
-        (_isConstructor || isEqual (methodName (), rhs.methodName ())) &&
-        isEqual (_args, rhs._args) &&
-        isEqual (typeFullName (), rhs.typeFullName ())))
+          isEqual (_isConstructor, rhs._isConstructor) &&
+          (_isConstructor || isEqual (methodName (), rhs.methodName ())) &&
+          isEqual (_args, rhs._args) && isEqual (typeFullName (), rhs.typeFullName ())))
     {
       return false;
     }
@@ -434,27 +434,23 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
       return false;
     for (int i = 0; i < _typeVariables.size (); i++)
     {
-      if (!isEqual (_typeVariables.get (i).fullName (),
-          rhs._typeVariables.get (i).fullName ()))
+      if (!isEqual (_typeVariables.get (i).fullName (), rhs._typeVariables.get (i).fullName ()))
         return false;
     }
     return true;
   }
 
+  @Override
   public int hashCode ()
   {
-    HashCodeGenerator hashCodeGenerator = new HashCodeGenerator (this)
-        .append (_object)
-        .append (_isConstructor);
+    HashCodeGenerator hashCodeGenerator = new HashCodeGenerator (this).append (_object).append (_isConstructor);
     if (!_isConstructor)
       hashCodeGenerator = hashCodeGenerator.append (methodName ());
-    hashCodeGenerator = hashCodeGenerator
-        .append (_args)
-        .append (typeFullName ());
+    hashCodeGenerator = hashCodeGenerator.append (_args).append (typeFullName ());
     if (_typeVariables != null)
     {
       hashCodeGenerator = hashCodeGenerator.append (_typeVariables.size ());
-      for (JTypeVar typeVariable : _typeVariables)
+      for (final JTypeVar typeVariable : _typeVariables)
       {
         hashCodeGenerator = hashCodeGenerator.append (typeVariable.fullName ());
       }
@@ -478,13 +474,13 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     String name;
     if (_object instanceof IJExpression)
     {
-      name = ((IJExpression) _object).expressionName () +
-          upper (methodName ());
-    } else
+      name = ((IJExpression) _object).expressionName () + upper (methodName ());
+    }
+    else
     {
       name = methodName ();
     }
-    for (IJExpression arg : _args)
+    for (final IJExpression arg : _args)
     {
       name += upper (arg.expressionName ());
     }
@@ -492,13 +488,13 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   }
 
   @Override
-  public boolean forAllSubExpressions (ExpressionCallback callback)
+  public boolean forAllSubExpressions (final ExpressionCallback callback)
   {
     if (_object instanceof IJExpression)
     {
       if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
       {
-        public void set (IJExpression newExpression)
+        public void set (final IJExpression newExpression)
         {
           _object = newExpression;
         }
@@ -515,7 +511,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
       final int finalI = i;
       if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
       {
-        public void set (IJExpression newExpression)
+        public void set (final IJExpression newExpression)
         {
           _args.set (finalI, newExpression);
         }

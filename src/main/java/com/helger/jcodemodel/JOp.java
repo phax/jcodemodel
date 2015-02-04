@@ -91,7 +91,7 @@ public final class JOp
 
   /**
    * Post increment
-   * 
+   *
    * @param e
    *        expression
    * @return <code><em>e</em>++</code>
@@ -104,7 +104,7 @@ public final class JOp
 
   /**
    * Pre increment
-   * 
+   *
    * @param e
    *        expression
    * @return <code>++<em>e</em></code>
@@ -117,7 +117,7 @@ public final class JOp
 
   /**
    * Post decrement
-   * 
+   *
    * @param e
    *        expression
    * @return <code><em>e</em>--</code>
@@ -130,7 +130,7 @@ public final class JOp
 
   /**
    * Pre decrement
-   * 
+   *
    * @param e
    *        expression
    * @return <code>--<em>e</em></code>

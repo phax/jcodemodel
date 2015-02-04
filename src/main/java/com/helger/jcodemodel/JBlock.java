@@ -126,7 +126,7 @@ public class JBlock implements IJGenerable, IJStatement
    * Gets the current position to which new statements will be inserted. For
    * example if the value is 0, newly created instructions will be inserted at
    * the very beginning of the block.
-   * 
+   *
    * @see #pos(int)
    */
   @Nonnegative
@@ -137,7 +137,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Sets the current position.
-   * 
+   *
    * @return the old value of the current position.
    * @throws IllegalArgumentException
    *         if the new position value is illegal.
@@ -163,7 +163,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Adds a local variable declaration to this block
-   * 
+   *
    * @param type
    *        JType of the variable
    * @param name
@@ -184,7 +184,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Adds a local variable declaration to this block
-   * 
+   *
    * @param mods
    *        Modifiers for the variable
    * @param type
@@ -201,7 +201,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Adds a local variable declaration to this block
-   * 
+   *
    * @param type
    *        JType of the variable
    * @param name
@@ -218,7 +218,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Adds a local variable declaration to this block
-   * 
+   *
    * @param mods
    *        Modifiers for the variable
    * @param type
@@ -242,9 +242,9 @@ public class JBlock implements IJGenerable, IJStatement
     return v;
   }
 
-  public JBlock insertBefore(JVar var, Object before)
+  public JBlock insertBefore (final JVar var, final Object before)
   {
-    int i = _content.indexOf (before);
+    final int i = _content.indexOf (before);
     _content.add (i, var);
     _pos++;
     _bracesRequired = true;
@@ -254,7 +254,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Creates an assignment statement and adds it to this block.
-   * 
+   *
    * @param lhs
    *        Assignable variable or field for left hand side of expression
    * @param exp
@@ -297,7 +297,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Creates an invocation statement and adds it to this block.
-   * 
+   *
    * @param expr
    *        {@link IJExpression} evaluating to the class or object upon which
    *        the named method will be invoked
@@ -313,7 +313,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Creates an invocation statement and adds it to this block.
-   * 
+   *
    * @param method
    *        Name of method to invoke on this
    * @return Newly generated {@link JInvocation}
@@ -326,7 +326,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Creates an invocation statement and adds it to this block.
-   * 
+   *
    * @param expr
    *        {@link IJExpression} evaluating to the class or object upon which
    *        the method will be invoked
@@ -342,7 +342,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Creates an invocation statement and adds it to this block.
-   * 
+   *
    * @param method
    *        {@link JMethod} to invoke on this
    * @return Newly generated {@link JInvocation}
@@ -364,7 +364,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Creates an invocation statement and adds it to this block.
-   * 
+   *
    * @param method
    *        Name of method to invoke
    * @return Newly generated JInvocation
@@ -377,7 +377,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Creates an invocation statement and adds it to this block.
-   * 
+   *
    * @param method
    *        JMethod to invoke
    * @return Newly generated JInvocation
@@ -402,7 +402,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Adds a statement to this block
-   * 
+   *
    * @param s
    *        JStatement to be added
    * @return This block
@@ -417,7 +417,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Create an If statement and add it to this block
-   * 
+   *
    * @param expr
    *        JExpression to be tested to determine branching
    * @return Newly generated conditional statement
@@ -430,7 +430,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Create a For statement and add it to this block
-   * 
+   *
    * @return Newly generated For statement
    */
   @Nonnull
@@ -441,7 +441,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Create a While statement and add it to this block
-   * 
+   *
    * @return Newly generated While statement
    */
   @Nonnull
@@ -461,7 +461,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Create a Do statement and add it to this block
-   * 
+   *
    * @return Newly generated Do statement
    */
   @Nonnull
@@ -472,7 +472,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Create a Try statement and add it to this block
-   * 
+   *
    * @return Newly generated Try statement
    */
   @Nonnull
@@ -562,7 +562,7 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Creates an enhanced For statement based on j2se 1.5 JLS and add it to this
    * block
-   * 
+   *
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
   @Nonnull

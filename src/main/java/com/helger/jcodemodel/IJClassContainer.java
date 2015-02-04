@@ -61,7 +61,7 @@ public interface IJClassContainer extends IJOwned
 
   /**
    * Add a new class to this package/class.
-   * 
+   *
    * @param mods
    *        Modifiers for this class declaration
    * @param name
@@ -74,7 +74,7 @@ public interface IJClassContainer extends IJOwned
 
   /**
    * Add a new public class to this class/package.
-   * 
+   *
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -82,7 +82,7 @@ public interface IJClassContainer extends IJOwned
 
   /**
    * Add an interface to this class/package.
-   * 
+   *
    * @param mods
    *        Modifiers for this interface declaration
    * @param name
@@ -95,7 +95,7 @@ public interface IJClassContainer extends IJOwned
 
   /**
    * Adds a public interface to this package.
-   * 
+   *
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -129,7 +129,7 @@ public interface IJClassContainer extends IJOwned
 
   /**
    * Add an annotationType Declaration to this package
-   * 
+   *
    * @param name
    *        Name of the annotation Type declaration to be added to this package
    * @return newly created Annotation Type Declaration
@@ -140,7 +140,7 @@ public interface IJClassContainer extends IJOwned
 
   /**
    * Add a public enum to this package
-   * 
+   *
    * @param name
    *        Name of the enum to be added to this package
    * @return newly created Enum

@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-
 import javax.annotation.Nonnull;
+
+import com.helger.jcodemodel.optimize.ExpressionCallback;
 
 public class JOpUnaryTight extends JOpUnary
 {
@@ -75,11 +75,12 @@ public class JOpUnaryTight extends JOpUnary
   String derivedName ()
   {
     return (opFirst () ? "pre" : "post") +
-        (op ().equals ("++") ? "Incremented" : "Decremented") +
-        expr ().expressionName ();
+           (op ().equals ("++") ? "Incremented" : "Decremented") +
+           expr ().expressionName ();
   }
 
-  public boolean forAllSubExpressions (ExpressionCallback callback)
+  @Override
+  public boolean forAllSubExpressions (final ExpressionCallback callback)
   {
     if (!expr ().forAllSubExpressions (callback))
       return false;

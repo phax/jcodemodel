@@ -40,9 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.util.StringUtils;
+import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,15 +50,16 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+import com.helger.jcodemodel.optimize.ExpressionAccessor;
+import com.helger.jcodemodel.optimize.ExpressionCallback;
+import com.helger.jcodemodel.util.StringUtils;
 
 /**
  * array creation and initialization.
  */
 public class JArray extends AbstractJExpressionImpl
 {
-  private AbstractJType _type;
+  private final AbstractJType _type;
   private IJExpression _size;
   private List <IJExpression> _exprs;
 
@@ -83,7 +83,7 @@ public class JArray extends AbstractJExpressionImpl
 
   /**
    * Add an element to the array initializer
-   * 
+   *
    * @return this
    */
   @Nonnull
@@ -97,7 +97,7 @@ public class JArray extends AbstractJExpressionImpl
 
   /**
    * Remove all elements from the array initializer
-   * 
+   *
    * @return this
    */
   @Nonnull
@@ -152,6 +152,7 @@ public class JArray extends AbstractJExpressionImpl
       f.print ('}');
   }
 
+  @Override
   public boolean equals (Object o)
   {
     if (o == this)
@@ -161,11 +162,13 @@ public class JArray extends AbstractJExpressionImpl
     o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
-    JArray rhs = (JArray) o;
+    final JArray rhs = (JArray) o;
     return isEqual (_type.fullName (), rhs._type.fullName ()) &&
-        isEqual (_size, rhs._size) && isEqual (_exprs, rhs._exprs);
+           isEqual (_size, rhs._size) &&
+           isEqual (_exprs, rhs._exprs);
   }
 
+  @Override
   public int hashCode ()
   {
     return getHashCode (this, _type.fullName (), _size, _exprs);
@@ -180,17 +183,17 @@ public class JArray extends AbstractJExpressionImpl
   @Override
   String derivedName ()
   {
-    return StringUtils.lower (_type.name ()) + "ArrayOfSize" +
-        _size.expressionName ();
+    return StringUtils.lower (_type.name ()) + "ArrayOfSize" + _size.expressionName ();
   }
 
-  public boolean forAllSubExpressions (ExpressionCallback callback)
+  @Override
+  public boolean forAllSubExpressions (final ExpressionCallback callback)
   {
     if (_size != null)
     {
       if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
       {
-        public void set (IJExpression newExpression)
+        public void set (final IJExpression newExpression)
         {
           _size = newExpression;
         }
@@ -204,20 +207,20 @@ public class JArray extends AbstractJExpressionImpl
     }
     for (int i = 0; i < (_exprs != null ? _exprs.size () : 0); i++)
     {
-      IJExpression expr = _exprs.get (i);
+      final IJExpression expr = _exprs.get (i);
       final int finalI = i;
       if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
-          {
-            public void set (IJExpression newExpression)
-            {
-              _exprs.set (finalI, newExpression);
-            }
+      {
+        public void set (final IJExpression newExpression)
+        {
+          _exprs.set (finalI, newExpression);
+        }
 
-            public IJExpression get ()
-            {
-              return _exprs.get (finalI);
-            }
-          }))
+        public IJExpression get ()
+        {
+          return _exprs.get (finalI);
+        }
+      }))
         return false;
     }
     return true;

@@ -65,7 +65,7 @@ final class Context extends HashMap<IJExpression, ExpressionState>
            BlockNode definitionBlock, Object definitionBefore,
            boolean mustBeDefinedHere)
   {
-    IJExpression expression = state.expression;
+    IJExpression expression = state._expression;
     ExpressionState s = get (expression);
     if (s == null)
     {

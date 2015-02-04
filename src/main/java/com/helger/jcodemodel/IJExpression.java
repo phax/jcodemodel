@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.optimize.ExpressionContainer;
-
 import javax.annotation.Nonnull;
+
+import com.helger.jcodemodel.optimize.ExpressionContainer;
 
 /**
  * A Java expression.
@@ -469,7 +469,7 @@ public interface IJExpression extends IJGenerable, ExpressionContainer
    */
   boolean equals (Object o);
 
-  String expressionName();
+  String expressionName ();
 
-  AbstractJType expressionType();
+  AbstractJType expressionType ();
 }

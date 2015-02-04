@@ -103,7 +103,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /**
    * JPackage constructor
-   * 
+   *
    * @param name
    *        Name of package. May not be <code>null</code> but empty.
    * @param owner
@@ -167,7 +167,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /**
    * Add a class to this package.
-   * 
+   *
    * @param mods
    *        Modifiers for this class declaration
    * @param name
@@ -214,7 +214,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /**
    * Gets a reference to the already created {@link JDefinedClass}.
-   * 
+   *
    * @return null If the class is not yet created.
    */
   @Nullable
@@ -233,7 +233,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /**
    * Add an interface to this package.
-   * 
+   *
    * @param mods
    *        Modifiers for this interface declaration
    * @param name
@@ -257,7 +257,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /**
    * Add a annotationType Declaration to this package
-   * 
+   *
    * @param mods
    *        Modifiers for this annotationType declaration
    * @param name
@@ -274,7 +274,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /**
    * Add a public annotationType Declaration to this package
-   * 
+   *
    * @param name
    *        Name of the annotation Type declaration to be added to this package
    * @return newly created Annotation Type Declaration
@@ -289,7 +289,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /**
    * Add a enum to this package
-   * 
+   *
    * @param mods
    *        Modifiers for this enum declaration
    * @param name
@@ -306,7 +306,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /**
    * Add a public enum to this package
-   * 
+   *
    * @param name
    *        Name of the enum to be added to this package
    * @return newly created Enum
@@ -352,7 +352,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Creates, if necessary, and returns the package javadoc for this
    * JDefinedClass.
-   * 
+   *
    * @return JDocComment containing javadocs for this class
    */
   @Nonnull
@@ -438,7 +438,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
   /**
    * Get the name of this package
-   * 
+   *
    * @return The name of this package, or the empty string if this is the null
    *         package. For example, this method returns strings like
    *         <code>"java.lang"</code>
