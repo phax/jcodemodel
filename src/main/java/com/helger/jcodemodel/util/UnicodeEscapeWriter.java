@@ -57,13 +57,13 @@ import javax.annotation.Nonnull;
  */
 public class UnicodeEscapeWriter extends FilterWriter
 {
-  private static final BitSet _escape = new BitSet (128);
+  private static final BitSet ESCAPE = new BitSet (128);
 
   static
   {
     for (int i = 0; i < 0x20; i++)
       if (i != '\t' && i != '\r' && i != '\n')
-        _escape.set (i, true);
+        ESCAPE.set (i, true);
   }
 
   public UnicodeEscapeWriter (@Nonnull final Writer next)
@@ -93,7 +93,7 @@ public class UnicodeEscapeWriter extends FilterWriter
   protected boolean requireEscaping (final int ch)
   {
     // control characters
-    return ch >= 128 || _escape.get (ch);
+    return ch >= 128 || ESCAPE.get (ch);
   }
 
   @Override

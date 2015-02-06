@@ -53,24 +53,29 @@ public class JMods implements IJGenerable
   //
   // mask
   //
-  private static int VAR = JMod.FINAL;
-  private static int FIELD = JMod.PUBLIC |
-                             JMod.PRIVATE |
-                             JMod.PROTECTED |
-                             JMod.STATIC |
-                             JMod.FINAL |
-                             JMod.TRANSIENT |
-                             JMod.VOLATILE;
-  private static int METHOD = JMod.PUBLIC |
-                              JMod.PRIVATE |
-                              JMod.PROTECTED |
-                              JMod.FINAL |
-                              JMod.ABSTRACT |
-                              JMod.STATIC |
-                              JMod.NATIVE |
-                              JMod.SYNCHRONIZED;
-  private static int CLASS = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED | JMod.STATIC | JMod.FINAL | JMod.ABSTRACT;
-  private static int INTERFACE = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED;
+  private static final int VAR = JMod.FINAL;
+  private static final int FIELD = JMod.PUBLIC |
+                                   JMod.PRIVATE |
+                                   JMod.PROTECTED |
+                                   JMod.STATIC |
+                                   JMod.FINAL |
+                                   JMod.TRANSIENT |
+                                   JMod.VOLATILE;
+  private static final int METHOD = JMod.PUBLIC |
+                                    JMod.PRIVATE |
+                                    JMod.PROTECTED |
+                                    JMod.FINAL |
+                                    JMod.ABSTRACT |
+                                    JMod.STATIC |
+                                    JMod.NATIVE |
+                                    JMod.SYNCHRONIZED;
+  private static final int CLASS = JMod.PUBLIC |
+                                   JMod.PRIVATE |
+                                   JMod.PROTECTED |
+                                   JMod.STATIC |
+                                   JMod.FINAL |
+                                   JMod.ABSTRACT;
+  private static final int INTERFACE = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED;
 
   /** bit-packed representation of modifiers. */
   private int _mods;

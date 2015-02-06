@@ -63,13 +63,13 @@ public abstract class AbstractCodeWriter implements Closeable
 {
   private static final class JavaUnicodeEscapeWriter extends UnicodeEscapeWriter
   {
-    private static final BitSet _escape = new BitSet (128);
+    private static final BitSet ESCAPE = new BitSet (128);
 
     static
     {
       for (int i = 0; i < 0x20; i++)
         if (i != '\t' && i != '\r' && i != '\n')
-          _escape.set (i, true);
+          ESCAPE.set (i, true);
     }
 
     // can't change this signature to Encoder because
@@ -86,7 +86,7 @@ public abstract class AbstractCodeWriter implements Closeable
     protected boolean requireEscaping (final int ch)
     {
       // control characters
-      if (_escape.get (ch))
+      if (ESCAPE.get (ch))
         return true;
 
       // check ASCII chars, for better performance

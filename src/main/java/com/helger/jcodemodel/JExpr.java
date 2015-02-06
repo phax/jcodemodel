@@ -61,11 +61,11 @@ public final class JExpr
   @Nonnull
   public static final JAtom FALSE = new JAtom ("false");
 
-  private static final String _charEscape = "\b\t\n\f\r\"\'\\";
-  private static final String _charMacro = "btnfr\"'\\";
-  private static final JAtom __this = new JAtom ("this");
-  private static final JAtom __super = new JAtom ("super");
-  private static final JAtom __null = new JAtom ("null");
+  private static final String CHAR_ESCAPE = "\b\t\n\f\r\"\'\\";
+  private static final String CHAR_MACRO = "btnfr\"'\\";
+  private static final JAtom THIS = new JAtom ("this");
+  private static final JAtom SUPER = new JAtom ("super");
+  private static final JAtom NULL = new JAtom ("null");
 
   /**
    * This class is not instanciable.
@@ -323,7 +323,7 @@ public final class JExpr
   @Nonnull
   public static JAtom _this ()
   {
-    return __this;
+    return THIS;
   }
 
   /**
@@ -332,7 +332,7 @@ public final class JExpr
   @Nonnull
   public static JAtom _super ()
   {
-    return __super;
+    return SUPER;
   }
 
   /* -- Literals -- */
@@ -340,7 +340,7 @@ public final class JExpr
   @Nonnull
   public static JAtom _null ()
   {
-    return __null;
+    return NULL;
   }
 
   @Nonnull
@@ -386,7 +386,7 @@ public final class JExpr
     for (int i = 0; i < n; i++)
     {
       final char c = s.charAt (i);
-      final int j = _charEscape.indexOf (c);
+      final int j = CHAR_ESCAPE.indexOf (c);
       if (j >= 0)
       {
         if ((quote == '"' && c == '\'') || (quote == '\'' && c == '"'))
@@ -396,7 +396,7 @@ public final class JExpr
         else
         {
           sb.append ('\\');
-          sb.append (_charMacro.charAt (j));
+          sb.append (CHAR_MACRO.charAt (j));
         }
       }
       else

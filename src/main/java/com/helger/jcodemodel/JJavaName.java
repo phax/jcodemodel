@@ -135,7 +135,7 @@ public class JJavaName
   }
 
   /** All reserved keywords of Java. */
-  private static HashSet <String> reservedKeywords = new HashSet <String> ();
+  private static final HashSet <String> RESERVED_KEYWORDS = new HashSet <String> ();
 
   static
   {
@@ -204,7 +204,7 @@ public class JJavaName
                                            // and 5.0 keywords
                                            "enum" };
     for (final String w : words)
-      reservedKeywords.add (w);
+      RESERVED_KEYWORDS.add (w);
   }
 
   /**
@@ -214,7 +214,7 @@ public class JJavaName
   {
     if (s.length () == 0)
       return false;
-    if (reservedKeywords.contains (s))
+    if (RESERVED_KEYWORDS.contains (s))
       return false;
 
     if (!Character.isJavaIdentifierStart (s.charAt (0)))

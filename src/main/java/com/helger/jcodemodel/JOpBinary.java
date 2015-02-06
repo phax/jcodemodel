@@ -68,7 +68,7 @@ public class JOpBinary extends AbstractJExpressionImpl
     return left.owner ().INT;
   }
 
-  private static Map <String, String> opNames = new HashMap <String, String> ()
+  private static final Map <String, String> OP_NAMES = new HashMap <String, String> ()
   {
     {
       put ("instanceof", "Instanceof");
@@ -171,7 +171,7 @@ public class JOpBinary extends AbstractJExpressionImpl
   String derivedName ()
   {
     return _left.expressionName () +
-           opNames.get (_op) +
+           OP_NAMES.get (_op) +
            (_right instanceof IJExpression ? ((IJExpression) _right).expressionName ()
                                           : ((AbstractJType) _right).fullName ());
   }
