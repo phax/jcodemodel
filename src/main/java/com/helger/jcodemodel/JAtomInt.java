@@ -84,7 +84,7 @@ public class JAtomInt extends AbstractJExpressionImpl
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _what);
+    return getHashCode (this, Integer.valueOf (_what));
   }
 
   @Override

@@ -86,6 +86,6 @@ public class JAtomLong extends AbstractJExpressionImpl
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _what);
+    return getHashCode (this, Long.valueOf (_what));
   }
 }

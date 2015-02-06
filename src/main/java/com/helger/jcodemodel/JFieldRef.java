@@ -227,10 +227,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     {
       return ((IJExpression) _object).expressionName () + StringUtils.upper (name ());
     }
-    else
-    {
-      return name ();
-    }
+    return name ();
   }
 
   @Override
