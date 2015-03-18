@@ -256,6 +256,19 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
+  public boolean isError ()
+  {
+    if (_basis.isError ())
+      return true;
+    for (final AbstractJClass aClass : _args)
+    {
+      if (aClass.isError ())
+        return true;
+    }
+    return false;
+  }
+
+  @Override
   public List <? extends AbstractJClass> getTypeParameters ()
   {
     return _args;

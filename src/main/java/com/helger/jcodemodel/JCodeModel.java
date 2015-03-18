@@ -282,6 +282,54 @@ public final class JCodeModel
   }
 
   /**
+   * Creates a dummy, error {@link AbstractJClass} that can only be referenced from hidden classes.
+   * <p>
+   * This method is useful when the code generation needs to include some error class
+   * that should never leak into actually written code.
+   * <p>
+   * Error-types represents holes or place-holders that can't be filled.
+   * References to error-classes can be used in hidden class-models.
+   * Such classes should never be actually written but can be somehow used during code generation.
+   * Use {@code JCodeModel#buildsErrorTypeRefs} method to test
+   * if your generated Java-sources contains references to error-types.
+   * <p>
+   * You should probably always check generated code with {@code JCodeModel#buildsErrorTypeRefs} method if
+   * you use any error-types.
+   * <p>
+   * Most of error-types methods throws {@code JErrorClassUsedException} unchecked exceptions.
+   * Be careful and use {@link AbstractJType#isError() AbstractJType#isError} method to check for error-types
+   * before actually using it's methods.
+   *
+   * @param message some free form text message to identify source of error
+   *
+   * @see JCodeModel#buildsErrorTypeRefs()
+   * @see JErrorClass
+   *
+   */
+  @Nonnull
+  public AbstractJClass errorClass (@Nonnull final String message)
+  {
+    return new JErrorClass (this, message);
+  }
+
+  /**
+   * Check if any error-types leaked into output Java-sources.
+   *
+   * @see JCodeModel#errorClass(String)
+   */
+  public boolean buildsErrorTypeRefs ()
+  {
+    final JPackage [] pkgs = _packages.values ().toArray (new JPackage [_packages.size ()]);
+    // avoid concurrent modification exception
+    for (final JPackage pkg : pkgs)
+    {
+      if (pkg.buildsErrorTypeRefs ())
+        return true;
+    }
+    return false;
+  }
+
+  /**
    * Gets a reference to the already created generated class.
    *
    * @return null If the class is not yet created.

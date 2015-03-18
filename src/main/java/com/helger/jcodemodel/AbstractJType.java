@@ -135,6 +135,18 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   }
 
   /**
+   * Tells whether or not this is an error-type.
+   * <p>
+   * Error types are not actual Java types and shouldn't be used in actually generated code.
+   *
+   * @see JCodeModel#errorType(String)
+   */
+  public boolean isError ()
+  {
+    return false;
+  }
+
+  /**
    * If this class is a primitive type, return the boxed class. Otherwise return
    * <tt>this</tt>.
    * <p>
@@ -221,6 +233,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
 
   protected boolean isAssignableFrom (final AbstractJType that, final boolean allowsRawTypeUnchekedConversion)
   {
+    if (isError () || that.isError ())
+      return false;
     if (this.equals (that))
       return true;
 

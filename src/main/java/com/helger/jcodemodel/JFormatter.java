@@ -55,6 +55,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.util.ClassNameComparator;
+import com.helger.jcodemodel.util.NullWriter;
 
 /**
  * This is a utility class for managing indentation and other basic formatting
@@ -62,6 +63,17 @@ import com.helger.jcodemodel.util.ClassNameComparator;
  */
 public class JFormatter implements Closeable
 {
+
+
+  public static boolean containsErrorTypes (@Nonnull final JDefinedClass c)
+  {
+    JFormatter formatter = new JFormatter (NullWriter.getInstance ());
+    formatter._mode = EMode.FIND_ERROR_TYPES;
+    formatter._containsErrorTypes = false;
+    formatter.declaration(c);
+    return formatter._containsErrorTypes;
+  }
+
   private static enum EMode
   {
     /**
@@ -72,7 +84,15 @@ public class JFormatter implements Closeable
     /**
      * Print the actual source code.
      */
-    PRINTING
+    PRINTING,
+
+    /**
+     * Find any error types in output code. In this mode we don't
+     * actually generate anything.
+     * <p>
+     * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass) containsErrorTypes} method
+     */
+    FIND_ERROR_TYPES
   }
 
   /**
@@ -120,6 +140,11 @@ public class JFormatter implements Closeable
   private char _lastChar = 0;
   private boolean _atBeginningOfLine = true;
   private JPackage _javaLang;
+
+  /**
+   * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass) containsErrorTypes} method
+   */
+  private boolean _containsErrorTypes;
 
   /**
    * Creates a JFormatter.
@@ -330,6 +355,10 @@ public class JFormatter implements Closeable
   {
     switch (_mode)
     {
+      case FIND_ERROR_TYPES:
+        if (type.isError())
+          _containsErrorTypes = true;
+        break;
       case PRINTING:
         // many of the JTypes in this list are either primitive or belong to
         // package java so we don't need a FQCN

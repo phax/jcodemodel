@@ -44,105 +44,72 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
- * Represents a wildcard type like "? extends Foo" or "? super Foo".
+ * A special {@link AbstractJClass} that represents an error class.
  * <p>
- * Instances of this class can be obtained from
- * {@link AbstractJClass#wildcard()}
+ * Error-types represents holes or placeholders that can't be filled.
+ * {@code JErrorClass} differs from {@code JDirectClass} class in that it should never be used in generated code.
+ * References to error-classes can be used in hidden class-models.
+ * Such classes should never be actually written but can be somehow used during code generation.
+ * Use {@code JCodeModel#buildsErrorTypeRefs} method to test
+ * if your generated Java-sources contains references to error-types.
  * <p>
- * Our modeling of types are starting to look really ugly. ideally it should
- * have been done somewhat like APT, but it's too late now.
+ * You should probably always check generated code with {@code JCodeModel#buildsErrorTypeRefs} method if
+ * you use any error-types.
+ * <p>
+ * Most of {@code JErrorClass} methods throws {@code JErrorClassUsedException} unchecked exceptions.
+ * Be careful and use {@link AbstractJType#isError() AbstractJType#isError} method to check for error-types
+ * before actually using it's methods.
  *
- * @author Kohsuke Kawaguchi
+ * @see JCodeModel#buildsErrorTypeRefs()
+ * @see JCodeModel#errorClass(String)
+ *
+ * @author Victor Nazarov
  */
-public class JTypeWildcard extends AbstractJClass
+public class JErrorClass extends AbstractJClass
 {
-  public static enum EBoundMode
+  private final String _message;
+
+  protected JErrorClass (@Nonnull final JCodeModel _owner, @Nonnull final String message)
   {
-    EXTENDS ("? extends "),
-    SUPER ("? super ");
-
-    /**
-     * The keyword used to declare this type.
-     */
-    private final String _declarationTokens;
-
-    private EBoundMode (@Nonnull final String token)
-    {
-      _declarationTokens = token;
-    }
-
-    @Nonnull
-    public String declarationTokens ()
-    {
-      return _declarationTokens;
-    }
-  }
-
-  private final AbstractJClass _bound;
-  private final EBoundMode _boundMode;
-
-  protected JTypeWildcard (@Nonnull final AbstractJClass bound, @Nonnull final EBoundMode eMode)
-  {
-    super (bound.owner ());
-    _bound = bound;
-    _boundMode = eMode;
-  }
-
-  @Nonnull
-  public AbstractJClass bound ()
-  {
-    return _bound;
-  }
-
-  @Nonnull
-  public EBoundMode boundMode ()
-  {
-    return _boundMode;
+    super (_owner);
+    _message = message;
   }
 
   @Override
   @Nonnull
   public String name ()
   {
-    return _boundMode.declarationTokens () + _bound.name ();
+    throw new JErrorClassUsedException (_message);
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    return _boundMode.declarationTokens () + _bound.fullName ();
+    throw new JErrorClassUsedException (_message);
   }
 
   @Override
-  @Nullable
+  @Nonnull
   public JPackage _package ()
   {
-    return null;
+    throw new JErrorClassUsedException (_message);
   }
 
-  /**
-   * Returns the class bound of this variable.
-   * <p>
-   * If no bound is given, this method returns {@link Object}.
-   */
   @Override
+  @Nonnull
   public AbstractJClass _extends ()
   {
-    return _boundMode == EBoundMode.EXTENDS ? _bound : _package ().owner ().ref (Object.class);
+    throw new JErrorClassUsedException (_message);
   }
 
-  /**
-   * Returns the interface bounds of this variable.
-   */
   @Override
   @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
-    return _bound._implements ();
+    throw new JErrorClassUsedException (_message);
   }
 
   @Override
@@ -160,28 +127,18 @@ public class JTypeWildcard extends AbstractJClass
   @Override
   public boolean isError ()
   {
-    return _bound.isError();
+    return true;
+  }
+
+  public String getMessage ()
+  {
+    return _message;
   }
 
   @Override
   @Nonnull
   protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
-    final AbstractJClass nb = _bound.substituteParams (variables, bindings);
-    if (nb == _bound)
-      return this;
-    return new JTypeWildcard (nb, EBoundMode.EXTENDS);
-  }
-
-  @Override
-  public void generate (@Nonnull final JFormatter f)
-  {
-    if (_bound._extends () == null)
-    {
-      // instead of "? extends Object" or "? super Object"
-      f.print ("?");
-    }
-    else
-      f.print (_boundMode.declarationTokens ()).generable (_bound);
+    return this;
   }
 }
