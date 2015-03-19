@@ -10,8 +10,8 @@ import javax.annotation.Nonnull;
 
 /**
  * An implementation of {@link Writer} that discards all input :)
- * 
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ *
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 public class NullWriter extends Writer
 {

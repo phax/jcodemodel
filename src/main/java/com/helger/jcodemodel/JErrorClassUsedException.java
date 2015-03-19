@@ -7,7 +7,7 @@ package com.helger.jcodemodel;
  * This exception purely indicates, that the {@link JErrorClass} is used which
  * is never intended.
  *
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 public class JErrorClassUsedException extends UnsupportedOperationException
 {

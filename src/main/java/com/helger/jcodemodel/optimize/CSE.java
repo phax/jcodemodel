@@ -98,7 +98,7 @@ import com.helger.jcodemodel.JVar;
  * shouldn't turn compiling and correct code into compiling, but invalid code,
  * if the premises met (single threading and absence of side effects).
  *
- * @author Roman Leventov <leventov@ya.ru>
+ * @author Roman Leventov &lt;leventov@ya.ru&gt;
  * @see #optimize(JBlock)
  * @see #optimize(JBlock, ExpressionFilter)
  */

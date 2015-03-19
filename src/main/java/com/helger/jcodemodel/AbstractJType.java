@@ -142,7 +142,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * Error types are not actual Java types and shouldn't be used in actually
    * generated code.
    *
-   * @see JCodeModel#errorType(String)
+   * @see JErrorClass
    */
   public boolean isError ()
   {
