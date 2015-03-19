@@ -576,7 +576,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
         continue;
       }
 
-      if (JFormatter.containsErrorTypes(c))
+      if (JFormatter.containsErrorTypes (c))
         return true;
     }
     return false;

@@ -50,5 +50,5 @@ public interface BranchingStatementVisitor
 
   void visit (JBlock block);
 
-  void visit (List<JBlock> branches);
+  void visit (List <JBlock> branches);
 }

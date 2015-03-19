@@ -73,7 +73,7 @@ public final class ClassNameComparator implements Comparator <AbstractJClass>
    */
   public int compare (@Nonnull final AbstractJClass left, @Nonnull final AbstractJClass right)
   {
-    if (left.isError () && right.isError())
+    if (left.isError () && right.isError ())
       return 0;
     if (left.isError ())
       return -1;

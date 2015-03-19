@@ -68,11 +68,11 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  *
  * <pre>
  * JCodeModel cm = new JCodeModel();
- *
+ * 
  * // generate source code by populating the 'cm' tree.
  * cm._class(...);
  * ...
- *
+ * 
  * // write them out
  * cm.build(new File("."));
  * </pre>
