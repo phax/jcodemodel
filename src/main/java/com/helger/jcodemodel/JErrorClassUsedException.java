@@ -4,15 +4,17 @@
 package com.helger.jcodemodel;
 
 /**
+ * This exception purely indicates, that the {@link JErrorClass} is used which
+ * is never intended.
  *
  * @author Victor Nazarov <asviraspossible@gmail.com>
  */
-public class JErrorClassUsedException extends UnsupportedOperationException {
+public class JErrorClassUsedException extends UnsupportedOperationException
+{
   private static final long serialVersionUID = 1L;
 
-  JErrorClassUsedException (String message)
+  JErrorClassUsedException (final String message)
   {
     super (message);
   }
-
 }

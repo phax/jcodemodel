@@ -81,40 +81,40 @@ public class JTypeWildcard extends AbstractJClass
     }
   }
 
-  private final AbstractJClass _bound;
-  private final EBoundMode _boundMode;
+  private final AbstractJClass m_aBoundClass;
+  private final EBoundMode m_eBoundMode;
 
-  protected JTypeWildcard (@Nonnull final AbstractJClass bound, @Nonnull final EBoundMode eMode)
+  protected JTypeWildcard (@Nonnull final AbstractJClass aBoundClass, @Nonnull final EBoundMode eBoundMode)
   {
-    super (bound.owner ());
-    _bound = bound;
-    _boundMode = eMode;
+    super (aBoundClass.owner ());
+    m_aBoundClass = aBoundClass;
+    m_eBoundMode = eBoundMode;
   }
 
   @Nonnull
   public AbstractJClass bound ()
   {
-    return _bound;
+    return m_aBoundClass;
   }
 
   @Nonnull
   public EBoundMode boundMode ()
   {
-    return _boundMode;
+    return m_eBoundMode;
   }
 
   @Override
   @Nonnull
   public String name ()
   {
-    return _boundMode.declarationTokens () + _bound.name ();
+    return m_eBoundMode.declarationTokens () + m_aBoundClass.name ();
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    return _boundMode.declarationTokens () + _bound.fullName ();
+    return m_eBoundMode.declarationTokens () + m_aBoundClass.fullName ();
   }
 
   @Override
@@ -129,20 +129,22 @@ public class JTypeWildcard extends AbstractJClass
    * <p>
    * If no bound is given, this method returns {@link Object}.
    */
+
   @Override
   public AbstractJClass _extends ()
   {
-    return _boundMode == EBoundMode.EXTENDS ? _bound : _package ().owner ().ref (Object.class);
+    return m_eBoundMode == EBoundMode.EXTENDS ? m_aBoundClass : _package ().owner ().ref (Object.class);
   }
 
   /**
    * Returns the interface bounds of this variable.
    */
+
   @Override
   @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
-    return _bound._implements ();
+    return m_aBoundClass._implements ();
   }
 
   @Override
@@ -160,15 +162,15 @@ public class JTypeWildcard extends AbstractJClass
   @Override
   public boolean isError ()
   {
-    return _bound.isError();
+    return m_aBoundClass.isError ();
   }
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] aVariables, final List <? extends AbstractJClass> aBindings)
   {
-    final AbstractJClass nb = _bound.substituteParams (variables, bindings);
-    if (nb == _bound)
+    final AbstractJClass nb = m_aBoundClass.substituteParams (aVariables, aBindings);
+    if (nb == m_aBoundClass)
       return this;
     return new JTypeWildcard (nb, EBoundMode.EXTENDS);
   }
@@ -176,12 +178,12 @@ public class JTypeWildcard extends AbstractJClass
   @Override
   public void generate (@Nonnull final JFormatter f)
   {
-    if (_bound._extends () == null)
+    if (m_aBoundClass._extends () == null)
     {
       // instead of "? extends Object" or "? super Object"
       f.print ("?");
     }
     else
-      f.print (_boundMode.declarationTokens ()).generable (_bound);
+      f.print (m_eBoundMode.declarationTokens ()).generable (m_aBoundClass);
   }
 }

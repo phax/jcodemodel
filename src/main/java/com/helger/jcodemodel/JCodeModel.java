@@ -68,11 +68,11 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  *
  * <pre>
  * JCodeModel cm = new JCodeModel();
- * 
+ *
  * // generate source code by populating the 'cm' tree.
  * cm._class(...);
  * ...
- * 
+ *
  * // write them out
  * cm.build(new File("."));
  * </pre>
@@ -282,29 +282,30 @@ public final class JCodeModel
   }
 
   /**
-   * Creates a dummy, error {@link AbstractJClass} that can only be referenced from hidden classes.
+   * Creates a dummy, error {@link AbstractJClass} that can only be referenced
+   * from hidden classes.
    * <p>
-   * This method is useful when the code generation needs to include some error class
-   * that should never leak into actually written code.
+   * This method is useful when the code generation needs to include some error
+   * class that should never leak into actually written code.
    * <p>
    * Error-types represents holes or place-holders that can't be filled.
-   * References to error-classes can be used in hidden class-models.
-   * Such classes should never be actually written but can be somehow used during code generation.
-   * Use {@code JCodeModel#buildsErrorTypeRefs} method to test
+   * References to error-classes can be used in hidden class-models. Such
+   * classes should never be actually written but can be somehow used during
+   * code generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test
    * if your generated Java-sources contains references to error-types.
    * <p>
-   * You should probably always check generated code with {@code JCodeModel#buildsErrorTypeRefs} method if
-   * you use any error-types.
+   * You should probably always check generated code with
+   * {@code JCodeModel#buildsErrorTypeRefs} method if you use any error-types.
    * <p>
-   * Most of error-types methods throws {@code JErrorClassUsedException} unchecked exceptions.
-   * Be careful and use {@link AbstractJType#isError() AbstractJType#isError} method to check for error-types
-   * before actually using it's methods.
+   * Most of error-types methods throws {@code JErrorClassUsedException}
+   * unchecked exceptions. Be careful and use {@link AbstractJType#isError()
+   * AbstractJType#isError} method to check for error-types before actually
+   * using it's methods.
    *
-   * @param message some free form text message to identify source of error
-   *
+   * @param message
+   *        some free form text message to identify source of error
    * @see JCodeModel#buildsErrorTypeRefs()
    * @see JErrorClass
-   *
    */
   @Nonnull
   public AbstractJClass errorClass (@Nonnull final String message)
@@ -348,15 +349,15 @@ public final class JCodeModel
    * Creates a new anonymous class.
    */
   @Nonnull
-  public JDefinedClass anonymousClass (@Nonnull final AbstractJClass baseType)
+  public JAnonymousClass anonymousClass (@Nonnull final AbstractJClass aBaseClass)
   {
-    return new JAnonymousClass (baseType);
+    return new JAnonymousClass (aBaseClass);
   }
 
   @Nonnull
-  public JDefinedClass anonymousClass (@Nonnull final Class <?> baseType)
+  public JAnonymousClass anonymousClass (@Nonnull final Class <?> aBaseClass)
   {
-    return anonymousClass (ref (baseType));
+    return anonymousClass (ref (aBaseClass));
   }
 
   /**
@@ -696,37 +697,38 @@ public final class JCodeModel
    */
   private class JReferencedClass extends AbstractJClass implements IJDeclaration
   {
-    private final Class <?> _class;
+    private final Class <?> m_aClass;
 
     JReferencedClass (@Nonnull final Class <?> _clazz)
     {
       super (JCodeModel.this);
-      _class = _clazz;
-      assert !_class.isArray ();
+      m_aClass = _clazz;
+      assert !m_aClass.isArray ();
     }
 
     @Override
     public String name ()
     {
-      return _class.getSimpleName ();
+      return m_aClass.getSimpleName ();
     }
 
     @Override
+    @Nonnull
     public String fullName ()
     {
-      return NameUtilities.getFullName (_class);
+      return NameUtilities.getFullName (m_aClass);
     }
 
     @Override
     public String binaryName ()
     {
-      return _class.getName ();
+      return m_aClass.getName ();
     }
 
     @Override
     public AbstractJClass outer ()
     {
-      final Class <?> p = _class.getDeclaringClass ();
+      final Class <?> p = m_aClass.getDeclaringClass ();
       if (p == null)
         return null;
       return ref (p);
@@ -752,7 +754,7 @@ public final class JCodeModel
     @Override
     public AbstractJClass _extends ()
     {
-      final Class <?> sp = _class.getSuperclass ();
+      final Class <?> sp = m_aClass.getSuperclass ();
       if (sp == null)
       {
         if (isInterface ())
@@ -765,7 +767,7 @@ public final class JCodeModel
     @Override
     public Iterator <AbstractJClass> _implements ()
     {
-      final Class <?> [] interfaces = _class.getInterfaces ();
+      final Class <?> [] interfaces = m_aClass.getInterfaces ();
       return new Iterator <AbstractJClass> ()
       {
         private int idx = 0;
@@ -791,20 +793,20 @@ public final class JCodeModel
     @Override
     public boolean isInterface ()
     {
-      return _class.isInterface ();
+      return m_aClass.isInterface ();
     }
 
     @Override
     public boolean isAbstract ()
     {
-      return Modifier.isAbstract (_class.getModifiers ());
+      return Modifier.isAbstract (m_aClass.getModifiers ());
     }
 
     @Override
     @Nullable
     public JPrimitiveType getPrimitiveType ()
     {
-      final Class <?> v = boxToPrimitive.get (_class);
+      final Class <?> v = boxToPrimitive.get (m_aClass);
       if (v != null)
         return AbstractJType.parse (JCodeModel.this, v.getName ());
       return null;

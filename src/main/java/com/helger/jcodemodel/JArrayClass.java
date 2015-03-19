@@ -54,36 +54,39 @@ import javax.annotation.Nonnull;
 public class JArrayClass extends AbstractJClass
 {
   // array component type
-  private final AbstractJType _componentType;
+  private final AbstractJType m_aComponentType;
 
-  protected JArrayClass (final JCodeModel owner, final AbstractJType component)
+  protected JArrayClass (@Nonnull final JCodeModel aOwner, @Nonnull final AbstractJType aComponentType)
   {
-    super (owner);
-    this._componentType = component;
+    super (aOwner);
+    m_aComponentType = aComponentType;
   }
 
   @Override
+  @Nonnull
   public String name ()
   {
-    return _componentType.name () + "[]";
+    return m_aComponentType.name () + "[]";
   }
 
   @Override
+  @Nonnull
   public String fullName ()
   {
-    return _componentType.fullName () + "[]";
+    return m_aComponentType.fullName () + "[]";
   }
 
   @Override
+  @Nonnull
   public String binaryName ()
   {
-    return _componentType.binaryName () + "[]";
+    return m_aComponentType.binaryName () + "[]";
   }
 
   @Override
   public void generate (final JFormatter f)
   {
-    f.generable (_componentType).print ("[]");
+    f.generable (m_aComponentType).print ("[]");
   }
 
   @Override
@@ -120,7 +123,7 @@ public class JArrayClass extends AbstractJClass
   @Override
   public AbstractJType elementType ()
   {
-    return _componentType;
+    return m_aComponentType;
   }
 
   @Override
@@ -142,24 +145,24 @@ public class JArrayClass extends AbstractJClass
       return false;
 
     final JArrayClass rhs = (JArrayClass) obj;
-    return _componentType.equals (rhs._componentType);
+    return m_aComponentType.equals (rhs.m_aComponentType);
   }
 
   @Override
   public int hashCode ()
   {
-    return _componentType.hashCode ();
+    return m_aComponentType.hashCode ();
   }
 
   @Override
   @Nonnull
   protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
   {
-    if (_componentType.isPrimitive ())
+    if (m_aComponentType.isPrimitive ())
       return this;
 
-    final AbstractJClass c = ((AbstractJClass) _componentType).substituteParams (variables, bindings);
-    if (c == _componentType)
+    final AbstractJClass c = ((AbstractJClass) m_aComponentType).substituteParams (variables, bindings);
+    if (c == m_aComponentType)
       return this;
 
     return new JArrayClass (owner (), c);

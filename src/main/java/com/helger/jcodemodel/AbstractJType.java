@@ -43,6 +43,7 @@ package com.helger.jcodemodel;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A representation of a type in codeModel. A type is always either primitive (
@@ -57,27 +58,27 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * Obtains a reference to the primitive type object from a type name.
    */
   @Nonnull
-  public static JPrimitiveType parse (@Nonnull final JCodeModel codeModel, @Nonnull final String typeName)
+  public static JPrimitiveType parse (@Nonnull final JCodeModel codeModel, @Nonnull final String sTypeName)
   {
-    if (typeName.equals ("void"))
+    if (sTypeName.equals ("void"))
       return codeModel.VOID;
-    if (typeName.equals ("boolean"))
+    if (sTypeName.equals ("boolean"))
       return codeModel.BOOLEAN;
-    if (typeName.equals ("byte"))
+    if (sTypeName.equals ("byte"))
       return codeModel.BYTE;
-    if (typeName.equals ("short"))
+    if (sTypeName.equals ("short"))
       return codeModel.SHORT;
-    if (typeName.equals ("char"))
+    if (sTypeName.equals ("char"))
       return codeModel.CHAR;
-    if (typeName.equals ("int"))
+    if (sTypeName.equals ("int"))
       return codeModel.INT;
-    if (typeName.equals ("float"))
+    if (sTypeName.equals ("float"))
       return codeModel.FLOAT;
-    if (typeName.equals ("long"))
+    if (sTypeName.equals ("long"))
       return codeModel.LONG;
-    if (typeName.equals ("double"))
+    if (sTypeName.equals ("double"))
       return codeModel.DOUBLE;
-    throw new IllegalArgumentException ("Not a primitive type: " + typeName);
+    throw new IllegalArgumentException ("Not a primitive type: " + sTypeName);
   }
 
   /**
@@ -85,9 +86,10 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * http://java.sun.com/docs/books/jls/second_edition/html/names.doc.html#25430
    * for the details.
    *
-   * @return Strings like "int", "java.lang.String", "java.io.File[]". Never
-   *         null.
+   * @return Strings like "int", "java.lang.String", "java.io.File[]". May be
+   *         <code>null</code> for unnamed classes.
    */
+  @Nullable
   public abstract String fullName ();
 
   /**
@@ -137,7 +139,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   /**
    * Tells whether or not this is an error-type.
    * <p>
-   * Error types are not actual Java types and shouldn't be used in actually generated code.
+   * Error types are not actual Java types and shouldn't be used in actually
+   * generated code.
    *
    * @see JCodeModel#errorType(String)
    */

@@ -79,13 +79,13 @@ import com.helger.jcodemodel.util.SecureLoader;
  * Note that because we don't parse the static Java source code, the returned
  * {@link AbstractJClass} object doesn't respond to methods like "isInterface"
  * or "_extends",
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JStaticJavaFile extends AbstractJResourceFile
 {
-  private final JPackage _pkg;
-  private final String _className;
+  private final JPackage m_aPkg;
+  private final String m_sClassName;
   private final URL _source;
   private final JStaticClass _clazz;
   private final ILineFilter _filter;
@@ -105,9 +105,9 @@ public class JStaticJavaFile extends AbstractJResourceFile
     super (className + ".java");
     if (source == null)
       throw new NullPointerException ();
-    this._pkg = pkg;
+    this.m_aPkg = pkg;
     this._clazz = new JStaticClass ();
-    this._className = className;
+    this.m_sClassName = className;
     this._source = source;
     this._filter = filter;
   }
@@ -175,9 +175,9 @@ public class JStaticJavaFile extends AbstractJResourceFile
         if (line.startsWith ("package "))
         {
           // replace package decl
-          if (_pkg.isUnnamed ())
+          if (m_aPkg.isUnnamed ())
             return null;
-          return "package " + _pkg.name () + ";";
+          return "package " + m_aPkg.name () + ";";
         }
         return line;
       }
@@ -196,7 +196,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
   public interface ILineFilter
   {
     /**
-     * @param line
+     * @param sLine
      *        a non-null valid String that corresponds to one line. No '\n'
      *        included.
      * @return null to strip the line off. Otherwise the returned String will be
@@ -205,7 +205,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
      *            when for some reason there's an error in the line.
      */
     @Nullable
-    String process (@Nonnull String line) throws ParseException;
+    String process (@Nonnull String sLine) throws ParseException;
   }
 
   /**
@@ -213,21 +213,21 @@ public class JStaticJavaFile extends AbstractJResourceFile
    */
   public static final class ChainFilter implements ILineFilter
   {
-    private final ILineFilter _first, _second;
+    private final ILineFilter m_aFirst, m_aSecond;
 
-    public ChainFilter (@Nonnull final ILineFilter first, @Nonnull final ILineFilter second)
+    public ChainFilter (@Nonnull final ILineFilter aFirst, @Nonnull final ILineFilter aSecond)
     {
-      this._first = first;
-      this._second = second;
+      m_aFirst = aFirst;
+      m_aSecond = aSecond;
     }
 
     @Nullable
     public String process (@Nonnull final String sLine) throws ParseException
     {
-      final String line = _first.process (sLine);
-      if (line == null)
+      final String sProcessedLine = m_aFirst.process (sLine);
+      if (sProcessedLine == null)
         return null;
-      return _second.process (line);
+      return m_aSecond.process (sProcessedLine);
     }
   }
 
@@ -237,7 +237,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
 
     JStaticClass ()
     {
-      super (_pkg.owner ());
+      super (m_aPkg.owner ());
       // TODO: allow those to be specified
       typeParams = new JTypeVar [0];
     }
@@ -245,22 +245,23 @@ public class JStaticJavaFile extends AbstractJResourceFile
     @Override
     public String name ()
     {
-      return _className;
+      return m_sClassName;
     }
 
     @Override
+    @Nonnull
     public String fullName ()
     {
-      if (_pkg.isUnnamed ())
-        return _className;
-      return _pkg.name () + '.' + _className;
+      if (m_aPkg.isUnnamed ())
+        return m_sClassName;
+      return m_aPkg.name () + '.' + m_sClassName;
     }
 
     @Override
     @Nonnull
     public JPackage _package ()
     {
-      return _pkg;
+      return m_aPkg;
     }
 
     @Override

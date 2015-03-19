@@ -53,12 +53,12 @@ import javax.annotation.Nullable;
  */
 public class JTypeVarClass extends JTypeVar
 {
-  private final AbstractJClass _cls;
+  private final AbstractJClass m_aClass;
 
-  protected JTypeVarClass (@Nonnull final AbstractJClass cls)
+  protected JTypeVarClass (@Nonnull final AbstractJClass aClass)
   {
-    super (cls.owner (), cls.name ());
-    _cls = cls;
+    super (aClass.owner (), aClass.name ());
+    m_aClass = aClass;
   }
 
   @Override
@@ -66,16 +66,16 @@ public class JTypeVarClass extends JTypeVar
   public String name ()
   {
     // This method is used for the main printing
-    if (_cls instanceof JDefinedClass)
+    if (m_aClass instanceof JDefinedClass)
     {
-      final List <JTypeVar> aTypeParams = ((JDefinedClass) _cls).typeParamList ();
+      final List <JTypeVar> aTypeParams = ((JDefinedClass) m_aClass).typeParamList ();
       if (!aTypeParams.isEmpty ())
       {
         // We need the type params here!
-        return new JNarrowedClass (_cls, aTypeParams).name ();
+        return new JNarrowedClass (m_aClass, aTypeParams).name ();
       }
     }
-    return _cls.name ();
+    return m_aClass.name ();
   }
 
   @Override
@@ -83,18 +83,18 @@ public class JTypeVarClass extends JTypeVar
   public String fullName ()
   {
     // This method is e.g. used for import statements
-    if (_cls instanceof JNarrowedClass)
+    if (m_aClass instanceof JNarrowedClass)
     {
       // Avoid the type parameters
-      return ((JNarrowedClass) _cls).erasure ().fullName ();
+      return ((JNarrowedClass) m_aClass).erasure ().fullName ();
     }
-    return _cls.fullName ();
+    return m_aClass.fullName ();
   }
 
   @Override
   @Nullable
   public JPackage _package ()
   {
-    return _cls._package ();
+    return m_aClass._package ();
   }
 }

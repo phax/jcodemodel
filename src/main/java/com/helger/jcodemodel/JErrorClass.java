@@ -49,67 +49,68 @@ import javax.annotation.Nonnull;
  * A special {@link AbstractJClass} that represents an error class.
  * <p>
  * Error-types represents holes or placeholders that can't be filled.
- * {@code JErrorClass} differs from {@code JDirectClass} class in that it should never be used in generated code.
- * References to error-classes can be used in hidden class-models.
- * Such classes should never be actually written but can be somehow used during code generation.
- * Use {@code JCodeModel#buildsErrorTypeRefs} method to test
- * if your generated Java-sources contains references to error-types.
+ * {@code JErrorClass} differs from {@code JDirectClass} class in that it should
+ * never be used in generated code. References to error-classes can be used in
+ * hidden class-models. Such classes should never be actually written but can be
+ * somehow used during code generation. Use
+ * {@code JCodeModel#buildsErrorTypeRefs} method to test if your generated
+ * Java-sources contains references to error-types.
  * <p>
- * You should probably always check generated code with {@code JCodeModel#buildsErrorTypeRefs} method if
- * you use any error-types.
+ * You should probably always check generated code with
+ * {@code JCodeModel#buildsErrorTypeRefs} method if you use any error-types.
  * <p>
- * Most of {@code JErrorClass} methods throws {@code JErrorClassUsedException} unchecked exceptions.
- * Be careful and use {@link AbstractJType#isError() AbstractJType#isError} method to check for error-types
- * before actually using it's methods.
+ * Most of {@code JErrorClass} methods throws {@code JErrorClassUsedException}
+ * unchecked exceptions. Be careful and use {@link AbstractJType#isError()
+ * AbstractJType#isError} method to check for error-types before actually using
+ * it's methods.
  *
  * @see JCodeModel#buildsErrorTypeRefs()
  * @see JCodeModel#errorClass(String)
- *
  * @author Victor Nazarov
  */
 public class JErrorClass extends AbstractJClass
 {
-  private final String _message;
+  private final String m_sMessage;
 
-  protected JErrorClass (@Nonnull final JCodeModel _owner, @Nonnull final String message)
+  protected JErrorClass (@Nonnull final JCodeModel _owner, @Nonnull final String sMessage)
   {
     super (_owner);
-    _message = message;
+    m_sMessage = sMessage;
   }
 
   @Override
   @Nonnull
   public String name ()
   {
-    throw new JErrorClassUsedException (_message);
+    throw new JErrorClassUsedException (m_sMessage);
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    throw new JErrorClassUsedException (_message);
+    throw new JErrorClassUsedException (m_sMessage);
   }
 
   @Override
   @Nonnull
   public JPackage _package ()
   {
-    throw new JErrorClassUsedException (_message);
+    throw new JErrorClassUsedException (m_sMessage);
   }
 
   @Override
   @Nonnull
   public AbstractJClass _extends ()
   {
-    throw new JErrorClassUsedException (_message);
+    throw new JErrorClassUsedException (m_sMessage);
   }
 
   @Override
   @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
-    throw new JErrorClassUsedException (_message);
+    throw new JErrorClassUsedException (m_sMessage);
   }
 
   @Override
@@ -130,9 +131,10 @@ public class JErrorClass extends AbstractJClass
     return true;
   }
 
+  @Nonnull
   public String getMessage ()
   {
-    return _message;
+    return m_sMessage;
   }
 
   @Override

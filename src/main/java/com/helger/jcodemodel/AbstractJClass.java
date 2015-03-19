@@ -65,14 +65,14 @@ public abstract class AbstractJClass extends AbstractJType
    */
   public static final JTypeVar [] EMPTY_ARRAY = new JTypeVar [0];
 
-  private final JCodeModel _owner;
-  private JArrayClass _arrayClass;
+  private final JCodeModel m_aOwner;
+  private JArrayClass m_aArrayClass;
 
-  protected AbstractJClass (@Nonnull final JCodeModel owner)
+  protected AbstractJClass (@Nonnull final JCodeModel aOwner)
   {
-    if (owner == null)
+    if (aOwner == null)
       throw new NullPointerException ("owner");
-    _owner = owner;
+    m_aOwner = aOwner;
   }
 
   /**
@@ -107,7 +107,7 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public final JCodeModel owner ()
   {
-    return _owner;
+    return m_aOwner;
   }
 
   /**
@@ -243,9 +243,9 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public JArrayClass array ()
   {
-    if (_arrayClass == null)
-      _arrayClass = new JArrayClass (owner (), this);
-    return _arrayClass;
+    if (m_aArrayClass == null)
+      m_aArrayClass = new JArrayClass (owner (), this);
+    return m_aArrayClass;
   }
 
   /**

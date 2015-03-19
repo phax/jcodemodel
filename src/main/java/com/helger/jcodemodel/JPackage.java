@@ -70,64 +70,64 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Name of the package. May be the empty string for the root package.
    */
-  private final String _name;
+  private final String m_sName;
 
-  private final JCodeModel _owner;
+  private final JCodeModel m_aOwner;
 
   /**
    * List of classes contained within this package keyed by their name.
    */
-  private final Map <String, JDefinedClass> _classes = new TreeMap <String, JDefinedClass> ();
+  private final Map <String, JDefinedClass> m_aClasses = new TreeMap <String, JDefinedClass> ();
 
   /**
    * List of resources files inside this package.
    */
-  private final Set <AbstractJResourceFile> _resources = new HashSet <AbstractJResourceFile> ();
+  private final Set <AbstractJResourceFile> m_aResources = new HashSet <AbstractJResourceFile> ();
 
   /**
    * All {@link AbstractJClass}s in this package keyed the upper case class
    * name. This field is non-null only on Windows, to detect "Foo" and "foo" as
    * a collision.
    */
-  private final Map <String, JDefinedClass> _upperCaseClassMap;
+  private final Map <String, JDefinedClass> m_aUpperCaseClassMap;
 
   /**
    * Lazily created list of package annotations.
    */
-  private List <JAnnotationUse> _annotations;
+  private List <JAnnotationUse> m_aAnnotations;
 
   /**
    * package javadoc.
    */
-  private JDocComment _jdoc;
+  private JDocComment m_aJavaDoc;
 
   /**
    * JPackage constructor
    *
-   * @param name
+   * @param sName
    *        Name of package. May not be <code>null</code> but empty.
-   * @param owner
+   * @param aOwner
    *        The code writer being used to create this package
    * @throws IllegalArgumentException
    *         If each part of the package name is not a valid identifier
    */
-  protected JPackage (@Nonnull final String name, @Nonnull final JCodeModel owner)
+  protected JPackage (@Nonnull final String sName, @Nonnull final JCodeModel aOwner)
   {
-    if (name == null)
+    if (sName == null)
       throw new NullPointerException ("name");
-    if (name.equals ("."))
+    if (sName.equals ("."))
       throw new IllegalArgumentException ("Package name . is not allowed");
-    if (owner == null)
+    if (aOwner == null)
       throw new NullPointerException ("codeModel");
 
-    _owner = owner;
+    m_aOwner = aOwner;
 
-    if (_owner.isCaseSensitiveFileSystem)
-      _upperCaseClassMap = null;
+    if (m_aOwner.isCaseSensitiveFileSystem)
+      m_aUpperCaseClassMap = null;
     else
-      _upperCaseClassMap = new HashMap <String, JDefinedClass> ();
+      m_aUpperCaseClassMap = new HashMap <String, JDefinedClass> ();
 
-    _name = name;
+    m_sName = sName;
   }
 
   @Nullable
@@ -142,11 +142,11 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nullable
   public JPackage parent ()
   {
-    if (_name.length () == 0)
+    if (m_sName.length () == 0)
       return null;
 
-    final int idx = _name.lastIndexOf ('.');
-    return _owner._package (_name.substring (0, idx));
+    final int idx = m_sName.lastIndexOf ('.');
+    return m_aOwner._package (m_sName.substring (0, idx));
   }
 
   public boolean isClass ()
@@ -168,38 +168,38 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /**
    * Add a class to this package.
    *
-   * @param mods
+   * @param nMods
    *        Modifiers for this class declaration
-   * @param name
+   * @param sName
    *        Name of class to be added to this package
    * @return Newly generated class
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, EClassType.CLASS);
+    return _class (nMods, sName, EClassType.CLASS);
   }
 
   @Nonnull
-  public JDefinedClass _class (final int mods, @Nonnull final String name, @Nonnull final EClassType classTypeVal) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int nMods, @Nonnull final String sName, @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
   {
-    if (_classes.containsKey (name))
-      throw new JClassAlreadyExistsException (_classes.get (name));
+    if (m_aClasses.containsKey (sName))
+      throw new JClassAlreadyExistsException (m_aClasses.get (sName));
 
     // XXX problems caught in the NC constructor
-    final JDefinedClass c = new JDefinedClass (this, mods, name, classTypeVal);
+    final JDefinedClass c = new JDefinedClass (this, nMods, sName, eClassType);
 
-    if (_upperCaseClassMap != null)
+    if (m_aUpperCaseClassMap != null)
     {
-      final String sUpperName = name.toUpperCase ();
-      final JDefinedClass dc = _upperCaseClassMap.get (sUpperName);
+      final String sUpperName = sName.toUpperCase ();
+      final JDefinedClass dc = m_aUpperCaseClassMap.get (sUpperName);
       if (dc != null)
         throw new JClassAlreadyExistsException (dc);
-      _upperCaseClassMap.put (sUpperName, c);
+      m_aUpperCaseClassMap.put (sUpperName, c);
     }
-    _classes.put (name, c);
+    m_aClasses.put (sName, c);
     return c;
   }
 
@@ -207,9 +207,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    * Adds a public class to this package.
    */
   @Nonnull
-  public JDefinedClass _class (@Nonnull final String name) throws JClassAlreadyExistsException
+  public JDefinedClass _class (@Nonnull final String sName) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, name);
+    return _class (JMod.PUBLIC, sName);
   }
 
   /**
@@ -218,41 +218,41 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    * @return null If the class is not yet created.
    */
   @Nullable
-  public JDefinedClass _getClass (@Nullable final String name)
+  public JDefinedClass _getClass (@Nullable final String sName)
   {
-    return _classes.get (name);
+    return m_aClasses.get (sName);
   }
 
   /**
    * Order is based on the lexicological order of the package name.
    */
-  public int compareTo (@Nonnull final JPackage that)
+  public int compareTo (@Nonnull final JPackage aOther)
   {
-    return this._name.compareTo (that._name);
+    return this.m_sName.compareTo (aOther.m_sName);
   }
 
   /**
    * Add an interface to this package.
    *
-   * @param mods
+   * @param nMods
    *        Modifiers for this interface declaration
-   * @param name
+   * @param sName
    *        Name of interface to be added to this package
    * @return Newly generated interface
    */
   @Nonnull
-  public JDefinedClass _interface (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
+  public JDefinedClass _interface (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
   {
-    return _class (mods, name, EClassType.INTERFACE);
+    return _class (nMods, sName, EClassType.INTERFACE);
   }
 
   /**
    * Adds a public interface to this package.
    */
   @Nonnull
-  public JDefinedClass _interface (@Nonnull final String name) throws JClassAlreadyExistsException
+  public JDefinedClass _interface (@Nonnull final String sName) throws JClassAlreadyExistsException
   {
-    return _interface (JMod.PUBLIC, name);
+    return _interface (JMod.PUBLIC, sName);
   }
 
   /**
@@ -325,7 +325,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public AbstractJResourceFile addResourceFile (@Nonnull final AbstractJResourceFile rsrc)
   {
-    _resources.add (rsrc);
+    m_aResources.add (rsrc);
     return rsrc;
   }
 
@@ -334,7 +334,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    */
   public boolean hasResourceFile (@Nullable final String name)
   {
-    for (final AbstractJResourceFile r : _resources)
+    for (final AbstractJResourceFile r : m_aResources)
       if (r.name ().equals (name))
         return true;
     return false;
@@ -346,7 +346,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public Iterator <AbstractJResourceFile> propertyFiles ()
   {
-    return _resources.iterator ();
+    return m_aResources.iterator ();
   }
 
   /**
@@ -358,9 +358,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public JDocComment javadoc ()
   {
-    if (_jdoc == null)
-      _jdoc = new JDocComment (owner ());
-    return _jdoc;
+    if (m_aJavaDoc == null)
+      m_aJavaDoc = new JDocComment (owner ());
+    return m_aJavaDoc;
   }
 
   /**
@@ -374,9 +374,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
 
     // note that c may not be a member of classes.
     // this happens when someone is trying to remove a non generated class
-    _classes.remove (c.name ());
-    if (_upperCaseClassMap != null)
-      _upperCaseClassMap.remove (c.name ().toUpperCase ());
+    m_aClasses.remove (c.name ());
+    if (m_aUpperCaseClassMap != null)
+      m_aUpperCaseClassMap.remove (c.name ().toUpperCase ());
   }
 
   /**
@@ -393,7 +393,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
       n = name + '.';
     n += name;
 
-    return _owner.ref (Class.forName (n));
+    return m_aOwner.ref (Class.forName (n));
   }
 
   /**
@@ -404,7 +404,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   {
     if (isUnnamed ())
       return owner ()._package (pkg);
-    return owner ()._package (_name + '.' + pkg);
+    return owner ()._package (m_sName + '.' + pkg);
   }
 
   /**
@@ -414,7 +414,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public Collection <JDefinedClass> classes ()
   {
-    return _classes.values ();
+    return m_aClasses.values ();
   }
 
   /**
@@ -422,7 +422,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    */
   public boolean isDefined (@Nullable final String classLocalName)
   {
-    for (final JDefinedClass clazz : _classes.values ())
+    for (final JDefinedClass clazz : m_aClasses.values ())
       if (clazz.name ().equals (classLocalName))
         return true;
     return false;
@@ -433,7 +433,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    */
   public final boolean isUnnamed ()
   {
-    return _name.length () == 0;
+    return m_sName.length () == 0;
   }
 
   /**
@@ -446,7 +446,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public String name ()
   {
-    return _name;
+    return m_sName;
   }
 
   /**
@@ -455,7 +455,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public final JCodeModel owner ()
   {
-    return _owner;
+    return m_aOwner;
   }
 
   @Nonnull
@@ -464,18 +464,18 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     if (isUnnamed ())
       throw new IllegalArgumentException ("the root package cannot be annotated");
 
-    if (_annotations == null)
-      _annotations = new ArrayList <JAnnotationUse> ();
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
 
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    _annotations.add (a);
+    m_aAnnotations.add (a);
     return a;
   }
 
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
-    return annotate (_owner.ref (clazz));
+    return annotate (m_aOwner.ref (clazz));
   }
 
   @Nonnull
@@ -487,9 +487,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    if (_annotations == null)
-      _annotations = new ArrayList <JAnnotationUse> ();
-    return Collections.unmodifiableList (_annotations);
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+    return Collections.unmodifiableList (m_aAnnotations);
   }
 
   /**
@@ -498,26 +498,26 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   @Nonnull
   File toPath (@Nonnull final File dir)
   {
-    if (_name == null)
+    if (m_sName == null)
       return dir;
-    return new File (dir, _name.replace ('.', File.separatorChar));
+    return new File (dir, m_sName.replace ('.', File.separatorChar));
   }
 
   public void declare (@Nonnull final JFormatter f)
   {
-    if (_name.length () != 0)
-      f.print ("package").print (_name).print (';').newline ();
+    if (m_sName.length () != 0)
+      f.print ("package").print (m_sName).print (';').newline ();
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (_name);
+    f.print (m_sName);
   }
 
   void build (final AbstractCodeWriter src, final AbstractCodeWriter res) throws IOException
   {
     // write classes
-    for (final JDefinedClass c : _classes.values ())
+    for (final JDefinedClass c : m_aClasses.values ())
     {
       if (c.isHidden ())
       {
@@ -531,17 +531,17 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     }
 
     // write package annotations
-    if (_annotations != null || _jdoc != null)
+    if (m_aAnnotations != null || m_aJavaDoc != null)
     {
       final JFormatter f = _createJavaSourceFileWriter (src, "package-info");
 
-      if (_jdoc != null)
-        f.generable (_jdoc);
+      if (m_aJavaDoc != null)
+        f.generable (m_aJavaDoc);
 
       // TODO: think about importing
-      if (_annotations != null)
+      if (m_aAnnotations != null)
       {
-        for (final JAnnotationUse a : _annotations)
+        for (final JAnnotationUse a : m_aAnnotations)
           f.generable (a).newline ();
       }
       f.declaration (this);
@@ -550,7 +550,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     }
 
     // write resources
-    for (final AbstractJResourceFile rsrc : _resources)
+    for (final AbstractJResourceFile rsrc : m_aResources)
     {
       final AbstractCodeWriter cw = rsrc.isResource () ? res : src;
       final OutputStream os = new BufferedOutputStream (cw.openBinary (this, rsrc.name ()));
@@ -568,7 +568,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   boolean buildsErrorTypeRefs ()
   {
     // check classes
-    for (final JDefinedClass c : _classes.values ())
+    for (final JDefinedClass c : m_aClasses.values ())
     {
       if (c.isHidden ())
       {
@@ -585,7 +585,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   /* package */int countArtifacts ()
   {
     int ret = 0;
-    for (final JDefinedClass c : _classes.values ())
+    for (final JDefinedClass c : m_aClasses.values ())
     {
       if (c.isHidden ())
       {
@@ -595,13 +595,13 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
       ret++;
     }
 
-    if (_annotations != null || _jdoc != null)
+    if (m_aAnnotations != null || m_aJavaDoc != null)
     {
       // package-info
       ret++;
     }
 
-    ret += _resources.size ();
+    ret += m_aResources.size ();
 
     return ret;
   }

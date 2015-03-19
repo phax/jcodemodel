@@ -55,17 +55,17 @@ public final class NameUtilities
   {}
 
   @Nonnull
-  public static String getFullName (@Nonnull final Class <?> c)
+  public static String getFullName (@Nonnull final Class <?> aClass)
   {
-    if (c == null)
+    if (aClass == null)
       throw new IllegalArgumentException ("class cannot be null");
 
     final StringBuilder name = new StringBuilder ();
     // Package name
-    name.append (c.getPackage ().getName ()).append ('.');
+    name.append (aClass.getPackage ().getName ()).append ('.');
 
     // Get all enclosing classes
-    Class <?> klaus = c;
+    Class <?> klaus = aClass;
     final List <Class <?>> enclosingClasses = new ArrayList <Class <?>> ();
     while ((klaus = klaus.getEnclosingClass ()) != null)
       enclosingClasses.add (klaus);
@@ -75,7 +75,7 @@ public final class NameUtilities
       name.append (enclosingClasses.get (i).getSimpleName ()).append ('.');
 
     // Append main class name
-    name.append (c.getSimpleName ());
+    name.append (aClass.getSimpleName ());
     return name.toString ();
   }
 }

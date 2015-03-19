@@ -40,10 +40,13 @@
  */
 package com.helger.jcodemodel.tests;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Iterator;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.JAnonymousClass;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
@@ -63,11 +66,16 @@ public class AnonymousClassTest
     final JDefinedClass cls = cm._class ("Test");
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
 
-    final JDefinedClass c = cm.anonymousClass (cm.ref (Iterator.class));
-    c.method (0, cm.VOID, "bob");
+    final JAnonymousClass c = cm.anonymousClass (cm.ref (Iterator.class).narrow (Double.class));
+    c.method (JMod.PUBLIC, cm.ref (Double.class), "next").body ()._return (JExpr._null ());
+    c.method (JMod.PUBLIC, cm.BOOLEAN, "hasNext").body ()._return (JExpr.FALSE);
     c.field (JMod.PRIVATE, cm.DOUBLE, "y");
     m.body ().decl (cm.ref (Object.class), "x", JExpr._new (c));
 
     cm.build (new SingleStreamCodeWriter (System.out));
+
+    assertEquals ("java.util.Iterator<java.lang.Double>", c.fullName ());
+    // Incorrect! Should be Test$1!
+    assertEquals ("java.util.Iterator<java.lang.Double>", c.binaryName ());
   }
 }

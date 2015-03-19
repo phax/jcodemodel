@@ -59,35 +59,35 @@ public class JPrimitiveType extends AbstractJType
   public static final JPrimitiveType LONG = CODE_MODEL.LONG;
   public static final JPrimitiveType DOUBLE = CODE_MODEL.DOUBLE;
 
-  private final JCodeModel _owner;
-  private final String _typeName;
+  private final JCodeModel m_aOwner;
+  private final String m_sTypeName;
   /**
    * Corresponding wrapper class. For example, this would be "java.lang.Short"
    * for short.
    */
-  private final AbstractJClass _wrapperClass;
-  private JArrayClass _arrayClass;
+  private final AbstractJClass m_aWrapperClass;
+  private JArrayClass m_aArrayClass;
 
-  protected JPrimitiveType (@Nonnull final JCodeModel owner,
-                            @Nonnull final String typeName,
-                            @Nonnull final Class <?> wrapper)
+  protected JPrimitiveType (@Nonnull final JCodeModel aOwner,
+                            @Nonnull final String sTypeName,
+                            @Nonnull final Class <?> aWrapper)
   {
-    _owner = owner;
-    _typeName = typeName;
-    _wrapperClass = owner.ref (wrapper);
+    m_aOwner = aOwner;
+    m_sTypeName = sTypeName;
+    m_aWrapperClass = aOwner.ref (aWrapper);
   }
 
   @Nonnull
   public JCodeModel owner ()
   {
-    return _owner;
+    return m_aOwner;
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    return _typeName;
+    return m_sTypeName;
   }
 
   @Override
@@ -107,9 +107,9 @@ public class JPrimitiveType extends AbstractJType
   @Nonnull
   public JArrayClass array ()
   {
-    if (_arrayClass == null)
-      _arrayClass = new JArrayClass (_owner, this);
-    return _arrayClass;
+    if (m_aArrayClass == null)
+      m_aArrayClass = new JArrayClass (m_aOwner, this);
+    return m_aArrayClass;
   }
 
   /**
@@ -120,7 +120,7 @@ public class JPrimitiveType extends AbstractJType
   @Nonnull
   public AbstractJClass boxify ()
   {
-    return _wrapperClass;
+    return m_aWrapperClass;
   }
 
   /**
@@ -139,8 +139,8 @@ public class JPrimitiveType extends AbstractJType
   /**
    * Wraps an expression of this type to the corresponding wrapper class. For
    * example, if this class represents "float", this method will return the
-   * expression <code>new Float(x)</code> for the paramter x. REVISIT: it's not
-   * clear how this method works for VOID.
+   * expression <code>new Float(x)</code> for the parameter x.<br>
+   * TODO: it's not clear how this method works for VOID.
    */
   @Nonnull
   public IJExpression wrap (@Nonnull final IJExpression exp)
@@ -153,15 +153,15 @@ public class JPrimitiveType extends AbstractJType
    * works for VOID.
    */
   @Nonnull
-  public IJExpression unwrap (@Nonnull final IJExpression exp)
+  public IJExpression unwrap (@Nonnull final IJExpression aExpr)
   {
     // it just so happens that the unwrap method is always
     // things like "intValue" or "booleanValue".
-    return exp.invoke (_typeName + "Value");
+    return aExpr.invoke (m_sTypeName + "Value");
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (_typeName);
+    f.print (m_sTypeName);
   }
 }

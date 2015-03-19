@@ -190,83 +190,75 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
     }
   };
 
-  protected JDefinedClass (@Nonnull final IJClassContainer parent,
-                           final int mods,
-                           final String name,
-                           @Nonnull final EClassType classTypeval)
+  protected JDefinedClass (@Nonnull final IJClassContainer aParent,
+                           final int nMods,
+                           @Nullable final String sName,
+                           @Nonnull final EClassType eClassType)
   {
-    this (mods, name, parent, parent.owner (), classTypeval);
+    this (aParent.owner (), aParent, nMods, eClassType, sName);
   }
 
   /**
    * Constructor for creating anonymous inner class.
    */
-  protected JDefinedClass (@Nonnull final JCodeModel owner, final int mods, @Nullable final String name)
+  protected JDefinedClass (@Nonnull final JCodeModel aOwner, final int nMods, @Nullable final String sName)
   {
-    this (mods, name, null, owner);
-  }
-
-  private JDefinedClass (final int mods,
-                         @Nullable final String name,
-                         @Nullable final IJClassContainer parent,
-                         @Nonnull final JCodeModel owner)
-  {
-    this (mods, name, parent, owner, EClassType.CLASS);
+    this (aOwner, null, nMods, EClassType.CLASS, sName);
   }
 
   /**
    * JClass constructor
    *
-   * @param mods
+   * @param nMods
    *        Modifiers for this class declaration
-   * @param name
+   * @param sName
    *        Name of this class
    */
-  private JDefinedClass (final int mods,
-                         @Nullable final String name,
-                         @Nullable final IJClassContainer parent,
-                         @Nonnull final JCodeModel owner,
-                         @Nonnull final EClassType classTypeVal)
+  private JDefinedClass (@Nonnull final JCodeModel aOwner,
+                         @Nullable final IJClassContainer aOuter,
+                         final int nMods,
+                         @Nonnull final EClassType eClassTypeVal,
+                         @Nullable final String sName)
   {
-    super (owner);
+    super (aOwner);
 
-    if (name != null)
+    if (sName != null)
     {
-      if (name.trim ().length () == 0)
+      if (sName.trim ().length () == 0)
         throw new IllegalArgumentException ("JClass name empty");
 
-      if (!Character.isJavaIdentifierStart (name.charAt (0)))
+      if (!Character.isJavaIdentifierStart (sName.charAt (0)))
       {
         final String msg = "JClass name " +
-                           name +
+                           sName +
                            " contains illegal character" +
                            " for beginning of identifier: " +
-                           name.charAt (0);
+                           sName.charAt (0);
         throw new IllegalArgumentException (msg);
       }
-      for (int i = 1; i < name.length (); i++)
+      for (int i = 1; i < sName.length (); i++)
       {
-        final char c = name.charAt (i);
+        final char c = sName.charAt (i);
         if (!Character.isJavaIdentifierPart (c))
         {
-          final String msg = "JClass name " + name + " contains illegal character " + c;
+          final String msg = "JClass name " + sName + " contains illegal character " + c;
           throw new IllegalArgumentException (msg);
         }
       }
     }
 
-    m_eClassType = classTypeVal;
+    m_eClassType = eClassTypeVal;
     if (isInterface ())
-      m_aMods = JMods.forInterface (mods);
+      m_aMods = JMods.forInterface (nMods);
     else
-      m_aMods = JMods.forClass (mods);
+      m_aMods = JMods.forClass (nMods);
 
-    m_sName = name;
-    m_aOuter = parent;
+    m_sName = sName;
+    m_aOuter = aOuter;
   }
 
   /**
-   * Returns true if this is an anonymous class.
+   * @return <code>true</code> if this is an anonymous class.
    */
   public final boolean isAnonymous ()
   {
@@ -413,6 +405,8 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   {
     if (m_aOuter instanceof JDefinedClass)
       return ((JDefinedClass) m_aOuter).binaryName () + '$' + name ();
+
+    // FIXME This is incorrect, e.g. for anonymous classes!
     return fullName ();
   }
 
@@ -875,14 +869,14 @@ public class JDefinedClass extends AbstractJClass implements IJDeclaration, IJCl
   protected void declareBody (@Nonnull final JFormatter f)
   {
     f.print ('{').newline ().indent ();
-    boolean first = true;
+    boolean bFirst = true;
 
     if (!m_aEnumConstantsByName.isEmpty ())
     {
       for (final JEnumConstant c : m_aEnumConstantsByName.values ())
       {
-        if (first)
-          first = false;
+        if (bFirst)
+          bFirst = false;
         else
           f.print (',').newline ();
         f.declaration (c);

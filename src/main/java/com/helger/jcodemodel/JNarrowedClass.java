@@ -128,6 +128,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
+  @Nonnull
   public String fullName ()
   {
     final StringBuilder buf = new StringBuilder ();

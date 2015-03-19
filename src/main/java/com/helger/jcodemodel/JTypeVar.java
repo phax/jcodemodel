@@ -55,29 +55,29 @@ import javax.annotation.Nullable;
  */
 public class JTypeVar extends AbstractJClass implements IJDeclaration
 {
-  private final String _name;
-  private final List <AbstractJClass> _bounds = new ArrayList <AbstractJClass> ();
+  private final String m_sName;
+  private final List <AbstractJClass> m_aBounds = new ArrayList <AbstractJClass> ();
 
-  protected JTypeVar (@Nonnull final JCodeModel owner, @Nonnull final String name)
+  protected JTypeVar (@Nonnull final JCodeModel aOwner, @Nonnull final String sName)
   {
-    super (owner);
-    if (name == null || name.length () == 0)
+    super (aOwner);
+    if (sName == null || sName.length () == 0)
       throw new IllegalArgumentException ("Name may not be empty!");
-    _name = name;
+    m_sName = sName;
   }
 
   @Override
   @Nonnull
   public String name ()
   {
-    return _name;
+    return m_sName;
   }
 
   @Override
   @Nonnull
   public String fullName ()
   {
-    return _name;
+    return m_sName;
   }
 
   @Override
@@ -98,7 +98,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
     if (bound == null)
       throw new IllegalArgumentException ("bound may not be null");
 
-    _bounds.add (bound);
+    m_aBounds.add (bound);
     return this;
   }
 
@@ -111,12 +111,12 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Nonnull
   public AbstractJClass _extends ()
   {
-    if (_bounds.isEmpty () || _bounds.get (0).isInterface ())
+    if (m_aBounds.isEmpty () || m_aBounds.get (0).isInterface ())
     {
       // implicit "extends Object"
       return owner ().ref (Object.class);
     }
-    return _bounds.get (0);
+    return m_aBounds.get (0);
   }
 
   /**
@@ -126,9 +126,9 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
-    if (_bounds.isEmpty () || _bounds.get (0).isInterface ())
-      return _bounds.iterator ();
-    return _bounds.subList (1, _bounds.size ()).iterator ();
+    if (m_aBounds.isEmpty () || m_aBounds.get (0).isInterface ())
+      return m_aBounds.iterator ();
+    return m_aBounds.subList (1, m_aBounds.size ()).iterator ();
   }
 
   @Override
@@ -160,10 +160,10 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   public void declare (@Nonnull final JFormatter f)
   {
     f.id (name ());
-    if (!_bounds.isEmpty ())
+    if (!m_aBounds.isEmpty ())
     {
-      f.print ("extends").generable (_bounds.get (0));
-      for (final AbstractJClass clazz : _bounds.subList (1, _bounds.size ()))
+      f.print ("extends").generable (m_aBounds.get (0));
+      for (final AbstractJClass clazz : m_aBounds.subList (1, m_aBounds.size ()))
       {
         f.print ("& ").generable (clazz);
       }
@@ -173,6 +173,6 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Override
   public void generate (@Nonnull final JFormatter f)
   {
-    f.id (_name);
+    f.id (m_sName);
   }
 }
