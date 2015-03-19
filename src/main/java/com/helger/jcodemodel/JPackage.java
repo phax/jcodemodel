@@ -565,6 +565,23 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
     }
   }
 
+  boolean buildsErrorTypeRefs ()
+  {
+    // check classes
+    for (final JDefinedClass c : _classes.values ())
+    {
+      if (c.isHidden ())
+      {
+        // don't check this file
+        continue;
+      }
+
+      if (JFormatter.containsErrorTypes(c))
+        return true;
+    }
+    return false;
+  }
+
   /* package */int countArtifacts ()
   {
     int ret = 0;

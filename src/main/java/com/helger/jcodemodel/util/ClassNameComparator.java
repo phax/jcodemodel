@@ -45,6 +45,7 @@ import java.util.Comparator;
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.AbstractJClass;
+import com.helger.jcodemodel.JErrorClass;
 
 /**
  * Comparator object that sorts {@link AbstractJClass}es in the order of their
@@ -72,6 +73,13 @@ public final class ClassNameComparator implements Comparator <AbstractJClass>
    */
   public int compare (@Nonnull final AbstractJClass left, @Nonnull final AbstractJClass right)
   {
+    if (left.isError () && right.isError())
+      return 0;
+    if (left.isError ())
+      return -1;
+    if (right.isError ())
+      return +1;
+
     final String lhs = left.fullName ();
     final String rhs = right.fullName ();
     final boolean bLeftJava = lhs.startsWith ("java");
