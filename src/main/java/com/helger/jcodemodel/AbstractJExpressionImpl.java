@@ -50,7 +50,6 @@ import com.helger.jcodemodel.optimize.ExpressionCallback;
  */
 public abstract class AbstractJExpressionImpl implements IJExpression
 {
-
   static boolean visitWithSubExpressions (final ExpressionCallback callback, final ExpressionAccessor accessor)
   {
     final IJExpression expression = accessor.get ();

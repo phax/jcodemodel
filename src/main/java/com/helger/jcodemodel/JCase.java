@@ -51,22 +51,22 @@ public class JCase implements IJStatement
   /**
    * label part of the case statement
    */
-  private final IJExpression _label;
+  private final IJExpression m_aLabelExpr;
 
   /**
    * is this a regular case statement or a default case statement?
    */
-  private boolean _isDefaultCase = false;
+  private boolean m_bIsDefaultCase = false;
 
   /**
    * JBlock of statements which makes up body of this While statement
    */
-  private JBlock _body;
+  private JBlock m_aBody;
 
   /**
    * Construct a case statement
    */
-  protected JCase (@Nonnull final IJExpression label)
+  public JCase (@Nonnull final IJExpression label)
   {
     this (label, false);
   }
@@ -75,44 +75,44 @@ public class JCase implements IJStatement
    * Construct a case statement. If isDefaultCase is true, then label should be
    * null since default cases don't have a label.
    */
-  protected JCase (@Nullable final IJExpression label, final boolean isDefaultCase)
+  public JCase (@Nullable final IJExpression label, final boolean isDefaultCase)
   {
-    this._label = label;
-    this._isDefaultCase = isDefaultCase;
+    m_aLabelExpr = label;
+    m_bIsDefaultCase = isDefaultCase;
   }
 
   @Nullable
   public IJExpression label ()
   {
-    return _label;
+    return m_aLabelExpr;
   }
 
   public boolean isDefaultCase ()
   {
-    return _isDefaultCase;
+    return m_bIsDefaultCase;
   }
 
   @Nonnull
   public JBlock body ()
   {
-    if (_body == null)
-      _body = new JBlock (false, true);
-    return _body;
+    if (m_aBody == null)
+      m_aBody = new JBlock ();
+    return m_aBody;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
     f.indent ();
-    if (!_isDefaultCase)
-    {
-      f.print ("case ").generable (_label).print (':').newline ();
-    }
-    else
+    if (m_bIsDefaultCase)
     {
       f.print ("default:").newline ();
     }
-    if (_body != null)
-      f.statement (_body);
+    else
+    {
+      f.print ("case ").generable (m_aLabelExpr).print (':').newline ();
+    }
+    if (m_aBody != null)
+      f.statement (m_aBody);
     f.outdent ();
   }
 }

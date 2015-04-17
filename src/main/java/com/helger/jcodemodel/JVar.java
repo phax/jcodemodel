@@ -60,22 +60,22 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   /**
    * Modifiers.
    */
-  private final JMods _mods;
+  private final JMods m_aMods;
 
   /**
    * JType of the variable
    */
-  private AbstractJType _type;
+  private AbstractJType m_aType;
 
   /**
    * Name of the variable
    */
-  private String _name;
+  private String m_sName;
 
   /**
    * Initialization of the variable in its declaration
    */
-  private IJExpression _init;
+  private IJExpression m_aInitExpr;
 
   /**
    * Annotations on this variable. Lazily created.
@@ -85,24 +85,24 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   /**
    * JVar constructor
    *
-   * @param type
+   * @param aType
    *        Datatype of this variable
-   * @param name
+   * @param sName
    *        Name of this variable
-   * @param init
+   * @param aInitExpr
    *        Value to initialize this variable to
    */
-  public JVar (@Nonnull final JMods mods,
-               @Nonnull final AbstractJType type,
-               @Nonnull final String name,
-               @Nullable final IJExpression init)
+  public JVar (@Nonnull final JMods aMods,
+               @Nonnull final AbstractJType aType,
+               @Nonnull final String sName,
+               @Nullable final IJExpression aInitExpr)
   {
-    if (!JJavaName.isJavaIdentifier (name))
-      throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
-    _mods = mods;
-    _type = type;
-    _name = name;
-    _init = init;
+    if (!JJavaName.isJavaIdentifier (sName))
+      throw new IllegalArgumentException ("Illegal variable name '" + sName + "'");
+    m_aMods = aMods;
+    m_aType = aType;
+    m_sName = sName;
+    m_aInitExpr = aInitExpr;
   }
 
   /**
@@ -114,7 +114,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   @Nonnull
   public JVar init (@Nullable final IJExpression init)
   {
-    _init = init;
+    m_aInitExpr = init;
     return this;
   }
 
@@ -126,7 +126,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   @Nonnull
   public String name ()
   {
-    return _name;
+    return m_sName;
   }
 
   /**
@@ -136,7 +136,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   {
     if (!JJavaName.isJavaIdentifier (name))
       throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
-    _name = name;
+    m_sName = name;
   }
 
   /**
@@ -146,7 +146,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
    */
   public AbstractJType type ()
   {
-    return _type;
+    return m_aType;
   }
 
   /**
@@ -156,24 +156,24 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   @Nonnull
   public JMods mods ()
   {
-    return _mods;
+    return m_aMods;
   }
 
   /**
    * Sets the type of this variable.
    *
-   * @param newType
+   * @param aNewType
    *        must not be null.
    * @return the old type value. always non-null.
    */
   @Nonnull
-  public AbstractJType type (@Nonnull final AbstractJType newType)
+  public AbstractJType type (@Nonnull final AbstractJType aNewType)
   {
-    if (newType == null)
+    if (aNewType == null)
       throw new IllegalArgumentException ();
-    final AbstractJType r = _type;
-    _type = newType;
-    return r;
+    final AbstractJType aOldType = m_aType;
+    m_aType = aNewType;
+    return aOldType;
   }
 
   /**
@@ -201,7 +201,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
-    return annotate (_type.owner ().ref (clazz));
+    return annotate (m_aType.owner ().ref (clazz));
   }
 
   @Nonnull
@@ -228,9 +228,9 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
     if (_annotations != null)
       for (final JAnnotationUse annotation : _annotations)
         f.generable (annotation).newline ();
-    f.generable (_mods).generable (_type).id (_name);
-    if (_init != null)
-      f.print ('=').generable (_init);
+    f.generable (m_aMods).generable (m_aType).id (m_sName);
+    if (m_aInitExpr != null)
+      f.print ('=').generable (m_aInitExpr);
   }
 
   public void declare (@Nonnull final JFormatter f)
@@ -240,7 +240,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.id (_name);
+    f.id (m_sName);
   }
 
   @Override
@@ -254,19 +254,19 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
     if (!(o instanceof JVar))
       return false;
     final JVar rhs = (JVar) o;
-    return isEqual (_name, rhs._name);
+    return isEqual (m_sName, rhs.m_sName);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _name);
+    return getHashCode (this, m_sName);
   }
 
   @Override
   AbstractJType derivedType ()
   {
-    return _type;
+    return m_aType;
   }
 
   @Override
