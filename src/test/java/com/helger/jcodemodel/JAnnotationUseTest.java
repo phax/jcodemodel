@@ -38,30 +38,53 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.tests;
+package com.helger.jcodemodel;
 
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.helger.jcodemodel.JAnnotationUse;
+import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
 
 /**
- * @author Kohsuke Kawaguchi
+ * Unit test for class {@link JAnnotationUse}.
+ *
+ * @author Philip Helger
  */
-public class AnnotationSample
+public class JAnnotationUseTest
 {
-  public static void main (final String [] args) throws Exception
+  @Test
+  public void generatesGenericParam () throws JClassAlreadyExistsException
   {
-    final JCodeModel cm = new JCodeModel ();
-    final JDefinedClass cls = cm._class ("Test");
-    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
-    m.annotate (Deprecated.class);
+    final JCodeModel codeModel = new JCodeModel ();
+    final JDefinedClass testClass = codeModel._class ("Test");
+    final JAnnotationUse suppressWarningAnnotation = testClass.annotate (SuppressWarnings.class);
+    suppressWarningAnnotation.param (JAnnotationUse.SPECIAL_KEY_VALUE, "unused");
 
-    final JFieldVar field = cls.field (JMod.PRIVATE, cm.DOUBLE, "y");
-    field.annotate (Deprecated.class);
+    Assert.assertEquals ("@java.lang.SuppressWarnings(\"unused\")",
+                         CodeModelTestsUtils.generate (suppressWarningAnnotation));
 
-    cm.build (new SingleStreamCodeWriter (System.out));
+  }
+
+  @Test
+  public void generatesGenericParam2 () throws JClassAlreadyExistsException
+  {
+    final JCodeModel codeModel = new JCodeModel ();
+    final JDefinedClass testClass = codeModel._class ("Test");
+    final JAnnotationUse suppressWarningAnnotation = testClass.annotate (SuppressWarnings.class);
+    suppressWarningAnnotation.paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, "unused", "deprecation");
+
+    final String sCRLF = System.getProperty ("line.separator");
+    Assert.assertEquals ("@java.lang.SuppressWarnings({" +
+                         sCRLF +
+                         "    \"unused\"," +
+                         sCRLF +
+                         "    \"deprecation\"" +
+                         sCRLF +
+                         "})", CodeModelTestsUtils.generate (suppressWarningAnnotation));
+
   }
 }

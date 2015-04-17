@@ -38,44 +38,57 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.tests;
+package com.helger.jcodemodel;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Iterator;
+import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JAnonymousClass;
+import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JFieldRef;
+import com.helger.jcodemodel.JForEach;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
- * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * Simple program to test the generation of the enhanced for loop in jdk 1.5
+ *
+ * @author Bhakti Mehta Bhakti.Mehta@sun.com
  */
-public class AnonymousClassTest
+
+public class ForEachTest
 {
+
   @Test
   public void main () throws Exception
   {
+
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
-    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
 
-    final JAnonymousClass c = cm.anonymousClass (cm.ref (Iterator.class).narrow (Double.class));
-    c.method (JMod.PUBLIC, cm.ref (Double.class), "next").body ()._return (JExpr._null ());
-    c.method (JMod.PUBLIC, cm.BOOLEAN, "hasNext").body ()._return (JExpr.FALSE);
-    c.field (JMod.PRIVATE, cm.DOUBLE, "y");
-    m.body ().decl (cm.ref (Object.class), "x", JExpr._new (c));
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
+    m.body ().decl (cm.INT, "getCount");
+
+    // This is not exactly right because we need to
+    // support generics
+    final AbstractJClass arrayListclass = cm.ref (ArrayList.class);
+    final JVar $list = m.body ().decl (arrayListclass, "alist", JExpr._new (arrayListclass));
+
+    final AbstractJClass $integerclass = cm.ref (Integer.class);
+    final JForEach foreach = m.body ().forEach ($integerclass, "count", $list);
+    final JVar $count1 = foreach.var ();
+    foreach.body ().assign (JExpr.ref ("getCount"), JExpr.lit (10));
+
+    // printing out the variable
+    final JFieldRef out1 = cm.ref (System.class).staticRef ("out");
+    // JInvocation invocation =
+    foreach.body ().invoke (out1, "println").arg ($count1);
 
     cm.build (new SingleStreamCodeWriter (System.out));
-
-    assertEquals ("java.util.Iterator<java.lang.Double>", c.fullName ());
-    // Incorrect! Should be Test$1!
-    assertEquals ("java.util.Iterator<java.lang.Double>", c.binaryName ());
   }
 }

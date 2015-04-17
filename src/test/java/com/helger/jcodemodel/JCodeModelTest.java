@@ -38,30 +38,24 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.tests;
+package com.helger.jcodemodel;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
-import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JVar;
 
-public class JMethodTest
+/**
+ * @author Kohsuke Kawaguchi
+ */
+public class JCodeModelTest
 {
   @Test
-  public void main () throws JClassAlreadyExistsException
+  public void testParseArray () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
-    final JDefinedClass cls = cm._class ("Test");
-    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
-
-    final JVar foo = m.param (String.class, "foo");
-
-    Assert.assertEquals (1, m.params ().size ());
-    Assert.assertSame (foo, m.params ().get (0));
+    assertNotNull (cm.parseType ("java.util.ArrayList<java.lang.String[]>[]"));
+    assertNotNull (cm.parseType ("java.util.ArrayList<java.util.ArrayList<java.util.ArrayList<java.lang.String[]>[]>[]>[]"));
   }
 }

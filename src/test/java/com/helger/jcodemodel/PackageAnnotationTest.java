@@ -38,25 +38,26 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.tests;
+package com.helger.jcodemodel;
 
-import static org.junit.Assert.assertEquals;
+import java.io.IOException;
+import java.lang.annotation.Inherited;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JBlock;
-import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
- * {@link JBlock} tests.
+ * @author Kohsuke Kawaguchi
  */
-public class JBlockTest
+public class PackageAnnotationTest
 {
-  private static final String CRLF = System.getProperty ("line.separator");
-
   @Test
-  public void testBasic () throws Exception
+  public void main () throws IOException
   {
-    assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsUtils.toString (new JBlock ()));
+    final JCodeModel cm = new JCodeModel ();
+    cm._package ("foo").annotate (Inherited.class);
+    cm.build (new SingleStreamCodeWriter (System.out));
   }
 }

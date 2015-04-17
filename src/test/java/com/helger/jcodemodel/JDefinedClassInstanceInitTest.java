@@ -38,25 +38,54 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.tests;
+package com.helger.jcodemodel;
 
-import java.io.IOException;
+import static org.junit.Assert.assertNotNull;
+import japa.parser.JavaParser;
+import japa.parser.ast.CompilationUnit;
+import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+import japa.parser.ast.body.InitializerDeclaration;
+import japa.parser.ast.body.TypeDeclaration;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
 
 import org.junit.Test;
 
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JFieldVar;
+import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 
-/**
- * @author Kohsuke Kawaguchi
- */
-public class PackageJavadocTest
+public class JDefinedClassInstanceInitTest
 {
+
   @Test
-  public void main () throws IOException
+  public void generatesInstanceInit () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
-    cm._package ("foo").javadoc ().add ("String");
-    cm.build (new SingleStreamCodeWriter (System.out));
+    final JDefinedClass c = cm._package ("myPackage")._class (0, "MyClass");
+    final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");
+    c.instanceInit ().assign (JExpr._this ().ref (myField), JExpr.lit ("myValue"));
+    final ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+    final Charset encoding = Charset.forName ("UTF-8");
+    // cm.build(new OutputStreamCodeWriter(System.out, encoding));
+    cm.build (new OutputStreamCodeWriter (bos, encoding));
+    bos.close ();
+
+    final ByteArrayInputStream bis = new ByteArrayInputStream (bos.toByteArray ());
+
+    final CompilationUnit compilationUnit = JavaParser.parse (bis, encoding.name ());
+
+    final TypeDeclaration typeDeclaration = compilationUnit.getTypes ().get (0);
+    final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
+
+    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
+                                                                                                   .get (1);
+
+    assertNotNull (initializerDeclaration);
   }
 }

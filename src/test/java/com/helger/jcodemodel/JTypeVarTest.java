@@ -38,57 +38,36 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.tests;
+package com.helger.jcodemodel;
 
-import java.util.ArrayList;
+import static org.junit.Assert.assertEquals;
+
+import java.io.Serializable;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.AbstractJClass;
+import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldRef;
-import com.helger.jcodemodel.JForEach;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JVar;
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.JTypeVar;
+import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
 
-/**
- * Simple program to test the generation of the enhanced for loop in jdk 1.5
- *
- * @author Bhakti Mehta Bhakti.Mehta@sun.com
- */
-
-public class ForEachTest
+public final class JTypeVarTest
 {
-
   @Test
-  public void main () throws Exception
+  public void main () throws JClassAlreadyExistsException
   {
-
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
-
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
-    m.body ().decl (cm.INT, "getCount");
+    final JTypeVar tv = m.generify ("T");
+    tv.bound (cm.parseType ("java.lang.Comparable<T>").boxify ());
+    tv.bound (cm.ref (Serializable.class));
 
-    // This is not exactly right because we need to
-    // support generics
-    final AbstractJClass arrayListclass = cm.ref (ArrayList.class);
-    final JVar $list = m.body ().decl (arrayListclass, "alist", JExpr._new (arrayListclass));
-
-    final AbstractJClass $integerclass = cm.ref (Integer.class);
-    final JForEach foreach = m.body ().forEach ($integerclass, "count", $list);
-    final JVar $count1 = foreach.var ();
-    foreach.body ().assign (JExpr.ref ("getCount"), JExpr.lit (10));
-
-    // printing out the variable
-    final JFieldRef out1 = cm.ref (System.class).staticRef ("out");
-    // JInvocation invocation =
-    foreach.body ().invoke (out1, "println").arg ($count1);
-
-    cm.build (new SingleStreamCodeWriter (System.out));
+    assertEquals ("T extends java.lang.Comparable<T> & java.io.Serializable", CodeModelTestsUtils.toString (tv));
+    assertEquals ("public<T extends java.lang.Comparable<T> & java.io.Serializable> void foo() {\n" + "}\n",
+                  CodeModelTestsUtils.toString (m).replace ("\r", ""));
   }
 }

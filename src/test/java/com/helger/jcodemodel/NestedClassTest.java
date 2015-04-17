@@ -38,24 +38,28 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.tests;
-
-import static org.junit.Assert.assertNotNull;
+package com.helger.jcodemodel;
 
 import org.junit.Test;
 
 import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public class JCodeModelTest
+public class NestedClassTest
 {
   @Test
-  public void testParseArray () throws Exception
+  public void main () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
-    assertNotNull (cm.parseType ("java.util.ArrayList<java.lang.String[]>[]"));
-    assertNotNull (cm.parseType ("java.util.ArrayList<java.util.ArrayList<java.util.ArrayList<java.lang.String[]>[]>[]>[]"));
+    final JDefinedClass c = cm._package ("foo")._class (0, "Foo");
+    c._extends (cm.ref (Bar.class));
+    cm.build (new SingleStreamCodeWriter (System.out));
   }
+
+  public static class Bar
+  {}
 }
