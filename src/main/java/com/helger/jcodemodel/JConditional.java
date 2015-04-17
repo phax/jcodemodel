@@ -54,46 +54,48 @@ import com.helger.jcodemodel.optimize.BranchingStatementVisitor;
 public class JConditional implements IJStatement, BranchingStatement
 {
   /**
-   * JExpression to test to determine branching
+   * Expression to test to determine branching
    */
-  private final IJExpression _test;
+  private final IJExpression m_aTestExpr;
 
   /**
-   * JBlock of statements for "then" clause
+   * Block of statements for "then" clause. Must always be present
    */
-  private final JBlock _then = new JBlock ();
+  private final JBlock m_aThenBlock = new JBlock ();
 
   /**
-   * JBlock of statements for optional "else" clause
+   * Block of statements for optional "else" clause
    */
-  private JBlock _else;
+  private JBlock m_aElseBlock;
 
   /**
    * Constructor
    *
-   * @param test
+   * @param aTestExpr
    *        JExpression which will determine branching
    */
-  protected JConditional (@Nonnull final IJExpression test)
+  protected JConditional (@Nonnull final IJExpression aTestExpr)
   {
-    this._test = test;
+    if (aTestExpr == null)
+      throw new NullPointerException ("Test expression");
+    m_aTestExpr = aTestExpr;
   }
 
   @Nonnull
   public IJExpression test ()
   {
-    return _test;
+    return m_aTestExpr;
   }
 
   /**
-   * Return the block to be excuted by the "then" branch
+   * Return the block to be executed by the "then" branch
    *
-   * @return Then block
+   * @return Then block. Never <code>null</code>.
    */
   @Nonnull
   public JBlock _then ()
   {
-    return _then;
+    return m_aThenBlock;
   }
 
   /**
@@ -104,50 +106,53 @@ public class JConditional implements IJStatement, BranchingStatement
   @Nonnull
   public JBlock _else ()
   {
-    if (_else == null)
-      _else = new JBlock ();
-    return _else;
+    if (m_aElseBlock == null)
+      m_aElseBlock = new JBlock ();
+    return m_aElseBlock;
   }
 
   /**
    * Creates <tt>... else if(...) ...</tt> code.
+   * 
+   * @param aTestExpr
+   *        The test expression for the new if
    */
   @Nonnull
-  public JConditional _elseif (@Nonnull final IJExpression boolExp)
+  public JConditional _elseif (@Nonnull final IJExpression aTestExpr)
   {
-    return _else ()._if (boolExp);
+    return _else ()._if (aTestExpr);
   }
 
   public void state (@Nonnull final JFormatter f)
   {
-    if (_test == JExpr.TRUE)
+    if (m_aTestExpr == JExpr.TRUE)
     {
-      _then.generateBody (f);
+      m_aThenBlock.generateBody (f);
       return;
     }
-    if (_test == JExpr.FALSE)
+    if (m_aTestExpr == JExpr.FALSE)
     {
-      _else.generateBody (f);
+      m_aElseBlock.generateBody (f);
       return;
     }
 
-    if (JOp.hasTopOp (_test))
+    if (JOp.hasTopOp (m_aTestExpr))
     {
-      f.print ("if ").generable (_test);
+      f.print ("if ").generable (m_aTestExpr);
     }
     else
     {
-      f.print ("if (").generable (_test).print (')');
+      f.print ("if (").generable (m_aTestExpr).print (')');
     }
-    f.generable (_then);
-    if (_else != null)
-      f.print ("else").generable (_else);
+    f.generable (m_aThenBlock);
+    if (m_aElseBlock != null)
+      f.print ("else").generable (m_aElseBlock);
     f.newline ();
   }
 
   public void apply (final BranchingStatementVisitor visitor)
   {
-    visitor.visit (_test);
-    visitor.visit (_else != null ? asList (_then, _else) : singletonList (_then));
+    visitor.visit (m_aTestExpr);
+    visitor.visit (m_aElseBlock != null ? asList (m_aThenBlock, m_aElseBlock) : singletonList (m_aThenBlock));
   }
 }
