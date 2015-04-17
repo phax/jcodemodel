@@ -55,26 +55,33 @@ import com.helger.jcodemodel.optimize.Loop;
  */
 public class JForEach implements IJStatement, Loop
 {
-  private final AbstractJType _type;
-  private final String _var;
-  private JBlock _body; // lazily created
-  private IJExpression _collection;
-  private final JVar _loopVar;
+  private final AbstractJType m_aType;
+  private final String m_sVarName;
+  private JBlock m_aBody; // lazily created
+  private IJExpression m_aCollection;
+  private final JVar m_aLopVar;
 
-  protected JForEach (@Nonnull final AbstractJType vartype,
-                      @Nonnull final String variable,
-                      @Nonnull final IJExpression collection)
+  protected JForEach (@Nonnull final AbstractJType aVarType,
+                      @Nonnull final String sVarName,
+                      @Nonnull final IJExpression aCollection)
   {
-    this._type = vartype;
-    this._var = variable;
-    this._collection = collection;
-    _loopVar = new JVar (JMods.forVar (JMod.FINAL), _type, _var, collection);
+    if (aVarType == null)
+      throw new NullPointerException ("Variable Type");
+    if (sVarName == null)
+      throw new NullPointerException ("Variable name");
+    if (aCollection == null)
+      throw new NullPointerException ("Collection expression");
+
+    m_aType = aVarType;
+    m_sVarName = sVarName;
+    m_aCollection = aCollection;
+    m_aLopVar = new JVar (JMods.forVar (JMod.FINAL), m_aType, m_sVarName, aCollection);
   }
 
   @Nonnull
   public AbstractJType type ()
   {
-    return _type;
+    return m_aType;
   }
 
   /**
@@ -83,13 +90,13 @@ public class JForEach implements IJStatement, Loop
   @Nonnull
   public JVar var ()
   {
-    return _loopVar;
+    return m_aLopVar;
   }
 
   @Nonnull
   public IJExpression collection ()
   {
-    return _collection;
+    return m_aCollection;
   }
 
   public ExpressionContainer statementsExecutedOnce ()
@@ -102,12 +109,12 @@ public class JForEach implements IJStatement, Loop
         {
           public void set (final IJExpression newExpression)
           {
-            _collection = newExpression;
+            m_aCollection = newExpression;
           }
 
           public IJExpression get ()
           {
-            return _collection;
+            return m_aCollection;
           }
         });
       }
@@ -120,7 +127,7 @@ public class JForEach implements IJStatement, Loop
     {
       public boolean forAllSubExpressions (final ExpressionCallback callback)
       {
-        return callback.visitAssignmentTarget (_loopVar);
+        return callback.visitAssignmentTarget (m_aLopVar);
       }
     };
   }
@@ -128,19 +135,20 @@ public class JForEach implements IJStatement, Loop
   @Nonnull
   public JBlock body ()
   {
-    if (_body == null)
-      _body = new JBlock ();
-    return _body;
+    if (m_aBody == null)
+      m_aBody = new JBlock ();
+    return m_aBody;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
     f.print ("for (");
-    f.generable (_type).id (_var).print (": ").generable (_collection);
+    f.generable (m_aType).id (m_sVarName).print (": ").generable (m_aCollection);
     f.print (')');
-    if (_body != null)
-      f.generable (_body).newline ();
+    if (m_aBody != null)
+      f.generable (m_aBody);
     else
-      f.print (';').newline ();
+      f.print (';');
+    f.newline ();
   }
 }

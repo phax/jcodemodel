@@ -57,9 +57,9 @@ import com.helger.jcodemodel.optimize.Loop;
  */
 public class JForLoop implements IJStatement, Loop
 {
-  private final List <Object> _inits = new ArrayList <Object> ();
-  private IJExpression _test;
-  private final List <IJExpression> _updates = new ArrayList <IJExpression> ();
+  private final List <Object> m_aInitExprs = new ArrayList <Object> ();
+  private IJExpression m_aTestExpr;
+  private final List <IJExpression> m_aUpdateExprs = new ArrayList <IJExpression> ();
   private JBlock _body;
 
   protected JForLoop ()
@@ -67,23 +67,27 @@ public class JForLoop implements IJStatement, Loop
 
   @Nonnull
   public JVar init (final int mods,
-                    @Nonnull final AbstractJType type,
-                    @Nonnull final String var,
-                    @Nullable final IJExpression e)
+                    @Nonnull final AbstractJType aType,
+                    @Nonnull final String sVarName,
+                    @Nullable final IJExpression aInitExpr)
   {
-    final JVar v = new JVar (JMods.forVar (mods), type, var, e);
-    _inits.add (v);
-    return v;
+    final JVar aVar = new JVar (JMods.forVar (mods), aType, sVarName, aInitExpr);
+    m_aInitExprs.add (aVar);
+    return aVar;
   }
 
-  public JVar init (final AbstractJType type, final String var, final IJExpression e)
+  @Nonnull
+  public JVar init (@Nonnull final AbstractJType aType,
+                    @Nonnull final String sVarName,
+                    @Nullable final IJExpression aInitExpr)
   {
-    return init (JMod.NONE, type, var, e);
+    return init (JMod.NONE, aType, sVarName, aInitExpr);
   }
 
-  public void init (@Nonnull final JVar v, @Nonnull final IJExpression e)
+  public void init (@Nonnull final JVar aVar, @Nonnull final IJExpression aRhs)
   {
-    _inits.add (JExpr.assign (v, e));
+    final JAssignment aAssignment = JExpr.assign (aVar, aRhs);
+    m_aInitExprs.add (aAssignment);
   }
 
   /**
@@ -92,40 +96,44 @@ public class JForLoop implements IJStatement, Loop
   @Nonnull
   public List <Object> inits ()
   {
-    return Collections.unmodifiableList (_inits);
+    return Collections.unmodifiableList (m_aInitExprs);
   }
 
-  public void test (@Nullable final IJExpression e)
+  public void test (@Nullable final IJExpression aTestExpr)
   {
-    this._test = e;
+    m_aTestExpr = aTestExpr;
   }
 
   @Nullable
   public IJExpression test ()
   {
-    return _test;
+    return m_aTestExpr;
   }
 
-  public void update (final IJExpression e)
+  public void update (@Nonnull final IJExpression aUpdate)
   {
-    _updates.add (e);
+    if (aUpdate == null)
+      throw new NullPointerException ("Update expression");
+
+    m_aUpdateExprs.add (aUpdate);
   }
 
   @Nonnull
   public List <IJExpression> updates ()
   {
-    return Collections.unmodifiableList (_updates);
+    return Collections.unmodifiableList (m_aUpdateExprs);
   }
 
+  @Nonnull
   public ExpressionContainer statementsExecutedOnce ()
   {
     return new ExpressionContainer ()
     {
       public boolean forAllSubExpressions (final ExpressionCallback callback)
       {
-        for (final Object init : _inits)
+        for (final Object aInit : m_aInitExprs)
         {
-          if (init instanceof IJExpression && !((IJExpression) init).forAllSubExpressions (callback))
+          if (aInit instanceof IJExpression && !((IJExpression) aInit).forAllSubExpressions (callback))
             return false;
         }
         return true;
@@ -139,21 +147,22 @@ public class JForLoop implements IJStatement, Loop
     {
       public boolean forAllSubExpressions (final ExpressionCallback callback)
       {
-        for (final IJExpression update : _updates)
+        for (final IJExpression update : m_aUpdateExprs)
         {
           if (!update.forAllSubExpressions (callback))
             return false;
         }
+
         return AbstractJExpressionImpl.visitWithSubExpressions (callback, new ExpressionAccessor ()
         {
           public void set (final IJExpression newExpression)
           {
-            _test = newExpression;
+            m_aTestExpr = newExpression;
           }
 
           public IJExpression get ()
           {
-            return _test;
+            return m_aTestExpr;
           }
         });
       }
@@ -172,7 +181,7 @@ public class JForLoop implements IJStatement, Loop
   {
     f.print ("for (");
     boolean first = true;
-    for (final Object o : _inits)
+    for (final Object o : m_aInitExprs)
     {
       if (!first)
         f.print (',');
@@ -182,7 +191,7 @@ public class JForLoop implements IJStatement, Loop
         f.generable ((IJExpression) o);
       first = false;
     }
-    f.print (';').generable (_test).print (';').generable (_updates).print (')');
+    f.print (';').generable (m_aTestExpr).print (';').generable (m_aUpdateExprs).print (')');
     if (_body != null)
       f.generable (_body).newline ();
     else

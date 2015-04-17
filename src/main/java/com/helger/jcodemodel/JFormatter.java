@@ -94,6 +94,8 @@ public class JFormatter implements Closeable
     FIND_ERROR_TYPES
   }
 
+  public static final String DEFAULT_INDENT_SPACE = "    ";
+
   /**
    * Special character token we use to differentiate '>' as an operator and '>'
    * as the end of the type arguments. The former uses '>' and it requires a
@@ -107,7 +109,7 @@ public class JFormatter implements Closeable
    * map from short type name to ReferenceList (list of JClass and ids sharing
    * that name)
    **/
-  private final Map <String, Usages> _collectedReferences = new HashMap <String, Usages> ();
+  private final Map <String, Usages> m_aCollectedReferences = new HashMap <String, Usages> ();
 
   /**
    * set of imported types (including package java types, even though we won't
@@ -150,12 +152,19 @@ public class JFormatter implements Closeable
    * Creates a JFormatter.
    *
    * @param aPW
-   *        PrintWriter to JFormatter to use.
+   *        {@link PrintWriter} to {@link JFormatter} to use. May not be
+   *        <code>null</code>.
    * @param sIndentSpace
-   *        Incremental indentation string, similar to tab value.
+   *        Incremental indentation string, similar to tab value. May not be
+   *        <code>null</code>.
    */
   public JFormatter (@Nonnull final PrintWriter aPW, @Nonnull final String sIndentSpace)
   {
+    if (aPW == null)
+      throw new NullPointerException ("PrintWriter");
+    if (sIndentSpace == null)
+      throw new NullPointerException ("Indent space");
+
     m_aPW = aPW;
     m_sIndentSpace = sIndentSpace;
   }
@@ -165,7 +174,7 @@ public class JFormatter implements Closeable
    */
   public JFormatter (@Nonnull final PrintWriter aPW)
   {
-    this (aPW, "    ");
+    this (aPW, DEFAULT_INDENT_SPACE);
   }
 
   /**
@@ -381,11 +390,11 @@ public class JFormatter implements Closeable
         break;
       case COLLECTING:
         final String shortName = aType.name ();
-        Usages usage = _collectedReferences.get (shortName);
+        Usages usage = m_aCollectedReferences.get (shortName);
         if (usage == null)
         {
           usage = new Usages ();
-          _collectedReferences.put (shortName, usage);
+          m_aCollectedReferences.put (shortName, usage);
         }
         usage.addReferencedType (aType);
         break;
@@ -406,13 +415,13 @@ public class JFormatter implements Closeable
         break;
       case COLLECTING:
         // see if there is a type name that collides with this id
-        Usages usage = _collectedReferences.get (id);
+        Usages usage = m_aCollectedReferences.get (id);
         if (usage == null)
         {
           // not a type, but we need to create a place holder to
           // see if there might be a collision with a type
           usage = new Usages ();
-          _collectedReferences.put (id, usage);
+          m_aCollectedReferences.put (id, usage);
         }
         usage.setVariableName ();
         break;
@@ -520,7 +529,7 @@ public class JFormatter implements Closeable
 
     // collate type names and identifiers to determine which types can be
     // imported
-    for (final Usages usage : _collectedReferences.values ())
+    for (final Usages usage : m_aCollectedReferences.values ())
     {
       if (!usage.isAmbiguousIn (c) && !usage.isVariableName ())
       {
@@ -716,7 +725,7 @@ public class JFormatter implements Closeable
 
   private boolean _causesNoAmbiguities (@Nonnull final AbstractJClass reference, @Nonnull final JDefinedClass clazz)
   {
-    final Usages usage = _collectedReferences.get (reference.name ());
+    final Usages usage = m_aCollectedReferences.get (reference.name ());
     return usage == null || (!usage.isAmbiguousIn (clazz) && usage.containsReferencedType (reference));
   }
 
