@@ -62,7 +62,7 @@ public class JBlock implements IJGenerable, IJStatement
    * Declarations and statements contained in this block. Either
    * {@link IJStatement} or {@link IJDeclaration}.
    */
-  private final List <Object> m_aContent = new ArrayList <Object> ();
+  private final List <Object> m_aContentList = new ArrayList <Object> ();
 
   /**
    * Whether or not this block must be braced and indented
@@ -75,12 +75,12 @@ public class JBlock implements IJGenerable, IJStatement
    */
   private int m_nPos;
 
-  public JBlock ()
+  protected JBlock ()
   {
     this (true, true);
   }
 
-  public JBlock (final boolean bBracesRequired, final boolean bIndentRequired)
+  protected JBlock (final boolean bBracesRequired, final boolean bIndentRequired)
   {
     m_BracesRequired = bBracesRequired;
     m_bIndentRequire = bIndentRequired;
@@ -93,7 +93,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   public List <Object> getContents ()
   {
-    return Collections.unmodifiableList (m_aContent);
+    return Collections.unmodifiableList (m_aContentList);
   }
 
   @Nonnull
@@ -102,19 +102,19 @@ public class JBlock implements IJGenerable, IJStatement
     if (aStatementOrDeclaration == null)
       throw new NullPointerException ("statementOrDeclaration");
 
-    m_aContent.add (m_nPos, aStatementOrDeclaration);
+    m_aContentList.add (m_nPos, aStatementOrDeclaration);
     m_nPos++;
     return aStatementOrDeclaration;
   }
 
   public void remove (final Object o)
   {
-    m_aContent.remove (o);
+    m_aContentList.remove (o);
   }
 
   public void remove (@Nonnegative final int index)
   {
-    m_aContent.remove (index);
+    m_aContentList.remove (index);
   }
 
   /**
@@ -122,7 +122,7 @@ public class JBlock implements IJGenerable, IJStatement
    */
   public void removeAll ()
   {
-    m_aContent.clear ();
+    m_aContentList.clear ();
     m_nPos = 0;
   }
 
@@ -151,7 +151,7 @@ public class JBlock implements IJGenerable, IJStatement
   public int pos (@Nonnegative final int newPos)
   {
     final int r = m_nPos;
-    if (newPos > m_aContent.size () || newPos < 0)
+    if (newPos > m_aContentList.size () || newPos < 0)
       throw new IllegalArgumentException ("Illegal position provided: " + newPos);
     m_nPos = newPos;
     return r;
@@ -162,7 +162,7 @@ public class JBlock implements IJGenerable, IJStatement
    */
   public boolean isEmpty ()
   {
-    return m_aContent.isEmpty ();
+    return m_aContentList.isEmpty ();
   }
 
   /**
@@ -248,8 +248,8 @@ public class JBlock implements IJGenerable, IJStatement
 
   public JBlock insertBefore (final JVar var, final Object before)
   {
-    final int i = m_aContent.indexOf (before);
-    m_aContent.add (i, var);
+    final int i = m_aContentList.indexOf (before);
+    m_aContentList.add (i, var);
     m_nPos++;
     m_BracesRequired = true;
     m_bIndentRequire = true;
@@ -435,7 +435,7 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Create a For statement and add it to this block
    *
-   * @return Newly generated For statement
+   * @return Newly generated For statement. Never <code>null</code>.
    */
   @Nonnull
   public JForLoop _for ()
@@ -570,11 +570,25 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
   @Nonnull
-  public JForEach forEach (@Nonnull final AbstractJType varType,
-                           @Nonnull final String name,
-                           @Nonnull final IJExpression collection)
+  public JForEach forEach (@Nonnull final AbstractJType aVarType,
+                           @Nonnull final String sName,
+                           @Nonnull final IJExpression aCollection)
   {
-    return _insert (new JForEach (varType, name, collection));
+    return _insert (new JForEach (aVarType, sName, aCollection));
+  }
+
+  /**
+   * Create a synchronized block statement and add it to this block
+   *
+   * @param aExpr
+   *        The expression to synchronize on. May not be <code>null</code>.
+   * @return Newly generated synchronized block. Never <code>null</code>.
+   * @since 2.7.10
+   */
+  @Nonnull
+  public JSynchronizedBlock synchronizedBlock (@Nonnull final IJExpression aExpr)
+  {
+    return _insert (new JSynchronizedBlock (aExpr));
   }
 
   /**
@@ -584,25 +598,26 @@ public class JBlock implements IJGenerable, IJStatement
    * <p>
    * For example, you can invoke this method as:
    * <code>directStatement("a=b+c;")</code>.
+   *
+   * @param sSource
+   *        The source code to state. May not be <code>null</code>.
+   * @return The created direct statement.
    */
   @Nonnull
-  public IJStatement directStatement (@Nonnull final String source)
+  public IJStatement directStatement (@Nonnull final String sSource)
   {
-    final IJStatement s = new IJStatement ()
-    {
-      public void state (@Nonnull final JFormatter f)
-      {
-        f.print (source).newline ();
-      }
-    };
-    add (s);
-    return s;
+    final JDirectStatement aStatement = new JDirectStatement (sSource);
+    add (aStatement);
+    return aStatement;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
     if (m_BracesRequired)
-      f.print ('{').newline ();
+    {
+      f.print ('{');
+      f.newline ();
+    }
     if (m_bIndentRequire)
       f.indent ();
     generateBody (f);
@@ -614,12 +629,12 @@ public class JBlock implements IJGenerable, IJStatement
 
   void generateBody (@Nonnull final JFormatter f)
   {
-    for (final Object o : m_aContent)
+    for (final Object aContentElement : m_aContentList)
     {
-      if (o instanceof IJDeclaration)
-        f.declaration ((IJDeclaration) o);
+      if (aContentElement instanceof IJDeclaration)
+        f.declaration ((IJDeclaration) aContentElement);
       else
-        f.statement ((IJStatement) o);
+        f.statement ((IJStatement) aContentElement);
     }
   }
 
@@ -629,5 +644,4 @@ public class JBlock implements IJGenerable, IJStatement
     if (m_BracesRequired)
       f.newline ();
   }
-
 }

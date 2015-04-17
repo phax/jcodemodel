@@ -40,60 +40,37 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+import static org.junit.Assert.assertEquals;
 
-import javax.annotation.Nonnull;
+import org.junit.Test;
+
+import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
 
 /**
- * String literal.
- *
- * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * {@link JSynchronizedBlock} tests.
+ * 
+ * @author Philip Helger
  */
-public class JStringLiteral extends AbstractJExpressionImpl
+public final class JSynchronizedBlockTest
 {
-  private String m_sWhat;
+  private static final String CRLF = System.getProperty ("line.separator");
 
-  protected JStringLiteral (@Nonnull final String sWhat)
+  @Test
+  public void testBasic ()
   {
-    what (sWhat);
-  }
+    assertEquals ("synchronized (a)" + CRLF + "{}" + CRLF,
+                  CodeModelTestsUtils.toString (new JSynchronizedBlock (JExpr.ref ("a"))));
 
-  @Nonnull
-  public String what ()
-  {
-    return m_sWhat;
-  }
-
-  public void what (@Nonnull final String sWhat)
-  {
-    if (sWhat == null)
-      throw new NullPointerException ("String may not be null");
-    m_sWhat = sWhat;
-  }
-
-  public void generate (@Nonnull final JFormatter f)
-  {
-    f.print (JExpr.quotify ('"', m_sWhat));
-  }
-
-  @Override
-  public boolean equals (Object o)
-  {
-    if (o == this)
-      return true;
-    if (!(o instanceof IJExpression))
-      return false;
-    o = ((IJExpression) o).unwrapped ();
-    if (o == null || getClass () != o.getClass ())
-      return false;
-    final JStringLiteral rhs = (JStringLiteral) o;
-    return isEqual (m_sWhat, rhs.m_sWhat);
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return getHashCode (this, m_sWhat);
+    final JSynchronizedBlock aSB = new JSynchronizedBlock (JExpr.ref ("abc"));
+    aSB.body ().assign (JExpr.ref ("x"), JExpr.ref ("y"));
+    assertEquals ("synchronized (abc)" +
+                  CRLF +
+                  "{" +
+                  CRLF +
+                  JFormatter.DEFAULT_INDENT_SPACE +
+                  "x = y;" +
+                  CRLF +
+                  "}" +
+                  CRLF, CodeModelTestsUtils.toString (aSB));
   }
 }

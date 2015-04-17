@@ -40,60 +40,52 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
-
 import javax.annotation.Nonnull;
 
 /**
- * String literal.
+ * Synchronized block within a method statement
  *
- * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Philip Helger
+ * @since 2.7.10
  */
-public class JStringLiteral extends AbstractJExpressionImpl
+public class JSynchronizedBlock implements IJStatement
 {
-  private String m_sWhat;
+  private IJExpression m_aExpression;
+  private JBlock m_aBody;
 
-  protected JStringLiteral (@Nonnull final String sWhat)
+  protected JSynchronizedBlock (@Nonnull final IJExpression aExpression)
   {
-    what (sWhat);
+    expr (aExpression);
+  }
+
+  public void expr (@Nonnull final IJExpression aExpression)
+  {
+    if (aExpression == null)
+      throw new NullPointerException ("expression");
+    m_aExpression = aExpression;
   }
 
   @Nonnull
-  public String what ()
+  public IJExpression expr ()
   {
-    return m_sWhat;
+    return m_aExpression;
   }
 
-  public void what (@Nonnull final String sWhat)
+  @Nonnull
+  public JBlock body ()
   {
-    if (sWhat == null)
-      throw new NullPointerException ("String may not be null");
-    m_sWhat = sWhat;
+    if (m_aBody == null)
+      m_aBody = new JBlock ();
+    return m_aBody;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void state (@Nonnull final JFormatter f)
   {
-    f.print (JExpr.quotify ('"', m_sWhat));
-  }
-
-  @Override
-  public boolean equals (Object o)
-  {
-    if (o == this)
-      return true;
-    if (!(o instanceof IJExpression))
-      return false;
-    o = ((IJExpression) o).unwrapped ();
-    if (o == null || getClass () != o.getClass ())
-      return false;
-    final JStringLiteral rhs = (JStringLiteral) o;
-    return isEqual (m_sWhat, rhs.m_sWhat);
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    return getHashCode (this, m_sWhat);
+    f.print ("synchronized (").generable (m_aExpression).print (")").newline ();
+    if (m_aBody != null)
+      f.generable (m_aBody);
+    else
+      f.print ("{}");
+    f.newline ();
   }
 }

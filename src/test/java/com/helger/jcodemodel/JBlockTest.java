@@ -48,13 +48,15 @@ import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
 
 /**
  * {@link JBlock} tests.
+ *
+ * @author Philip Helger
  */
-public class JBlockTest
+public final class JBlockTest
 {
   private static final String CRLF = System.getProperty ("line.separator");
 
   @Test
-  public void testBasic () throws Exception
+  public void testBasic ()
   {
     assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsUtils.toString (new JBlock ()));
     assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsUtils.toString (new JBlock (true, true)));
