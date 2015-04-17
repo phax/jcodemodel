@@ -306,10 +306,30 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
+   * Check if there are any varargs declared for this method signature.
+   */
+  public boolean hasVarArgs ()
+  {
+    return m_aVarParam != null;
+  }
+
+  /**
+   * Returns the varags parameter type.
+   *
+   * @return If there's no vararg parameter type, null will be returned.
+   */
+  @Nullable
+  public AbstractJType listVarParamType ()
+  {
+    return m_aVarParam != null ? m_aVarParam.type () : null;
+  }
+
+  /**
    * Adds an annotation to this variable.
    *
    * @param clazz
    *        The annotation class to annotate the field with
+   * @return The created object. Never <code>null</code>.
    */
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
@@ -326,6 +346,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *
    * @param clazz
    *        The annotation class to annotate the field with
+   * @return The created object. Never <code>null</code>.
    */
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
@@ -347,14 +368,6 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     return Collections.unmodifiableList (m_aAnnotations);
   }
 
-  /**
-   * Check if there are any varargs declared for this method signature.
-   */
-  public boolean hasVarArgs ()
-  {
-    return m_aVarParam != null;
-  }
-
   public String name ()
   {
     return m_sName;
@@ -369,8 +382,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
-   * Returns the return type.
+   * Returns the return type. Is <code>null</code> for constructors.
    */
+  @Nullable
   public AbstractJType type ()
   {
     return m_aType;
@@ -378,8 +392,12 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Overrides the return type.
+   *
+   * @param t
+   *        The type to set. Set to <code>null</code> to make this method a
+   *        constructor.
    */
-  public void type (final AbstractJType t)
+  public void type (@Nullable final AbstractJType t)
   {
     m_aType = t;
   }
@@ -389,25 +407,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *
    * @return If there's no parameter, an empty array will be returned.
    */
+  @Nonnull
   public AbstractJType [] listParamTypes ()
   {
     final AbstractJType [] r = new AbstractJType [m_aParams.size ()];
     for (int i = 0; i < r.length; i++)
       r[i] = m_aParams.get (i).type ();
     return r;
-  }
-
-  /**
-   * Returns the varags parameter type.
-   *
-   * @return If there's no vararg parameter type, null will be returned.
-   */
-  @Nullable
-  public AbstractJType listVarParamType ()
-  {
-    if (m_aVarParam != null)
-      return m_aVarParam.type ();
-    return null;
   }
 
   /**
@@ -425,10 +431,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * Returns the variable parameter
    *
    * @return If there's no parameter, null will be returned.
+   * @deprecated Use {@link #varParam()} instead.
    */
+  @Nullable
+  @Deprecated
   public JVar listVarParam ()
   {
-    return m_aVarParam;
+    return varParam ();
   }
 
   /**
@@ -436,12 +445,12 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public boolean hasSignature (@Nonnull final AbstractJType [] argTypes)
   {
-    final JVar [] p = listParams ();
-    if (p.length != argTypes.length)
+    final JVar [] aParams = listParams ();
+    if (aParams.length != argTypes.length)
       return false;
 
-    for (int i = 0; i < p.length; i++)
-      if (!p[i].type ().equals (argTypes[i]))
+    for (int i = 0; i < aParams.length; i++)
+      if (!aParams[i].type ().equals (argTypes[i]))
         return false;
 
     return true;
@@ -450,8 +459,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Get the block that makes up body of this method
    *
-   * @return Body of method
+   * @return Body of method. Never <code>null</code>.
    */
+  @Nonnull
   public JBlock body ()
   {
     if (m_aBody == null)
@@ -460,20 +470,22 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
-   * Specify the default value for this annotation member
+   * Specify the default value for this method
    *
-   * @param value
-   *        Default value for the annotation member
+   * @param aDefaultValue
+   *        Default value for the method
    */
-  public void declareDefaultValue (final IJExpression value)
+  public void declareDefaultValue (@Nullable final IJExpression aDefaultValue)
   {
-    m_aDefaultValue = value;
+    m_aDefaultValue = aDefaultValue;
   }
 
   /**
-   * Creates, if necessary, and returns the class javadoc for this JDefinedClass
+   * Creates, if necessary, and returns the class javadoc for this
+   * {@link JMethod}.
    *
-   * @return JDocComment containing javadocs for this class
+   * @return JDocComment containing javadocs for this class. Never
+   *         <code>null</code>.
    */
   @Nonnull
   public JDocComment javadoc ()
@@ -484,7 +496,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Override
-  public void declare (final JFormatter f)
+  public void declare (@Nonnull final JFormatter f)
   {
     if (m_aJDoc != null)
       f.generable (m_aJDoc);

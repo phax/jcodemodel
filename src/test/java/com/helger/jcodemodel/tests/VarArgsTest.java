@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel.tests;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
 import com.helger.jcodemodel.AbstractJClass;
@@ -100,8 +102,8 @@ public class VarArgsTest
 
     final JFieldRef out = cm.ref (System.class).staticRef ("out");
 
-    // JVar typearray =
-    m.listVarParam ();
+    final JVar typearray = m.varParam ();
+    assertNotNull (typearray);
 
     // JInvocation invocation =
     forloop.body ().invoke (out, "println").arg (JExpr.direct ("param3[count]"));

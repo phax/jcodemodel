@@ -40,17 +40,19 @@
  */
 package com.helger.jcodemodel.tests.util;
 
+import java.io.StringWriter;
+
+import javax.annotation.Nonnull;
+
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJGenerable;
+import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JFormatter;
-
-import javax.annotation.Nonnull;
-import java.io.StringWriter;
 
 /**
  * Various utilities for codemodel tests.
- * 
+ *
  * @author Aleksei Valikov
  */
 public final class CodeModelTestsUtils
@@ -61,40 +63,59 @@ public final class CodeModelTestsUtils
 
   /**
    * Prints an expression into a string.
-   * 
-   * @param expression
+   *
+   * @param aExpression
    *        expression to print into a string.
    * @return Expression formatted as a string.
    */
   @Nonnull
-  public static String toString (@Nonnull final IJExpression expression)
+  public static String toString (@Nonnull final IJExpression aExpression)
   {
-    if (expression == null)
+    if (aExpression == null)
       throw new IllegalArgumentException ("Generable must not be null.");
 
-    final StringWriter stringWriter = new StringWriter ();
-    final JFormatter formatter = new JFormatter (stringWriter);
-    expression.generate (formatter);
-    return stringWriter.toString ();
+    final StringWriter aSW = new StringWriter ();
+    final JFormatter formatter = new JFormatter (aSW);
+    aExpression.generate (formatter);
+    return aSW.toString ();
   }
 
   /**
    * Prints a declaration into a string.
    *
-   * @param declaration
+   * @param aDeclaration
    *        declaration to print into a string.
    * @return Declaration formatted as a string.
    */
   @Nonnull
-  public static String toString (@Nonnull final IJDeclaration declaration)
+  public static String toString (@Nonnull final IJDeclaration aDeclaration)
   {
-    if (declaration == null)
+    if (aDeclaration == null)
       throw new IllegalArgumentException ("Declaration must not be null.");
 
-    final StringWriter stringWriter = new StringWriter ();
-    final JFormatter formatter = new JFormatter (stringWriter);
-    declaration.declare (formatter);
-    return stringWriter.toString ();
+    final StringWriter aSW = new StringWriter ();
+    final JFormatter formatter = new JFormatter (aSW);
+    aDeclaration.declare (formatter);
+    return aSW.toString ();
+  }
+
+  /**
+   * Prints a statement into a string.
+   *
+   * @param aStatement
+   *        declaration to print into a string.
+   * @return Declaration formatted as a string.
+   */
+  @Nonnull
+  public static String toString (@Nonnull final IJStatement aStatement)
+  {
+    if (aStatement == null)
+      throw new IllegalArgumentException ("Statement must not be null.");
+
+    final StringWriter aSW = new StringWriter ();
+    final JFormatter formatter = new JFormatter (aSW);
+    aStatement.state (formatter);
+    return aSW.toString ();
   }
 
   @Nonnull
@@ -103,10 +124,10 @@ public final class CodeModelTestsUtils
     if (declaration == null)
       throw new IllegalArgumentException ("Declaration must not be null.");
 
-    final StringWriter stringWriter = new StringWriter ();
-    final JFormatter formatter = new JFormatter (stringWriter);
+    final StringWriter aSW = new StringWriter ();
+    final JFormatter formatter = new JFormatter (aSW);
     declaration.declare (formatter);
-    return stringWriter.toString ();
+    return aSW.toString ();
   }
 
   @Nonnull
@@ -115,9 +136,9 @@ public final class CodeModelTestsUtils
     if (generable == null)
       throw new IllegalArgumentException ("Generable must not be null.");
 
-    final StringWriter stringWriter = new StringWriter ();
-    final JFormatter formatter = new JFormatter (stringWriter);
+    final StringWriter aSW = new StringWriter ();
+    final JFormatter formatter = new JFormatter (aSW);
     generable.generate (formatter);
-    return stringWriter.toString ();
+    return aSW.toString ();
   }
 }
