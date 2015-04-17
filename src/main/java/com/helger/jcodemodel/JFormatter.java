@@ -504,10 +504,10 @@ public class JFormatter implements Closeable
   }
 
   /**
-   * Cause the JVar to generate source for itself
+   * Cause the {@link JVar} to generate source for itself
    *
    * @param v
-   *        the JVar object
+   *        the {@link JVar} object
    */
   @Nonnull
   public JFormatter var (@Nonnull final JVar v)

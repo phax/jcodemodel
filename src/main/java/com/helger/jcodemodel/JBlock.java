@@ -62,7 +62,7 @@ public class JBlock implements IJGenerable, IJStatement
    * Declarations and statements contained in this block. Either
    * {@link IJStatement} or {@link IJDeclaration}.
    */
-  private final List <Object> m_aContentList = new ArrayList <Object> ();
+  protected final List <Object> m_aContentList = new ArrayList <Object> ();
 
   /**
    * Whether or not this block must be braced and indented
@@ -120,7 +120,7 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   @Nonnull
-  private <T> T _insert (@Nonnull final T aStatementOrDeclaration)
+  protected final <T> T _insert (@Nonnull final T aStatementOrDeclaration)
   {
     if (aStatementOrDeclaration == null)
       throw new NullPointerException ("statementOrDeclaration");
@@ -181,11 +181,21 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Returns true if this block is empty and does not contain any statement.
+   * Returns <code>true</code> if this block is empty and does not contain any
+   * statement.
    */
   public boolean isEmpty ()
   {
     return m_aContentList.isEmpty ();
+  }
+
+  /**
+   * @return The number of elements contained in the block. Always &ge; 0.
+   */
+  @Nonnegative
+  public int size ()
+  {
+    return m_aContentList.size ();
   }
 
   /**
@@ -657,7 +667,13 @@ public class JBlock implements IJGenerable, IJStatement
       if (aContentElement instanceof IJDeclaration)
         f.declaration ((IJDeclaration) aContentElement);
       else
-        f.statement ((IJStatement) aContentElement);
+        if (aContentElement instanceof IJStatement)
+          f.statement ((IJStatement) aContentElement);
+        else
+        {
+          // For lambda expressions in JLambdaBlock
+          f.generable ((IJGenerable) aContentElement);
+        }
     }
   }
 
