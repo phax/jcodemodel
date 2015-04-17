@@ -560,7 +560,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   public JBlock block ()
   {
-    return _insert (new JBlock (false, false));
+    return _insert (new JBlock (true, true));
   }
 
   /**
