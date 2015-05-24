@@ -59,9 +59,11 @@ public final class JBlockTest
   public void testBasic ()
   {
     assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsUtils.toString (new JBlock ()));
-    assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsUtils.toString (new JBlock (true, true)));
-    assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsUtils.toString (new JBlock (true, false)));
-    assertEquals ("", CodeModelTestsUtils.toString (new JBlock (false, true)));
-    assertEquals ("", CodeModelTestsUtils.toString (new JBlock (false, false)));
+    assertEquals ("{" + CRLF + "}" + CRLF,
+                  CodeModelTestsUtils.toString (new JBlock ().bracesRequired (true).indentRequired (true)));
+    assertEquals ("{" + CRLF + "}" + CRLF,
+                  CodeModelTestsUtils.toString (new JBlock ().bracesRequired (true).indentRequired (false)));
+    assertEquals ("", CodeModelTestsUtils.toString (new JBlock ().bracesRequired (false).indentRequired (true)));
+    assertEquals ("", CodeModelTestsUtils.toString (new JBlock ().bracesRequired (false).indentRequired (false)));
   }
 }
