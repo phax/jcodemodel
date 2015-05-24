@@ -58,6 +58,9 @@ import javax.annotation.Nullable;
  */
 public class JBlock implements IJGenerable, IJStatement
 {
+  public static final boolean DEFAULT_BRACES_REQUIRED = true;
+  public static final boolean DEFAULT_INDENT_REQUIRED = true;
+
   /**
    * Declarations and statements contained in this block. Either
    * {@link IJStatement} or {@link IJDeclaration}.
@@ -67,8 +70,8 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Whether or not this block must be braced and indented
    */
-  private boolean m_bBracesRequired = true;
-  private boolean m_bIndentRequired = true;
+  private boolean m_bBracesRequired = DEFAULT_BRACES_REQUIRED;
+  private boolean m_bIndentRequired = DEFAULT_INDENT_REQUIRED;
 
   /**
    * Current position.
