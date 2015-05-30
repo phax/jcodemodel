@@ -40,19 +40,17 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
+import org.junit.Test;
+
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public class AnnotationSample
+public class AnnotationTest
 {
-  public static void main (final String [] args) throws Exception
+  @Test
+  public void testBasic () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
