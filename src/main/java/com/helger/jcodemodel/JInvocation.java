@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.StringUtils.upper;
+import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
+import static com.helger.jcodemodel.util.JCStringUtils.upper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +53,7 @@ import javax.annotation.Nullable;
 import com.helger.jcodemodel.optimize.ExpressionAccessor;
 import com.helger.jcodemodel.optimize.ExpressionCallback;
 import com.helger.jcodemodel.optimize.ExpressionContainer;
-import com.helger.jcodemodel.util.HashCodeGenerator;
+import com.helger.jcodemodel.util.JCHashCodeGenerator;
 
 /**
  * {@link JMethod} invocation
@@ -443,7 +443,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   @Override
   public int hashCode ()
   {
-    HashCodeGenerator hashCodeGenerator = new HashCodeGenerator (this).append (_object).append (_isConstructor);
+    JCHashCodeGenerator hashCodeGenerator = new JCHashCodeGenerator (this).append (_object).append (_isConstructor);
     if (!_isConstructor)
       hashCodeGenerator = hashCodeGenerator.append (methodName ());
     hashCodeGenerator = hashCodeGenerator.append (_args).append (typeFullName ());

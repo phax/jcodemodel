@@ -40,18 +40,79 @@
  */
 package com.helger.jcodemodel.util;
 
-public final class StringUtils
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
+/**
+ * Class defined for safe calls of getClassLoader methods of any kind
+ * (context/system/class classloader. This MUST be package private and defined
+ * in every package which uses such invocations.
+ * 
+ * @author snajper
+ */
+public final class JCSecureLoader
 {
-  private StringUtils ()
+  private JCSecureLoader ()
   {}
 
-  public static String lower (String cap)
+  public static ClassLoader getContextClassLoader ()
   {
-    return Character.toLowerCase (cap.charAt (0)) + cap.substring (1);
+    if (System.getSecurityManager () == null)
+    {
+      return Thread.currentThread ().getContextClassLoader ();
+    }
+    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
+    {
+      public ClassLoader run ()
+      {
+        return Thread.currentThread ().getContextClassLoader ();
+      }
+    });
   }
 
-  public static String upper (String low)
+  public static ClassLoader getClassClassLoader (final Class <?> c)
   {
-    return Character.toUpperCase (low.charAt (0)) + low.substring (1);
+    if (System.getSecurityManager () == null)
+    {
+      return c.getClassLoader ();
+    }
+    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
+    {
+      public ClassLoader run ()
+      {
+        return c.getClassLoader ();
+      }
+    });
+  }
+
+  public static ClassLoader getSystemClassLoader ()
+  {
+    if (System.getSecurityManager () == null)
+    {
+      return ClassLoader.getSystemClassLoader ();
+    }
+    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
+    {
+      public ClassLoader run ()
+      {
+        return ClassLoader.getSystemClassLoader ();
+      }
+    });
+  }
+
+  public static void setContextClassLoader (final ClassLoader cl)
+  {
+    if (System.getSecurityManager () == null)
+    {
+      Thread.currentThread ().setContextClassLoader (cl);
+    }
+    AccessController.doPrivileged (new PrivilegedAction <Object> ()
+    {
+      public Object run ()
+      {
+        Thread.currentThread ().setContextClassLoader (cl);
+        return null;
+      }
+    });
   }
 }

@@ -47,7 +47,7 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.AbstractJResourceFile;
-import com.helger.jcodemodel.util.SecureLoader;
+import com.helger.jcodemodel.util.JCSecureLoader;
 
 /**
  * Allows an application to copy a resource file to the output.
@@ -67,7 +67,7 @@ public class JStaticFile extends AbstractJResourceFile
 
   public JStaticFile (@Nonnull final String resourceName, final boolean isResource)
   {
-    this (SecureLoader.getClassClassLoader (JStaticFile.class), resourceName, isResource);
+    this (JCSecureLoader.getClassClassLoader (JStaticFile.class), resourceName, isResource);
   }
 
   /**

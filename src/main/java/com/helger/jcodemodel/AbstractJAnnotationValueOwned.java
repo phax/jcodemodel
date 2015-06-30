@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.NameUtilities;
+import com.helger.jcodemodel.util.JCNameUtilities;
 
 /**
  * Things that can be values of an annotation element and have an owning code
@@ -78,7 +78,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
 
     public void generate (final JFormatter f)
     {
-      f.print (NameUtilities.getFullName (_value));
+      f.print (JCNameUtilities.getFullName (_value));
       f.print (".class");
     }
   }

@@ -43,7 +43,7 @@ package com.helger.jcodemodel.tests.util;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.helger.jcodemodel.util.NameUtilities;
+import com.helger.jcodemodel.util.JCNameUtilities;
 
 /**
  * @author Ben Fagin
@@ -63,7 +63,7 @@ public class NameUtilitiesTest
                             "." +
                             "Inner";
 
-    final String name = NameUtilities.getFullName (Inner.class);
+    final String name = JCNameUtilities.getFullName (Inner.class);
     Assert.assertEquals (expected, name);
   }
 }

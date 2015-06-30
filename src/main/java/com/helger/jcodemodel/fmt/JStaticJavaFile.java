@@ -60,7 +60,7 @@ import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJResourceFile;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JTypeVar;
-import com.helger.jcodemodel.util.SecureLoader;
+import com.helger.jcodemodel.util.JCSecureLoader;
 
 /**
  * Statically generated Java soruce file.
@@ -94,7 +94,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
                           @Nonnull final String className,
                           @Nonnull final String resourceName)
   {
-    this (pkg, className, SecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (resourceName), null);
+    this (pkg, className, JCSecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (resourceName), null);
   }
 
   public JStaticJavaFile (@Nonnull final JPackage pkg,

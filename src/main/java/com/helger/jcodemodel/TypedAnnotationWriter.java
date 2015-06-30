@@ -52,7 +52,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.SecureLoader;
+import com.helger.jcodemodel.util.JCSecureLoader;
 
 /**
  * Dynamically implements the typed annotation writer interfaces.
@@ -263,7 +263,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
    */
   private W _createProxy ()
   {
-    return (W) Proxy.newProxyInstance (SecureLoader.getClassClassLoader (_writerType),
+    return (W) Proxy.newProxyInstance (JCSecureLoader.getClassClassLoader (_writerType),
                                        new Class [] { _writerType },
                                        this);
   }

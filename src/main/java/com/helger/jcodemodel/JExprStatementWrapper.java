@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
+import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 
 import javax.annotation.Nonnull;
 

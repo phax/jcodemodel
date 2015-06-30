@@ -45,7 +45,6 @@ import java.util.Comparator;
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.JErrorClass;
 
 /**
  * Comparator object that sorts {@link AbstractJClass}es in the order of their

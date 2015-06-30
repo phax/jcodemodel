@@ -40,79 +40,18 @@
  */
 package com.helger.jcodemodel.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
-/**
- * Class defined for safe calls of getClassLoader methods of any kind
- * (context/system/class classloader. This MUST be package private and defined
- * in every package which uses such invocations.
- * 
- * @author snajper
- */
-public final class SecureLoader
+public final class JCStringUtils
 {
-  private SecureLoader ()
+  private JCStringUtils ()
   {}
 
-  public static ClassLoader getContextClassLoader ()
+  public static String lower (String cap)
   {
-    if (System.getSecurityManager () == null)
-    {
-      return Thread.currentThread ().getContextClassLoader ();
-    }
-    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
-    {
-      public ClassLoader run ()
-      {
-        return Thread.currentThread ().getContextClassLoader ();
-      }
-    });
+    return Character.toLowerCase (cap.charAt (0)) + cap.substring (1);
   }
 
-  public static ClassLoader getClassClassLoader (final Class <?> c)
+  public static String upper (String low)
   {
-    if (System.getSecurityManager () == null)
-    {
-      return c.getClassLoader ();
-    }
-    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
-    {
-      public ClassLoader run ()
-      {
-        return c.getClassLoader ();
-      }
-    });
-  }
-
-  public static ClassLoader getSystemClassLoader ()
-  {
-    if (System.getSecurityManager () == null)
-    {
-      return ClassLoader.getSystemClassLoader ();
-    }
-    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
-    {
-      public ClassLoader run ()
-      {
-        return ClassLoader.getSystemClassLoader ();
-      }
-    });
-  }
-
-  public static void setContextClassLoader (final ClassLoader cl)
-  {
-    if (System.getSecurityManager () == null)
-    {
-      Thread.currentThread ().setContextClassLoader (cl);
-    }
-    AccessController.doPrivileged (new PrivilegedAction <Object> ()
-    {
-      public Object run ()
-      {
-        Thread.currentThread ().setContextClassLoader (cl);
-        return null;
-      }
-    });
+    return Character.toUpperCase (low.charAt (0)) + low.substring (1);
   }
 }

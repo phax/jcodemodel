@@ -54,9 +54,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * @author Philip Helger
  */
 @Immutable
-public final class EqualsUtils
+public final class JCEqualsHelper
 {
-  private EqualsUtils ()
+  private JCEqualsHelper ()
   {}
 
   public static boolean isEqual (final boolean aObj1, final boolean aObj2)

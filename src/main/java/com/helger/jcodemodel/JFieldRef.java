@@ -40,15 +40,15 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
+import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.optimize.ExpressionAccessor;
 import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.util.StringUtils;
+import com.helger.jcodemodel.util.JCStringUtils;
 
 /**
  * Field Reference
@@ -225,7 +225,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
   {
     if (_object instanceof IJExpression)
     {
-      return ((IJExpression) _object).expressionName () + StringUtils.upper (name ());
+      return ((IJExpression) _object).expressionName () + JCStringUtils.upper (name ());
     }
     return name ();
   }

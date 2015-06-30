@@ -56,8 +56,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.helger.jcodemodel.util.NameUtilities;
-import com.helger.jcodemodel.util.SecureLoader;
+import com.helger.jcodemodel.util.JCNameUtilities;
+import com.helger.jcodemodel.util.JCSecureLoader;
 import com.helger.jcodemodel.writer.FileCodeWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter;
 
@@ -500,7 +500,7 @@ public final class JCodeModel
     try
     {
       // try the context class loader first
-      return ref (SecureLoader.getContextClassLoader ().loadClass (fullyQualifiedClassName));
+      return ref (JCSecureLoader.getContextClassLoader ().loadClass (fullyQualifiedClassName));
     }
     catch (final ClassNotFoundException e)
     {
@@ -716,7 +716,7 @@ public final class JCodeModel
     @Nonnull
     public String fullName ()
     {
-      return NameUtilities.getFullName (m_aClass);
+      return JCNameUtilities.getFullName (m_aClass);
     }
 
     @Override

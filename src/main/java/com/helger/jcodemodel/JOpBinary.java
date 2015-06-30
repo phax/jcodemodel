@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
+import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import java.util.HashMap;
 import java.util.Map;

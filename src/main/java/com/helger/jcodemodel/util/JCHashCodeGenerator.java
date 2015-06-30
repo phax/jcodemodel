@@ -70,7 +70,7 @@ import org.w3c.dom.Node;
  * </pre>
  * <p>
  * For a derived class, the typical code looks like this, assuming the base
- * class also uses {@link HashCodeGenerator}:
+ * class also uses {@link JCHashCodeGenerator}:
  * </p>
  *
  * <pre>
@@ -84,7 +84,7 @@ import org.w3c.dom.Node;
  * @author Philip Helger
  */
 @NotThreadSafe
-public final class HashCodeGenerator
+public final class JCHashCodeGenerator
 {
   /** Represents an illegal hash code that is never to be returned! */
   public static final int ILLEGAL_HASHCODE = 0;
@@ -110,7 +110,7 @@ public final class HashCodeGenerator
    *        The source object from which the class is extracted. May not be
    *        <code>null</code>.
    */
-  public HashCodeGenerator (@Nonnull final Object aSrcObject)
+  public JCHashCodeGenerator (@Nonnull final Object aSrcObject)
   {
     this (aSrcObject instanceof Class <?> ? (Class <?>) aSrcObject : aSrcObject.getClass ());
   }
@@ -124,7 +124,7 @@ public final class HashCodeGenerator
    *        The class this instance is about to create a hash code for. May not
    *        be <code>null</code>.
    */
-  public HashCodeGenerator (@Nonnull final Class <?> aClass)
+  public JCHashCodeGenerator (@Nonnull final Class <?> aClass)
   {
     if (aClass == null)
       throw new NullPointerException ("class");
@@ -138,7 +138,7 @@ public final class HashCodeGenerator
       append (aComponentType.getName ());
   }
 
-  private HashCodeGenerator (final int nSuperHashCode)
+  private JCHashCodeGenerator (final int nSuperHashCode)
   {
     m_nHC = nSuperHashCode;
   }
@@ -157,10 +157,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (final boolean x)
+  public JCHashCodeGenerator append (final boolean x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -172,10 +172,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (final byte x)
+  public JCHashCodeGenerator append (final byte x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -187,10 +187,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (final char x)
+  public JCHashCodeGenerator append (final char x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -202,10 +202,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (final double x)
+  public JCHashCodeGenerator append (final double x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -217,10 +217,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (final float x)
+  public JCHashCodeGenerator append (final float x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -232,10 +232,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (final int x)
+  public JCHashCodeGenerator append (final int x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -247,10 +247,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (final long x)
+  public JCHashCodeGenerator append (final long x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -262,10 +262,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (final short x)
+  public JCHashCodeGenerator append (final short x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -277,10 +277,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final Object x)
+  public JCHashCodeGenerator append (@Nullable final Object x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -292,10 +292,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final Enum <?> x)
+  public JCHashCodeGenerator append (@Nullable final Enum <?> x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -307,10 +307,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final boolean [] x)
+  public JCHashCodeGenerator append (@Nullable final boolean [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -322,10 +322,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final byte [] x)
+  public JCHashCodeGenerator append (@Nullable final byte [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -337,10 +337,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final char [] x)
+  public JCHashCodeGenerator append (@Nullable final char [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -352,10 +352,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final double [] x)
+  public JCHashCodeGenerator append (@Nullable final double [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -367,10 +367,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final float [] x)
+  public JCHashCodeGenerator append (@Nullable final float [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -382,10 +382,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final int [] x)
+  public JCHashCodeGenerator append (@Nullable final int [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -397,10 +397,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final long [] x)
+  public JCHashCodeGenerator append (@Nullable final long [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -412,10 +412,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final short [] x)
+  public JCHashCodeGenerator append (@Nullable final short [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -427,10 +427,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final Object [] x)
+  public JCHashCodeGenerator append (@Nullable final Object [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -442,10 +442,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final Enum <?> [] x)
+  public JCHashCodeGenerator append (@Nullable final Enum <?> [] x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -458,10 +458,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final StringBuffer x)
+  public JCHashCodeGenerator append (@Nullable final StringBuffer x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -474,10 +474,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final StringBuilder x)
+  public JCHashCodeGenerator append (@Nullable final StringBuilder x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -487,10 +487,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final Iterable <?> x)
+  public JCHashCodeGenerator append (@Nullable final Iterable <?> x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -500,10 +500,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final Map <?, ?> x)
+  public JCHashCodeGenerator append (@Nullable final Map <?, ?> x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -513,10 +513,10 @@ public final class HashCodeGenerator
    * @return this
    */
   @Nonnull
-  public HashCodeGenerator append (@Nullable final Node x)
+  public JCHashCodeGenerator append (@Nullable final Node x)
   {
     _checkClosed ();
-    m_nHC = HashCodeCalculator.append (m_nHC, x);
+    m_nHC = JCHashCodeCalculator.append (m_nHC, x);
     return this;
   }
 
@@ -550,7 +550,7 @@ public final class HashCodeGenerator
   }
 
   /**
-   * Never compare {@link HashCodeGenerator} objects :)
+   * Never compare {@link JCHashCodeGenerator} objects :)
    */
   @Deprecated
   @Override
@@ -573,8 +573,8 @@ public final class HashCodeGenerator
   }
 
   /**
-   * Create a {@link HashCodeGenerator} for derived classes where the base class
-   * also uses the {@link HashCodeGenerator}. This avoid calculating the hash
+   * Create a {@link JCHashCodeGenerator} for derived classes where the base class
+   * also uses the {@link JCHashCodeGenerator}. This avoid calculating the hash
    * code of the class name more than once.
    *
    * @param nSuperHashCode
@@ -582,11 +582,11 @@ public final class HashCodeGenerator
    * @return Never <code>null</code>
    */
   @Nonnull
-  public static HashCodeGenerator getDerived (final int nSuperHashCode)
+  public static JCHashCodeGenerator getDerived (final int nSuperHashCode)
   {
     if (nSuperHashCode == ILLEGAL_HASHCODE)
       throw new IllegalArgumentException ("Passed hash code is invalid!");
-    return new HashCodeGenerator (nSuperHashCode);
+    return new JCHashCodeGenerator (nSuperHashCode);
   }
 
   /**
@@ -602,7 +602,7 @@ public final class HashCodeGenerator
    */
   public static int getHashCode (@Nonnull final Object aThis, @Nullable final Object... aMembers)
   {
-    final HashCodeGenerator aHCGen = new HashCodeGenerator (aThis);
+    final JCHashCodeGenerator aHCGen = new JCHashCodeGenerator (aThis);
     if (aMembers != null)
       for (final Object aMember : aMembers)
         aHCGen.append (aMember);
@@ -622,7 +622,7 @@ public final class HashCodeGenerator
    */
   public static int getHashCode (@Nonnull final int nSuperHashCode, @Nullable final Object... aMembers)
   {
-    final HashCodeGenerator aHCGen = getDerived (nSuperHashCode);
+    final JCHashCodeGenerator aHCGen = getDerived (nSuperHashCode);
     if (aMembers != null)
       for (final Object aMember : aMembers)
         aHCGen.append (aMember);

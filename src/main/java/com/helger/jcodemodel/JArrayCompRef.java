@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
-import static com.helger.jcodemodel.util.StringUtils.upper;
+import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
+import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
+import static com.helger.jcodemodel.util.JCStringUtils.upper;
 
 import javax.annotation.Nonnull;
 

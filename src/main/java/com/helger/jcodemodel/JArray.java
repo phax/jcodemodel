@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.EqualsUtils.isEqual;
-import static com.helger.jcodemodel.util.HashCodeGenerator.getHashCode;
+import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
+import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +52,7 @@ import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.optimize.ExpressionAccessor;
 import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.util.StringUtils;
+import com.helger.jcodemodel.util.JCStringUtils;
 
 /**
  * array creation and initialization.
@@ -183,7 +183,7 @@ public class JArray extends AbstractJExpressionImpl
   @Override
   String derivedName ()
   {
-    return StringUtils.lower (_type.name ()) + "ArrayOfSize" + _size.expressionName ();
+    return JCStringUtils.lower (_type.name ()) + "ArrayOfSize" + _size.expressionName ();
   }
 
   @Override
@@ -211,6 +211,7 @@ public class JArray extends AbstractJExpressionImpl
       final int finalI = i;
       if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
       {
+
         public void set (final IJExpression newExpression)
         {
           _exprs.set (finalI, newExpression);

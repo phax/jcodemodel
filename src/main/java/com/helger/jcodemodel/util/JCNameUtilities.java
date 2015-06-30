@@ -49,9 +49,9 @@ import javax.annotation.Nonnull;
  * @author Ben Fagin
  * @version 2013-04-01
  */
-public final class NameUtilities
+public final class JCNameUtilities
 {
-  private NameUtilities ()
+  private JCNameUtilities ()
   {}
 
   @Nonnull

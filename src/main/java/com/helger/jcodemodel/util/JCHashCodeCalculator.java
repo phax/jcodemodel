@@ -49,7 +49,7 @@ import javax.annotation.concurrent.Immutable;
  * @author Philip Helger
  */
 @Immutable
-public final class HashCodeCalculator
+public final class JCHashCodeCalculator
 {
   /**
    * Each value is multiplied with this value. 31 because it can easily be
@@ -64,9 +64,9 @@ public final class HashCodeCalculator
   public static final int HASHCODE_NULL = 129;
 
   @SuppressWarnings ("unused")
-  private static final HashCodeCalculator s_aInstance = new HashCodeCalculator ();
+  private static final JCHashCodeCalculator s_aInstance = new JCHashCodeCalculator ();
 
-  private HashCodeCalculator ()
+  private JCHashCodeCalculator ()
   {}
 
   /**
