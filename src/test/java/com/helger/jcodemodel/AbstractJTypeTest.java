@@ -51,10 +51,9 @@ import javax.annotation.Nonnull;
 import org.junit.After;
 import org.junit.Test;
 
-import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.JCodeModel;
-
 /**
+ * Test class for class {@link AbstractJType}
+ * 
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 public final class AbstractJTypeTest

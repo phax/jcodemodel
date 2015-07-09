@@ -40,55 +40,43 @@
  */
 package com.helger.jcodemodel;
 
-import java.util.ArrayList;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldRef;
-import com.helger.jcodemodel.JForEach;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
-/**
- * Simple program to test the generation of the enhanced for loop in jdk 1.5
- *
- * @author Bhakti Mehta Bhakti.Mehta@sun.com
- */
-
-public class ForEachTest
+public final class InnerClassFuncTest
 {
-
   @Test
-  public void main () throws Exception
+  public void innerClassesAreImported () throws Exception
   {
+    final JCodeModel codeModel = new JCodeModel ();
+    final JDefinedClass aClass = codeModel._class ("org.test.DaTestClass");
+    final JDefinedClass daInner1 = aClass._class ("Inner");
+    final JDefinedClass daInnerInner = daInner1._class ("InnerInner");
+    final JDefinedClass daInner2 = aClass._class ("DaTestClassInner");
+    final JDefinedClass daInner2Inner = daInner2._class ("Inner2");
 
-    final JCodeModel cm = new JCodeModel ();
-    final JDefinedClass cls = cm._class ("Test");
+    assertEquals ("Inner", daInner1.name ());
+    assertEquals ("org.test.DaTestClass.Inner", daInner1.fullName ());
+    assertEquals ("org.test.DaTestClass$Inner", daInner1.binaryName ());
 
-    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
-    m.body ().decl (cm.INT, "getCount");
+    assertEquals ("InnerInner", daInnerInner.name ());
+    assertEquals ("org.test.DaTestClass.Inner.InnerInner", daInnerInner.fullName ());
+    assertEquals ("org.test.DaTestClass$Inner$InnerInner", daInnerInner.binaryName ());
 
-    // This is not exactly right because we need to
-    // support generics
-    final AbstractJClass arrayListclass = cm.ref (ArrayList.class);
-    final JVar $list = m.body ().decl (arrayListclass, "alist", JExpr._new (arrayListclass));
+    aClass.method (JMod.PUBLIC, daInner1, "getInner");
+    aClass.method (JMod.PUBLIC, daInnerInner, "getInnerInner");
+    aClass.method (JMod.PUBLIC, daInner2, "getInner2");
+    aClass.method (JMod.PUBLIC, daInner2Inner, "getInner2Inner");
 
-    final AbstractJClass $integerclass = cm.ref (Integer.class);
-    final JForEach foreach = m.body ().forEach ($integerclass, "count", $list);
-    final JVar $count1 = foreach.var ();
-    foreach.body ().assign (JExpr.ref ("getCount"), JExpr.lit (10));
+    final JDefinedClass otherClass = codeModel._class ("org.test.OtherClass");
+    otherClass.method (JMod.PUBLIC, daInner1, "getInner");
+    otherClass.method (JMod.PUBLIC, daInnerInner, "getInnerInner");
+    otherClass.method (JMod.PUBLIC, daInner2Inner, "getInner2Inner");
+    otherClass.method (JMod.PUBLIC, aClass, "getOuter");
 
-    // printing out the variable
-    final JFieldRef out1 = cm.ref (System.class).staticRef ("out");
-    // JInvocation invocation =
-    foreach.body ().invoke (out1, "println").arg ($count1);
-
-    cm.build (new SingleStreamCodeWriter (System.out));
+    codeModel.build (new SingleStreamCodeWriter (System.out));
   }
 }

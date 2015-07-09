@@ -44,12 +44,10 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JCodeModel;
-
 /**
  * @author Kohsuke Kawaguchi
  */
-public class JCodeModelTest
+public final class JCodeModelTest
 {
   @Test
   public void testParseArray () throws Exception

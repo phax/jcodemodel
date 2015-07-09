@@ -48,16 +48,14 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JClassAlreadyExistsException;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
-public class JInvocationTest
+/**
+ * Test class for class {@link JInvocation}
+ *
+ * @author Philip Helger
+ */
+public final class JInvocationTest
 {
   @Test
   public void testWithGenerics () throws JClassAlreadyExistsException, IOException

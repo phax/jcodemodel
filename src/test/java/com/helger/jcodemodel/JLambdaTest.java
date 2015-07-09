@@ -44,7 +44,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsUtils;
 
 /**
  * Test class for class {@link JLambda}.

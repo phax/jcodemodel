@@ -38,32 +38,38 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.tests.util;
+package com.helger.jcodemodel;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
+import java.util.Iterator;
+
 import org.junit.Test;
 
-import com.helger.jcodemodel.util.JCNameUtilities;
+import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
- * @author Ben Fagin
- * @version 2013-04-01
+ * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class NameUtilitiesTest
+public final class AnonymousClassFuncTest
 {
-  public static class Inner
-  {}
-
   @Test
-  public void testInnerClassNaming ()
+  public void testBasic () throws Exception
   {
-    final String expected = NameUtilitiesTest.class.getPackage ().getName () +
-                            "." +
-                            NameUtilitiesTest.class.getSimpleName () +
-                            "." +
-                            "Inner";
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("Test");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
 
-    final String name = JCNameUtilities.getFullName (Inner.class);
-    Assert.assertEquals (expected, name);
+    final JAnonymousClass c = cm.anonymousClass (cm.ref (Iterator.class).narrow (Double.class));
+    c.method (JMod.PUBLIC, cm.ref (Double.class), "next").body ()._return (JExpr._null ());
+    c.method (JMod.PUBLIC, cm.BOOLEAN, "hasNext").body ()._return (JExpr.FALSE);
+    c.field (JMod.PRIVATE, cm.DOUBLE, "y");
+    m.body ().decl (cm.ref (Object.class), "x", JExpr._new (c));
+
+    cm.build (new SingleStreamCodeWriter (System.out));
+
+    assertEquals ("java.util.Iterator<java.lang.Double>", c.fullName ());
+    // Incorrect! Should be Test$1!
+    assertEquals ("java.util.Iterator<java.lang.Double>", c.binaryName ());
   }
 }

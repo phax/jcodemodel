@@ -40,25 +40,69 @@
  */
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
- * @author Kohsuke Kawaguchi
+ * Simple program to test the generation of the varargs feature in jdk 1.5
+ *
+ * @author Bhakti Mehta Bhakti.Mehta@sun.com
  */
-public class AnnotationTest
+/*
+ * ====================================================== This is how the output
+ * from this program looks like Still need to learn how to work on instantiation
+ * and args ========================================================= public
+ * class Test { public void foo(java.lang.String param1, java.lang.Integer
+ * param2, java.lang.String param5, java.lang.Object... param3) { for (int count
+ * = 0; (count<(param3.length)); count ++) {
+ * java.lang.System.out.println((param3[count])); } } public static void
+ * main(java.lang.String[] args) { } }
+ * ==========================================================
+ */
+
+public final class VarArgsFuncTest
 {
+
   @Test
   public void testBasic () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
-    m.annotate (Deprecated.class);
+    m.param (String.class, "param1");
+    m.param (Integer.class, "param2");
+    final JVar var = m.varParam (Object.class, "param3");
+    System.out.println ("First varParam " + var);
 
-    final JFieldVar field = cls.field (JMod.PRIVATE, cm.DOUBLE, "y");
-    field.annotate (Deprecated.class);
+    // checking for param after varParam it behaves ok
+    // JVar[] var1 = m.varParam(Float.class, "param4");
+    final AbstractJClass string = cm.ref (String.class);
+    final AbstractJClass stringArray = string.array ();
+    // JVar param5 =
+    m.param (String.class, "param5");
+
+    final JForLoop forloop = m.body ()._for ();
+
+    final JVar $count = forloop.init (cm.INT, "count", JExpr.lit (0));
+
+    forloop.test ($count.lt (JExpr.direct ("param3.length")));
+    forloop.update ($count.incr ());
+
+    final JFieldRef out = cm.ref (System.class).staticRef ("out");
+
+    final JVar typearray = m.varParam ();
+    assertNotNull (typearray);
+
+    // JInvocation invocation =
+    forloop.body ().invoke (out, "println").arg (JExpr.direct ("param3[count]"));
+
+    final JMethod main = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "main");
+    main.param (stringArray, "args");
+    main.body ()
+        .directStatement ("new Test().foo(new String(\"Param1\"),new Integer(5),null,new String(\"Param3\"),new String(\"Param4\"));");
 
     cm.build (new SingleStreamCodeWriter (System.out));
   }

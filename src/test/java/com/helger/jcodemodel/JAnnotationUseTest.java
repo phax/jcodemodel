@@ -40,21 +40,21 @@
  */
 package com.helger.jcodemodel;
 
+import java.io.IOException;
+import java.lang.annotation.Inherited;
+
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.helger.jcodemodel.JAnnotationUse;
-import com.helger.jcodemodel.JClassAlreadyExistsException;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
  * Unit test for class {@link JAnnotationUse}.
  *
  * @author Philip Helger
  */
-public class JAnnotationUseTest
+public final class JAnnotationUseTest
 {
   @Test
   public void generatesGenericParam () throws JClassAlreadyExistsException
@@ -84,7 +84,29 @@ public class JAnnotationUseTest
                          sCRLF +
                          "    \"deprecation\"" +
                          sCRLF +
-                         "})", CodeModelTestsUtils.generate (suppressWarningAnnotation));
+                         "})",
+                         CodeModelTestsUtils.generate (suppressWarningAnnotation));
+  }
 
+  @Test
+  public void testOnMethodAndField () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("Test");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
+    m.annotate (Deprecated.class);
+
+    final JFieldVar field = cls.field (JMod.PRIVATE, cm.DOUBLE, "y");
+    field.annotate (Deprecated.class);
+
+    cm.build (new SingleStreamCodeWriter (System.out));
+  }
+
+  @Test
+  public void testPackageAnnotation () throws IOException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    cm._package ("foo").annotate (Inherited.class);
+    cm.build (new SingleStreamCodeWriter (System.out));
   }
 }

@@ -40,42 +40,24 @@
  */
 package com.helger.jcodemodel;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.Iterator;
-
 import org.junit.Test;
 
-import com.helger.jcodemodel.JAnonymousClass;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
- * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Kohsuke Kawaguchi
  */
-public class AnonymousClassTest
+public final class NestedClassFuncTest
 {
   @Test
-  public void main () throws Exception
+  public void testBasic () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
-    final JDefinedClass cls = cm._class ("Test");
-    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
-
-    final JAnonymousClass c = cm.anonymousClass (cm.ref (Iterator.class).narrow (Double.class));
-    c.method (JMod.PUBLIC, cm.ref (Double.class), "next").body ()._return (JExpr._null ());
-    c.method (JMod.PUBLIC, cm.BOOLEAN, "hasNext").body ()._return (JExpr.FALSE);
-    c.field (JMod.PRIVATE, cm.DOUBLE, "y");
-    m.body ().decl (cm.ref (Object.class), "x", JExpr._new (c));
-
+    final JDefinedClass c = cm._package ("foo")._class (0, "Foo");
+    c._extends (cm.ref (MockInnerClass.class));
     cm.build (new SingleStreamCodeWriter (System.out));
-
-    assertEquals ("java.util.Iterator<java.lang.Double>", c.fullName ());
-    // Incorrect! Should be Test$1!
-    assertEquals ("java.util.Iterator<java.lang.Double>", c.binaryName ());
   }
+
+  public static class MockInnerClass
+  {}
 }

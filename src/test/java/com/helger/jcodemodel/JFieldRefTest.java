@@ -42,18 +42,17 @@ package com.helger.jcodemodel;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
-public class JFieldRefTest
+/**
+ * Test class for class {@link JFieldRef}
+ * 
+ * @author Philip Helger
+ */
+public final class JFieldRefTest
 {
   @Test
-  public void main () throws Exception
+  public void testBasic () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
 

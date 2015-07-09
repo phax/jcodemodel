@@ -63,7 +63,7 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
  *
  * @author Bhakti Mehta
  */
-public final class AnnotationUseTest
+public final class AnnotationUseFuncTest
 {
   @interface XmlElement
   {

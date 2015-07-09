@@ -38,54 +38,32 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.util;
 
-import static org.junit.Assert.assertNotNull;
-import japa.parser.JavaParser;
-import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.body.ClassOrInterfaceDeclaration;
-import japa.parser.ast.body.InitializerDeclaration;
-import japa.parser.ast.body.TypeDeclaration;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.nio.charset.Charset;
-
+import org.junit.Assert;
 import org.junit.Test;
 
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
+import com.helger.jcodemodel.util.JCNameUtilities;
 
-public class JDefinedClassInstanceInitTest
+/**
+ * @author Ben Fagin
+ * @version 2013-04-01
+ */
+public final class JCNameUtilitiesTest
 {
+  public static class Inner
+  {}
 
   @Test
-  public void generatesInstanceInit () throws Exception
+  public void testInnerClassNaming ()
   {
-    final JCodeModel cm = new JCodeModel ();
-    final JDefinedClass c = cm._package ("myPackage")._class (0, "MyClass");
-    final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");
-    c.instanceInit ().assign (JExpr._this ().ref (myField), JExpr.lit ("myValue"));
-    final ByteArrayOutputStream bos = new ByteArrayOutputStream ();
-    final Charset encoding = Charset.forName ("UTF-8");
-    // cm.build(new OutputStreamCodeWriter(System.out, encoding));
-    cm.build (new OutputStreamCodeWriter (bos, encoding));
-    bos.close ();
+    final String expected = JCNameUtilitiesTest.class.getPackage ().getName () +
+                            "." +
+                            JCNameUtilitiesTest.class.getSimpleName () +
+                            "." +
+                            "Inner";
 
-    final ByteArrayInputStream bis = new ByteArrayInputStream (bos.toByteArray ());
-
-    final CompilationUnit compilationUnit = JavaParser.parse (bis, encoding.name ());
-
-    final TypeDeclaration typeDeclaration = compilationUnit.getTypes ().get (0);
-    final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
-
-    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
-                                                                                                   .get (1);
-
-    assertNotNull (initializerDeclaration);
+    final String name = JCNameUtilities.getFullName (Inner.class);
+    Assert.assertEquals (expected, name);
   }
 }

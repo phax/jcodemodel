@@ -38,7 +38,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.tests.util;
+package com.helger.jcodemodel.util;
 
 import java.io.StringWriter;
 

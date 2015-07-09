@@ -44,16 +44,15 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
  * @author Kohsuke Kawaguchi
  */
-public class PackageJavadocTest
+public final class JavadocFuncTest
 {
   @Test
-  public void main () throws IOException
+  public void testOnPackage () throws IOException
   {
     final JCodeModel cm = new JCodeModel ();
     cm._package ("foo").javadoc ().add ("String");

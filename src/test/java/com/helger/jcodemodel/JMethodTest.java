@@ -43,17 +43,15 @@ package com.helger.jcodemodel;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.helger.jcodemodel.JClassAlreadyExistsException;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JVar;
-
-public class JMethodTest
+/**
+ * Test class for class {@link JMethod}.
+ *
+ * @author Philip Helger
+ */
+public final class JMethodTest
 {
   @Test
-  public void main () throws JClassAlreadyExistsException
+  public void testBasic () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");

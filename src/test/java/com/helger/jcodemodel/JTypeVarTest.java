@@ -46,18 +46,17 @@ import java.io.Serializable;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JClassAlreadyExistsException;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JTypeVar;
-import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsUtils;
 
+/**
+ * {@link JTypeVar} tests.
+ *
+ * @author Philip Helger
+ */
 public final class JTypeVarTest
 {
   @Test
-  public void main () throws JClassAlreadyExistsException
+  public void testBasic () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
@@ -67,7 +66,8 @@ public final class JTypeVarTest
     tv.bound (cm.ref (Serializable.class));
 
     assertEquals ("T extends java.lang.Comparable<T> & java.io.Serializable", CodeModelTestsUtils.toString (tv));
-    assertEquals ("public<T extends java.lang.Comparable<T> & java.io.Serializable> void foo() {\n" + "}\n",
+    assertEquals ("public<T extends java.lang.Comparable<T> & java.io.Serializable> void foo() {\n" +
+                  "}\n",
                   CodeModelTestsUtils.toString (m).replace ("\r", ""));
   }
 }

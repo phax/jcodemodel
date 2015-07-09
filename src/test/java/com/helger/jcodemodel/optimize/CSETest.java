@@ -62,7 +62,7 @@ import com.helger.jcodemodel.JForLoop;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
-import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsUtils;
 
 public final class CSETest
 {

@@ -40,46 +40,52 @@
  */
 package com.helger.jcodemodel;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.Charset;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 
-public class InnerClassTest
+import japa.parser.JavaParser;
+import japa.parser.ast.CompilationUnit;
+import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+import japa.parser.ast.body.InitializerDeclaration;
+import japa.parser.ast.body.TypeDeclaration;
+
+/**
+ * Test class for class {@link JDefinedClass}.
+ * 
+ * @author Philip Helger
+ */
+public final class JDefinedClassTest
 {
   @Test
-  public void innerClassesAreImported () throws Exception
+  public void generatesInstanceInit () throws Exception
   {
-    final JCodeModel codeModel = new JCodeModel ();
-    final JDefinedClass aClass = codeModel._class ("org.test.DaTestClass");
-    final JDefinedClass daInner1 = aClass._class ("Inner");
-    final JDefinedClass daInnerInner = daInner1._class ("InnerInner");
-    final JDefinedClass daInner2 = aClass._class ("DaTestClassInner");
-    final JDefinedClass daInner2Inner = daInner2._class ("Inner2");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass c = cm._package ("myPackage")._class (0, "MyClass");
+    final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");
+    c.instanceInit ().assign (JExpr._this ().ref (myField), JExpr.lit ("myValue"));
+    final ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+    final Charset encoding = Charset.forName ("UTF-8");
+    // cm.build(new OutputStreamCodeWriter(System.out, encoding));
+    cm.build (new OutputStreamCodeWriter (bos, encoding));
+    bos.close ();
 
-    assertEquals ("Inner", daInner1.name ());
-    assertEquals ("org.test.DaTestClass.Inner", daInner1.fullName ());
-    assertEquals ("org.test.DaTestClass$Inner", daInner1.binaryName ());
+    final ByteArrayInputStream bis = new ByteArrayInputStream (bos.toByteArray ());
 
-    assertEquals ("InnerInner", daInnerInner.name ());
-    assertEquals ("org.test.DaTestClass.Inner.InnerInner", daInnerInner.fullName ());
-    assertEquals ("org.test.DaTestClass$Inner$InnerInner", daInnerInner.binaryName ());
+    final CompilationUnit compilationUnit = JavaParser.parse (bis, encoding.name ());
 
-    aClass.method (JMod.PUBLIC, daInner1, "getInner");
-    aClass.method (JMod.PUBLIC, daInnerInner, "getInnerInner");
-    aClass.method (JMod.PUBLIC, daInner2, "getInner2");
-    aClass.method (JMod.PUBLIC, daInner2Inner, "getInner2Inner");
+    final TypeDeclaration typeDeclaration = compilationUnit.getTypes ().get (0);
+    final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
 
-    final JDefinedClass otherClass = codeModel._class ("org.test.OtherClass");
-    otherClass.method (JMod.PUBLIC, daInner1, "getInner");
-    otherClass.method (JMod.PUBLIC, daInnerInner, "getInnerInner");
-    otherClass.method (JMod.PUBLIC, daInner2Inner, "getInner2Inner");
-    otherClass.method (JMod.PUBLIC, aClass, "getOuter");
+    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
+                                                                                                   .get (1);
 
-    codeModel.build (new SingleStreamCodeWriter (System.out));
+    assertNotNull (initializerDeclaration);
   }
 }

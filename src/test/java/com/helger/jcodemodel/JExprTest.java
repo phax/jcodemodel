@@ -44,15 +44,12 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.JAtomDouble;
-import com.helger.jcodemodel.JAtomFloat;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.tests.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsUtils;
 
 /**
- * JExpr tests.
+ * {@link JExpr} tests.
  */
-public class JExprTest
+public final class JExprTest
 {
   /**
    * Tests double literal expression.
