@@ -44,7 +44,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * {@link JExpr} tests.
@@ -58,27 +58,27 @@ public final class JExprTest
   public void testLitDouble () throws Exception
   {
     assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_POSITIVE_INFINITY,
-                  CodeModelTestsUtils.toString (JExpr.lit (Double.POSITIVE_INFINITY)));
+                  CodeModelTestsHelper.toString (JExpr.lit (Double.POSITIVE_INFINITY)));
     assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_NEGATIVE_INFINITY,
-                  CodeModelTestsUtils.toString (JExpr.lit (Double.NEGATIVE_INFINITY)));
-    assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_NAN, CodeModelTestsUtils.toString (JExpr.lit (Double.NaN)));
+                  CodeModelTestsHelper.toString (JExpr.lit (Double.NEGATIVE_INFINITY)));
+    assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_NAN, CodeModelTestsHelper.toString (JExpr.lit (Double.NaN)));
   }
 
   @Test
   public void testLitFloat () throws Exception
   {
     assertEquals (JAtomFloat.JAVA_LANG_FLOAT_POSITIVE_INFINITY,
-                  CodeModelTestsUtils.toString (JExpr.lit (Float.POSITIVE_INFINITY)));
+                  CodeModelTestsHelper.toString (JExpr.lit (Float.POSITIVE_INFINITY)));
     assertEquals (JAtomFloat.JAVA_LANG_FLOAT_NEGATIVE_INFINITY,
-                  CodeModelTestsUtils.toString (JExpr.lit (Float.NEGATIVE_INFINITY)));
-    assertEquals (JAtomFloat.JAVA_LANG_FLOAT_NAN, CodeModelTestsUtils.toString (JExpr.lit (Float.NaN)));
+                  CodeModelTestsHelper.toString (JExpr.lit (Float.NEGATIVE_INFINITY)));
+    assertEquals (JAtomFloat.JAVA_LANG_FLOAT_NAN, CodeModelTestsHelper.toString (JExpr.lit (Float.NaN)));
   }
 
   @Test
   public void testLitIntAndLong () throws Exception
   {
-    assertEquals ("5", CodeModelTestsUtils.toString (JExpr.lit (5)));
-    assertEquals ("5L", CodeModelTestsUtils.toString (JExpr.lit (5l)));
-    assertEquals ("5L", CodeModelTestsUtils.toString (JExpr.lit ((long) 5)));
+    assertEquals ("5", CodeModelTestsHelper.toString (JExpr.lit (5)));
+    assertEquals ("5L", CodeModelTestsHelper.toString (JExpr.lit (5l)));
+    assertEquals ("5L", CodeModelTestsHelper.toString (JExpr.lit ((long) 5)));
   }
 }

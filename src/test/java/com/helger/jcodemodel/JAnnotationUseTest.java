@@ -46,7 +46,7 @@ import java.lang.annotation.Inherited;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.helger.jcodemodel.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
@@ -65,7 +65,7 @@ public final class JAnnotationUseTest
     suppressWarningAnnotation.param (JAnnotationUse.SPECIAL_KEY_VALUE, "unused");
 
     Assert.assertEquals ("@java.lang.SuppressWarnings(\"unused\")",
-                         CodeModelTestsUtils.generate (suppressWarningAnnotation));
+                         CodeModelTestsHelper.generate (suppressWarningAnnotation));
 
   }
 
@@ -85,7 +85,7 @@ public final class JAnnotationUseTest
                          "    \"deprecation\"" +
                          sCRLF +
                          "})",
-                         CodeModelTestsUtils.generate (suppressWarningAnnotation));
+                         CodeModelTestsHelper.generate (suppressWarningAnnotation));
   }
 
   @Test

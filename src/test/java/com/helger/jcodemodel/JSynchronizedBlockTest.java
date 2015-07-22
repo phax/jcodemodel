@@ -44,7 +44,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * {@link JSynchronizedBlock} tests.
@@ -59,7 +59,7 @@ public final class JSynchronizedBlockTest
   public void testBasic ()
   {
     assertEquals ("synchronized (a)" + CRLF + "{}" + CRLF,
-                  CodeModelTestsUtils.toString (new JSynchronizedBlock (JExpr.ref ("a"))));
+                  CodeModelTestsHelper.toString (new JSynchronizedBlock (JExpr.ref ("a"))));
 
     final JSynchronizedBlock aSB = new JSynchronizedBlock (JExpr.ref ("abc"));
     aSB.body ().assign (JExpr.ref ("x"), JExpr.ref ("y"));
@@ -71,6 +71,6 @@ public final class JSynchronizedBlockTest
                   "x = y;" +
                   CRLF +
                   "}" +
-                  CRLF, CodeModelTestsUtils.toString (aSB));
+                  CRLF, CodeModelTestsHelper.toString (aSB));
   }
 }

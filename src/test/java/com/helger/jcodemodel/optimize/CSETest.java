@@ -62,7 +62,7 @@ import com.helger.jcodemodel.JForLoop;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
-import com.helger.jcodemodel.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 public final class CSETest
 {
@@ -94,7 +94,7 @@ public final class CSETest
     _println (cm, b, aLength);
 
     CSE.optimize (b);
-    System.out.println (CodeModelTestsUtils.declare (cls));
+    System.out.println (CodeModelTestsHelper.declare (cls));
   }
 
   @Test
@@ -119,7 +119,7 @@ public final class CSETest
     _println (cm, b, a.component (i));
 
     CSE.optimize (b);
-    System.out.println (CodeModelTestsUtils.declare (cls));
+    System.out.println (CodeModelTestsHelper.declare (cls));
   }
 
   @Test
@@ -144,7 +144,7 @@ public final class CSETest
     _println (cm, b, map.invoke ("contains").arg (i).hintType (cm.BOOLEAN));
 
     CSE.optimize (b);
-    System.out.println (CodeModelTestsUtils.declare (cls));
+    System.out.println (CodeModelTestsHelper.declare (cls));
   }
 
   @Test
@@ -163,7 +163,7 @@ public final class CSETest
      .hintType (cm.VOID);
 
     CSE.optimize (b);
-    System.out.println (CodeModelTestsUtils.declare (cls));
+    System.out.println (CodeModelTestsHelper.declare (cls));
   }
 
   @Test
@@ -184,7 +184,7 @@ public final class CSETest
     _println (cm, b, aLength);
 
     CSE.optimize (b);
-    System.out.println (CodeModelTestsUtils.declare (cls));
+    System.out.println (CodeModelTestsHelper.declare (cls));
   }
 
   @Test
@@ -210,7 +210,7 @@ public final class CSETest
     _println (cm, b, aLength);
 
     CSE.optimize (b);
-    System.out.println (CodeModelTestsUtils.declare (cls));
+    System.out.println (CodeModelTestsHelper.declare (cls));
   }
 
   @Test
@@ -255,7 +255,7 @@ public final class CSETest
     cond3._else ().decl ("i", lit (1));
 
     CSE.optimize (b);
-    System.out.println (CodeModelTestsUtils.declare (cls));
+    System.out.println (CodeModelTestsHelper.declare (cls));
   }
 
   @Test
@@ -278,6 +278,6 @@ public final class CSETest
     _println (cm, forBody, a.component (j));
 
     CSE.optimize (b);
-    System.out.println (CodeModelTestsUtils.declare (cls));
+    System.out.println (CodeModelTestsHelper.declare (cls));
   }
 }

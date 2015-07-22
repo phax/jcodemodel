@@ -46,7 +46,7 @@ import java.io.Serializable;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * {@link JTypeVar} tests.
@@ -65,9 +65,9 @@ public final class JTypeVarTest
     tv.bound (cm.parseType ("java.lang.Comparable<T>").boxify ());
     tv.bound (cm.ref (Serializable.class));
 
-    assertEquals ("T extends java.lang.Comparable<T> & java.io.Serializable", CodeModelTestsUtils.toString (tv));
+    assertEquals ("T extends java.lang.Comparable<T> & java.io.Serializable", CodeModelTestsHelper.toString (tv));
     assertEquals ("public<T extends java.lang.Comparable<T> & java.io.Serializable> void foo() {\n" +
                   "}\n",
-                  CodeModelTestsUtils.toString (m).replace ("\r", ""));
+                  CodeModelTestsHelper.toString (m).replace ("\r", ""));
   }
 }

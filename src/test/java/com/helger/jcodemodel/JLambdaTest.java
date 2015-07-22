@@ -44,7 +44,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * Test class for class {@link JLambda}.
@@ -61,7 +61,7 @@ public final class JLambdaTest
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam ("x");
     aLambda.body ().lambdaExpr (aParam.mul (2));
-    assertEquals ("x -> (x* 2)", CodeModelTestsUtils.toString (aLambda));
+    assertEquals ("x -> (x* 2)", CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test
@@ -72,7 +72,7 @@ public final class JLambdaTest
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
     aLambda.body ().lambdaExpr (aParam.mul (2));
-    assertEquals ("(int x) -> (x* 2)", CodeModelTestsUtils.toString (aLambda));
+    assertEquals ("(int x) -> (x* 2)", CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test
@@ -82,7 +82,7 @@ public final class JLambdaTest
     final JLambdaParam aParam1 = aLambda.addParam ("x");
     final JLambdaParam aParam2 = aLambda.addParam ("y");
     aLambda.body ().lambdaExpr (aParam1.plus (aParam2));
-    assertEquals ("(x, y) -> (x + y)", CodeModelTestsUtils.toString (aLambda));
+    assertEquals ("(x, y) -> (x + y)", CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test
@@ -94,7 +94,7 @@ public final class JLambdaTest
     final JLambdaParam aParam1 = aLambda.addParam (cm.INT, "x");
     final JLambdaParam aParam2 = aLambda.addParam (cm.BYTE, "y");
     aLambda.body ().lambdaExpr (aParam1.plus (aParam2));
-    assertEquals ("(int x, byte y) -> (x + y)", CodeModelTestsUtils.toString (aLambda));
+    assertEquals ("(int x, byte y) -> (x + y)", CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test
@@ -106,6 +106,6 @@ public final class JLambdaTest
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
     aLambda.body ()._return (aParam.plus (1));
     assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF,
-                  CodeModelTestsUtils.toString (aLambda));
+                  CodeModelTestsHelper.toString (aLambda));
   }
 }

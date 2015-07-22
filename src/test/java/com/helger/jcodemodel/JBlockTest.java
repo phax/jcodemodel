@@ -44,7 +44,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.util.CodeModelTestsUtils;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * {@link JBlock} tests.
@@ -58,12 +58,12 @@ public final class JBlockTest
   @Test
   public void testBasic ()
   {
-    assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsUtils.toString (new JBlock ()));
+    assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsHelper.toString (new JBlock ()));
     assertEquals ("{" + CRLF + "}" + CRLF,
-                  CodeModelTestsUtils.toString (new JBlock ().bracesRequired (true).indentRequired (true)));
+                  CodeModelTestsHelper.toString (new JBlock ().bracesRequired (true).indentRequired (true)));
     assertEquals ("{" + CRLF + "}" + CRLF,
-                  CodeModelTestsUtils.toString (new JBlock ().bracesRequired (true).indentRequired (false)));
-    assertEquals ("", CodeModelTestsUtils.toString (new JBlock ().bracesRequired (false).indentRequired (true)));
-    assertEquals ("", CodeModelTestsUtils.toString (new JBlock ().bracesRequired (false).indentRequired (false)));
+                  CodeModelTestsHelper.toString (new JBlock ().bracesRequired (true).indentRequired (false)));
+    assertEquals ("", CodeModelTestsHelper.toString (new JBlock ().bracesRequired (false).indentRequired (true)));
+    assertEquals ("", CodeModelTestsHelper.toString (new JBlock ().bracesRequired (false).indentRequired (false)));
   }
 }

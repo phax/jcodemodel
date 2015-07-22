@@ -55,10 +55,10 @@ import com.helger.jcodemodel.JFormatter;
  *
  * @author Aleksei Valikov
  */
-public final class CodeModelTestsUtils
+public final class CodeModelTestsHelper
 {
   /** Hidden constructor. */
-  private CodeModelTestsUtils ()
+  private CodeModelTestsHelper ()
   {}
 
   /**
