@@ -146,6 +146,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
       return null;
 
     final int idx = m_sName.lastIndexOf ('.');
+    if (idx < 0)
+      return null;
     return m_aOwner._package (m_sName.substring (0, idx));
   }
 
@@ -183,7 +185,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   }
 
   @Nonnull
-  public JDefinedClass _class (final int nMods, @Nonnull final String sName, @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int nMods,
+                               @Nonnull final String sName,
+                               @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
   {
     if (m_aClasses.containsKey (sName))
       throw new JClassAlreadyExistsException (m_aClasses.get (sName));
@@ -267,7 +271,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _annotationTypeDeclaration (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
+  public JDefinedClass _annotationTypeDeclaration (final int mods,
+                                                   @Nonnull final String name) throws JClassAlreadyExistsException
   {
     return _class (mods, name, EClassType.ANNOTATION_TYPE_DECL);
   }
@@ -369,8 +374,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   public void remove (@Nonnull final AbstractJClass c)
   {
     if (c._package () != this)
-      throw new IllegalArgumentException ("the specified class is not a member of this package,"
-                                          + " or it is a referenced class");
+      throw new IllegalArgumentException ("the specified class is not a member of this package," +
+                                          " or it is a referenced class");
 
     // note that c may not be a member of classes.
     // this happens when someone is trying to remove a non generated class
@@ -607,7 +612,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   }
 
   @Nonnull
-  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter src, @Nonnull final String className) throws IOException
+  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter src,
+                                                  @Nonnull final String className) throws IOException
   {
     final Writer bw = new BufferedWriter (src.openSource (this, className + ".java"));
     return new JFormatter (new PrintWriter (bw));
