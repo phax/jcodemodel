@@ -11,7 +11,8 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 News and noteworthy:
 
-* 2015-xx-yy: Release 2.7.10 - Synchronized block added; initial support for lambda expressions
+* 2015-xx-yy: Release 2.7.11 - Bugfix release
+* 2015-06-30: Release 2.7.10 - Synchronized block added; initial support for lambda expressions
 * 2015-03-19: Release 2.7.9 - Minor extensions for error types
 * 2015-02-05: Release 2.7.8 - Enum constants for annotation parameters
 * 2014-09-17: Release 2.7.7 - mainly API extensions
