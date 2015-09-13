@@ -591,12 +591,29 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Create a sub-block and add it to this block
+   * Create a sub-block and add it to this block. By default braces and indent
+   * are required.
+   * 
+   * @see #block(boolean, boolean)
+   * @see #blockSimple()
    */
   @Nonnull
   public JBlock block ()
   {
     return _insert (new JBlock ());
+  }
+
+  /**
+   * Create a sub-block and add it to this block. By default braces and indent
+   * are not required.
+   * 
+   * @see #block()
+   * @see #block(boolean, boolean)
+   */
+  @Nonnull
+  public JBlock blockSimple ()
+  {
+    return block (false, false);
   }
 
   /**
@@ -606,6 +623,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        <code>true</code> if braces should be required
    * @param bIndentRequired
    *        <code>true</code> if indentation is required
+   * @see #block()
+   * @see #blockSimple()
    */
   @Nonnull
   public JBlock block (final boolean bBracesRequired, final boolean bIndentRequired)
