@@ -600,6 +600,20 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
+   * Create a sub-block and add it to this block
+   *
+   * @param bBracesRequired
+   *        <code>true</code> if braces should be required
+   * @param bIndentRequired
+   *        <code>true</code> if indentation is required
+   */
+  @Nonnull
+  public JBlock block (final boolean bBracesRequired, final boolean bIndentRequired)
+  {
+    return _insert (new JBlock ().bracesRequired (bBracesRequired).indentRequired (bIndentRequired));
+  }
+
+  /**
    * Creates an enhanced For statement based on j2se 1.5 JLS and add it to this
    * block
    *
