@@ -84,7 +84,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
    */
   private List <IJExpression> _args;
 
-  protected JEnumConstant (@Nonnull final JDefinedClass type, @Nonnull final String name)
+  public JEnumConstant (@Nonnull final JDefinedClass type, @Nonnull final String name)
   {
     if (type == null)
       throw new NullPointerException ("type");
