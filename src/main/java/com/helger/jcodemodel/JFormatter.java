@@ -53,6 +53,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.NullWriter;
@@ -61,6 +62,7 @@ import com.helger.jcodemodel.util.NullWriter;
  * This is a utility class for managing indentation and other basic formatting
  * for PrintWriter.
  */
+@NotThreadSafe
 public class JFormatter implements Closeable
 {
   public static boolean containsErrorTypes (@Nonnull final JDefinedClass c)
@@ -74,23 +76,23 @@ public class JFormatter implements Closeable
 
   private static enum EMode
   {
-    /**
-     * Collect all the type names and identifiers. In this mode we don't
-     * actually generate anything.
-     */
+   /**
+    * Collect all the type names and identifiers. In this mode we don't actually
+    * generate anything.
+    */
     COLLECTING,
-    /**
-     * Print the actual source code.
-     */
+   /**
+    * Print the actual source code.
+    */
     PRINTING,
 
-    /**
-     * Find any error types in output code. In this mode we don't actually
-     * generate anything.
-     * <p>
-     * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass)
-     * containsErrorTypes} method
-     */
+   /**
+    * Find any error types in output code. In this mode we don't actually
+    * generate anything.
+    * <p>
+    * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass)
+    * containsErrorTypes} method
+    */
     FIND_ERROR_TYPES
   }
 

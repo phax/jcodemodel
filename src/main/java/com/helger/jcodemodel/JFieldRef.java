@@ -171,6 +171,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     return _explicitThis;
   }
 
+  @Nonnull
   public JFieldRef explicitThis (final boolean explicitThis)
   {
     this._explicitThis = explicitThis;
@@ -182,7 +183,13 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     final String name = name ();
 
     if (_object != null)
-      f.generable (_object).print ('.').print (name);
+    {
+      if (_object instanceof AbstractJType)
+        f.type ((AbstractJType) _object);
+      else
+        f.generable (_object);
+      f.print ('.').print (name);
+    }
     else
       if (_explicitThis)
         f.print ("this.").print (name);
@@ -198,13 +205,15 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     if (o == null || getClass () != o.getClass ())
       return false;
     final JFieldRef rhs = (JFieldRef) o;
-    return isEqual (_object, rhs._object) && isEqual (name (), rhs.name ());
+    return isEqual (_object, rhs._object) &&
+           isEqual (name (), rhs.name ()) &&
+           isEqual (_explicitThis, rhs._explicitThis);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _object, name ());
+    return getHashCode (this, _object, name (), Boolean.valueOf (_explicitThis));
   }
 
   @Override

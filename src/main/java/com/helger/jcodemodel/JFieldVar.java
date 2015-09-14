@@ -113,4 +113,12 @@ public class JFieldVar extends JVar implements IJDocCommentable
       f.generable (_jdoc);
     super.declare (f);
   }
+
+  @Override
+  public void generate (@Nonnull final JFormatter f)
+  {
+    // Ensure the type is collected - see issue #30
+    f.type (_owner).print ('.');
+    super.generate (f);
+  }
 }
