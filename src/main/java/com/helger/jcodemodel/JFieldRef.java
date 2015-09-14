@@ -46,10 +46,6 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.util.JCStringUtils;
-
 /**
  * Field Reference
  */
@@ -61,7 +57,7 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
    * Object expression upon which this field will be accessed, or null for the
    * implicit 'this'.
    */
-  private IJGenerable _object;
+  private final IJGenerable _object;
 
   /**
    * Name of the field to be accessed. Either this or {@link #_var} is set.
@@ -214,46 +210,5 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
   public int hashCode ()
   {
     return getHashCode (this, _object, name (), Boolean.valueOf (_explicitThis));
-  }
-
-  @Override
-  AbstractJType derivedType ()
-  {
-    if (_var != null)
-    {
-      return _var.type ();
-    }
-    return null;
-  }
-
-  @Override
-  String derivedName ()
-  {
-    if (_object instanceof IJExpression)
-    {
-      return ((IJExpression) _object).expressionName () + JCStringUtils.upper (name ());
-    }
-    return name ();
-  }
-
-  @Override
-  public boolean forAllSubExpressions (final ExpressionCallback callback)
-  {
-    if (_object instanceof IJExpression)
-    {
-      return visitWithSubExpressions (callback, new ExpressionAccessor ()
-      {
-        public void set (final IJExpression newExpression)
-        {
-          _object = newExpression;
-        }
-
-        public IJExpression get ()
-        {
-          return (IJExpression) _object;
-        }
-      });
-    }
-    return true;
   }
 }

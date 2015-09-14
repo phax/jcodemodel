@@ -40,18 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
-
 import javax.annotation.Nonnull;
-
-import com.helger.jcodemodel.optimize.BranchingStatement;
-import com.helger.jcodemodel.optimize.BranchingStatementVisitor;
 
 /**
  * If statement, with optional else clause
  */
-public class JConditional implements IJStatement, BranchingStatement
+public class JConditional implements IJStatement
 {
   /**
    * Expression to test to determine branching
@@ -113,7 +107,7 @@ public class JConditional implements IJStatement, BranchingStatement
 
   /**
    * Creates <tt>... else if(...) ...</tt> code.
-   * 
+   *
    * @param aTestExpr
    *        The test expression for the new if
    */
@@ -148,11 +142,5 @@ public class JConditional implements IJStatement, BranchingStatement
     if (m_aElseBlock != null)
       f.print ("else").generable (m_aElseBlock);
     f.newline ();
-  }
-
-  public void apply (final BranchingStatementVisitor visitor)
-  {
-    visitor.visit (m_aTestExpr);
-    visitor.visit (m_aElseBlock != null ? asList (m_aThenBlock, m_aElseBlock) : singletonList (m_aThenBlock));
   }
 }

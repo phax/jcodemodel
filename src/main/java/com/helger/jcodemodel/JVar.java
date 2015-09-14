@@ -259,16 +259,4 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   {
     return getHashCode (this, m_sName);
   }
-
-  @Override
-  AbstractJType derivedType ()
-  {
-    return m_aType;
-  }
-
-  @Override
-  String derivedName ()
-  {
-    return name ();
-  }
 }

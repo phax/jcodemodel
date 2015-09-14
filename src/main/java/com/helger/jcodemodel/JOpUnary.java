@@ -47,47 +47,47 @@ import javax.annotation.Nonnull;
 
 public class JOpUnary extends AbstractJExpressionImpl
 {
-  private final String _op;
-  private final IJExpression _e;
-  private final boolean opFirst;
+  private final String m_sOperator;
+  private final IJExpression m_aExpr;
+  private final boolean m_bOperatorComesFirst;
 
   protected JOpUnary (@Nonnull final String op, @Nonnull final IJExpression e)
   {
-    this._op = op;
-    this._e = e;
-    opFirst = true;
+    m_sOperator = op;
+    m_aExpr = e;
+    m_bOperatorComesFirst = true;
   }
 
   protected JOpUnary (@Nonnull final IJExpression e, @Nonnull final String op)
   {
-    this._op = op;
-    this._e = e;
-    opFirst = false;
+    m_sOperator = op;
+    m_aExpr = e;
+    m_bOperatorComesFirst = false;
   }
 
   @Nonnull
   public String op ()
   {
-    return _op;
+    return m_sOperator;
   }
 
   @Nonnull
   public IJExpression expr ()
   {
-    return _e;
+    return m_aExpr;
   }
 
   public boolean opFirst ()
   {
-    return opFirst;
+    return m_bOperatorComesFirst;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (opFirst)
-      f.print ('(').print (_op).generable (_e).print (')');
+    if (m_bOperatorComesFirst)
+      f.print ('(').print (m_sOperator).generable (m_aExpr).print (')');
     else
-      f.print ('(').generable (_e).print (_op).print (')');
+      f.print ('(').generable (m_aExpr).print (m_sOperator).print (')');
   }
 
   @Override
@@ -98,12 +98,14 @@ public class JOpUnary extends AbstractJExpressionImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JOpUnary rhs = (JOpUnary) o;
-    return isEqual (_op, rhs._op) && isEqual (_e, rhs._e) && isEqual (opFirst, rhs.opFirst);
+    return isEqual (m_sOperator, rhs.m_sOperator) &&
+           isEqual (m_aExpr, rhs.m_aExpr) &&
+           isEqual (m_bOperatorComesFirst, rhs.m_bOperatorComesFirst);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _op, _e, Boolean.valueOf (opFirst));
+    return getHashCode (this, m_sOperator, m_aExpr, Boolean.valueOf (m_bOperatorComesFirst));
   }
 }

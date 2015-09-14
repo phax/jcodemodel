@@ -52,21 +52,21 @@ public class JAtomLong extends AbstractJExpressionImpl
 {
   public static final String SUFFIX_LONG = "L";
 
-  private final long _what;
+  private final long m_nValue;
 
   protected JAtomLong (final long what)
   {
-    this._what = what;
+    m_nValue = what;
   }
 
   public long what ()
   {
-    return _what;
+    return m_nValue;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (Long.toString (_what) + SUFFIX_LONG);
+    f.print (Long.toString (m_nValue) + SUFFIX_LONG);
   }
 
   @Override
@@ -77,12 +77,12 @@ public class JAtomLong extends AbstractJExpressionImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtomLong rhs = (JAtomLong) o;
-    return isEqual (_what, rhs._what);
+    return isEqual (m_nValue, rhs.m_nValue);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, Long.valueOf (_what));
+    return getHashCode (this, Long.valueOf (m_nValue));
   }
 }

@@ -45,16 +45,13 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-
 /**
  * Assignment statements, which are also expressions.
  */
 public class JAssignment extends AbstractJExpressionImpl implements IJExpressionStatement
 {
   private final IJAssignmentTarget _lhs;
-  private IJExpression _rhs;
+  private final IJExpression _rhs;
   private final String _op;
 
   /**
@@ -135,41 +132,5 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
   public int hashCode ()
   {
     return getHashCode (this, _lhs, _rhs, _op);
-  }
-
-  @Override
-  AbstractJType derivedType ()
-  {
-    final AbstractJType type = _lhs.expressionType ();
-    if (type != null)
-      return type;
-    return _rhs.expressionType ();
-  }
-
-  @Override
-  String derivedName ()
-  {
-    return _lhs.expressionName () + "AssignedTo" + _rhs.expressionName ();
-  }
-
-  @Override
-  public boolean forAllSubExpressions (final ExpressionCallback callback)
-  {
-    if (!_lhs.forAllSubExpressions (callback))
-      return false;
-    if (!callback.visitAssignmentTarget (_lhs))
-      return false;
-    return visitWithSubExpressions (callback, new ExpressionAccessor ()
-    {
-      public void set (final IJExpression newExpression)
-      {
-        _rhs = newExpression;
-      }
-
-      public IJExpression get ()
-      {
-        return _rhs;
-      }
-    });
   }
 }

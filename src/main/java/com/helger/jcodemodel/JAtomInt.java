@@ -50,21 +50,21 @@ import javax.annotation.Nonnull;
  */
 public class JAtomInt extends AbstractJExpressionImpl
 {
-  private final int _what;
+  private final int m_nValue;
 
   protected JAtomInt (final int what)
   {
-    this._what = what;
+    this.m_nValue = what;
   }
 
   public int what ()
   {
-    return _what;
+    return m_nValue;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (Integer.toString (_what));
+    f.print (Integer.toString (m_nValue));
   }
 
   @Override
@@ -75,18 +75,12 @@ public class JAtomInt extends AbstractJExpressionImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtomInt rhs = (JAtomInt) o;
-    return isEqual (_what, rhs._what);
+    return isEqual (m_nValue, rhs.m_nValue);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, Integer.valueOf (_what));
-  }
-
-  @Override
-  AbstractJType derivedType ()
-  {
-    return JPrimitiveType.INT;
+    return getHashCode (this, Integer.valueOf (m_nValue));
   }
 }

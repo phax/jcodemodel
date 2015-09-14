@@ -50,17 +50,13 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.util.JCStringUtils;
-
 /**
  * array creation and initialization.
  */
 public class JArray extends AbstractJExpressionImpl
 {
   private final AbstractJType _type;
-  private IJExpression _size;
+  private final IJExpression _size;
   private List <IJExpression> _exprs;
 
   protected JArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
@@ -169,57 +165,5 @@ public class JArray extends AbstractJExpressionImpl
   public int hashCode ()
   {
     return getHashCode (this, _type.fullName (), _size, _exprs);
-  }
-
-  @Override
-  AbstractJType derivedType ()
-  {
-    return _type.array ();
-  }
-
-  @Override
-  String derivedName ()
-  {
-    return JCStringUtils.lower (_type.name ()) + "ArrayOfSize" + _size.expressionName ();
-  }
-
-  @Override
-  public boolean forAllSubExpressions (final ExpressionCallback callback)
-  {
-    if (_size != null)
-    {
-      if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
-      {
-        public void set (final IJExpression newExpression)
-        {
-          _size = newExpression;
-        }
-
-        public IJExpression get ()
-        {
-          return _size;
-        }
-      }))
-        return false;
-    }
-    for (int i = 0; i < (_exprs != null ? _exprs.size () : 0); i++)
-    {
-      final IJExpression expr = _exprs.get (i);
-      final int finalI = i;
-      if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
-      {
-        public void set (final IJExpression newExpression)
-        {
-          _exprs.set (finalI, newExpression);
-        }
-
-        public IJExpression get ()
-        {
-          return _exprs.get (finalI);
-        }
-      }))
-        return false;
-    }
-    return true;
   }
 }

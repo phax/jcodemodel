@@ -42,23 +42,18 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.optimize.ExpressionAccessor;
-import com.helger.jcodemodel.optimize.ExpressionCallback;
-import com.helger.jcodemodel.optimize.ExpressionContainer;
-import com.helger.jcodemodel.optimize.Loop;
-
 /**
  * ForEach Statement This will generate the code for statement based on the new
  * j2se 1.5 j.l.s.
  *
  * @author Bhakti
  */
-public class JForEach implements IJStatement, Loop
+public class JForEach implements IJStatement
 {
   private final AbstractJType m_aType;
   private final String m_sVarName;
   private JBlock m_aBody; // lazily created
-  private IJExpression m_aCollection;
+  private final IJExpression m_aCollection;
   private final JVar m_aLopVar;
 
   protected JForEach (@Nonnull final AbstractJType aVarType,
@@ -97,39 +92,6 @@ public class JForEach implements IJStatement, Loop
   public IJExpression collection ()
   {
     return m_aCollection;
-  }
-
-  public ExpressionContainer statementsExecutedOnce ()
-  {
-    return new ExpressionContainer ()
-    {
-      public boolean forAllSubExpressions (final ExpressionCallback callback)
-      {
-        return AbstractJExpressionImpl.visitWithSubExpressions (callback, new ExpressionAccessor ()
-        {
-          public void set (final IJExpression newExpression)
-          {
-            m_aCollection = newExpression;
-          }
-
-          public IJExpression get ()
-          {
-            return m_aCollection;
-          }
-        });
-      }
-    };
-  }
-
-  public ExpressionContainer statementsExecutedOnEachIteration ()
-  {
-    return new ExpressionContainer ()
-    {
-      public boolean forAllSubExpressions (final ExpressionCallback callback)
-      {
-        return callback.visitAssignmentTarget (m_aLopVar);
-      }
-    };
   }
 
   @Nonnull

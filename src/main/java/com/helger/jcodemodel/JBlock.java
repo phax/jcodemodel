@@ -216,12 +216,6 @@ public class JBlock implements IJGenerable, IJStatement
     return decl (JMod.NONE, type, name, null);
   }
 
-  @Nonnull
-  public JVar decl (@Nonnull final String name, @Nonnull final IJExpression init)
-  {
-    return decl (JMod.NONE, init.expressionType (), name, init);
-  }
-
   /**
    * Adds a local variable declaration to this block
    *

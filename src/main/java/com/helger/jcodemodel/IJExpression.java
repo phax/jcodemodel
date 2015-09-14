@@ -42,8 +42,6 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.optimize.ExpressionContainer;
-
 /**
  * A Java expression.
  * <p>
@@ -56,7 +54,7 @@ import com.helger.jcodemodel.optimize.ExpressionContainer;
  * parameters. For example, you can build "5+2" by
  * <tt>JExpr.lit(5).add(JExpr.lit(2))</tt>
  */
-public interface IJExpression extends IJGenerable, ExpressionContainer
+public interface IJExpression extends IJGenerable
 {
   /**
    * @return <code>-[this]" from "[this]</code>.
@@ -453,15 +451,4 @@ public interface IJExpression extends IJGenerable, ExpressionContainer
    */
   @Nonnull
   JArrayCompRef component0 ();
-
-  /**
-   * Two instances of <code>IJExpression</code> should be considered equal if
-   * their unwrapped forms represent expressions eligible for common
-   * subexpression elimination.
-   */
-  boolean equals (Object o);
-
-  String expressionName ();
-
-  AbstractJType expressionType ();
 }
