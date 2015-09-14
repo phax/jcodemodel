@@ -224,7 +224,7 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JEnumConstantRef enumConstantRef (@Nonnull final JDefinedClass type, @Nonnull final String name)
+  public static JEnumConstantRef enumConstantRef (@Nonnull final AbstractJClass type, @Nonnull final String name)
   {
     return new JEnumConstantRef (type, name);
   }
