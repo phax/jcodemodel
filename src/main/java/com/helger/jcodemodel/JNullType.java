@@ -56,9 +56,9 @@ import javax.annotation.Nullable;
  */
 public final class JNullType extends AbstractJClass
 {
-  protected JNullType (@Nonnull final JCodeModel _owner)
+  protected JNullType (@Nonnull final JCodeModel aOwner)
   {
-    super (_owner);
+    super (aOwner);
   }
 
   @Override

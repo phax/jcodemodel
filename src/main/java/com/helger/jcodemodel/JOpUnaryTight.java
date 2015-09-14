@@ -44,14 +44,14 @@ import javax.annotation.Nonnull;
 
 public class JOpUnaryTight extends JOpUnary
 {
-  protected JOpUnaryTight (@Nonnull final IJExpression e, @Nonnull final String op)
+  protected JOpUnaryTight (@Nonnull final IJExpression aExpr, @Nonnull final String sOperator)
   {
-    super (e, op);
+    super (aExpr, sOperator);
   }
 
-  protected JOpUnaryTight (@Nonnull final String op, @Nonnull final IJExpression e)
+  protected JOpUnaryTight (@Nonnull final String sOperator, @Nonnull final IJExpression aExpr)
   {
-    super (op, e);
+    super (sOperator, aExpr);
   }
 
   @Override

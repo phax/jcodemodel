@@ -49,7 +49,7 @@ import javax.annotation.Nullable;
  * @author Philip Helger
  * @since 2.7.10
  */
-public final class JLambdaParam extends AbstractJExpressionAssignmentTargetImpl implements IJDeclaration
+public class JLambdaParam extends AbstractJExpressionAssignmentTargetImpl implements IJDeclaration
 {
   private final AbstractJType m_aType;
   private final String m_sName;

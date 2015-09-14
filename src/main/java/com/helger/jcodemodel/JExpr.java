@@ -142,7 +142,7 @@ public final class JExpr
   @Nonnull
   public static JOpUnaryTight incr (@Nonnull final IJExpression expression)
   {
-    return JOp.incr (expression);
+    return JOp.postincr (expression);
   }
 
   @Nonnull
@@ -154,7 +154,7 @@ public final class JExpr
   @Nonnull
   public static JOpUnaryTight decr (@Nonnull final IJExpression expression)
   {
-    return JOp.decr (expression);
+    return JOp.postdecr (expression);
   }
 
   @Nonnull

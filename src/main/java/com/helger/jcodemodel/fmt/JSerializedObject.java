@@ -43,6 +43,7 @@ package com.helger.jcodemodel.fmt;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 
 import javax.annotation.Nonnull;
 
@@ -54,16 +55,16 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  */
 public class JSerializedObject extends AbstractJResourceFile
 {
-  private final Object _obj;
+  private final Serializable m_aObj;
 
   /**
    * @exception IOException
    *            If the serialization fails, this exception is thrown
    */
-  public JSerializedObject (@Nonnull final String name, @Nonnull final Object obj) throws IOException
+  public JSerializedObject (@Nonnull final String name, @Nonnull final Serializable obj) throws IOException
   {
     super (name);
-    this._obj = obj;
+    m_aObj = obj;
   }
 
   /**
@@ -74,7 +75,7 @@ public class JSerializedObject extends AbstractJResourceFile
   {
     // serialize the obj into a ByteArrayOutputStream
     final ObjectOutputStream oos = new ObjectOutputStream (os);
-    oos.writeObject (_obj);
+    oos.writeObject (m_aObj);
     oos.close ();
   }
 }

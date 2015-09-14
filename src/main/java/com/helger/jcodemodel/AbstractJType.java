@@ -122,7 +122,9 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    */
   public abstract JArrayClass array ();
 
-  /** Tell whether or not this is an array type. */
+  /**
+   * Tell whether or not this is an array type.
+   */
   public boolean isArray ()
   {
     return false;
@@ -154,7 +156,10 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * <tt>this</tt>.
    * <p>
    * For example, for "int", this method returns "java.lang.Integer".
+   *
+   * @return Never <code>null</code>
    */
+  @Nonnull
   public abstract AbstractJClass boxify ();
 
   /**
@@ -162,7 +167,10 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * Otherwise return <tt>this</tt>.
    * <p>
    * For example, for "java.lang.Integer", this method returns "int".
+   *
+   * @return Never <code>null</code>
    */
+  @Nonnull
   public abstract AbstractJType unboxify ();
 
   /**
@@ -186,11 +194,18 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   }
 
   /**
-   * If this is an array, returns the component type of the array. (T of T[])
+   * If this is an array, returns the component type of the array (T of T[]).
+   * Important: call this method only if you check that this is an array type (
+   * {@link #isArray()}).
+   * 
+   * @return Never <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If this is not an array type
    */
+  @Nonnull
   public AbstractJType elementType ()
   {
-    throw new IllegalArgumentException ("Not an array type");
+    throw new IllegalArgumentException ("Not an array type: " + fullName ());
   }
 
   @Override
@@ -202,7 +217,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   /**
    * Checks the relationship between two types.
    * <p>
-   * This method performes superset of actions that are performed by
+   * This method performs superset of actions that are performed by
    * {@link Class#isAssignableFrom(Class)} For example,
    * baseClass.isAssignableFrom(derivedClass) is always true.
    * <p>
@@ -234,7 +249,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     return isAssignableFrom (that, true);
   }
 
-  protected boolean isAssignableFrom (final AbstractJType that, final boolean allowsRawTypeUnchekedConversion)
+  protected boolean isAssignableFrom (final AbstractJType that, final boolean bAllowsRawTypeUnchekedConversion)
   {
     if (isError () || that.isError ())
       return false;
@@ -266,7 +281,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
 
         // Raw classes unchecked conversion: i. e. List<T> list1 = (List)list2
         if (!thatClass.isParameterized ())
-          return allowsRawTypeUnchekedConversion;
+          return bAllowsRawTypeUnchekedConversion;
 
         for (int i = 0; i < thisClass.getTypeParameters ().size (); i++)
         {

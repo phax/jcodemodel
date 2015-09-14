@@ -58,16 +58,16 @@ public enum EClassType
   /**
    * The keyword used to declare this type.
    */
-  private final String _declarationToken;
+  private final String m_sDeclarationToken;
 
-  private EClassType (@Nonnull final String token)
+  private EClassType (@Nonnull final String sDeclarationToken)
   {
-    _declarationToken = token;
+    m_sDeclarationToken = sDeclarationToken;
   }
 
   @Nonnull
   public String declarationToken ()
   {
-    return _declarationToken;
+    return m_sDeclarationToken;
   }
 }

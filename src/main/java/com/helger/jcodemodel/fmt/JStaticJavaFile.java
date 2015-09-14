@@ -61,6 +61,7 @@ import com.helger.jcodemodel.AbstractJResourceFile;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.util.JCSecureLoader;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Statically generated Java soruce file.
@@ -86,30 +87,31 @@ public class JStaticJavaFile extends AbstractJResourceFile
 {
   private final JPackage m_aPkg;
   private final String m_sClassName;
-  private final URL _source;
-  private final JStaticClass _clazz;
-  private final ILineFilter _filter;
+  private final URL m_aSource;
+  private final JStaticClass m_aClazz;
+  private final ILineFilter m_aFilter;
 
-  public JStaticJavaFile (@Nonnull final JPackage pkg,
-                          @Nonnull final String className,
-                          @Nonnull final String resourceName)
+  public JStaticJavaFile (@Nonnull final JPackage aPkg,
+                          @Nonnull final String sClassName,
+                          @Nonnull final String sResourceName)
   {
-    this (pkg, className, JCSecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (resourceName), null);
+    this (aPkg,
+          sClassName,
+          JCSecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (sResourceName),
+          null);
   }
 
-  public JStaticJavaFile (@Nonnull final JPackage pkg,
-                          @Nonnull final String className,
-                          @Nonnull final URL source,
-                          @Nullable final ILineFilter filter)
+  public JStaticJavaFile (@Nonnull final JPackage aPkg,
+                          @Nonnull final String sClassName,
+                          @Nonnull final URL aSource,
+                          @Nullable final ILineFilter aFilter)
   {
-    super (className + ".java");
-    if (source == null)
-      throw new NullPointerException ();
-    this.m_aPkg = pkg;
-    this._clazz = new JStaticClass ();
-    this.m_sClassName = className;
-    this._source = source;
-    this._filter = filter;
+    super (sClassName + ".java");
+    m_aPkg = JCValueEnforcer.notNull (aPkg, "Package");
+    m_aClazz = new JStaticClass ();
+    m_sClassName = JCValueEnforcer.notEmpty (sClassName, "ClassName");
+    m_aSource = JCValueEnforcer.notNull (aSource, "Source");
+    m_aFilter = aFilter;
   }
 
   /**
@@ -118,7 +120,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
   @Nonnull
   public final AbstractJClass getJClass ()
   {
-    return _clazz;
+    return m_aClazz;
   }
 
   @Override
@@ -130,7 +132,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
   @Override
   protected void build (@Nonnull final OutputStream os) throws IOException
   {
-    final InputStream is = _source.openStream ();
+    final InputStream is = m_aSource.openStream ();
 
     final BufferedReader r = new BufferedReader (new InputStreamReader (is));
     final PrintWriter w = new PrintWriter (new BufferedWriter (new OutputStreamWriter (os)));
@@ -150,7 +152,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
     }
     catch (final ParseException e)
     {
-      throw new IOException ("unable to process " + _source + " line:" + lineNumber + "\n" + e.getMessage ());
+      throw new IOException ("unable to process " + m_aSource + " line:" + lineNumber + "\n" + e.getMessage ());
     }
 
     w.close ();
@@ -182,8 +184,8 @@ public class JStaticJavaFile extends AbstractJResourceFile
         return line;
       }
     };
-    if (_filter != null)
-      return new ChainFilter (_filter, f);
+    if (m_aFilter != null)
+      return new ChainFilter (m_aFilter, f);
     return f;
   }
 

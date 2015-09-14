@@ -53,16 +53,16 @@ import com.helger.jcodemodel.JPackage;
 /**
  * Writes all the source files under the specified file folder and inserts a
  * file prolog comment in each java source file.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class PrologCodeWriter extends FilterCodeWriter
 {
   /** prolog comment */
-  private final String _prolog;
+  private final String m_sProlog;
 
   /**
-   * @param core
+   * @param aCore
    *        This CodeWriter will be used to actually create a storage for files.
    *        PrologCodeWriter simply decorates this underlying CodeWriter by
    *        adding prolog comments.
@@ -72,10 +72,10 @@ public class PrologCodeWriter extends FilterCodeWriter
    *        the beginning of each line to make it a valid Java comment, so the
    *        caller can just pass strings like "abc\ndef"
    */
-  public PrologCodeWriter (@Nonnull final AbstractCodeWriter core, @Nullable final String prolog)
+  public PrologCodeWriter (@Nonnull final AbstractCodeWriter aCore, @Nullable final String prolog)
   {
-    super (core);
-    this._prolog = prolog;
+    super (aCore);
+    m_sProlog = prolog;
   }
 
   @Override
@@ -86,11 +86,11 @@ public class PrologCodeWriter extends FilterCodeWriter
     final PrintWriter out = new PrintWriter (w);
 
     // write prolog if this is a java source file
-    if (_prolog != null)
+    if (m_sProlog != null)
     {
       out.println ("//");
 
-      String s = _prolog;
+      String s = m_sProlog;
       int idx;
       while ((idx = s.indexOf ('\n')) != -1)
       {
@@ -100,8 +100,9 @@ public class PrologCodeWriter extends FilterCodeWriter
       out.println ("//");
       out.println ();
     }
-    out.flush (); // we can't close the stream for that would close the
-                  // undelying stream.
+    // we can't close the stream for that would close the
+    // underlying stream.
+    out.flush ();
 
     return w;
   }

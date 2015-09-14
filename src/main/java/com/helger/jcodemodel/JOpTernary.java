@@ -45,60 +45,68 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 public class JOpTernary extends AbstractJExpressionImpl
 {
-  private final IJExpression _e1;
-  private final String _op1;
-  private final IJExpression _e2;
-  private final String _op2;
-  private final IJExpression _e3;
+  private final IJExpression m_aExpr1;
+  private final String m_sOperator1;
+  private final IJExpression m_aExpr2;
+  private final String m_sOperator2;
+  private final IJExpression m_aExpr3;
 
-  protected JOpTernary (@Nonnull final IJExpression e1,
-                        @Nonnull final String op1,
-                        @Nonnull final IJExpression e2,
-                        @Nonnull final String op2,
-                        @Nonnull final IJExpression e3)
+  protected JOpTernary (@Nonnull final IJExpression aExpr1,
+                        @Nonnull final String sOperator1,
+                        @Nonnull final IJExpression aExpr2,
+                        @Nonnull final String sOperator2,
+                        @Nonnull final IJExpression aExpr3)
   {
-    this._e1 = e1;
-    this._op1 = op1;
-    this._e2 = e2;
-    this._op2 = op2;
-    this._e3 = e3;
+    m_aExpr1 = JCValueEnforcer.notNull (aExpr1, "Expr1");
+    m_sOperator1 = JCValueEnforcer.notNull (sOperator1, "Operator1");
+    m_aExpr2 = JCValueEnforcer.notNull (aExpr2, "Expr2");
+    m_sOperator2 = JCValueEnforcer.notNull (sOperator2, "Operator2");
+    m_aExpr3 = JCValueEnforcer.notNull (aExpr3, "Expr3");
   }
 
   @Nonnull
   public IJExpression expr1 ()
   {
-    return _e1;
+    return m_aExpr1;
   }
 
   @Nonnull
   public String op1 ()
   {
-    return _op1;
+    return m_sOperator1;
   }
 
   @Nonnull
   public IJGenerable expr2 ()
   {
-    return _e2;
+    return m_aExpr2;
   }
 
   @Nonnull
   public String op2 ()
   {
-    return _op2;
+    return m_sOperator2;
   }
 
   @Nonnull
   public IJGenerable expr3 ()
   {
-    return _e3;
+    return m_aExpr3;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print ('(').generable (_e1).print (_op1).generable (_e2).print (_op2).generable (_e3).print (')');
+    f.print ('(')
+     .generable (m_aExpr1)
+     .print (m_sOperator1)
+     .generable (m_aExpr2)
+     .print (m_sOperator2)
+     .generable (m_aExpr3)
+     .print (')');
   }
 
   @Override
@@ -109,16 +117,16 @@ public class JOpTernary extends AbstractJExpressionImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JOpTernary rhs = (JOpTernary) o;
-    return isEqual (_e1, rhs._e1) &&
-           isEqual (_op1, rhs._op1) &&
-           isEqual (_e2, rhs._e2) &&
-           isEqual (_op2, rhs._op2) &&
-           isEqual (_e3, rhs._e3);
+    return isEqual (m_aExpr1, rhs.m_aExpr1) &&
+           isEqual (m_sOperator1, rhs.m_sOperator1) &&
+           isEqual (m_aExpr2, rhs.m_aExpr2) &&
+           isEqual (m_sOperator2, rhs.m_sOperator2) &&
+           isEqual (m_aExpr3, rhs.m_aExpr3);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _e1, _op1, _e2, _op2, _e3);
+    return getHashCode (this, m_aExpr1, m_sOperator1, m_aExpr2, m_sOperator2, m_aExpr3);
   }
 }

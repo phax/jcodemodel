@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Label that can be used for continue and break.
  *
@@ -49,27 +51,27 @@ import javax.annotation.Nonnull;
  */
 public class JLabel implements IJStatement
 {
-  private final String _label;
+  private final String m_sLabel;
 
   /**
    * JLabel constructor
    *
-   * @param label
+   * @param sLabel
    *        label name.
    */
-  protected JLabel (@Nonnull final String label)
+  protected JLabel (@Nonnull final String sLabel)
   {
-    _label = label;
+    m_sLabel = JCValueEnforcer.notNull (sLabel, "Label");
   }
 
   @Nonnull
   public String label ()
   {
-    return _label;
+    return m_sLabel;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
-    f.print (_label + ':').newline ();
+    f.print (m_sLabel + ':').newline ();
   }
 }

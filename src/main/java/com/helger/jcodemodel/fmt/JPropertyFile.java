@@ -53,7 +53,7 @@ import com.helger.jcodemodel.AbstractJResourceFile;
  */
 public class JPropertyFile extends AbstractJResourceFile
 {
-  private final Properties _data = new Properties ();
+  private final Properties m_aProps = new Properties ();
 
   public JPropertyFile (@Nonnull final String name)
   {
@@ -62,20 +62,16 @@ public class JPropertyFile extends AbstractJResourceFile
 
   /**
    * Adds key/value pair into the property file. If you call this method twice
-   * with the same key, the old one is overriden by the new one.
+   * with the same key, the old one is overridden by the new one.
    */
-  public void add (@Nonnull final String key, @Nonnull final String value)
+  public void add (@Nonnull final String sKey, @Nonnull final String sValue)
   {
-    _data.put (key, value);
+    m_aProps.put (sKey, sValue);
   }
-
-  // TODO: method to iterate values in data?
-  // TODO: should we rather expose Properties object directly via
-  // public Properties body() { return data; } ?
 
   @Override
   public void build (@Nonnull final OutputStream out) throws IOException
   {
-    _data.store (out, null);
+    m_aProps.store (out, null);
   }
 }

@@ -53,12 +53,12 @@ import com.helger.jcodemodel.AbstractJResourceFile;
 
 /**
  * Simple text file.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JTextFile extends AbstractJResourceFile
 {
-  private String _contents;
+  private String m_sContents;
 
   public JTextFile (@Nonnull final String name)
   {
@@ -67,22 +67,23 @@ public class JTextFile extends AbstractJResourceFile
 
   public void setContents (@Nullable final String contents)
   {
-    _contents = contents;
+    m_sContents = contents;
   }
 
   @Nullable
   public String contents ()
   {
-    return _contents;
+    return m_sContents;
   }
 
   @Override
   public void build (@Nonnull @WillClose final OutputStream out) throws IOException
   {
+    // XXX missing encoding
     final Writer w = new OutputStreamWriter (out);
     try
     {
-      w.write (_contents);
+      w.write (m_sContents);
     }
     finally
     {

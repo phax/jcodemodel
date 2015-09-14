@@ -56,42 +56,44 @@ import com.helger.jcodemodel.JPackage;
 
 /**
  * Writes all the source files under the specified file folder.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class FileCodeWriter extends AbstractCodeWriter
 {
   /** The target directory to put source code. */
-  private final File _target;
+  private final File m_aTargetDir;
 
   /** specify whether or not to mark the generated files read-only */
-  private final boolean _readOnly;
+  private final boolean m_bMarkReadOnly;
 
   /** Files that shall be marked as read only. */
-  private final Set <File> _readonlyFiles = new HashSet <File> ();
+  private final Set <File> m_aReadOnlyFiles = new HashSet <File> ();
 
-  public FileCodeWriter (@Nonnull final File target) throws IOException
+  public FileCodeWriter (@Nonnull final File aTargetDir) throws IOException
   {
-    this (target, false);
+    this (aTargetDir, false);
   }
 
-  public FileCodeWriter (@Nonnull final File target, @Nullable final Charset encoding) throws IOException
+  public FileCodeWriter (@Nonnull final File aTargetDir, @Nullable final Charset encoding) throws IOException
   {
-    this (target, false, encoding);
+    this (aTargetDir, false, encoding);
   }
 
-  public FileCodeWriter (@Nonnull final File target, final boolean readOnly) throws IOException
+  public FileCodeWriter (@Nonnull final File aTargetDir, final boolean bMarkReadOnly) throws IOException
   {
-    this (target, readOnly, null);
+    this (aTargetDir, bMarkReadOnly, null);
   }
 
-  public FileCodeWriter (@Nonnull final File target, final boolean readOnly, @Nullable final Charset encoding) throws IOException
+  public FileCodeWriter (@Nonnull final File aTargetDir,
+                         final boolean bMarkReadOnly,
+                         @Nullable final Charset encoding) throws IOException
   {
     super (encoding);
-    this._target = target;
-    this._readOnly = readOnly;
-    if (!target.exists () || !target.isDirectory ())
-      throw new IOException (target + ": non-existent directory");
+    m_aTargetDir = aTargetDir;
+    m_bMarkReadOnly = bMarkReadOnly;
+    if (!aTargetDir.exists () || !aTargetDir.isDirectory ())
+      throw new IOException (aTargetDir + ": non-existent directory");
   }
 
   @Override
@@ -106,9 +108,9 @@ public class FileCodeWriter extends AbstractCodeWriter
   {
     File dir;
     if (pkg.isUnnamed ())
-      dir = _target;
+      dir = m_aTargetDir;
     else
-      dir = new File (_target, _toDirName (pkg));
+      dir = new File (m_aTargetDir, _toDirName (pkg));
 
     if (!dir.exists ())
       dir.mkdirs ();
@@ -121,22 +123,22 @@ public class FileCodeWriter extends AbstractCodeWriter
         throw new IOException (fn + ": Can't delete previous version");
     }
 
-    if (_readOnly)
-      _readonlyFiles.add (fn);
+    if (m_bMarkReadOnly)
+      m_aReadOnlyFiles.add (fn);
     return fn;
   }
 
   @Override
   public void close () throws IOException
   {
-    // mark files as read-onnly if necessary
-    for (final File f : _readonlyFiles)
+    // mark files as read-only if necessary
+    for (final File f : m_aReadOnlyFiles)
       f.setReadOnly ();
   }
 
   /** Converts a package name to the directory name. */
-  private static String _toDirName (@Nonnull final JPackage pkg)
+  private static String _toDirName (@Nonnull final JPackage aPkg)
   {
-    return pkg.name ().replace ('.', File.separatorChar);
+    return aPkg.name ().replace ('.', File.separatorChar);
   }
 }

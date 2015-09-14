@@ -43,10 +43,11 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.util.JCNameUtilities;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Things that can be values of an annotation element and have an owning code
- * model.
+ * model (see {@link IJOwned}).
  *
  * @author Philip Helger
  */
@@ -54,44 +55,43 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
 {
   protected final class JEnumConstantExpr extends AbstractJExpressionImpl
   {
-    private final Enum <?> _value;
+    private final Enum <?> m_aEnumConstant;
 
-    protected JEnumConstantExpr (@Nonnull final Enum <?> value)
+    protected JEnumConstantExpr (@Nonnull final Enum <?> aEnumConstant)
     {
-      _value = value;
+      m_aEnumConstant = JCValueEnforcer.notNull (aEnumConstant, "EnumConstant");
     }
 
-    public void generate (final JFormatter f)
+    public void generate (@Nonnull final JFormatter f)
     {
-      f.type (owner ().ref (_value.getDeclaringClass ())).print ('.').print (_value.name ());
+      f.type (owner ().ref (m_aEnumConstant.getDeclaringClass ())).print ('.').print (m_aEnumConstant.name ());
     }
   }
 
   protected final class FullClassNameExpr extends AbstractJExpressionImpl
   {
-    private final Class <?> _value;
+    private final Class <?> m_aClass;
 
-    protected FullClassNameExpr (@Nonnull final Class <?> value)
+    protected FullClassNameExpr (@Nonnull final Class <?> aClass)
     {
-      _value = value;
+      m_aClass = JCValueEnforcer.notNull (aClass, "Class");
     }
 
-    public void generate (final JFormatter f)
+    public void generate (@Nonnull final JFormatter f)
     {
-      f.print (JCNameUtilities.getFullName (_value));
-      f.print (".class");
+      f.print (JCNameUtilities.getFullName (m_aClass)).print (".class");
     }
   }
 
   @Nonnull
-  public AbstractJAnnotationValue wrap (@Nonnull final Enum <?> value)
+  public AbstractJAnnotationValue wrap (@Nonnull final Enum <?> aEnumConstant)
   {
-    return new JAnnotationStringValue (new JEnumConstantExpr (value), value);
+    return new JAnnotationStringValue (new JEnumConstantExpr (aEnumConstant), aEnumConstant);
   }
 
   @Nonnull
-  public AbstractJAnnotationValue wrap (@Nonnull final Class <?> value)
+  public AbstractJAnnotationValue wrap (@Nonnull final Class <?> aClass)
   {
-    return new JAnnotationStringValue (new FullClassNameExpr (value), value);
+    return new JAnnotationStringValue (new FullClassNameExpr (aClass), aClass);
   }
 }

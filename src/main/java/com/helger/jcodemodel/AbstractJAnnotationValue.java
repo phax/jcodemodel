@@ -106,20 +106,20 @@ public abstract class AbstractJAnnotationValue implements IJGenerable
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (@Nonnull final JEnumConstant value)
+  public static JAnnotationStringValue wrap (@Nonnull final JEnumConstant aValue)
   {
-    return new JAnnotationStringValue (value);
+    return new JAnnotationStringValue (aValue);
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (@Nonnull final AbstractJType type)
+  public static JAnnotationStringValue wrap (@Nonnull final AbstractJType aType)
   {
-    return new JAnnotationStringValue (type.boxify ().dotclass (), type);
+    return new JAnnotationStringValue (aType.boxify ().dotclass (), aType);
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (@Nonnull final IJExpression expr)
+  public static JAnnotationStringValue wrap (@Nonnull final IJExpression aExpr)
   {
-    return new JAnnotationStringValue (expr);
+    return new JAnnotationStringValue (aExpr);
   }
 }

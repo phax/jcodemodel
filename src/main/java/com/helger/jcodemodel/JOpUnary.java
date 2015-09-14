@@ -45,23 +45,25 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 public class JOpUnary extends AbstractJExpressionImpl
 {
   private final String m_sOperator;
   private final IJExpression m_aExpr;
   private final boolean m_bOperatorComesFirst;
 
-  protected JOpUnary (@Nonnull final String op, @Nonnull final IJExpression e)
+  protected JOpUnary (@Nonnull final String sOperator, @Nonnull final IJExpression aExpr)
   {
-    m_sOperator = op;
-    m_aExpr = e;
+    m_sOperator = JCValueEnforcer.notNull (sOperator, "Operator");
+    m_aExpr = JCValueEnforcer.notNull (aExpr, "Expression");
     m_bOperatorComesFirst = true;
   }
 
-  protected JOpUnary (@Nonnull final IJExpression e, @Nonnull final String op)
+  protected JOpUnary (@Nonnull final IJExpression aExpr, @Nonnull final String sOperator)
   {
-    m_sOperator = op;
-    m_aExpr = e;
+    m_sOperator = JCValueEnforcer.notNull (sOperator, "Operator");
+    m_aExpr = JCValueEnforcer.notNull (aExpr, "Expression");
     m_bOperatorComesFirst = false;
   }
 

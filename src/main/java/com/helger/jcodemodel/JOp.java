@@ -45,7 +45,9 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 /**
- * JClass for generating expressions containing operators
+ * Class for generating expressions containing operators
+ *
+ * @author Philip Helger et al
  */
 @Immutable
 public final class JOp
@@ -95,9 +97,24 @@ public final class JOp
    * @param e
    *        expression
    * @return <code><em>e</em>++</code>
+   * @deprecated Use {@link #postincr(IJExpression)} instead
    */
+  @Deprecated
   @Nonnull
   public static JOpUnaryTight incr (@Nonnull final IJExpression e)
+  {
+    return postincr (e);
+  }
+
+  /**
+   * Post increment
+   *
+   * @param e
+   *        expression
+   * @return <code><em>e</em>++</code>
+   */
+  @Nonnull
+  public static JOpUnaryTight postincr (@Nonnull final IJExpression e)
   {
     return new JOpUnaryTight (e, "++");
   }
@@ -121,9 +138,24 @@ public final class JOp
    * @param e
    *        expression
    * @return <code><em>e</em>--</code>
+   * @deprecated Use {@link #postdecr(IJExpression)} instead
    */
+  @Deprecated
   @Nonnull
   public static JOpUnaryTight decr (@Nonnull final IJExpression e)
+  {
+    return postdecr (e);
+  }
+
+  /**
+   * Post decrement
+   *
+   * @param e
+   *        expression
+   * @return <code><em>e</em>--</code>
+   */
+  @Nonnull
+  public static JOpUnaryTight postdecr (@Nonnull final IJExpression e)
   {
     return new JOpUnaryTight (e, "--");
   }

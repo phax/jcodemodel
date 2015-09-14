@@ -50,11 +50,11 @@ import javax.annotation.Nonnull;
  */
 public abstract class AbstractJResourceFile
 {
-  private final String _name;
+  private final String m_sName;
 
   protected AbstractJResourceFile (@Nonnull final String name)
   {
-    this._name = name;
+    m_sName = name;
   }
 
   /**
@@ -63,7 +63,7 @@ public abstract class AbstractJResourceFile
   @Nonnull
   public final String name ()
   {
-    return _name;
+    return m_sName;
   }
 
   /**
@@ -79,7 +79,7 @@ public abstract class AbstractJResourceFile
   }
 
   /**
-   * called by JPackage to produce the file image.
+   * called by {@link JPackage} to produce the file image.
    */
   protected abstract void build (@Nonnull OutputStream os) throws IOException;
 }

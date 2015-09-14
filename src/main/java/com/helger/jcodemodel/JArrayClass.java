@@ -46,6 +46,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Array class.
  *
@@ -59,7 +61,7 @@ public class JArrayClass extends AbstractJClass
   protected JArrayClass (@Nonnull final JCodeModel aOwner, @Nonnull final AbstractJType aComponentType)
   {
     super (aOwner);
-    m_aComponentType = aComponentType;
+    m_aComponentType = JCValueEnforcer.notNull (aComponentType, "ComponentType");
   }
 
   @Override
@@ -156,7 +158,8 @@ public class JArrayClass extends AbstractJClass
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables,
+                                             final List <? extends AbstractJClass> bindings)
   {
     if (m_aComponentType.isPrimitive ())
       return this;

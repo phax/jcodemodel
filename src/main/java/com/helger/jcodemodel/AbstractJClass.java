@@ -50,6 +50,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.JTypeWildcard.EBoundMode;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Represents a Java reference type, such as a class, an interface, an enum, an
@@ -70,9 +71,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   protected AbstractJClass (@Nonnull final JCodeModel aOwner)
   {
-    if (aOwner == null)
-      throw new NullPointerException ("owner");
-    m_aOwner = aOwner;
+    m_aOwner = JCValueEnforcer.notNull (aOwner, "Owner");
   }
 
   /**
@@ -170,7 +169,7 @@ public abstract class AbstractJClass extends AbstractJType
   public AbstractJType unboxify ()
   {
     final JPrimitiveType pt = getPrimitiveType ();
-    return pt == null ? (AbstractJType) this : pt;
+    return pt == null ? this : pt;
   }
 
   @Override

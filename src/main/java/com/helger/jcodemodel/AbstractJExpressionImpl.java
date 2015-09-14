@@ -75,7 +75,7 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   @Nonnull
   public final JOpUnaryTight incr ()
   {
-    return JOp.incr (this);
+    return JOp.postincr (this);
   }
 
   @Nonnull
@@ -87,7 +87,7 @@ public abstract class AbstractJExpressionImpl implements IJExpression
   @Nonnull
   public final JOpUnaryTight decr ()
   {
-    return JOp.decr (this);
+    return JOp.postdecr (this);
   }
 
   @Nonnull

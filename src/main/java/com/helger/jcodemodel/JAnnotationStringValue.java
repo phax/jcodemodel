@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Captures the value of the annotation.
  *
@@ -52,46 +54,42 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
   /**
    * The value of the Annotation member
    */
-  private final IJExpression _value;
+  private final IJExpression m_aValue;
   /**
    * The source object used to build the expression value.
    */
-  private final Object _nativeValue;
+  private final Object m_aNativeValue;
 
-  public JAnnotationStringValue (@Nonnull final IJExpression value)
+  public JAnnotationStringValue (@Nonnull final IJExpression aValue)
   {
-    this (value, value);
+    this (aValue, aValue);
   }
 
-  public JAnnotationStringValue (@Nonnull final IJExpression value, @Nonnull final Object nativeValue)
+  public JAnnotationStringValue (@Nonnull final IJExpression aValue, @Nonnull final Object aNativeValue)
   {
-    if (value == null)
-      throw new NullPointerException ("value");
-    if (nativeValue == null)
-      throw new NullPointerException ("nativeValue");
-    _value = value;
-    _nativeValue = nativeValue;
+    m_aValue = JCValueEnforcer.notNull (aValue, "Value");
+    m_aNativeValue = JCValueEnforcer.notNull (aNativeValue, "NativeValue");
   }
 
   @Nonnull
   public IJExpression value ()
   {
-    return _value;
+    return m_aValue;
   }
 
   @Nonnull
   public Object nativeValue ()
   {
-    return _nativeValue;
+    return m_aNativeValue;
   }
 
   public boolean isNativeValueExpression ()
   {
-    return _nativeValue instanceof IJExpression;
+    return m_aNativeValue instanceof IJExpression;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.generable (_value);
+    f.generable (m_aValue);
   }
 }

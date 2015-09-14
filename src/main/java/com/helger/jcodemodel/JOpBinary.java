@@ -45,17 +45,21 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 public class JOpBinary extends AbstractJExpressionImpl
 {
   private final IJExpression m_aLeft;
   private final String m_sOperator;
   private final IJGenerable m_aRight;
 
-  protected JOpBinary (@Nonnull final IJExpression left, @Nonnull final String op, @Nonnull final IJGenerable right)
+  protected JOpBinary (@Nonnull final IJExpression aLeft,
+                       @Nonnull final String sOperator,
+                       @Nonnull final IJGenerable aRight)
   {
-    this.m_aLeft = left;
-    this.m_sOperator = op;
-    this.m_aRight = right;
+    m_aLeft = JCValueEnforcer.notNull (aLeft, "Left");
+    m_sOperator = JCValueEnforcer.notNull (sOperator, "Operator");
+    m_aRight = JCValueEnforcer.notNull (aRight, "Right");
   }
 
   @Nonnull

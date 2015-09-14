@@ -51,50 +51,54 @@ import com.helger.jcodemodel.util.JCSecureLoader;
 
 /**
  * Allows an application to copy a resource file to the output.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JStaticFile extends AbstractJResourceFile
 {
-  private final ClassLoader _classLoader;
-  private final String _resourceName;
-  private final boolean _isResource;
+  private final ClassLoader m_aClassLoader;
+  private final String m_sResourceName;
+  private final boolean m_bIsResource;
 
-  public JStaticFile (@Nonnull final String resourceName)
+  public JStaticFile (@Nonnull final String sResourceName)
   {
-    this (resourceName, !resourceName.endsWith (".java"));
+    this (sResourceName, !sResourceName.endsWith (".java"));
   }
 
-  public JStaticFile (@Nonnull final String resourceName, final boolean isResource)
+  public JStaticFile (@Nonnull final String sResourceName, final boolean bIsResource)
   {
-    this (JCSecureLoader.getClassClassLoader (JStaticFile.class), resourceName, isResource);
+    this (JCSecureLoader.getClassClassLoader (JStaticFile.class), sResourceName, bIsResource);
   }
 
   /**
-   * @param isResource
-   *        false if this is a Java source file. True if this is other resource
-   *        files.
+   * @param aClassLoader
+   *        Class loader to use. May not be <code>null</code>.
+   * @param sResourceName
+   *        Path to use for loading via resource. May not be <code>null</code>.
+   * @param bIsResource
+   *        <code>false</code> if this is a Java source file. <code>true</code>
+   *        if this is other resource files.
    */
-  public JStaticFile (@Nonnull final ClassLoader classLoader,
-                      @Nonnull final String resourceName,
-                      final boolean isResource)
+  public JStaticFile (@Nonnull final ClassLoader aClassLoader,
+                      @Nonnull final String sResourceName,
+                      final boolean bIsResource)
   {
-    super (resourceName.substring (resourceName.lastIndexOf ('/') + 1));
-    this._classLoader = classLoader;
-    this._resourceName = resourceName;
-    this._isResource = isResource;
+    super (sResourceName.substring (sResourceName.lastIndexOf ('/') + 1));
+    m_aClassLoader = aClassLoader;
+    m_sResourceName = sResourceName;
+    m_bIsResource = bIsResource;
   }
 
   @Override
   protected boolean isResource ()
   {
-    return _isResource;
+    return m_bIsResource;
   }
 
   @Override
   protected void build (@Nonnull final OutputStream os) throws IOException
   {
-    final DataInputStream dis = new DataInputStream (_classLoader.getResourceAsStream (_resourceName));
+    final DataInputStream dis = new DataInputStream (m_aClassLoader.getResourceAsStream (m_sResourceName));
 
     final byte [] buf = new byte [256];
     int sz;

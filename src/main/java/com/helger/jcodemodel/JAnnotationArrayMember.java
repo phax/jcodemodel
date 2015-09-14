@@ -285,15 +285,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   /**
    * Adds a enum array member to this annotation
    *
-   * @param value
+   * @param aEnumConstant
    *        Adds a enum value to the array member
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
   @Nonnull
-  public JAnnotationArrayMember param (final Enum <?> value)
+  public JAnnotationArrayMember param (@Nonnull final Enum <?> aEnumConstant)
   {
-    _values.add (wrap (value));
+    _values.add (wrap (aEnumConstant));
     return this;
   }
 

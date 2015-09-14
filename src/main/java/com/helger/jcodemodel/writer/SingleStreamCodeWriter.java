@@ -60,28 +60,28 @@ import com.helger.jcodemodel.JPackage;
  */
 public class SingleStreamCodeWriter extends AbstractCodeWriter
 {
-  private final PrintStream _out;
+  private final PrintStream m_aPS;
 
   /**
-   * @param os
+   * @param aOS
    *        This stream will be closed at the end of the code generation.
    */
-  public SingleStreamCodeWriter (@Nonnull final OutputStream os)
+  public SingleStreamCodeWriter (@Nonnull final OutputStream aOS)
   {
     super (null);
-    _out = new PrintStream (os);
+    m_aPS = new PrintStream (aOS);
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  public OutputStream openBinary (@Nonnull final JPackage aPkg, @Nonnull final String sFilename) throws IOException
   {
-    String pkgName = pkg.name ();
-    if (pkgName.length () != 0)
-      pkgName += '.';
+    String sPkgName = aPkg.name ();
+    if (sPkgName.length () > 0)
+      sPkgName += '.';
 
-    _out.println ("-----------------------------------" + pkgName + fileName + "-----------------------------------");
+    m_aPS.println ("-----------------------------------" + sPkgName + sFilename + "-----------------------------------");
 
-    return new FilterOutputStream (_out)
+    return new FilterOutputStream (m_aPS)
     {
       @Override
       public void close ()
@@ -94,7 +94,7 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
   @Override
   public void close () throws IOException
   {
-    _out.flush ();
-    _out.close ();
+    m_aPS.flush ();
+    m_aPS.close ();
   }
 }

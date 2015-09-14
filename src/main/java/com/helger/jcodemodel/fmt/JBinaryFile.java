@@ -51,30 +51,31 @@ import com.helger.jcodemodel.AbstractJResourceFile;
 /**
  * Allows the application to use OutputStream to define data that will be stored
  * into a file.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class JBinaryFile extends AbstractJResourceFile
 {
-  private final ByteArrayOutputStream _baos = new ByteArrayOutputStream ();
+  private final ByteArrayOutputStream m_aBAOS = new ByteArrayOutputStream ();
 
-  public JBinaryFile (@Nonnull final String name)
+  public JBinaryFile (@Nonnull final String sName)
   {
-    super (name);
+    super (sName);
   }
 
   /**
    * @return Data written to the returned output stream will be written to the
    *         file.
    */
+  @Nonnull
   public OutputStream getDataStore ()
   {
-    return _baos;
+    return m_aBAOS;
   }
 
   @Override
   public void build (@Nonnull final OutputStream os) throws IOException
   {
-    _baos.writeTo (os);
+    m_aBAOS.writeTo (os);
   }
 }
