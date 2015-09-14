@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
+import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -153,13 +153,10 @@ public class JArray extends AbstractJExpressionImpl
   }
 
   @Override
-  public boolean equals (Object o)
+  public boolean equals (final Object o)
   {
     if (o == this)
       return true;
-    if (!(o instanceof IJExpression))
-      return false;
-    o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
     final JArray rhs = (JArray) o;
@@ -211,7 +208,6 @@ public class JArray extends AbstractJExpressionImpl
       final int finalI = i;
       if (!visitWithSubExpressions (callback, new ExpressionAccessor ()
       {
-
         public void set (final IJExpression newExpression)
         {
           _exprs.set (finalI, newExpression);

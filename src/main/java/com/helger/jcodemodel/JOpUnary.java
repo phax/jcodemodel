@@ -91,14 +91,11 @@ public class JOpUnary extends AbstractJExpressionImpl
   }
 
   @Override
-  public boolean equals (Object o)
+  public boolean equals (final Object o)
   {
     if (o == this)
       return true;
-    if (!(o instanceof IJExpression))
-      return false;
-    o = ((IJExpression) o).unwrapped ();
-    if (!(o instanceof JOpUnary))
+    if (o == null || getClass () != o.getClass ())
       return false;
     final JOpUnary rhs = (JOpUnary) o;
     return isEqual (_op, rhs._op) && isEqual (_e, rhs._e) && isEqual (opFirst, rhs.opFirst);

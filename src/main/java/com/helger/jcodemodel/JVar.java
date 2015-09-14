@@ -244,14 +244,11 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   }
 
   @Override
-  public boolean equals (Object o)
+  public boolean equals (final Object o)
   {
     if (o == this)
       return true;
-    if (!(o instanceof IJExpression))
-      return false;
-    o = ((IJExpression) o).unwrapped ();
-    if (!(o instanceof JVar))
+    if (o == null || getClass () != o.getClass ())
       return false;
     final JVar rhs = (JVar) o;
     return isEqual (m_sName, rhs.m_sName);

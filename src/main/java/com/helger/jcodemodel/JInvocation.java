@@ -409,20 +409,18 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   }
 
   @Override
-  public boolean equals (Object o)
+  public boolean equals (final Object o)
   {
     if (o == this)
       return true;
-    if (!(o instanceof IJExpression))
-      return false;
-    o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
     final JInvocation rhs = (JInvocation) o;
     if (!(isEqual (_object, rhs._object) &&
           isEqual (_isConstructor, rhs._isConstructor) &&
           (_isConstructor || isEqual (methodName (), rhs.methodName ())) &&
-          isEqual (_args, rhs._args) && isEqual (typeFullName (), rhs.typeFullName ())))
+          isEqual (_args, rhs._args) &&
+          isEqual (typeFullName (), rhs.typeFullName ())))
     {
       return false;
     }

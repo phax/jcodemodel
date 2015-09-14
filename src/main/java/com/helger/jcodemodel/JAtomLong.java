@@ -70,13 +70,10 @@ public class JAtomLong extends AbstractJExpressionImpl
   }
 
   @Override
-  public boolean equals (Object o)
+  public boolean equals (final Object o)
   {
     if (o == this)
       return true;
-    if (!(o instanceof IJExpression))
-      return false;
-    o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtomLong rhs = (JAtomLong) o;

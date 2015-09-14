@@ -114,13 +114,10 @@ public class JOpBinary extends AbstractJExpressionImpl
   }
 
   @Override
-  public boolean equals (Object o)
+  public boolean equals (final Object o)
   {
     if (o == this)
       return true;
-    if (!(o instanceof IJExpression))
-      return false;
-    o = ((IJExpression) o).unwrapped ();
     if (o == null || getClass () != o.getClass ())
       return false;
     final JOpBinary rhs = (JOpBinary) o;
@@ -173,7 +170,7 @@ public class JOpBinary extends AbstractJExpressionImpl
     return _left.expressionName () +
            OP_NAMES.get (_op) +
            (_right instanceof IJExpression ? ((IJExpression) _right).expressionName ()
-                                          : ((AbstractJType) _right).fullName ());
+                                           : ((AbstractJType) _right).fullName ());
   }
 
   @Override

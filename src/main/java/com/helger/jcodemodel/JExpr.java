@@ -140,27 +140,27 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JExprStatementWrapper <JOpUnaryTight> incr (@Nonnull final IJExpression expression)
+  public static JOpUnaryTight incr (@Nonnull final IJExpression expression)
   {
-    return JExprStatementWrapper.create (JOp.incr (expression));
+    return JOp.incr (expression);
   }
 
   @Nonnull
-  public static JExprStatementWrapper <JOpUnaryTight> preincr (@Nonnull final IJExpression expression)
+  public static JOpUnaryTight preincr (@Nonnull final IJExpression expression)
   {
-    return JExprStatementWrapper.create (JOp.preincr (expression));
+    return JOp.preincr (expression);
   }
 
   @Nonnull
-  public static JExprStatementWrapper <JOpUnaryTight> decr (@Nonnull final IJExpression expression)
+  public static JOpUnaryTight decr (@Nonnull final IJExpression expression)
   {
-    return JExprStatementWrapper.create (JOp.decr (expression));
+    return JOp.decr (expression);
   }
 
   @Nonnull
-  public static JExprStatementWrapper <JOpUnaryTight> predecr (@Nonnull final IJExpression expression)
+  public static JOpUnaryTight predecr (@Nonnull final IJExpression expression)
   {
-    return JExprStatementWrapper.create (JOp.predecr (expression));
+    return JOp.predecr (expression);
   }
 
   @Nonnull
