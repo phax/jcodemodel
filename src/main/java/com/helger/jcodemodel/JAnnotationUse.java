@@ -50,9 +50,10 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
- * Represents an annotation on a program element. TODO How to add enums to the
- * annotations
+ * Represents an annotation on a program element.
  *
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
@@ -67,48 +68,46 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   /**
    * The {@link Annotation} class
    */
-  private final AbstractJClass _clazz;
+  private final AbstractJClass m_aAnnotationClass;
 
   /**
    * Map of member values.
    */
-  private Map <String, AbstractJAnnotationValue> _memberValues;
+  private Map <String, AbstractJAnnotationValue> m_aMemberValues;
 
-  public JAnnotationUse (@Nonnull final AbstractJClass clazz)
+  public JAnnotationUse (@Nonnull final AbstractJClass aAnnotationClass)
   {
-    if (clazz == null)
-      throw new NullPointerException ("clazz");
-    _clazz = clazz;
+    m_aAnnotationClass = JCValueEnforcer.notNull (aAnnotationClass, "AnnotationClass");
   }
 
   @Nonnull
   public AbstractJClass getAnnotationClass ()
   {
-    return _clazz;
+    return m_aAnnotationClass;
   }
 
   @Nonnull
   public JCodeModel owner ()
   {
-    return _clazz.owner ();
+    return m_aAnnotationClass.owner ();
   }
 
   @Nonnull
   public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
-    return _memberValues == null ? new HashMap <String, AbstractJAnnotationValue> ()
-                                 : Collections.unmodifiableMap (_memberValues);
+    return m_aMemberValues == null ? new HashMap <String, AbstractJAnnotationValue> ()
+                                   : Collections.unmodifiableMap (m_aMemberValues);
   }
 
   public boolean hasAnnotationMembers ()
   {
-    return _memberValues != null && !_memberValues.isEmpty ();
+    return m_aMemberValues != null && !m_aMemberValues.isEmpty ();
   }
 
   @Nullable
   public AbstractJAnnotationValue getParam (@Nullable final String sName)
   {
-    return _memberValues == null ? null : _memberValues.get (sName);
+    return m_aMemberValues == null ? null : m_aMemberValues.get (sName);
   }
 
   @Nullable
@@ -125,24 +124,26 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
     return aParam != null ? aParam.value () : null;
   }
 
-  private void _addValue (@Nonnull final String name, @Nonnull final AbstractJAnnotationValue annotationValue)
+  @Nonnull
+  private JAnnotationUse _addValue (@Nonnull final String sName,
+                                    @Nonnull final AbstractJAnnotationValue aAnnotationValue)
   {
-    if (name == null || name.length () == 0)
-      throw new IllegalArgumentException ("Name must not be null or empty");
-    if (annotationValue == null)
-      throw new NullPointerException ("annotationValue may not be null!");
+    JCValueEnforcer.notEmpty (sName, "Name");
+    JCValueEnforcer.notNull (aAnnotationValue, "AnnotationValue");
 
     // Use ordered map to keep the code generation the same on any JVM.
     // Lazily created.
-    if (_memberValues == null)
-      _memberValues = new LinkedHashMap <String, AbstractJAnnotationValue> ();
-    _memberValues.put (name, annotationValue);
+    if (m_aMemberValues == null)
+      m_aMemberValues = new LinkedHashMap <String, AbstractJAnnotationValue> ();
+    m_aMemberValues.put (sName, aAnnotationValue);
+
+    return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
    * @param value
    *        The boolean value for this annotation
@@ -150,10 +151,9 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, final boolean value)
+  public JAnnotationUse param (@Nonnull final String sName, final boolean value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (sName, wrap (value));
   }
 
   @Nonnull
@@ -176,8 +176,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final byte value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -200,8 +199,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final char value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -224,8 +222,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final double value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -248,8 +245,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final float value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -272,8 +268,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final long value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -296,8 +291,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final short value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -320,8 +314,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final int value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -344,8 +337,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, final String value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -368,8 +360,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final Enum <?> value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -392,8 +383,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final JEnumConstant value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -424,8 +414,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final Class <?> value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -449,8 +438,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final AbstractJType type)
   {
-    _addValue (name, wrap (type));
-    return this;
+    return _addValue (name, wrap (type));
   }
 
   @Nonnull
@@ -474,8 +462,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final IJExpression value)
   {
-    _addValue (name, wrap (value));
-    return this;
+    return _addValue (name, wrap (value));
   }
 
   @Nonnull
@@ -488,17 +475,17 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   /**
    * Adds a member value pair which is of type array to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
    * @return The {@link JAnnotationArrayMember}. For adding array values
    * @see JAnnotationArrayMember
    */
   @Nonnull
-  public JAnnotationArrayMember paramArray (@Nonnull final String name)
+  public JAnnotationArrayMember paramArray (@Nonnull final String sName)
   {
-    final JAnnotationArrayMember arrayMember = new JAnnotationArrayMember (owner ());
-    _addValue (name, arrayMember);
-    return arrayMember;
+    final JAnnotationArrayMember aArrayMember = new JAnnotationArrayMember (owner ());
+    _addValue (sName, aArrayMember);
+    return aArrayMember;
   }
 
   /**
@@ -542,34 +529,34 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnegative
   public int size ()
   {
-    return _memberValues.size ();
+    return m_aMemberValues.size ();
   }
 
   private boolean _isOptimizable ()
   {
-    return _memberValues.size () == 1 && _memberValues.containsKey (SPECIAL_KEY_VALUE);
+    return m_aMemberValues.size () == 1 && m_aMemberValues.containsKey (SPECIAL_KEY_VALUE);
   }
 
   public void generate (final JFormatter f)
   {
-    f.print ('@').generable (_clazz);
-    if (_memberValues != null && !_memberValues.isEmpty ())
+    f.print ('@').generable (m_aAnnotationClass);
+    if (m_aMemberValues != null && !m_aMemberValues.isEmpty ())
     {
       f.print ('(');
       if (_isOptimizable ())
       {
         // short form
-        f.generable (_memberValues.get (SPECIAL_KEY_VALUE));
+        f.generable (m_aMemberValues.get (SPECIAL_KEY_VALUE));
       }
       else
       {
-        boolean first = true;
-        for (final Map.Entry <String, AbstractJAnnotationValue> mapEntry : _memberValues.entrySet ())
+        boolean bFirst = true;
+        for (final Map.Entry <String, AbstractJAnnotationValue> mapEntry : m_aMemberValues.entrySet ())
         {
-          if (!first)
+          if (!bFirst)
             f.print (',');
           f.print (mapEntry.getKey ()).print ('=').generable (mapEntry.getValue ());
-          first = false;
+          bFirst = false;
         }
       }
       f.print (')');
