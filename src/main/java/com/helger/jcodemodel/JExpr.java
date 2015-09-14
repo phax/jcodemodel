@@ -223,6 +223,12 @@ public final class JExpr
     return new JFieldRef (lhs, field);
   }
 
+  @Nonnull
+  public static JEnumConstantRef enumConstantRef (@Nonnull final JDefinedClass type, @Nonnull final String name)
+  {
+    return new JEnumConstantRef (type, name);
+  }
+
   /**
    * @param field
    *        field name to reference
