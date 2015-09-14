@@ -56,14 +56,14 @@ public class JEnumConstantRef extends AbstractJExpressionImpl
   /**
    * The enum class.
    */
-  private final JDefinedClass _type;
+  private final AbstractJClass _type;
 
   /**
    * The constant.
    */
   private final String _name;
 
-  protected JEnumConstantRef (@Nonnull final JDefinedClass type, @Nonnull final String name)
+  protected JEnumConstantRef (@Nonnull final AbstractJClass type, @Nonnull final String name)
   {
     if (type == null)
       throw new NullPointerException ("type");
@@ -74,7 +74,7 @@ public class JEnumConstantRef extends AbstractJExpressionImpl
   }
 
   @Nonnull
-  public JDefinedClass type ()
+  public AbstractJClass type ()
   {
     return _type;
   }
