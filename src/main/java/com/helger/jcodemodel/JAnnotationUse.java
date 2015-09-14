@@ -97,7 +97,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
     return _memberValues == null ? new HashMap <String, AbstractJAnnotationValue> ()
-                                : Collections.unmodifiableMap (_memberValues);
+                                 : Collections.unmodifiableMap (_memberValues);
   }
 
   public boolean hasAnnotationMembers ()
@@ -472,7 +472,6 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  @Deprecated
   public JAnnotationUse param (@Nonnull final String name, @Nonnull final IJExpression value)
   {
     _addValue (name, wrap (value));
@@ -480,7 +479,6 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  @Deprecated
   public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final IJExpression... values)
   {
     paramArray (name).params (values);

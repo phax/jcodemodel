@@ -118,7 +118,6 @@ public abstract class AbstractJAnnotationValue implements IJGenerable
   }
 
   @Nonnull
-  @Deprecated
   public static JAnnotationStringValue wrap (@Nonnull final IJExpression expr)
   {
     return new JAnnotationStringValue (expr);

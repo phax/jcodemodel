@@ -337,7 +337,6 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *         the same method multiple times
    */
   @Nonnull
-  @Deprecated
   public JAnnotationArrayMember param (final IJExpression value)
   {
     _values.add (wrap (value));
@@ -345,7 +344,6 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   }
 
   @Nonnull
-  @Deprecated
   public JAnnotationArrayMember params (@Nonnull final IJExpression... values)
   {
     for (final IJExpression value : values)
