@@ -40,9 +40,9 @@
  */
 /**
  * Output all source files into a single stream.
- * 
+ *
  * This is primarily for test purposes.
- * 
+ *
  * @author
  * 	Aleksei Valikov (valikov@gmx.net)
  */
@@ -63,7 +63,7 @@ import com.helger.jcodemodel.JPackage;
 
 public class OutputStreamCodeWriter extends AbstractCodeWriter
 {
-  private final PrintStream _out;
+  private final PrintStream m_aPS;
 
   /**
    * @param os
@@ -74,7 +74,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
     super (encoding);
     try
     {
-      this._out = encoding == null ? new PrintStream (os, false) : new PrintStream (os, false, encoding.name ());
+      m_aPS = encoding == null ? new PrintStream (os, false) : new PrintStream (os, false, encoding.name ());
     }
     catch (final UnsupportedEncodingException ueex)
     {
@@ -85,7 +85,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   @Override
   public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
-    return new FilterOutputStream (_out)
+    return new FilterOutputStream (m_aPS)
     {
       @Override
       public void close ()
@@ -98,6 +98,6 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   @Override
   public void close () throws IOException
   {
-    _out.close ();
+    m_aPS.close ();
   }
 }
