@@ -65,7 +65,7 @@ import javax.annotation.Nullable;
 /**
  * A Java package.
  */
-public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, IJAnnotatable, Comparable <JPackage>, IJDocCommentable
+public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <JDefinedClass>, IJAnnotatable, Comparable <JPackage>, IJDocCommentable
 {
   /**
    * Name of the package. May be the empty string for the root package.
@@ -131,7 +131,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
   }
 
   @Nullable
-  public IJClassContainer parentContainer ()
+  public IJClassContainer <?> parentContainer ()
   {
     return parent ();
   }
@@ -232,7 +232,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer, I
    */
   public int compareTo (@Nonnull final JPackage aOther)
   {
-    return this.m_sName.compareTo (aOther.m_sName);
+    return m_sName.compareTo (aOther.m_sName);
   }
 
   /**

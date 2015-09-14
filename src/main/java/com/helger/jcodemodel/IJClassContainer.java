@@ -46,8 +46,12 @@ import javax.annotation.Nonnull;
 
 /**
  * The common aspect of a package and a class.
+ *
+ * @author Philip Helger
+ * @param <CLASSTYPE>
+ *        Implementation type
  */
-public interface IJClassContainer extends IJOwned
+public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE>> extends IJOwned
 {
   /**
    * Returns true if the container is a class.
@@ -60,92 +64,135 @@ public interface IJClassContainer extends IJOwned
   boolean isPackage ();
 
   /**
-   * Add a new class to this package/class.
-   *
-   * @param mods
-   *        Modifiers for this class declaration
-   * @param name
-   *        Name of class to be added to this package
-   * @return Newly generated class
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
+   * Parent {@link IJClassContainer}. If this is a package, this method returns
+   * a parent package, or <code>null</code> if this package is the root package.
+   * If this is an outer-most class, this method returns a {@link JPackage} to
+   * which it belongs. If this is an inner class, this method returns the outer
+   * class.
    */
-  JDefinedClass _class (int mods, String name) throws JClassAlreadyExistsException;
+  IJClassContainer <?> parentContainer ();
 
   /**
-   * Add a new public class to this class/package.
-   *
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  JDefinedClass _class (String name) throws JClassAlreadyExistsException;
-
-  /**
-   * Add an interface to this class/package.
-   *
-   * @param mods
-   *        Modifiers for this interface declaration
-   * @param name
-   *        Name of interface to be added to this package
-   * @return Newly generated interface
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  JDefinedClass _interface (int mods, String name) throws JClassAlreadyExistsException;
-
-  /**
-   * Adds a public interface to this package.
-   *
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  JDefinedClass _interface (String name) throws JClassAlreadyExistsException;
-
-  /**
-   * Creates a new class/enum/interface/annotation.
-   */
-  JDefinedClass _class (int mods, String name, EClassType kind) throws JClassAlreadyExistsException;
-
-  /**
-   * Returns an iterator that walks the nested classes defined in this class.
-   */
-  @Nonnull
-  Collection <JDefinedClass> classes ();
-
-  /**
-   * Parent JClassContainer. If this is a package, this method returns a parent
-   * package, or null if this package is the root package. If this is an
-   * outer-most class, this method returns a package to which it belongs. If
-   * this is an inner class, this method returns the outer class.
-   */
-  IJClassContainer parentContainer ();
-
-  /**
-   * Gets the nearest package parent.
-   * <p>
-   * If <tt>this.isPackage()</tt>, then return <tt>this</tt>.
+   * @return The nearest package parent. If <tt>this.isPackage()</tt>, then
+   *         return <tt>this</tt>.
    */
   JPackage getPackage ();
 
   /**
+   * Creates a new class/enum/interface/annotation. This is the most generic
+   * method.
+   *
+   * @param nMods
+   *        Modifiers for this ...
+   * @param sName
+   *        Name of ... to be added to this package.
+   * @param eClassType
+   *        The type of class to create. May not be <code>null</code>.
+   * @return The created ...
+   */
+  CLASSTYPE _class (int nMods,
+                    @Nonnull String sName,
+                    @Nonnull EClassType eClassType) throws JClassAlreadyExistsException;
+
+  /**
+   * Add a new public class to this class/package.
+   *
+   * @param sName
+   *        Name of class to be added to this package
+   * @throws JClassAlreadyExistsException
+   *         When the specified class/interface was already created.
+   */
+  CLASSTYPE _class (@Nonnull String sName) throws JClassAlreadyExistsException;
+
+  /**
+   * Add a new class to this package/class.
+   *
+   * @param nMods
+   *        Modifiers for this class declaration
+   * @param sName
+   *        Name of class to be added to this package
+   * @return Newly generated class
+   * @throws JClassAlreadyExistsException
+   *         When the specified class/interface was already created.
+   */
+  CLASSTYPE _class (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
+
+  /**
+   * Adds a public interface to this package.
+   *
+   * @param sName
+   *        Name of interface to be added to this package
+   * @throws JClassAlreadyExistsException
+   *         When the specified class/interface was already created.
+   */
+  CLASSTYPE _interface (@Nonnull String sName) throws JClassAlreadyExistsException;
+
+  /**
+   * Add an interface to this class/package.
+   *
+   * @param nMods
+   *        Modifiers for this interface declaration
+   * @param sName
+   *        Name of interface to be added to this package
+   * @return Newly generated interface
+   * @throws JClassAlreadyExistsException
+   *         When the specified class/interface was already created.
+   */
+  CLASSTYPE _interface (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
+
+  /**
    * Add an annotationType Declaration to this package
    *
-   * @param name
+   * @param sName
    *        Name of the annotation Type declaration to be added to this package
    * @return newly created Annotation Type Declaration
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
+   * @throws JClassAlreadyExistsException
+   *         When the specified class/interface was already created.
    */
-  JDefinedClass _annotationTypeDeclaration (String name) throws JClassAlreadyExistsException;
+  CLASSTYPE _annotationTypeDeclaration (@Nonnull String sName) throws JClassAlreadyExistsException;
+
+  /**
+   * Add an annotationType Declaration to this package
+   *
+   * @param nMods
+   *        Modifiers for this annotation Type declaration
+   * @param sName
+   *        Name of the annotation Type declaration to be added to this package
+   * @return newly created Annotation Type Declaration
+   * @throws JClassAlreadyExistsException
+   *         When the specified class/interface was already created.
+   */
+  CLASSTYPE _annotationTypeDeclaration (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
 
   /**
    * Add a public enum to this package
    *
-   * @param name
+   * @param sName
+   *        Name of the enum to be added to this package
+   * @return newly created enum
+   * @throws JClassAlreadyExistsException
+   *         When the specified class/interface was already created.
+   */
+  CLASSTYPE _enum (@Nonnull String sName) throws JClassAlreadyExistsException;
+
+  /**
+   * Add a enum to this package
+   *
+   * @param nMods
+   *        Modifiers for this enum declaration
+   * @param sName
    *        Name of the enum to be added to this package
    * @return newly created Enum
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
+   * @throws JClassAlreadyExistsException
+   *         When the specified class/interface was already created.
    */
-  JDefinedClass _enum (String name) throws JClassAlreadyExistsException;
+  @Nonnull
+  CLASSTYPE _enum (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
+
+  /**
+   * @return A collection with all nested classes defined in this class. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  Collection <CLASSTYPE> classes ();
 }

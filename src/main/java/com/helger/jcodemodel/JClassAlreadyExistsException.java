@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Indicates that the class is already created.
  *
@@ -49,11 +51,11 @@ public class JClassAlreadyExistsException extends Exception
 {
   private static final long serialVersionUID = 1L;
 
-  private final JDefinedClass _existing;
+  private final AbstractJClass m_aExisting;
 
-  public JClassAlreadyExistsException (final JDefinedClass existing)
+  public JClassAlreadyExistsException (@Nonnull final AbstractJClass existing)
   {
-    this._existing = existing;
+    m_aExisting = existing;
   }
 
   /**
@@ -61,8 +63,9 @@ public class JClassAlreadyExistsException extends Exception
    *
    * @return This method always return non-null valid object.
    */
-  public JDefinedClass getExistingClass ()
+  @Nonnull
+  public AbstractJClass getExistingClass ()
   {
-    return _existing;
+    return m_aExisting;
   }
 }

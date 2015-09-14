@@ -68,11 +68,11 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  *
  * <pre>
  * JCodeModel cm = new JCodeModel();
- * 
+ *
  * // generate source code by populating the 'cm' tree.
  * cm._class(...);
  * ...
- * 
+ *
  * // write them out
  * cm.build(new File("."));
  * </pre>
@@ -235,9 +235,10 @@ public final class JCodeModel
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int mods, @Nonnull final String fullyqualifiedName) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int nMods,
+                               @Nonnull final String fullyqualifiedName) throws JClassAlreadyExistsException
   {
-    return _class (mods, fullyqualifiedName, EClassType.CLASS);
+    return _class (nMods, fullyqualifiedName, EClassType.CLASS);
   }
 
   /**
@@ -247,12 +248,17 @@ public final class JCodeModel
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int mods, @Nonnull final String fullyqualifiedName, @Nonnull final EClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (final int nMods,
+                               @Nonnull final String sFullyQualifiedClassName,
+                               @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
   {
-    final int idx = fullyqualifiedName.lastIndexOf ('.');
-    if (idx < 0)
-      return rootPackage ()._class (fullyqualifiedName);
-    return _package (fullyqualifiedName.substring (0, idx))._class (mods, fullyqualifiedName.substring (idx + 1), t);
+    final int nIdx = sFullyQualifiedClassName.lastIndexOf ('.');
+    if (nIdx < 0)
+      return rootPackage ()._class (nMods, sFullyQualifiedClassName, eClassType);
+    return _package (sFullyQualifiedClassName.substring (0, nIdx))._class (nMods,
+                                                                           sFullyQualifiedClassName.substring (nIdx +
+                                                                                                               1),
+                                                                           eClassType);
   }
 
   /**
@@ -262,23 +268,36 @@ public final class JCodeModel
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (@Nonnull final String fullyqualifiedName, @Nonnull final EClassType t) throws JClassAlreadyExistsException
+  public JDefinedClass _class (@Nonnull final String fullyqualifiedName,
+                               @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, fullyqualifiedName, t);
+    return _class (JMod.PUBLIC, fullyqualifiedName, eClassType);
   }
 
   /**
-   * Creates a dummy, unknown {@link AbstractJClass} that represents a given
-   * name.
-   * <p>
+   * Creates a dummy, unknown {@link JDirectClass} that represents a given name.
+   * <br/>
    * This method is useful when the code generation needs to include the
    * user-specified class that may or may not exist, and only thing known about
    * it is a class name.
    */
   @Nonnull
-  public AbstractJClass directClass (@Nonnull final String name)
+  public JDirectClass directClass (@Nonnull final String name)
   {
-    return new JDirectClass (this, name);
+    return directClass (EClassType.CLASS, name);
+  }
+
+  /**
+   * Creates a dummy, unknown {@link JDirectClass} that represents a given name.
+   * <br />
+   * This method is useful when the code generation needs to include the
+   * user-specified class that may or may not exist, and only thing known about
+   * it is a class name.
+   */
+  @Nonnull
+  public JDirectClass directClass (@Nonnull final EClassType eClassType, @Nonnull final String sName)
+  {
+    return new JDirectClass (this, null, eClassType, sName);
   }
 
   /**
@@ -308,7 +327,7 @@ public final class JCodeModel
    * @see JErrorClass
    */
   @Nonnull
-  public AbstractJClass errorClass (@Nonnull final String message)
+  public JErrorClass errorClass (@Nonnull final String message)
   {
     return new JErrorClass (this, message);
   }
@@ -337,12 +356,14 @@ public final class JCodeModel
    * @see JPackage#_getClass(String)
    */
   @Nullable
-  public JDefinedClass _getClass (@Nonnull final String fullyQualifiedName)
+  public JDefinedClass _getClass (@Nonnull final String sFullyQualifiedClassName)
   {
-    final int idx = fullyQualifiedName.lastIndexOf ('.');
-    if (idx < 0)
-      return rootPackage ()._getClass (fullyQualifiedName);
-    return _package (fullyQualifiedName.substring (0, idx))._getClass (fullyQualifiedName.substring (idx + 1));
+    final int nIndex = sFullyQualifiedClassName.lastIndexOf ('.');
+    if (nIndex < 0)
+      return rootPackage ()._getClass (sFullyQualifiedClassName);
+    return _package (sFullyQualifiedClassName.substring (0, nIndex))
+                                                                    ._getClass (sFullyQualifiedClassName.substring (nIndex +
+                                                                                                                    1));
   }
 
   /**
@@ -385,7 +406,9 @@ public final class JCodeModel
    * @param status
    *        if non-null, progress indication will be sent to this stream.
    */
-  public void build (@Nonnull final File srcDir, @Nonnull final File resourceDir, @Nullable final PrintStream status) throws IOException
+  public void build (@Nonnull final File srcDir,
+                     @Nonnull final File resourceDir,
+                     @Nullable final PrintStream status) throws IOException
   {
     AbstractCodeWriter res = new FileCodeWriter (resourceDir);
     AbstractCodeWriter src = new FileCodeWriter (srcDir);
@@ -424,7 +447,8 @@ public final class JCodeModel
   /**
    * Generates Java source code.
    */
-  public void build (@Nonnull final AbstractCodeWriter source, @Nonnull final AbstractCodeWriter resource) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter source,
+                     @Nonnull final AbstractCodeWriter resource) throws IOException
   {
     try
     {
@@ -495,12 +519,12 @@ public final class JCodeModel
    * and return a {@link AbstractJClass}.
    */
   @Nonnull
-  public AbstractJClass ref (@Nonnull final String fullyQualifiedClassName)
+  public AbstractJClass ref (@Nonnull final String sFullyQualifiedClassName)
   {
     try
     {
       // try the context class loader first
-      return ref (JCSecureLoader.getContextClassLoader ().loadClass (fullyQualifiedClassName));
+      return ref (JCSecureLoader.getContextClassLoader ().loadClass (sFullyQualifiedClassName));
     }
     catch (final ClassNotFoundException e)
     {
@@ -510,7 +534,7 @@ public final class JCodeModel
     // then the default mechanism.
     try
     {
-      return ref (Class.forName (fullyQualifiedClassName));
+      return ref (Class.forName (sFullyQualifiedClassName));
     }
     catch (final ClassNotFoundException e1)
     {
@@ -518,7 +542,7 @@ public final class JCodeModel
     }
 
     // assume it's not visible to us.
-    return new JDirectClass (this, fullyQualifiedClassName);
+    return new JDirectClass (this, null, EClassType.CLASS, sFullyQualifiedClassName);
   }
 
   /**
@@ -703,7 +727,7 @@ public final class JCodeModel
     {
       super (JCodeModel.this);
       m_aClass = _clazz;
-      assert !m_aClass.isArray ();
+      assert!m_aClass.isArray ();
     }
 
     @Override

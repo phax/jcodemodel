@@ -51,28 +51,28 @@ import javax.annotation.Nullable;
  */
 public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implements IJOwnedMaybe
 {
-  private final JCodeModel _owner;
+  private final JCodeModel m_aOwner;
 
   /**
    * Object expression upon which this field will be accessed, or null for the
    * implicit 'this'.
    */
-  private final IJGenerable _object;
+  private final IJGenerable m_aObject;
 
   /**
-   * Name of the field to be accessed. Either this or {@link #_var} is set.
+   * Name of the field to be accessed. Either this or {@link #m_aVar} is set.
    */
-  private final String _name;
+  private final String m_sName;
 
   /**
    * Variable to be accessed.
    */
-  private final JVar _var;
+  private final JVar m_aVar;
 
   /**
    * Indicates if an explicit this should be generated
    */
-  private boolean _explicitThis;
+  private boolean m_bExplicitThis;
 
   /**
    * Field reference constructor given an object expression and field name.
@@ -118,59 +118,59 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     this (null, object, (String) null, var, explicitThis);
   }
 
-  private JFieldRef (@Nullable final JCodeModel owner,
-                     @Nullable final IJGenerable object,
-                     @Nullable final String name,
-                     @Nullable final JVar var,
-                     final boolean explicitThis)
+  private JFieldRef (@Nullable final JCodeModel aOwner,
+                     @Nullable final IJGenerable aObject,
+                     @Nullable final String sName,
+                     @Nullable final JVar aVar,
+                     final boolean bExplicitThis)
   {
-    if (name != null && name.indexOf ('.') >= 0)
-      throw new IllegalArgumentException ("Field name contains '.': " + name);
-    if (name == null && var == null)
+    if (sName != null && sName.indexOf ('.') >= 0)
+      throw new IllegalArgumentException ("Field name contains '.': " + sName);
+    if (sName == null && aVar == null)
       throw new IllegalArgumentException ("name or var must be present");
-    _owner = owner;
-    _object = object;
-    _name = name;
-    _var = var;
-    _explicitThis = explicitThis;
+    m_aOwner = aOwner;
+    m_aObject = aObject;
+    m_sName = sName;
+    m_aVar = aVar;
+    m_bExplicitThis = bExplicitThis;
   }
 
   @Nullable
   public JCodeModel owner ()
   {
-    return _owner;
+    return m_aOwner;
   }
 
   @Nullable
   public IJGenerable object ()
   {
-    return _object;
+    return m_aObject;
   }
 
   @Nonnull
   public String name ()
   {
-    String name = _name;
-    if (name == null)
-      name = _var.name ();
-    return name;
+    String sName = m_sName;
+    if (sName == null)
+      sName = m_aVar.name ();
+    return sName;
   }
 
   @Nullable
   public JVar var ()
   {
-    return _var;
+    return m_aVar;
   }
 
   public boolean explicitThis ()
   {
-    return _explicitThis;
+    return m_bExplicitThis;
   }
 
   @Nonnull
-  public JFieldRef explicitThis (final boolean explicitThis)
+  public JFieldRef explicitThis (final boolean bExplicitThis)
   {
-    this._explicitThis = explicitThis;
+    m_bExplicitThis = bExplicitThis;
     return this;
   }
 
@@ -178,16 +178,16 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
   {
     final String name = name ();
 
-    if (_object != null)
+    if (m_aObject != null)
     {
-      if (_object instanceof AbstractJType)
-        f.type ((AbstractJType) _object);
+      if (m_aObject instanceof AbstractJType)
+        f.type ((AbstractJType) m_aObject);
       else
-        f.generable (_object);
+        f.generable (m_aObject);
       f.print ('.').print (name);
     }
     else
-      if (_explicitThis)
+      if (m_bExplicitThis)
         f.print ("this.").print (name);
       else
         f.id (name);
@@ -201,14 +201,14 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
     if (o == null || getClass () != o.getClass ())
       return false;
     final JFieldRef rhs = (JFieldRef) o;
-    return isEqual (_object, rhs._object) &&
+    return isEqual (m_aObject, rhs.m_aObject) &&
            isEqual (name (), rhs.name ()) &&
-           isEqual (_explicitThis, rhs._explicitThis);
+           isEqual (m_bExplicitThis, rhs.m_bExplicitThis);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _object, name (), Boolean.valueOf (_explicitThis));
+    return getHashCode (this, m_aObject, name (), Boolean.valueOf (m_bExplicitThis));
   }
 }

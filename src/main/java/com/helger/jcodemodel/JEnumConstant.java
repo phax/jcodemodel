@@ -51,6 +51,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Enum Constant. When used as an {@link IJExpression}, this object represents a
  * reference to the enum constant.
@@ -62,42 +64,38 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   /**
    * The enum class.
    */
-  private final JDefinedClass _type;
+  private final AbstractJClass m_aType;
 
   /**
    * The constant.
    */
-  private final String _name;
+  private final String m_sName;
 
   /**
    * javadoc comments, if any.
    */
-  private JDocComment _jdoc;
+  private JDocComment m_aJavaDoc;
 
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> _annotations;
+  private List <JAnnotationUse> m_aAnnotations;
 
   /**
    * List of the constructor argument expressions. Lazily constructed.
    */
-  private List <IJExpression> _args;
+  private List <IJExpression> m_aArgs;
 
-  protected JEnumConstant (@Nonnull final JDefinedClass type, @Nonnull final String name)
+  protected JEnumConstant (@Nonnull final AbstractJClass aType, @Nonnull final String sName)
   {
-    if (type == null)
-      throw new NullPointerException ("type");
-    if (name == null)
-      throw new NullPointerException ("name");
-    _type = type;
-    _name = name;
+    m_aType = JCValueEnforcer.notNull (aType, "Type");
+    m_sName = JCValueEnforcer.notNull (sName, "Name");
   }
 
   @Nonnull
-  public JDefinedClass type ()
+  public AbstractJClass type ()
   {
-    return _type;
+    return m_aType;
   }
 
   /**
@@ -106,37 +104,36 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public String name ()
   {
-    return _name;
+    return m_sName;
   }
 
   /**
    * Add an expression to this constructor's argument list
    *
-   * @param arg
+   * @param aArg
    *        Argument to add to argument list
    */
   @Nonnull
-  public JEnumConstant arg (@Nonnull final IJExpression arg)
+  public JEnumConstant arg (@Nonnull final IJExpression aArg)
   {
-    if (arg == null)
-      throw new IllegalArgumentException ("arg");
-    if (_args == null)
-      _args = new ArrayList <IJExpression> ();
-    _args.add (arg);
+    JCValueEnforcer.notNull (aArg, "Arg");
+    if (m_aArgs == null)
+      m_aArgs = new ArrayList <IJExpression> ();
+    m_aArgs.add (aArg);
     return this;
   }
 
   @Nonnull
   public List <IJExpression> args ()
   {
-    if (_args == null)
-      _args = new ArrayList <IJExpression> ();
-    return Collections.unmodifiableList (_args);
+    if (m_aArgs == null)
+      m_aArgs = new ArrayList <IJExpression> ();
+    return Collections.unmodifiableList (m_aArgs);
   }
 
   public boolean hasArgs ()
   {
-    return _args != null && !_args.isEmpty ();
+    return m_aArgs != null && !m_aArgs.isEmpty ();
   }
 
   /**
@@ -147,7 +144,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public String getName ()
   {
-    return _type.fullName () + '.' + _name;
+    return m_aType.fullName () + '.' + m_sName;
   }
 
   /**
@@ -158,9 +155,9 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public JDocComment javadoc ()
   {
-    if (_jdoc == null)
-      _jdoc = new JDocComment (_type.owner ());
-    return _jdoc;
+    if (m_aJavaDoc == null)
+      m_aJavaDoc = new JDocComment (m_aType.owner ());
+    return m_aJavaDoc;
   }
 
   /**
@@ -172,10 +169,10 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
-    if (_annotations == null)
-      _annotations = new ArrayList <JAnnotationUse> ();
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    _annotations.add (a);
+    m_aAnnotations.add (a);
     return a;
   }
 
@@ -188,7 +185,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
-    return annotate (_type.owner ().ref (clazz));
+    return annotate (m_aType.owner ().ref (clazz));
   }
 
   @Nonnull
@@ -203,26 +200,26 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    if (_annotations == null)
-      _annotations = new ArrayList <JAnnotationUse> ();
-    return Collections.unmodifiableList (_annotations);
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+    return Collections.unmodifiableList (m_aAnnotations);
   }
 
   public void declare (@Nonnull final JFormatter f)
   {
-    if (_jdoc != null)
-      f.newline ().generable (_jdoc);
-    if (_annotations != null)
-      for (final JAnnotationUse annotation : _annotations)
+    if (m_aJavaDoc != null)
+      f.newline ().generable (m_aJavaDoc);
+    if (m_aAnnotations != null)
+      for (final JAnnotationUse annotation : m_aAnnotations)
         f.generable (annotation).newline ();
-    f.id (_name);
-    if (_args != null)
-      f.print ('(').generable (_args).print (')');
+    f.id (m_sName);
+    if (m_aArgs != null)
+      f.print ('(').generable (m_aArgs).print (')');
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.type (_type).print ('.').print (_name);
+    f.type (m_aType).print ('.').print (m_sName);
   }
 
   @Override
@@ -233,12 +230,12 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
     if (o == null || getClass () != o.getClass ())
       return false;
     final JEnumConstant rhs = (JEnumConstant) o;
-    return isEqual (_type.fullName (), rhs._type.fullName ()) && isEqual (_name, rhs._name);
+    return isEqual (m_aType.fullName (), rhs.m_aType.fullName ()) && isEqual (m_sName, rhs.m_sName);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _type.fullName (), _name);
+    return getHashCode (this, m_aType.fullName (), m_sName);
   }
 }

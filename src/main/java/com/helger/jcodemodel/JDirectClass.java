@@ -45,6 +45,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A special {@link AbstractJClass} that represents an unknown class (except its
@@ -53,23 +54,36 @@ import javax.annotation.Nonnull;
  * @author Kohsuke Kawaguchi
  * @see JCodeModel#directClass(String)
  */
-public class JDirectClass extends AbstractJClass
+public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 {
   private final String m_sFullName;
 
+  @Deprecated
   protected JDirectClass (@Nonnull final JCodeModel aOwner, @Nonnull final String sFullName)
   {
-    super (aOwner);
+    this (aOwner, null, EClassType.CLASS, sFullName);
+  }
+
+  private static String _getName (@Nonnull final String sFullName)
+  {
+    final int i = sFullName.lastIndexOf ('.');
+    if (i >= 0)
+      return sFullName.substring (i + 1);
+    return sFullName;
+  }
+
+  protected JDirectClass (@Nonnull final JCodeModel aOwner,
+                          @Nullable final IJClassContainer <?> aOuter,
+                          @Nonnull final EClassType eClassType,
+                          @Nonnull final String sFullName)
+  {
+    super (aOwner, aOuter, eClassType, _getName (sFullName));
     m_sFullName = sFullName;
   }
 
   @Override
-  @Nonnull
   public String name ()
   {
-    final int i = m_sFullName.lastIndexOf ('.');
-    if (i >= 0)
-      return m_sFullName.substring (i + 1);
     return m_sFullName;
   }
 
@@ -105,12 +119,6 @@ public class JDirectClass extends AbstractJClass
   }
 
   @Override
-  public boolean isInterface ()
-  {
-    return false;
-  }
-
-  @Override
   public boolean isAbstract ()
   {
     return false;
@@ -118,8 +126,16 @@ public class JDirectClass extends AbstractJClass
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables,
+                                             final List <? extends AbstractJClass> bindings)
   {
     return this;
+  }
+
+  @Override
+  @Nonnull
+  protected JDirectClass createInnerClass (final int nMods, final EClassType eClassType, final String sName)
+  {
+    return new JDirectClass (owner (), this, eClassType, sName);
   }
 }
