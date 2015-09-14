@@ -66,12 +66,12 @@ public final class JCodeModelTest
   public void testIssue28 () throws JClassAlreadyExistsException, IOException
   {
     final JCodeModel cm = new JCodeModel ();
-    final JDefinedClass aEnumClass = cm._package ("com.helger.issue28")._class ("DummyEnum");
+    final JDefinedClass aEnumClass = cm._package ("com.helger.issue28")._enum ("DummyEnum");
     cm._package ("com.helger.issue28.other")
       ._class ("Class")
       .constructor (JMod.PUBLIC)
       .body ()
-      .add (aEnumClass.staticRef ("CONSTANT").invoke ("toString"));
+      .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
     cm.build (new SingleStreamCodeWriter (System.out));
   }
 }
