@@ -458,14 +458,55 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Create an If statement and add it to this block
    *
-   * @param expr
+   * @param aTestExpr
    *        JExpression to be tested to determine branching
    * @return Newly generated conditional statement
    */
   @Nonnull
-  public JConditional _if (@Nonnull final IJExpression expr)
+  public JConditional _if (@Nonnull final IJExpression aTestExpr)
   {
-    return _insert (new JConditional (expr));
+    return _insert (new JConditional (aTestExpr));
+  }
+
+  /**
+   * Create an If statement with the respective then statement and add it to
+   * this block
+   *
+   * @param aTestExpr
+   *        JExpression to be tested to determine branching
+   * @param aThen
+   *        The then-block. May not be <code>null</code>.
+   * @return Newly generated conditional statement
+   */
+  @Nonnull
+  public JConditional _if (@Nonnull final IJExpression aTestExpr, @Nonnull final IJStatement aThen)
+  {
+    final JConditional aCond = new JConditional (aTestExpr);
+    aCond._then ().add (aThen);
+    return _insert (aCond);
+  }
+
+  /**
+   * Create an If statement with the respective then and else statements and add
+   * it to this block
+   *
+   * @param aTestExpr
+   *        JExpression to be tested to determine branching
+   * @param aThen
+   *        The then-block. May not be <code>null</code>.
+   * @param aElse
+   *        The else-block. May not be <code>null</code>.
+   * @return Newly generated conditional statement
+   */
+  @Nonnull
+  public JConditional _if (@Nonnull final IJExpression aTestExpr,
+                           @Nonnull final IJStatement aThen,
+                           @Nonnull final IJStatement aElse)
+  {
+    final JConditional aCond = new JConditional (aTestExpr);
+    aCond._then ().add (aThen);
+    aCond._else ().add (aElse);
+    return _insert (aCond);
   }
 
   /**
@@ -593,7 +634,7 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Create a sub-block and add it to this block. By default braces and indent
    * are required.
-   * 
+   *
    * @see #block(boolean, boolean)
    * @see #blockSimple()
    */
@@ -606,7 +647,7 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Create a sub-block and add it to this block. By default braces and indent
    * are not required.
-   * 
+   *
    * @see #block()
    * @see #block(boolean, boolean)
    */
