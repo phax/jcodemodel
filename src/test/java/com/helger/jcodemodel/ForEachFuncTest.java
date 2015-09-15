@@ -44,7 +44,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * Simple program to test the generation of the enhanced for loop in jdk 1.5
@@ -56,7 +56,6 @@ public final class ForEachFuncTest
   @Test
   public void testBasic () throws Exception
   {
-
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
 
@@ -78,6 +77,6 @@ public final class ForEachFuncTest
     // JInvocation invocation =
     foreach.body ().invoke (out1, "println").arg ($count1);
 
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

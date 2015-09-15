@@ -40,7 +40,11 @@
  */
 package com.helger.jcodemodel.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 
@@ -48,15 +52,25 @@ import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JFormatter;
+import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
+import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+
+import japa.parser.JavaParser;
+import japa.parser.ParseException;
+import japa.parser.ast.CompilationUnit;
 
 /**
  * Various utilities for codemodel tests.
  *
  * @author Aleksei Valikov
+ * @author Philip Helger
  */
 public final class CodeModelTestsHelper
 {
+  public static final Charset DEFAULT_ENCODING = Charset.forName ("UTF-8");
+
   /** Hidden constructor. */
   private CodeModelTestsHelper ()
   {}
@@ -140,5 +154,41 @@ public final class CodeModelTestsHelper
     final JFormatter formatter = new JFormatter (aSW);
     generable.generate (formatter);
     return aSW.toString ();
+  }
+
+  /**
+   * Get the content of the code model as a byte array in
+   * {@link #DEFAULT_ENCODING}
+   *
+   * @param cm
+   *        Source code model
+   * @return The byte array
+   * @throws IOException
+   *         Theoretically only
+   */
+  @Nonnull
+  public static byte [] getAllBytes (@Nonnull final JCodeModel cm) throws IOException
+  {
+    final ByteArrayOutputStream bos = new ByteArrayOutputStream ();
+    cm.build (new OutputStreamCodeWriter (bos, DEFAULT_ENCODING));
+    bos.close ();
+    return bos.toByteArray ();
+  }
+
+  @Nonnull
+  public static CompilationUnit parseCodeModel (@Nonnull final JCodeModel cm) throws IOException, ParseException
+  {
+    final byte [] aBytes = getAllBytes (cm);
+    if (true)
+      System.out.println (new String (aBytes, DEFAULT_ENCODING.name ()));
+
+    final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes);
+
+    return JavaParser.parse (bis, DEFAULT_ENCODING.name ());
+  }
+
+  public static void printCodeModel (@Nonnull final JCodeModel cm) throws IOException
+  {
+    cm.build (new SingleStreamCodeWriter (System.out));
   }
 }

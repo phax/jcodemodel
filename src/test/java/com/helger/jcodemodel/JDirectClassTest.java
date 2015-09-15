@@ -2,11 +2,9 @@ package com.helger.jcodemodel;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * Test class for class {@link JDirectClass}.
@@ -16,7 +14,7 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 public final class JDirectClassTest
 {
   @Test
-  public void testBasic () throws JClassAlreadyExistsException, IOException
+  public void testBasic () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
 
@@ -39,11 +37,11 @@ public final class JDirectClassTest
     final JMethod aMethodSelected = aClassAct.method (JMod.PUBLIC, cm.BOOLEAN, "onOptionsItemSelected");
     aMethodSelected.body ()._if (JExpr.ref ("itemId_").eq (myItem));
 
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 
   @Test
-  public void testGenerics ()
+  public void testGenerics () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
 
@@ -51,5 +49,9 @@ public final class JDirectClassTest
     assertEquals ("com.test", aDirectClass._package ().name ());
     assertEquals ("com.test.GenericFragmentArguments<S,P>", aDirectClass.name ());
     assertEquals ("com.test.GenericFragmentArguments<S,P>", aDirectClass.fullName ());
+
+    cm._class ("UsingClass").method (JMod.PUBLIC, cm.VOID, "test").body ().add (JExpr._new (aDirectClass));
+
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

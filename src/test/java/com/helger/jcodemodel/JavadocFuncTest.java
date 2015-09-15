@@ -40,11 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -52,10 +50,10 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 public final class JavadocFuncTest
 {
   @Test
-  public void testOnPackage () throws IOException
+  public void testOnPackage () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
     cm._package ("foo").javadoc ().add ("String");
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

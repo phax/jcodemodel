@@ -42,11 +42,11 @@ package com.helger.jcodemodel;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * Test class for class {@link JFieldRef}
- * 
+ *
  * @author Philip Helger
  */
 public final class JFieldRefTest
@@ -65,6 +65,6 @@ public final class JFieldRefTest
     m.body ().add (JExpr.refthis (f1).assign (6));
     m.body ().add (JExpr.refthis (f2).assign ("Call"));
 
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

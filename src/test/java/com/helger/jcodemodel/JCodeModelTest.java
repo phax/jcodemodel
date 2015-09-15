@@ -42,11 +42,9 @@ package com.helger.jcodemodel;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -63,7 +61,7 @@ public final class JCodeModelTest
   }
 
   @Test
-  public void testIssue28 () throws JClassAlreadyExistsException, IOException
+  public void testIssue28 () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass aEnumClass = cm._package ("com.helger.issue28")._enum ("DummyEnum");
@@ -72,6 +70,6 @@ public final class JCodeModelTest
       .constructor (JMod.PUBLIC)
       .body ()
       .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.printCodeModel (cm);
   }
 }

@@ -60,13 +60,13 @@ public final class AbstractJTypeTest
 {
   private static final class AssignmentTypes
   {
-    private final AbstractJClass _variable;
-    private final AbstractJClass _value;
+    private final AbstractJClass m_aVariable;
+    private final AbstractJClass m_aValue;
 
     public AssignmentTypes (final AbstractJClass aVariable, final AbstractJClass aValue)
     {
-      _variable = aVariable;
-      _value = aValue;
+      m_aVariable = aVariable;
+      m_aValue = aValue;
     }
   }
 
@@ -194,16 +194,16 @@ public final class AbstractJTypeTest
       }
       for (final AssignmentTypes assignment : _refreshAssignableTypes ())
       {
-        if (!assignment._value.equals (assignment._variable))
+        if (!assignment.m_aValue.equals (assignment.m_aVariable))
         {
-          _assertIsNotAssignable (_List.narrow (assignment._variable), _List.narrow (assignment._value));
+          _assertIsNotAssignable (_List.narrow (assignment.m_aVariable), _List.narrow (assignment.m_aValue));
         }
-        _assertIsAssignable (_List.narrow (assignment._variable.wildcard ()), _List.narrow (assignment._value));
-        _assertIsAssignable (_List.narrow (assignment._variable.wildcard ()),
-                             _List.narrow (assignment._value.wildcard ()));
-        _assertIsAssignable (_List.narrow (assignment._value.wildcardSuper ()), _List.narrow (assignment._variable));
-        _assertIsAssignable (_List.narrow (assignment._value.wildcardSuper ()),
-                             _List.narrow (assignment._variable.wildcardSuper ()));
+        _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcard ()), _List.narrow (assignment.m_aValue));
+        _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcard ()),
+                             _List.narrow (assignment.m_aValue.wildcard ()));
+        _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()), _List.narrow (assignment.m_aVariable));
+        _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()),
+                             _List.narrow (assignment.m_aVariable.wildcardSuper ()));
       }
     }
   }

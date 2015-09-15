@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -55,7 +55,7 @@ public final class NestedClassFuncTest
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass c = cm._package ("foo")._class (0, "Foo");
     c._extends (cm.ref (MockInnerClass.class));
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 
   public static class MockInnerClass

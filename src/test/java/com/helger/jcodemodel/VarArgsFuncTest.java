@@ -44,7 +44,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * Simple program to test the generation of the varargs feature in jdk 1.5
@@ -75,7 +75,9 @@ public final class VarArgsFuncTest
     m.param (String.class, "param1");
     m.param (Integer.class, "param2");
     final JVar var = m.varParam (Object.class, "param3");
-    System.out.println ("First varParam " + var);
+
+    if (false)
+      System.out.println ("First varParam " + var);
 
     // checking for param after varParam it behaves ok
     // JVar[] var1 = m.varParam(Float.class, "param4");
@@ -86,10 +88,10 @@ public final class VarArgsFuncTest
 
     final JForLoop forloop = m.body ()._for ();
 
-    final JVar $count = forloop.init (cm.INT, "count", JExpr.lit (0));
+    final JVar jcount = forloop.init (cm.INT, "count", JExpr.lit (0));
 
-    forloop.test ($count.lt (JExpr.direct ("param3.length")));
-    forloop.update ($count.incr ());
+    forloop.test (jcount.lt (JExpr.direct ("param3.length")));
+    forloop.update (jcount.incr ());
 
     final JFieldRef out = cm.ref (System.class).staticRef ("out");
 
@@ -104,6 +106,6 @@ public final class VarArgsFuncTest
     main.body ()
         .directStatement ("new Test().foo(new String(\"Param1\"),new Integer(5),null,new String(\"Param3\"),new String(\"Param4\"));");
 
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

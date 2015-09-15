@@ -40,21 +40,15 @@
  */
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertEquals;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.IJAnnotationWriter;
-import com.helger.jcodemodel.JAnnotationArrayMember;
-import com.helger.jcodemodel.JAnnotationUse;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JEnumConstant;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * A test program for the annotation use features Note: Not all the generated
@@ -89,7 +83,7 @@ public final class AnnotationUseFuncTest
    * import java.lang.annotation.RetentionPolicy;
    * import java.lang.annotation.Target;
    * import com.helger.jcodemodel.tests.AnnotationUseTest;
-   * 
+   *
    * &#064;Retention (value = Test.Iamenum.GOOD, value1 = RetentionPolicy.RUNTIME)
    * &#064;AnnotationUseTest.XmlElement (ns = &quot;##default&quot;, value = &quot;foobar&quot;)
    * public class Test
@@ -99,21 +93,18 @@ public final class AnnotationUseFuncTest
    *               names = { &quot;Bob&quot;, &quot;Rob&quot;, &quot;Ted&quot; },
    *               namesno = { 4, 5, 6 },
    *               values = { @Target (type = java.lang.Integer.class), @Target (type = java.lang.Float.class) },
-   *               foo = @Target (junk = 7))
+   *               foo = @Target (junk = 7) )
    *   private double y;
-   * 
+   *
    *   public void foo ()
    *   {}
-   * 
+   *
    *   public enum Iamenum
    *   {
-   *     GOOD,
-   *     BAD;
+   *    GOOD,
+   *    BAD;
    *   }
    * }
-   * 
-   *
-   *
    * </pre>
    */
   @Test
@@ -133,7 +124,7 @@ public final class AnnotationUseFuncTest
     final JEnumConstant ec = enumcls.enumConstant ("GOOD");
     final JEnumConstant ec1 = enumcls.enumConstant ("BAD");
     final JEnumConstant ec2 = enumcls.enumConstant ("BAD");
-    ec1.equals (ec2);
+    assertEquals (ec1, ec2);
 
     use.param ("value", ec);
     // adding another param as an enum
@@ -172,6 +163,6 @@ public final class AnnotationUseFuncTest
     final JAnnotationUse myuse = aUse.annotationParam ("foo", Target.class);
     myuse.param ("junk", 7);
 
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

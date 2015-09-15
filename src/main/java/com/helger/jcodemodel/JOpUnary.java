@@ -79,6 +79,10 @@ public class JOpUnary extends AbstractJExpressionImpl
     return m_aExpr;
   }
 
+  /**
+   * @return <code>true</code> if the operator comes first, <code>false</code>
+   *         if the operator comes last
+   */
   public boolean opFirst ()
   {
     return m_bOperatorComesFirst;

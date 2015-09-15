@@ -44,15 +44,15 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 public final class InnerClassFuncTest
 {
   @Test
   public void innerClassesAreImported () throws Exception
   {
-    final JCodeModel codeModel = new JCodeModel ();
-    final JDefinedClass aClass = codeModel._class ("org.test.DaTestClass");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass aClass = cm._class ("org.test.DaTestClass");
     final JDefinedClass daInner1 = aClass._class ("Inner");
     final JDefinedClass daInnerInner = daInner1._class ("InnerInner");
     final JDefinedClass daInner2 = aClass._class ("DaTestClassInner");
@@ -71,12 +71,12 @@ public final class InnerClassFuncTest
     aClass.method (JMod.PUBLIC, daInner2, "getInner2");
     aClass.method (JMod.PUBLIC, daInner2Inner, "getInner2Inner");
 
-    final JDefinedClass otherClass = codeModel._class ("org.test.OtherClass");
+    final JDefinedClass otherClass = cm._class ("org.test.OtherClass");
     otherClass.method (JMod.PUBLIC, daInner1, "getInner");
     otherClass.method (JMod.PUBLIC, daInnerInner, "getInnerInner");
     otherClass.method (JMod.PUBLIC, daInner2Inner, "getInner2Inner");
     otherClass.method (JMod.PUBLIC, aClass, "getOuter");
 
-    codeModel.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.printCodeModel (cm);
   }
 }

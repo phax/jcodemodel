@@ -298,7 +298,7 @@ public class JFormatter implements Closeable
       m_bAtBeginningOfLine = false;
     }
     else
-      if ((m_cLastChar != 0) && _needSpace (m_cLastChar, c))
+      if (m_cLastChar != 0 && _needSpace (m_cLastChar, c))
         m_aPW.print (' ');
   }
 
@@ -391,14 +391,18 @@ public class JFormatter implements Closeable
         }
         break;
       case COLLECTING:
-        final String shortName = aType.name ();
-        Usages usage = m_aCollectedReferences.get (shortName);
-        if (usage == null)
+        // Never import direct classes
+        if (!(aType instanceof JDirectClass))
         {
-          usage = new Usages ();
-          m_aCollectedReferences.put (shortName, usage);
+          final String sShortName = aType.name ();
+          Usages aUsage = m_aCollectedReferences.get (sShortName);
+          if (aUsage == null)
+          {
+            aUsage = new Usages ();
+            m_aCollectedReferences.put (sShortName, aUsage);
+          }
+          aUsage.addReferencedType (aType);
         }
-        usage.addReferencedType (aType);
         break;
     }
     return this;

@@ -43,6 +43,8 @@ package com.helger.jcodemodel;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
+
 /**
  * Test class for class {@link JMethod}.
  *
@@ -51,15 +53,17 @@ import org.junit.Test;
 public final class JMethodTest
 {
   @Test
-  public void testBasic () throws JClassAlreadyExistsException
+  public void testBasic () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
-
     final JVar foo = m.param (String.class, "foo");
+    m.body ().assign (foo, JExpr.lit ("bar"));
 
     Assert.assertEquals (1, m.params ().size ());
     Assert.assertSame (foo, m.params ().get (0));
+
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

@@ -40,14 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import java.io.IOException;
 import java.lang.annotation.Inherited;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
  * Unit test for class {@link JAnnotationUse}.
@@ -66,7 +64,6 @@ public final class JAnnotationUseTest
 
     Assert.assertEquals ("@java.lang.SuppressWarnings(\"unused\")",
                          CodeModelTestsHelper.generate (suppressWarningAnnotation));
-
   }
 
   @Test
@@ -99,14 +96,14 @@ public final class JAnnotationUseTest
     final JFieldVar field = cls.field (JMod.PRIVATE, cm.DOUBLE, "y");
     field.annotate (Deprecated.class);
 
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 
   @Test
-  public void testPackageAnnotation () throws IOException
+  public void testPackageAnnotation () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
     cm._package ("foo").annotate (Inherited.class);
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

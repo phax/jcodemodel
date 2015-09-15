@@ -40,7 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -48,7 +47,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * Test class for class {@link JInvocation}
@@ -58,7 +57,7 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 public final class JInvocationTest
 {
   @Test
-  public void testWithGenerics () throws JClassAlreadyExistsException, IOException
+  public void testWithGenerics () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("TestInvocation");
@@ -108,6 +107,6 @@ public final class JInvocationTest
            .arg (JExpr._this ())
            .arg (JExpr._new (cm.ref (ArrayList.class).narrow (Long.class)));
 
-    cm.build (new SingleStreamCodeWriter (System.out));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

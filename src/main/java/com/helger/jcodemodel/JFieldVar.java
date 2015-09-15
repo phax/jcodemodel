@@ -43,21 +43,27 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * A field that can have a {@link JDocComment} associated with it
  */
 public class JFieldVar extends JVar implements IJDocCommentable
 {
-  private final JDefinedClass _owner;
+  private final JDefinedClass m_aOwnerClass;
 
   /**
    * javadoc comments for this JFieldVar
    */
-  private JDocComment _jdoc;
+  private JDocComment m_aJavaDoc;
 
   /**
    * JFieldVar constructor
    *
+   * @param aOwnerClass
+   *        The owning class.
+   * @param mods
+   *        modifiers to use
    * @param type
    *        Datatype of this variable
    * @param name
@@ -65,32 +71,35 @@ public class JFieldVar extends JVar implements IJDocCommentable
    * @param init
    *        Value to initialize this variable to
    */
-  protected JFieldVar (@Nonnull final JDefinedClass owner,
+  protected JFieldVar (@Nonnull final JDefinedClass aOwnerClass,
                        @Nonnull final JMods mods,
                        @Nonnull final AbstractJType type,
                        @Nonnull final String name,
                        @Nullable final IJExpression init)
   {
     super (mods, type, name, init);
-    this._owner = owner;
+    m_aOwnerClass = JCValueEnforcer.notNull (aOwnerClass, "OwnerClass");
   }
 
+  /**
+   * @return The owning class. Never <code>null</code>.
+   */
   @Nonnull
   public JDefinedClass owner ()
   {
-    return _owner;
+    return m_aOwnerClass;
   }
 
   @Override
   public void name (final String name)
   {
     // make sure that the new name is available
-    if (_owner.m_aFields.containsKey (name))
+    if (m_aOwnerClass.m_aFields.containsKey (name))
       throw new IllegalArgumentException ("name " + name + " is already in use");
-    final String oldName = name ();
+    final String sOldName = name ();
     super.name (name);
-    _owner.m_aFields.remove (oldName);
-    _owner.m_aFields.put (name, this);
+    m_aOwnerClass.m_aFields.remove (sOldName);
+    m_aOwnerClass.m_aFields.put (name, this);
   }
 
   /**
@@ -101,24 +110,27 @@ public class JFieldVar extends JVar implements IJDocCommentable
   @Nonnull
   public JDocComment javadoc ()
   {
-    if (_jdoc == null)
-      _jdoc = new JDocComment (_owner.owner ());
-    return _jdoc;
+    if (m_aJavaDoc == null)
+      m_aJavaDoc = new JDocComment (m_aOwnerClass.owner ());
+    return m_aJavaDoc;
   }
 
   @Override
   public void declare (@Nonnull final JFormatter f)
   {
-    if (_jdoc != null)
-      f.generable (_jdoc);
+    if (m_aJavaDoc != null)
+      f.generable (m_aJavaDoc);
     super.declare (f);
   }
 
   @Override
   public void generate (@Nonnull final JFormatter f)
   {
-    // Ensure the type is collected - see issue #30
-    f.type (_owner).print ('.');
+    if (false)
+    {
+      // Ensure the type is collected - see issue #30
+      f.type (m_aOwnerClass).print ('.');
+    }
     super.generate (f);
   }
 }

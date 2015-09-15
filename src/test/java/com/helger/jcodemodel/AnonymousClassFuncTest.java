@@ -46,7 +46,7 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
@@ -66,10 +66,10 @@ public final class AnonymousClassFuncTest
     c.field (JMod.PRIVATE, cm.DOUBLE, "y");
     m.body ().decl (cm.ref (Object.class), "x", JExpr._new (c));
 
-    cm.build (new SingleStreamCodeWriter (System.out));
-
     assertEquals ("java.util.Iterator<java.lang.Double>", c.fullName ());
     // Incorrect! Should be Test$1!
     assertEquals ("java.util.Iterator<java.lang.Double>", c.binaryName ());
+
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }
