@@ -1,5 +1,7 @@
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 
 import org.junit.Test;
@@ -19,7 +21,13 @@ public final class JDirectClassTest
     final JCodeModel cm = new JCodeModel ();
 
     final JDirectClass rClassId = cm.directClass ("id.aa.R")._class ("id");
+    assertEquals ("id", rClassId.name ());
+    assertEquals ("id.aa", rClassId._package ().name ());
+    assertEquals ("id.aa.R.id", rClassId.fullName ());
     final JDirectClass rClassMenu = cm.directClass ("id.aa.R")._class ("menu");
+    assertEquals ("menu", rClassMenu.name ());
+    assertEquals ("id.aa", rClassMenu._package ().name ());
+    assertEquals ("id.aa.R.menu", rClassMenu.fullName ());
 
     final JFieldRef myItem = rClassId.staticRef ("myItem");
     final JFieldRef myMenu = rClassMenu.staticRef ("myMenu");
@@ -32,5 +40,16 @@ public final class JDirectClassTest
     aMethodSelected.body ()._if (JExpr.ref ("itemId_").eq (myItem));
 
     cm.build (new SingleStreamCodeWriter (System.out));
+  }
+
+  @Test
+  public void testGenerics ()
+  {
+    final JCodeModel cm = new JCodeModel ();
+
+    final JDirectClass aDirectClass = cm.directClass ("com.test.GenericFragmentArguments<S,P>");
+    assertEquals ("com.test", aDirectClass._package ().name ());
+    assertEquals ("com.test.GenericFragmentArguments<S,P>", aDirectClass.name ());
+    assertEquals ("com.test.GenericFragmentArguments<S,P>", aDirectClass.fullName ());
   }
 }

@@ -56,20 +56,10 @@ import javax.annotation.Nullable;
  */
 public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 {
-  private final String m_sFullName;
-
   @Deprecated
   protected JDirectClass (@Nonnull final JCodeModel aOwner, @Nonnull final String sFullName)
   {
     this (aOwner, null, EClassType.CLASS, sFullName);
-  }
-
-  private static String _getName (@Nonnull final String sFullName)
-  {
-    final int i = sFullName.lastIndexOf ('.');
-    if (i >= 0)
-      return sFullName.substring (i + 1);
-    return sFullName;
   }
 
   protected JDirectClass (@Nonnull final JCodeModel aOwner,
@@ -77,30 +67,38 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
                           @Nonnull final EClassType eClassType,
                           @Nonnull final String sFullName)
   {
-    super (aOwner, aOuter, eClassType, _getName (sFullName));
-    m_sFullName = sFullName;
+    super (aOwner, aOuter, eClassType, sFullName);
   }
 
+  /**
+   * Gets the fully qualified name of this class.
+   */
   @Override
-  public String name ()
-  {
-    return m_sFullName;
-  }
-
-  @Override
-  @Nonnull
+  @Nullable
   public String fullName ()
   {
-    return m_sFullName;
+    if (getOuter () instanceof AbstractJClassContainer <?>)
+      return ((AbstractJClassContainer <?>) getOuter ()).fullName () + '.' + name ();
+
+    // The fully qualified name was already provided in the ctor
+    return name ();
   }
 
   @Override
   @Nonnull
   public JPackage _package ()
   {
-    final int i = m_sFullName.lastIndexOf ('.');
+    final IJClassContainer <?> aOuter = getOuter ();
+    if (aOuter instanceof AbstractJClassContainer <?>)
+      return ((AbstractJClassContainer <?>) aOuter)._package ();
+    if (aOuter instanceof JPackage)
+      return (JPackage) aOuter;
+
+    // No package present - use name based analysis
+    final String sFullName = name ();
+    final int i = sFullName.lastIndexOf ('.');
     if (i >= 0)
-      return owner ()._package (m_sFullName.substring (0, i));
+      return owner ()._package (sFullName.substring (0, i));
     return owner ().rootPackage ();
   }
 

@@ -193,6 +193,32 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>implem
                          @Nullable final String sName)
   {
     super (aOwner, aOuter, eClassType, sName);
+
+    if (sName != null)
+    {
+      if (sName.trim ().length () == 0)
+        throw new IllegalArgumentException ("JDefinedClass name empty");
+
+      if (!Character.isJavaIdentifierStart (sName.charAt (0)))
+      {
+        final String msg = "JDefinedClass name " +
+                           sName +
+                           " contains illegal character" +
+                           " for beginning of identifier: " +
+                           sName.charAt (0);
+        throw new IllegalArgumentException (msg);
+      }
+      for (int i = 1; i < sName.length (); i++)
+      {
+        final char c = sName.charAt (i);
+        if (!Character.isJavaIdentifierPart (c))
+        {
+          final String msg = "JDefinedClass name " + sName + " contains illegal character " + c;
+          throw new IllegalArgumentException (msg);
+        }
+      }
+    }
+
     if (isInterface ())
       m_aMods = JMods.forInterface (nMods);
     else
@@ -301,22 +327,6 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>implem
       m_aEnumConstantsByName.put (name, ec);
     }
     return ec;
-  }
-
-  /**
-   * Gets the fully qualified name of this class.
-   */
-  @Override
-  @Nullable
-  public String fullName ()
-  {
-    if (getOuter () instanceof AbstractJClassContainer <?>)
-      return ((AbstractJClassContainer <?>) getOuter ()).fullName () + '.' + name ();
-
-    final JPackage p = _package ();
-    if (p.isUnnamed ())
-      return name ();
-    return p.name () + '.' + name ();
   }
 
   @Override

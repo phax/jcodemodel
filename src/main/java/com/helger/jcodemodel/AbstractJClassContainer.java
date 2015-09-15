@@ -98,32 +98,6 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
                                      @Nullable final String sName)
   {
     super (aOwner);
-
-    if (sName != null)
-    {
-      if (sName.trim ().length () == 0)
-        throw new IllegalArgumentException ("JClass name empty");
-
-      if (!Character.isJavaIdentifierStart (sName.charAt (0)))
-      {
-        final String msg = "JClass name " +
-                           sName +
-                           " contains illegal character" +
-                           " for beginning of identifier: " +
-                           sName.charAt (0);
-        throw new IllegalArgumentException (msg);
-      }
-      for (int i = 1; i < sName.length (); i++)
-      {
-        final char c = sName.charAt (i);
-        if (!Character.isJavaIdentifierPart (c))
-        {
-          final String msg = "JClass name " + sName + " contains illegal character " + c;
-          throw new IllegalArgumentException (msg);
-        }
-      }
-    }
-
     m_aOuter = aOuter;
     m_eClassType = eClassType;
     m_sName = sName;
@@ -177,6 +151,22 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   public String name ()
   {
     return m_sName;
+  }
+
+  /**
+   * Gets the fully qualified name of this class.
+   */
+  @Override
+  @Nullable
+  public String fullName ()
+  {
+    if (getOuter () instanceof AbstractJClassContainer <?>)
+      return ((AbstractJClassContainer <?>) getOuter ()).fullName () + '.' + name ();
+
+    final JPackage aPkg = _package ();
+    if (aPkg.isUnnamed ())
+      return name ();
+    return aPkg.name () + '.' + name ();
   }
 
   /**
