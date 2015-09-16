@@ -115,8 +115,7 @@ public abstract class AbstractCodeWriter implements Closeable
 
   /**
    * Called by CodeModel to store the specified file. The callee must allocate a
-   * storage to store the specified file.
-   * <p>
+   * storage to store the specified file. <br>
    * The returned stream will be closed before the next file is stored. So the
    * callee can assume that only one OutputStream is active at any given time.
    *
@@ -126,14 +125,14 @@ public abstract class AbstractCodeWriter implements Closeable
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
    * @return OutputStream to write to
+   * @IOException On IO error
    */
   @Nonnull
   public abstract OutputStream openBinary (@Nonnull JPackage pkg, @Nonnull String fileName) throws IOException;
 
   /**
    * Called by CodeModel to store the specified file. The callee must allocate a
-   * storage to store the specified file.
-   * <p>
+   * storage to store the specified file. <br>
    * The returned stream will be closed before the next file is stored. So the
    * callee can assume that only one OutputStream is active at any given time.
    *
@@ -143,6 +142,7 @@ public abstract class AbstractCodeWriter implements Closeable
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
    * @return Writer to write to
+   * @IOException On IO error
    */
   @Nonnull
   public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException

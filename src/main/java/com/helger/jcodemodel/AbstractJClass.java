@@ -385,7 +385,7 @@ public abstract class AbstractJClass extends AbstractJType
   @Override
   public String toString ()
   {
-    return getClass ().getName () + '(' + name () + ')';
+    return getClass ().getName () + '(' + fullName () + ')';
   }
 
   @Nonnull
