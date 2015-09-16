@@ -56,10 +56,22 @@ import javax.annotation.Nullable;
  */
 public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 {
+
+  private final String m_sFullName;
+
   @Deprecated
   protected JDirectClass (@Nonnull final JCodeModel aOwner, @Nonnull final String sFullName)
   {
     this (aOwner, null, EClassType.CLASS, sFullName);
+  }
+
+  @Nonnull
+  private static String _getName (@Nonnull final String sFullName)
+  {
+    final int nLast = sFullName.lastIndexOf ('.');
+    if (nLast < 0)
+      return sFullName;
+    return sFullName.substring (nLast + 1);
   }
 
   protected JDirectClass (@Nonnull final JCodeModel aOwner,
@@ -67,7 +79,8 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
                           @Nonnull final EClassType eClassType,
                           @Nonnull final String sFullName)
   {
-    super (aOwner, aOuter, eClassType, sFullName);
+    super (aOwner, aOuter, eClassType, _getName (sFullName));
+    m_sFullName = sFullName;
   }
 
   /**
@@ -78,10 +91,10 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   public String fullName ()
   {
     if (getOuter () instanceof AbstractJClassContainer <?>)
-      return ((AbstractJClassContainer <?>) getOuter ()).fullName () + '.' + name ();
+      return ((AbstractJClassContainer <?>) getOuter ()).fullName () + '.' + m_sFullName;
 
     // The fully qualified name was already provided in the ctor
-    return name ();
+    return m_sFullName;
   }
 
   @Override
@@ -95,7 +108,7 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
       return (JPackage) aOuter;
 
     // No package present - use name based analysis
-    final String sFullName = name ();
+    final String sFullName = fullName ();
     final int i = sFullName.lastIndexOf ('.');
     if (i >= 0)
       return owner ()._package (sFullName.substring (0, i));

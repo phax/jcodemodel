@@ -88,8 +88,7 @@ public class JFormatter implements Closeable
 
    /**
     * Find any error types in output code. In this mode we don't actually
-    * generate anything.
-    * <p>
+    * generate anything. <br/>
     * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass)
     * containsErrorTypes} method
     */
@@ -106,10 +105,10 @@ public class JFormatter implements Closeable
    */
   /* package */static final char CLOSE_TYPE_ARGS = '\uFFFF';
 
-  /** all classes and ids encountered during the collection mode **/
   /**
-   * map from short type name to ReferenceList (list of JClass and ids sharing
-   * that name)
+   * all classes and ids encountered during the collection mode.<br>
+   * map from short type name to {@link Usages} (list of {@link AbstractJClass}
+   * and ids sharing that name)
    **/
   private final Map <String, Usages> m_aCollectedReferences = new HashMap <String, Usages> ();
 
@@ -391,18 +390,14 @@ public class JFormatter implements Closeable
         }
         break;
       case COLLECTING:
-        // Never import direct classes
-        if (!(aType instanceof JDirectClass))
+        final String sShortName = aType.name ();
+        Usages aUsage = m_aCollectedReferences.get (sShortName);
+        if (aUsage == null)
         {
-          final String sShortName = aType.name ();
-          Usages aUsage = m_aCollectedReferences.get (sShortName);
-          if (aUsage == null)
-          {
-            aUsage = new Usages ();
-            m_aCollectedReferences.put (sShortName, aUsage);
-          }
-          aUsage.addReferencedType (aType);
+          aUsage = new Usages ();
+          m_aCollectedReferences.put (sShortName, aUsage);
         }
+        aUsage.addReferencedType (aType);
         break;
     }
     return this;
@@ -525,46 +520,46 @@ public class JFormatter implements Closeable
   /**
    * Generates the whole source code out of the specified class.
    */
-  void write (@Nonnull final JDefinedClass c)
+  void write (@Nonnull final JDefinedClass aClassToBeWritten)
   {
-    m_aPckJavaLang = c.owner ()._package ("java.lang");
+    m_aPckJavaLang = aClassToBeWritten.owner ()._package ("java.lang");
 
     // first collect all the types and identifiers
     m_eMode = EMode.COLLECTING;
-    declaration (c);
+    declaration (aClassToBeWritten);
 
     // collate type names and identifiers to determine which types can be
     // imported
-    for (final Usages usage : m_aCollectedReferences.values ())
+    for (final Usages aUsage : m_aCollectedReferences.values ())
     {
-      if (!usage.isAmbiguousIn (c) && !usage.isVariableName ())
+      if (!aUsage.isAmbiguousIn (aClassToBeWritten) && !aUsage.isVariableName ())
       {
-        final AbstractJClass reference = usage.getSingleReferencedType ();
+        final AbstractJClass aReferencedClass = aUsage.getSingleReferencedType ();
 
-        if (_shouldBeImported (reference, c))
-          m_aImportedClasses.add (reference);
+        if (_shouldBeImported (aReferencedClass, aClassToBeWritten))
+          m_aImportedClasses.add (aReferencedClass);
         else
         {
-          _importOuterClassIfCausesNoAmbiguities (reference, c);
+          _importOuterClassIfCausesNoAmbiguities (aReferencedClass, aClassToBeWritten);
         }
       }
       else
       {
-        for (final AbstractJClass reference : usage.getReferencedTypes ())
+        for (final AbstractJClass reference : aUsage.getReferencedTypes ())
         {
-          _importOuterClassIfCausesNoAmbiguities (reference, c);
+          _importOuterClassIfCausesNoAmbiguities (reference, aClassToBeWritten);
         }
       }
     }
 
     // the class itself that we will be generating is always accessible
-    m_aImportedClasses.add (c);
+    m_aImportedClasses.add (aClassToBeWritten);
 
     // then print the declaration
     m_eMode = EMode.PRINTING;
 
-    assert c.parentContainer ().isPackage () : "this method is only for a pacakge-level class";
-    final JPackage pkg = (JPackage) c.parentContainer ();
+    assert aClassToBeWritten.parentContainer ().isPackage () : "this method is only for a pacakge-level class";
+    final JPackage pkg = (JPackage) aClassToBeWritten.parentContainer ();
     if (!pkg.isUnnamed ())
     {
       newline ().declaration (pkg);
@@ -580,7 +575,7 @@ public class JFormatter implements Closeable
       // suppress import statements for primitive types, built-in types,
       // types in the root package, and types in
       // the same package as the current type
-      if (!_isImplicitlyImported (clazz, c))
+      if (!_isImplicitlyImported (clazz, aClassToBeWritten))
       {
         if (clazz instanceof JNarrowedClass)
         {
@@ -595,7 +590,7 @@ public class JFormatter implements Closeable
     if (bAnyImport)
       newline ();
 
-    declaration (c);
+    declaration (aClassToBeWritten);
   }
 
   /**
@@ -604,23 +599,27 @@ public class JFormatter implements Closeable
    *
    * @param aReference
    *        {@link AbstractJClass} referenced class
-   * @param clazz
+   * @param aGeneratedClass
    *        {@link AbstractJClass} currently generated class
    * @return true if an import statement can be used to shorten references to
    *         referenced class
    */
-  private boolean _shouldBeImported (@Nonnull final AbstractJClass aReference, @Nonnull final JDefinedClass clazz)
+  private boolean _shouldBeImported (@Nonnull final AbstractJClass aReference,
+                                     @Nonnull final JDefinedClass aGeneratedClass)
   {
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)
     {
+      // get the super class of the anonymous class
       aRealReference = ((JAnonymousClass) aRealReference)._extends ();
     }
     if (aRealReference instanceof JNarrowedClass)
     {
+      // Remove the generic arguments
       aRealReference = aRealReference.erasure ();
     }
 
+    // Is it an inner class?
     final AbstractJClass aOuter = aRealReference.outer ();
     if (aOuter != null)
     {
@@ -629,7 +628,7 @@ public class JFormatter implements Closeable
       // In such case no information is lost when we refer to inner class
       // without mentioning
       // it's enclosing class
-      if (aRealReference.name ().contains (aOuter.name ()) && _shouldBeImported (aOuter, clazz))
+      if (aRealReference.name ().contains (aOuter.name ()) && _shouldBeImported (aOuter, aGeneratedClass))
         return true;
 
       // Do not import inner classes in all other cases to aid
@@ -654,10 +653,12 @@ public class JFormatter implements Closeable
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)
     {
+      // Get the super class of the anonymous class
       aRealReference = ((JAnonymousClass) aRealReference)._extends ();
     }
     if (aRealReference instanceof JNarrowedClass)
     {
+      // Remove generic type arguments
       aRealReference = aRealReference.erasure ();
     }
 
@@ -669,7 +670,10 @@ public class JFormatter implements Closeable
     }
 
     if (aPackage.isUnnamed ())
+    {
+      // Root package - no need to import something
       return true;
+    }
 
     if (aPackage == m_aPckJavaLang)
     {

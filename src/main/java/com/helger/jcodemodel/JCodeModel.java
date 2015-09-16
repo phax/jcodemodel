@@ -536,7 +536,7 @@ public final class JCodeModel
     {
       return ref (Class.forName (sFullyQualifiedClassName));
     }
-    catch (final ClassNotFoundException e1)
+    catch (final ClassNotFoundException e)
     {
       // fall through
     }
@@ -581,7 +581,7 @@ public final class JCodeModel
     }
     catch (final IllegalArgumentException e)
     {
-      // NOt a primitive type
+      // Not a primitive type
     }
 
     // existing class
@@ -591,12 +591,12 @@ public final class JCodeModel
   @NotThreadSafe
   private final class TypeNameParser
   {
-    private final String _s;
-    private int _idx;
+    private final String m_sTypeName;
+    private int m_nIdx;
 
     public TypeNameParser (@Nonnull final String s)
     {
-      _s = s;
+      m_sTypeName = s;
     }
 
     /**
@@ -608,36 +608,37 @@ public final class JCodeModel
     @Nonnull
     AbstractJClass parseTypeName ()
     {
-      final int start = _idx;
+      final int start = m_nIdx;
 
-      if (_s.charAt (_idx) == '?')
+      if (m_sTypeName.charAt (m_nIdx) == '?')
       {
         // wildcard
-        _idx++;
+        m_nIdx++;
         _skipWs ();
-        final String head = _s.substring (_idx);
+        final String head = m_sTypeName.substring (m_nIdx);
         if (head.startsWith ("extends"))
         {
-          _idx += 7;
+          m_nIdx += 7;
           _skipWs ();
           return parseTypeName ().wildcard ();
         }
         if (head.startsWith ("super"))
           throw new UnsupportedOperationException ("? super T not implemented");
         // not supported
-        throw new IllegalArgumentException ("only extends/super can follow ?, but found " + _s.substring (_idx));
+        throw new IllegalArgumentException ("only extends/super can follow ?, but found " +
+                                            m_sTypeName.substring (m_nIdx));
       }
 
-      while (_idx < _s.length ())
+      while (m_nIdx < m_sTypeName.length ())
       {
-        final char ch = _s.charAt (_idx);
+        final char ch = m_sTypeName.charAt (m_nIdx);
         if (Character.isJavaIdentifierStart (ch) || Character.isJavaIdentifierPart (ch) || ch == '.')
-          _idx++;
+          m_nIdx++;
         else
           break;
       }
 
-      final AbstractJClass clazz = ref (_s.substring (start, _idx));
+      final AbstractJClass clazz = ref (m_sTypeName.substring (start, m_nIdx));
 
       return _parseSuffix (clazz);
     }
@@ -649,22 +650,22 @@ public final class JCodeModel
     @Nonnull
     private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass clazz)
     {
-      if (_idx == _s.length ())
+      if (m_nIdx == m_sTypeName.length ())
         return clazz; // hit EOL
 
-      final char ch = _s.charAt (_idx);
+      final char ch = m_sTypeName.charAt (m_nIdx);
 
       if (ch == '<')
         return _parseSuffix (_parseArguments (clazz));
 
       if (ch == '[')
       {
-        if (_s.charAt (_idx + 1) == ']')
+        if (m_sTypeName.charAt (m_nIdx + 1) == ']')
         {
-          _idx += 2;
+          m_nIdx += 2;
           return _parseSuffix (clazz.array ());
         }
-        throw new IllegalArgumentException ("Expected ']' but found " + _s.substring (_idx + 1));
+        throw new IllegalArgumentException ("Expected ']' but found " + m_sTypeName.substring (m_nIdx + 1));
       }
 
       return clazz;
@@ -675,8 +676,8 @@ public final class JCodeModel
      */
     private void _skipWs ()
     {
-      while (Character.isWhitespace (_s.charAt (_idx)) && _idx < _s.length ())
-        _idx++;
+      while (Character.isWhitespace (m_sTypeName.charAt (m_nIdx)) && m_nIdx < m_sTypeName.length ())
+        m_nIdx++;
     }
 
     /**
@@ -687,24 +688,24 @@ public final class JCodeModel
     @Nonnull
     private AbstractJClass _parseArguments (@Nonnull final AbstractJClass rawType)
     {
-      if (_s.charAt (_idx) != '<')
+      if (m_sTypeName.charAt (m_nIdx) != '<')
         throw new IllegalArgumentException ();
-      _idx++;
+      m_nIdx++;
 
       final List <AbstractJClass> args = new ArrayList <AbstractJClass> ();
 
       while (true)
       {
         args.add (parseTypeName ());
-        if (_idx == _s.length ())
-          throw new IllegalArgumentException ("Missing '>' in " + _s);
-        final char ch = _s.charAt (_idx);
+        if (m_nIdx == m_sTypeName.length ())
+          throw new IllegalArgumentException ("Missing '>' in " + m_sTypeName);
+        final char ch = m_sTypeName.charAt (m_nIdx);
         if (ch == '>')
           return rawType.narrow (args.toArray (new AbstractJClass [args.size ()]));
 
         if (ch != ',')
-          throw new IllegalArgumentException (_s);
-        _idx++;
+          throw new IllegalArgumentException (m_sTypeName);
+        m_nIdx++;
       }
     }
   }

@@ -1,6 +1,7 @@
 package com.helger.jcodemodel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -45,12 +46,16 @@ public final class JDirectClassTest
   {
     final JCodeModel cm = new JCodeModel ();
 
-    final JDirectClass aDirectClass = cm.directClass ("com.test.GenericFragmentArguments<S,P>");
-    assertEquals ("com.test", aDirectClass._package ().name ());
-    assertEquals ("com.test.GenericFragmentArguments<S,P>", aDirectClass.name ());
-    assertEquals ("com.test.GenericFragmentArguments<S,P>", aDirectClass.fullName ());
+    final AbstractJClass aNarrowedClass = (AbstractJClass) cm.parseType ("com.test.GenericFragmentArguments<S,P>");
+    assertTrue (aNarrowedClass instanceof JNarrowedClass);
+    assertTrue (aNarrowedClass.erasure () instanceof JDirectClass);
+    assertEquals ("com.test", aNarrowedClass._package ().name ());
+    assertEquals ("GenericFragmentArguments<S,P>", aNarrowedClass.name ());
+    assertEquals ("GenericFragmentArguments", aNarrowedClass.erasure ().name ());
+    assertEquals ("com.test.GenericFragmentArguments<S,P>", aNarrowedClass.fullName ());
+    assertEquals ("com.test.GenericFragmentArguments", aNarrowedClass.erasure ().fullName ());
 
-    cm._class ("UsingClass").method (JMod.PUBLIC, cm.VOID, "test").body ().add (JExpr._new (aDirectClass));
+    cm._class ("UsingClass").method (JMod.PUBLIC, cm.VOID, "test").body ().add (JExpr._new (aNarrowedClass));
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }
