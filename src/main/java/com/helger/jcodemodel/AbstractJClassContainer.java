@@ -49,7 +49,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
- * A generated Java class/interface/enum/annotation<br />
+ * A generated Java class/interface/enum/annotation<br>
  * This class models a declaration, and since a declaration can be always used
  * as a reference, it inherits {@link AbstractJClass}.
  *
@@ -87,8 +87,12 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   /**
    * JClass constructor
    *
-   * @param nMods
-   *        Modifiers for this class declaration
+   * @param aOwner
+   *        Owning code model
+   * @param aOuter
+   *        Optional outer class container
+   * @param eClassType
+   *        Class type to use
    * @param sName
    *        Name of this class
    */
@@ -132,6 +136,8 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
 
   /**
    * This method indicates if the interface is an annotationTypeDeclaration
+   *
+   * @return <code>true</code> if this an annotation type declaration
    */
   public final boolean isAnnotationTypeDeclaration ()
   {
@@ -139,8 +145,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   }
 
   /**
-   * JClass name accessor.
-   * <p>
+   * Class name accessor. <br>
    * For example, for <code>java.util.List</code>, this method returns
    * <code>"List"</code>"
    *

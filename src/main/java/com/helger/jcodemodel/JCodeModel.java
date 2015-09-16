@@ -208,7 +208,7 @@ public final class JCodeModel
   }
 
   /**
-   * Returns an iterator that walks the packages defined using this code writer.
+   * @return an iterator that walks the packages defined using this code writer.
    */
   @Nonnull
   public Iterator <JPackage> packages ()
@@ -219,31 +219,12 @@ public final class JCodeModel
   /**
    * Creates a new generated class.
    *
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  @Nonnull
-  public JDefinedClass _class (@Nonnull final String fullyqualifiedName) throws JClassAlreadyExistsException
-  {
-    return _class (fullyqualifiedName, EClassType.CLASS);
-  }
-
-  /**
-   * Creates a new generated class.
-   *
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  @Nonnull
-  public JDefinedClass _class (final int nMods,
-                               @Nonnull final String fullyqualifiedName) throws JClassAlreadyExistsException
-  {
-    return _class (nMods, fullyqualifiedName, EClassType.CLASS);
-  }
-
-  /**
-   * Creates a new generated class.
-   *
+   * @param nMods
+   *        Modifiers to use
+   * @param sFullyQualifiedClassName
+   *        FQCN
+   * @param eClassType
+   *        Class type to use (enum/class/interface/annotation)
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -264,19 +245,56 @@ public final class JCodeModel
   /**
    * Creates a new generated class.
    *
+   * @param sFullyQualifiedClassName
+   *        FQCN
+   * @return New {@link JDefinedClass}
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (@Nonnull final String fullyqualifiedName,
+  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName) throws JClassAlreadyExistsException
+  {
+    return _class (sFullyQualifiedClassName, EClassType.CLASS);
+  }
+
+  /**
+   * Creates a new generated class.
+   *
+   * @param nMods
+   *        Modifiers to use
+   * @param sFullyQualifiedClassName
+   *        FQCN
+   * @return New {@link JDefinedClass}
+   * @exception JClassAlreadyExistsException
+   *            When the specified class/interface was already created.
+   */
+  @Nonnull
+  public JDefinedClass _class (final int nMods,
+                               @Nonnull final String sFullyQualifiedClassName) throws JClassAlreadyExistsException
+  {
+    return _class (nMods, sFullyQualifiedClassName, EClassType.CLASS);
+  }
+
+  /**
+   * Creates a new generated class.
+   *
+   * @param sFullyQualifiedClassName
+   *        FQCN
+   * @param eClassType
+   *        Class type to use (enum/class/interface/annotation)
+   * @exception JClassAlreadyExistsException
+   *            When the specified class/interface was already created.
+   */
+  @Nonnull
+  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName,
                                @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
   {
-    return _class (JMod.PUBLIC, fullyqualifiedName, eClassType);
+    return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
   }
 
   /**
    * Creates a dummy, unknown {@link JDirectClass} that represents a given name.
-   * <br/>
+   * <br>
    * This method is useful when the code generation needs to include the
    * user-specified class that may or may not exist, and only thing known about
    * it is a class name.
@@ -289,7 +307,7 @@ public final class JCodeModel
 
   /**
    * Creates a dummy, unknown {@link JDirectClass} that represents a given name.
-   * <br />
+   * <br>
    * This method is useful when the code generation needs to include the
    * user-specified class that may or may not exist, and only thing known about
    * it is a class name.

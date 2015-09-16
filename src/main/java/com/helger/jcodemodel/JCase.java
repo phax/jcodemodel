@@ -65,6 +65,9 @@ public class JCase implements IJStatement
 
   /**
    * Construct a case statement
+   * 
+   * @param label
+   *        Label name. May not be <code>null</code>.
    */
   public JCase (@Nonnull final IJExpression label)
   {
@@ -74,6 +77,12 @@ public class JCase implements IJStatement
   /**
    * Construct a case statement. If isDefaultCase is true, then label should be
    * null since default cases don't have a label.
+   *
+   * @param label
+   *        Label name. May be <code>null</code> for the default case.
+   * @param isDefaultCase
+   *        <code>true</code> if this is the <code>default:</code> case which
+   *        renders differently.
    */
   public JCase (@Nullable final IJExpression label, final boolean isDefaultCase)
   {

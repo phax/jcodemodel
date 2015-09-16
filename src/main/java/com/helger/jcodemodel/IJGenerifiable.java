@@ -55,6 +55,8 @@ public interface IJGenerifiable
   /**
    * Adds a new type variable to this declaration.
    *
+   * @param name
+   *        type variable name
    * @return The created {@link JTypeVar}
    */
   @Nonnull
@@ -63,6 +65,10 @@ public interface IJGenerifiable
   /**
    * Adds a new type variable to this declaration with a bound.
    *
+   * @param name
+   *        type variable name
+   * @param bound
+   *        Bound class
    * @return The created {@link JTypeVar}
    */
   @Nonnull
@@ -71,6 +77,10 @@ public interface IJGenerifiable
   /**
    * Adds a new type variable to this declaration with a bound.
    *
+   * @param name
+   *        type variable name
+   * @param bound
+   *        Bound class
    * @return The created {@link JTypeVar}
    */
   @Nonnull

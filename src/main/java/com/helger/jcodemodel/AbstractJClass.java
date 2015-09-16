@@ -94,8 +94,8 @@ public abstract class AbstractJClass extends AbstractJType
   public abstract JPackage _package ();
 
   /**
-   * Returns the class in which this class is nested, or <tt>null</tt> if this
-   * is a top-level class.
+   * @return the class in which this class is nested, or <tt>null</tt> if this
+   *         is a top-level class.
    */
   @Nullable
   public AbstractJClass outer ()
@@ -133,18 +133,19 @@ public abstract class AbstractJClass extends AbstractJType
   public abstract Iterator <AbstractJClass> _implements ();
 
   /**
-   * Checks if this object represents an interface.
+   * @return <code>true</code> if this object represents an interface.
    */
   public abstract boolean isInterface ();
 
   /**
-   * Checks if this class is an abstract class.
+   * @return <code>true</code> if this class is an abstract class.
    */
   public abstract boolean isAbstract ();
 
   /**
-   * If this class represents one of the wrapper classes defined in the
-   * java.lang package, return the corresponding primitive type. Otherwise null.
+   * @return If this class represents one of the wrapper classes defined in the
+   *         <code>java.lang</code> package, return the corresponding primitive
+   *         type. Otherwise <code>null</code>.
    */
   @Nullable
   public JPrimitiveType getPrimitiveType ()
@@ -249,10 +250,13 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * "Narrows" a generic class to a concrete class by specifying a type
-   * argument.
-   * <p>
+   * argument.<br>
    * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from
    * <code>Set</code>.
+   *
+   * @param clazz
+   *        class to narrow with
+   * @return Never <code>null</code>. Narrowed class.
    */
   @Nonnull
   public JNarrowedClass narrow (@Nonnull final Class <?> clazz)
@@ -271,10 +275,13 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * "Narrows" a generic class to a concrete class by specifying a type
-   * argument.
-   * <p>
+   * argument. <br>
    * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from
    * <code>Set</code>.
+   *
+   * @param clazz
+   *        class to narrow with
+   * @return Never <code>null</code>. Narrowed class.
    */
   @Nonnull
   public JNarrowedClass narrow (final AbstractJClass clazz)
@@ -305,8 +312,8 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * If this class is parameterized, return the type parameter of the given
-   * index.
+   * @return If this class is parameterized, the type parameters of the given
+   *         index.
    */
   @Nonnull
   public List <? extends AbstractJClass> getTypeParameters ()
@@ -315,11 +322,12 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * Iterates all the type parameters of this class/interface.
-   * <p>
+   * Iterates all the type parameters of this class/interface. <br>
    * For example, if this {@link AbstractJClass} represents
    * <code>Set&lt;T&gt;</code>, this method returns an array that contains
    * single {@link JTypeVar} for 'T'.
+   *
+   * @return All type parameters as array.
    */
   @Nonnull
   public JTypeVar [] typeParams ()
@@ -328,7 +336,7 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * Returns true if this class is a parameterized class.
+   * @return <code>true</code> if this class is a parameterized class.
    */
   public final boolean isParameterized ()
   {
@@ -338,7 +346,7 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Create "? extends T" from T.
    *
-   * @return never null
+   * @return never <code>null</code>
    */
   @Nonnull
   public final JTypeWildcard wildcard ()
@@ -349,7 +357,7 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Create "? super T" from T.
    *
-   * @return never null
+   * @return never <code>null</code>
    */
   @Nonnull
   public final JTypeWildcard wildcardSuper ()
@@ -362,7 +370,7 @@ public abstract class AbstractJClass extends AbstractJType
    *
    * @param eMode
    *        "extends" or "super"
-   * @return never null
+   * @return never <code>null</code>
    */
   @Nonnull
   public final JTypeWildcard wildcard (@Nonnull final EBoundMode eMode)
@@ -371,14 +379,19 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * Substitutes the type variables with their actual arguments.
-   * <p>
+   * Substitutes the type variables with their actual arguments. <br>
    * For example, when this class is Map&lt;String,Map&lt;V&gt;&gt;, (where V
    * then doing substituteParams( V, Integer ) returns a {@link AbstractJClass}
-   * for <code>Map&lt;String,Map&lt;Integer&gt;&gt;</code>.
-   * <p>
+   * for <code>Map&lt;String,Map&lt;Integer&gt;&gt;</code>. <br>
    * This method needs to work recursively.
+   *
+   * @param variables
+   *        Type variables
+   * @param bindings
+   *        Bindings
+   * @return Never <code>null</code>.
    */
+  @Nonnull
   protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] variables,
                                                       @Nonnull List <? extends AbstractJClass> bindings);
 
@@ -396,38 +409,54 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Generates a static method invocation.
+   *
+   * @param aMethod
+   *        Method to be invoked
+   * @return Newly created {@link JInvocation}
    */
   @Nonnull
-  public final JInvocation staticInvoke (@Nonnull final JMethod method)
+  public final JInvocation staticInvoke (@Nonnull final JMethod aMethod)
   {
-    return new JInvocation (this, method);
+    return new JInvocation (this, aMethod);
   }
 
   /**
    * Generates a static method invocation.
+   *
+   * @param sMethod
+   *        Method to be invoked
+   * @return Newly created {@link JInvocation}
    */
   @Nonnull
-  public final JInvocation staticInvoke (@Nonnull final String method)
+  public final JInvocation staticInvoke (@Nonnull final String sMethod)
   {
-    return new JInvocation (this, method);
+    return new JInvocation (this, sMethod);
   }
 
   /**
    * Static field reference.
+   *
+   * @param sField
+   *        Field to be referenced
+   * @return Newly created {@link JFieldRef}
    */
   @Nonnull
-  public final JFieldRef staticRef (final String field)
+  public final JFieldRef staticRef (final String sField)
   {
-    return new JFieldRef (this, field);
+    return new JFieldRef (this, sField);
   }
 
   /**
    * Static field reference.
+   *
+   * @param aField
+   *        Field to be referenced
+   * @return Newly created {@link JFieldRef}
    */
   @Nonnull
-  public final JFieldRef staticRef (final JVar field)
+  public final JFieldRef staticRef (final JVar aField)
   {
-    return new JFieldRef (this, field);
+    return new JFieldRef (this, aField);
   }
 
   public void generate (@Nonnull final JFormatter f)
@@ -437,6 +466,9 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Prints the class name in javadoc @link format.
+   * 
+   * @param f
+   *        Formatter to be used
    */
   void printLink (@Nonnull final JFormatter f)
   {

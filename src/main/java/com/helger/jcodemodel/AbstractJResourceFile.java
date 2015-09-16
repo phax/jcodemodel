@@ -58,7 +58,7 @@ public abstract class AbstractJResourceFile
   }
 
   /**
-   * Gets the name of this property file
+   * @return the name of this property file
    */
   @Nonnull
   public final String name ()
@@ -67,11 +67,10 @@ public abstract class AbstractJResourceFile
   }
 
   /**
-   * Returns true if this file should be generated into the directory that the
-   * resource files go into.
-   * <p>
-   * Returns false if this file should be generated into the directory where
-   * other source files go.
+   * @return <code>true</code> if this file should be generated into the
+   *         directory that the resource files go into. <code>false</code> if
+   *         this file should be generated into the directory where other source
+   *         files go.
    */
   protected boolean isResource ()
   {
@@ -80,6 +79,11 @@ public abstract class AbstractJResourceFile
 
   /**
    * called by {@link JPackage} to produce the file image.
+   *
+   * @param os
+   *        OutputStream to write to
+   * @throws IOException
+   *         If writing on the stream throws an error
    */
   protected abstract void build (@Nonnull OutputStream os) throws IOException;
 }

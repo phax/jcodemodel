@@ -99,168 +99,224 @@ public interface IJExpression extends IJGenerable
   IJExpression predecr ();
 
   /**
+   * @param right
+   *        value to add
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        value to add
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (double right);
 
   /**
+   * @param right
+   *        value to add
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (float right);
 
   /**
+   * @param right
+   *        value to add
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (int right);
 
   /**
+   * @param right
+   *        value to add
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (long right);
 
   /**
+   * @param right
+   *        value to add
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
   IJExpression plus (@Nonnull String right);
 
   /**
+   * @param right
+   *        value to add
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        value to subtract
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (double right);
 
   /**
+   * @param right
+   *        value to subtract
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (float right);
 
   /**
+   * @param right
+   *        value to subtract
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (int right);
 
   /**
+   * @param right
+   *        value to subtract
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
   IJExpression minus (long right);
 
   /**
+   * @param right
+   *        value to multiply
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        value to multiply
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (double right);
 
   /**
+   * @param right
+   *        value to multiply
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (float right);
 
   /**
+   * @param right
+   *        value to multiply
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (int right);
 
   /**
+   * @param right
+   *        value to multiply
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
   IJExpression mul (long right);
 
   /**
+   * @param right
+   *        value to divide through
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        value to divide through
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (double right);
 
   /**
+   * @param right
+   *        value to divide through
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (float right);
 
   /**
+   * @param right
+   *        value to divide through
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (int right);
 
   /**
+   * @param right
+   *        value to divide through
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
   IJExpression div (long right);
 
   /**
+   * @param right
+   *        value to mod with
    * @return <code>[this]%[right]</code>.
    */
   @Nonnull
   IJExpression mod (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        number of bits to shift
    * @return <code>[this]&lt;&lt;[right]</code>.
    */
   @Nonnull
   IJExpression shl (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        number of bits to shift
    * @return <code>[this]&lt;&lt;[right]</code>.
    */
   @Nonnull
   IJExpression shl (int right);
 
   /**
+   * @param right
+   *        number of bits to shift
    * @return <code>[this] &gt;&gt; [right]</code>.
    */
   @Nonnull
   IJExpression shr (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        number of bits to shift
    * @return <code>[this] &gt;&gt; [right]</code>.
    */
   @Nonnull
   IJExpression shr (int right);
 
   /**
+   * @param right
+   *        number of bits to shift
    * @return <code>[this] &gt;&gt;&gt; [right]</code>.
    */
   @Nonnull
   IJExpression shrz (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        number of bits to shift
    * @return <code>[this] &gt;&gt;&gt; [right]</code>.
    */
   @Nonnull
@@ -269,6 +325,8 @@ public interface IJExpression extends IJGenerable
   /**
    * Bit-wise AND '&amp;'.
    *
+   * @param right
+   *        value to combine with
    * @return <code>[this] &amp; [right]</code>.
    */
   @Nonnull
@@ -277,6 +335,8 @@ public interface IJExpression extends IJGenerable
   /**
    * Bit-wise OR '|'.
    *
+   * @param right
+   *        value to combine with
    * @return <code>[this] | [right]</code>.
    */
   @Nonnull
@@ -285,6 +345,8 @@ public interface IJExpression extends IJGenerable
   /**
    * Logical AND '&amp;&amp;'.
    *
+   * @param right
+   *        value to combine with
    * @return <code>[this] &amp;&amp; [right]</code>.
    */
   @Nonnull
@@ -293,18 +355,24 @@ public interface IJExpression extends IJGenerable
   /**
    * Logical OR '||'.
    *
+   * @param right
+   *        value to combine with
    * @return <code>[this] || [right]</code>.
    */
   @Nonnull
   IJExpression cor (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        value to combine with
    * @return <code>[this] ^ [right]</code>.
    */
   @Nonnull
   IJExpression xor (@Nonnull IJExpression right);
 
   /**
+   * @param right
+   *        value to compare to
    * @return <code>[this] &lt; [right]</code>.
    */
   @Nonnull
@@ -317,6 +385,8 @@ public interface IJExpression extends IJGenerable
   IJExpression lt0 ();
 
   /**
+   * @param right
+   *        value to compare to
    * @return <code>[this] &lt;= [right]</code>.
    */
   @Nonnull
@@ -329,6 +399,8 @@ public interface IJExpression extends IJGenerable
   IJExpression lte0 ();
 
   /**
+   * @param right
+   *        value to compare to
    * @return <code>[this] &gt; [right]</code>.
    */
   @Nonnull
@@ -341,6 +413,8 @@ public interface IJExpression extends IJGenerable
   IJExpression gt0 ();
 
   /**
+   * @param right
+   *        value to compare to
    * @return <code>[this] &gt;= [right]</code>.
    */
   @Nonnull
@@ -405,12 +479,16 @@ public interface IJExpression extends IJGenerable
   IJExpression ne0 ();
 
   /**
+   * @param right
+   *        type to check
    * @return <code>[this] instanceof [right]</code>.
    */
   @Nonnull
   IJExpression _instanceof (@Nonnull AbstractJType right);
 
   /**
+   * @param method
+   *        Method to be invoked
    * @return <code>[this].[method]</code>. Arguments shall be added to the
    *         returned {@link JInvocation} object.
    */
@@ -418,6 +496,8 @@ public interface IJExpression extends IJGenerable
   JInvocation invoke (@Nonnull JMethod method);
 
   /**
+   * @param method
+   *        name of the method to invoke
    * @return <code>[this].[method]</code>. Arguments shall be added to the
    *         returned {@link JInvocation} object.
    */

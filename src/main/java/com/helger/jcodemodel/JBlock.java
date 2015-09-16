@@ -113,8 +113,8 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Returns a read-only view of {@link IJStatement}s and {@link IJDeclaration}
-   * in this block.
+   * @return a read-only view of {@link IJStatement}s and {@link IJDeclaration}
+   *         in this block.
    */
   @Nonnull
   public List <Object> getContents ()
@@ -153,10 +153,9 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Gets the current position to which new statements will be inserted. For
-   * example if the value is 0, newly created instructions will be inserted at
-   * the very beginning of the block.
-   *
+   * @return the current position to which new statements will be inserted. For
+   *         example if the value is 0, newly created instructions will be
+   *         inserted at the very beginning of the block.
    * @see #pos(int)
    */
   @Nonnegative
@@ -168,24 +167,26 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Sets the current position.
    *
+   * @param nNewPos
+   *        The new position to set
    * @return the old value of the current position.
    * @throws IllegalArgumentException
    *         if the new position value is illegal.
    * @see #pos()
    */
   @Nonnegative
-  public int pos (@Nonnegative final int newPos)
+  public int pos (@Nonnegative final int nNewPos)
   {
-    final int r = m_nPos;
-    if (newPos > m_aContentList.size () || newPos < 0)
-      throw new IllegalArgumentException ("Illegal position provided: " + newPos);
-    m_nPos = newPos;
-    return r;
+    final int nOldPos = m_nPos;
+    if (nNewPos > m_aContentList.size () || nNewPos < 0)
+      throw new IllegalArgumentException ("Illegal position provided: " + nNewPos);
+    m_nPos = nNewPos;
+    return nOldPos;
   }
 
   /**
-   * Returns <code>true</code> if this block is empty and does not contain any
-   * statement.
+   * @return <code>true</code> if this block is empty and does not contain any
+   *         statement.
    */
   public boolean isEmpty ()
   {
@@ -208,7 +209,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        JType of the variable
    * @param name
    *        Name of the variable
-   * @return Newly generated JVar
+   * @return Newly generated {@link JVar}
    */
   @Nonnull
   public JVar decl (@Nonnull final AbstractJType type, @Nonnull final String name)
@@ -225,7 +226,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        JType of the variable
    * @param name
    *        Name of the variable
-   * @return Newly generated JVar
+   * @return Newly generated {@link JVar}
    */
   @Nonnull
   public JVar decl (final int mods, @Nonnull final AbstractJType type, @Nonnull final String name)
@@ -242,7 +243,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        Name of the variable
    * @param init
    *        Initialization expression for this variable. May be null.
-   * @return Newly generated JVar
+   * @return Newly generated {@link JVar}
    */
   @Nonnull
   public JVar decl (@Nonnull final AbstractJType type, @Nonnull final String name, @Nullable final IJExpression init)
@@ -261,7 +262,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        Name of the variable
    * @param init
    *        Initialization expression for this variable. May be null.
-   * @return Newly generated JVar
+   * @return Newly generated {@link JVar}
    */
   @Nonnull
   public JVar decl (final int mods,
@@ -276,6 +277,7 @@ public class JBlock implements IJGenerable, IJStatement
     return v;
   }
 
+  @Nonnull
   public JBlock insertBefore (final JVar var, final Object before)
   {
     final int i = m_aContentList.indexOf (before);
@@ -293,6 +295,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        Assignable variable or field for left hand side of expression
    * @param exp
    *        Right hand side expression
+   * @return this for chaining
    */
   @Nonnull
   public JBlock assign (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression exp)
@@ -389,37 +392,43 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Creates a static invocation statement.
-   */
-  @Nonnull
-  public JInvocation staticInvoke (@Nonnull final AbstractJClass type, @Nonnull final String method)
-  {
-    return _insert (new JInvocation (type, method));
-  }
-
-  /**
-   * Creates an invocation statement and adds it to this block.
    *
-   * @param method
+   * @param aType
+   *        Type upon which the method should be invoked
+   * @param sMethod
    *        Name of method to invoke
-   * @return Newly generated JInvocation
+   * @return Newly generated {@link JInvocation}
    */
   @Nonnull
-  public JInvocation invoke (@Nonnull final String method)
+  public JInvocation staticInvoke (@Nonnull final AbstractJClass aType, @Nonnull final String sMethod)
   {
-    return _insert (new JInvocation ((IJExpression) null, method));
+    return _insert (new JInvocation (aType, sMethod));
   }
 
   /**
    * Creates an invocation statement and adds it to this block.
    *
-   * @param method
-   *        JMethod to invoke
-   * @return Newly generated JInvocation
+   * @param sMethod
+   *        Name of method to invoke
+   * @return Newly generated {@link JInvocation}
    */
   @Nonnull
-  public JInvocation invoke (@Nonnull final JMethod method)
+  public JInvocation invoke (@Nonnull final String sMethod)
   {
-    return _insert (new JInvocation ((IJExpression) null, method));
+    return _insert (new JInvocation ((IJExpression) null, sMethod));
+  }
+
+  /**
+   * Creates an invocation statement and adds it to this block.
+   *
+   * @param aMethod
+   *        JMethod to invoke
+   * @return Newly generated {@link JInvocation}
+   */
+  @Nonnull
+  public JInvocation invoke (@Nonnull final JMethod aMethod)
+  {
+    return _insert (new JInvocation ((IJExpression) null, aMethod));
   }
 
   @Nonnull
@@ -517,7 +526,9 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Create a While statement and add it to this block
    *
-   * @return Newly generated While statement
+   * @param test
+   *        Test expression for the while statement
+   * @return Newly generated {@link JWhileLoop} statement
    */
   @Nonnull
   public JWhileLoop _while (@Nonnull final IJExpression test)
@@ -527,6 +538,10 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Create a switch/case statement and add it to this block
+   *
+   * @param test
+   *        Test expression for the switch statement
+   * @return Newly created {@link JSwitch}
    */
   @Nonnull
   public JSwitch _switch (@Nonnull final IJExpression test)
@@ -537,7 +552,9 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Create a Do statement and add it to this block
    *
-   * @return Newly generated Do statement
+   * @param test
+   *        Test expression for the while statement
+   * @return Newly generated {@link JDoLoop} statement
    */
   @Nonnull
   public JDoLoop _do (@Nonnull final IJExpression test)
@@ -548,7 +565,7 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Create a Try statement and add it to this block
    *
-   * @return Newly generated Try statement
+   * @return Newly generated {@link JTryBlock} statement
    */
   @Nonnull
   public JTryBlock _try ()
@@ -558,6 +575,8 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Create a return statement and add it to this block
+   *
+   * @return Newly created {@link JReturn} statement
    */
   @Nonnull
   public JReturn _return ()
@@ -567,24 +586,34 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Create a return statement and add it to this block
+   *
+   * @param aExpr
+   *        Expression to be returned. May be <code>null</code>.
+   * @return Newly created {@link JReturn} statement
    */
   @Nonnull
-  public JReturn _return (@Nullable final IJExpression exp)
+  public JReturn _return (@Nullable final IJExpression aExpr)
   {
-    return _insert (new JReturn (exp));
+    return _insert (new JReturn (aExpr));
   }
 
   /**
    * Create a throw statement and add it to this block
+   *
+   * @param aExpr
+   *        Expression to be thrown
+   * @return Newly created {@link JThrow}
    */
   @Nonnull
-  public JThrow _throw (@Nonnull final IJExpression exp)
+  public JThrow _throw (@Nonnull final IJExpression aExpr)
   {
-    return _insert (new JThrow (exp));
+    return _insert (new JThrow (aExpr));
   }
 
   /**
-   * Create a break statement and add it to this block
+   * Create a break statement without a label and add it to this block
+   *
+   * @return Newly created {@link JBreak}
    */
   @Nonnull
   public JBreak _break ()
@@ -592,15 +621,26 @@ public class JBlock implements IJGenerable, IJStatement
     return _break ((JLabel) null);
   }
 
+  /**
+   * Create a break statement with an optional label and add it to this block
+   *
+   * @param aLabel
+   *        Optional label for the break statement
+   * @return Newly created {@link JBreak}
+   */
   @Nonnull
-  public JBreak _break (@Nullable final JLabel label)
+  public JBreak _break (@Nullable final JLabel aLabel)
   {
-    return _insert (new JBreak (label));
+    return _insert (new JBreak (aLabel));
   }
 
   /**
    * Create a label, which can be referenced from <code>continue</code> and
    * <code>break</code> statements.
+   *
+   * @param name
+   *        Label name
+   * @return Newly created {@link JLabel}
    */
   @Nonnull
   public JLabel label (@Nonnull final String name)
@@ -610,6 +650,11 @@ public class JBlock implements IJGenerable, IJStatement
     return l;
   }
 
+  /**
+   * Create a continue statement without a label and add it to this block
+   *
+   * @return New {@link JContinue}
+   */
   @Nonnull
   public JContinue _continue ()
   {
@@ -617,18 +662,23 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Create a continue statement and add it to this block
+   * Create a continue statement with an optional label and add it to this block
+   *
+   * @param aLabel
+   *        Optional label statement.
+   * @return New {@link JContinue}
    */
   @Nonnull
-  public JContinue _continue (@Nullable final JLabel label)
+  public JContinue _continue (@Nullable final JLabel aLabel)
   {
-    return _insert (new JContinue (label));
+    return _insert (new JContinue (aLabel));
   }
 
   /**
    * Create a sub-block and add it to this block. By default braces and indent
    * are required.
    *
+   * @return New {@link JBlock}
    * @see #block(boolean, boolean)
    * @see #blockSimple()
    */
@@ -642,6 +692,7 @@ public class JBlock implements IJGenerable, IJStatement
    * Create a sub-block and add it to this block. By default braces and indent
    * are not required.
    *
+   * @return New {@link JBlock}
    * @see #block()
    * @see #block(boolean, boolean)
    */
@@ -658,6 +709,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        <code>true</code> if braces should be required
    * @param bIndentRequired
    *        <code>true</code> if indentation is required
+   * @return New {@link JBlock}
    * @see #block()
    * @see #blockSimple()
    */
@@ -671,6 +723,12 @@ public class JBlock implements IJGenerable, IJStatement
    * Creates an enhanced For statement based on j2se 1.5 JLS and add it to this
    * block
    *
+   * @param aVarType
+   *        Variable type
+   * @param sName
+   *        Variable name
+   * @param aCollection
+   *        Collection to be iterated
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
   @Nonnull

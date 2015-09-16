@@ -55,39 +55,41 @@ import javax.annotation.Nullable;
  */
 public class JArray extends AbstractJExpressionImpl
 {
-  private final AbstractJType _type;
-  private final IJExpression _size;
-  private List <IJExpression> _exprs;
+  private final AbstractJType m_aType;
+  private final IJExpression m_aSize;
+  private List <IJExpression> m_aExprs;
 
   protected JArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
   {
-    _type = type;
-    _size = size;
+    m_aType = type;
+    m_aSize = size;
   }
 
   @Nonnull
   public AbstractJType type ()
   {
-    return _type;
+    return m_aType;
   }
 
   @Nullable
   public IJExpression size ()
   {
-    return _size;
+    return m_aSize;
   }
 
   /**
    * Add an element to the array initializer
    *
+   * @param aExpr
+   *        Expression to be added to the array
    * @return this
    */
   @Nonnull
-  public JArray add (@Nonnull final IJExpression e)
+  public JArray add (@Nonnull final IJExpression aExpr)
   {
-    if (_exprs == null)
-      _exprs = new ArrayList <IJExpression> ();
-    _exprs.add (e);
+    if (m_aExprs == null)
+      m_aExprs = new ArrayList <IJExpression> ();
+    m_aExprs.add (aExpr);
     return this;
   }
 
@@ -99,21 +101,21 @@ public class JArray extends AbstractJExpressionImpl
   @Nonnull
   public JArray removeAll ()
   {
-    _exprs = null;
+    m_aExprs = null;
     return this;
   }
 
   @Nonnull
   public List <IJExpression> exprs ()
   {
-    if (_exprs == null)
-      _exprs = new ArrayList <IJExpression> ();
-    return Collections.unmodifiableList (_exprs);
+    if (m_aExprs == null)
+      m_aExprs = new ArrayList <IJExpression> ();
+    return Collections.unmodifiableList (m_aExprs);
   }
 
   public boolean hasExprs ()
   {
-    return _exprs != null && !_exprs.isEmpty ();
+    return m_aExprs != null && !m_aExprs.isEmpty ();
   }
 
   public void generate (@Nonnull final JFormatter f)
@@ -121,7 +123,7 @@ public class JArray extends AbstractJExpressionImpl
     // generally we produce new T[x], but when T is an array type (T=T'[])
     // then new T'[][x] is wrong. It has to be new T'[x][].
     int arrayCount = 0;
-    AbstractJType t = _type;
+    AbstractJType t = m_aType;
     final boolean hasExprs = hasExprs ();
 
     while (t.isArray ())
@@ -131,20 +133,20 @@ public class JArray extends AbstractJExpressionImpl
     }
 
     f.print ("new").generable (t).print ('[');
-    if (_size != null)
-      f.generable (_size);
+    if (m_aSize != null)
+      f.generable (m_aSize);
     f.print (']');
 
     for (int i = 0; i < arrayCount; i++)
       f.print ("[]");
 
-    if (_size == null || hasExprs)
+    if (m_aSize == null || hasExprs)
       f.print ('{');
     if (hasExprs)
-      f.generable (_exprs);
+      f.generable (m_aExprs);
     else
       f.print (' ');
-    if (_size == null || hasExprs)
+    if (m_aSize == null || hasExprs)
       f.print ('}');
   }
 
@@ -156,14 +158,14 @@ public class JArray extends AbstractJExpressionImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JArray rhs = (JArray) o;
-    return isEqual (_type.fullName (), rhs._type.fullName ()) &&
-           isEqual (_size, rhs._size) &&
-           isEqual (_exprs, rhs._exprs);
+    return isEqual (m_aType.fullName (), rhs.m_aType.fullName ()) &&
+           isEqual (m_aSize, rhs.m_aSize) &&
+           isEqual (m_aExprs, rhs.m_aExprs);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _type.fullName (), _size, _exprs);
+    return getHashCode (this, m_aType.fullName (), m_aSize, m_aExprs);
   }
 }

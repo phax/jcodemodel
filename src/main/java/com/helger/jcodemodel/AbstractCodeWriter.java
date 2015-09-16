@@ -125,7 +125,8 @@ public abstract class AbstractCodeWriter implements Closeable
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
    * @return OutputStream to write to
-   * @IOException On IO error
+   * @throws IOException
+   *         On IO error
    */
   @Nonnull
   public abstract OutputStream openBinary (@Nonnull JPackage pkg, @Nonnull String fileName) throws IOException;
@@ -142,7 +143,8 @@ public abstract class AbstractCodeWriter implements Closeable
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
    * @return Writer to write to
-   * @IOException On IO error
+   * @throws IOException
+   *         On IO error
    */
   @Nonnull
   public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException

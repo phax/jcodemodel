@@ -56,6 +56,14 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
 {
   /**
    * Obtains a reference to the primitive type object from a type name.
+   *
+   * @param codeModel
+   *        Base code model
+   * @param sTypeName
+   *        primitive type to be parsed (e.g. "int" or "void")
+   * @return Never <code>null</code>
+   * @throws IllegalArgumentException
+   *         If the passed type name is not a primitive type name
    */
   @Nonnull
   public static JPrimitiveType parse (@Nonnull final JCodeModel codeModel, @Nonnull final String sTypeName)
@@ -124,6 +132,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
 
   /**
    * Tell whether or not this is an array type.
+   *
+   * @return <code>true</code> if this an array type
    */
   public boolean isArray ()
   {
@@ -132,6 +142,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
 
   /**
    * Tell whether or not this is a built-in primitive type, such as int or void.
+   *
+   * @return <code>true</code> if this is a primitive type
    */
   public boolean isPrimitive ()
   {
@@ -144,6 +156,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * Error types are not actual Java types and shouldn't be used in actually
    * generated code.
    *
+   * @return <code>true</code> if this is an error class
    * @see JErrorClass
    */
   public boolean isError ()
@@ -186,7 +199,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   }
 
   /**
-   * Returns true if this is a referenced type.
+   * @return <code>true</code> if this is a referenced type (which means it is
+   *         not a primitive type).
    */
   public final boolean isReference ()
   {
@@ -197,7 +211,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * If this is an array, returns the component type of the array (T of T[]).
    * Important: call this method only if you check that this is an array type (
    * {@link #isArray()}).
-   * 
+   *
    * @return Never <code>null</code>.
    * @throws IllegalArgumentException
    *         If this is not an array type
@@ -219,7 +233,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * <p>
    * This method performs superset of actions that are performed by
    * {@link Class#isAssignableFrom(Class)} For example,
-   * baseClass.isAssignableFrom(derivedClass) is always true.
+   * baseClass.isAssignableFrom(derivedClass) is always <code>true</code>.
    * <p>
    * There are two differences of this method and
    * {@link Class#isAssignableFrom(Class)}
@@ -243,13 +257,17 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * <li>[[List&lt;? extends List&lt;? extends Object&gt;&gt;]].isAssignableFrom
    * ([[List&lt;List&lt;Integer&gt;&gt;]])</li>
    * </ol>
+   *
+   * @param that
+   *        Type to check
+   * @return <code>true</code> if assignable, <code>false</code> if not
    */
-  public boolean isAssignableFrom (final AbstractJType that)
+  public boolean isAssignableFrom (@Nonnull final AbstractJType that)
   {
     return isAssignableFrom (that, true);
   }
 
-  protected boolean isAssignableFrom (final AbstractJType that, final boolean bAllowsRawTypeUnchekedConversion)
+  protected boolean isAssignableFrom (@Nonnull final AbstractJType that, final boolean bAllowsRawTypeUnchekedConversion)
   {
     if (isError () || that.isError ())
       return false;

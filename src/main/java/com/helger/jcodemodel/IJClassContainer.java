@@ -54,21 +54,25 @@ import javax.annotation.Nonnull;
 public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE>> extends IJOwned
 {
   /**
-   * Returns true if the container is a class.
+   * @return <code>true</code> if the container is a class, <code>false</code>
+   *         if it is a package
+   * @see #isPackage()
    */
   boolean isClass ();
 
   /**
-   * Returns true if the container is a package.
+   * @return <code>true</code> if the container is a package, <code>false</code>
+   *         if it is a class.
+   * @see #isClass()
    */
   boolean isPackage ();
 
   /**
-   * Parent {@link IJClassContainer}. If this is a package, this method returns
-   * a parent package, or <code>null</code> if this package is the root package.
-   * If this is an outer-most class, this method returns a {@link JPackage} to
-   * which it belongs. If this is an inner class, this method returns the outer
-   * class.
+   * @return Parent {@link IJClassContainer}. If this is a package, this method
+   *         returns a parent package, or <code>null</code> if this package is
+   *         the root package. If this is an outer-most class, this method
+   *         returns a {@link JPackage} to which it belongs. If this is an inner
+   *         class, this method returns the outer class.
    */
   IJClassContainer <?> parentContainer ();
 
@@ -89,6 +93,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param eClassType
    *        The type of class to create. May not be <code>null</code>.
    * @return The created ...
+   * @throws JClassAlreadyExistsException
+   *         If another class/interface/... with the same name already exists
    */
   CLASSTYPE _class (int nMods,
                     @Nonnull String sName,
@@ -99,8 +105,9 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    *
    * @param sName
    *        Name of class to be added to this package
+   * @return Newly generated class
    * @throws JClassAlreadyExistsException
-   *         When the specified class/interface was already created.
+   *         If another class/interface/... with the same name already exists
    */
   CLASSTYPE _class (@Nonnull String sName) throws JClassAlreadyExistsException;
 
@@ -113,7 +120,7 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    *        Name of class to be added to this package
    * @return Newly generated class
    * @throws JClassAlreadyExistsException
-   *         When the specified class/interface was already created.
+   *         If another class/interface/... with the same name already exists
    */
   CLASSTYPE _class (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
 
@@ -122,8 +129,9 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    *
    * @param sName
    *        Name of interface to be added to this package
+   * @return Newly generated interface
    * @throws JClassAlreadyExistsException
-   *         When the specified class/interface was already created.
+   *         If another class/interface/... with the same name already exists
    */
   CLASSTYPE _interface (@Nonnull String sName) throws JClassAlreadyExistsException;
 
@@ -136,7 +144,7 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    *        Name of interface to be added to this package
    * @return Newly generated interface
    * @throws JClassAlreadyExistsException
-   *         When the specified class/interface was already created.
+   *         If another class/interface/... with the same name already exists
    */
   CLASSTYPE _interface (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
 
@@ -147,7 +155,7 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    *        Name of the annotation Type declaration to be added to this package
    * @return newly created Annotation Type Declaration
    * @throws JClassAlreadyExistsException
-   *         When the specified class/interface was already created.
+   *         If another class/interface/... with the same name already exists
    */
   CLASSTYPE _annotationTypeDeclaration (@Nonnull String sName) throws JClassAlreadyExistsException;
 
@@ -160,7 +168,7 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    *        Name of the annotation Type declaration to be added to this package
    * @return newly created Annotation Type Declaration
    * @throws JClassAlreadyExistsException
-   *         When the specified class/interface was already created.
+   *         If another class/interface/... with the same name already exists
    */
   CLASSTYPE _annotationTypeDeclaration (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
 
@@ -171,7 +179,7 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    *        Name of the enum to be added to this package
    * @return newly created enum
    * @throws JClassAlreadyExistsException
-   *         When the specified class/interface was already created.
+   *         If another class/interface/... with the same name already exists
    */
   CLASSTYPE _enum (@Nonnull String sName) throws JClassAlreadyExistsException;
 
@@ -184,7 +192,7 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    *        Name of the enum to be added to this package
    * @return newly created Enum
    * @throws JClassAlreadyExistsException
-   *         When the specified class/interface was already created.
+   *         If another class/interface/... with the same name already exists
    */
   @Nonnull
   CLASSTYPE _enum (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
