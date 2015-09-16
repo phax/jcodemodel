@@ -115,7 +115,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
   }
 
   /**
-   * Returns a class object that represents a statically generated code.
+   * @return a class object that represents a statically generated code.
    */
   @Nonnull
   public final AbstractJClass getJClass ()

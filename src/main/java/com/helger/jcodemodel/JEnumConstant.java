@@ -112,6 +112,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
    *
    * @param aArg
    *        Argument to add to argument list
+   * @return this for chaining
    */
   @Nonnull
   public JEnumConstant arg (@Nonnull final IJExpression aArg)

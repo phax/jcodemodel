@@ -303,6 +303,9 @@ public final class JExpr
    *
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
+   * @param size
+   *        Size of the array
+   * @return New {@link JArray}
    */
   @Nonnull
   public static JArray newArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
@@ -316,6 +319,9 @@ public final class JExpr
    *
    * @param type
    *        The type of the array component. 'T' or {@code new T[size]}.
+   * @param size
+   *        Size of the array
+   * @return New {@link JArray}
    */
   @Nonnull
   public static JArray newArray (@Nonnull final AbstractJType type, @Nonnegative final int size)
@@ -324,7 +330,7 @@ public final class JExpr
   }
 
   /**
-   * Returns a reference to "this", an implicit reference to the current object.
+   * @return a reference to "this", an implicit reference to the current object.
    */
   @Nonnull
   public static JAtom _this ()
@@ -333,7 +339,7 @@ public final class JExpr
   }
 
   /**
-   * Returns a reference to "super", an implicit reference to the super class.
+   * @return a reference to "super", an implicit reference to the super class.
    */
   @Nonnull
   public static JAtom _super ()
@@ -382,6 +388,12 @@ public final class JExpr
   /**
    * Escapes the given string, then surrounds it by the specified quotation
    * mark.
+   *
+   * @param quote
+   *        Quote char. Either single quote (') or double quote (")
+   * @param s
+   *        Source string to quote
+   * @return Qutoed string
    */
   @Nonnull
   public static String quotify (final char quote, @Nonnull final String s)
@@ -415,11 +427,11 @@ public final class JExpr
         // the escaping here (regardless of the actual file encoding)
         //
         // see bug
-        if (c < 0x20 || 0x7E < c)
+        if (c < 0x20 || c > 0x7E)
         {
           // not printable. use Unicode escape
           sb.append ("\\u");
-          final String hex = Integer.toHexString ((c) & 0xFFFF);
+          final String hex = Integer.toHexString (c & 0xFFFF);
           for (int k = hex.length (); k < 4; k++)
             sb.append ('0');
           sb.append (hex);
@@ -455,6 +467,10 @@ public final class JExpr
    * <p>
    * Be warned that there is a danger in using this method, as it obfuscates the
    * object model.
+   * 
+   * @param source
+   *        Java source code
+   * @return Direct expression
    */
   @Nonnull
   public static AbstractJExpressionImpl direct (@Nonnull final String source)

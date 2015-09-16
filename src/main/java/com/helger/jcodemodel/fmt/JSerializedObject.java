@@ -58,8 +58,12 @@ public class JSerializedObject extends AbstractJResourceFile
   private final Serializable m_aObj;
 
   /**
-   * @exception IOException
-   *            If the serialization fails, this exception is thrown
+   * @param name
+   *        Name
+   * @param obj
+   *        Serializable object
+   * @throws IOException
+   *         If the serialization fails, this exception is thrown
    */
   public JSerializedObject (@Nonnull final String name, @Nonnull final Serializable obj) throws IOException
   {
@@ -67,9 +71,6 @@ public class JSerializedObject extends AbstractJResourceFile
     m_aObj = obj;
   }
 
-  /**
-   * called by JPackage to serialize the object
-   */
   @Override
   protected void build (@Nonnull final OutputStream os) throws IOException
   {

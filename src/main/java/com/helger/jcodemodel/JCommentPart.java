@@ -69,9 +69,13 @@ public class JCommentPart extends ArrayList <Object>
   {}
 
   /**
-   * Appends a new value. If the value is {@link AbstractJType} it will be
-   * printed as a @link tag. Otherwise it will be converted to String via
-   * {@link Object#toString()} .
+   * Appends a new value.
+   *
+   * @param o
+   *        If the value is {@link AbstractJType} it will be printed as a @link
+   *        tag. Otherwise it will be converted to String via
+   *        {@link Object#toString()}.
+   * @return this for chaining
    */
   @Nonnull
   public JCommentPart append (@Nullable final Object o)
@@ -108,6 +112,11 @@ public class JCommentPart extends ArrayList <Object>
 
   /**
    * Writes this part into the formatter by using the specified indentation.
+   *
+   * @param f
+   *        Formatter to use
+   * @param indent
+   *        Indentation to use
    */
   protected void format (@Nonnull final JFormatter f, final String indent)
   {
@@ -165,6 +174,10 @@ public class JCommentPart extends ArrayList <Object>
 
   /**
    * Escapes the appearance of the comment terminator.
+   * 
+   * @param sText
+   *        Source text
+   * @return Escaped text
    */
   private static String _escape (@Nonnull final String sText)
   {

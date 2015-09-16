@@ -62,6 +62,8 @@ import java.util.TreeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * A Java package.
  */
@@ -113,21 +115,17 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
    */
   protected JPackage (@Nonnull final String sName, @Nonnull final JCodeModel aOwner)
   {
-    if (sName == null)
-      throw new NullPointerException ("name");
+    JCValueEnforcer.notNull (sName, "Name");
     if (sName.equals ("."))
       throw new IllegalArgumentException ("Package name . is not allowed");
-    if (aOwner == null)
-      throw new NullPointerException ("codeModel");
+    JCValueEnforcer.notNull (aOwner, "CodeModel");
 
     m_aOwner = aOwner;
-
+    m_sName = sName;
     if (m_aOwner.isCaseSensitiveFileSystem)
       m_aUpperCaseClassMap = null;
     else
       m_aUpperCaseClassMap = new HashMap <String, JDefinedClass> ();
-
-    m_sName = sName;
   }
 
   @Nullable
@@ -137,12 +135,13 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   }
 
   /**
-   * Gets the parent package, or null if this class is the root package.
+   * @return the parent package, or <code>null</code> if this class is the root
+   *         package.
    */
   @Nullable
   public JPackage parent ()
   {
-    if (m_sName.length () == 0)
+    if (isUnnamed ())
       return null;
 
     final int idx = m_sName.lastIndexOf ('.');
@@ -219,7 +218,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   /**
    * Gets a reference to the already created {@link JDefinedClass}.
    *
-   * @return null If the class is not yet created.
+   * @param sName
+   *        Class name to search
+   * @return <code>null</code> if the class is not yet created.
    */
   @Nullable
   public JDefinedClass _getClass (@Nullable final String sName)
@@ -228,7 +229,10 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   }
 
   /**
-   * Order is based on the lexicological order of the package name.
+   * Order is based on the lexicographic order of the package name.
+   *
+   * @param aOther
+   *        Other package to compare to
    */
   public int compareTo (@Nonnull final JPackage aOther)
   {
@@ -326,16 +330,25 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
 
   /**
    * Adds a new resource file to this package.
+   *
+   * @param rsrc
+   *        Resource file to add
+   * @return Parameter resource file
    */
   @Nonnull
   public AbstractJResourceFile addResourceFile (@Nonnull final AbstractJResourceFile rsrc)
   {
+    JCValueEnforcer.notNull (rsrc, "ResourceFile");
     m_aResources.add (rsrc);
     return rsrc;
   }
 
   /**
    * Checks if a resource of the given name exists.
+   *
+   * @param name
+   *        Filename to check
+   * @return <code>true</code> if contained
    */
   public boolean hasResourceFile (@Nullable final String name)
   {
@@ -347,6 +360,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
 
   /**
    * Iterates all resource files in this package.
+   *
+   * @return Iterator
    */
   @Nonnull
   public Iterator <AbstractJResourceFile> propertyFiles ()
@@ -358,7 +373,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
    * Creates, if necessary, and returns the package javadoc for this
    * JDefinedClass.
    *
-   * @return JDocComment containing javadocs for this class
+   * @return {@link JDocComment} containing javadocs for this class
    */
   @Nonnull
   public JDocComment javadoc ()
@@ -370,6 +385,9 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
 
   /**
    * Removes a class from this package.
+   *
+   * @param c
+   *        Class to be removed
    */
   public void remove (@Nonnull final AbstractJClass c)
   {
@@ -386,35 +404,46 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
 
   /**
    * Reference a class within this package.
+   *
+   * @param sClassLocalName
+   *        Local class name to reference
+   * @return The referenced class
+   * @throws ClassNotFoundException
+   *         If the provided class does not exist
    */
   @Nonnull
-  public AbstractJClass ref (@Nonnull final String name) throws ClassNotFoundException
+  public AbstractJClass ref (@Nonnull final String sClassLocalName) throws ClassNotFoundException
   {
-    if (name.indexOf ('.') >= 0)
-      throw new IllegalArgumentException ("JClass name contains '.': " + name);
+    if (sClassLocalName.indexOf ('.') >= 0)
+      throw new IllegalArgumentException ("JClass name contains '.': " + sClassLocalName);
 
-    String n = "";
-    if (!isUnnamed ())
-      n = name + '.';
-    n += name;
+    String sFQCN;
+    if (isUnnamed ())
+      sFQCN = "";
+    else
+      sFQCN = m_sName + '.';
+    sFQCN += sClassLocalName;
 
-    return m_aOwner.ref (Class.forName (n));
+    return m_aOwner.ref (Class.forName (sFQCN));
   }
 
   /**
    * Gets a reference to a sub package of this package.
+   *
+   * @param sSubPackageName
+   *        Name of the sub-package
+   * @return New sub-package
    */
   @Nonnull
-  public JPackage subPackage (@Nonnull final String pkg)
+  public JPackage subPackage (@Nonnull final String sSubPackageName)
   {
     if (isUnnamed ())
-      return owner ()._package (pkg);
-    return owner ()._package (m_sName + '.' + pkg);
+      return owner ()._package (sSubPackageName);
+    return owner ()._package (m_sName + '.' + sSubPackageName);
   }
 
   /**
-   * Returns an iterator that walks the top-level classes defined in this
-   * package.
+   * @return the top-level classes defined in this package.
    */
   @Nonnull
   public Collection <JDefinedClass> classes ()
@@ -424,6 +453,10 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
 
   /**
    * Checks if a given name is already defined as a class/interface
+   *
+   * @param classLocalName
+   *        Class local name
+   * @return <code>true</code> if contained in this package
    */
   public boolean isDefined (@Nullable final String classLocalName)
   {
@@ -435,6 +468,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
 
   /**
    * Checks if this package is the root, unnamed package.
+   *
+   * @return <code>true</code> if this is the root package
    */
   public final boolean isUnnamed ()
   {
@@ -455,7 +490,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   }
 
   /**
-   * Return the code model root object being used to create this package.
+   * @return the code model root object being used to create this package.
    */
   @Nonnull
   public final JCodeModel owner ()

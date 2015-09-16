@@ -78,7 +78,7 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  * </pre>
  * <p>
  * Every CodeModel node is always owned by one {@link JCodeModel} object at any
- * given time (which can be often accesesd by the <tt>owner()</tt> method.) As
+ * given time (which can be often accessed by the <tt>owner()</tt> method.) As
  * such, when you generate Java code, most of the operation works in a top-down
  * fashion. For example, you create a class from {@link JCodeModel}, which gives
  * you a {@link JDefinedClass}. Then you invoke a method on it to generate a new
@@ -137,15 +137,15 @@ public final class JCodeModel
   /** Obtains a reference to the special "null" type. */
   public final JNullType NULL = new JNullType (this);
   // primitive types
-  public final JPrimitiveType VOID = new JPrimitiveType (this, "void", Void.class);
-  public final JPrimitiveType BOOLEAN = new JPrimitiveType (this, "boolean", Boolean.class);
-  public final JPrimitiveType BYTE = new JPrimitiveType (this, "byte", Byte.class);
-  public final JPrimitiveType SHORT = new JPrimitiveType (this, "short", Short.class);
-  public final JPrimitiveType CHAR = new JPrimitiveType (this, "char", Character.class);
-  public final JPrimitiveType INT = new JPrimitiveType (this, "int", Integer.class);
-  public final JPrimitiveType FLOAT = new JPrimitiveType (this, "float", Float.class);
-  public final JPrimitiveType LONG = new JPrimitiveType (this, "long", Long.class);
-  public final JPrimitiveType DOUBLE = new JPrimitiveType (this, "double", Double.class);
+  public final JPrimitiveType BOOLEAN = new JPrimitiveType (this, "boolean", Boolean.class, true);
+  public final JPrimitiveType BYTE = new JPrimitiveType (this, "byte", Byte.class, true);
+  public final JPrimitiveType CHAR = new JPrimitiveType (this, "char", Character.class, true);
+  public final JPrimitiveType DOUBLE = new JPrimitiveType (this, "double", Double.class, true);
+  public final JPrimitiveType FLOAT = new JPrimitiveType (this, "float", Float.class, true);
+  public final JPrimitiveType INT = new JPrimitiveType (this, "int", Integer.class, true);
+  public final JPrimitiveType LONG = new JPrimitiveType (this, "long", Long.class, true);
+  public final JPrimitiveType SHORT = new JPrimitiveType (this, "short", Short.class, true);
+  public final JPrimitiveType VOID = new JPrimitiveType (this, "void", Void.class, false);
 
   /**
    * If the flag is true, we will consider two classes "Foo" and "foo" as a
@@ -225,6 +225,7 @@ public final class JCodeModel
    *        FQCN
    * @param eClassType
    *        Class type to use (enum/class/interface/annotation)
+   * @return New {@link JDefinedClass}
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -282,6 +283,7 @@ public final class JCodeModel
    *        FQCN
    * @param eClassType
    *        Class type to use (enum/class/interface/annotation)
+   * @return New {@link JDefinedClass}
    * @exception JClassAlreadyExistsException
    *            When the specified class/interface was already created.
    */
@@ -298,11 +300,16 @@ public final class JCodeModel
    * This method is useful when the code generation needs to include the
    * user-specified class that may or may not exist, and only thing known about
    * it is a class name.
+   *
+   * @param sName
+   *        The fully qualified name of the class. When using type parameters
+   *        please use {@link #parseType(String)} instead!
+   * @return New {@link JDirectClass}
    */
   @Nonnull
-  public JDirectClass directClass (@Nonnull final String name)
+  public JDirectClass directClass (@Nonnull final String sName)
   {
-    return directClass (EClassType.CLASS, name);
+    return directClass (EClassType.CLASS, sName);
   }
 
   /**
@@ -311,6 +318,13 @@ public final class JCodeModel
    * This method is useful when the code generation needs to include the
    * user-specified class that may or may not exist, and only thing known about
    * it is a class name.
+   *
+   * @param eClassType
+   *        Class type to use.
+   * @param sName
+   *        The fully qualified name of the class. When using type parameters
+   *        please use {@link #parseType(String)} instead!
+   * @return New {@link JDirectClass}
    */
   @Nonnull
   public JDirectClass directClass (@Nonnull final EClassType eClassType, @Nonnull final String sName)
@@ -339,20 +353,22 @@ public final class JCodeModel
    * AbstractJType#isError} method to check for error-types before actually
    * using it's methods.
    *
-   * @param message
+   * @param sMessage
    *        some free form text message to identify source of error
+   * @return New {@link JErrorClass}
    * @see JCodeModel#buildsErrorTypeRefs()
    * @see JErrorClass
    */
   @Nonnull
-  public JErrorClass errorClass (@Nonnull final String message)
+  public JErrorClass errorClass (@Nonnull final String sMessage)
   {
-    return new JErrorClass (this, message);
+    return new JErrorClass (this, sMessage);
   }
 
   /**
    * Check if any error-types leaked into output Java-sources.
    *
+   * @return <code>true</code> if so
    * @see JCodeModel#errorClass(String)
    */
   public boolean buildsErrorTypeRefs ()
@@ -370,7 +386,9 @@ public final class JCodeModel
   /**
    * Gets a reference to the already created generated class.
    *
-   * @return null If the class is not yet created.
+   * @param sFullyQualifiedClassName
+   *        FQCN
+   * @return <code>null</code> If the class is not yet created.
    * @see JPackage#_getClass(String)
    */
   @Nullable
@@ -386,6 +404,10 @@ public final class JCodeModel
 
   /**
    * Creates a new anonymous class.
+   *
+   * @param aBaseClass
+   *        Base class
+   * @return New {@link JAnonymousClass}
    */
   @Nonnull
   public JAnonymousClass anonymousClass (@Nonnull final AbstractJClass aBaseClass)
@@ -393,6 +415,13 @@ public final class JCodeModel
     return new JAnonymousClass (aBaseClass);
   }
 
+  /**
+   * Creates a new anonymous class.
+   *
+   * @param aBaseClass
+   *        Base class
+   * @return New {@link JAnonymousClass}
+   */
   @Nonnull
   public JAnonymousClass anonymousClass (@Nonnull final Class <?> aBaseClass)
   {
@@ -404,9 +433,11 @@ public final class JCodeModel
    * <code>build(destDir,destDir,System.out)</code>.
    *
    * @param destDir
-   *        source files are generated into this directory.
+   *        source files and resources are generated into this directory.
    * @param status
    *        if non-null, progress indication will be sent to this stream.
+   * @throws IOException
+   *         on IO error
    */
   public void build (@Nonnull final File destDir, @Nullable final PrintStream status) throws IOException
   {
@@ -422,7 +453,10 @@ public final class JCodeModel
    * @param resourceDir
    *        Other resource files are generated into this directory.
    * @param status
-   *        if non-null, progress indication will be sent to this stream.
+   *        Progress stream. May be <code>null</code>.
+   * @throws IOException
+   *         on IO error if non-null, progress indication will be sent to this
+   *         stream.
    */
   public void build (@Nonnull final File srcDir,
                      @Nonnull final File resourceDir,
@@ -440,6 +474,11 @@ public final class JCodeModel
 
   /**
    * A convenience method for <code>build(destDir,System.out)</code>.
+   *
+   * @param destDir
+   *        source files and resources are generated into this directory.
+   * @throws IOException
+   *         on IO error
    */
   public void build (@Nonnull final File destDir) throws IOException
   {
@@ -448,6 +487,13 @@ public final class JCodeModel
 
   /**
    * A convenience method for <code>build(srcDir,resourceDir,System.out)</code>.
+   *
+   * @param srcDir
+   *        Java source files are generated into this directory.
+   * @param resourceDir
+   *        Other resource files are generated into this directory.
+   * @throws IOException
+   *         on IO error
    */
   public void build (@Nonnull final File srcDir, @Nonnull final File resourceDir) throws IOException
   {
@@ -456,6 +502,11 @@ public final class JCodeModel
 
   /**
    * A convenience method for <code>build(out,out)</code>.
+   *
+   * @param out
+   *        Source code and resource writer
+   * @throws IOException
+   *         on IO error
    */
   public void build (@Nonnull final AbstractCodeWriter out) throws IOException
   {
@@ -464,6 +515,13 @@ public final class JCodeModel
 
   /**
    * Generates Java source code.
+   *
+   * @param source
+   *        Source code writer
+   * @param resource
+   *        Resource writer
+   * @throws IOException
+   *         on IO error
    */
   public void build (@Nonnull final AbstractCodeWriter source,
                      @Nonnull final AbstractCodeWriter resource) throws IOException
@@ -483,8 +541,8 @@ public final class JCodeModel
   }
 
   /**
-   * Returns the number of files to be generated if {@link #build} is invoked
-   * now.
+   * @return the number of files to be generated if {@link #build} is invoked
+   *         now.
    */
   @Nonnegative
   public int countArtifacts ()
@@ -502,6 +560,10 @@ public final class JCodeModel
    * <p>
    * The parameter may not be primitive.
    *
+   * @param clazz
+   *        Existing class to reference
+   * @return Singleton reference to this class. Might be a
+   *         {@link JReferencedClass} or a {@link JArrayClass}
    * @see #_ref(Class) for the version that handles more cases.
    */
   @Nonnull
@@ -530,11 +592,16 @@ public final class JCodeModel
 
   /**
    * Obtains a reference to an existing class from its fully-qualified class
-   * name.
-   * <p>
+   * name. <br>
    * First, this method attempts to load the class of the given name. If that
    * fails, we assume that the class is derived straight from {@link Object},
    * and return a {@link AbstractJClass}.
+   *
+   * @param sFullyQualifiedClassName
+   *        FQCN
+   * @return Singleton reference to this class. Might be a
+   *         {@link JReferencedClass} or a {@link JArrayClass} or a
+   *         {@link JDirectClass}
    */
   @Nonnull
   public AbstractJClass ref (@Nonnull final String sFullyQualifiedClassName)
@@ -564,8 +631,8 @@ public final class JCodeModel
   }
 
   /**
-   * Gets a {@link AbstractJClass} representation for "?", which is equivalent
-   * to "? extends Object".
+   * @return Singleton {@link AbstractJClass} representation for "?", which is
+   *         equivalent to "? extends Object".
    */
   @Nonnull
   public AbstractJClass wildcard ()
@@ -580,7 +647,11 @@ public final class JCodeModel
    * <p>
    * This method handles primitive types, arrays, and existing {@link Class}es.
    *
-   * @return The internal representation of the specified name
+   * @param name
+   *        Type name to parse
+   * @return The internal representation of the specified name. Might be a
+   *         {@link JArrayClass}, a {@link JPrimitiveType}, a
+   *         {@link JReferencedClass}, a {@link JNarrowedClass}
    */
   @Nonnull
   public AbstractJType parseType (@Nonnull final String name)
@@ -619,29 +690,38 @@ public final class JCodeModel
 
     /**
      * Parses a type name token T (which can be potentially of the form
-     * Tr&ly;T1,T2,...>, or "? extends/super T".)
+     * T&lt;T1,T2,...&gt;, or "? extends/super T".)
      *
      * @return The parsed type name
      */
     @Nonnull
     AbstractJClass parseTypeName ()
     {
-      final int start = m_nIdx;
+      final int nStart = m_nIdx;
 
       if (m_sTypeName.charAt (m_nIdx) == '?')
       {
         // wildcard
         m_nIdx++;
         _skipWs ();
+
         final String head = m_sTypeName.substring (m_nIdx);
         if (head.startsWith ("extends"))
         {
+          // 7 == "extends".length
           m_nIdx += 7;
           _skipWs ();
           return parseTypeName ().wildcard ();
         }
+
         if (head.startsWith ("super"))
-          throw new UnsupportedOperationException ("? super T not implemented");
+        {
+          // 5 == "super".length
+          m_nIdx += 5;
+          _skipWs ();
+          return parseTypeName ().wildcardSuper ();
+        }
+
         // not supported
         throw new IllegalArgumentException ("only extends/super can follow ?, but found " +
                                             m_sTypeName.substring (m_nIdx));
@@ -656,8 +736,7 @@ public final class JCodeModel
           break;
       }
 
-      final AbstractJClass clazz = ref (m_sTypeName.substring (start, m_nIdx));
-
+      final AbstractJClass clazz = ref (m_sTypeName.substring (nStart, m_nIdx));
       return _parseSuffix (clazz);
     }
 
@@ -669,7 +748,10 @@ public final class JCodeModel
     private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass clazz)
     {
       if (m_nIdx == m_sTypeName.length ())
-        return clazz; // hit EOL
+      {
+        // hit EOL
+        return clazz;
+      }
 
       final char ch = m_sTypeName.charAt (m_nIdx);
 
@@ -699,7 +781,7 @@ public final class JCodeModel
     }
 
     /**
-     * Parses '&lt;T1,T2,...,Tn>'
+     * Parses '&lt;T1,T2,...,Tn&gt;'
      *
      * @return the index of the character next to '>'
      */
@@ -719,7 +801,7 @@ public final class JCodeModel
           throw new IllegalArgumentException ("Missing '>' in " + m_sTypeName);
         final char ch = m_sTypeName.charAt (m_nIdx);
         if (ch == '>')
-          return rawType.narrow (args.toArray (new AbstractJClass [args.size ()]));
+          return rawType.narrow (args);
 
         if (ch != ',')
           throw new IllegalArgumentException (m_sTypeName);

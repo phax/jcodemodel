@@ -56,25 +56,25 @@ import com.helger.jcodemodel.util.JCHashCodeGenerator;
  */
 public class JInvocation extends AbstractJExpressionImpl implements IJStatement, IJOwnedMaybe
 {
-  private final JCodeModel _owner;
+  private final JCodeModel m_aOwner;
 
   /**
    * Object expression upon which this method will be invoked, or null if this
    * is a constructor invocation
    */
-  private final IJGenerable _object;
+  private final IJGenerable m_aObject;
 
   /**
    * Name of the method to be invoked. Either this field is set, or
-   * {@link #_method}, or {@link #_type} (in which case it's a constructor
+   * {@link #m_sMethod}, or {@link #m_aConstructorType} (in which case it's a constructor
    * invocation.) This allows {@link JMethod#name(String) the name of the method
    * to be changed later}.
    */
-  private final String _methodName;
+  private final String m_sMethodName;
 
-  private final JMethod _method;
+  private final JMethod m_sMethod;
 
-  private final boolean _isConstructor;
+  private final boolean m_bIsConstructor;
 
   /**
    * List of argument expressions for this method invocation
@@ -84,7 +84,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   /**
    * If isConstructor==true, this field keeps the type to be created.
    */
-  private final AbstractJType _type;
+  private final AbstractJType m_aConstructorType;
 
   /**
    * Lazily created list of {@link JTypeVar}s.
@@ -113,68 +113,81 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Invokes a static method on a class.
+   *
+   * @param aType
+   *        Parent type
+   * @param sMethodName
+   *        Method name to be invoked
    */
-  protected JInvocation (@Nonnull final AbstractJClass type, @Nonnull final String name)
+  protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final String sMethodName)
   {
-    this (type.owner (), type, name);
+    this (aType.owner (), aType, sMethodName);
   }
 
-  protected JInvocation (@Nonnull final AbstractJClass type, @Nonnull final JMethod method)
+  /**
+   * Invokes a static method on a class.
+   *
+   * @param aType
+   *        Parent type
+   * @param aMethod
+   *        Method to be invoked
+   */
+  protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final JMethod aMethod)
   {
-    this (type.owner (), type, method);
+    this (aType.owner (), aType, aMethod);
   }
 
-  private JInvocation (@Nullable final JCodeModel owner, @Nullable final IJGenerable object, @Nonnull final String name)
+  private JInvocation (@Nullable final JCodeModel owner, @Nullable final IJGenerable object, @Nonnull final String sName)
   {
-    if (name.indexOf ('.') >= 0)
-      throw new IllegalArgumentException ("method name contains '.': " + name);
-    _owner = owner;
-    _object = object;
-    _methodName = name;
-    _method = null;
-    _isConstructor = false;
-    _type = null;
+    if (sName.indexOf ('.') >= 0)
+      throw new IllegalArgumentException ("method name contains '.': " + sName);
+    m_aOwner = owner;
+    m_aObject = object;
+    m_sMethodName = sName;
+    m_sMethod = null;
+    m_bIsConstructor = false;
+    m_aConstructorType = null;
   }
 
   private JInvocation (@Nonnull final JCodeModel owner,
                        @Nullable final IJGenerable object,
                        @Nonnull final JMethod method)
   {
-    _owner = owner;
-    _object = object;
-    _methodName = null;
-    _method = method;
-    _isConstructor = false;
-    _type = null;
+    m_aOwner = owner;
+    m_aObject = object;
+    m_sMethodName = null;
+    m_sMethod = method;
+    m_bIsConstructor = false;
+    m_aConstructorType = null;
   }
 
   /**
    * Invokes a constructor of an object (i.e., creates a new object.)
    *
-   * @param c
+   * @param aConstructorType
    *        Type of the object to be created. If this type is an array type,
    *        added arguments are treated as array initializer. Thus you can
    *        create an expression like <code>new int[]{1,2,3,4,5}</code>.
    */
-  protected JInvocation (@Nonnull final AbstractJType c)
+  protected JInvocation (@Nonnull final AbstractJType aConstructorType)
   {
-    _owner = c.owner ();
-    _object = null;
-    _methodName = null;
-    _method = null;
-    _isConstructor = true;
-    _type = c;
+    m_aOwner = aConstructorType.owner ();
+    m_aObject = null;
+    m_sMethodName = null;
+    m_sMethod = null;
+    m_bIsConstructor = true;
+    m_aConstructorType = aConstructorType;
   }
 
   @Nullable
   public JCodeModel owner ()
   {
-    return _owner;
+    return m_aOwner;
   }
 
   public boolean isConstructor ()
   {
-    return _isConstructor;
+    return m_bIsConstructor;
   }
 
   /**
@@ -182,6 +195,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
    *
    * @param arg
    *        Argument to add to argument list
+   * @return this for chaining
    */
   @Nonnull
   public JInvocation arg (@Nonnull final IJExpression arg)
@@ -194,6 +208,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   *
+   * @param v
+   *        Value to be added to the argument list
+   * @return this for chaining
    */
   @Nonnull
   public JInvocation arg (@Nonnull final boolean v)
@@ -203,6 +221,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   *
+   * @param v
+   *        Value to be added to the argument list
+   * @return this for chaining
    */
   @Nonnull
   public JInvocation arg (@Nonnull final char v)
@@ -212,6 +234,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   *
+   * @param v
+   *        Value to be added to the argument list
+   * @return this for chaining
    */
   @Nonnull
   public JInvocation arg (@Nonnull final double v)
@@ -221,6 +247,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   *
+   * @param v
+   *        Value to be added to the argument list
+   * @return this for chaining
    */
   @Nonnull
   public JInvocation arg (@Nonnull final float v)
@@ -230,6 +260,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   *
+   * @param v
+   *        Value to be added to the argument list
+   * @return this for chaining
    */
   @Nonnull
   public JInvocation arg (@Nonnull final int v)
@@ -239,6 +273,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   *
+   * @param v
+   *        Value to be added to the argument list
+   * @return this for chaining
    */
   @Nonnull
   public JInvocation arg (@Nonnull final long v)
@@ -248,6 +286,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Adds a literal argument. Short for {@code arg(JExpr.lit(v))}
+   *
+   * @param v
+   *        Value to be added to the argument list
+   * @return this for chaining
    */
   @Nonnull
   public JInvocation arg (@Nonnull final String v)
@@ -339,24 +381,24 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   private String methodName ()
   {
-    return _methodName != null ? _methodName : _method.name ();
+    return m_sMethodName != null ? m_sMethodName : m_sMethod.name ();
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (_isConstructor)
+    if (m_bIsConstructor)
     {
-      if (_type.isArray ())
+      if (m_aConstructorType.isArray ())
       {
         // [RESULT] new T[]{arg1,arg2,arg3,...};
-        f.print ("new").generable (_type);
+        f.print ("new").generable (m_aConstructorType);
         _addTypeVars (f);
         f.print ('{');
       }
       else
       {
         // [RESULT] new T(
-        f.print ("new").generable (_type);
+        f.print ("new").generable (m_aConstructorType);
         _addTypeVars (f);
         f.print ('(');
       }
@@ -365,10 +407,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     {
       final String name = methodName ();
 
-      if (_object != null)
+      if (m_aObject != null)
       {
         // object.<generics> name (
-        f.generable (_object).print ('.');
+        f.generable (m_aObject).print ('.');
         _addTypeVars (f);
         f.print (name).print ('(');
       }
@@ -383,14 +425,14 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     f.generable (_args);
 
     // Close arg list
-    if (_isConstructor && _type.isArray ())
+    if (m_bIsConstructor && m_aConstructorType.isArray ())
       f.print ('}');
     else
       f.print (')');
 
-    if (_type instanceof JDefinedClass && ((JDefinedClass) _type).isAnonymous ())
+    if (m_aConstructorType instanceof JDefinedClass && ((JDefinedClass) m_aConstructorType).isAnonymous ())
     {
-      ((JAnonymousClass) _type).declareBody (f);
+      ((JAnonymousClass) m_aConstructorType).declareBody (f);
     }
   }
 
@@ -401,7 +443,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   private String typeFullName ()
   {
-    return _type != null ? _type.fullName () : "";
+    return m_aConstructorType != null ? m_aConstructorType.fullName () : "";
   }
 
   @Override
@@ -412,9 +454,9 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     if (o == null || getClass () != o.getClass ())
       return false;
     final JInvocation rhs = (JInvocation) o;
-    if (!(isEqual (_object, rhs._object) &&
-          isEqual (_isConstructor, rhs._isConstructor) &&
-          (_isConstructor || isEqual (methodName (), rhs.methodName ())) &&
+    if (!(isEqual (m_aObject, rhs.m_aObject) &&
+          isEqual (m_bIsConstructor, rhs.m_bIsConstructor) &&
+          (m_bIsConstructor || isEqual (methodName (), rhs.methodName ())) &&
           isEqual (_args, rhs._args) &&
           isEqual (typeFullName (), rhs.typeFullName ())))
     {
@@ -437,8 +479,8 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   @Override
   public int hashCode ()
   {
-    JCHashCodeGenerator hashCodeGenerator = new JCHashCodeGenerator (this).append (_object).append (_isConstructor);
-    if (!_isConstructor)
+    JCHashCodeGenerator hashCodeGenerator = new JCHashCodeGenerator (this).append (m_aObject).append (m_bIsConstructor);
+    if (!m_bIsConstructor)
       hashCodeGenerator = hashCodeGenerator.append (methodName ());
     hashCodeGenerator = hashCodeGenerator.append (_args).append (typeFullName ());
     if (_typeVariables != null)

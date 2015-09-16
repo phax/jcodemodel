@@ -299,6 +299,9 @@ public class JFormatter implements Closeable
 
   /**
    * Creates a formatter with default incremental indentations of four spaces.
+   *
+   * @param aPW
+   *        The {@link PrintWriter} to use
    */
   public JFormatter (@Nonnull final PrintWriter aPW)
   {
@@ -307,6 +310,9 @@ public class JFormatter implements Closeable
 
   /**
    * Creates a formatter with default incremental indentations of four spaces.
+   *
+   * @param aWriter
+   *        The {@link Writer} to be wrapped in a {@link PrintWriter}
    */
   public JFormatter (@Nonnull final Writer aWriter)
   {
@@ -322,8 +328,8 @@ public class JFormatter implements Closeable
   }
 
   /**
-   * Returns true if we are in the printing mode, where we actually produce
-   * text. The other mode is the "collecting mode'
+   * @return <code>true</code> if we are in the printing mode, where we actually
+   *         produce text. The other mode is the "collecting mode'
    */
   public boolean isPrinting ()
   {
@@ -332,6 +338,8 @@ public class JFormatter implements Closeable
 
   /**
    * Decrement the indentation level.
+   *
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter outdent ()
@@ -342,6 +350,8 @@ public class JFormatter implements Closeable
 
   /**
    * Increment the indentation level.
+   *
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter indent ()
@@ -433,7 +443,7 @@ public class JFormatter implements Closeable
    *
    * @param c
    *        the char
-   * @return this
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter print (final char c)
@@ -486,6 +496,10 @@ public class JFormatter implements Closeable
    * <p>
    * In the collecting mode we use this information to decide what types to
    * import and what not to.
+   *
+   * @param aType
+   *        Type to be emitted
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter type (@Nonnull final AbstractJClass aType)
@@ -542,6 +556,10 @@ public class JFormatter implements Closeable
 
   /**
    * Print an identifier
+   *
+   * @param id
+   *        identifier
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter id (@Nonnull final String id)
@@ -569,6 +587,8 @@ public class JFormatter implements Closeable
 
   /**
    * Print a new line into the stream
+   *
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter newline ()
@@ -587,6 +607,7 @@ public class JFormatter implements Closeable
    *
    * @param g
    *        the JGenerable object
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter generable (@Nonnull final IJGenerable g)
@@ -597,19 +618,24 @@ public class JFormatter implements Closeable
 
   /**
    * Produces {@link IJGenerable}s separated by ','
+   *
+   * @param list
+   *        List of {@link IJGenerable} objects that will be separated by a
+   *        comma
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter generable (@Nonnull final Collection <? extends IJGenerable> list)
   {
-    boolean first = true;
     if (!list.isEmpty ())
     {
+      boolean bFirst = true;
       for (final IJGenerable item : list)
       {
-        if (!first)
+        if (!bFirst)
           print (',');
         generable (item);
-        first = false;
+        bFirst = false;
       }
     }
     return this;
@@ -620,6 +646,7 @@ public class JFormatter implements Closeable
    *
    * @param d
    *        the JDeclaration object
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter declaration (@Nonnull final IJDeclaration d)
@@ -633,6 +660,7 @@ public class JFormatter implements Closeable
    *
    * @param s
    *        the JStatement object
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter statement (@Nonnull final IJStatement s)
@@ -646,6 +674,7 @@ public class JFormatter implements Closeable
    *
    * @param v
    *        the {@link JVar} object
+   * @return this for chaining
    */
   @Nonnull
   public JFormatter var (@Nonnull final JVar v)
@@ -656,6 +685,9 @@ public class JFormatter implements Closeable
 
   /**
    * Generates the whole source code out of the specified class.
+   *
+   * @param aClassToBeWritten
+   *        Class to be written
    */
   void write (@Nonnull final JDefinedClass aClassToBeWritten)
   {
@@ -744,8 +776,8 @@ public class JFormatter implements Closeable
    *        {@link AbstractJClass} referenced class
    * @param aGeneratedClass
    *        {@link AbstractJClass} currently generated class
-   * @return true if an import statement can be used to shorten references to
-   *         referenced class
+   * @return <code>true</code> if an import statement can be used to shorten
+   *         references to referenced class
    */
   private boolean _shouldBeImported (@Nonnull final AbstractJClass aReference,
                                      @Nonnull final JDefinedClass aGeneratedClass)

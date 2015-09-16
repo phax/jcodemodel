@@ -47,6 +47,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Type variable used to declare generics.
  *
@@ -61,9 +63,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   protected JTypeVar (@Nonnull final JCodeModel aOwner, @Nonnull final String sName)
   {
     super (aOwner);
-    if (sName == null || sName.length () == 0)
-      throw new IllegalArgumentException ("Name may not be empty!");
-    m_sName = sName;
+    m_sName = JCValueEnforcer.notEmpty (sName, "Name");
   }
 
   @Override
@@ -90,14 +90,14 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   /**
    * Adds a bound to this variable.
    *
+   * @param bound
+   *        Bound class to be added
    * @return this
    */
   @Nonnull
   public JTypeVar bound (@Nonnull final AbstractJClass bound)
   {
-    if (bound == null)
-      throw new IllegalArgumentException ("bound may not be null");
-
+    JCValueEnforcer.notNull (bound, "Bound");
     m_aBounds.add (bound);
     return this;
   }

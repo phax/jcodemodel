@@ -68,6 +68,8 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   /**
    * @param os
    *        This stream will be closed at the end of the code generation.
+   * @param encoding
+   *        Encoding to be used.
    */
   public OutputStreamCodeWriter (@Nonnull final OutputStream os, @Nullable final Charset encoding)
   {

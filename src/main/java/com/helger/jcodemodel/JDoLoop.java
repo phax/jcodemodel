@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Do loops
  */
@@ -50,52 +52,53 @@ public class JDoLoop implements IJStatement
   /**
    * Test part of Do statement for determining exit state
    */
-  private final IJExpression _test;
+  private final IJExpression m_aTest;
 
   /**
    * JBlock of statements which makes up body of this Do statement
    */
-  private JBlock _body;
+  private JBlock m_aBody;
 
   /**
-   * Construct a Do statment
+   * Construct a Do statement
+   *
+   * @param aTest
+   *        Test expression
    */
-  protected JDoLoop (@Nonnull final IJExpression test)
+  protected JDoLoop (@Nonnull final IJExpression aTest)
   {
-    if (test == null)
-      throw new NullPointerException ("test");
-    this._test = test;
+    m_aTest = JCValueEnforcer.notNull (aTest, "Test");
   }
 
   @Nonnull
   public IJExpression test ()
   {
-    return _test;
+    return m_aTest;
   }
 
   @Nonnull
   public JBlock body ()
   {
-    if (_body == null)
-      _body = new JBlock ();
-    return _body;
+    if (m_aBody == null)
+      m_aBody = new JBlock ();
+    return m_aBody;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
     f.print ("do");
-    if (_body != null)
-      f.generable (_body);
+    if (m_aBody != null)
+      f.generable (m_aBody);
     else
       f.print ("{ }");
 
-    if (JOp.hasTopOp (_test))
+    if (JOp.hasTopOp (m_aTest))
     {
-      f.print ("while ").generable (_test);
+      f.print ("while ").generable (m_aTest);
     }
     else
     {
-      f.print ("while (").generable (_test).print (')');
+      f.print ("while (").generable (m_aTest).print (')');
     }
     f.print (';').newline ();
   }

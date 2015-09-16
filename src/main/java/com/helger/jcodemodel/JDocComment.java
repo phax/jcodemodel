@@ -46,6 +46,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * JavaDoc comment.
  * <p>
@@ -61,39 +63,39 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   private static final long serialVersionUID = 1L;
 
-  private final JCodeModel _owner;
+  private final JCodeModel m_aOwner;
 
   /** list of @param tags */
-  private final Map <String, JCommentPart> _atParams = new LinkedHashMap <String, JCommentPart> ();
+  private final Map <String, JCommentPart> m_aAtParams = new LinkedHashMap <String, JCommentPart> ();
 
   /** list of xdoclets */
-  private final Map <String, Map <String, String>> _atXdoclets = new LinkedHashMap <String, Map <String, String>> ();
+  private final Map <String, Map <String, String>> m_aAtXdoclets = new LinkedHashMap <String, Map <String, String>> ();
 
   /** list of @throws tags */
-  private final Map <AbstractJClass, JCommentPart> _atThrows = new LinkedHashMap <AbstractJClass, JCommentPart> ();
+  private final Map <AbstractJClass, JCommentPart> m_aAtThrows = new LinkedHashMap <AbstractJClass, JCommentPart> ();
 
   /**
    * The @return tag part.
    */
-  private JCommentPart _atReturn = null;
+  private JCommentPart m_aAtReturn;
 
   /**
    * The @author tag part.
    */
-  private JCommentPart _atAuthor = null;
+  private JCommentPart m_aAtAuthor;
 
   /** The @deprecated tag */
-  private JCommentPart _atDeprecated = null;
+  private JCommentPart m_aAtDeprecated;
 
   protected JDocComment (@Nonnull final JCodeModel owner)
   {
-    this._owner = owner;
+    m_aOwner = JCValueEnforcer.notNull (owner, "Owner");
   }
 
   @Nonnull
   public JCodeModel owner ()
   {
-    return _owner;
+    return m_aOwner;
   }
 
   @Override
@@ -105,21 +107,29 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   /**
    * Append a text to a @param tag to the javadoc
+   *
+   * @param param
+   *        Parameter to be added
+   * @return The created {@link JCommentPart}
    */
   @Nonnull
   public JCommentPart addParam (final String param)
   {
-    JCommentPart p = _atParams.get (param);
+    JCommentPart p = m_aAtParams.get (param);
     if (p == null)
     {
       p = new JCommentPart ();
-      _atParams.put (param, p);
+      m_aAtParams.put (param, p);
     }
     return p;
   }
 
   /**
    * Append a text to an @param tag.
+   *
+   * @param param
+   *        Parameter to be added
+   * @return The created {@link JCommentPart}
    */
   public JCommentPart addParam (@Nonnull final JVar param)
   {
@@ -129,7 +139,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   @Nullable
   public JCommentPart removeParam (final String param)
   {
-    return _atParams.remove (param);
+    return m_aAtParams.remove (param);
   }
 
   @Nullable
@@ -140,13 +150,13 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   public void removeAllParams ()
   {
-    _atParams.clear ();
+    m_aAtParams.clear ();
   }
 
   @Nullable
   public JCommentPart getParam (@Nullable final String param)
   {
-    return _atParams.get (param);
+    return m_aAtParams.get (param);
   }
 
   @Nullable
@@ -157,22 +167,30 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   /**
    * add an @throws tag to the javadoc
+   *
+   * @param exception
+   *        Exception to be added
+   * @return New {@link JCommentPart}
    */
   public JCommentPart addThrows (@Nonnull final Class <? extends Throwable> exception)
   {
-    return addThrows (_owner.ref (exception));
+    return addThrows (m_aOwner.ref (exception));
   }
 
   /**
    * add an @throws tag to the javadoc
+   *
+   * @param exception
+   *        Exception to be added
+   * @return New {@link JCommentPart}
    */
   public JCommentPart addThrows (final AbstractJClass exception)
   {
-    JCommentPart p = _atThrows.get (exception);
+    JCommentPart p = m_aAtThrows.get (exception);
     if (p == null)
     {
       p = new JCommentPart ();
-      _atThrows.put (exception, p);
+      m_aAtThrows.put (exception, p);
     }
     return p;
   }
@@ -180,97 +198,113 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   @Nullable
   public JCommentPart removeThrows (@Nonnull final Class <? extends Throwable> exception)
   {
-    return removeThrows (_owner.ref (exception));
+    return removeThrows (m_aOwner.ref (exception));
   }
 
   @Nullable
   public JCommentPart removeThrows (final AbstractJClass exception)
   {
-    return _atThrows.remove (exception);
+    return m_aAtThrows.remove (exception);
   }
 
   public void removeAllThrows ()
   {
-    _atThrows.clear ();
+    m_aAtThrows.clear ();
   }
 
   @Nullable
   public JCommentPart getThrows (@Nonnull final Class <? extends Throwable> exception)
   {
-    return getThrows (_owner.ref (exception));
+    return getThrows (m_aOwner.ref (exception));
   }
 
   @Nullable
   public JCommentPart getThrows (final AbstractJClass exception)
   {
-    return _atThrows.get (exception);
+    return m_aAtThrows.get (exception);
   }
 
   /**
    * Appends a text to @return tag.
+   *
+   * @return Always the same {@link JCommentPart}
    */
   @Nonnull
   public JCommentPart addReturn ()
   {
-    if (_atReturn == null)
-      _atReturn = new JCommentPart ();
-    return _atReturn;
+    if (m_aAtReturn == null)
+      m_aAtReturn = new JCommentPart ();
+    return m_aAtReturn;
   }
 
   public void removeReturn ()
   {
-    _atReturn = null;
+    m_aAtReturn = null;
   }
 
   /**
    * Appends a text to @author tag.
+   *
+   * @return Always the same {@link JCommentPart}
    */
   @Nonnull
   public JCommentPart addAuthor ()
   {
-    if (_atAuthor == null)
-      _atAuthor = new JCommentPart ();
-    return _atAuthor;
+    if (m_aAtAuthor == null)
+      m_aAtAuthor = new JCommentPart ();
+    return m_aAtAuthor;
   }
 
   public void removeAuthor ()
   {
-    _atAuthor = null;
+    m_aAtAuthor = null;
   }
 
   /**
    * add an @deprecated tag to the javadoc, with the associated message.
+   *
+   * @return Always the same {@link JCommentPart}
    */
   @Nonnull
   public JCommentPart addDeprecated ()
   {
-    if (_atDeprecated == null)
-      _atDeprecated = new JCommentPart ();
-    return _atDeprecated;
+    if (m_aAtDeprecated == null)
+      m_aAtDeprecated = new JCommentPart ();
+    return m_aAtDeprecated;
   }
 
   public void removeDeprecated ()
   {
-    _atDeprecated = null;
+    m_aAtDeprecated = null;
   }
 
   /**
    * add an xdoclet.
+   *
+   * @param name
+   *        xdoclet name
+   * @return Map with the key/value pairs
    */
   @Nonnull
   public Map <String, String> addXdoclet (final String name)
   {
-    Map <String, String> p = _atXdoclets.get (name);
+    Map <String, String> p = m_aAtXdoclets.get (name);
     if (p == null)
     {
       p = new LinkedHashMap <String, String> ();
-      _atXdoclets.put (name, p);
+      m_aAtXdoclets.put (name, p);
     }
     return p;
   }
 
   /**
    * add an xdoclet.
+   *
+   * @param name
+   *        xdoclet name
+   * @param attributes
+   *        Attributes to be added
+   * @return Map with the key/value pairs
    */
   @Nonnull
   public Map <String, String> addXdoclet (final String name, final Map <String, String> attributes)
@@ -282,6 +316,14 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   /**
    * add an xdoclet.
+   *
+   * @param name
+   *        xdoclet name
+   * @param attribute
+   *        Attribute name to be added
+   * @param value
+   *        Attribute value to be added
+   * @return Map with the key/value pairs
    */
   @Nonnull
   public Map <String, String> addXdoclet (final String name, final String attribute, final String value)
@@ -294,12 +336,12 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   @Nullable
   public Map <String, String> removeXdoclet (final String name)
   {
-    return _atXdoclets.remove (name);
+    return m_aAtXdoclets.remove (name);
   }
 
   public void removeAllXdoclets ()
   {
-    _atXdoclets.clear ();
+    m_aAtXdoclets.clear ();
   }
 
   public void generate (@Nonnull final JFormatter f)
@@ -312,32 +354,32 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
     format (f, " * ");
 
     f.print (" * ").newline ();
-    for (final Map.Entry <String, JCommentPart> e : _atParams.entrySet ())
+    for (final Map.Entry <String, JCommentPart> e : m_aAtParams.entrySet ())
     {
       f.print (" * @param ").print (e.getKey ()).newline ();
       e.getValue ().format (f, INDENT);
     }
-    if (_atReturn != null)
+    if (m_aAtReturn != null)
     {
       f.print (" * @return").newline ();
-      _atReturn.format (f, INDENT);
+      m_aAtReturn.format (f, INDENT);
     }
-    if (_atAuthor != null)
+    if (m_aAtAuthor != null)
     {
       f.print (" * @author").newline ();
-      _atAuthor.format (f, INDENT);
+      m_aAtAuthor.format (f, INDENT);
     }
-    for (final Map.Entry <AbstractJClass, JCommentPart> e : _atThrows.entrySet ())
+    for (final Map.Entry <AbstractJClass, JCommentPart> e : m_aAtThrows.entrySet ())
     {
       f.print (" * @throws ").type (e.getKey ()).newline ();
       e.getValue ().format (f, INDENT);
     }
-    if (_atDeprecated != null)
+    if (m_aAtDeprecated != null)
     {
       f.print (" * @deprecated").newline ();
-      _atDeprecated.format (f, INDENT);
+      m_aAtDeprecated.format (f, INDENT);
     }
-    for (final Map.Entry <String, Map <String, String>> e : _atXdoclets.entrySet ())
+    for (final Map.Entry <String, Map <String, String>> e : m_aAtXdoclets.entrySet ())
     {
       f.print (" * @").print (e.getKey ());
       if (e.getValue () != null)

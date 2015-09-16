@@ -172,6 +172,13 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>implem
 
   /**
    * Constructor for creating anonymous inner class.
+   *
+   * @param aOwner
+   *        Owning code model
+   * @param nMods
+   *        Java modifier
+   * @param sName
+   *        Name of this class
    */
   protected JDefinedClass (@Nonnull final JCodeModel aOwner, final int nMods, @Nullable final String sName)
   {
@@ -181,8 +188,14 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>implem
   /**
    * JClass constructor
    *
+   * @param aOwner
+   *        Owning code model
+   * @param aOuter
+   *        Outer class or package
    * @param nMods
    *        Modifiers for this class declaration
+   * @param eClassType
+   *        Class type to use
    * @param sName
    *        Name of this class
    */
@@ -537,6 +550,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>implem
   /**
    * Looks for a method that has the specified method signature and return it.
    *
+   * @param sName
+   *        Method name to search
    * @param aArgTypes
    *        Signature to search
    * @return <code>null</code> if not found.

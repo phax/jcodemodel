@@ -50,47 +50,50 @@ public class JWhileLoop implements IJStatement
   /**
    * Test part of While statement for determining exit state
    */
-  private final IJExpression _test;
+  private final IJExpression m_aTextExpr;
 
   /**
    * JBlock of statements which makes up body of this While statement
    */
-  private JBlock _body;
+  private JBlock m_aBody;
 
   /**
    * Construct a While statment
+   * 
+   * @param aTestExpr
+   *        Test expression to use.
    */
-  protected JWhileLoop (@Nonnull final IJExpression test)
+  protected JWhileLoop (@Nonnull final IJExpression aTestExpr)
   {
-    this._test = test;
+    m_aTextExpr = aTestExpr;
   }
 
   @Nonnull
   public IJExpression test ()
   {
-    return _test;
+    return m_aTextExpr;
   }
 
   @Nonnull
   public JBlock body ()
   {
-    if (_body == null)
-      _body = new JBlock ();
-    return _body;
+    if (m_aBody == null)
+      m_aBody = new JBlock ();
+    return m_aBody;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
-    if (JOp.hasTopOp (_test))
+    if (JOp.hasTopOp (m_aTextExpr))
     {
-      f.print ("while ").generable (_test);
+      f.print ("while ").generable (m_aTextExpr);
     }
     else
     {
-      f.print ("while (").generable (_test).print (')');
+      f.print ("while (").generable (m_aTextExpr).print (')');
     }
-    if (_body != null)
-      f.statement (_body);
+    if (m_aBody != null)
+      f.statement (m_aBody);
     else
       f.print (';').newline ();
   }

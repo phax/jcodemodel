@@ -52,6 +52,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Variables and fields.
  */
@@ -63,7 +65,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   private final JMods m_aMods;
 
   /**
-   * JType of the variable
+   * Type of the variable
    */
   private AbstractJType m_aType;
 
@@ -80,11 +82,13 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   /**
    * Annotations on this variable. Lazily created.
    */
-  private List <JAnnotationUse> _annotations;
+  private List <JAnnotationUse> m_aAnnotations;
 
   /**
    * JVar constructor
    *
+   * @param aMods
+   *        Modifiers to use
    * @param aType
    *        Datatype of this variable
    * @param sName
@@ -108,13 +112,14 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   /**
    * Initialize this variable
    *
-   * @param init
-   *        JExpression to be used to initialize this field
+   * @param aInitExpr
+   *        Expression to be used to initialize this field
+   * @return this for chaining
    */
   @Nonnull
-  public JVar init (@Nullable final IJExpression init)
+  public JVar init (@Nullable final IJExpression aInitExpr)
   {
-    m_aInitExpr = init;
+    m_aInitExpr = aInitExpr;
     return this;
   }
 
@@ -131,12 +136,15 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
 
   /**
    * Changes the name of this variable.
+   *
+   * @param sName
+   *        New name of the variable
    */
-  public void name (@Nonnull final String name)
+  public void name (@Nonnull final String sName)
   {
-    if (!JJavaName.isJavaIdentifier (name))
-      throw new IllegalArgumentException ("Illegal variable name '" + name + "'");
-    m_sName = name;
+    if (!JJavaName.isJavaIdentifier (sName))
+      throw new IllegalArgumentException ("Illegal variable name '" + sName + "'");
+    m_sName = sName;
   }
 
   /**
@@ -144,6 +152,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
    *
    * @return always non-null.
    */
+  @Nonnull
   public AbstractJType type ()
   {
     return m_aType;
@@ -169,8 +178,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   @Nonnull
   public AbstractJType type (@Nonnull final AbstractJType aNewType)
   {
-    if (aNewType == null)
-      throw new IllegalArgumentException ();
+    JCValueEnforcer.notNull (aNewType, "NewType");
     final AbstractJType aOldType = m_aType;
     m_aType = aNewType;
     return aOldType;
@@ -181,14 +189,15 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
    *
    * @param clazz
    *        The annotation class to annotate the field with
+   * @return New {@link JAnnotationUse}
    */
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
-    if (_annotations == null)
-      _annotations = new ArrayList <JAnnotationUse> ();
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    _annotations.add (a);
+    m_aAnnotations.add (a);
     return a;
   }
 
@@ -197,6 +206,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
    *
    * @param clazz
    *        The annotation class to annotate the field with
+   * @return New {@link JAnnotationUse}
    */
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
@@ -213,20 +223,20 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
-    if (_annotations == null)
-      _annotations = new ArrayList <JAnnotationUse> ();
-    return Collections.unmodifiableList (_annotations);
+    if (m_aAnnotations == null)
+      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+    return Collections.unmodifiableList (m_aAnnotations);
   }
 
   protected boolean isAnnotated ()
   {
-    return _annotations != null;
+    return m_aAnnotations != null;
   }
 
   public void bind (@Nonnull final JFormatter f)
   {
-    if (_annotations != null)
-      for (final JAnnotationUse annotation : _annotations)
+    if (m_aAnnotations != null)
+      for (final JAnnotationUse annotation : m_aAnnotations)
         f.generable (annotation).newline ();
     f.generable (m_aMods).generable (m_aType).id (m_sName);
     if (m_aInitExpr != null)

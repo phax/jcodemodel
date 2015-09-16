@@ -110,6 +110,7 @@ public class JConditional implements IJStatement
    *
    * @param aTestExpr
    *        The test expression for the new if
+   * @return New {@link JConditional}
    */
   @Nonnull
   public JConditional _elseif (@Nonnull final IJExpression aTestExpr)

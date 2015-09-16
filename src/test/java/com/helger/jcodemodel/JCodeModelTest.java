@@ -58,6 +58,7 @@ public final class JCodeModelTest
     final JCodeModel cm = new JCodeModel ();
     assertNotNull (cm.parseType ("java.util.ArrayList<java.lang.String[]>[]"));
     assertNotNull (cm.parseType ("java.util.ArrayList<java.util.ArrayList<java.util.ArrayList<java.lang.String[]>[]>[]>[]"));
+    assertNotNull (cm.parseType ("java.util.Comparator<? super java.lang.CharSequence[]>[]"));
   }
 
   @Test

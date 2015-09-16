@@ -63,6 +63,11 @@ public class JPropertyFile extends AbstractJResourceFile
   /**
    * Adds key/value pair into the property file. If you call this method twice
    * with the same key, the old one is overridden by the new one.
+   * 
+   * @param sKey
+   *        Properties key
+   * @param sValue
+   *        Properties value
    */
   public void add (@Nonnull final String sKey, @Nonnull final String sValue)
   {

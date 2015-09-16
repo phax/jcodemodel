@@ -115,6 +115,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Constructor for regular methods
    *
+   * @param outer
+   *        Outer class
    * @param mods
    *        Modifiers for this method's declaration
    * @param type
@@ -202,11 +204,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * Add the specified variable to the list of parameters for this method
    * signature.
    *
+   * @param mods
+   *        Java modifiers to be used
    * @param type
    *        JType of the parameter being added
    * @param name
    *        Name of the parameter being added
-   * @return New parameter variable
+   * @return New parameter variable of type {@link JVar}
    */
   @Nonnull
   public JVar param (final int mods, @Nonnull final AbstractJType type, @Nonnull final String name)
@@ -235,7 +239,17 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
-   * @see #varParam(AbstractJType, String)
+   * Add the specified variable argument to the list of parameters for this
+   * method signature.
+   *
+   * @param type
+   *        Type of the parameter being added.
+   * @param name
+   *        Name of the parameter being added
+   * @return the variable parameter
+   * @throws IllegalStateException
+   *         If this method is called twice. varargs in J2SE 1.5 can appear only
+   *         once in the method signature.
    */
   @Nonnull
   public JVar varParam (@Nonnull final Class <?> type, @Nonnull final String name)
@@ -263,7 +277,20 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
-   * @see #varParam(int, AbstractJType, String)
+   * Add the specified variable argument to the list of parameters for this
+   * method signature.
+   *
+   * @param mods
+   *        mods to use
+   * @param type
+   *        Type of the parameter being added. Is automatically converted to an
+   *        array.
+   * @param name
+   *        Name of the parameter being added
+   * @return the created variable parameter
+   * @throws IllegalStateException
+   *         If this method is called twice. varargs in J2SE 1.5 can appear only
+   *         once in the method signature.
    */
   @Nonnull
   public JVar varParam (final int mods, @Nonnull final Class <?> type, @Nonnull final String name)
@@ -291,9 +318,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public JVar varParam (final int mods, @Nonnull final AbstractJType type, @Nonnull final String name)
   {
     if (hasVarArgs ())
-      throw new IllegalStateException ("Cannot have two varargs in a method,\n"
-                                       + "Check if varParam method of JMethod is"
-                                       + " invoked more than once");
+      throw new IllegalStateException ("Cannot have two varargs in a method,\n" +
+                                       "Check if varParam method of JMethod is" +
+                                       " invoked more than once");
 
     m_aVarParam = new JVar (JMods.forVar (mods), type.array (), name, null);
     return m_aVarParam;
@@ -306,7 +333,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
-   * Check if there are any varargs declared for this method signature.
+   * @return <code>true</code> if there are any varargs declared for this method
+   *         signature.
    */
   public boolean hasVarArgs ()
   {
@@ -375,6 +403,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Changes the name of the method.
+   *
+   * @param n
+   *        New name
    */
   public void name (final String n)
   {
@@ -382,7 +413,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
-   * Returns the return type. Is <code>null</code> for constructors.
+   * @return the return type. Is <code>null</code> for constructors.
    */
   @Nullable
   public AbstractJType type ()
@@ -442,6 +473,10 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /**
    * Returns true if the method has the specified signature.
+   *
+   * @param argTypes
+   *        Signature to check
+   * @return <code>true</code> if this method has the provided signature
    */
   public boolean hasSignature (@Nonnull final AbstractJType [] argTypes)
   {

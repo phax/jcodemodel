@@ -80,7 +80,7 @@ public class JForEach implements IJStatement
   }
 
   /**
-   * Returns a reference to the loop variable.
+   * @return a reference to the loop variable.
    */
   @Nonnull
   public JVar var ()

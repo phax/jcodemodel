@@ -52,7 +52,7 @@ import javax.annotation.Nonnull;
  * {@link Writer} that escapes non US-ASCII characters into Java Unicode escape
  * \\uXXXX. This process is necessary if the method names or field names contain
  * non US-ASCII characters.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class UnicodeEscapeWriter extends FilterWriter
@@ -88,7 +88,11 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   /**
-   * Can be overridden. Return true if the character needs to be escaped.
+   * Can be overridden.
+   * 
+   * @param ch
+   *        Character to check
+   * @return true if the character needs to be escaped.
    */
   protected boolean requireEscaping (final int ch)
   {
@@ -97,7 +101,9 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   @Override
-  public final void write (@Nonnull final char [] buf, @Nonnegative final int off, @Nonnegative final int len) throws IOException
+  public final void write (@Nonnull final char [] buf,
+                           @Nonnegative final int off,
+                           @Nonnegative final int len) throws IOException
   {
     for (int i = 0; i < len; i++)
       write (buf[off + i]);
@@ -110,7 +116,9 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   @Override
-  public final void write (@Nonnull final String buf, @Nonnegative final int off, @Nonnegative final int len) throws IOException
+  public final void write (@Nonnull final String buf,
+                           @Nonnegative final int off,
+                           @Nonnegative final int len) throws IOException
   {
     write (buf.toCharArray (), off, len);
   }

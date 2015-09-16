@@ -124,6 +124,10 @@ public final class JJavaName
 
   /**
    * Checks if a given string is usable as a Java identifier.
+   *
+   * @param s
+   *        Source string
+   * @return <code>true</code> if the string is a valid Java identifier
    */
   public static boolean isJavaIdentifier (@Nonnull final String s)
   {
@@ -144,14 +148,22 @@ public final class JJavaName
 
   /**
    * Checks if the given string is a valid fully qualified name.
+   *
+   * @param sName
+   *        Source string to check
+   * @return <code>true</code> if it is a valid fully qualified class name
    */
-  public static boolean isFullyQualifiedClassName (final String s)
+  public static boolean isFullyQualifiedClassName (final String sName)
   {
-    return isJavaPackageName (s);
+    return isJavaPackageName (sName);
   }
 
   /**
    * Checks if the given string is a valid Java package name.
+   *
+   * @param sName
+   *        Source string to check
+   * @return <code>true</code> if it is a valid Java package name
    */
   public static boolean isJavaPackageName (final String sName)
   {
@@ -166,7 +178,10 @@ public final class JJavaName
 
       s = s.substring (idx);
       if (s.length () != 0)
-        s = s.substring (1); // remove '.'
+      {
+        // remove '.'
+        s = s.substring (1);
+      }
     }
     return true;
   }

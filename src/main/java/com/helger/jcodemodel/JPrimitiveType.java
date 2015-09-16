@@ -67,14 +67,17 @@ public class JPrimitiveType extends AbstractJType
    */
   private final AbstractJClass m_aWrapperClass;
   private JArrayClass m_aArrayClass;
+  private boolean m_bUseValueOf;
 
   protected JPrimitiveType (@Nonnull final JCodeModel aOwner,
                             @Nonnull final String sTypeName,
-                            @Nonnull final Class <?> aWrapper)
+                            @Nonnull final Class <?> aWrapper,
+                            final boolean bUseValueOf)
   {
     m_aOwner = aOwner;
     m_sTypeName = sTypeName;
     m_aWrapperClass = aOwner.ref (aWrapper);
+    m_bUseValueOf = bUseValueOf;
   }
 
   @Nonnull
@@ -112,7 +115,7 @@ public class JPrimitiveType extends AbstractJType
     return m_aArrayClass;
   }
 
-  /**
+  /*
    * Obtains the wrapper class for this primitive type. For example, this method
    * returns a reference to java.lang.Integer if this object represents int.
    */
@@ -139,25 +142,70 @@ public class JPrimitiveType extends AbstractJType
   /**
    * Wraps an expression of this type to the corresponding wrapper class. For
    * example, if this class represents "float", this method will return the
-   * expression <code>new Float(x)</code> for the parameter x.<br>
-   * TODO: it's not clear how this method works for VOID.
+   * expression <code>new Float(x)</code> or <code>Float.valueOf(x)</code> for
+   * the parameter <code>x</code>.<br>
+   * For void type it throws an {@link IllegalStateException} because this would
+   * lead to corrupt code!
+   *
+   * @param aExpr
+   *        Expression to be wrapped
+   * @return The created expression. Never <code>null</code>
+   * @see #useValueOf()
    */
   @Nonnull
-  public IJExpression wrap (@Nonnull final IJExpression exp)
+  public IJExpression wrap (@Nonnull final IJExpression aExpr)
   {
-    return JExpr._new (boxify ()).arg (exp);
+    if ("void".equals (m_sTypeName))
+      throw new IllegalStateException ("Cannot wrap a 'void' expression!");
+
+    if (m_bUseValueOf)
+      return boxify ().staticInvoke ("valueOf").arg (aExpr);
+
+    return JExpr._new (boxify ()).arg (aExpr);
   }
 
   /**
-   * Do the opposite of the wrap method. REVISIT: it's not clear how this method
-   * works for VOID.
+   * Do the opposite of the wrap method. So for a <code>Float</code> object
+   * <code>x</code> it creates <code>x.floatValue()</code><br>
+   * For void type it throws an {@link IllegalStateException} because this would
+   * lead to corrupt code!
+   *
+   * @param aExpr
+   *        Expression to be unwrapped
+   * @return The created primitive value expression. Never <code>null</code>
    */
   @Nonnull
   public IJExpression unwrap (@Nonnull final IJExpression aExpr)
   {
+    if ("void".equals (m_sTypeName))
+      throw new IllegalStateException ("Cannot unwrap a 'void' expression!");
+
     // it just so happens that the unwrap method is always
     // things like "intValue" or "booleanValue".
     return aExpr.invoke (m_sTypeName + "Value");
+  }
+
+  /**
+   * @return <code>true</code> if <code>valueOf</code> should be used in
+   *         {@link #wrap(IJExpression)}, <code>false</code> if
+   *         <code>new X(y)</code> should be used there. Note:
+   *         <code>valueOf</code> is faster in execution since it uses
+   *         potentially built in caches of the objects.
+   */
+  public boolean useValueOf ()
+  {
+    return m_bUseValueOf;
+  }
+
+  /**
+   * Determine of <code>valueOf</code> should be used or not.
+   *
+   * @param bUseValueOf
+   *        New value. <code>true</code> to enable usage of <code>valueOf</code>
+   */
+  public void useValueOf (final boolean bUseValueOf)
+  {
+    m_bUseValueOf = bUseValueOf;
   }
 
   public void generate (@Nonnull final JFormatter f)

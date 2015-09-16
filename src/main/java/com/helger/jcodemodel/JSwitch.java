@@ -54,71 +54,74 @@ public class JSwitch implements IJStatement
   /**
    * Test part of switch statement.
    */
-  private final IJExpression _test;
+  private final IJExpression m_aTestExpr;
 
   /**
    * vector of JCases.
    */
-  private final List <JCase> _cases = new ArrayList <JCase> ();
+  private final List <JCase> m_aCases = new ArrayList <JCase> ();
 
   /**
    * a single default case
    */
-  private JCase _defaultCase;
+  private JCase m_aDefaultCase;
 
   /**
-   * Construct a While statment
+   * Construct a switch statement
+   *
+   * @param aTestExpr
+   *        expression
    */
-  protected JSwitch (@Nonnull final IJExpression test)
+  protected JSwitch (@Nonnull final IJExpression aTestExpr)
   {
-    this._test = test;
+    m_aTestExpr = aTestExpr;
   }
 
   @Nonnull
   public IJExpression test ()
   {
-    return _test;
+    return m_aTestExpr;
   }
 
   @Nonnull
   public Iterator <JCase> cases ()
   {
-    return _cases.iterator ();
+    return m_aCases.iterator ();
   }
 
   @Nonnull
   public JCase _case (@Nonnull final IJExpression label)
   {
     final JCase c = new JCase (label);
-    _cases.add (c);
+    m_aCases.add (c);
     return c;
   }
 
   @Nonnull
   public JCase _default ()
   {
-    if (_defaultCase == null)
+    if (m_aDefaultCase == null)
     {
       // default cases statements don't have a label
-      _defaultCase = new JCase (null, true);
+      m_aDefaultCase = new JCase (null, true);
     }
-    return _defaultCase;
+    return m_aDefaultCase;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
-    if (JOp.hasTopOp (_test))
+    if (JOp.hasTopOp (m_aTestExpr))
     {
-      f.print ("switch ").generable (_test).print (" {").newline ();
+      f.print ("switch ").generable (m_aTestExpr).print (" {").newline ();
     }
     else
     {
-      f.print ("switch (").generable (_test).print (')').print (" {").newline ();
+      f.print ("switch (").generable (m_aTestExpr).print (')').print (" {").newline ();
     }
-    for (final JCase c : _cases)
+    for (final JCase c : m_aCases)
       f.statement (c);
-    if (_defaultCase != null)
-      f.statement (_defaultCase);
+    if (m_aDefaultCase != null)
+      f.statement (m_aDefaultCase);
     f.print ('}').newline ();
   }
 }

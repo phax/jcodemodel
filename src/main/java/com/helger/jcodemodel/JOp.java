@@ -57,6 +57,10 @@ public final class JOp
 
   /**
    * Determine whether the top level of an expression involves an operator.
+   *
+   * @param e
+   *        Expression to evaluate
+   * @return <code>true</code> of a top level operator is present
    */
   public static boolean hasTopOp (@Nullable final IJExpression e)
   {
@@ -73,6 +77,10 @@ public final class JOp
 
   /**
    * Logical not <tt>'!x'</tt>.
+   * 
+   * @param e
+   *        Expression to invert
+   * @return Inverted expression
    */
   @Nonnull
   public static IJExpression not (@Nonnull final IJExpression e)

@@ -97,12 +97,25 @@ public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implement
 
   /**
    * Static field reference.
+   *
+   * @param type
+   *        Type to use
+   * @param name
+   *        Field name
    */
   protected JFieldRef (@Nonnull final AbstractJType type, @Nonnull final String name)
   {
     this (type.owner (), type, name, (JVar) null, false);
   }
 
+  /**
+   * Static field reference.
+   *
+   * @param type
+   *        Type to use
+   * @param var
+   *        Referenced variable
+   */
   protected JFieldRef (@Nonnull final AbstractJType type, @Nonnull final JVar var)
   {
     this (type.owner (), type, (String) null, var, false);
