@@ -83,11 +83,18 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
     m_sFullName = sFullName;
   }
 
+  @Override
+  @Nonnull
+  public String name ()
+  {
+    return super.name ();
+  }
+
   /**
    * Gets the fully qualified name of this class.
    */
   @Override
-  @Nullable
+  @Nonnull
   public String fullName ()
   {
     if (getOuter () instanceof AbstractJClassContainer <?>)

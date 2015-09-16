@@ -53,9 +53,11 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.jcodemodel.util.ClassNameComparator;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.util.NullWriter;
 
 /**
@@ -65,13 +67,140 @@ import com.helger.jcodemodel.util.NullWriter;
 @NotThreadSafe
 public class JFormatter implements Closeable
 {
-  public static boolean containsErrorTypes (@Nonnull final JDefinedClass c)
+  /**
+   * Used during the optimization of class imports. List of
+   * {@link AbstractJClass}es whose short name is the same.
+   *
+   * @author Ryan.Shoemaker@Sun.COM
+   */
+  private final class Usages
   {
-    final JFormatter formatter = new JFormatter (NullWriter.getInstance ());
-    formatter.m_eMode = EMode.FIND_ERROR_TYPES;
-    formatter.m_bContainsErrorTypes = false;
-    formatter.declaration (c);
-    return formatter.m_bContainsErrorTypes;
+    private final String m_sName;
+
+    private final List <AbstractJClass> m_aReferencedClasses = new ArrayList <AbstractJClass> ();
+
+    /** true if this name is used as an identifier (like a variable name.) **/
+    private boolean m_bIsVariableName;
+
+    public Usages (@Nonnull final String sName)
+    {
+      m_sName = sName;
+    }
+
+    /**
+     * @return true if the short name is ambiguous in context of enclosingClass
+     *         and classes with this name can't be imported.
+     */
+    public boolean isAmbiguousIn (final JDefinedClass enclosingClass)
+    {
+      // more than one type with the same name
+      if (m_aReferencedClasses.size () > 1)
+        return true;
+
+      // an id and (at least one) type with the same name
+      if (m_bIsVariableName && !m_aReferencedClasses.isEmpty ())
+        return true;
+
+      // no references is always unambiguous
+      if (m_aReferencedClasses.isEmpty ())
+        return false;
+
+      AbstractJClass aSingleRef = m_aReferencedClasses.get (0);
+      if (aSingleRef instanceof JAnonymousClass)
+      {
+        aSingleRef = aSingleRef._extends ();
+      }
+
+      // special case where a generated type collides with a type in package
+      // java.lang
+      if (aSingleRef._package () == JFormatter.this.m_aPckJavaLang)
+      {
+        // make sure that there's no other class with this name within the
+        // same package
+        for (final JDefinedClass aClass : enclosingClass._package ().classes ())
+        {
+          // even if this is the only "String" class we use,
+          // if the class called "String" is in the same package,
+          // we still need to import it.
+          if (aClass.name ().equals (aSingleRef.name ()))
+          {
+            // collision
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
+
+    public boolean addReferencedType (@Nonnull final AbstractJClass clazz)
+    {
+      if (false)
+        System.out.println ("Adding referenced type[" + m_sName + "]: " + clazz.fullName ());
+      if (m_aReferencedClasses.contains (clazz))
+        return false;
+      return m_aReferencedClasses.add (clazz);
+    }
+
+    public boolean containsReferencedType (@Nullable final AbstractJClass clazz)
+    {
+      return m_aReferencedClasses.contains (clazz);
+    }
+
+    @Nonnull
+    public AbstractJClass getSingleReferencedType ()
+    {
+      assert m_aReferencedClasses.size () == 1;
+      return m_aReferencedClasses.get (0);
+    }
+
+    @Nonnull
+    public List <AbstractJClass> getReferencedTypes ()
+    {
+      return m_aReferencedClasses;
+    }
+
+    public void setVariableName ()
+    {
+      // FIXME: Strangely special processing of inner-classes references
+      // Why is this?
+      // Should this be removed?
+      for (final AbstractJClass aRefedType : m_aReferencedClasses)
+      {
+        if (aRefedType.outer () != null)
+        {
+          m_bIsVariableName = false;
+          return;
+        }
+      }
+      m_bIsVariableName = true;
+    }
+
+    /**
+     * @return true if this name is used as an identifier (like a variable
+     *         name.).
+     */
+    public boolean isVariableName ()
+    {
+      return m_bIsVariableName;
+    }
+
+    /**
+     * @return true if this name is used as an type name (like class name.)
+     */
+    public boolean isTypeName ()
+    {
+      return !m_aReferencedClasses.isEmpty ();
+    }
+
+    @Override
+    public String toString ()
+    {
+      final StringBuilder aSB = new StringBuilder ("Usages[").append (m_sName).append ("]");
+      aSB.append ("; isVarName=").append (m_bIsVariableName);
+      aSB.append ("; refedClasses=").append (m_aReferencedClasses);
+      return aSB.toString ();
+    }
   }
 
   private static enum EMode
@@ -98,10 +227,10 @@ public class JFormatter implements Closeable
   public static final String DEFAULT_INDENT_SPACE = "    ";
 
   /**
-   * Special character token we use to differentiate '>' as an operator and '>'
-   * as the end of the type arguments. The former uses '>' and it requires a
-   * preceding whitespace. The latter uses this, and it does not have a
-   * preceding whitespace.
+   * Special character token we use to differentiate '&gt;' as an operator and
+   * '&gt;' as the end of the type arguments. The former uses '&gt;' and it
+   * requires a preceding whitespace. The latter uses this, and it does not have
+   * a preceding whitespace.
    */
   /* package */static final char CLOSE_TYPE_ARGS = '\uFFFF';
 
@@ -161,10 +290,8 @@ public class JFormatter implements Closeable
    */
   public JFormatter (@Nonnull final PrintWriter aPW, @Nonnull final String sIndentSpace)
   {
-    if (aPW == null)
-      throw new NullPointerException ("PrintWriter");
-    if (sIndentSpace == null)
-      throw new NullPointerException ("Indent space");
+    JCValueEnforcer.notNull (aPW, "PrintWriter");
+    JCValueEnforcer.notNull (sIndentSpace, "IndentSpace");
 
     m_aPW = aPW;
     m_sIndentSpace = sIndentSpace;
@@ -379,9 +506,9 @@ public class JFormatter implements Closeable
         }
         else
         {
-          final AbstractJClass aOuterClass = aType.outer ();
-          if (aOuterClass != null)
-            type (aOuterClass).print ('.').print (aType.name ());
+          final AbstractJClass aOuter = aType.outer ();
+          if (aOuter != null)
+            type (aOuter).print ('.').print (aType.name ());
           else
           {
             // collision was detected, so generate FQCN
@@ -390,14 +517,24 @@ public class JFormatter implements Closeable
         }
         break;
       case COLLECTING:
-        final String sShortName = aType.name ();
-        Usages aUsage = m_aCollectedReferences.get (sShortName);
-        if (aUsage == null)
+        if (false)
         {
-          aUsage = new Usages ();
-          m_aCollectedReferences.put (sShortName, aUsage);
+          final AbstractJClass aOuter = aType.outer ();
+          if (aOuter != null)
+          {
+            // If an outer type is available, collect this one as well
+            type (aOuter);
+          }
         }
-        aUsage.addReferencedType (aType);
+
+        final String sShortName = aType.name ();
+        Usages aUsages = m_aCollectedReferences.get (sShortName);
+        if (aUsages == null)
+        {
+          aUsages = new Usages (sShortName);
+          m_aCollectedReferences.put (sShortName, aUsages);
+        }
+        aUsages.addReferencedType (aType);
         break;
     }
     return this;
@@ -416,15 +553,15 @@ public class JFormatter implements Closeable
         break;
       case COLLECTING:
         // see if there is a type name that collides with this id
-        Usages usage = m_aCollectedReferences.get (id);
-        if (usage == null)
+        Usages aUsages = m_aCollectedReferences.get (id);
+        if (aUsages == null)
         {
           // not a type, but we need to create a place holder to
           // see if there might be a collision with a type
-          usage = new Usages ();
-          m_aCollectedReferences.put (id, usage);
+          aUsages = new Usages (id);
+          m_aCollectedReferences.put (id, aUsages);
         }
-        usage.setVariableName ();
+        aUsages.setVariableName ();
         break;
     }
     return this;
@@ -526,18 +663,22 @@ public class JFormatter implements Closeable
 
     // first collect all the types and identifiers
     m_eMode = EMode.COLLECTING;
+    m_aCollectedReferences.clear ();
+    m_aImportedClasses.clear ();
     declaration (aClassToBeWritten);
 
     // collate type names and identifiers to determine which types can be
     // imported
-    for (final Usages aUsage : m_aCollectedReferences.values ())
+    for (final Usages aUsages : m_aCollectedReferences.values ())
     {
-      if (!aUsage.isAmbiguousIn (aClassToBeWritten) && !aUsage.isVariableName ())
+      if (!aUsages.isAmbiguousIn (aClassToBeWritten) && !aUsages.isVariableName ())
       {
-        final AbstractJClass aReferencedClass = aUsage.getSingleReferencedType ();
+        final AbstractJClass aReferencedClass = aUsages.getSingleReferencedType ();
 
         if (_shouldBeImported (aReferencedClass, aClassToBeWritten))
+        {
           m_aImportedClasses.add (aReferencedClass);
+        }
         else
         {
           _importOuterClassIfCausesNoAmbiguities (aReferencedClass, aClassToBeWritten);
@@ -545,10 +686,11 @@ public class JFormatter implements Closeable
       }
       else
       {
-        for (final AbstractJClass reference : aUsage.getReferencedTypes ())
-        {
-          _importOuterClassIfCausesNoAmbiguities (reference, aClassToBeWritten);
-        }
+        if (aUsages.isTypeName ())
+          for (final AbstractJClass reference : aUsages.getReferencedTypes ())
+          {
+            _importOuterClassIfCausesNoAmbiguities (reference, aClassToBeWritten);
+          }
       }
     }
 
@@ -559,10 +701,10 @@ public class JFormatter implements Closeable
     m_eMode = EMode.PRINTING;
 
     assert aClassToBeWritten.parentContainer ().isPackage () : "this method is only for a pacakge-level class";
-    final JPackage pkg = (JPackage) aClassToBeWritten.parentContainer ();
-    if (!pkg.isUnnamed ())
+    final JPackage aPackage = (JPackage) aClassToBeWritten.parentContainer ();
+    if (!aPackage.isUnnamed ())
     {
-      newline ().declaration (pkg);
+      newline ().declaration (aPackage);
       newline ();
     }
 
@@ -570,19 +712,20 @@ public class JFormatter implements Closeable
     final AbstractJClass [] imports = m_aImportedClasses.toArray (new AbstractJClass [m_aImportedClasses.size ()]);
     Arrays.sort (imports, ClassNameComparator.getInstance ());
     boolean bAnyImport = false;
-    for (AbstractJClass clazz : imports)
+    for (AbstractJClass aImportClass : imports)
     {
       // suppress import statements for primitive types, built-in types,
       // types in the root package, and types in
       // the same package as the current type
-      if (!_isImplicitlyImported (clazz, aClassToBeWritten))
+      if (!_isImplicitlyImported (aImportClass, aClassToBeWritten))
       {
-        if (clazz instanceof JNarrowedClass)
+        if (aImportClass instanceof JNarrowedClass)
         {
-          clazz = clazz.erasure ();
+          // Never imported narrowed class but the erasure only
+          aImportClass = aImportClass.erasure ();
         }
 
-        print ("import").print (clazz.fullName ()).print (';').newline ();
+        print ("import").print (aImportClass.fullName ()).print (';').newline ();
         bAnyImport = true;
       }
     }
@@ -723,135 +866,30 @@ public class JFormatter implements Closeable
   private void _importOuterClassIfCausesNoAmbiguities (@Nonnull final AbstractJClass reference,
                                                        @Nonnull final JDefinedClass clazz)
   {
-    final AbstractJClass outer = reference.outer ();
-    if (outer != null)
+    final AbstractJClass aOuter = reference.outer ();
+    if (aOuter != null)
     {
-      if (_causesNoAmbiguities (outer, clazz) && _shouldBeImported (outer, clazz))
-        m_aImportedClasses.add (outer);
+      if (_causesNoAmbiguities (aOuter, clazz) && _shouldBeImported (aOuter, clazz))
+        m_aImportedClasses.add (aOuter);
       else
-        _importOuterClassIfCausesNoAmbiguities (outer, clazz);
+        _importOuterClassIfCausesNoAmbiguities (aOuter, clazz);
     }
   }
 
   private boolean _causesNoAmbiguities (@Nonnull final AbstractJClass reference, @Nonnull final JDefinedClass clazz)
   {
-    final Usages usage = m_aCollectedReferences.get (reference.name ());
-    return usage == null || (!usage.isAmbiguousIn (clazz) && usage.containsReferencedType (reference));
+    final Usages aUsages = m_aCollectedReferences.get (reference.name ());
+    if (aUsages == null)
+      return true;
+    return !aUsages.isAmbiguousIn (clazz) && aUsages.containsReferencedType (reference);
   }
 
-  /**
-   * Used during the optimization of class imports. List of
-   * {@link AbstractJClass}es whose short name is the same.
-   *
-   * @author Ryan.Shoemaker@Sun.COM
-   */
-  private final class Usages
+  public static boolean containsErrorTypes (@Nonnull final JDefinedClass c)
   {
-    private final List <AbstractJClass> _referencedClasses = new ArrayList <AbstractJClass> ();
-
-    /** true if this name is used as an identifier (like a variable name.) **/
-    private boolean _isVariableName;
-
-    /**
-     * @return true if the short name is ambiguous in context of enclosingClass
-     *         and classes with this name can't be imported.
-     */
-    public boolean isAmbiguousIn (final JDefinedClass enclosingClass)
-    {
-      // more than one type with the same name
-      if (_referencedClasses.size () > 1)
-        return true;
-
-      // an id and (at least one) type with the same name
-      if (_isVariableName && !_referencedClasses.isEmpty ())
-        return true;
-
-      // no references is always unambiguous
-      if (_referencedClasses.isEmpty ())
-        return false;
-
-      AbstractJClass singleRef = _referencedClasses.get (0);
-      if (singleRef instanceof JAnonymousClass)
-      {
-        singleRef = singleRef._extends ();
-      }
-
-      // special case where a generated type collides with a type in package
-      // java.lang
-      if (singleRef._package () == JFormatter.this.m_aPckJavaLang)
-      {
-        // make sure that there's no other class with this name within the
-        // same package
-        for (final JDefinedClass n : enclosingClass._package ().classes ())
-        {
-          // even if this is the only "String" class we use,
-          // if the class called "String" is in the same package,
-          // we still need to import it.
-          if (n.name ().equals (singleRef.name ()))
-            return true; // collision
-        }
-      }
-
-      return false;
-    }
-
-    public boolean addReferencedType (final AbstractJClass clazz)
-    {
-      if (_referencedClasses.contains (clazz))
-        return false;
-      return _referencedClasses.add (clazz);
-    }
-
-    public boolean containsReferencedType (final AbstractJClass clazz)
-    {
-      return _referencedClasses.contains (clazz);
-    }
-
-    @Nonnull
-    public AbstractJClass getSingleReferencedType ()
-    {
-      assert _referencedClasses.size () == 1;
-      return _referencedClasses.get (0);
-    }
-
-    @Nonnull
-    public List <AbstractJClass> getReferencedTypes ()
-    {
-      return _referencedClasses;
-    }
-
-    public void setVariableName ()
-    {
-      // FIXME: Strangely special processing of inner-classes references
-      // Why is this?
-      // Should this be removed?
-      for (final AbstractJClass type : _referencedClasses)
-      {
-        if (type.outer () != null)
-        {
-          _isVariableName = false;
-          return;
-        }
-      }
-      _isVariableName = true;
-    }
-
-    /**
-     * @return true if this name is used as an identifier (like a variable
-     *         name.).
-     */
-    public boolean isVariableName ()
-    {
-      return _isVariableName;
-    }
-
-    /**
-     * @return true if this name is used as an type name (like class name.)
-     */
-    @SuppressWarnings ("unused")
-    public boolean isTypeName ()
-    {
-      return !_referencedClasses.isEmpty ();
-    }
+    final JFormatter aFormatter = new JFormatter (NullWriter.getInstance ());
+    aFormatter.m_eMode = EMode.FIND_ERROR_TYPES;
+    aFormatter.m_bContainsErrorTypes = false;
+    aFormatter.declaration (c);
+    return aFormatter.m_bContainsErrorTypes;
   }
 }
