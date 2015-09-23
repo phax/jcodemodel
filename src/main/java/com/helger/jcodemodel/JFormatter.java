@@ -683,89 +683,22 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  /**
-   * Generates the whole source code out of the specified class.
-   *
-   * @param aClassToBeWritten
-   *        Class to be written
-   */
-  void write (@Nonnull final JDefinedClass aClassToBeWritten)
+  private final boolean m_bImportDebug = false;
+
+  private boolean _collectCausesNoAmbiguities (@Nonnull final AbstractJClass aReference,
+                                               @Nonnull final JDefinedClass aClassToBeWritten)
   {
-    m_aPckJavaLang = aClassToBeWritten.owner ()._package ("java.lang");
+    if (m_bImportDebug)
+      System.out.println ("_collectCausesNoAmbiguities(" +
+                          aReference.fullName () +
+                          ", " +
+                          aClassToBeWritten.fullName () +
+                          ")");
 
-    // first collect all the types and identifiers
-    m_eMode = EMode.COLLECTING;
-    m_aCollectedReferences.clear ();
-    m_aImportedClasses.clear ();
-    declaration (aClassToBeWritten);
-
-    // collate type names and identifiers to determine which types can be
-    // imported
-    for (final Usages aUsages : m_aCollectedReferences.values ())
-    {
-      if (!aUsages.isAmbiguousIn (aClassToBeWritten) && !aUsages.isVariableName ())
-      {
-        final AbstractJClass aReferencedClass = aUsages.getSingleReferencedType ();
-
-        if (_shouldBeImported (aReferencedClass, aClassToBeWritten))
-        {
-          m_aImportedClasses.add (aReferencedClass);
-        }
-        else
-        {
-          _importOuterClassIfCausesNoAmbiguities (aReferencedClass, aClassToBeWritten);
-        }
-      }
-      else
-      {
-        if (aUsages.isTypeName ())
-          for (final AbstractJClass reference : aUsages.getReferencedTypes ())
-          {
-            _importOuterClassIfCausesNoAmbiguities (reference, aClassToBeWritten);
-          }
-      }
-    }
-
-    // the class itself that we will be generating is always accessible
-    m_aImportedClasses.add (aClassToBeWritten);
-
-    // then print the declaration
-    m_eMode = EMode.PRINTING;
-
-    assert aClassToBeWritten.parentContainer ().isPackage () : "this method is only for a pacakge-level class";
-    final JPackage aPackage = (JPackage) aClassToBeWritten.parentContainer ();
-    if (!aPackage.isUnnamed ())
-    {
-      newline ().declaration (aPackage);
-      newline ();
-    }
-
-    // generate import statements
-    final AbstractJClass [] imports = m_aImportedClasses.toArray (new AbstractJClass [m_aImportedClasses.size ()]);
-    Arrays.sort (imports, ClassNameComparator.getInstance ());
-    boolean bAnyImport = false;
-    for (AbstractJClass aImportClass : imports)
-    {
-      // suppress import statements for primitive types, built-in types,
-      // types in the root package, and types in
-      // the same package as the current type
-      if (!_isImplicitlyImported (aImportClass, aClassToBeWritten))
-      {
-        if (aImportClass instanceof JNarrowedClass)
-        {
-          // Never imported narrowed class but the erasure only
-          aImportClass = aImportClass.erasure ();
-        }
-
-        print ("import").print (aImportClass.fullName ()).print (';').newline ();
-        bAnyImport = true;
-      }
-    }
-
-    if (bAnyImport)
-      newline ();
-
-    declaration (aClassToBeWritten);
+    final Usages aUsages = m_aCollectedReferences.get (aReference.name ());
+    if (aUsages == null)
+      return true;
+    return !aUsages.isAmbiguousIn (aClassToBeWritten) && aUsages.containsReferencedType (aReference);
   }
 
   /**
@@ -774,14 +707,21 @@ public class JFormatter implements Closeable
    *
    * @param aReference
    *        {@link AbstractJClass} referenced class
-   * @param aGeneratedClass
+   * @param aClassToBeWritten
    *        {@link AbstractJClass} currently generated class
    * @return <code>true</code> if an import statement can be used to shorten
    *         references to referenced class
    */
-  private boolean _shouldBeImported (@Nonnull final AbstractJClass aReference,
-                                     @Nonnull final JDefinedClass aGeneratedClass)
+  private boolean _collectShouldBeImported (@Nonnull final AbstractJClass aReference,
+                                            @Nonnull final JDefinedClass aClassToBeWritten)
   {
+    if (m_bImportDebug)
+      System.out.println ("_collectShouldBeImported(" +
+                          aReference.fullName () +
+                          ", " +
+                          aClassToBeWritten.fullName () +
+                          ")");
+
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)
     {
@@ -801,17 +741,76 @@ public class JFormatter implements Closeable
       // Import inner class only when it's name contain a name of enclosing
       // class.
       // In such case no information is lost when we refer to inner class
-      // without mentioning
-      // it's enclosing class
-      if (aRealReference.name ().contains (aOuter.name ()) && _shouldBeImported (aOuter, aGeneratedClass))
-        return true;
+      // without mentioning it's enclosing class
+      if (aRealReference.name ().contains (aOuter.name ()))
+      {
+        // Recurse
+        if (_collectShouldBeImported (aOuter, aClassToBeWritten))
+          return true;
+      }
 
       // Do not import inner classes in all other cases to aid
       // understandability/readability.
       return false;
     }
-
     return true;
+  }
+
+  // This block should do the trick to avoid that no two classes with the same
+  // local name are imported
+  public boolean _collectIsLocalNameUniqueOverAllImports (@Nonnull final AbstractJClass aReference)
+  {
+    final String sCurrentLocalName = aReference.name ();
+    for (final AbstractJClass aAlreadyImportedClass : m_aImportedClasses)
+      if (aAlreadyImportedClass.name ().equals (sCurrentLocalName))
+      {
+        if (m_bImportDebug)
+          System.out.println ("**Local name mismatch between " +
+                              aReference.fullName () +
+                              " and " +
+                              aAlreadyImportedClass.fullName ());
+        return false;
+      }
+    return true;
+  }
+
+  /**
+   * If reference is inner-class adds some outer class to the list of imported
+   * classes if it
+   *
+   * @param aClassToBeWritten
+   *        {@link AbstractJClass} that may or may not have an import
+   * @param aGeneratingClass
+   *        {@link AbstractJClass} that is the current class being processed
+   * @return true if an import statement should be suppressed, false otherwise
+   */
+  private void _collectImportOuterClassIfCausesNoAmbiguities (@Nonnull final AbstractJClass aReference,
+                                                              @Nonnull final JDefinedClass aClassToBeWritten)
+  {
+    if (m_bImportDebug)
+      System.out.println ("_collectImportOuterClassIfCausesNoAmbiguities(" +
+                          aReference.fullName () +
+                          ", " +
+                          aClassToBeWritten.fullName () +
+                          ")");
+
+    final AbstractJClass aOuter = aReference.outer ();
+    if (aOuter != null)
+    {
+      if (_collectCausesNoAmbiguities (aOuter, aClassToBeWritten) &&
+          _collectShouldBeImported (aOuter, aClassToBeWritten) &&
+          _collectIsLocalNameUniqueOverAllImports (aOuter))
+      {
+        m_aImportedClasses.add (aOuter);
+        if (m_bImportDebug)
+          System.out.println ("  m_aImportedClasses.add(" + aOuter.fullName () + ")");
+      }
+      else
+      {
+        // Recursive call
+        _collectImportOuterClassIfCausesNoAmbiguities (aOuter, aClassToBeWritten);
+      }
+    }
   }
 
   /**
@@ -823,8 +822,16 @@ public class JFormatter implements Closeable
    *        {@link AbstractJClass} that is the current class being processed
    * @return true if an import statement should be suppressed, false otherwise
    */
-  private boolean _isImplicitlyImported (@Nonnull final AbstractJClass aReference, @Nonnull final AbstractJClass clazz)
+  private boolean _printIsImplicitlyImported (@Nonnull final AbstractJClass aReference,
+                                              @Nonnull final AbstractJClass aClassToBeWrittem)
   {
+    if (m_bImportDebug)
+      System.out.println ("_printIsImplicitlyImported(" +
+                          aReference.fullName () +
+                          ", " +
+                          aClassToBeWrittem.fullName () +
+                          ")");
+
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)
     {
@@ -858,7 +865,7 @@ public class JFormatter implements Closeable
 
     // All pkg local classes do not need an
     // import stmt for ref, except for inner classes
-    if (aPackage == clazz._package ())
+    if (aPackage == aClassToBeWrittem._package ())
     {
       AbstractJClass aOuter = aRealReference.outer ();
       if (aOuter == null) // top-level class
@@ -880,40 +887,108 @@ public class JFormatter implements Closeable
       // reference's top-level class is generated clazz,
       // i. e. reference is enclosed in generated clazz,
       // then it needs no explicit import statement.
-      return aTopLevelClass == clazz;
+      return aTopLevelClass == aClassToBeWrittem;
     }
     return false;
   }
 
   /**
-   * If reference is inner-class adds some outer class to the list of imported
-   * classes if it
+   * Generates the whole source code out of the specified class.
    *
-   * @param clazz
-   *        {@link AbstractJClass} that may or may not have an import
-   * @param aGeneratingClass
-   *        {@link AbstractJClass} that is the current class being processed
-   * @return true if an import statement should be suppressed, false otherwise
+   * @param aClassToBeWritten
+   *        Class to be written
    */
-  private void _importOuterClassIfCausesNoAmbiguities (@Nonnull final AbstractJClass reference,
-                                                       @Nonnull final JDefinedClass clazz)
+  void write (@Nonnull final JDefinedClass aClassToBeWritten)
   {
-    final AbstractJClass aOuter = reference.outer ();
-    if (aOuter != null)
-    {
-      if (_causesNoAmbiguities (aOuter, clazz) && _shouldBeImported (aOuter, clazz))
-        m_aImportedClasses.add (aOuter);
-      else
-        _importOuterClassIfCausesNoAmbiguities (aOuter, clazz);
-    }
-  }
+    m_aPckJavaLang = aClassToBeWritten.owner ()._package ("java.lang");
 
-  private boolean _causesNoAmbiguities (@Nonnull final AbstractJClass reference, @Nonnull final JDefinedClass clazz)
-  {
-    final Usages aUsages = m_aCollectedReferences.get (reference.name ());
-    if (aUsages == null)
-      return true;
-    return !aUsages.isAmbiguousIn (clazz) && aUsages.containsReferencedType (reference);
+    // first collect all the types and identifiers
+    m_eMode = EMode.COLLECTING;
+    m_aCollectedReferences.clear ();
+    m_aImportedClasses.clear ();
+    declaration (aClassToBeWritten);
+
+    if (m_bImportDebug)
+      System.out.println ("***Start collecting***");
+
+    // collate type names and identifiers to determine which types can be
+    // imported
+    for (final Usages aUsages : m_aCollectedReferences.values ())
+    {
+      if (!aUsages.isAmbiguousIn (aClassToBeWritten) && !aUsages.isVariableName ())
+      {
+        final AbstractJClass aReferencedClass = aUsages.getSingleReferencedType ();
+
+        if (_collectShouldBeImported (aReferencedClass, aClassToBeWritten) &&
+            _collectIsLocalNameUniqueOverAllImports (aReferencedClass))
+        {
+          m_aImportedClasses.add (aReferencedClass);
+          if (m_bImportDebug)
+            System.out.println ("  m_aImportedClasses.add(" + aReferencedClass.fullName () + ")");
+        }
+        else
+        {
+          _collectImportOuterClassIfCausesNoAmbiguities (aReferencedClass, aClassToBeWritten);
+        }
+      }
+      else
+      {
+        if (aUsages.isTypeName ())
+          for (final AbstractJClass reference : aUsages.getReferencedTypes ())
+          {
+            _collectImportOuterClassIfCausesNoAmbiguities (reference, aClassToBeWritten);
+          }
+      }
+    }
+
+    // the class itself that we will be generating is always accessible
+    m_aImportedClasses.add (aClassToBeWritten);
+    if (m_bImportDebug)
+      System.out.println ("  m_aImportedClasses.add(" + aClassToBeWritten.fullName () + ")");
+
+    if (m_bImportDebug)
+      System.out.println ("***Finished collecting***");
+
+    // then print the declaration
+    m_eMode = EMode.PRINTING;
+
+    assert aClassToBeWritten.parentContainer ().isPackage () : "this method is only for a pacakge-level class";
+    final JPackage aPackage = (JPackage) aClassToBeWritten.parentContainer ();
+    if (!aPackage.isUnnamed ())
+    {
+      newline ().declaration (aPackage);
+      newline ();
+    }
+
+    // generate import statements
+    final AbstractJClass [] imports = m_aImportedClasses.toArray (new AbstractJClass [m_aImportedClasses.size ()]);
+    Arrays.sort (imports, ClassNameComparator.getInstance ());
+    boolean bAnyImport = false;
+    for (AbstractJClass aImportClass : imports)
+    {
+      // suppress import statements for primitive types, built-in types,
+      // types in the root package, and types in
+      // the same package as the current type
+      if (!_printIsImplicitlyImported (aImportClass, aClassToBeWritten))
+      {
+        if (aImportClass instanceof JNarrowedClass)
+        {
+          // Never imported narrowed class but the erasure only
+          aImportClass = aImportClass.erasure ();
+        }
+
+        print ("import").print (aImportClass.fullName ()).print (';').newline ();
+        bAnyImport = true;
+
+        if (m_bImportDebug)
+          System.out.println ("  import " + aImportClass.fullName ());
+      }
+    }
+
+    if (bAnyImport)
+      newline ();
+
+    declaration (aClassToBeWritten);
   }
 
   public static boolean containsErrorTypes (@Nonnull final JDefinedClass c)
