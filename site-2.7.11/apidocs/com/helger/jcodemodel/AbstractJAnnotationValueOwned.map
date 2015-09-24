@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JAnnotationUse.html" title="com.helger.jcodemodel.JAnnotationUse" alt="" coords="16,216,128,243"/>
+<area shape="rect" id="node2_1" href="./JAnnotationArrayMember.html" title="com.helger.jcodemodel.JAnnotationArrayMember" alt="" coords="174,216,341,243"/>
+<area shape="rect" id="node3_2" href="./IJOwned.html" title="com.helger.jcodemodel.IJOwned" alt="" coords="33,11,117,55"/>
+<area shape="rect" id="node4_3" href="./AbstractJAnnotationValueOwned.html" title="com.helger.jcodemodel.AbstractJAnnotationValueOwned" alt="" coords="51,120,277,147"/>
+<area shape="rect" id="node5_4" href="./AbstractJAnnotationValue.html" title="com.helger.jcodemodel.AbstractJAnnotationValue" alt="" coords="163,20,347,47"/>
+</map>

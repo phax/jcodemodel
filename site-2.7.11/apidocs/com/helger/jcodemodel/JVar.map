@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JVar.html" title="com.helger.jcodemodel.JVar" alt="" coords="182,120,229,147"/>
+<area shape="rect" id="node2_1" href="./JFieldVar.html" title="com.helger.jcodemodel.JFieldVar" alt="" coords="168,216,243,243"/>
+<area shape="rect" id="node3_2" href="./IJDeclaration.html" title="com.helger.jcodemodel.IJDeclaration" alt="" coords="15,11,110,55"/>
+<area shape="rect" id="node4_3" href="./IJAnnotatable.html" title="com.helger.jcodemodel.IJAnnotatable" alt="" coords="156,11,255,55"/>
+<area shape="rect" id="node5_4" href="./AbstractJExpressionAssignmentTargetImpl.html" title="com.helger.jcodemodel.AbstractJExpressionAssignmentTargetImpl" alt="" coords="300,20,591,47"/>
+</map>
