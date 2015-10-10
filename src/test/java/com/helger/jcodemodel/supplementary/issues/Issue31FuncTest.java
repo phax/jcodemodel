@@ -40,21 +40,4 @@ public final class Issue31FuncTest
 
     CodeModelTestsHelper.parseCodeModel (generator);
   }
-
-  public class TestClass1Impl
-  {
-
-    public void foo ()
-    {
-      final AbstractFieldInstanceImpl <String> _testField = new AbstractFieldInstanceImpl <String> ()
-      {
-        private ValueHolderInstanceImpl valueHolder;
-
-        protected void initialize ()
-        {
-          valueHolder = new ValueHolderInstanceImpl (String.class, null);
-        }
-      };
-    }
-  }
 }

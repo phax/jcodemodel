@@ -11,6 +11,12 @@ public class AbstractFieldInstanceImpl <T>
 {
   public class ValueHolderInstanceImpl
   {
+    /**
+     * @param aClass
+     *        dummy
+     * @param aValue
+     *        dummy
+     */
     public ValueHolderInstanceImpl (final Class <T> aClass, final T aValue)
     {}
   }
