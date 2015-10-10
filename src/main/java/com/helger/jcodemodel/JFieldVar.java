@@ -115,9 +115,20 @@ public class JFieldVar extends JVar implements IJDocCommentable
     return m_aJavaDoc;
   }
 
+  /**
+   * @return A field reference to this field variable. May be used for public
+   *         static final constants.
+   */
+  @Nonnull
+  public JFieldRef fieldRef ()
+  {
+    return new JFieldRef (m_aOwnerClass, this);
+  }
+
   @Override
   public void declare (@Nonnull final JFormatter f)
   {
+    // Declaration
     if (m_aJavaDoc != null)
       f.generable (m_aJavaDoc);
     super.declare (f);
@@ -126,11 +137,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
   @Override
   public void generate (@Nonnull final JFormatter f)
   {
-    if (false)
-    {
-      // Ensure the type is collected - see issue #30
-      f.type (m_aOwnerClass).print ('.');
-    }
+    // Usage
     super.generate (f);
   }
 }
