@@ -395,12 +395,9 @@ public abstract class AbstractJClass extends AbstractJType
   protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] variables,
                                                       @Nonnull List <? extends AbstractJClass> bindings);
 
-  @Override
-  public String toString ()
-  {
-    return getClass ().getName () + '(' + fullName () + ')';
-  }
-
+  /**
+   * @return name<code>.class</code>
+   */
   @Nonnull
   public final IJExpression dotclass ()
   {
@@ -466,12 +463,18 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Prints the class name in javadoc @link format.
-   * 
+   *
    * @param f
    *        Formatter to be used
    */
   void printLink (@Nonnull final JFormatter f)
   {
     f.print ("{@link ").generable (this).print ('}');
+  }
+
+  @Override
+  public String toString ()
+  {
+    return getClass ().getName () + '(' + fullName () + ')';
   }
 }
