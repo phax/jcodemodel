@@ -11,6 +11,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 News and noteworthy:
 
+* 2015-xx-yy: Release 2.7.12 - fixed potential double imports;
 * 2015-09-24: Release 2.7.11 - Bugfix release; removed half done CSE implementation (issue #18); improved handling of directClasses; added enumConstantReference
 * 2015-06-30: Release 2.7.10 - Synchronized block added; initial support for lambda expressions
 * 2015-03-19: Release 2.7.9 - Minor extensions for error types
