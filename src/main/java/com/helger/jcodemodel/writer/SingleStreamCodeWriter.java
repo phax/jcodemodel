@@ -61,15 +61,19 @@ import com.helger.jcodemodel.JPackage;
 public class SingleStreamCodeWriter extends AbstractCodeWriter
 {
   private final PrintStream m_aPS;
+  private final boolean m_bDoClose;
 
   /**
    * @param aOS
-   *        This stream will be closed at the end of the code generation.
+   *        This stream will be closed at the end of the code generation. Except
+   *        it is System.out or System.err
    */
   public SingleStreamCodeWriter (@Nonnull final OutputStream aOS)
   {
     super (null);
-    m_aPS = new PrintStream (aOS);
+    // Do not close System.out or System.err
+    m_bDoClose = aOS != System.out && aOS != System.err;
+    m_aPS = aOS instanceof PrintStream ? (PrintStream) aOS : new PrintStream (aOS);
   }
 
   @Override
@@ -79,7 +83,10 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
     if (sPkgName.length () > 0)
       sPkgName += '.';
 
-    m_aPS.println ("-----------------------------------" + sPkgName + sFilename + "-----------------------------------");
+    m_aPS.println ("-----------------------------------" +
+                   sPkgName +
+                   sFilename +
+                   "-----------------------------------");
 
     return new FilterOutputStream (m_aPS)
     {
@@ -95,6 +102,7 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
   public void close () throws IOException
   {
     m_aPS.flush ();
-    m_aPS.close ();
+    if (m_bDoClose)
+      m_aPS.close ();
   }
 }
