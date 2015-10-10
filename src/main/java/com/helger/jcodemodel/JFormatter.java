@@ -44,8 +44,8 @@ import java.io.Closeable;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -162,9 +162,7 @@ public class JFormatter implements Closeable
 
     public void setVariableName ()
     {
-      // FIXME: Strangely special processing of inner-classes references
-      // Why is this?
-      // Should this be removed?
+      // Check if something can be a variable or a type
       for (final AbstractJClass aRefedType : m_aReferencedClasses)
       {
         if (aRefedType.outer () != null)
@@ -224,6 +222,63 @@ public class JFormatter implements Closeable
     FIND_ERROR_TYPES
   }
 
+  private final class ImportedClasses
+  {
+    private final Set <AbstractJClass> m_aSet = new HashSet <AbstractJClass> ();
+
+    public ImportedClasses ()
+    {}
+
+    public boolean add (@Nonnull final AbstractJClass aClass)
+    {
+      AbstractJClass aRealClass = aClass;
+      if (aClass instanceof JNarrowedClass)
+      {
+        // Never imported narrowed class but the erasure only
+        aRealClass = aRealClass.erasure ();
+      }
+
+      // This block should do the trick to avoid that no two classes with the
+      // same local name are imported
+      final String sCurrentLocalName = aRealClass.name ();
+      for (final AbstractJClass aAlreadyImportedClass : m_aSet)
+        if (aAlreadyImportedClass.name ().equals (sCurrentLocalName))
+        {
+          if (m_bImportDebug)
+            System.out.println ("**Local name mismatch between " +
+                                aClass.fullName () +
+                                " and " +
+                                aAlreadyImportedClass.fullName ());
+          return false;
+        }
+
+      if (!m_aSet.add (aRealClass))
+        return false;
+
+      if (m_bImportDebug)
+        System.out.println ("  m_aImportedClasses.add(" + aClass.fullName () + ")");
+      return true;
+    }
+
+    public boolean contains (@Nullable final AbstractJClass aClass)
+    {
+      return m_aSet.contains (aClass);
+    }
+
+    public void clear ()
+    {
+      m_aSet.clear ();
+    }
+
+    @Nonnull
+    public List <AbstractJClass> getAllSorted ()
+    {
+      final List <AbstractJClass> aImports = new ArrayList <AbstractJClass> (m_aSet);
+      Collections.sort (aImports, ClassNameComparator.getInstance ());
+      return aImports;
+    }
+  }
+
   public static final String DEFAULT_INDENT_SPACE = "    ";
 
   /**
@@ -245,7 +300,7 @@ public class JFormatter implements Closeable
    * set of imported types (including package java types, even though we won't
    * generate imports for them)
    */
-  private final Set <AbstractJClass> m_aImportedClasses = new HashSet <AbstractJClass> ();
+  private final ImportedClasses m_aImportedClasses = new ImportedClasses ();
 
   /**
    * The current running mode. Set to PRINTING so that a casual client can use a
@@ -506,9 +561,25 @@ public class JFormatter implements Closeable
   {
     switch (m_eMode)
     {
-      case FIND_ERROR_TYPES:
-        if (aType.isError ())
-          m_bContainsErrorTypes = true;
+      case COLLECTING:
+        if (false)
+        {
+          final AbstractJClass aOuter = aType.outer ();
+          if (aOuter != null)
+          {
+            // If an outer type is available, collect this one as well
+            type (aOuter);
+          }
+        }
+
+        final String sShortName = aType.name ();
+        Usages aUsages = m_aCollectedReferences.get (sShortName);
+        if (aUsages == null)
+        {
+          aUsages = new Usages (sShortName);
+          m_aCollectedReferences.put (sShortName, aUsages);
+        }
+        aUsages.addReferencedType (aType);
         break;
       case PRINTING:
         // many of the JTypes in this list are either primitive or belong to
@@ -530,25 +601,9 @@ public class JFormatter implements Closeable
           }
         }
         break;
-      case COLLECTING:
-        if (false)
-        {
-          final AbstractJClass aOuter = aType.outer ();
-          if (aOuter != null)
-          {
-            // If an outer type is available, collect this one as well
-            type (aOuter);
-          }
-        }
-
-        final String sShortName = aType.name ();
-        Usages aUsages = m_aCollectedReferences.get (sShortName);
-        if (aUsages == null)
-        {
-          aUsages = new Usages (sShortName);
-          m_aCollectedReferences.put (sShortName, aUsages);
-        }
-        aUsages.addReferencedType (aType);
+      case FIND_ERROR_TYPES:
+        if (aType.isError ())
+          m_bContainsErrorTypes = true;
         break;
     }
     return this;
@@ -566,9 +621,6 @@ public class JFormatter implements Closeable
   {
     switch (m_eMode)
     {
-      case PRINTING:
-        print (id);
-        break;
       case COLLECTING:
         // see if there is a type name that collides with this id
         Usages aUsages = m_aCollectedReferences.get (id);
@@ -580,6 +632,9 @@ public class JFormatter implements Closeable
           m_aCollectedReferences.put (id, aUsages);
         }
         aUsages.setVariableName ();
+        break;
+      case PRINTING:
+        print (id);
         break;
     }
     return this;
@@ -756,24 +811,6 @@ public class JFormatter implements Closeable
     return true;
   }
 
-  // This block should do the trick to avoid that no two classes with the same
-  // local name are imported
-  public boolean _collectIsLocalNameUniqueOverAllImports (@Nonnull final AbstractJClass aReference)
-  {
-    final String sCurrentLocalName = aReference.name ();
-    for (final AbstractJClass aAlreadyImportedClass : m_aImportedClasses)
-      if (aAlreadyImportedClass.name ().equals (sCurrentLocalName))
-      {
-        if (m_bImportDebug)
-          System.out.println ("**Local name mismatch between " +
-                              aReference.fullName () +
-                              " and " +
-                              aAlreadyImportedClass.fullName ());
-        return false;
-      }
-    return true;
-  }
-
   /**
    * If reference is inner-class adds some outer class to the list of imported
    * classes if it
@@ -798,12 +835,9 @@ public class JFormatter implements Closeable
     if (aOuter != null)
     {
       if (_collectCausesNoAmbiguities (aOuter, aClassToBeWritten) &&
-          _collectShouldBeImported (aOuter, aClassToBeWritten) &&
-          _collectIsLocalNameUniqueOverAllImports (aOuter))
+          _collectShouldBeImported (aOuter, aClassToBeWritten))
       {
         m_aImportedClasses.add (aOuter);
-        if (m_bImportDebug)
-          System.out.println ("  m_aImportedClasses.add(" + aOuter.fullName () + ")");
       }
       else
       {
@@ -911,6 +945,10 @@ public class JFormatter implements Closeable
     if (m_bImportDebug)
       System.out.println ("***Start collecting***");
 
+    // the class itself that we will be generating is always accessible and must
+    // be the first import
+    m_aImportedClasses.add (aClassToBeWritten);
+
     // collate type names and identifiers to determine which types can be
     // imported
     for (final Usages aUsages : m_aCollectedReferences.values ())
@@ -919,12 +957,9 @@ public class JFormatter implements Closeable
       {
         final AbstractJClass aReferencedClass = aUsages.getSingleReferencedType ();
 
-        if (_collectShouldBeImported (aReferencedClass, aClassToBeWritten) &&
-            _collectIsLocalNameUniqueOverAllImports (aReferencedClass))
+        if (_collectShouldBeImported (aReferencedClass, aClassToBeWritten))
         {
           m_aImportedClasses.add (aReferencedClass);
-          if (m_bImportDebug)
-            System.out.println ("  m_aImportedClasses.add(" + aReferencedClass.fullName () + ")");
         }
         else
         {
@@ -941,11 +976,6 @@ public class JFormatter implements Closeable
       }
     }
 
-    // the class itself that we will be generating is always accessible
-    m_aImportedClasses.add (aClassToBeWritten);
-    if (m_bImportDebug)
-      System.out.println ("  m_aImportedClasses.add(" + aClassToBeWritten.fullName () + ")");
-
     if (m_bImportDebug)
       System.out.println ("***Finished collecting***");
 
@@ -961,22 +991,14 @@ public class JFormatter implements Closeable
     }
 
     // generate import statements
-    final AbstractJClass [] imports = m_aImportedClasses.toArray (new AbstractJClass [m_aImportedClasses.size ()]);
-    Arrays.sort (imports, ClassNameComparator.getInstance ());
     boolean bAnyImport = false;
-    for (AbstractJClass aImportClass : imports)
+    for (final AbstractJClass aImportClass : m_aImportedClasses.getAllSorted ())
     {
       // suppress import statements for primitive types, built-in types,
       // types in the root package, and types in
       // the same package as the current type
       if (!_printIsImplicitlyImported (aImportClass, aClassToBeWritten))
       {
-        if (aImportClass instanceof JNarrowedClass)
-        {
-          // Never imported narrowed class but the erasure only
-          aImportClass = aImportClass.erasure ();
-        }
-
         print ("import").print (aImportClass.fullName ()).print (';').newline ();
         bAnyImport = true;
 
