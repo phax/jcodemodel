@@ -262,7 +262,14 @@ public class JFormatter implements Closeable
 
     public boolean contains (@Nullable final AbstractJClass aClass)
     {
-      return m_aSet.contains (aClass);
+      AbstractJClass aRealClass = aClass;
+      if (aClass instanceof JNarrowedClass)
+      {
+        // Never imported narrowed class but the erasure only
+        aRealClass = aRealClass.erasure ();
+      }
+
+      return m_aSet.contains (aRealClass);
     }
 
     public void clear ()
