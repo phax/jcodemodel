@@ -394,7 +394,10 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @return Newly generated field
    */
   @Nonnull
-  public JFieldVar field (final int mods, final AbstractJType type, final String name, final IJExpression init)
+  public JFieldVar field (final int mods,
+                          @Nonnull final AbstractJType type,
+                          @Nonnull final String name,
+                          @Nullable final IJExpression init)
   {
     final JFieldVar f = new JFieldVar (this, JMods.forField (mods), type, name, init);
     if (m_aFields.containsKey (name))

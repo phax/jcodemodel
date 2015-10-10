@@ -3,6 +3,7 @@ package com.helger.jcodemodel.supplementary.issues;
 import org.junit.Test;
 
 import com.helger.jcodemodel.AbstractJClass;
+import com.helger.jcodemodel.JAnonymousClass;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
@@ -26,9 +27,9 @@ public final class Issue31FuncTest
     final JCodeModel generator = new JCodeModel ();
 
     final AbstractJClass jtype = generator.ref (String.class);
-    final AbstractJClass aspect = generator.ref (ValueHolderInstanceImpl.class);
+    final AbstractJClass aspect = generator.directClass (ValueHolderInstanceImpl.class.getSimpleName ());
     final AbstractJClass abstractFieldClass = generator.ref (AbstractFieldInstanceImpl.class).narrow (jtype);
-    final JDefinedClass basefield = generator.anonymousClass (abstractFieldClass);
+    final JAnonymousClass basefield = generator.anonymousClass (abstractFieldClass);
     final JFieldVar apectfield = basefield.field (JMod.PRIVATE, aspect, "valueHolder");
     final JMethod initfield = basefield.method (JMod.PROTECTED, generator.VOID, "initialize");
     initfield.body ().assign (apectfield, JExpr._new (aspect).arg (jtype.dotclass ()).arg (JExpr._null ()));
@@ -38,5 +39,22 @@ public final class Issue31FuncTest
     m.body ().decl (abstractFieldClass, "_testField", JExpr._new (basefield));
 
     CodeModelTestsHelper.parseCodeModel (generator);
+  }
+
+  public class TestClass1Impl
+  {
+
+    public void foo ()
+    {
+      final AbstractFieldInstanceImpl <String> _testField = new AbstractFieldInstanceImpl <String> ()
+      {
+        private ValueHolderInstanceImpl valueHolder;
+
+        protected void initialize ()
+        {
+          valueHolder = new ValueHolderInstanceImpl (String.class, null);
+        }
+      };
+    }
   }
 }

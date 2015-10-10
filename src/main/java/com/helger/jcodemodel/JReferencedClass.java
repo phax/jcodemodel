@@ -23,10 +23,10 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
 {
   private final Class <?> m_aClass;
 
-  JReferencedClass (@Nonnull final JCodeModel aOwner, @Nonnull final Class <?> _clazz)
+  JReferencedClass (@Nonnull final JCodeModel aOwner, @Nonnull final Class <?> aClass)
   {
     super (aOwner);
-    m_aClass = _clazz;
+    m_aClass = aClass;
     assert !m_aClass.isArray ();
   }
 
@@ -134,12 +134,6 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
     if (v != null)
       return AbstractJType.parse (owner (), v.getName ());
     return null;
-  }
-
-  @Override
-  public boolean isArray ()
-  {
-    return false;
   }
 
   public void declare (final JFormatter f)

@@ -73,7 +73,7 @@ public class JFormatter implements Closeable
    *
    * @author Ryan.Shoemaker@Sun.COM
    */
-  private final class Usages
+  private final class NameUsage
   {
     private final String m_sName;
 
@@ -82,16 +82,16 @@ public class JFormatter implements Closeable
     /** true if this name is used as an identifier (like a variable name.) **/
     private boolean m_bIsVariableName;
 
-    public Usages (@Nonnull final String sName)
+    public NameUsage (@Nonnull final String sName)
     {
       m_sName = sName;
     }
 
     /**
-     * @return true if the short name is ambiguous in context of enclosingClass
-     *         and classes with this name can't be imported.
+     * @return <code>true</code> if the short name is ambiguous in context of
+     *         enclosingClass and classes with this name can't be imported.
      */
-    public boolean isAmbiguousIn (final JDefinedClass enclosingClass)
+    public boolean isAmbiguousIn (final JDefinedClass aEnclosingClass)
     {
       // more than one type with the same name
       if (m_aReferencedClasses.size () > 1)
@@ -105,10 +105,11 @@ public class JFormatter implements Closeable
       if (m_aReferencedClasses.isEmpty ())
         return false;
 
+      // we have exactly one reference
       AbstractJClass aSingleRef = m_aReferencedClasses.get (0);
       if (aSingleRef instanceof JAnonymousClass)
       {
-        aSingleRef = aSingleRef._extends ();
+        aSingleRef = ((JAnonymousClass) aSingleRef).base ();
       }
 
       // special case where a generated type collides with a type in package
@@ -117,14 +118,14 @@ public class JFormatter implements Closeable
       {
         // make sure that there's no other class with this name within the
         // same package
-        for (final JDefinedClass aClass : enclosingClass._package ().classes ())
+        for (final JDefinedClass aClass : aEnclosingClass._package ().classes ())
         {
           // even if this is the only "String" class we use,
           // if the class called "String" is in the same package,
           // we still need to import it.
           if (aClass.name ().equals (aSingleRef.name ()))
           {
-            // collision
+            // collision -> ambiguous
             return true;
           }
         }
@@ -234,7 +235,12 @@ public class JFormatter implements Closeable
     private AbstractJClass _getClassForImport (@Nonnull final AbstractJClass aClass)
     {
       AbstractJClass aRealClass = aClass;
-      if (aClass instanceof JNarrowedClass)
+      if (aRealClass instanceof JAnonymousClass)
+      {
+        // get the super class of the anonymous class
+        aRealClass = ((JAnonymousClass) aRealClass).base ();
+      }
+      if (aRealClass instanceof JNarrowedClass)
       {
         // Never imported narrowed class but the erasure only
         aRealClass = aRealClass.erasure ();
@@ -300,10 +306,10 @@ public class JFormatter implements Closeable
 
   /**
    * all classes and ids encountered during the collection mode.<br>
-   * map from short type name to {@link Usages} (list of {@link AbstractJClass}
-   * and ids sharing that name)
+   * map from short type name to {@link NameUsage} (list of
+   * {@link AbstractJClass} and ids sharing that name)
    **/
-  private final Map <String, Usages> m_aCollectedReferences = new HashMap <String, Usages> ();
+  private final Map <String, NameUsage> m_aCollectedReferences = new HashMap <String, NameUsage> ();
 
   /**
    * set of imported types (including package java types, even though we won't
@@ -571,21 +577,11 @@ public class JFormatter implements Closeable
     switch (m_eMode)
     {
       case COLLECTING:
-        if (false)
-        {
-          final AbstractJClass aOuter = aType.outer ();
-          if (aOuter != null)
-          {
-            // If an outer type is available, collect this one as well
-            type (aOuter);
-          }
-        }
-
         final String sShortName = aType.name ();
-        Usages aUsages = m_aCollectedReferences.get (sShortName);
+        NameUsage aUsages = m_aCollectedReferences.get (sShortName);
         if (aUsages == null)
         {
-          aUsages = new Usages (sShortName);
+          aUsages = new NameUsage (sShortName);
           m_aCollectedReferences.put (sShortName, aUsages);
         }
         aUsages.addReferencedType (aType);
@@ -602,7 +598,9 @@ public class JFormatter implements Closeable
         {
           final AbstractJClass aOuter = aType.outer ();
           if (aOuter != null)
+          {
             type (aOuter).print ('.').print (aType.name ());
+          }
           else
           {
             // collision was detected, so generate FQCN
@@ -632,12 +630,12 @@ public class JFormatter implements Closeable
     {
       case COLLECTING:
         // see if there is a type name that collides with this id
-        Usages aUsages = m_aCollectedReferences.get (id);
+        NameUsage aUsages = m_aCollectedReferences.get (id);
         if (aUsages == null)
         {
           // not a type, but we need to create a place holder to
           // see if there might be a collision with a type
-          aUsages = new Usages (id);
+          aUsages = new NameUsage (id);
           m_aCollectedReferences.put (id, aUsages);
         }
         aUsages.setVariableName ();
@@ -759,7 +757,7 @@ public class JFormatter implements Closeable
                           aClassToBeWritten.fullName () +
                           ")");
 
-    final Usages aUsages = m_aCollectedReferences.get (aReference.name ());
+    final NameUsage aUsages = m_aCollectedReferences.get (aReference.name ());
     if (aUsages == null)
       return true;
     return !aUsages.isAmbiguousIn (aClassToBeWritten) && aUsages.containsReferencedType (aReference);
@@ -790,7 +788,7 @@ public class JFormatter implements Closeable
     if (aRealReference instanceof JAnonymousClass)
     {
       // get the super class of the anonymous class
-      aRealReference = ((JAnonymousClass) aRealReference)._extends ();
+      aRealReference = ((JAnonymousClass) aRealReference).base ();
     }
     if (aRealReference instanceof JNarrowedClass)
     {
@@ -879,7 +877,7 @@ public class JFormatter implements Closeable
     if (aRealReference instanceof JAnonymousClass)
     {
       // Get the super class of the anonymous class
-      aRealReference = ((JAnonymousClass) aRealReference)._extends ();
+      aRealReference = ((JAnonymousClass) aRealReference).base ();
     }
     if (aRealReference instanceof JNarrowedClass)
     {
@@ -960,11 +958,11 @@ public class JFormatter implements Closeable
 
     // collate type names and identifiers to determine which types can be
     // imported
-    for (final Usages aUsages : m_aCollectedReferences.values ())
+    for (final NameUsage aUsage : m_aCollectedReferences.values ())
     {
-      if (!aUsages.isAmbiguousIn (aClassToBeWritten) && !aUsages.isVariableName ())
+      if (!aUsage.isAmbiguousIn (aClassToBeWritten) && !aUsage.isVariableName ())
       {
-        final AbstractJClass aReferencedClass = aUsages.getSingleReferencedType ();
+        final AbstractJClass aReferencedClass = aUsage.getSingleReferencedType ();
 
         if (_collectShouldBeImported (aReferencedClass, aClassToBeWritten))
         {
@@ -977,8 +975,8 @@ public class JFormatter implements Closeable
       }
       else
       {
-        if (aUsages.isTypeName ())
-          for (final AbstractJClass reference : aUsages.getReferencedTypes ())
+        if (aUsage.isTypeName ())
+          for (final AbstractJClass reference : aUsage.getReferencedTypes ())
           {
             _collectImportOuterClassIfCausesNoAmbiguities (reference, aClassToBeWritten);
           }

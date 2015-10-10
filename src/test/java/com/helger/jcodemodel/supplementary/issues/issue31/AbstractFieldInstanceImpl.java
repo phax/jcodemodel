@@ -2,15 +2,16 @@ package com.helger.jcodemodel.supplementary.issues.issue31;
 
 /**
  * Dummy class for issue 31
- * 
+ *
  * @author Philip Helger
  * @param <T>
  *        Required type param
  */
-public final class AbstractFieldInstanceImpl <T>
+public class AbstractFieldInstanceImpl <T>
 {
-  public final class ValueHolderInstanceImpl
+  public class ValueHolderInstanceImpl
   {
-    T m_aMember;
+    public ValueHolderInstanceImpl (final Class <T> aClass, final T aValue)
+    {}
   }
 }
