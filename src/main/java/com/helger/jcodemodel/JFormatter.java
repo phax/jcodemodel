@@ -224,12 +224,14 @@ public class JFormatter implements Closeable
 
   private final class ImportedClasses
   {
-    private final Set <AbstractJClass> m_aSet = new HashSet <AbstractJClass> ();
+    private final Set <AbstractJClass> m_aClasses = new HashSet <AbstractJClass> ();
+    private final Set <String> m_aNames = new HashSet <String> ();
 
     public ImportedClasses ()
     {}
 
-    public boolean add (@Nonnull final AbstractJClass aClass)
+    @Nonnull
+    private AbstractJClass _getClassForImport (@Nonnull final AbstractJClass aClass)
     {
       AbstractJClass aRealClass = aClass;
       if (aClass instanceof JNarrowedClass)
@@ -237,50 +239,50 @@ public class JFormatter implements Closeable
         // Never imported narrowed class but the erasure only
         aRealClass = aRealClass.erasure ();
       }
+      return aRealClass;
+    }
 
-      // This block should do the trick to avoid that no two classes with the
-      // same local name are imported
-      final String sCurrentLocalName = aRealClass.name ();
-      for (final AbstractJClass aAlreadyImportedClass : m_aSet)
-        if (aAlreadyImportedClass.name ().equals (sCurrentLocalName))
-        {
-          if (m_bImportDebug)
-            System.out.println ("**Local name mismatch between " +
-                                aClass.fullName () +
-                                " and " +
-                                aAlreadyImportedClass.fullName ());
-          return false;
-        }
+    public boolean add (@Nonnull final AbstractJClass aClass)
+    {
+      final AbstractJClass aRealClass = _getClassForImport (aClass);
 
-      if (!m_aSet.add (aRealClass))
+      // Avoid importing 2 classes with the same class name
+      if (!m_aNames.add (aRealClass.name ()))
+      {
+        if (m_bImportDebug)
+          System.out.println ("A class with local name '" + aRealClass.name () + "' is already in the import list.");
         return false;
+      }
+
+      if (!m_aClasses.add (aRealClass))
+      {
+        if (m_bImportDebug)
+          System.out.println ("The class '" + aRealClass.fullName () + "' is already in the import list.");
+        return false;
+      }
 
       if (m_bImportDebug)
-        System.out.println ("  m_aImportedClasses.add(" + aClass.fullName () + ")");
+        System.out.println ("Added import class '" + aClass.fullName () + "'");
       return true;
     }
 
     public boolean contains (@Nullable final AbstractJClass aClass)
     {
-      AbstractJClass aRealClass = aClass;
-      if (aClass instanceof JNarrowedClass)
-      {
-        // Never imported narrowed class but the erasure only
-        aRealClass = aRealClass.erasure ();
-      }
+      final AbstractJClass aRealClass = _getClassForImport (aClass);
 
-      return m_aSet.contains (aRealClass);
+      return m_aClasses.contains (aRealClass);
     }
 
     public void clear ()
     {
-      m_aSet.clear ();
+      m_aClasses.clear ();
+      m_aNames.clear ();
     }
 
     @Nonnull
     public List <AbstractJClass> getAllSorted ()
     {
-      final List <AbstractJClass> aImports = new ArrayList <AbstractJClass> (m_aSet);
+      final List <AbstractJClass> aImports = new ArrayList <AbstractJClass> (m_aClasses);
       Collections.sort (aImports, ClassNameComparator.getInstance ());
       return aImports;
     }
