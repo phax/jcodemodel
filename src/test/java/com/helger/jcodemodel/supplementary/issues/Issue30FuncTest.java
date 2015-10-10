@@ -45,9 +45,9 @@ public final class Issue30FuncTest
     final JPackage aPkg2 = cm._package ("demo");
     final JDefinedClass aClassAct = aPkg2._class ("HelloAndroidActivity_");
     final JMethod aMethodCreate = aClassAct.method (JMod.PUBLIC, cm.BOOLEAN, "onCreateOptionsMenu");
-    aMethodCreate.body ().add (JExpr.ref ("menuInflater").invoke ("inflate").arg (aFieldMenu));
+    aMethodCreate.body ().add (JExpr.ref ("menuInflater").invoke ("inflate").arg (aFieldMenu.fieldRef ()));
     final JMethod aMethodSelected = aClassAct.method (JMod.PUBLIC, cm.BOOLEAN, "onOptionsItemSelected");
-    aMethodSelected.body ()._if (JExpr.ref ("itemId_").eq (aFieldItem));
+    aMethodSelected.body ()._if (JExpr.ref ("itemId_").eq (aFieldItem.fieldRef ()));
 
     // Multiple packages - print only
     CodeModelTestsHelper.printCodeModel (cm);
@@ -71,6 +71,30 @@ public final class Issue30FuncTest
     constructorBody.decl (cm.INT, "myInt", androidRId.staticRef ("someId"));
     constructorBody.decl (cm.INT, "myInt2", myRId.staticRef ("otherId"));
 
+    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testRegression1VerySpecialCase () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+
+    final JPackage aPkg1 = cm._package ("id.myapp.activity");
+
+    // Class is named like imported class
+    final JDefinedClass testClass = aPkg1._class ("R");
+
+    final JDirectClass androidR = cm.directClass ("android.R");
+    final JDirectClass androidRId = androidR._class ("id");
+    final JDirectClass myR = cm.directClass ("id.myapp.R");
+    final JDirectClass myRId = myR._class ("id");
+
+    final JBlock constructorBody = testClass.constructor (JMod.PUBLIC).body ();
+    constructorBody.decl (cm.INT, "myInt", androidRId.staticRef ("someId"));
+    constructorBody.decl (cm.INT, "myInt2", myRId.staticRef ("otherId"));
+
+    CodeModelTestsHelper.printCodeModel (cm);
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 }
