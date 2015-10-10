@@ -43,7 +43,6 @@ package com.helger.jcodemodel;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -56,7 +55,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
-import com.helger.jcodemodel.util.JCNameUtilities;
 import com.helger.jcodemodel.util.JCSecureLoader;
 import com.helger.jcodemodel.writer.FileCodeWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter;
@@ -129,10 +127,10 @@ public final class JCodeModel
   }
 
   /** The packages that this JCodeWriter contains. */
-  private final Map <String, JPackage> _packages = new HashMap <String, JPackage> ();
+  private final Map <String, JPackage> m_aPackages = new HashMap <String, JPackage> ();
 
   /** All JReferencedClasses are pooled here. */
-  private final Map <Class <?>, JReferencedClass> _refClasses = new HashMap <Class <?>, JReferencedClass> ();
+  private final Map <Class <?>, JReferencedClass> m_aRefClasses = new HashMap <Class <?>, JReferencedClass> ();
 
   /** Obtains a reference to the special "null" type. */
   public final JNullType NULL = new JNullType (this);
@@ -156,7 +154,7 @@ public final class JCodeModel
   /**
    * Cached for {@link #wildcard()}.
    */
-  private AbstractJClass _wildcard;
+  private AbstractJClass m_aWildcard;
 
   protected boolean getFileSystemCaseSensitivity ()
   {
@@ -173,7 +171,9 @@ public final class JCodeModel
         return true;
     }
     catch (final Exception e)
-    {}
+    {
+      // Fall through
+    }
 
     // on Unix, it's case sensitive.
     return File.separatorChar == '/';
@@ -192,11 +192,11 @@ public final class JCodeModel
   @Nonnull
   public JPackage _package (@Nonnull final String name)
   {
-    JPackage p = _packages.get (name);
+    JPackage p = m_aPackages.get (name);
     if (p == null)
     {
       p = new JPackage (name, this);
-      _packages.put (name, p);
+      m_aPackages.put (name, p);
     }
     return p;
   }
@@ -213,7 +213,7 @@ public final class JCodeModel
   @Nonnull
   public Iterator <JPackage> packages ()
   {
-    return _packages.values ().iterator ();
+    return m_aPackages.values ().iterator ();
   }
 
   /**
@@ -373,7 +373,7 @@ public final class JCodeModel
    */
   public boolean buildsErrorTypeRefs ()
   {
-    final JPackage [] pkgs = _packages.values ().toArray (new JPackage [_packages.size ()]);
+    final JPackage [] pkgs = m_aPackages.values ().toArray (new JPackage [m_aPackages.size ()]);
     // avoid concurrent modification exception
     for (final JPackage pkg : pkgs)
     {
@@ -528,7 +528,7 @@ public final class JCodeModel
   {
     try
     {
-      final JPackage [] pkgs = _packages.values ().toArray (new JPackage [_packages.size ()]);
+      final JPackage [] pkgs = m_aPackages.values ().toArray (new JPackage [m_aPackages.size ()]);
       // avoid concurrent modification exception
       for (final JPackage pkg : pkgs)
         pkg.build (source, resource);
@@ -548,7 +548,7 @@ public final class JCodeModel
   public int countArtifacts ()
   {
     int r = 0;
-    final JPackage [] pkgs = _packages.values ().toArray (new JPackage [_packages.size ()]);
+    final JPackage [] pkgs = m_aPackages.values ().toArray (new JPackage [m_aPackages.size ()]);
     // avoid concurrent modification exception
     for (final JPackage pkg : pkgs)
       r += pkg.countArtifacts ();
@@ -569,19 +569,35 @@ public final class JCodeModel
   @Nonnull
   public AbstractJClass ref (@Nonnull final Class <?> clazz)
   {
-    JReferencedClass jrc = _refClasses.get (clazz);
-    if (jrc == null)
+    JReferencedClass aRefClass = m_aRefClasses.get (clazz);
+    if (aRefClass == null)
     {
       if (clazz.isPrimitive ())
+      {
+        // Cannot return BYTE etc. because the return type does not match
         throw new IllegalArgumentException (clazz + " is a primitive");
+      }
+
       if (clazz.isArray ())
-        return new JArrayClass (this, _ref (clazz.getComponentType ()));
-      jrc = new JReferencedClass (clazz);
-      _refClasses.put (clazz, jrc);
+      {
+        final Class <?> aComponentType = clazz.getComponentType ();
+        // Component type may be a primitive!
+        return new JArrayClass (this, _ref (aComponentType));
+      }
+
+      aRefClass = new JReferencedClass (this, clazz);
+      m_aRefClasses.put (clazz, aRefClass);
     }
-    return jrc;
+    return aRefClass;
   }
 
+  /**
+   * Like {@link #ref(Class)} but also handling primitive types!
+   *
+   * @param c
+   *        Class to be referenced
+   * @return primitive or class
+   */
   @Nonnull
   public AbstractJType _ref (@Nonnull final Class <?> c)
   {
@@ -637,9 +653,9 @@ public final class JCodeModel
   @Nonnull
   public AbstractJClass wildcard ()
   {
-    if (_wildcard == null)
-      _wildcard = ref (Object.class).wildcard ();
-    return _wildcard;
+    if (m_aWildcard == null)
+      m_aWildcard = ref (Object.class).wildcard ();
+    return m_aWildcard;
   }
 
   /**
@@ -807,158 +823,6 @@ public final class JCodeModel
           throw new IllegalArgumentException (m_sTypeName);
         m_nIdx++;
       }
-    }
-  }
-
-  /**
-   * References to existing classes.
-   * <p>
-   * JReferencedClass is kept in a pool so that they are shared. There is one
-   * pool for each JCodeModel object.
-   * <p>
-   * It is impossible to cache JReferencedClass globally only because there is
-   * the _package() method, which obtains the owner JPackage object, which is
-   * scoped to JCodeModel.
-   */
-  private class JReferencedClass extends AbstractJClass implements IJDeclaration
-  {
-    private final Class <?> m_aClass;
-
-    JReferencedClass (@Nonnull final Class <?> _clazz)
-    {
-      super (JCodeModel.this);
-      m_aClass = _clazz;
-      assert!m_aClass.isArray ();
-    }
-
-    @Override
-    public String name ()
-    {
-      return m_aClass.getSimpleName ();
-    }
-
-    @Override
-    @Nonnull
-    public String fullName ()
-    {
-      return JCNameUtilities.getFullName (m_aClass);
-    }
-
-    @Override
-    public String binaryName ()
-    {
-      return m_aClass.getName ();
-    }
-
-    @Override
-    public AbstractJClass outer ()
-    {
-      final Class <?> p = m_aClass.getDeclaringClass ();
-      if (p == null)
-        return null;
-      return ref (p);
-    }
-
-    @Override
-    @Nonnull
-    public JPackage _package ()
-    {
-      final String name = fullName ();
-
-      // this type is array
-      if (name.indexOf ('[') != -1)
-        return JCodeModel.this._package ("");
-
-      // other normal case
-      final int idx = name.lastIndexOf ('.');
-      if (idx < 0)
-        return JCodeModel.this._package ("");
-      return JCodeModel.this._package (name.substring (0, idx));
-    }
-
-    @Override
-    public AbstractJClass _extends ()
-    {
-      final Class <?> sp = m_aClass.getSuperclass ();
-      if (sp == null)
-      {
-        if (isInterface ())
-          return owner ().ref (Object.class);
-        return null;
-      }
-      return ref (sp);
-    }
-
-    @Override
-    public Iterator <AbstractJClass> _implements ()
-    {
-      final Class <?> [] interfaces = m_aClass.getInterfaces ();
-      return new Iterator <AbstractJClass> ()
-      {
-        private int idx = 0;
-
-        public boolean hasNext ()
-        {
-          return idx < interfaces.length;
-        }
-
-        @Nonnull
-        public AbstractJClass next ()
-        {
-          return JCodeModel.this.ref (interfaces[idx++]);
-        }
-
-        public void remove ()
-        {
-          throw new UnsupportedOperationException ();
-        }
-      };
-    }
-
-    @Override
-    public boolean isInterface ()
-    {
-      return m_aClass.isInterface ();
-    }
-
-    @Override
-    public boolean isAbstract ()
-    {
-      return Modifier.isAbstract (m_aClass.getModifiers ());
-    }
-
-    @Override
-    @Nullable
-    public JPrimitiveType getPrimitiveType ()
-    {
-      final Class <?> v = boxToPrimitive.get (m_aClass);
-      if (v != null)
-        return AbstractJType.parse (JCodeModel.this, v.getName ());
-      return null;
-    }
-
-    @Override
-    public boolean isArray ()
-    {
-      return false;
-    }
-
-    public void declare (final JFormatter f)
-    {}
-
-    @Override
-    public JTypeVar [] typeParams ()
-    {
-      // TODO: does JDK 1.5 reflection provides these information?
-      return super.typeParams ();
-    }
-
-    @Override
-    protected AbstractJClass substituteParams (final JTypeVar [] variables,
-                                               final List <? extends AbstractJClass> bindings)
-    {
-      // TODO: does JDK 1.5 reflection provides these information?
-      return this;
     }
   }
 }

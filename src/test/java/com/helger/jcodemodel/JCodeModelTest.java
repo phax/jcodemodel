@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
@@ -72,5 +73,12 @@ public final class JCodeModelTest
       .body ()
       .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
     CodeModelTestsHelper.printCodeModel (cm);
+  }
+
+  @Test
+  public void testRefClass ()
+  {
+    final JCodeModel cm = new JCodeModel ();
+    assertSame (cm.INT, cm._ref (int.class));
   }
 }

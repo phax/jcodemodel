@@ -67,7 +67,7 @@ import com.helger.jcodemodel.util.ClassNameComparator;
  * {@link #method(int, AbstractJType, String)} and
  * {@link #field(int, AbstractJType, String)}.
  */
-public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>implements IJDeclaration, IJGenerifiable, IJAnnotatable, IJDocCommentable
+public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> implements IJDeclaration, IJGenerifiable, IJAnnotatable, IJDocCommentable
 {
   /**
    * Modifiers for the class declaration
@@ -125,6 +125,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>implem
   /**
    * Client-app specific metadata associated with this user-created class.
    */
+  @Deprecated
   public Object metadata;
 
   /**

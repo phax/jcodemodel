@@ -60,6 +60,9 @@ public class JAnonymousClass extends JDefinedClass
     m_aBaseClass = aBaseClass;
   }
 
+  /**
+   * @return The base class to be used.
+   */
   @Nonnull
   public AbstractJClass base ()
   {
@@ -70,7 +73,7 @@ public class JAnonymousClass extends JDefinedClass
   @Nonnull
   public String fullName ()
   {
-    // I think this is incorrect! Some "$1" or the like is missing
+    // TODO I think this is incorrect! Some "$1" or the like is missing
     return m_aBaseClass.fullName ();
   }
 
