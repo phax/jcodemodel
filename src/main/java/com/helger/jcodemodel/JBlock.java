@@ -58,6 +58,7 @@ import javax.annotation.Nullable;
  */
 public class JBlock implements IJGenerable, IJStatement
 {
+  public static final boolean DEFAULT_VIRTUAL_BLOCK = false;
   public static final boolean DEFAULT_BRACES_REQUIRED = true;
   public static final boolean DEFAULT_INDENT_REQUIRED = true;
 
@@ -66,6 +67,8 @@ public class JBlock implements IJGenerable, IJStatement
    * {@link IJStatement} or {@link IJDeclaration}.
    */
   protected final List <Object> m_aContentList = new ArrayList <Object> ();
+
+  private boolean m_bVirtualBlock = DEFAULT_VIRTUAL_BLOCK;
 
   /**
    * Whether or not this block must be braced and indented
@@ -86,6 +89,29 @@ public class JBlock implements IJGenerable, IJStatement
   {
     bracesRequired (bBracesRequired);
     indentRequired (bIndentRequired);
+  }
+
+  /**
+   * @return <code>true</code> if this is a virtual block never emitting braces
+   *         or indent. The default is {@link #DEFAULT_VIRTUAL_BLOCK}
+   */
+  public boolean virtual ()
+  {
+    return m_bVirtualBlock;
+  }
+
+  /**
+   * Mark this block virtual or not. Default is <code>false</code>.
+   *
+   * @param bVirtualBlock
+   *        <code>true</code> to make this block a virtual block.
+   * @return this for chaining
+   */
+  @Nonnull
+  public JBlock virtual (final boolean bVirtualBlock)
+  {
+    m_bVirtualBlock = bVirtualBlock;
+    return this;
   }
 
   public boolean bracesRequired ()
@@ -278,7 +304,7 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   @Nonnull
-  public JBlock insertBefore (final JVar var, final Object before)
+  public JBlock insertBefore (@Nonnull final JVar var, @Nonnull final Object before)
   {
     final int i = m_aContentList.indexOf (before);
     m_aContentList.add (i, var);
@@ -703,6 +729,20 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
+   * Create a sub-block and add it to this block. This kind of block will never
+   * create braces or indent!
+   *
+   * @return New {@link JBlock}
+   * @see #block()
+   * @see #block(boolean, boolean)
+   */
+  @Nonnull
+  public JBlock blockVirtual ()
+  {
+    return blockSimple ().virtual (true);
+  }
+
+  /**
    * Create a sub-block and add it to this block
    *
    * @param bBracesRequired
@@ -775,18 +815,26 @@ public class JBlock implements IJGenerable, IJStatement
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (m_bBracesRequired)
+    if (m_bVirtualBlock)
     {
-      f.print ('{');
-      f.newline ();
+      // Body only
+      generateBody (f);
     }
-    if (m_bIndentRequired)
-      f.indent ();
-    generateBody (f);
-    if (m_bIndentRequired)
-      f.outdent ();
-    if (m_bBracesRequired)
-      f.print ('}');
+    else
+    {
+      if (m_bBracesRequired)
+      {
+        f.print ('{');
+        f.newline ();
+      }
+      if (m_bIndentRequired)
+        f.indent ();
+      generateBody (f);
+      if (m_bIndentRequired)
+        f.outdent ();
+      if (m_bBracesRequired)
+        f.print ('}');
+    }
   }
 
   void generateBody (@Nonnull final JFormatter f)
