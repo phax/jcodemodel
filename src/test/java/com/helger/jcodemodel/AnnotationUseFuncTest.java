@@ -148,8 +148,8 @@ public final class AnnotationUseFuncTest
     arrayMember.param ("Ted");
 
     // Shortcut
-    // Ambiguous on OpenJDK when not using the "L" suffix
-    aUse.paramArray ("namesno", 4L, 5L, 6L);
+    // Ambiguous on OpenJDK6 - explicit array needed
+    aUse.paramArray ("namesno", new int [] { 4, 5, 6 });
 
     final JAnnotationArrayMember arrayMember2 = aUse.paramArray ("values");
     // adding an annotation as a member value pair
