@@ -58,7 +58,6 @@ import com.helger.jcodemodel.JPackage;
 /**
  * @author Victor Nazarov <asviraspossible@gmail.com>
  */
-@SuppressWarnings ("restriction")
 class DecidedErrorTypesModelsAdapter
 {
   private static final Logger logger = Logger.getLogger (DecidedErrorTypesModelsAdapter.class.getName ());

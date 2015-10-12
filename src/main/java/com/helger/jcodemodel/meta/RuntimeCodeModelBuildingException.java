@@ -43,7 +43,6 @@ class RuntimeCodeModelBuildingException extends RuntimeException
     this._cause = cause;
   }
 
-  @SuppressWarnings ("sync-override")
   @Override
   public CodeModelBuildingException getCause ()
   {

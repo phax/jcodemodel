@@ -51,7 +51,6 @@ import com.helger.jcodemodel.JVar;
 /**
  * @author Victor Nazarov <asviraspossible@gmail.com>
  */
-@SuppressWarnings ("restriction")
 class ClassFiller
 {
   private final JDefinedClass _newClass;
@@ -103,8 +102,8 @@ class ClassFiller
         {
           final ExecutableElement executable = (ExecutableElement) enclosedElement;
           final JMethod method = _newClass.method (DecidedErrorTypesModelsAdapter.toJMod (executable.getModifiers ()),
-                                                  _codeModel.VOID,
-                                                  executable.getSimpleName ().toString ());
+                                                   _codeModel.VOID,
+                                                   executable.getSimpleName ().toString ());
           final TypeEnvironment methodEnvironment = environment.enclosed ();
           final Annotator methodAnnotator = new Annotator (_modelsAdapter, method, environment);
           methodAnnotator.annotate (executable.getAnnotationMirrors ());

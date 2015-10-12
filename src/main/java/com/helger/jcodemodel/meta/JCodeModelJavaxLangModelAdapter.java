@@ -35,7 +35,6 @@ import javax.lang.model.util.Elements;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 
-@SuppressWarnings ("restriction")
 public class JCodeModelJavaxLangModelAdapter
 {
   private final JCodeModel _codeModel;

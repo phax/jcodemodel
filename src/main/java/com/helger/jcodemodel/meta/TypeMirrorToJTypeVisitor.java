@@ -50,7 +50,6 @@ import com.helger.jcodemodel.JTypeWildcard;
 /**
  * @author Victor Nazarov <asviraspossible@gmail.com>
  */
-@SuppressWarnings ("restriction")
 class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void>
 {
   private final boolean _includesErrorTypes;
@@ -96,13 +95,8 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
 
   public AbstractJType visitNull (final NullType t, final Void p)
   {
-    throw new IllegalArgumentException ("null can't be JClass."); // To change
-                                                                  // body of
-                                                                  // generated
-                                                                  // methods,
-                                                                  // choose
-                                                                  // Tools |
-                                                                  // Templates.
+    // To change body of generated methods, choose Tools | Templates.
+    throw new IllegalArgumentException ("null can't be JClass.");
   }
 
   public AbstractJType visitArray (final ArrayType t, final Void p)

@@ -53,7 +53,6 @@ import com.helger.jcodemodel.JAnnotationUse;
 /**
  * @author Victor Nazarov <asviraspossible@gmail.com>
  */
-@SuppressWarnings ("restriction")
 class Annotator
 {
   private final DecidedErrorTypesModelsAdapter _modelsAdapter;

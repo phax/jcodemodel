@@ -40,9 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.meta.CodeModelBuildingException;
-import com.helger.jcodemodel.meta.ErrorTypeFound;
-import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -57,12 +54,15 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.Elements;
 
+import com.helger.jcodemodel.meta.CodeModelBuildingException;
+import com.helger.jcodemodel.meta.ErrorTypeFound;
+import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
 import com.helger.jcodemodel.util.JCSecureLoader;
 import com.helger.jcodemodel.writer.FileCodeWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.util.Elements;
 
 /**
  * Root of the code DOM.
@@ -597,57 +597,58 @@ public final class JCodeModel
   }
 
   /**
-   * Obtains a reference to a processable class from its TypeElement description.
+   * Obtains a reference to a processable class from its TypeElement
+   * description.
    * <p>
-   * Annotation processors can get access of {@link TypeElement} objects
-   * during annotation processing. These TypeElement objects can be used
-   * with jcodemodel as a references to classes.
+   * Annotation processors can get access of {@link TypeElement} objects during
+   * annotation processing. These TypeElement objects can be used with
+   * jcodemodel as a references to classes.
    * <p>
    * This method result-class definition can never include references to
-   * "error"-types. Error-types araise during annotation processing
-   * when something is not fully defined.
+   * "error"-types. Error-types araise during annotation processing when
+   * something is not fully defined.
    * <p>
    * You can post-pond annotation processing for later stages of annotation
    * processor hoping that all error-types will become defined on some
-   * annotation processing stage at last.
-   * You can catch {@link ErrorTypeFound} exception to achieve this.
+   * annotation processing stage at last. You can catch {@link ErrorTypeFound}
+   * exception to achieve this.
    *
    * @param element
    *        Processable class to reference
    * @param elementUtils
    *        Utility functions to handle Element-objects
    * @return Singleton reference to this class.
-   * @throws ErrorTypeFound if some classes are not fully defined during annotation processing.
+   * @throws ErrorTypeFound
+   *         if some classes are not fully defined during annotation processing.
    * @throws CodeModelBuildingException
    * @see JCodeModelJavaxLangModelAdapter
-   * @see #refWithErrorTypes(javax.lang.model.element.TypeElement, javax.lang.model.util.Elements)
+   * @see #refWithErrorTypes(javax.lang.model.element.TypeElement,
+   *      javax.lang.model.util.Elements)
    */
   @Nonnull
-  public JDefinedClass ref (
-    @Nonnull final TypeElement element,
-    @Nonnull final Elements elementUtils
-  ) throws ErrorTypeFound, CodeModelBuildingException
+  public JDefinedClass ref (@Nonnull final TypeElement element,
+                            @Nonnull final Elements elementUtils) throws ErrorTypeFound, CodeModelBuildingException
   {
-    JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter(this, elementUtils);
-    return adapter.getClass(element);
+    final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, elementUtils);
+    return adapter.getClass (element);
   }
 
   /**
-   * Obtains a reference to a processable class from its TypeElement description.
+   * Obtains a reference to a processable class from its TypeElement
+   * description.
    * <p>
-   * Annotation processors can get access of TypeElement objects
-   * during annotation processing. These TypeElement objects can be used
-   * with jcodemodel as a references to classes.
+   * Annotation processors can get access of TypeElement objects during
+   * annotation processing. These TypeElement objects can be used with
+   * jcodemodel as a references to classes.
    * <p>
    * This method result-class definition can include references to
-   * "error"-types. Error-types araise during annotation processing
-   * when something is not fully defined.
+   * "error"-types. Error-types araise during annotation processing when
+   * something is not fully defined.
    * <p>
-   * Sometimes direct treatment of error-types is required.
-   * You can use {@link AbstractJType#isError()} and
-   * {@link JCodeModel#buildsErrorTypeRefs()}
-   * methods to handle error-types and to prevent error-types to leak into
-   * generated code.
+   * Sometimes direct treatment of error-types is required. You can use
+   * {@link AbstractJType#isError()} and
+   * {@link JCodeModel#buildsErrorTypeRefs()} methods to handle error-types and
+   * to prevent error-types to leak into generated code.
    *
    * @param element
    *        Processable class to reference
@@ -656,18 +657,17 @@ public final class JCodeModel
    * @return Singleton reference to this class.
    * @throws CodeModelBuildingException
    * @see JCodeModelJavaxLangModelAdapter
-   * @see #ref(javax.lang.model.element.TypeElement, javax.lang.model.util.Elements)
+   * @see #ref(javax.lang.model.element.TypeElement,
+   *      javax.lang.model.util.Elements)
    * @see JErrorClass
    * @see #buildsErrorTypeRefs()
    */
   @Nonnull
-  public JDefinedClass refWithErrorTypes (
-    @Nonnull final TypeElement element,
-    @Nonnull final Elements elementUtils
-  ) throws CodeModelBuildingException
+  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement element,
+                                          @Nonnull final Elements elementUtils) throws CodeModelBuildingException
   {
-    JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter(this, elementUtils);
-    return adapter.getClassWithErrorTypes(element);
+    final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, elementUtils);
+    return adapter.getClassWithErrorTypes (element);
   }
 
   /**
