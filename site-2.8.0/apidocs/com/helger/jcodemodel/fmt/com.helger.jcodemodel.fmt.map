@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JTextFile.html" title="com.helger.jcodemodel.fmt.JTextFile" alt="" coords="15,20,89,47"/>
+<area shape="rect" id="node2_1" href="./JStaticJavaFile.html" title="com.helger.jcodemodel.fmt.JStaticJavaFile" alt="" coords="135,20,241,47"/>
+<area shape="rect" id="node3_2" href="./JStaticJavaFile.ILineFilter.html" title="com.helger.jcodemodel.fmt.JStaticJavaFile.ILineFilter" alt="" coords="287,11,371,55"/>
+<area shape="rect" id="node4_3" href="./JStaticJavaFile.ChainFilter.html" title="com.helger.jcodemodel.fmt.JStaticJavaFile.ChainFilter" alt="" coords="288,120,371,147"/>
+<area shape="rect" id="node5_4" href="./JStaticFile.html" title="com.helger.jcodemodel.fmt.JStaticFile" alt="" coords="417,20,498,47"/>
+<area shape="rect" id="node6_5" href="./JSerializedObject.html" title="com.helger.jcodemodel.fmt.JSerializedObject" alt="" coords="543,20,665,47"/>
+<area shape="rect" id="node7_6" href="./JPropertyFile.html" title="com.helger.jcodemodel.fmt.JPropertyFile" alt="" coords="710,20,807,47"/>
+<area shape="rect" id="node8_7" href="./JBinaryFile.html" title="com.helger.jcodemodel.fmt.JBinaryFile" alt="" coords="853,20,939,47"/>
+</map>
