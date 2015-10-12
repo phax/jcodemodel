@@ -48,6 +48,9 @@ import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
+import com.github.javaparser.ast.CompilationUnit;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJGenerable;
@@ -56,10 +59,6 @@ import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JFormatter;
 import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
-
-import japa.parser.JavaParser;
-import japa.parser.ParseException;
-import japa.parser.ast.CompilationUnit;
 
 /**
  * Various utilities for codemodel tests.

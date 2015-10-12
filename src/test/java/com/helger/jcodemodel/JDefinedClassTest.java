@@ -44,12 +44,11 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.InitializerDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
-
-import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.body.ClassOrInterfaceDeclaration;
-import japa.parser.ast.body.InitializerDeclaration;
-import japa.parser.ast.body.TypeDeclaration;
 
 /**
  * Test class for class {@link JDefinedClass}.
