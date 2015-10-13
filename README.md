@@ -10,6 +10,8 @@ this would be very tricky.
 
 A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. is available.
 
+Join the conversation on [Gitter](https://gitter.im/phax/jcodemodel).
+
 News and noteworthy:
 
 * 2015-10-12: Release 2.8.0 - Requires Java 1.6; fixed potential double imports; added virtual blocks; integrated [sviperll](https://github.com/sviperll)'s [metachicory](https://github.com/sviperll/chicory/tree/master/metachicory)
