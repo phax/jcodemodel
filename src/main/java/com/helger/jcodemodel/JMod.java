@@ -59,6 +59,8 @@ public final class JMod
   public static final int SYNCHRONIZED = 0x080;
   public static final int TRANSIENT = 0x100;
   public static final int VOLATILE = 0x200;
+  /** Java8 default method indicator */
+  public static final int DEFAULT = 0x400;
 
   private JMod ()
   {}

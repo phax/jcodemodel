@@ -579,6 +579,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
     if (m_aDefaultValue != null)
     {
+      // For annotation values
       f.print ("default ");
       f.generable (m_aDefaultValue);
     }
@@ -587,18 +588,22 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       f.statement (m_aBody);
     }
     else
-      if (!m_aOuter.isInterface () &&
-          !m_aOuter.isAnnotationTypeDeclaration () &&
-          !m_aMods.isAbstract () &&
-          !m_aMods.isNative ())
+    {
+      final boolean bIsDeclarationOnly = (m_aOuter.isInterface () && !m_aMods.isDefault ()) ||
+                                         m_aOuter.isAnnotationTypeDeclaration () ||
+                                         m_aMods.isAbstract () ||
+                                         m_aMods.isNative ();
+
+      if (bIsDeclarationOnly)
+      {
+        f.print (';').newline ();
+      }
+      else
       {
         // Print an empty body for non-native, non-abstract methods
         f.statement (new JBlock ());
       }
-      else
-      {
-        f.print (';').newline ();
-      }
+    }
   }
 
   /**

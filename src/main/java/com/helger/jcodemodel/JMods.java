@@ -68,7 +68,8 @@ public class JMods implements IJGenerable
                                     JMod.ABSTRACT |
                                     JMod.STATIC |
                                     JMod.NATIVE |
-                                    JMod.SYNCHRONIZED;
+                                    JMod.SYNCHRONIZED |
+                                    JMod.DEFAULT;
   private static final int CLASS = JMod.PUBLIC |
                                    JMod.PRIVATE |
                                    JMod.PROTECTED |
@@ -80,9 +81,9 @@ public class JMods implements IJGenerable
   /** bit-packed representation of modifiers. */
   private int m_nMods;
 
-  protected JMods (final int mods)
+  protected JMods (final int nMods)
   {
-    m_nMods = mods;
+    m_nMods = nMods;
   }
 
   /**
@@ -93,48 +94,48 @@ public class JMods implements IJGenerable
     return m_nMods;
   }
 
-  private static void _check (final int mods, final int legal, final String what)
+  private static void _check (final int nMods, final int legal, final String what)
   {
-    if ((mods & ~legal) != 0)
+    if ((nMods & ~legal) != 0)
     {
-      throw new IllegalArgumentException ("Illegal modifiers for " + what + ": " + new JMods (mods).toString ());
+      throw new IllegalArgumentException ("Illegal modifiers for " + what + ": " + new JMods (nMods).toString ());
     }
     /* ## check for illegal combinations too */
   }
 
   @Nonnull
-  public static JMods forVar (final int mods)
+  public static JMods forVar (final int nMods)
   {
-    _check (mods, VAR, "variable");
-    return new JMods (mods);
+    _check (nMods, VAR, "variable");
+    return new JMods (nMods);
   }
 
   @Nonnull
-  public static JMods forField (final int mods)
+  public static JMods forField (final int nMods)
   {
-    _check (mods, FIELD, "field");
-    return new JMods (mods);
+    _check (nMods, FIELD, "field");
+    return new JMods (nMods);
   }
 
   @Nonnull
-  public static JMods forMethod (final int mods)
+  public static JMods forMethod (final int nMods)
   {
-    _check (mods, METHOD, "method");
-    return new JMods (mods);
+    _check (nMods, METHOD, "method");
+    return new JMods (nMods);
   }
 
   @Nonnull
-  public static JMods forClass (final int mods)
+  public static JMods forClass (final int nMods)
   {
-    _check (mods, CLASS, "class");
-    return new JMods (mods);
+    _check (nMods, CLASS, "class");
+    return new JMods (nMods);
   }
 
   @Nonnull
-  public static JMods forInterface (final int mods)
+  public static JMods forInterface (final int nMods)
   {
-    _check (mods, INTERFACE, "class");
-    return new JMods (mods);
+    _check (nMods, INTERFACE, "interface");
+    return new JMods (nMods);
   }
 
   public boolean isAbstract ()
@@ -152,9 +153,27 @@ public class JMods implements IJGenerable
     return (m_nMods & JMod.SYNCHRONIZED) != 0;
   }
 
-  public void setSynchronized (final boolean newValue)
+  public void setSynchronized (final boolean bNewValue)
   {
-    _setFlag (JMod.SYNCHRONIZED, newValue);
+    _setFlag (JMod.SYNCHRONIZED, bNewValue);
+  }
+
+  /**
+   * @return <code>true</code> if this is a Java8 interface default method.
+   */
+  public boolean isDefault ()
+  {
+    return (m_nMods & JMod.DEFAULT) != 0;
+  }
+
+  /**
+   * @param bNewValue
+   *        <code>true</code> if this is a Java8 interface default method,
+   *        <code>false</code> otherwise.
+   */
+  public void setDefault (final boolean bNewValue)
+  {
+    _setFlag (JMod.DEFAULT, bNewValue);
   }
 
   public void setPrivate ()
@@ -185,14 +204,14 @@ public class JMods implements IJGenerable
     _setFlag (JMod.PRIVATE, false);
   }
 
-  public void setFinal (final boolean newValue)
+  public void setFinal (final boolean bNewValue)
   {
-    _setFlag (JMod.FINAL, newValue);
+    _setFlag (JMod.FINAL, bNewValue);
   }
 
-  private void _setFlag (final int bit, final boolean newValue)
+  private void _setFlag (final int bit, final boolean bNewValue)
   {
-    m_nMods = (m_nMods & ~bit) | (newValue ? bit : 0);
+    m_nMods = (m_nMods & ~bit) | (bNewValue ? bit : 0);
   }
 
   public void generate (@Nonnull final JFormatter f)
@@ -217,6 +236,8 @@ public class JMods implements IJGenerable
       f.print ("transient");
     if ((m_nMods & JMod.VOLATILE) != 0)
       f.print ("volatile");
+    if ((m_nMods & JMod.DEFAULT) != 0)
+      f.print ("default");
   }
 
   @Override
