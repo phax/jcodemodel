@@ -69,7 +69,7 @@ class Annotator
     this._typeEnvironment = typeEnvironment;
   }
 
-  void annotate (final List <? extends AnnotationMirror> annotationMirrors) throws CodeModelBuildingException
+  void annotate (final List <? extends AnnotationMirror> annotationMirrors) throws CodeModelBuildingException, IllegalStateException, ErrorTypeFound
   {
     for (final AnnotationMirror annotation : annotationMirrors)
     {
@@ -77,7 +77,7 @@ class Annotator
     }
   }
 
-  private void annotate (final AnnotationMirror annotation) throws CodeModelBuildingException, IllegalStateException
+  private void annotate (final AnnotationMirror annotation) throws CodeModelBuildingException, IllegalStateException, ErrorTypeFound
   {
     final JAnnotationUse annotationUse = _annotatable.annotate ((AbstractJClass) _modelsAdapter.toJType (annotation.getAnnotationType (),
                                                                                                          _typeEnvironment));
@@ -94,7 +94,7 @@ class Annotator
       this._annotationUse = annotationUse;
     }
 
-    void addArguments (final AnnotationMirror annotation) throws CodeModelBuildingException
+    void addArguments (final AnnotationMirror annotation) throws CodeModelBuildingException, IllegalStateException, ErrorTypeFound
     {
       final Map <? extends ExecutableElement, ? extends AnnotationValue> annotationArguments = _modelsAdapter.getElementValuesWithDefaults (annotation);
       for (final Map.Entry <? extends ExecutableElement, ? extends AnnotationValue> annotationValueAssignment : annotationArguments.entrySet ())
@@ -106,7 +106,8 @@ class Annotator
     }
 
     private void addArgument (final String name, final Object value) throws IllegalStateException,
-                                                                     CodeModelBuildingException
+                                                                     CodeModelBuildingException,
+                                                                     ErrorTypeFound
     {
       if (value instanceof String)
         _annotationUse.param (name, (String) value);

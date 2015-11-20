@@ -35,6 +35,7 @@ package com.helger.jcodemodel.meta;
 @SuppressWarnings ("serial")
 public class ErrorTypeFound extends Exception
 {
-  public ErrorTypeFound ()
-  {}
+  ErrorTypeFound(String message) {
+    super(message);
+  }
 }
