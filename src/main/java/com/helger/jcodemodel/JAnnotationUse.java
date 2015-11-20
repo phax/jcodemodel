@@ -51,6 +51,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.JCValueEnforcer;
+import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Represents an annotation on a program element.
@@ -64,6 +67,35 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * other parameter
    */
   public static final String SPECIAL_KEY_VALUE = "value";
+
+  @SuppressWarnings("unchecked")
+  private static <T> T castAnnotationArgument (@Nullable final AbstractJAnnotationValue value, @Nonnull final Class<T> klass) throws ClassCastException {
+    if (!klass.isArray()) {
+      if (value == null)
+        throw new ClassCastException("Can't cast null annotation value to " + klass + " class");
+      if (JAnnotationUse.class.isAssignableFrom(klass))
+        return (T)value;
+      else if (!(value instanceof JAnnotationStringValue))
+        throw new ClassCastException("Can't cast " + value + " annotation value to " + klass + " class");
+      else {
+        JAnnotationStringValue stringValue = (JAnnotationStringValue)value;
+        return (T)stringValue.nativeValue();
+      }
+    } else {
+      if (value == null) {
+        return (T)Array.newInstance(klass.getComponentType(), 0);
+      } else {
+        JAnnotationArrayMember jarray = (JAnnotationArrayMember)value;
+        Collection<AbstractJAnnotationValue> interfaceJArray = jarray.getAllAnnotations();
+        Object[] result = (Object[])Array.newInstance(klass.getComponentType(), interfaceJArray.size());
+        Iterator<AbstractJAnnotationValue> iterator = interfaceJArray.iterator();
+        for (int i = 0; iterator.hasNext(); i++) {
+          result[i] = castAnnotationArgument(iterator.next(), klass.getComponentType());
+        }
+        return (T)result;
+      }
+    }
+  }
 
   /**
    * The {@link Annotation} class
@@ -108,6 +140,29 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   public AbstractJAnnotationValue getParam (@Nullable final String sName)
   {
     return m_aMemberValues == null ? null : m_aMemberValues.get (sName);
+  }
+
+  /**
+   * Return annotation argument represented as required type.
+   * Return type is chosen to conform to given klass argument.
+   * <p>
+   * For example, you can have annotation parameter named 'value' of type String.
+   * <p>
+   * You can write {@code getParam("value", String.class)} to get raw string-value.
+   * You can write {@code getParam("value", AbstractJAnnotationValue.class)}
+   * to get AbstractJAnnotationValue for this argument.
+   * <p>
+   * Arrays are supported as a result type.
+   *
+   * @param <T> return type
+   * @param sName annotation parameter name
+   * @param klass type to use as a return type
+   * @return annotation argument represented as required type
+   */
+  @Nullable
+  public <T> T getParam (@Nonnull final String sName, @Nonnull final Class<T> klass) throws ClassCastException {
+    AbstractJAnnotationValue value = getParam(sName);
+    return castAnnotationArgument(value, klass);
   }
 
   @Nullable
