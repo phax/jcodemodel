@@ -103,6 +103,22 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   }
 
   /**
+   * Copy bounds from another type-variable into this one.
+   * @param sourceTypeParameter existing type-variable to copy bounds from
+   * @return this (for fluent method chaining)
+   */
+  @Nonnull
+  public JTypeVar boundLike (@Nonnull final JTypeVar sourceTypeParameter) {
+    JCValueEnforcer.notNull (sourceTypeParameter, "sourceTypeParameter");
+    AbstractJClass bound = sourceTypeParameter._extends();
+    bound(bound);
+    Iterator<AbstractJClass> iterator = sourceTypeParameter._implements();
+    while (iterator.hasNext())
+        bound(iterator.next());
+    return this;
+  }
+
+  /**
    * Returns the class bound of this variable.
    * <p>
    * If no bound is given, this method returns {@link Object}.
