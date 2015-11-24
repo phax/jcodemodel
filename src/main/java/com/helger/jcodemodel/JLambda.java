@@ -147,7 +147,8 @@ public class JLambda extends AbstractJExpressionImpl
     }
     f.print (" -> ");
 
-    m_aBodyStatement.bracesRequired (!(m_aBodyStatement.size () == 1 && m_aBodyStatement.getContents ().get (0) instanceof IJExpression));
+    m_aBodyStatement.bracesRequired (!(m_aBodyStatement.size () == 1 &&
+                                       m_aBodyStatement.getContents ().get (0) instanceof IJExpression));
     f.statement (m_aBodyStatement);
   }
 }

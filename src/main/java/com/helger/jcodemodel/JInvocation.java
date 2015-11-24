@@ -66,9 +66,9 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Name of the method to be invoked. Either this field is set, or
-   * {@link #m_sMethod}, or {@link #m_aConstructorType} (in which case it's a constructor
-   * invocation.) This allows {@link JMethod#name(String) the name of the method
-   * to be changed later}.
+   * {@link #m_sMethod}, or {@link #m_aConstructorType} (in which case it's a
+   * constructor invocation.) This allows {@link JMethod#name(String) the name
+   * of the method to be changed later}.
    */
   private final String m_sMethodName;
 
@@ -137,7 +137,9 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     this (aType.owner (), aType, aMethod);
   }
 
-  private JInvocation (@Nullable final JCodeModel owner, @Nullable final IJGenerable object, @Nonnull final String sName)
+  private JInvocation (@Nullable final JCodeModel owner,
+                       @Nullable final IJGenerable object,
+                       @Nonnull final String sName)
   {
     if (sName.indexOf ('.') >= 0)
       throw new IllegalArgumentException ("method name contains '.': " + sName);

@@ -50,10 +50,10 @@ import javax.annotation.Nonnull;
  */
 public enum EClassType
 {
-  CLASS ("class"),
-  INTERFACE ("interface"),
-  ANNOTATION_TYPE_DECL ("@interface"),
-  ENUM ("enum");
+ CLASS ("class"),
+ INTERFACE ("interface"),
+ ANNOTATION_TYPE_DECL ("@interface"),
+ ENUM ("enum");
 
   /**
    * The keyword used to declare this type.

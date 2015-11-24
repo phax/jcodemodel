@@ -803,4 +803,15 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   {
     return new JDefinedClass (this, nMods, sName, eClassType);
   }
+
+  /**
+   * Returns true if this class or it's inner classes contains references to
+   * error-types.
+   * 
+   * @see JErrorClass
+   */
+  public boolean containsErrorTypes ()
+  {
+    return JFormatter.containsErrorTypes (this);
+  }
 }

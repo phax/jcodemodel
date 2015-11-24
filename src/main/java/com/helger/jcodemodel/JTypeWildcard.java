@@ -61,8 +61,8 @@ public class JTypeWildcard extends AbstractJClass
 {
   public static enum EBoundMode
   {
-    EXTENDS ("? extends "),
-    SUPER ("? super ");
+   EXTENDS ("? extends "),
+   SUPER ("? super ");
 
     /**
      * The keyword used to declare this type.

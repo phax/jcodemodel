@@ -81,7 +81,9 @@ public class JavadocEscapeWriter extends FilterWriter
   }
 
   @Override
-  public void write (@Nonnull final char [] buf, @Nonnegative final int off, @Nonnegative final int len) throws IOException
+  public void write (@Nonnull final char [] buf,
+                     @Nonnegative final int off,
+                     @Nonnegative final int len) throws IOException
   {
     for (int i = 0; i < len; i++)
       write (buf[off + i]);
@@ -94,7 +96,9 @@ public class JavadocEscapeWriter extends FilterWriter
   }
 
   @Override
-  public void write (@Nonnull final String buf, @Nonnegative final int off, @Nonnegative final int len) throws IOException
+  public void write (@Nonnull final String buf,
+                     @Nonnegative final int off,
+                     @Nonnegative final int len) throws IOException
   {
     write (buf.toCharArray (), off, len);
   }

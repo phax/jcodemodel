@@ -573,9 +573,9 @@ public final class JCHashCodeGenerator
   }
 
   /**
-   * Create a {@link JCHashCodeGenerator} for derived classes where the base class
-   * also uses the {@link JCHashCodeGenerator}. This avoid calculating the hash
-   * code of the class name more than once.
+   * Create a {@link JCHashCodeGenerator} for derived classes where the base
+   * class also uses the {@link JCHashCodeGenerator}. This avoid calculating the
+   * hash code of the class name more than once.
    *
    * @param nSuperHashCode
    *        Always pass in <code>super.hashCode ()</code>

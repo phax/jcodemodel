@@ -276,7 +276,8 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables,
+                                             final List <? extends AbstractJClass> bindings)
   {
     final AbstractJClass b = _basis.substituteParams (variables, bindings);
     boolean different = b != _basis;

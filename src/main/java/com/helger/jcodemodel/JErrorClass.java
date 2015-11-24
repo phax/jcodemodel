@@ -139,7 +139,8 @@ public class JErrorClass extends AbstractJClass
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] variables,
+                                             final List <? extends AbstractJClass> bindings)
   {
     return this;
   }
