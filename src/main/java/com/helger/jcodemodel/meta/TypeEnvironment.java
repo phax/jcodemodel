@@ -41,15 +41,18 @@ class TypeEnvironment
 {
   private final Map <String, AbstractJType> map = new TreeMap <String, AbstractJType> ();
   private final TypeEnvironment _parent;
+  private final String _packageName;
 
-  TypeEnvironment ()
+  TypeEnvironment (final String packageName)
   {
     _parent = null;
+    _packageName = packageName;
   }
 
   private TypeEnvironment (final TypeEnvironment parent)
   {
-    this._parent = parent;
+    _packageName = null;
+    _parent = parent;
   }
 
   public TypeEnvironment enclosed ()
@@ -68,5 +71,9 @@ class TypeEnvironment
   public void put (final String name, final AbstractJType type)
   {
     map.put (name, type);
+  }
+
+  String packageName() {
+    return _parent == null ? _packageName : _parent.packageName();
   }
 }

@@ -577,19 +577,26 @@ public class JFormatter implements Closeable
     switch (m_eMode)
     {
       case COLLECTING:
-        final String sShortName = aType.name ();
-        NameUsage aUsages = m_aCollectedReferences.get (sShortName);
-        if (aUsages == null)
+        if (!aType.isError ())
         {
-          aUsages = new NameUsage (sShortName);
-          m_aCollectedReferences.put (sShortName, aUsages);
+          final String sShortName = aType.name ();
+          NameUsage aUsages = m_aCollectedReferences.get (sShortName);
+          if (aUsages == null)
+          {
+            aUsages = new NameUsage (sShortName);
+            m_aCollectedReferences.put (sShortName, aUsages);
+          }
+          aUsages.addReferencedType (aType);
         }
-        aUsages.addReferencedType (aType);
         break;
       case PRINTING:
         // many of the JTypes in this list are either primitive or belong to
         // package java so we don't need a FQCN
-        if (m_aImportedClasses.contains (aType) || aType._package () == m_aPckJavaLang)
+        if (aType.isError ())
+        {
+          print ("Object");
+        }
+        else if (m_aImportedClasses.contains (aType) || aType._package () == m_aPckJavaLang)
         {
           // FQCN imported or not necessary, so generate short name
           print (aType.name ());

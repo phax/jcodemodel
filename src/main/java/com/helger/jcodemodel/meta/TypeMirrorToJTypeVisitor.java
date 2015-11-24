@@ -45,29 +45,33 @@ import javax.lang.model.util.AbstractTypeVisitor6;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JTypeWildcard;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Victor Nazarov <asviraspossible@gmail.com>
  */
 class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void>
 {
-  private final boolean _includesErrorTypes;
+  private final ErrorTypePolicy _errorTypePolicy;
   private final TypeEnvironment _environment;
   private final JCodeModel _codeModel;
   private final DecidedErrorTypesModelsAdapter _modelsAdapter;
 
   public TypeMirrorToJTypeVisitor (final JCodeModel codeModel,
                                    final DecidedErrorTypesModelsAdapter modelsAdapter,
-                                   final boolean includesErrorTypes,
+                                   final ErrorTypePolicy errorTypePolicy,
                                    final TypeEnvironment environment)
   {
     this._codeModel = codeModel;
     this._modelsAdapter = modelsAdapter;
-    this._includesErrorTypes = includesErrorTypes;
+    this._errorTypePolicy = errorTypePolicy;
     this._environment = environment;
   }
 
+  @Override
   public AbstractJType visitPrimitive (final PrimitiveType t, final Void p)
   {
     switch (t.getKind ())
@@ -93,12 +97,14 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
     }
   }
 
+  @Override
   public AbstractJType visitNull (final NullType t, final Void p)
   {
     // To change body of generated methods, choose Tools | Templates.
     throw new IllegalArgumentException ("null can't be JClass.");
   }
 
+  @Override
   public AbstractJType visitArray (final ArrayType t, final Void p)
   {
     try
@@ -110,8 +116,13 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
     {
       throw new RuntimeCodeModelBuildingException (ex);
     }
+    catch (final ErrorTypeFound ex)
+    {
+      throw new RuntimeErrorTypeFound (ex);
+    }
   }
 
+  @Override
   public AbstractJType visitDeclared (final DeclaredType t, final Void p)
   {
     try
@@ -128,15 +139,46 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
     {
       throw new RuntimeCodeModelBuildingException (ex);
     }
+    catch (final ErrorTypeFound ex)
+    {
+      throw new RuntimeErrorTypeFound (ex);
+    }
   }
 
+  @Override
   public AbstractJType visitError (final ErrorType t, final Void p)
   {
-    if (_includesErrorTypes)
-      return _codeModel.errorClass (t.asElement ().getSimpleName ().toString () + " in annotated source code");
+    String typeName = t.asElement ().getSimpleName ().toString();
+    typeName = _environment.packageName() + "." + typeName;
+    JDefinedClass jCodeModelClass = _codeModel._getClass(typeName);
+    if (jCodeModelClass != null)
+    {
+      List<? extends TypeMirror> typeArguments = t.getTypeArguments();
+      if (typeArguments.isEmpty())
+        return jCodeModelClass;
+      List<AbstractJClass> jArguments = new ArrayList<AbstractJClass>(typeArguments.size());
+      for (TypeMirror typeArgument: typeArguments)
+      {
+        try
+        {
+          jArguments.add((AbstractJClass)_modelsAdapter.toJType(typeArgument, _environment));
+        }
+        catch (CodeModelBuildingException ex)
+        {
+          throw new RuntimeCodeModelBuildingException(ex);
+        }
+        catch (final ErrorTypeFound ex)
+        {
+          throw new RuntimeErrorTypeFound (ex);
+        }
+      }
+      return jCodeModelClass.narrow(jArguments);
+    }
+    if (_errorTypePolicy.action() == ErrorTypePolicy.Action.CREATE_ERROR_TYPE)
+      return _codeModel.errorClass (typeName + " in annotated source code");
     try
     {
-      throw new ErrorTypeFound ();
+      throw new ErrorTypeFound (typeName + " in annotated source code");
     }
     catch (final ErrorTypeFound ex)
     {
@@ -144,11 +186,26 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
     }
   }
 
+  @Override
   public AbstractJType visitTypeVariable (final TypeVariable t, final Void p)
   {
-    return _environment.get (t.asElement ().getSimpleName ().toString ());
+    String typeName = t.asElement ().getSimpleName ().toString();
+    AbstractJType result = _environment.get (typeName);
+    if (result != null)
+      return result;
+    if (_errorTypePolicy.action() == ErrorTypePolicy.Action.CREATE_ERROR_TYPE)
+      return _codeModel.errorClass ("Missing type-variable " + typeName + " in annotated source code");
+    try
+    {
+      throw new ErrorTypeFound ("Missing type-variable " + typeName + " in annotated source code");
+    }
+    catch (final ErrorTypeFound ex)
+    {
+      throw new RuntimeErrorTypeFound (ex);
+    }
   }
 
+  @Override
   public AbstractJType visitWildcard (final WildcardType t, final Void p)
   {
     try
@@ -171,21 +228,27 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
     {
       throw new RuntimeCodeModelBuildingException (ex);
     }
+    catch (final ErrorTypeFound ex)
+    {
+      throw new RuntimeErrorTypeFound (ex);
+    }
   }
 
+  @Override
   public AbstractJType visitExecutable (final ExecutableType t, final Void p)
   {
     throw new IllegalArgumentException ("executable can't be JClass.");
   }
 
+  @Override
   public AbstractJType visitNoType (final NoType t, final Void p)
   {
-    if (_includesErrorTypes)
+    if (_errorTypePolicy.action() == ErrorTypePolicy.Action.CREATE_ERROR_TYPE)
       return _codeModel.errorClass ("'no type' in annotated source code");
 
     try
     {
-      throw new ErrorTypeFound ();
+      throw new ErrorTypeFound ("'no type' in annotated source code");
     }
     catch (final ErrorTypeFound ex)
     {
@@ -196,12 +259,12 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
   @Override
   public AbstractJType visitUnknown (final TypeMirror t, final Void p)
   {
-    if (_includesErrorTypes)
+    if (_errorTypePolicy.action() == ErrorTypePolicy.Action.CREATE_ERROR_TYPE)
       return _codeModel.errorClass ("'unknown type' in annotated source code");
 
     try
     {
-      throw new ErrorTypeFound ();
+      throw new ErrorTypeFound ("'unknown type' in annotated source code");
     }
     catch (final ErrorTypeFound ex)
     {
