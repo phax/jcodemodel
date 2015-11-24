@@ -66,7 +66,8 @@ class ClassFiller
     this._newClass = newClass;
   }
 
-  void fillClass (final TypeElement element, final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
+  void fillClass (final TypeElement element, final TypeEnvironment environment) throws CodeModelBuildingException,
+                                                                                ErrorTypeFound
   {
     _newClass.hide ();
     final Annotator classAnnotator = new Annotator (_modelsAdapter, _newClass, environment);

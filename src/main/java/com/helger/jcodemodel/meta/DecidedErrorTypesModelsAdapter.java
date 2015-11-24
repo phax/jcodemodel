@@ -176,8 +176,8 @@ class DecidedErrorTypesModelsAdapter
     final Element enclosingElement = element.getEnclosingElement ();
     if (enclosingElement instanceof PackageElement)
     {
-      PackageElement packageElement = (PackageElement)enclosingElement;
-      return defineTopLevelClass (element, new TypeEnvironment (packageElement.getQualifiedName().toString()));
+      PackageElement packageElement = (PackageElement) enclosingElement;
+      return defineTopLevelClass (element, new TypeEnvironment (packageElement.getQualifiedName ().toString ()));
     }
 
     // Only top-level classes can be directly defined
@@ -185,7 +185,8 @@ class DecidedErrorTypesModelsAdapter
   }
 
   private JDefinedClass defineTopLevelClass (final TypeElement element,
-                                             final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
+                                             final TypeEnvironment environment) throws CodeModelBuildingException,
+                                                                                ErrorTypeFound
   {
     final EClassType classType = toClassType (element.getKind ());
     int modifiers = toJMod (element.getModifiers ());
@@ -278,7 +279,8 @@ class DecidedErrorTypesModelsAdapter
     }
   }
 
-  AbstractJType toJType (final TypeMirror type, final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
+  AbstractJType toJType (final TypeMirror type, final TypeEnvironment environment) throws CodeModelBuildingException,
+                                                                                   ErrorTypeFound
   {
     try
     {

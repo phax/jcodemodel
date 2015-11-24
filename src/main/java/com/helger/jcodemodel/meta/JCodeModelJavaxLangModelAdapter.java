@@ -60,14 +60,14 @@ public class JCodeModelJavaxLangModelAdapter
    *         if {@code element} argument contains references to so called
    *         "error"-types.
    * @throws CodeModelBuildingException
-   *         when operation can't be performed.
-   *         For example, when given class already exists.
+   *         when operation can't be performed. For example, when given class
+   *         already exists.
    */
   @Nonnull
   public JDefinedClass getClass (@Nonnull final TypeElement element) throws ErrorTypeFound, CodeModelBuildingException
   {
-    ErrorTypePolicy policy = new ErrorTypePolicy(ErrorTypePolicy.Action.THROW_EXCEPTION, true);
-    return getClass(element, policy);
+    ErrorTypePolicy policy = new ErrorTypePolicy (ErrorTypePolicy.EAction.THROW_EXCEPTION, true);
+    return getClass (element, policy);
   }
 
   /**
@@ -81,18 +81,21 @@ public class JCodeModelJavaxLangModelAdapter
    *        element to convert to class definition
    * @return jcodemodel class definition for given element.
    * @throws CodeModelBuildingException
-   *         when operation can't be performed.
-   *         For example, when given class already exists.
+   *         when operation can't be performed. For example, when given class
+   *         already exists.
    */
   @Nonnull
   public JDefinedClass getClassWithErrorTypes (@Nonnull final TypeElement element) throws CodeModelBuildingException
   {
-    ErrorTypePolicy policy = new ErrorTypePolicy(ErrorTypePolicy.Action.CREATE_ERROR_TYPE, true);
-      try {
-          return getClass(element, policy);
-      } catch (ErrorTypeFound ex) {
-          throw new RuntimeException("ErrorTypeFound exception is disabled and shouldn't be thrown here", ex);
-      }
+    ErrorTypePolicy policy = new ErrorTypePolicy (ErrorTypePolicy.EAction.CREATE_ERROR_TYPE, true);
+    try
+    {
+      return getClass (element, policy);
+    }
+    catch (ErrorTypeFound ex)
+    {
+      throw new RuntimeException ("ErrorTypeFound exception is disabled and shouldn't be thrown here", ex);
+    }
   }
 
   /**
@@ -112,11 +115,12 @@ public class JCodeModelJavaxLangModelAdapter
    *         {@code element} argument contains references to so called
    *         "error"-types
    * @throws CodeModelBuildingException
-   *         when operation can't be performed.
-   *         For example, when given class already exists.
+   *         when operation can't be performed. For example, when given class
+   *         already exists.
    */
   @Nonnull
-  public JDefinedClass getClass (@Nonnull final TypeElement element, @Nonnull ErrorTypePolicy policy) throws ErrorTypeFound, CodeModelBuildingException
+  public JDefinedClass getClass (@Nonnull final TypeElement element,
+                                 @Nonnull ErrorTypePolicy policy) throws ErrorTypeFound, CodeModelBuildingException
   {
     final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (_codeModel,
                                                                                                  _elementUtils,

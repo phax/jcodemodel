@@ -105,7 +105,12 @@ public final class JLambdaTest
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
     aLambda.body ()._return (aParam.plus (1));
-    assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF,
+    assertEquals ("(int x) -> {" +
+                  CRLF +
+                  "    return (x + 1);" +
+                  CRLF +
+                  "}" +
+                  CRLF,
                   CodeModelTestsHelper.toString (aLambda));
   }
 }

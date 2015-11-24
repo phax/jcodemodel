@@ -32,6 +32,9 @@ package com.helger.jcodemodel.meta;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.helger.jcodemodel.AbstractJType;
 
 /**
@@ -55,12 +58,14 @@ class TypeEnvironment
     _parent = parent;
   }
 
+  @Nonnull
   public TypeEnvironment enclosed ()
   {
     return new TypeEnvironment (this);
   }
 
-  public AbstractJType get (final String name)
+  @Nullable
+  public AbstractJType get (@Nonnull final String name)
   {
     final AbstractJType result = map.get (name);
     if (result != null || _parent == null)
@@ -68,12 +73,14 @@ class TypeEnvironment
     return _parent.get (name);
   }
 
-  public void put (final String name, final AbstractJType type)
+  public void put (@Nonnull final String name, final AbstractJType type)
   {
     map.put (name, type);
   }
 
-  String packageName() {
-    return _parent == null ? _packageName : _parent.packageName();
+  @Nullable
+  String packageName ()
+  {
+    return _parent == null ? _packageName : _parent.packageName ();
   }
 }

@@ -201,7 +201,8 @@ public final class AbstractJTypeTest
         _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcard ()), _List.narrow (assignment.m_aValue));
         _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcard ()),
                              _List.narrow (assignment.m_aValue.wildcard ()));
-        _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()), _List.narrow (assignment.m_aVariable));
+        _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()),
+                             _List.narrow (assignment.m_aVariable));
         _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()),
                              _List.narrow (assignment.m_aVariable.wildcardSuper ()));
       }

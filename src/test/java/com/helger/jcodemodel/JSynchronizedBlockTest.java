@@ -58,7 +58,10 @@ public final class JSynchronizedBlockTest
   @Test
   public void testBasic ()
   {
-    assertEquals ("synchronized (a)" + CRLF + "{}" + CRLF,
+    assertEquals ("synchronized (a)" +
+                  CRLF +
+                  "{}" +
+                  CRLF,
                   CodeModelTestsHelper.toString (new JSynchronizedBlock (JExpr.ref ("a"))));
 
     final JSynchronizedBlock aSB = new JSynchronizedBlock (JExpr.ref ("abc"));
@@ -71,6 +74,7 @@ public final class JSynchronizedBlockTest
                   "x = y;" +
                   CRLF +
                   "}" +
-                  CRLF, CodeModelTestsHelper.toString (aSB));
+                  CRLF,
+                  CodeModelTestsHelper.toString (aSB));
   }
 }

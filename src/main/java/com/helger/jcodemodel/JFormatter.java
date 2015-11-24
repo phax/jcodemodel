@@ -596,24 +596,25 @@ public class JFormatter implements Closeable
         {
           print ("Object");
         }
-        else if (m_aImportedClasses.contains (aType) || aType._package () == m_aPckJavaLang)
-        {
-          // FQCN imported or not necessary, so generate short name
-          print (aType.name ());
-        }
         else
-        {
-          final AbstractJClass aOuter = aType.outer ();
-          if (aOuter != null)
+          if (m_aImportedClasses.contains (aType) || aType._package () == m_aPckJavaLang)
           {
-            type (aOuter).print ('.').print (aType.name ());
+            // FQCN imported or not necessary, so generate short name
+            print (aType.name ());
           }
           else
           {
-            // collision was detected, so generate FQCN
-            print (aType.fullName ());
+            final AbstractJClass aOuter = aType.outer ();
+            if (aOuter != null)
+            {
+              type (aOuter).print ('.').print (aType.name ());
+            }
+            else
+            {
+              // collision was detected, so generate FQCN
+              print (aType.fullName ());
+            }
           }
-        }
         break;
       case FIND_ERROR_TYPES:
         if (aType.isError ())
