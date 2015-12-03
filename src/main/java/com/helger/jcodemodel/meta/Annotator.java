@@ -62,7 +62,7 @@ import com.helger.jcodemodel.JAnnotationArrayMember;
 import com.helger.jcodemodel.JAnnotationUse;
 
 /**
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 class Annotator
 {

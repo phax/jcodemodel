@@ -40,6 +40,9 @@
  */
 package com.helger.jcodemodel.meta;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
@@ -58,11 +61,9 @@ import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JTypeWildcard;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void>
 {
@@ -161,20 +162,20 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
   {
     String typeName = t.asElement ().getSimpleName ().toString ();
     typeName = _environment.packageName () + "." + typeName;
-    JDefinedClass jCodeModelClass = _codeModel._getClass (typeName);
+    final JDefinedClass jCodeModelClass = _codeModel._getClass (typeName);
     if (jCodeModelClass != null)
     {
-      List <? extends TypeMirror> typeArguments = t.getTypeArguments ();
+      final List <? extends TypeMirror> typeArguments = t.getTypeArguments ();
       if (typeArguments.isEmpty ())
         return jCodeModelClass;
-      List <AbstractJClass> jArguments = new ArrayList <AbstractJClass> (typeArguments.size ());
-      for (TypeMirror typeArgument : typeArguments)
+      final List <AbstractJClass> jArguments = new ArrayList <AbstractJClass> (typeArguments.size ());
+      for (final TypeMirror typeArgument : typeArguments)
       {
         try
         {
           jArguments.add ((AbstractJClass) _modelsAdapter.toJType (typeArgument, _environment));
         }
-        catch (CodeModelBuildingException ex)
+        catch (final CodeModelBuildingException ex)
         {
           throw new RuntimeCodeModelBuildingException (ex);
         }
@@ -200,8 +201,8 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
   @Override
   public AbstractJType visitTypeVariable (final TypeVariable t, final Void p)
   {
-    String typeName = t.asElement ().getSimpleName ().toString ();
-    AbstractJType result = _environment.get (typeName);
+    final String typeName = t.asElement ().getSimpleName ().toString ();
+    final AbstractJType result = _environment.get (typeName);
     if (result != null)
       return result;
     if (_errorTypePolicy.action () == ErrorTypePolicy.EAction.CREATE_ERROR_TYPE)

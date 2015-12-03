@@ -66,7 +66,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  * classes defined in jcodemodel. When {@code tryBind} parameter is false,
  * error-types are returned as is.
  *
- * @author vir
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 public class ErrorTypePolicy
 {

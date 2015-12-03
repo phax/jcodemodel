@@ -67,7 +67,7 @@ import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
 
 /**
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 class DecidedErrorTypesModelsAdapter
 {
@@ -187,7 +187,7 @@ class DecidedErrorTypesModelsAdapter
     final Element enclosingElement = element.getEnclosingElement ();
     if (enclosingElement instanceof PackageElement)
     {
-      PackageElement packageElement = (PackageElement) enclosingElement;
+      final PackageElement packageElement = (PackageElement) enclosingElement;
       return defineTopLevelClass (element, new TypeEnvironment (packageElement.getQualifiedName ().toString ()));
     }
 

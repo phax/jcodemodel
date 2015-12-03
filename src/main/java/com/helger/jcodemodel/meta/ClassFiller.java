@@ -60,7 +60,7 @@ import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.JVar;
 
 /**
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 class ClassFiller
 {

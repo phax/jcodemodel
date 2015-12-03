@@ -41,12 +41,14 @@
 package com.helger.jcodemodel.meta;
 
 /**
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ * Special internal excpetion thrown when an error type was found
+ *
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 @SuppressWarnings ("serial")
 public class ErrorTypeFound extends Exception
 {
-  ErrorTypeFound (String message)
+  ErrorTypeFound (final String message)
   {
     super (message);
   }

@@ -41,7 +41,7 @@
 package com.helger.jcodemodel.meta;
 
 /**
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 @SuppressWarnings ("serial")
 class RuntimeCodeModelBuildingException extends RuntimeException
@@ -54,6 +54,8 @@ class RuntimeCodeModelBuildingException extends RuntimeException
     this._cause = cause;
   }
 
+  // Remove the synchronized
+  @SuppressWarnings ("sync-override")
   @Override
   public CodeModelBuildingException getCause ()
   {

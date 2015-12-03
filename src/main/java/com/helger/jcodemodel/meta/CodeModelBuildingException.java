@@ -42,18 +42,19 @@ package com.helger.jcodemodel.meta;
 
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 
+/**
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
+ */
 @SuppressWarnings ("serial")
 public class CodeModelBuildingException extends Exception
 {
-
-  public CodeModelBuildingException (JClassAlreadyExistsException ex)
+  public CodeModelBuildingException (final JClassAlreadyExistsException ex)
   {
     super (ex);
   }
 
-  CodeModelBuildingException (ClassNotFoundException ex)
+  CodeModelBuildingException (final ClassNotFoundException ex)
   {
     super (ex);
   }
-
 }

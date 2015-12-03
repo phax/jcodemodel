@@ -49,7 +49,7 @@ import javax.annotation.Nullable;
 import com.helger.jcodemodel.AbstractJType;
 
 /**
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 class TypeEnvironment
 {

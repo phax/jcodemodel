@@ -41,7 +41,7 @@
 package com.helger.jcodemodel.meta;
 
 /**
- * @author Victor Nazarov <asviraspossible@gmail.com>
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 @SuppressWarnings ("serial")
 class RuntimeErrorTypeFound extends RuntimeException
@@ -54,6 +54,7 @@ class RuntimeErrorTypeFound extends RuntimeException
     this._cause = cause;
   }
 
+  @SuppressWarnings ("sync-override")
   @Override
   public ErrorTypeFound getCause ()
   {
