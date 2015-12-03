@@ -40,12 +40,12 @@
  */
 package com.helger.jcodemodel.meta;
 
+import javax.annotation.Nonnull;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
-import javax.annotation.Nonnull;
 
 public class JCodeModelJavaxLangModelAdapter
 {
@@ -54,6 +54,11 @@ public class JCodeModelJavaxLangModelAdapter
 
   /**
    * Creates new instance of JCodeModelJavaxLangModelAdapter.
+   *
+   * @param codeModel
+   *        Base code model. May not be <code>null</code>.
+   * @param elementUtils
+   *        Program element utility. May not be <code>null</code>.
    */
   public JCodeModelJavaxLangModelAdapter (@Nonnull final JCodeModel codeModel, @Nonnull final Elements elementUtils)
   {
@@ -77,7 +82,7 @@ public class JCodeModelJavaxLangModelAdapter
   @Nonnull
   public JDefinedClass getClass (@Nonnull final TypeElement element) throws ErrorTypeFound, CodeModelBuildingException
   {
-    ErrorTypePolicy policy = new ErrorTypePolicy (ErrorTypePolicy.EAction.THROW_EXCEPTION, true);
+    final ErrorTypePolicy policy = new ErrorTypePolicy (ErrorTypePolicy.EAction.THROW_EXCEPTION, true);
     return getClass (element, policy);
   }
 
@@ -98,12 +103,12 @@ public class JCodeModelJavaxLangModelAdapter
   @Nonnull
   public JDefinedClass getClassWithErrorTypes (@Nonnull final TypeElement element) throws CodeModelBuildingException
   {
-    ErrorTypePolicy policy = new ErrorTypePolicy (ErrorTypePolicy.EAction.CREATE_ERROR_TYPE, true);
+    final ErrorTypePolicy policy = new ErrorTypePolicy (ErrorTypePolicy.EAction.CREATE_ERROR_TYPE, true);
     try
     {
       return getClass (element, policy);
     }
-    catch (ErrorTypeFound ex)
+    catch (final ErrorTypeFound ex)
     {
       throw new RuntimeException ("ErrorTypeFound exception is disabled and shouldn't be thrown here", ex);
     }
@@ -131,7 +136,8 @@ public class JCodeModelJavaxLangModelAdapter
    */
   @Nonnull
   public JDefinedClass getClass (@Nonnull final TypeElement element,
-                                 @Nonnull ErrorTypePolicy policy) throws ErrorTypeFound, CodeModelBuildingException
+                                 @Nonnull final ErrorTypePolicy policy) throws ErrorTypeFound,
+                                                                        CodeModelBuildingException
   {
     final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (_codeModel,
                                                                                                  _elementUtils,

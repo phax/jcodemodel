@@ -621,9 +621,9 @@ public final class JCodeModel
    * @throws ErrorTypeFound
    *         if some classes are not fully defined during annotation processing.
    * @throws CodeModelBuildingException
+   *         In case of an internal error (?)
    * @see JCodeModelJavaxLangModelAdapter
-   * @see #refWithErrorTypes(javax.lang.model.element.TypeElement,
-   *      javax.lang.model.util.Elements)
+   * @see #refWithErrorTypes(TypeElement,Elements)
    */
   @Nonnull
   public JDefinedClass ref (@Nonnull final TypeElement element,
@@ -656,9 +656,9 @@ public final class JCodeModel
    *        Utility functions to handle Element-objects
    * @return Singleton reference to this class.
    * @throws CodeModelBuildingException
+   *         In case of an internal error (?)
    * @see JCodeModelJavaxLangModelAdapter
-   * @see #ref(javax.lang.model.element.TypeElement,
-   *      javax.lang.model.util.Elements)
+   * @see #ref(TypeElement, Elements)
    * @see JErrorClass
    * @see #buildsErrorTypeRefs()
    */

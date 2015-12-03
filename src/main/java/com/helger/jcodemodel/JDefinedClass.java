@@ -807,7 +807,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   /**
    * Returns true if this class or it's inner classes contains references to
    * error-types.
-   * 
+   *
+   * @return <code>true</code> if an error type is contained, <code>false</code>
+   *         otherwise
    * @see JErrorClass
    */
   public boolean containsErrorTypes ()
