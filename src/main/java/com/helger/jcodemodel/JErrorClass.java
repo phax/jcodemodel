@@ -42,8 +42,8 @@ package com.helger.jcodemodel;
 
 import java.util.Iterator;
 import java.util.List;
-
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * A special {@link AbstractJClass} that represents an error class.
@@ -71,18 +71,28 @@ import javax.annotation.Nonnull;
 public class JErrorClass extends AbstractJClass
 {
   private final String m_sMessage;
+  private final String m_sName;
 
-  protected JErrorClass (@Nonnull final JCodeModel _owner, @Nonnull final String sMessage)
+  protected JErrorClass (
+    @Nonnull final JCodeModel _owner,
+    @Nonnull final String sMessage,
+    @Nullable final String sName)
   {
     super (_owner);
     m_sMessage = sMessage;
+    m_sName = sName;
+  }
+
+  protected JErrorClass (@Nonnull final JCodeModel _owner, @Nonnull final String sMessage)
+  {
+    this (_owner, sMessage, null);
   }
 
   @Override
-  @Nonnull
+  @Nullable
   public String name ()
   {
-    throw new JErrorClassUsedException (m_sMessage);
+    return m_sName;
   }
 
   @Override
