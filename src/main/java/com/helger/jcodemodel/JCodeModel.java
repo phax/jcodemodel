@@ -40,6 +40,12 @@
  */
 package com.helger.jcodemodel;
 
+import com.helger.jcodemodel.meta.CodeModelBuildingException;
+import com.helger.jcodemodel.meta.ErrorTypeFound;
+import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
+import com.helger.jcodemodel.util.JCSecureLoader;
+import com.helger.jcodemodel.writer.FileCodeWriter;
+import com.helger.jcodemodel.writer.ProgressCodeWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -49,20 +55,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
-
-import com.helger.jcodemodel.meta.CodeModelBuildingException;
-import com.helger.jcodemodel.meta.ErrorTypeFound;
-import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
-import com.helger.jcodemodel.util.JCSecureLoader;
-import com.helger.jcodemodel.writer.FileCodeWriter;
-import com.helger.jcodemodel.writer.ProgressCodeWriter;
 
 /**
  * Root of the code DOM.
@@ -365,9 +363,46 @@ public final class JCodeModel
    * @see JErrorClass
    */
   @Nonnull
-  public JErrorClass errorClass (@Nonnull final String sMessage)
+  public JErrorClass errorClass (
+    @Nonnull final String sMessage)
   {
-    return new JErrorClass (this, sMessage);
+    return errorClass (sMessage, null);
+  }
+
+  /**
+   * Creates a dummy, error {@link AbstractJClass} that can only be referenced
+   * from hidden classes.
+   * <p>
+   * This method is useful when the code generation needs to include some error
+   * class that should never leak into actually written code.
+   * <p>
+   * Error-types represents holes or place-holders that can't be filled.
+   * References to error-classes can be used in hidden class-models. Such
+   * classes should never be actually written but can be somehow used during
+   * code generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test
+   * if your generated Java-sources contains references to error-types.
+   * <p>
+   * You should probably always check generated code with
+   * {@code JCodeModel#buildsErrorTypeRefs} method if you use any error-types.
+   * <p>
+   * Most of error-types methods throws {@code JErrorClassUsedException}
+   * unchecked exceptions. Be careful and use {@link AbstractJType#isError()
+   * AbstractJType#isError} method to check for error-types before actually
+   * using it's methods.
+   *
+   * @param sName name of missing class if it is known
+   * @param sMessage
+   *        some free form text message to identify source of error
+   * @return New {@link JErrorClass}
+   * @see JCodeModel#buildsErrorTypeRefs()
+   * @see JErrorClass
+   */
+  @Nonnull
+  public JErrorClass errorClass (
+    @Nonnull final String sMessage,
+    @Nullable final String sName)
+  {
+    return new JErrorClass (this, sMessage, sName);
   }
 
   /**
