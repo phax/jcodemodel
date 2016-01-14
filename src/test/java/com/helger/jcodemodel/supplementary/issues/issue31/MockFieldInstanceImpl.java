@@ -47,7 +47,7 @@ package com.helger.jcodemodel.supplementary.issues.issue31;
  * @param <T>
  *        Required type param
  */
-public class AbstractFieldInstanceImpl <T>
+public class MockFieldInstanceImpl <T>
 {
   public class ValueHolderInstanceImpl
   {

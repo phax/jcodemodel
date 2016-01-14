@@ -50,8 +50,8 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.supplementary.issues.issue31.AbstractFieldInstanceImpl;
-import com.helger.jcodemodel.supplementary.issues.issue31.AbstractFieldInstanceImpl.ValueHolderInstanceImpl;
+import com.helger.jcodemodel.supplementary.issues.issue31.MockFieldInstanceImpl;
+import com.helger.jcodemodel.supplementary.issues.issue31.MockFieldInstanceImpl.ValueHolderInstanceImpl;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
@@ -68,7 +68,7 @@ public final class Issue31FuncTest
 
     final AbstractJClass jtype = generator.ref (String.class);
     final AbstractJClass aspect = generator.directClass (ValueHolderInstanceImpl.class.getSimpleName ());
-    final AbstractJClass abstractFieldClass = generator.ref (AbstractFieldInstanceImpl.class).narrow (jtype);
+    final AbstractJClass abstractFieldClass = generator.ref (MockFieldInstanceImpl.class).narrow (jtype);
     final JAnonymousClass basefield = generator.anonymousClass (abstractFieldClass);
     final JFieldVar apectfield = basefield.field (JMod.PRIVATE, aspect, "valueHolder");
     final JMethod initfield = basefield.method (JMod.PROTECTED, generator.VOID, "initialize");
