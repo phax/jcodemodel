@@ -73,7 +73,22 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
    */
   public OutputStreamCodeWriter (@Nonnull final OutputStream os, @Nullable final Charset encoding)
   {
-    super (encoding);
+    this (os, encoding, getDefaultNewLine ());
+  }
+
+  /**
+   * @param os
+   *        This stream will be closed at the end of the code generation.
+   * @param encoding
+   *        Encoding to be used.
+   * @param sNewLine
+   *        The new line string to be used for source files
+   */
+  public OutputStreamCodeWriter (@Nonnull final OutputStream os,
+                                 @Nullable final Charset encoding,
+                                 @Nonnull final String sNewLine)
+  {
+    super (encoding, sNewLine);
     try
     {
       m_aPS = encoding == null ? new PrintStream (os, false) : new PrintStream (os, false, encoding.name ());

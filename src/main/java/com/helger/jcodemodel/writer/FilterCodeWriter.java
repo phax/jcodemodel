@@ -42,12 +42,12 @@ package com.helger.jcodemodel.writer;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Writer;
 
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.SourcePrintWriter;
 
 /**
  * {@link AbstractCodeWriter} that delegates to another
@@ -61,7 +61,7 @@ public class FilterCodeWriter extends AbstractCodeWriter
 
   public FilterCodeWriter (@Nonnull final AbstractCodeWriter aCore)
   {
-    super (aCore.encoding ());
+    super (aCore.encoding (), aCore.getNewLine ());
     m_aCore = aCore;
   }
 
@@ -78,7 +78,7 @@ public class FilterCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     return m_aCore.openSource (pkg, fileName);
   }

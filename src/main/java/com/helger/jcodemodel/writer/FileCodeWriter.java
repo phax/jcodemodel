@@ -61,6 +61,9 @@ import com.helger.jcodemodel.JPackage;
  */
 public class FileCodeWriter extends AbstractCodeWriter
 {
+  public static final boolean DEFAULT_MARK_READ_ONLY = false;
+  public static final Charset DEFAULT_CHARSET = null;
+
   /** The target directory to put source code. */
   private final File m_aTargetDir;
 
@@ -72,24 +75,39 @@ public class FileCodeWriter extends AbstractCodeWriter
 
   public FileCodeWriter (@Nonnull final File aTargetDir) throws IOException
   {
-    this (aTargetDir, false);
+    this (aTargetDir, DEFAULT_MARK_READ_ONLY, DEFAULT_CHARSET, getDefaultNewLine ());
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir, @Nullable final Charset encoding) throws IOException
   {
-    this (aTargetDir, false, encoding);
+    this (aTargetDir, DEFAULT_MARK_READ_ONLY, encoding, getDefaultNewLine ());
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir, final boolean bMarkReadOnly) throws IOException
   {
-    this (aTargetDir, bMarkReadOnly, null);
+    this (aTargetDir, bMarkReadOnly, DEFAULT_CHARSET, getDefaultNewLine ());
+  }
+
+  public FileCodeWriter (@Nonnull final File aTargetDir,
+                         @Nullable final Charset encoding,
+                         @Nonnull final String sNewLine) throws IOException
+  {
+    this (aTargetDir, DEFAULT_MARK_READ_ONLY, encoding, sNewLine);
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir,
                          final boolean bMarkReadOnly,
                          @Nullable final Charset encoding) throws IOException
   {
-    super (encoding);
+    this (aTargetDir, bMarkReadOnly, encoding, getDefaultNewLine ());
+  }
+
+  public FileCodeWriter (@Nonnull final File aTargetDir,
+                         final boolean bMarkReadOnly,
+                         @Nullable final Charset encoding,
+                         @Nonnull final String sNewLine) throws IOException
+  {
+    super (encoding, sNewLine);
     m_aTargetDir = aTargetDir;
     m_bMarkReadOnly = bMarkReadOnly;
     if (!aTargetDir.exists () || !aTargetDir.isDirectory ())

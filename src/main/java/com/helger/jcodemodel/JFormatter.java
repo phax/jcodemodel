@@ -334,9 +334,9 @@ public class JFormatter implements Closeable
   private final String m_sIndentSpace;
 
   /**
-   * Stream associated with this JFormatter
+   * Writer associated with this {@link JFormatter}
    */
-  private final PrintWriter m_aPW;
+  private final SourcePrintWriter m_aPW;
 
   private char m_cLastChar = 0;
   private boolean m_bAtBeginningOfLine = true;
@@ -349,6 +349,17 @@ public class JFormatter implements Closeable
   private boolean m_bContainsErrorTypes;
 
   /**
+   * Creates a formatter with default incremental indentations of four spaces.
+   *
+   * @param aPW
+   *        The {@link PrintWriter} to use
+   */
+  public JFormatter (@Nonnull final SourcePrintWriter aPW)
+  {
+    this (aPW, DEFAULT_INDENT_SPACE);
+  }
+
+  /**
    * Creates a JFormatter.
    *
    * @param aPW
@@ -358,7 +369,7 @@ public class JFormatter implements Closeable
    *        Incremental indentation string, similar to tab value. May not be
    *        <code>null</code>.
    */
-  public JFormatter (@Nonnull final PrintWriter aPW, @Nonnull final String sIndentSpace)
+  public JFormatter (@Nonnull final SourcePrintWriter aPW, @Nonnull final String sIndentSpace)
   {
     JCValueEnforcer.notNull (aPW, "PrintWriter");
     JCValueEnforcer.notNull (sIndentSpace, "IndentSpace");
@@ -370,12 +381,12 @@ public class JFormatter implements Closeable
   /**
    * Creates a formatter with default incremental indentations of four spaces.
    *
-   * @param aPW
-   *        The {@link PrintWriter} to use
+   * @param aWriter
+   *        The {@link Writer} to be wrapped in a {@link PrintWriter}
    */
-  public JFormatter (@Nonnull final PrintWriter aPW)
+  public JFormatter (@Nonnull final Writer aWriter)
   {
-    this (aPW, DEFAULT_INDENT_SPACE);
+    this (aWriter, DEFAULT_INDENT_SPACE);
   }
 
   /**
@@ -384,9 +395,22 @@ public class JFormatter implements Closeable
    * @param aWriter
    *        The {@link Writer} to be wrapped in a {@link PrintWriter}
    */
-  public JFormatter (@Nonnull final Writer aWriter)
+  public JFormatter (@Nonnull final Writer aWriter, @Nonnull final String sIndentSpace)
   {
-    this (aWriter instanceof PrintWriter ? (PrintWriter) aWriter : new PrintWriter (aWriter));
+    this (aWriter, sIndentSpace, System.getProperty ("line.separator"));
+  }
+
+  /**
+   * Creates a formatter with default incremental indentations of four spaces.
+   *
+   * @param aWriter
+   *        The {@link Writer} to be wrapped in a {@link PrintWriter}
+   */
+  public JFormatter (@Nonnull final Writer aWriter, @Nonnull final String sIndentSpace, @Nonnull final String sNewLine)
+  {
+    this (aWriter instanceof SourcePrintWriter ? (SourcePrintWriter) aWriter
+                                               : new SourcePrintWriter (aWriter, sNewLine),
+          sIndentSpace);
   }
 
   /**

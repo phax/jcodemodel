@@ -70,7 +70,19 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
    */
   public SingleStreamCodeWriter (@Nonnull final OutputStream aOS)
   {
-    super (null);
+    this (aOS, getDefaultNewLine ());
+  }
+
+  /**
+   * @param aOS
+   *        This stream will be closed at the end of the code generation. Except
+   *        it is System.out or System.err
+   * @param sNewLine
+   *        The new line string to be used for source files
+   */
+  public SingleStreamCodeWriter (@Nonnull final OutputStream aOS, @Nonnull final String sNewLine)
+  {
+    super (null, sNewLine);
     // Do not close System.out or System.err
     m_bDoClose = aOS != System.out && aOS != System.err;
     m_aPS = aOS instanceof PrintStream ? (PrintStream) aOS : new PrintStream (aOS);

@@ -53,13 +53,13 @@ import com.helger.jcodemodel.JPackage;
 
 /**
  * Writes all the files into a zip file.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class ZipCodeWriter extends AbstractCodeWriter
 {
-  private final ZipOutputStream _zip;
-  private final OutputStream _filter;
+  private final ZipOutputStream m_aZOS;
+  private final OutputStream m_aFOS;
 
   /**
    * @param target
@@ -67,10 +67,21 @@ public class ZipCodeWriter extends AbstractCodeWriter
    */
   public ZipCodeWriter (@Nonnull final OutputStream target)
   {
-    super (null);
-    _zip = new ZipOutputStream (target);
+    this (target, getDefaultNewLine ());
+  }
+
+  /**
+   * @param target
+   *        Zip file will be written to this stream.
+   * @param sNewLine
+   *        The new line string to be used for source files
+   */
+  public ZipCodeWriter (@Nonnull final OutputStream target, @Nonnull final String sNewLine)
+  {
+    super (null, sNewLine);
+    m_aZOS = new ZipOutputStream (target);
     // nullify the close method.
-    _filter = new FilterOutputStream (_zip)
+    m_aFOS = new FilterOutputStream (m_aZOS)
     {
       @Override
       public void close ()
@@ -85,8 +96,8 @@ public class ZipCodeWriter extends AbstractCodeWriter
     if (!pkg.isUnnamed ())
       name = _toDirName (pkg) + name;
 
-    _zip.putNextEntry (new ZipEntry (name));
-    return _filter;
+    m_aZOS.putNextEntry (new ZipEntry (name));
+    return m_aFOS;
   }
 
   /** Converts a package name to the directory name. */
@@ -98,6 +109,6 @@ public class ZipCodeWriter extends AbstractCodeWriter
   @Override
   public void close () throws IOException
   {
-    _zip.close ();
+    m_aZOS.close ();
   }
 }

@@ -40,27 +40,31 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.jcodemodel.meta.CodeModelBuildingException;
-import com.helger.jcodemodel.meta.ErrorTypeFound;
-import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
-import com.helger.jcodemodel.util.JCSecureLoader;
-import com.helger.jcodemodel.writer.FileCodeWriter;
-import com.helger.jcodemodel.writer.ProgressCodeWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
+
+import com.helger.jcodemodel.meta.CodeModelBuildingException;
+import com.helger.jcodemodel.meta.ErrorTypeFound;
+import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
+import com.helger.jcodemodel.util.JCSecureLoader;
+import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.jcodemodel.writer.FileCodeWriter;
+import com.helger.jcodemodel.writer.ProgressCodeWriter;
 
 /**
  * Root of the code DOM.
@@ -148,18 +152,7 @@ public final class JCodeModel
   public final JPrimitiveType SHORT = new JPrimitiveType (this, "short", Short.class, true);
   public final JPrimitiveType VOID = new JPrimitiveType (this, "void", Void.class, false);
 
-  /**
-   * If the flag is true, we will consider two classes "Foo" and "foo" as a
-   * collision.
-   */
-  protected final boolean isCaseSensitiveFileSystem = getFileSystemCaseSensitivity ();
-
-  /**
-   * Cached for {@link #wildcard()}.
-   */
-  private AbstractJClass m_aWildcard;
-
-  protected boolean getFileSystemCaseSensitivity ()
+  protected static boolean getFileSystemCaseSensitivity ()
   {
     try
     {
@@ -181,6 +174,23 @@ public final class JCodeModel
     // on Unix, it's case sensitive.
     return File.separatorChar == '/';
   }
+
+  /**
+   * If the flag is true, we will consider two classes "Foo" and "foo" as a
+   * collision.
+   */
+  protected final boolean isCaseSensitiveFileSystem = getFileSystemCaseSensitivity ();
+
+  /**
+   * Cached for {@link #wildcard()}.
+   */
+  private AbstractJClass m_aWildcard;
+
+  /** The charset used for building the output - null means system default */
+  private Charset m_aBuildingCharset = null;
+
+  /** The newline string to be used. Defaults to system default */
+  private String m_sBuildingNewLine = AbstractCodeWriter.getDefaultNewLine ();
 
   public JCodeModel ()
   {}
@@ -363,8 +373,7 @@ public final class JCodeModel
    * @see JErrorClass
    */
   @Nonnull
-  public JErrorClass errorClass (
-    @Nonnull final String sMessage)
+  public JErrorClass errorClass (@Nonnull final String sMessage)
   {
     return errorClass (sMessage, null);
   }
@@ -390,7 +399,8 @@ public final class JCodeModel
    * AbstractJType#isError} method to check for error-types before actually
    * using it's methods.
    *
-   * @param sName name of missing class if it is known
+   * @param sName
+   *        name of missing class if it is known
    * @param sMessage
    *        some free form text message to identify source of error
    * @return New {@link JErrorClass}
@@ -398,9 +408,7 @@ public final class JCodeModel
    * @see JErrorClass
    */
   @Nonnull
-  public JErrorClass errorClass (
-    @Nonnull final String sMessage,
-    @Nullable final String sName)
+  public JErrorClass errorClass (@Nonnull final String sMessage, @Nullable final String sName)
   {
     return new JErrorClass (this, sMessage, sName);
   }
@@ -469,8 +477,57 @@ public final class JCodeModel
   }
 
   /**
+   * @return The default charset used for building. <code>null</code> means
+   *         system default.
+   */
+  @Nullable
+  public Charset getBuildingCharset ()
+  {
+    return m_aBuildingCharset;
+  }
+
+  /**
+   * Set the charset to be used for emitting files.
+   * 
+   * @param aCharset
+   *        The charset to be used. May be <code>null</code> to indicate the use
+   *        of the system default.
+   * @return this for chaining
+   */
+  @Nonnull
+  public JCodeModel setBuildingCharset (@Nullable final Charset aCharset)
+  {
+    m_aBuildingCharset = aCharset;
+    return this;
+  }
+
+  /**
+   * @return The newline string to be used. Defaults to system default
+   */
+  public String getBuildingNewLine ()
+  {
+    return m_sBuildingNewLine;
+  }
+
+  /**
+   * Set the new line string to be used for emitting source files.
+   *
+   * @param sNewLine
+   *        The new line string to be used. May neither be <code>null</code> nor
+   *        empty.
+   * @return this for chaining
+   */
+  @Nonnull
+  public JCodeModel setBuildingNewLine (@Nonnull final String sNewLine)
+  {
+    JCValueEnforcer.notEmpty (sNewLine, "NewLine");
+    m_sBuildingNewLine = sNewLine;
+    return this;
+  }
+
+  /**
    * Generates Java source code. A convenience method for
-   * <code>build(destDir,destDir,System.out)</code>.
+   * <code>build(destDir,destDir,status)</code>.
    *
    * @param destDir
    *        source files and resources are generated into this directory.
@@ -502,8 +559,8 @@ public final class JCodeModel
                      @Nonnull final File resourceDir,
                      @Nullable final PrintStream status) throws IOException
   {
-    AbstractCodeWriter res = new FileCodeWriter (resourceDir);
-    AbstractCodeWriter src = new FileCodeWriter (srcDir);
+    AbstractCodeWriter res = new FileCodeWriter (resourceDir, m_aBuildingCharset, m_sBuildingNewLine);
+    AbstractCodeWriter src = new FileCodeWriter (srcDir, m_aBuildingCharset, m_sBuildingNewLine);
     if (status != null)
     {
       src = new ProgressCodeWriter (src, status);

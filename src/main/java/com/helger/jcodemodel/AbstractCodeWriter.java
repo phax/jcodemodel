@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel;
 
+import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -52,6 +53,7 @@ import java.util.BitSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
 /**
@@ -101,16 +103,54 @@ public abstract class AbstractCodeWriter implements Closeable
    * Encoding to be used by the writer. Null means platform specific encoding.
    */
   private final Charset m_aEncoding;
+  private final String m_sNewLine;
 
+  @Nonnull
+  protected static String getDefaultNewLine ()
+  {
+    String ret = null;
+    try
+    {
+      ret = System.getProperty ("line.separator");
+    }
+    catch (final Exception ex)
+    {
+      // Fall through
+    }
+
+    if (ret == null || ret.length () == 0)
+      ret = "\n";
+    return ret;
+  }
+
+  @Deprecated
   protected AbstractCodeWriter (@Nullable final Charset aEncoding)
   {
+    this (aEncoding, getDefaultNewLine ());
+  }
+
+  protected AbstractCodeWriter (@Nullable final Charset aEncoding, @Nonnull final String sNewLine)
+  {
+    JCValueEnforcer.notNull (sNewLine, "NewLine");
+
     m_aEncoding = aEncoding;
+    m_sNewLine = sNewLine;
   }
 
   @Nullable
   public Charset encoding ()
   {
     return m_aEncoding;
+  }
+
+  /**
+   * @return The new line string as provided in the constructor. Defaults to
+   *         <code>System.getProperty ("line.separator")</code>
+   */
+  @Nonnull
+  public String getNewLine ()
+  {
+    return m_sNewLine;
   }
 
   /**
@@ -139,7 +179,7 @@ public abstract class AbstractCodeWriter implements Closeable
    *
    * @param pkg
    *        The package of the file to be written.
-   * @param fileName
+   * @param sFilename
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
    * @return Writer to write to
@@ -147,21 +187,25 @@ public abstract class AbstractCodeWriter implements Closeable
    *         On IO error
    */
   @Nonnull
-  public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage pkg, @Nonnull final String sFilename) throws IOException
   {
-    final OutputStream os = openBinary (pkg, fileName);
+    final OutputStream os = openBinary (pkg, sFilename);
     final OutputStreamWriter bw = m_aEncoding != null ? new OutputStreamWriter (os, m_aEncoding)
                                                       : new OutputStreamWriter (os);
 
     // create writer
+    Writer aWriter;
     try
     {
-      return new JavaUnicodeEscapeWriter (bw);
+      aWriter = new JavaUnicodeEscapeWriter (bw);
     }
     catch (final Throwable t)
     {
-      return new UnicodeEscapeWriter (bw);
+      aWriter = new UnicodeEscapeWriter (bw);
     }
+
+    // Ensure result is buffered
+    return new SourcePrintWriter (new BufferedWriter (aWriter), m_sNewLine);
   }
 
   /**

@@ -41,12 +41,9 @@
 package com.helger.jcodemodel;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -650,7 +647,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter src,
                                                   @Nonnull final String className) throws IOException
   {
-    final Writer bw = new BufferedWriter (src.openSource (this, className + ".java"));
-    return new JFormatter (new PrintWriter (bw));
+    final SourcePrintWriter aWriter = src.openSource (this, className + ".java");
+    return new JFormatter (aWriter);
   }
 }

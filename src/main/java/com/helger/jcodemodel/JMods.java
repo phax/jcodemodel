@@ -40,7 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import javax.annotation.Nonnull;
@@ -243,9 +242,9 @@ public class JMods implements IJGenerable
   @Override
   public String toString ()
   {
-    final StringWriter s = new StringWriter ();
-    final JFormatter f = new JFormatter (new PrintWriter (s));
+    final StringWriter aWriter = new StringWriter ();
+    final JFormatter f = new JFormatter (aWriter);
     this.generate (f);
-    return s.toString ();
+    return aWriter.toString ();
   }
 }

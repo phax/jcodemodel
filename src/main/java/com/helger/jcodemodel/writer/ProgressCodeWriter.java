@@ -44,17 +44,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.Writer;
 
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.SourcePrintWriter;
 
 /**
  * Filter CodeWriter that writes a progress message to the specified
  * PrintStream.
- * 
+ *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class ProgressCodeWriter extends FilterCodeWriter
@@ -77,7 +77,7 @@ public class ProgressCodeWriter extends FilterCodeWriter
   }
 
   @Override
-  public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
     _report (pkg, fileName);
     return super.openSource (pkg, fileName);

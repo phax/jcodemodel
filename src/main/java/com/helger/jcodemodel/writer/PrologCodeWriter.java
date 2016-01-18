@@ -41,14 +41,13 @@
 package com.helger.jcodemodel.writer;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Writer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.SourcePrintWriter;
 
 /**
  * Writes all the source files under the specified file folder and inserts a
@@ -79,30 +78,24 @@ public class PrologCodeWriter extends FilterCodeWriter
   }
 
   @Override
-  public Writer openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
   {
-    final Writer w = super.openSource (pkg, fileName);
-
-    final PrintWriter out = new PrintWriter (w);
+    final SourcePrintWriter w = super.openSource (pkg, fileName);
 
     // write prolog if this is a java source file
     if (m_sProlog != null)
     {
-      out.println ("//");
-
+      w.println ("//");
       String s = m_sProlog;
       int idx;
       while ((idx = s.indexOf ('\n')) != -1)
       {
-        out.println ("// " + s.substring (0, idx));
+        w.println ("// " + s.substring (0, idx));
         s = s.substring (idx + 1);
       }
-      out.println ("//");
-      out.println ();
+      w.println ("//");
+      w.println ();
     }
-    // we can't close the stream for that would close the
-    // underlying stream.
-    out.flush ();
 
     return w;
   }
