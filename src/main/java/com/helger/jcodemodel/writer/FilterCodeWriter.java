@@ -52,7 +52,7 @@ import com.helger.jcodemodel.JPackage;
 /**
  * {@link AbstractCodeWriter} that delegates to another
  * {@link AbstractCodeWriter}.
- * 
+ *
  * @author Kohsuke Kawaguchi
  */
 public class FilterCodeWriter extends AbstractCodeWriter
@@ -62,7 +62,7 @@ public class FilterCodeWriter extends AbstractCodeWriter
   public FilterCodeWriter (@Nonnull final AbstractCodeWriter aCore)
   {
     super (aCore.encoding ());
-    this.m_aCore = aCore;
+    m_aCore = aCore;
   }
 
   @Nonnull
