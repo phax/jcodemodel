@@ -394,6 +394,9 @@ public class JFormatter implements Closeable
    *
    * @param aWriter
    *        The {@link Writer} to be wrapped in a {@link PrintWriter}
+   * @param sIndentSpace
+   *        Incremental indentation string, similar to tab value. May not be
+   *        <code>null</code>.
    */
   public JFormatter (@Nonnull final Writer aWriter, @Nonnull final String sIndentSpace)
   {
@@ -405,6 +408,12 @@ public class JFormatter implements Closeable
    *
    * @param aWriter
    *        The {@link Writer} to be wrapped in a {@link PrintWriter}
+   * @param sIndentSpace
+   *        Incremental indentation string, similar to tab value. May not be
+   *        <code>null</code>.
+   * @param sNewLine
+   *        The new line string to be used. May neither be <code>null</code> nor
+   *        empty.
    */
   public JFormatter (@Nonnull final Writer aWriter, @Nonnull final String sIndentSpace, @Nonnull final String sNewLine)
   {
