@@ -14,7 +14,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 News and noteworthy:
 
-* 2016-xx-yy: Release 2.8.2 - Customizable new line string and character set; extensions by @sviperll
+* 2016-01-19: Release 2.8.2 - Customizable new line string and character set; extensions by @sviperll
 * 2015-12-03: Release 2.8.1 - Extensions by @sviperll
 * 2015-10-12: Release 2.8.0 - Requires Java 1.6; fixed potential double imports; added virtual blocks; integrated [sviperll](https://github.com/sviperll)'s [metachicory](https://github.com/sviperll/chicory/tree/master/metachicory)
 * 2015-09-24: Release 2.7.11 - Bugfix release; removed half done CSE implementation (issue #18); improved handling of directClasses; added enumConstantReference
@@ -38,7 +38,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>2.8.1</version>
+  <version>2.8.2</version>
 </dependency>
 ```
 
