@@ -55,7 +55,7 @@ public class JForLoop implements IJStatement
   private final List <Object> m_aInitExprs = new ArrayList <Object> ();
   private IJExpression m_aTestExpr;
   private final List <IJExpression> m_aUpdateExprs = new ArrayList <IJExpression> ();
-  private JBlock _body;
+  private JBlock m_aBody;
 
   protected JForLoop ()
   {}
@@ -122,9 +122,9 @@ public class JForLoop implements IJStatement
   @Nonnull
   public JBlock body ()
   {
-    if (_body == null)
-      _body = new JBlock ();
-    return _body;
+    if (m_aBody == null)
+      m_aBody = new JBlock ();
+    return m_aBody;
   }
 
   public void state (@Nonnull final JFormatter f)
@@ -142,8 +142,8 @@ public class JForLoop implements IJStatement
       first = false;
     }
     f.print (';').generable (m_aTestExpr).print (';').generable (m_aUpdateExprs).print (')');
-    if (_body != null)
-      f.generable (_body).newline ();
+    if (m_aBody != null)
+      f.generable (m_aBody).newline ();
     else
       f.print (';').newline ();
   }

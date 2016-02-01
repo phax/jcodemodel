@@ -54,7 +54,7 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
 public final class JLambdaMethodRefTest
 {
   @Test
-  public void testExpressionMethodRef ()
+  public void testStaticMethodRef_Name ()
   {
     final JCodeModel cm = new JCodeModel ();
 
@@ -63,7 +63,7 @@ public final class JLambdaMethodRefTest
   }
 
   @Test
-  public void testExpressionMethodRefJMethod () throws JClassAlreadyExistsException
+  public void testStaticMethodRef_JMethod () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
@@ -76,12 +76,39 @@ public final class JLambdaMethodRefTest
   }
 
   @Test
-  public void testExpressionMethodRefNew () throws JClassAlreadyExistsException
+  public void testStaticMethodRef_New () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
 
     final JLambdaMethodRef aLambda = new JLambdaMethodRef (cl);
     assertEquals ("com.helger.test.LambdaTest::new", CodeModelTestsHelper.toString (aLambda));
+  }
+
+  @Test
+  public void testInstanceMethodRef_Name ()
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JBlock aBlock = new JBlock ();
+    final JVar aVar = aBlock.decl (cm._ref (Object.class), "aObj");
+
+    final JLambdaMethodRef aLambda = new JLambdaMethodRef (aVar, "toString");
+    assertEquals ("aObj::toString", CodeModelTestsHelper.toString (aLambda));
+  }
+
+  @Test
+  public void testInstanceMethodRef_JMethod () throws JClassAlreadyExistsException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
+    final JMethod m = cl.method (JMod.PUBLIC, cm.ref (String.class), "myToString");
+    final JVar p = m.param (Object.class, "obj");
+    m.body ()._return (cm.ref (String.class).staticInvoke ("valueOf").arg (p));
+
+    final JBlock aBlock = new JBlock ();
+    final JVar aVar = aBlock.decl (cl, "aObj");
+
+    final JLambdaMethodRef aLambda = new JLambdaMethodRef (aVar, m);
+    assertEquals ("aObj::myToString", CodeModelTestsHelper.toString (aLambda));
   }
 }

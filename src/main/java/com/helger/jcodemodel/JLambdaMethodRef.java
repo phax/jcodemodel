@@ -55,24 +55,30 @@ public class JLambdaMethodRef extends AbstractJExpressionImpl
 {
   private final JMethod m_aMethod;
   private final AbstractJType m_aType;
+  private final JVar m_aVar;
   private final String m_sMethodName;
 
   /**
    * Constructor to reference the passed method
-   * 
+   *
    * @param aMethod
    *        The static method to reference. May not be <code>null</code>.
    */
   public JLambdaMethodRef (@Nonnull final JMethod aMethod)
   {
-    m_aMethod = JCValueEnforcer.notNull (aMethod, "Method");
+    JCValueEnforcer.notNull (aMethod, "Method");
+    if (!aMethod.mods ().isStatic ())
+      throw new IllegalArgumentException ("Only static methods can be used with this constructor. Use the constructor with JVar for instance methods.");
+
+    m_aMethod = aMethod;
     m_aType = null;
+    m_aVar = null;
     m_sMethodName = null;
   }
 
   /**
    * Constructor for a constructor method reference (<code>type::new</code>).
-   * 
+   *
    * @param aType
    *        Type to reference the constructor from. May not be <code>null</code>
    *        .
@@ -84,23 +90,77 @@ public class JLambdaMethodRef extends AbstractJExpressionImpl
 
   /**
    * Constructor for an arbitrary method reference.
-   * 
+   *
    * @param aType
    *        Type the method belongs to. May not be <code>null</code>.
    * @param sMethod
-   *        Name of the method to reference. May neither be <code>null</code>
-   *        nor empty.
+   *        Name of the static method to reference. May neither be
+   *        <code>null</code> nor empty.
    */
   public JLambdaMethodRef (@Nonnull final AbstractJType aType, @Nonnull final String sMethod)
   {
     m_aMethod = null;
     m_aType = JCValueEnforcer.notNull (aType, "Type");
+    m_aVar = null;
     m_sMethodName = JCValueEnforcer.notEmpty (sMethod, "Method");
   }
 
   /**
-   * @return The owning method. May be <code>null</code> if the constructor with
-   *         type and name was used.
+   * Constructor for an arbitrary instance method reference.
+   *
+   * @param aVar
+   *        Variable containing the instance. May not be <code>null</code>.
+   * @param sMethod
+   *        Name of the method to reference. May neither be <code>null</code>
+   *        nor empty.
+   */
+  public JLambdaMethodRef (@Nonnull final JVar aVar, @Nonnull final String sMethod)
+  {
+    JCValueEnforcer.notNull (aVar, "Var");
+    JCValueEnforcer.notEmpty (sMethod, "Method");
+
+    m_aMethod = null;
+    m_aType = null;
+    m_aVar = aVar;
+    m_sMethodName = sMethod;
+  }
+
+  /**
+   * Constructor for an arbitrary instance method reference.
+   *
+   * @param aVar
+   *        Variable containing the instance. May not be <code>null</code>.
+   * @param aMethod
+   *        The instance method to reference. May not be <code>null</code>.
+   */
+  public JLambdaMethodRef (@Nonnull final JVar aVar, @Nonnull final JMethod aMethod)
+  {
+    JCValueEnforcer.notNull (aVar, "Var");
+    JCValueEnforcer.notNull (aMethod, "Method");
+    if (aMethod.mods ().isStatic ())
+      throw new IllegalArgumentException ("Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
+
+    m_aMethod = aMethod;
+    m_aType = null;
+    m_aVar = aVar;
+    m_sMethodName = null;
+  }
+
+  /**
+   * @return <code>true</code> if this is a static reference, <code>false</code>
+   *         if this is an instance reference.
+   */
+  public boolean isStaticRef ()
+  {
+    if (m_aMethod != null)
+      return m_aMethod.mods ().isStatic ();
+
+    return m_aType != null;
+  }
+
+  /**
+   * @return The owning method. May be <code>null</code> if a constructor with
+   *         method name was used.
    */
   @Nullable
   public JMethod method ()
@@ -118,6 +178,16 @@ public class JLambdaMethodRef extends AbstractJExpressionImpl
   }
 
   /**
+   * @return The variable for the instance reference. May be <code>null</code>
+   *         if this is a static reference.
+   */
+  @Nullable
+  public JVar var ()
+  {
+    return m_aVar;
+  }
+
+  /**
    * @return The name of the referenced method. Never <code>null</code>.
    */
   @Nonnull
@@ -128,6 +198,11 @@ public class JLambdaMethodRef extends AbstractJExpressionImpl
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.type (type ()).print ("::").print (methodName ());
+    final AbstractJType aType = type ();
+    if (isStaticRef ())
+      f.type (aType);
+    else
+      f.generable (m_aVar);
+    f.print ("::").print (methodName ());
   }
 }

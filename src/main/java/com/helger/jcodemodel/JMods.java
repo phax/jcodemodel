@@ -147,6 +147,11 @@ public class JMods implements IJGenerable
     return (m_nMods & JMod.NATIVE) != 0;
   }
 
+  public boolean isStatic ()
+  {
+    return (m_nMods & JMod.STATIC) != 0;
+  }
+
   public boolean isSynchronized ()
   {
     return (m_nMods & JMod.SYNCHRONIZED) != 0;
