@@ -65,6 +65,14 @@ public final class JLambdaTest
   }
 
   @Test
+  public void testExpressionNoParam ()
+  {
+    final JLambda aLambda = new JLambda ();
+    aLambda.body ().lambdaExpr (JExpr.lit (2));
+    assertEquals ("() ->  2", CodeModelTestsHelper.toString (aLambda));
+  }
+
+  @Test
   public void testExpressionBasicType ()
   {
     final JCodeModel cm = new JCodeModel ();

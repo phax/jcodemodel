@@ -119,32 +119,36 @@ public class JLambda extends AbstractJExpressionImpl
   public void generate (@Nonnull final JFormatter f)
   {
     final int nParams = m_aParams.size ();
-    if (nParams == 0)
-      throw new IllegalStateException ("Lambda expression needs at least one parameter!");
-    final JLambdaParam aParam0 = m_aParams.get (0);
-    for (int i = 1; i < nParams; ++i)
-      if (m_aParams.get (i).hasType () != aParam0.hasType ())
-        throw new IllegalStateException ("Lambda expression parameters must all have types or none may have a type!");
+    if (nParams > 0)
+    {
+      final JLambdaParam aParam0 = m_aParams.get (0);
+      for (int i = 1; i < nParams; ++i)
+        if (m_aParams.get (i).hasType () != aParam0.hasType ())
+          throw new IllegalStateException ("Lambda expression parameters must all have types or none may have a type!");
+    }
     if (m_aBodyStatement.isEmpty ())
       throw new IllegalStateException ("Lambda expression is empty!");
 
     // Print parameters
-    if (nParams == 1 && !aParam0.hasType ())
-    {
-      // Braces can be omitted for single parameters without a type
-      m_aParams.get (0).declare (f);
-    }
+    if (nParams == 0)
+      f.print ("()");
     else
-    {
-      f.print ('(');
-      for (int i = 0; i < nParams; ++i)
+      if (nParams == 1 && !m_aParams.get (0).hasType ())
       {
-        if (i > 0)
-          f.print (',');
-        m_aParams.get (i).declare (f);
+        // Braces can be omitted for single parameters without a type
+        m_aParams.get (0).declare (f);
       }
-      f.print (')');
-    }
+      else
+      {
+        f.print ('(');
+        for (int i = 0; i < nParams; ++i)
+        {
+          if (i > 0)
+            f.print (',');
+          m_aParams.get (i).declare (f);
+        }
+        f.print (')');
+      }
     f.print (" -> ");
 
     m_aBodyStatement.bracesRequired (!(m_aBodyStatement.size () == 1 &&
