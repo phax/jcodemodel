@@ -41,6 +41,10 @@
 package com.helger.jcodemodel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -60,6 +64,11 @@ public final class JLambdaMethodRefTest
 
     final JLambdaMethodRef aLambda = cm.ref (Object.class).methodRef ("toString");
     assertEquals ("java.lang.Object::toString", CodeModelTestsHelper.toString (aLambda));
+    assertTrue (aLambda.isStaticRef ());
+    assertNull (aLambda.method ());
+    assertSame (cm.ref (Object.class), aLambda.type ());
+    assertNull (aLambda.var ());
+    assertEquals ("toString", aLambda.methodName ());
   }
 
   @Test
@@ -73,6 +82,20 @@ public final class JLambdaMethodRefTest
 
     final JLambdaMethodRef aLambda = new JLambdaMethodRef (m);
     assertEquals ("com.helger.test.LambdaTest::myToString", CodeModelTestsHelper.toString (aLambda));
+    assertTrue (aLambda.isStaticRef ());
+    assertSame (m, aLambda.method ());
+    assertSame (cl, aLambda.type ());
+    assertNull (aLambda.var ());
+    assertEquals ("myToString", aLambda.methodName ());
+
+    // Modify original method
+    m.name ("newName");
+    assertEquals ("com.helger.test.LambdaTest::newName", CodeModelTestsHelper.toString (aLambda));
+    assertTrue (aLambda.isStaticRef ());
+    assertSame (m, aLambda.method ());
+    assertSame (cl, aLambda.type ());
+    assertNull (aLambda.var ());
+    assertEquals ("newName", aLambda.methodName ());
   }
 
   @Test
@@ -83,6 +106,11 @@ public final class JLambdaMethodRefTest
 
     final JLambdaMethodRef aLambda = new JLambdaMethodRef (cl);
     assertEquals ("com.helger.test.LambdaTest::new", CodeModelTestsHelper.toString (aLambda));
+    assertTrue (aLambda.isStaticRef ());
+    assertNull (aLambda.method ());
+    assertSame (cl, aLambda.type ());
+    assertNull (aLambda.var ());
+    assertEquals ("new", aLambda.methodName ());
   }
 
   @Test
@@ -94,6 +122,11 @@ public final class JLambdaMethodRefTest
 
     final JLambdaMethodRef aLambda = new JLambdaMethodRef (aVar, "toString");
     assertEquals ("aObj::toString", CodeModelTestsHelper.toString (aLambda));
+    assertFalse (aLambda.isStaticRef ());
+    assertNull (aLambda.method ());
+    assertSame (cm._ref (Object.class), aLambda.type ());
+    assertSame (aVar, aLambda.var ());
+    assertEquals ("toString", aLambda.methodName ());
   }
 
   @Test
@@ -110,5 +143,10 @@ public final class JLambdaMethodRefTest
 
     final JLambdaMethodRef aLambda = new JLambdaMethodRef (aVar, m);
     assertEquals ("aObj::myToString", CodeModelTestsHelper.toString (aLambda));
+    assertFalse (aLambda.isStaticRef ());
+    assertSame (m, aLambda.method ());
+    assertSame (cl, aLambda.type ());
+    assertSame (aVar, aLambda.var ());
+    assertEquals ("myToString", aLambda.methodName ());
   }
 }

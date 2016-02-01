@@ -174,7 +174,11 @@ public class JLambdaMethodRef extends AbstractJExpressionImpl
   @Nonnull
   public AbstractJType type ()
   {
-    return m_aMethod != null ? m_aMethod.owningClass () : m_aType;
+    if (m_aVar != null)
+      return m_aVar.type ();
+    if (m_aMethod != null)
+      return m_aMethod.owningClass ();
+    return m_aType;
   }
 
   /**
