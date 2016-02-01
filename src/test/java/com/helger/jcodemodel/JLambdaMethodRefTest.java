@@ -47,78 +47,41 @@ import org.junit.Test;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
- * Test class for class {@link JLambda}.
+ * Test class for class {@link JLambdaMethodRef}.
  *
  * @author Philip Helger
  */
-public final class JLambdaTest
+public final class JLambdaMethodRefTest
 {
-  private static final String CRLF = System.getProperty ("line.separator");
-
   @Test
-  public void testExpressionBasic ()
-  {
-    final JLambda aLambda = new JLambda ();
-    final JLambdaParam aParam = aLambda.addParam ("x");
-    aLambda.body ().lambdaExpr (aParam.mul (2));
-    assertEquals ("x -> (x* 2)", CodeModelTestsHelper.toString (aLambda));
-  }
-
-  @Test
-  public void testExpressionNoParam ()
-  {
-    final JLambda aLambda = new JLambda ();
-    aLambda.body ().lambdaExpr (JExpr.lit (2));
-    assertEquals ("() ->  2", CodeModelTestsHelper.toString (aLambda));
-  }
-
-  @Test
-  public void testExpressionBasicType ()
+  public void testExpressionMethodRef ()
   {
     final JCodeModel cm = new JCodeModel ();
 
-    final JLambda aLambda = new JLambda ();
-    final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
-    aLambda.body ().lambdaExpr (aParam.mul (2));
-    assertEquals ("(int x) -> (x* 2)", CodeModelTestsHelper.toString (aLambda));
+    final JLambdaMethodRef aLambda = cm.ref (Object.class).methodRef ("toString");
+    assertEquals ("java.lang.Object::toString", CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test
-  public void testExpressionBasic2 ()
-  {
-    final JLambda aLambda = new JLambda ();
-    final JLambdaParam aParam1 = aLambda.addParam ("x");
-    final JLambdaParam aParam2 = aLambda.addParam ("y");
-    aLambda.body ().lambdaExpr (aParam1.plus (aParam2));
-    assertEquals ("(x, y) -> (x + y)", CodeModelTestsHelper.toString (aLambda));
-  }
-
-  @Test
-  public void testExpressionBasicType2 ()
+  public void testExpressionMethodRefJMethod () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
+    final JMethod m = cl.method (JMod.PUBLIC | JMod.STATIC, cm.ref (String.class), "myToString");
+    final JVar p = m.param (Object.class, "obj");
+    m.body ()._return (cm.ref (String.class).staticInvoke ("valueOf").arg (p));
 
-    final JLambda aLambda = new JLambda ();
-    final JLambdaParam aParam1 = aLambda.addParam (cm.INT, "x");
-    final JLambdaParam aParam2 = aLambda.addParam (cm.BYTE, "y");
-    aLambda.body ().lambdaExpr (aParam1.plus (aParam2));
-    assertEquals ("(int x, byte y) -> (x + y)", CodeModelTestsHelper.toString (aLambda));
+    final JLambdaMethodRef aLambda = new JLambdaMethodRef (m);
+    assertEquals ("com.helger.test.LambdaTest::myToString", CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test
-  public void testStatementBasicType ()
+  public void testExpressionMethodRefNew () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
 
-    final JLambda aLambda = new JLambda ();
-    final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
-    aLambda.body ()._return (aParam.plus (1));
-    assertEquals ("(int x) -> {" +
-                  CRLF +
-                  "    return (x + 1);" +
-                  CRLF +
-                  "}" +
-                  CRLF,
-                  CodeModelTestsHelper.toString (aLambda));
+    final JLambdaMethodRef aLambda = new JLambdaMethodRef (cl);
+    assertEquals ("com.helger.test.LambdaTest::new", CodeModelTestsHelper.toString (aLambda));
   }
 }

@@ -57,6 +57,12 @@ public class JLambdaMethodRef extends AbstractJExpressionImpl
   private final AbstractJType m_aType;
   private final String m_sMethodName;
 
+  /**
+   * Constructor to reference the passed method
+   * 
+   * @param aMethod
+   *        The static method to reference. May not be <code>null</code>.
+   */
   public JLambdaMethodRef (@Nonnull final JMethod aMethod)
   {
     m_aMethod = JCValueEnforcer.notNull (aMethod, "Method");
@@ -64,6 +70,27 @@ public class JLambdaMethodRef extends AbstractJExpressionImpl
     m_sMethodName = null;
   }
 
+  /**
+   * Constructor for a constructor method reference (<code>type::new</code>).
+   * 
+   * @param aType
+   *        Type to reference the constructor from. May not be <code>null</code>
+   *        .
+   */
+  public JLambdaMethodRef (@Nonnull final AbstractJType aType)
+  {
+    this (aType, "new");
+  }
+
+  /**
+   * Constructor for an arbitrary method reference.
+   * 
+   * @param aType
+   *        Type the method belongs to. May not be <code>null</code>.
+   * @param sMethod
+   *        Name of the method to reference. May neither be <code>null</code>
+   *        nor empty.
+   */
   public JLambdaMethodRef (@Nonnull final AbstractJType aType, @Nonnull final String sMethod)
   {
     m_aMethod = null;
