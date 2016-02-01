@@ -623,13 +623,13 @@ public class JFormatter implements Closeable
         }
         break;
       case PRINTING:
-        // many of the JTypes in this list are either primitive or belong to
-        // package java so we don't need a FQCN
         if (aType.isError ())
         {
           print ("Object");
         }
         else
+          // many of the JTypes in this list are either primitive or belong to
+          // package java so we don't need a FQCN
           if (m_aImportedClasses.contains (aType) || aType._package () == m_aPckJavaLang)
           {
             // FQCN imported or not necessary, so generate short name

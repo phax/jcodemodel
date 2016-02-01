@@ -67,7 +67,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Return type for this method
    */
-  private AbstractJType m_aType;
+  private AbstractJType m_aReturnType;
 
   /**
    * Name of this method
@@ -90,7 +90,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   private JBlock m_aBody;
 
-  private final JDefinedClass m_aOuter;
+  private final JDefinedClass m_aOwningClass;
 
   /**
    * javadoc comments for this JMethod
@@ -115,21 +115,21 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Constructor for regular methods
    *
-   * @param outer
+   * @param aOwningClass
    *        Outer class
    * @param mods
    *        Modifiers for this method's declaration
-   * @param type
+   * @param aReturnType
    *        Return type for the method
-   * @param name
+   * @param sName
    *        Name of this method
    */
-  protected JMethod (@Nonnull final JDefinedClass outer, final int mods, final AbstractJType type, final String name)
+  protected JMethod (@Nonnull final JDefinedClass aOwningClass, final int mods, final AbstractJType aReturnType, final String sName)
   {
     m_aMods = JMods.forMethod (mods);
-    m_aType = type;
-    m_sName = name;
-    m_aOuter = outer;
+    m_aReturnType = aReturnType;
+    m_sName = sName;
+    m_aOwningClass = aOwningClass;
   }
 
   /**
@@ -143,14 +143,14 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   protected JMethod (final int mods, @Nonnull final JDefinedClass aClass)
   {
     m_aMods = JMods.forMethod (mods);
-    m_aType = null;
+    m_aReturnType = null;
     m_sName = aClass.name ();
-    m_aOuter = aClass;
+    m_aOwningClass = aClass;
   }
 
   public boolean isConstructor ()
   {
-    return m_aType == null;
+    return m_aReturnType == null;
   }
 
   @Nonnull
@@ -180,7 +180,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JMethod _throws (@Nonnull final Class <? extends Throwable> exception)
   {
-    return _throws (m_aOuter.owner ().ref (exception));
+    return _throws (m_aOwningClass.owner ().ref (exception));
   }
 
   /**
@@ -229,13 +229,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JVar param (final int mods, @Nonnull final Class <?> type, @Nonnull final String name)
   {
-    return param (mods, m_aOuter.owner ()._ref (type), name);
+    return param (mods, m_aOwningClass.owner ()._ref (type), name);
   }
 
   @Nonnull
   public JVar param (@Nonnull final Class <?> type, @Nonnull final String name)
   {
-    return param (m_aOuter.owner ()._ref (type), name);
+    return param (m_aOwningClass.owner ()._ref (type), name);
   }
 
   /**
@@ -254,7 +254,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JVar varParam (@Nonnull final Class <?> type, @Nonnull final String name)
   {
-    return varParam (m_aOuter.owner ()._ref (type), name);
+    return varParam (m_aOwningClass.owner ()._ref (type), name);
   }
 
   /**
@@ -295,7 +295,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JVar varParam (final int mods, @Nonnull final Class <?> type, @Nonnull final String name)
   {
-    return varParam (mods, m_aOuter.owner ()._ref (type), name);
+    return varParam (mods, m_aOwningClass.owner ()._ref (type), name);
   }
 
   /**
@@ -418,7 +418,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nullable
   public AbstractJType type ()
   {
-    return m_aType;
+    return m_aReturnType;
   }
 
   /**
@@ -430,7 +430,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public void type (@Nullable final AbstractJType t)
   {
-    m_aType = t;
+    m_aReturnType = t;
   }
 
   /**
@@ -546,7 +546,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     super.declare (f);
 
     if (!isConstructor ())
-      f.generable (m_aType);
+      f.generable (m_aReturnType);
     f.id (m_sName).print ('(').indent ();
     // when parameters are printed in new lines, we want them to be indented.
     // there's a good chance no newlines happen, too, but just in case it does.
@@ -589,8 +589,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
     else
     {
-      final boolean bIsDeclarationOnly = (m_aOuter.isInterface () && !m_aMods.isDefault ()) ||
-                                         m_aOuter.isAnnotationTypeDeclaration () ||
+      final boolean bIsDeclarationOnly = (m_aOwningClass.isInterface () && !m_aMods.isDefault ()) ||
+                                         m_aOwningClass.isAnnotationTypeDeclaration () ||
                                          m_aMods.isAbstract () ||
                                          m_aMods.isNative ();
 
@@ -616,9 +616,19 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     return m_aMods;
   }
 
+  /**
+   * @return The {@link JDefinedClass} to which this methods belongs. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public JDefinedClass owningClass ()
+  {
+    return m_aOwningClass;
+  }
+
   @Nonnull
   public JCodeModel owner ()
   {
-    return m_aOuter.owner ();
+    return m_aOwningClass.owner ();
   }
 }

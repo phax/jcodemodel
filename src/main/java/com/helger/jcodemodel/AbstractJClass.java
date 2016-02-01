@@ -456,6 +456,19 @@ public abstract class AbstractJClass extends AbstractJType
     return new JFieldRef (this, aField);
   }
 
+  /**
+   * Method reference for JDK8 (as in <code>String::valueOf</code>).
+   *
+   * @param sMethod
+   *        Method to be referenced
+   * @return Newly created {@link JLambdaMethodRef}
+   */
+  @Nonnull
+  public final JLambdaMethodRef methodRef (@Nonnull final String sMethod)
+  {
+    return new JLambdaMethodRef (this, sMethod);
+  }
+
   public void generate (@Nonnull final JFormatter f)
   {
     f.type (this);

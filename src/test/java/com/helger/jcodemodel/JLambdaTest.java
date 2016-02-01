@@ -121,4 +121,26 @@ public final class JLambdaTest
                   CRLF,
                   CodeModelTestsHelper.toString (aLambda));
   }
+
+  @Test
+  public void testExpressionMethodRef ()
+  {
+    final JCodeModel cm = new JCodeModel ();
+
+    final JLambdaMethodRef aLambda = cm.ref (Object.class).methodRef ("toString");
+    assertEquals ("java.lang.Object::toString", CodeModelTestsHelper.toString (aLambda));
+  }
+
+  @Test
+  public void testExpressionMethodRef2 () throws JClassAlreadyExistsException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
+    final JMethod m = cl.method (JMod.PUBLIC | JMod.STATIC, cm.ref (String.class), "myToString");
+    final JVar p = m.param (Object.class, "obj");
+    m.body ()._return (cm.ref (String.class).staticInvoke ("valueOf").arg (p));
+
+    final JLambdaMethodRef aLambda = new JLambdaMethodRef (m);
+    assertEquals ("com.helger.test.LambdaTest::myToString", CodeModelTestsHelper.toString (aLambda));
+  }
 }
