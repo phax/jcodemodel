@@ -568,7 +568,7 @@ public class JFormatter implements Closeable
   }
 
   /**
-   * Print a String into the stream
+   * Print a String into the stream. Indentation happens automatically.
    *
    * @param s
    *        the String

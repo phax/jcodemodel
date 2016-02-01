@@ -48,6 +48,8 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * A block of Java code, which may contain statements and local declarations.
  * <p>
@@ -101,7 +103,8 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Mark this block virtual or not. Default is <code>false</code>.
+   * Mark this block virtual or not. Default is <code>false</code>. Virtual
+   * blocks NEVER have braces and are never indented!
    *
    * @param bVirtualBlock
    *        <code>true</code> to make this block a virtual block.
@@ -151,11 +154,24 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   protected final <T> T _insert (@Nonnull final T aStatementOrDeclaration)
   {
-    if (aStatementOrDeclaration == null)
-      throw new NullPointerException ("statementOrDeclaration");
+    return _insertAt (m_nPos, aStatementOrDeclaration);
+  }
 
-    m_aContentList.add (m_nPos, aStatementOrDeclaration);
+  @Nonnull
+  protected final <T> T _insertAt (final int nIndex, @Nonnull final T aStatementOrDeclaration)
+  {
+    JCValueEnforcer.isGE0 (nIndex, "Index");
+    JCValueEnforcer.notNull (aStatementOrDeclaration, "StatementOrDeclaration");
+
+    m_aContentList.add (nIndex, aStatementOrDeclaration);
     m_nPos++;
+
+    if (aStatementOrDeclaration instanceof JVar)
+    {
+      m_bBracesRequired = true;
+      m_bIndentRequired = true;
+    }
+
     return aStatementOrDeclaration;
   }
 
@@ -229,7 +245,8 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Adds a local variable declaration to this block
+   * Adds a local variable declaration to this block. This enforces braces and
+   * indentation to be enabled!
    *
    * @param type
    *        JType of the variable
@@ -244,7 +261,8 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Adds a local variable declaration to this block
+   * Adds a local variable declaration to this block. This enforces braces and
+   * indentation to be enabled!
    *
    * @param mods
    *        Modifiers for the variable
@@ -261,7 +279,8 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Adds a local variable declaration to this block
+   * Adds a local variable declaration to this block. This enforces braces and
+   * indentation to be enabled!
    *
    * @param type
    *        JType of the variable
@@ -278,7 +297,8 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Adds a local variable declaration to this block
+   * Adds a local variable declaration to this block. This enforces braces and
+   * indentation to be enabled!
    *
    * @param mods
    *        Modifiers for the variable
@@ -298,19 +318,26 @@ public class JBlock implements IJGenerable, IJStatement
   {
     final JVar v = new JVar (JMods.forVar (mods), type, name, init);
     _insert (v);
-    m_bBracesRequired = true;
-    m_bIndentRequired = true;
     return v;
   }
 
+  /**
+   * Insert a variable before another element of this block. This enforces
+   * braces and indentation to be enabled!
+   *
+   * @param var
+   *        The variable to be inserted. May not be <code>null</code>.
+   * @param before
+   *        The object before the variable should be inserted. If the passed
+   *        object is not contained in this block, an
+   *        {@link IndexOutOfBoundsException} is thrown.
+   * @return this for chaining
+   */
   @Nonnull
   public JBlock insertBefore (@Nonnull final JVar var, @Nonnull final Object before)
   {
     final int i = m_aContentList.indexOf (before);
-    m_aContentList.add (i, var);
-    m_nPos++;
-    m_bBracesRequired = true;
-    m_bIndentRequired = true;
+    _insertAt (i, var);
     return this;
   }
 
@@ -470,17 +497,43 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Adds a statement to this block
+   * Adds an arbitrary statement to this block
    *
    * @param s
-   *        JStatement to be added
-   * @return This block
+   *        {@link IJStatement} to be added. May not be <code>null</code>.
+   * @return this for chaining
    */
   @Nonnull
   public JBlock add (@Nonnull final IJStatement s)
   {
-    // ## Needed?
     _insert (s);
+    return this;
+  }
+
+  /**
+   * Adds an empty single line comment
+   *
+   * @return this for chaining
+   */
+  @Nonnull
+  public JBlock addSingleLineComment ()
+  {
+    return addSingleLineComment ("");
+  }
+
+  /**
+   * Adds a single line comment to this block
+   *
+   * @param sComment
+   *        The comment string to be added. <code>null</code> is ignored, empty
+   *        string lead to an empty single line comment.
+   * @return this for chaining
+   */
+  @Nonnull
+  public JBlock addSingleLineComment (@Nullable final String sComment)
+  {
+    if (sComment != null)
+      _insert (new JSingleLineCommentStatement (sComment));
     return this;
   }
 
@@ -488,8 +541,8 @@ public class JBlock implements IJGenerable, IJStatement
    * Create an If statement and add it to this block
    *
    * @param aTestExpr
-   *        JExpression to be tested to determine branching
-   * @return Newly generated conditional statement
+   *        {@link IJExpression} to be tested to determine branching
+   * @return Newly generated {@link JConditional} statement
    */
   @Nonnull
   public JConditional _if (@Nonnull final IJExpression aTestExpr)
@@ -502,10 +555,10 @@ public class JBlock implements IJGenerable, IJStatement
    * this block
    *
    * @param aTestExpr
-   *        JExpression to be tested to determine branching
+   *        {@link IJExpression} to be tested to determine branching
    * @param aThen
    *        The then-block. May not be <code>null</code>.
-   * @return Newly generated conditional statement
+   * @return Newly generated {@link JConditional} statement
    */
   @Nonnull
   public JConditional _if (@Nonnull final IJExpression aTestExpr, @Nonnull final IJStatement aThen)
@@ -520,12 +573,12 @@ public class JBlock implements IJGenerable, IJStatement
    * it to this block
    *
    * @param aTestExpr
-   *        JExpression to be tested to determine branching
+   *        {@link IJExpression} to be tested to determine branching
    * @param aThen
    *        The then-block. May not be <code>null</code>.
    * @param aElse
    *        The else-block. May not be <code>null</code>.
-   * @return Newly generated conditional statement
+   * @return Newly generated {@link JConditional} statement
    */
   @Nonnull
   public JConditional _if (@Nonnull final IJExpression aTestExpr,
@@ -541,7 +594,8 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Create a For statement and add it to this block
    *
-   * @return Newly generated For statement. Never <code>null</code>.
+   * @return Newly generated {@link JForLoop} statement. Never <code>null</code>
+   *         .
    */
   @Nonnull
   public JForLoop _for ()

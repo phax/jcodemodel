@@ -40,56 +40,61 @@
  */
 package com.helger.jcodemodel;
 
-import static org.junit.Assert.assertEquals;
+import javax.annotation.Nonnull;
 
-import org.junit.Test;
-
-import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
- * {@link JBlock} tests.
+ * This class represents a special single-comment "statement"! This is not an
+ * ideal solution but it gives you an easy way to add single line comments to
+ * generated code.
  *
  * @author Philip Helger
+ * @since 2.8.3
  */
-public final class JBlockTest
+public class JSingleLineCommentStatement implements IJStatement
 {
-  private static final String CRLF = System.getProperty ("line.separator");
+  private String m_sComment;
 
-  @Test
-  public void testBasic ()
+  /**
+   * Constructor.
+   *
+   * @param sComment
+   *        The new comment string. May not be <code>null</code> but maybe
+   *        empty.
+   */
+  public JSingleLineCommentStatement (@Nonnull final String sComment)
   {
-    assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsHelper.toString (new JBlock ()));
-    assertEquals ("{" +
-                  CRLF +
-                  "}" +
-                  CRLF,
-                  CodeModelTestsHelper.toString (new JBlock ().bracesRequired (true).indentRequired (true)));
-    assertEquals ("{" +
-                  CRLF +
-                  "}" +
-                  CRLF,
-                  CodeModelTestsHelper.toString (new JBlock ().bracesRequired (true).indentRequired (false)));
-    assertEquals ("", CodeModelTestsHelper.toString (new JBlock ().bracesRequired (false).indentRequired (true)));
-    assertEquals ("", CodeModelTestsHelper.toString (new JBlock ().bracesRequired (false).indentRequired (false)));
+    comment (sComment);
   }
 
-  @Test
-  public void testCommentOnlyBlock ()
+  /**
+   * @return The current comment string, without the leading "//".
+   */
+  @Nonnull
+  public String comment ()
   {
-    final JBlock aBlock = new JBlock ();
-    aBlock.addSingleLineComment ();
-    aBlock.addSingleLineComment ("This is a comment");
-    aBlock.addSingleLineComment ();
-    assertEquals ("{" +
-                  CRLF +
-                  "    //" +
-                  CRLF +
-                  "    // This is a comment" +
-                  CRLF +
-                  "    //" +
-                  CRLF +
-                  "}" +
-                  CRLF,
-                  CodeModelTestsHelper.toString (aBlock));
+    return m_sComment;
+  }
+
+  /**
+   * Set a new comment string.
+   *
+   * @param sComment
+   *        The new comment string. May not be <code>null</code> but maybe
+   *        empty.
+   */
+  public void comment (@Nonnull final String sComment)
+  {
+    JCValueEnforcer.notNull (sComment, "Comment");
+    m_sComment = sComment;
+  }
+
+  public void state (@Nonnull final JFormatter f)
+  {
+    if (m_sComment.length () > 0)
+      f.print ("// ").print (m_sComment).newline ();
+    else
+      f.print ("//").newline ();
   }
 }

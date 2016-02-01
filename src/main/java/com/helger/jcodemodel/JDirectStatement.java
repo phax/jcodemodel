@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * This class represents a single direct statement. A direct statement is a
  * statement that is neither parsed not evaluated! Handle with care!
@@ -53,7 +55,7 @@ public final class JDirectStatement implements IJStatement
 {
   private String m_sSource;
 
-  public JDirectStatement (final String sSource)
+  public JDirectStatement (@Nonnull final String sSource)
   {
     source (sSource);
   }
@@ -64,10 +66,9 @@ public final class JDirectStatement implements IJStatement
     return m_sSource;
   }
 
-  public void source (final String sSource)
+  public void source (@Nonnull final String sSource)
   {
-    if (sSource == null)
-      throw new NullPointerException ("Source");
+    JCValueEnforcer.notNull (sSource, "Source");
     m_sSource = sSource;
   }
 
