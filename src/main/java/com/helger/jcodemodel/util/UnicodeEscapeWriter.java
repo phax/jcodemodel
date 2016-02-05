@@ -89,7 +89,7 @@ public class UnicodeEscapeWriter extends FilterWriter
 
   /**
    * Can be overridden.
-   * 
+   *
    * @param ch
    *        Character to check
    * @return true if the character needs to be escaped.

@@ -65,7 +65,7 @@ public class JCase implements IJStatement
 
   /**
    * Construct a case statement
-   * 
+   *
    * @param label
    *        Label name. May not be <code>null</code>.
    */

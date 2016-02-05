@@ -40,13 +40,9 @@
  */
 package com.helger.jcodemodel.meta;
 
-import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.AbstractJType;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JTypeWildcard;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
@@ -59,6 +55,12 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVariable;
 import javax.lang.model.type.WildcardType;
 import javax.lang.model.util.AbstractTypeVisitor6;
+
+import com.helger.jcodemodel.AbstractJClass;
+import com.helger.jcodemodel.AbstractJType;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JTypeWildcard;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
@@ -158,8 +160,8 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
   @Override
   public AbstractJType visitError (final ErrorType t, final Void p)
   {
-    String typeName = t.asElement ().getSimpleName ().toString ();
-    String fullTypeName = _environment.packageName () + "." + typeName;
+    final String typeName = t.asElement ().getSimpleName ().toString ();
+    final String fullTypeName = _environment.packageName () + "." + typeName;
     final JDefinedClass jCodeModelClass = _codeModel._getClass (fullTypeName);
     if (jCodeModelClass != null)
     {
@@ -185,7 +187,9 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
       return jCodeModelClass.narrow (jArguments);
     }
     if (_errorTypePolicy.action () == ErrorTypePolicy.EAction.CREATE_ERROR_TYPE)
-      return _codeModel.errorClass (typeName + " in annotated source code", typeName.equals ("<any>") ? null : typeName);
+      return _codeModel.errorClass (typeName +
+                                    " in annotated source code",
+                                    typeName.equals ("<any>") ? null : typeName);
     try
     {
       throw new ErrorTypeFound (typeName + " in annotated source code");

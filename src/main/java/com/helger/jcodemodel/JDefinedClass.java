@@ -67,7 +67,8 @@ import com.helger.jcodemodel.util.ClassNameComparator;
  * {@link #method(int, AbstractJType, String)} and
  * {@link #field(int, AbstractJType, String)}.
  */
-public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> implements IJDeclaration, IJGenerifiable, IJAnnotatable, IJDocCommentable
+public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
+                           implements IJDeclaration, IJGenerifiable, IJAnnotatable, IJDocCommentable
 {
   /**
    * Modifiers for the class declaration
@@ -788,15 +789,15 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   @Nullable
-  public JAnnotationUse getAnnotation (Class<?> annotationClass)
+  public JAnnotationUse getAnnotation (final Class <?> annotationClass)
   {
-    for (JAnnotationUse jannotation: m_aAnnotations)
+    for (final JAnnotationUse jannotation : m_aAnnotations)
     {
-      AbstractJClass jannotationClass = jannotation.getAnnotationClass();
-      if (!jannotationClass.isError())
+      final AbstractJClass jannotationClass = jannotation.getAnnotationClass ();
+      if (!jannotationClass.isError ())
       {
-        String qualifiedName = jannotationClass.fullName();
-        if (qualifiedName != null && qualifiedName.equals(annotationClass.getName()))
+        final String qualifiedName = jannotationClass.fullName ();
+        if (qualifiedName != null && qualifiedName.equals (annotationClass.getName ()))
         {
           return jannotation;
         }

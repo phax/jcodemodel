@@ -204,22 +204,22 @@ public class JFormatter implements Closeable
 
   private static enum EMode
   {
-   /**
-    * Collect all the type names and identifiers. In this mode we don't actually
-    * generate anything.
-    */
+    /**
+     * Collect all the type names and identifiers. In this mode we don't
+     * actually generate anything.
+     */
     COLLECTING,
-   /**
-    * Print the actual source code.
-    */
+    /**
+     * Print the actual source code.
+     */
     PRINTING,
 
-   /**
-    * Find any error types in output code. In this mode we don't actually
-    * generate anything. <br/>
-    * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass)
-    * containsErrorTypes} method
-    */
+    /**
+     * Find any error types in output code. In this mode we don't actually
+     * generate anything. <br/>
+     * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass)
+     * containsErrorTypes} method
+     */
     FIND_ERROR_TYPES
   }
 

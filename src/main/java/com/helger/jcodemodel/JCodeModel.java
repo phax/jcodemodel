@@ -488,7 +488,7 @@ public final class JCodeModel
 
   /**
    * Set the charset to be used for emitting files.
-   * 
+   *
    * @param aCharset
    *        The charset to be used. May be <code>null</code> to indicate the use
    *        of the system default.

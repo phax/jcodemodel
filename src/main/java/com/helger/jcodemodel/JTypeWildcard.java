@@ -61,23 +61,23 @@ public class JTypeWildcard extends AbstractJClass
 {
   public static enum EBoundMode
   {
-   EXTENDS ("? extends "),
-   SUPER ("? super ");
+    EXTENDS ("? extends "),
+    SUPER ("? super ");
 
     /**
      * The keyword used to declare this type.
      */
-    private final String _declarationTokens;
+    private final String m_sDeclarationTokens;
 
     private EBoundMode (@Nonnull final String token)
     {
-      _declarationTokens = token;
+      m_sDeclarationTokens = token;
     }
 
     @Nonnull
     public String declarationTokens ()
     {
-      return _declarationTokens;
+      return m_sDeclarationTokens;
     }
   }
 
@@ -105,9 +105,9 @@ public class JTypeWildcard extends AbstractJClass
   }
 
   @Override
-  public boolean containsTypeVar (JTypeVar var)
+  public boolean containsTypeVar (@Nullable final JTypeVar aVar)
   {
-    return m_aBoundClass.containsTypeVar (var);
+    return m_aBoundClass.containsTypeVar (aVar);
   }
 
   @Nonnull
@@ -152,7 +152,6 @@ public class JTypeWildcard extends AbstractJClass
   /**
    * Returns the interface bounds of this variable.
    */
-
   @Override
   @Nonnull
   public Iterator <AbstractJClass> _implements ()

@@ -48,7 +48,8 @@ import javax.annotation.Nonnull;
  *
  * @author Philip Helger
  */
-public abstract class AbstractJExpressionAssignmentTargetImpl extends AbstractJExpressionImpl implements IJAssignmentTarget
+public abstract class AbstractJExpressionAssignmentTargetImpl extends AbstractJExpressionImpl
+                                                              implements IJAssignmentTarget
 {
   @Nonnull
   public JAssignment assign (@Nonnull final IJExpression rhs)

@@ -58,8 +58,8 @@ public class JWhileLoop implements IJStatement
   private JBlock m_aBody;
 
   /**
-   * Construct a While statment
-   * 
+   * Construct a While statement
+   *
    * @param aTestExpr
    *        Test expression to use.
    */

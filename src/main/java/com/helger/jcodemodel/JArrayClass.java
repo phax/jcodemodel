@@ -45,6 +45,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
@@ -65,9 +66,9 @@ public class JArrayClass extends AbstractJClass
   }
 
   @Override
-  public boolean containsTypeVar (JTypeVar var)
+  public boolean containsTypeVar (@Nullable final JTypeVar aVar)
   {
-    return m_aComponentType.containsTypeVar (var);
+    return m_aComponentType.containsTypeVar (aVar);
   }
 
   @Override

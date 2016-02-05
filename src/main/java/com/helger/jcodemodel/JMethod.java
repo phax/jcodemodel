@@ -124,7 +124,10 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @param sName
    *        Name of this method
    */
-  protected JMethod (@Nonnull final JDefinedClass aOwningClass, final int mods, final AbstractJType aReturnType, final String sName)
+  protected JMethod (@Nonnull final JDefinedClass aOwningClass,
+                     final int mods,
+                     final AbstractJType aReturnType,
+                     final String sName)
   {
     m_aMods = JMods.forMethod (mods);
     m_aReturnType = aReturnType;

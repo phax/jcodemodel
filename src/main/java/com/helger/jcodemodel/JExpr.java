@@ -467,7 +467,7 @@ public final class JExpr
    * <p>
    * Be warned that there is a danger in using this method, as it obfuscates the
    * object model.
-   * 
+   *
    * @param source
    *        Java source code
    * @return Direct expression

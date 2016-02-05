@@ -55,7 +55,8 @@ import javax.annotation.Nullable;
  *
  * @author Philip Helger
  */
-public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends AbstractJClass implements IJClassContainer <CLASSTYPE>
+public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>>
+                                              extends AbstractJClass implements IJClassContainer <CLASSTYPE>
 {
   /**
    * If this is a package-member class, this is {@link JPackage}. If this is a

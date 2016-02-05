@@ -174,7 +174,7 @@ public class JCommentPart extends ArrayList <Object>
 
   /**
    * Escapes the appearance of the comment terminator.
-   * 
+   *
    * @param sText
    *        Source text
    * @return Escaped text

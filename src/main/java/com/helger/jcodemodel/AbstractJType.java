@@ -199,9 +199,10 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   }
 
   /**
-   * @return type that can be used to declare method result or variable.
-   *         This is only relevant for wildcards types that can't be used in such context
-   *         in which case this method returns the bound of wildcard type.
+   * @return type that can be used to declare method result or variable. This is
+   *         only relevant for wildcards types that can't be used in such
+   *         context in which case this method returns the bound of wildcard
+   *         type.
    */
   @Nonnull
   public AbstractJType declarable ()
@@ -233,13 +234,17 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     throw new IllegalArgumentException ("Not an array type: " + fullName ());
   }
 
-  @Override
-  public String toString ()
+  /**
+   * Check if this class is a generic class and contains the passed type
+   * variable.
+   * 
+   * @param aVar
+   *        The type variable to check. May be <code>null</code>.
+   * @return <code>true</code> if the passed type variable is contained,
+   *         <code>false</code> otherwise.
+   */
+  public boolean containsTypeVar (@Nullable final JTypeVar aVar)
   {
-    return this.getClass ().getName () + '(' + fullName () + ')';
-  }
-
-  public boolean containsTypeVar (JTypeVar var) {
     return false;
   }
 
@@ -365,5 +370,11 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     }
 
     return false;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return this.getClass ().getName () + '(' + fullName () + ')';
   }
 }

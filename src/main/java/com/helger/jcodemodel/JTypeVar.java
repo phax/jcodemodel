@@ -41,6 +41,8 @@
 package com.helger.jcodemodel;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,8 +50,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.JCValueEnforcer;
-import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Type variable used to declare generics.
@@ -69,9 +69,9 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  public boolean containsTypeVar (JTypeVar var)
+  public boolean containsTypeVar (@Nullable final JTypeVar aVar)
   {
-    return this == var;
+    return this == aVar;
   }
 
   @Override
@@ -116,9 +116,9 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    * @return this
    */
   @Nonnull
-  public Collection<? extends AbstractJClass> bounds ()
+  public Collection <? extends AbstractJClass> bounds ()
   {
-    return Collections.unmodifiableList (new ArrayList<AbstractJClass> (m_aBounds));
+    return Collections.unmodifiableList (new ArrayList <AbstractJClass> (m_aBounds));
   }
 
   /**
@@ -133,7 +133,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   {
     JCValueEnforcer.notNull (sourceTypeParameter, "sourceTypeParameter");
 
-    for (AbstractJClass bound: sourceTypeParameter.bounds())
+    for (final AbstractJClass bound : sourceTypeParameter.bounds ())
       bound (bound);
     return this;
   }

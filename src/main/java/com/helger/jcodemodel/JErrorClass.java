@@ -42,6 +42,7 @@ package com.helger.jcodemodel;
 
 import java.util.Iterator;
 import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -73,10 +74,7 @@ public class JErrorClass extends AbstractJClass
   private final String m_sMessage;
   private final String m_sName;
 
-  protected JErrorClass (
-    @Nonnull final JCodeModel _owner,
-    @Nonnull final String sMessage,
-    @Nullable final String sName)
+  protected JErrorClass (@Nonnull final JCodeModel _owner, @Nonnull final String sMessage, @Nullable final String sName)
   {
     super (_owner);
     m_sMessage = sMessage;

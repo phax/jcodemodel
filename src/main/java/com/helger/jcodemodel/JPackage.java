@@ -64,7 +64,13 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
 /**
  * A Java package.
  */
-public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <JDefinedClass>, IJAnnotatable, Comparable <JPackage>, IJDocCommentable
+public class JPackage implements
+                      IJDeclaration,
+                      IJGenerable,
+                      IJClassContainer <JDefinedClass>,
+                      IJAnnotatable,
+                      Comparable <JPackage>,
+                      IJDocCommentable
 {
   /**
    * Name of the package. May be the empty string for the root package.

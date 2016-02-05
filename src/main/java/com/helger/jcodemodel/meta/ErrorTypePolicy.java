@@ -72,8 +72,8 @@ public class ErrorTypePolicy
 {
   public static enum EAction
   {
-   THROW_EXCEPTION,
-   CREATE_ERROR_TYPE
+    THROW_EXCEPTION,
+    CREATE_ERROR_TYPE
   }
 
   private final EAction _action;

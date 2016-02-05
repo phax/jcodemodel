@@ -58,11 +58,11 @@ public class JNarrowedClass extends AbstractJClass
   /**
    * A generic class with type parameters.
    */
-  private final AbstractJClass _basis;
+  private final AbstractJClass m_aBasis;
   /**
    * Arguments to those parameters.
    */
-  private final List <? extends AbstractJClass> _args;
+  private final List <? extends AbstractJClass> m_aArgs;
 
   public JNarrowedClass (@Nonnull final AbstractJClass basis, @Nonnull final AbstractJClass arg)
   {
@@ -76,27 +76,25 @@ public class JNarrowedClass extends AbstractJClass
       throw new IllegalArgumentException ("basis may not be a narrowed class: " + basis);
     if (args == null || args.isEmpty ())
       throw new IllegalArgumentException ("Arguments are missing");
-    _basis = basis;
-    _args = args;
+    m_aBasis = basis;
+    m_aArgs = args;
   }
 
   @Override
-  public boolean containsTypeVar (JTypeVar var)
+  public boolean containsTypeVar (@Nullable final JTypeVar aVar)
   {
-    if (_basis.containsTypeVar (var))
+    if (m_aBasis.containsTypeVar (aVar))
       return true;
-    for (AbstractJClass argument: _args)
-    {
-      if (argument.containsTypeVar (var))
+    for (final AbstractJClass aArg : m_aArgs)
+      if (aArg.containsTypeVar (aVar))
         return true;
-    }
     return false;
   }
 
   @Nonnull
   public AbstractJClass basis ()
   {
-    return _basis;
+    return m_aBasis;
   }
 
   @Override
@@ -105,9 +103,9 @@ public class JNarrowedClass extends AbstractJClass
     if (clazz == null)
       throw new IllegalArgumentException ("Narrowing class is missing");
 
-    final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (_args);
+    final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (m_aArgs);
     newArgs.add (clazz);
-    return new JNarrowedClass (_basis, newArgs);
+    return new JNarrowedClass (m_aBasis, newArgs);
   }
 
   @Override
@@ -116,19 +114,19 @@ public class JNarrowedClass extends AbstractJClass
     if (clazz == null || clazz.length == 0)
       throw new IllegalArgumentException ("Narrowing classes are missing");
 
-    final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (_args);
+    final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (m_aArgs);
     for (final AbstractJClass aClass : clazz)
       newArgs.add (aClass);
-    return new JNarrowedClass (_basis, newArgs);
+    return new JNarrowedClass (m_aBasis, newArgs);
   }
 
   @Override
   public String name ()
   {
     final StringBuilder buf = new StringBuilder ();
-    buf.append (_basis.name ()).append ('<');
+    buf.append (m_aBasis.name ()).append ('<');
     boolean first = true;
-    for (final AbstractJClass c : _args)
+    for (final AbstractJClass c : m_aArgs)
     {
       if (first)
         first = false;
@@ -145,13 +143,13 @@ public class JNarrowedClass extends AbstractJClass
   public String fullName ()
   {
     final StringBuilder buf = new StringBuilder ();
-    buf.append (_basis.fullName ());
+    buf.append (m_aBasis.fullName ());
     buf.append ('<');
-    boolean first = true;
-    for (final AbstractJClass c : _args)
+    boolean bFirst = true;
+    for (final AbstractJClass c : m_aArgs)
     {
-      if (first)
-        first = false;
+      if (bFirst)
+        bFirst = false;
       else
         buf.append (',');
       buf.append (c.fullName ());
@@ -164,13 +162,13 @@ public class JNarrowedClass extends AbstractJClass
   public String binaryName ()
   {
     final StringBuilder buf = new StringBuilder ();
-    buf.append (_basis.binaryName ());
+    buf.append (m_aBasis.binaryName ());
     buf.append ('<');
-    boolean first = true;
-    for (final AbstractJClass c : _args)
+    boolean bFirst = true;
+    for (final AbstractJClass c : m_aArgs)
     {
-      if (first)
-        first = false;
+      if (bFirst)
+        bFirst = false;
       else
         buf.append (',');
       buf.append (c.binaryName ());
@@ -182,16 +180,16 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public void generate (final JFormatter f)
   {
-    f.type (_basis).print ('<').generable (_args).print (JFormatter.CLOSE_TYPE_ARGS);
+    f.type (m_aBasis).print ('<').generable (m_aArgs).print (JFormatter.CLOSE_TYPE_ARGS);
   }
 
   @Override
   void printLink (final JFormatter f)
   {
-    _basis.printLink (f);
+    m_aBasis.printLink (f);
     f.print ("{@code <}");
     boolean first = true;
-    for (final AbstractJClass c : _args)
+    for (final AbstractJClass c : m_aArgs)
     {
       if (first)
         first = false;
@@ -206,17 +204,17 @@ public class JNarrowedClass extends AbstractJClass
   @Nonnull
   public JPackage _package ()
   {
-    return _basis._package ();
+    return m_aBasis._package ();
   }
 
   @Override
   @Nullable
   public AbstractJClass _extends ()
   {
-    final AbstractJClass base = _basis._extends ();
+    final AbstractJClass base = m_aBasis._extends ();
     if (base == null)
       return base;
-    return base.substituteParams (_basis.typeParams (), _args);
+    return base.substituteParams (m_aBasis.typeParams (), m_aArgs);
   }
 
   @Override
@@ -225,7 +223,7 @@ public class JNarrowedClass extends AbstractJClass
   {
     return new Iterator <AbstractJClass> ()
     {
-      private final Iterator <AbstractJClass> core = _basis._implements ();
+      private final Iterator <AbstractJClass> core = m_aBasis._implements ();
 
       public void remove ()
       {
@@ -234,7 +232,7 @@ public class JNarrowedClass extends AbstractJClass
 
       public AbstractJClass next ()
       {
-        return core.next ().substituteParams (_basis.typeParams (), _args);
+        return core.next ().substituteParams (m_aBasis.typeParams (), m_aArgs);
       }
 
       public boolean hasNext ()
@@ -248,19 +246,19 @@ public class JNarrowedClass extends AbstractJClass
   @Nonnull
   public AbstractJClass erasure ()
   {
-    return _basis;
+    return m_aBasis;
   }
 
   @Override
   public boolean isInterface ()
   {
-    return _basis.isInterface ();
+    return m_aBasis.isInterface ();
   }
 
   @Override
   public boolean isAbstract ()
   {
-    return _basis.isAbstract ();
+    return m_aBasis.isAbstract ();
   }
 
   @Override
@@ -272,9 +270,9 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public boolean isError ()
   {
-    if (_basis.isError ())
+    if (m_aBasis.isError ())
       return true;
-    for (final AbstractJClass aClass : _args)
+    for (final AbstractJClass aClass : m_aArgs)
     {
       if (aClass.isError ())
         return true;
@@ -285,18 +283,18 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public List <? extends AbstractJClass> getTypeParameters ()
   {
-    return _args;
+    return m_aArgs;
   }
 
   @Override
   protected AbstractJClass substituteParams (final JTypeVar [] variables,
                                              final List <? extends AbstractJClass> bindings)
   {
-    final AbstractJClass b = _basis.substituteParams (variables, bindings);
-    boolean different = b != _basis;
+    final AbstractJClass b = m_aBasis.substituteParams (variables, bindings);
+    boolean different = b != m_aBasis;
 
-    final List <AbstractJClass> clazz = new ArrayList <AbstractJClass> (_args.size ());
-    for (final AbstractJClass aClass : _args)
+    final List <AbstractJClass> clazz = new ArrayList <AbstractJClass> (m_aArgs.size ());
+    for (final AbstractJClass aClass : m_aArgs)
     {
       final AbstractJClass c = aClass.substituteParams (variables, bindings);
       clazz.add (c);
@@ -322,12 +320,12 @@ public class JNarrowedClass extends AbstractJClass
     if (obj == null || !getClass ().equals (obj.getClass ()))
       return false;
     final JNarrowedClass that = (JNarrowedClass) obj;
-    return _basis.equals (that._basis) && _args.equals (that._args);
+    return m_aBasis.equals (that.m_aBasis) && m_aArgs.equals (that.m_aArgs);
   }
 
   @Override
   public int hashCode ()
   {
-    return _basis.hashCode () * 37 + _args.hashCode ();
+    return m_aBasis.hashCode () * 37 + m_aArgs.hashCode ();
   }
 }
