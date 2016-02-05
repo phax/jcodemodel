@@ -98,6 +98,19 @@ public class JTypeWildcard extends AbstractJClass
   }
 
   @Nonnull
+  @Override
+  public AbstractJType declarable ()
+  {
+    return m_aBoundClass;
+  }
+
+  @Override
+  public boolean containsTypeVar (JTypeVar var)
+  {
+    return m_aBoundClass.containsTypeVar (var);
+  }
+
+  @Nonnull
   public EBoundMode boundMode ()
   {
     return m_eBoundMode;

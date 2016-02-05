@@ -174,9 +174,7 @@ class DecidedErrorTypesModelsAdapter
             return innerClass;
           }
         }
-        throw new IllegalStateException (MessageFormat.format ("Inner class should always be defined if outer class is defined: inner class {0}, enclosing class {1}",
-                                                               element,
-                                                               enclosingClass));
+        throw new CodeModelBuildingException("Can't define inner class " + element.getQualifiedName () + ": enclosing class " + enclosingClass.fullName() + " already defined", new JClassAlreadyExistsException(enclosingClass));
       }
       else
         throw new IllegalStateException ("Enclosing element should be package or class");
@@ -264,7 +262,8 @@ class DecidedErrorTypesModelsAdapter
   {
     for (final JDefinedClass innerClass : enclosingClass.classes ())
     {
-      if (innerClass.fullName ().equals (element.getQualifiedName ().toString ()))
+      String innerClassName = innerClass.fullName ();
+      if (innerClassName != null && innerClassName.equals (element.getQualifiedName ().toString ()))
       {
         final ClassFiller filler = new ClassFiller (_codeModel, this, innerClass);
         filler.fillClass (element, environment);

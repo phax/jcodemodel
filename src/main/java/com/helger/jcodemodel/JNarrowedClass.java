@@ -80,6 +80,19 @@ public class JNarrowedClass extends AbstractJClass
     _args = args;
   }
 
+  @Override
+  public boolean containsTypeVar (JTypeVar var)
+  {
+    if (_basis.containsTypeVar (var))
+      return true;
+    for (AbstractJClass argument: _args)
+    {
+      if (argument.containsTypeVar (var))
+        return true;
+    }
+    return false;
+  }
+
   @Nonnull
   public AbstractJClass basis ()
   {

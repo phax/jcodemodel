@@ -57,4 +57,8 @@ public class CodeModelBuildingException extends Exception
   {
     super (ex);
   }
+
+  CodeModelBuildingException(String message, JClassAlreadyExistsException exception) {
+    super (message, exception);
+  }
 }
