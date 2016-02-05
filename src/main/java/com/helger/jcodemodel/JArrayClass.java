@@ -65,6 +65,12 @@ public class JArrayClass extends AbstractJClass
   }
 
   @Override
+  public boolean containsTypeVar (JTypeVar var)
+  {
+    return m_aComponentType.containsTypeVar (var);
+  }
+
+  @Override
   @Nonnull
   public String name ()
   {

@@ -787,6 +787,24 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     return Collections.unmodifiableCollection (m_aAnnotations);
   }
 
+  @Nullable
+  public JAnnotationUse getAnnotation (Class<?> annotationClass)
+  {
+    for (JAnnotationUse jannotation: m_aAnnotations)
+    {
+      AbstractJClass jannotationClass = jannotation.getAnnotationClass();
+      if (!jannotationClass.isError())
+      {
+        String qualifiedName = jannotationClass.fullName();
+        if (qualifiedName != null && qualifiedName.equals(annotationClass.getName()))
+        {
+          return jannotation;
+        }
+      }
+    }
+    return null;
+  }
+
   /**
    * @return the current modifiers of this class. Always return non-null valid
    *         object.

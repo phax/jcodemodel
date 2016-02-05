@@ -199,6 +199,17 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   }
 
   /**
+   * @return type that can be used to declare method result or variable.
+   *         This is only relevant for wildcards types that can't be used in such context
+   *         in which case this method returns the bound of wildcard type.
+   */
+  @Nonnull
+  public AbstractJType declarable ()
+  {
+    return this;
+  }
+
+  /**
    * @return <code>true</code> if this is a referenced type (which means it is
    *         not a primitive type).
    */
@@ -226,6 +237,10 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   public String toString ()
   {
     return this.getClass ().getName () + '(' + fullName () + ')';
+  }
+
+  public boolean containsTypeVar (JTypeVar var) {
+    return false;
   }
 
   /**
