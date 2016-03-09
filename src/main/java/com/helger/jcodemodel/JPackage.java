@@ -149,7 +149,7 @@ public class JPackage implements
 
     final int idx = m_sName.lastIndexOf ('.');
     if (idx < 0)
-      return null;
+      return m_aOwner.rootPackage();
     return m_aOwner._package (m_sName.substring (0, idx));
   }
 
