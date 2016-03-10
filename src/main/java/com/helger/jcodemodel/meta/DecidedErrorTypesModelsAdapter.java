@@ -238,7 +238,8 @@ class DecidedErrorTypesModelsAdapter
     for (final Element enclosedElement : element.getEnclosedElements ())
     {
       if (enclosedElement.getKind ().equals (ElementKind.INTERFACE) ||
-          enclosedElement.getKind ().equals (ElementKind.CLASS))
+          enclosedElement.getKind ().equals (ElementKind.CLASS) ||
+          enclosedElement.getKind ().equals (ElementKind.ANNOTATION_TYPE))
       {
         final EClassType classType = toClassType (enclosedElement.getKind ());
         int modifiers = toJMod (enclosedElement.getModifiers ());
