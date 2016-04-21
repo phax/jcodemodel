@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
@@ -80,5 +81,14 @@ public final class JCodeModelTest
   {
     final JCodeModel cm = new JCodeModel ();
     assertSame (cm.INT, cm._ref (int.class));
+  }
+
+  @Test
+  public void testCODEMODEL24 () throws JClassAlreadyExistsException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass jClass = cm._class ("dummy", EClassType.INTERFACE);
+    assertEquals ("dummy", jClass.name ());
+    assertEquals (EClassType.INTERFACE, jClass.getClassType ());
   }
 }
