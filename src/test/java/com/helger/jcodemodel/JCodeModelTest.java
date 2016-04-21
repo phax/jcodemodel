@@ -44,6 +44,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import java.io.IOException;
+import java.util.Map;
+
 import org.junit.Test;
 
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
@@ -90,5 +93,15 @@ public final class JCodeModelTest
     final JDefinedClass jClass = cm._class ("dummy", EClassType.INTERFACE);
     assertEquals ("dummy", jClass.name ());
     assertEquals (EClassType.INTERFACE, jClass.getClassType ());
+  }
+
+  @Test
+  public void testEmptyNarrowed () throws JClassAlreadyExistsException, IOException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass jClass = cm._class ("EmptyNarrowed", EClassType.INTERFACE);
+    final AbstractJClass hashMap = cm.ref (java.util.HashMap.class).narrowEmpty ();
+    jClass.field (JMod.PRIVATE, cm.ref (Map.class).narrow (String.class), "strMap", JExpr._new (hashMap));
+    CodeModelTestsHelper.printCodeModel (cm);
   }
 }

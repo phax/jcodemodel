@@ -48,6 +48,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Represents X&lt;Y&gt;. TODO: consider separating the decl and the use.
  *
@@ -74,8 +76,7 @@ public class JNarrowedClass extends AbstractJClass
     super (basis.owner ());
     if (basis instanceof JNarrowedClass)
       throw new IllegalArgumentException ("basis may not be a narrowed class: " + basis);
-    if (args == null || args.isEmpty ())
-      throw new IllegalArgumentException ("Arguments are missing");
+    JCValueEnforcer.notNull (args, "NarrowingClass");
     m_aBasis = basis;
     m_aArgs = args;
   }
@@ -100,8 +101,7 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public JNarrowedClass narrow (@Nonnull final AbstractJClass clazz)
   {
-    if (clazz == null)
-      throw new IllegalArgumentException ("Narrowing class is missing");
+    JCValueEnforcer.notNull (clazz, "NarrowingClass");
 
     final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (m_aArgs);
     newArgs.add (clazz);
@@ -111,8 +111,7 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public JNarrowedClass narrow (@Nonnull final AbstractJClass... clazz)
   {
-    if (clazz == null || clazz.length == 0)
-      throw new IllegalArgumentException ("Narrowing classes are missing");
+    JCValueEnforcer.notNull (clazz, "NarrowingClass");
 
     final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (m_aArgs);
     for (final AbstractJClass aClass : clazz)

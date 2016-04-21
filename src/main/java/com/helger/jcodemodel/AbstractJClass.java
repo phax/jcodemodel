@@ -298,17 +298,23 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public AbstractJClass narrow (@Nonnull final AbstractJClass... clazz)
   {
-    if (clazz.length == 0)
-      return this;
     return new JNarrowedClass (this, Arrays.asList (clazz.clone ()));
   }
 
   @Nonnull
   public AbstractJClass narrow (@Nonnull final List <? extends AbstractJClass> clazz)
   {
-    if (clazz.isEmpty ())
-      return this;
     return new JNarrowedClass (this, new ArrayList <AbstractJClass> (clazz));
+  }
+
+  /**
+   * @return A narrowed type without any type parameter (as in
+   *         <code>HashMap&lt;&gt;</code>)
+   */
+  @Nonnull
+  public AbstractJClass narrowEmpty ()
+  {
+    return new JNarrowedClass (this, new ArrayList <AbstractJClass> ());
   }
 
   /**
