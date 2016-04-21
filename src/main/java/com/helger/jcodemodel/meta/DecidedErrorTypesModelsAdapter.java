@@ -46,6 +46,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
@@ -110,6 +111,9 @@ class DecidedErrorTypesModelsAdapter
         case VOLATILE:
           modifiers |= JMod.VOLATILE;
           break;
+        case STRICTFP:
+          modifiers |= JMod.STRICTFP;
+          break;
         default:
           logger.log (Level.WARNING, "Skpping unsupported modifier: {0}", modifier);
       }
@@ -117,7 +121,7 @@ class DecidedErrorTypesModelsAdapter
     return modifiers;
   }
 
-  private static EClassType toClassType (final ElementKind kind)
+  private static EClassType toClassType (@Nonnull final ElementKind kind)
   {
     switch (kind)
     {

@@ -162,6 +162,16 @@ public class JMods implements IJGenerable
     _setFlag (JMod.SYNCHRONIZED, bNewValue);
   }
 
+  public boolean isStrictFP ()
+  {
+    return (m_nMods & JMod.STRICTFP) != 0;
+  }
+
+  public void setStrictFP (final boolean bNewValue)
+  {
+    _setFlag (JMod.STRICTFP, bNewValue);
+  }
+
   /**
    * @return <code>true</code> if this is a Java8 interface default method.
    */
@@ -242,6 +252,8 @@ public class JMods implements IJGenerable
       f.print ("volatile");
     if ((m_nMods & JMod.DEFAULT) != 0)
       f.print ("default");
+    if ((m_nMods & JMod.STRICTFP) != 0)
+      f.print ("strictfp");
   }
 
   @Override

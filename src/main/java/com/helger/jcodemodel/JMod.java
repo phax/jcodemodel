@@ -61,6 +61,7 @@ public final class JMod
   public static final int VOLATILE = 0x200;
   /** Java8 default method indicator */
   public static final int DEFAULT = 0x400;
+  public static final int STRICTFP = 0x800;
 
   private JMod ()
   {}
