@@ -53,6 +53,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.ClassNameComparator;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Java method.
@@ -116,19 +117,22 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * Constructor for regular methods
    *
    * @param aOwningClass
-   *        Outer class
+   *        Outer class. May not be <code>null</code>.
    * @param mods
    *        Modifiers for this method's declaration
    * @param aReturnType
-   *        Return type for the method
+   *        Return type for the method. May not be <code>null</code>.
    * @param sName
-   *        Name of this method
+   *        Name of this method. May neither be <code>null</code> nor empty.
    */
   protected JMethod (@Nonnull final JDefinedClass aOwningClass,
                      final int mods,
-                     final AbstractJType aReturnType,
-                     final String sName)
+                     @Nonnull final AbstractJType aReturnType,
+                     @Nonnull final String sName)
   {
+    JCValueEnforcer.notNull (aOwningClass, "OwningClass");
+    JCValueEnforcer.notNull (aReturnType, "ReturnType");
+    JCValueEnforcer.notEmpty (sName, "Name");
     m_aMods = JMods.forMethod (mods);
     m_aReturnType = aReturnType;
     m_sName = sName;
@@ -141,10 +145,11 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @param mods
    *        Modifiers for this constructor's declaration
    * @param aClass
-   *        JClass containing this constructor
+   *        Class containing this constructor. May not be <code>null</code>.
    */
   protected JMethod (final int mods, @Nonnull final JDefinedClass aClass)
   {
+    JCValueEnforcer.notNull (aClass, "Class");
     m_aMods = JMods.forMethod (mods);
     m_aReturnType = null;
     m_sName = aClass.name ();

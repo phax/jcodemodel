@@ -529,7 +529,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
    * @return Newly generated {@link JMethod}
    */
   @Nonnull
-  public JMethod method (final int mods, final AbstractJType type, final String name)
+  public JMethod method (final int mods, @Nonnull final AbstractJType type, @Nonnull final String name)
   {
     // XXX problems caught in M constructor
     final JMethod m = new JMethod (this, mods, type, name);
