@@ -124,6 +124,15 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   }
 
   /**
+   * @return The init expression. May be <code>null</code>.
+   */
+  @Nullable
+  public IJExpression init ()
+  {
+    return m_aInitExpr;
+  }
+
+  /**
    * Get the name of this variable
    *
    * @return Name of the variable
