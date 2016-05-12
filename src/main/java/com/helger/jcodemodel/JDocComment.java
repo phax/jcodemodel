@@ -166,10 +166,10 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * add an @throws tag to the javadoc
+   * add a @throws tag to the javadoc
    *
    * @param exception
-   *        Exception to be added
+   *        Exception to be added. May not be <code>null</code>.
    * @return New {@link JCommentPart}
    */
   public JCommentPart addThrows (@Nonnull final Class <? extends Throwable> exception)
@@ -178,13 +178,13 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * add an @throws tag to the javadoc
+   * add a @throws tag to the javadoc
    *
    * @param exception
-   *        Exception to be added
+   *        Exception to be added. May not be <code>null</code>.
    * @return New {@link JCommentPart}
    */
-  public JCommentPart addThrows (final AbstractJClass exception)
+  public JCommentPart addThrows (@Nonnull final AbstractJClass exception)
   {
     JCommentPart p = m_aAtThrows.get (exception);
     if (p == null)
@@ -346,51 +346,56 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   public void generate (@Nonnull final JFormatter f)
   {
-    // I realized that we can't use StringTokenizer because
-    // this will recognize multiple \n as one token.
+    if (!m_aAtParams.isEmpty () ||
+        m_aAtReturn != null ||
+        m_aAtAuthor != null ||
+        !m_aAtThrows.isEmpty () ||
+        m_aAtDeprecated != null ||
+        !m_aAtXdoclets.isEmpty ())
+    {
+      f.print ("/**").newline ();
 
-    f.print ("/**").newline ();
+      format (f, " * ");
 
-    format (f, " * ");
-
-    f.print (" * ").newline ();
-    for (final Map.Entry <String, JCommentPart> e : m_aAtParams.entrySet ())
-    {
-      f.print (" * @param ").print (e.getKey ()).newline ();
-      e.getValue ().format (f, INDENT);
-    }
-    if (m_aAtReturn != null)
-    {
-      f.print (" * @return").newline ();
-      m_aAtReturn.format (f, INDENT);
-    }
-    if (m_aAtAuthor != null)
-    {
-      f.print (" * @author").newline ();
-      m_aAtAuthor.format (f, INDENT);
-    }
-    for (final Map.Entry <AbstractJClass, JCommentPart> e : m_aAtThrows.entrySet ())
-    {
-      f.print (" * @throws ").type (e.getKey ()).newline ();
-      e.getValue ().format (f, INDENT);
-    }
-    if (m_aAtDeprecated != null)
-    {
-      f.print (" * @deprecated").newline ();
-      m_aAtDeprecated.format (f, INDENT);
-    }
-    for (final Map.Entry <String, Map <String, String>> e : m_aAtXdoclets.entrySet ())
-    {
-      f.print (" * @").print (e.getKey ());
-      if (e.getValue () != null)
+      f.print (" * ").newline ();
+      for (final Map.Entry <String, JCommentPart> e : m_aAtParams.entrySet ())
       {
-        for (final Map.Entry <String, String> a : e.getValue ().entrySet ())
-        {
-          f.print (" ").print (a.getKey ()).print ("= \"").print (a.getValue ()).print ("\"");
-        }
+        f.print (" * @param ").print (e.getKey ()).newline ();
+        e.getValue ().format (f, INDENT);
       }
-      f.newline ();
+      if (m_aAtReturn != null)
+      {
+        f.print (" * @return").newline ();
+        m_aAtReturn.format (f, INDENT);
+      }
+      if (m_aAtAuthor != null)
+      {
+        f.print (" * @author").newline ();
+        m_aAtAuthor.format (f, INDENT);
+      }
+      for (final Map.Entry <AbstractJClass, JCommentPart> e : m_aAtThrows.entrySet ())
+      {
+        f.print (" * @throws ").type (e.getKey ()).newline ();
+        e.getValue ().format (f, INDENT);
+      }
+      if (m_aAtDeprecated != null)
+      {
+        f.print (" * @deprecated").newline ();
+        m_aAtDeprecated.format (f, INDENT);
+      }
+      for (final Map.Entry <String, Map <String, String>> e : m_aAtXdoclets.entrySet ())
+      {
+        f.print (" * @").print (e.getKey ());
+        if (e.getValue () != null)
+        {
+          for (final Map.Entry <String, String> a : e.getValue ().entrySet ())
+          {
+            f.print (" ").print (a.getKey ()).print ("= \"").print (a.getValue ()).print ("\"");
+          }
+        }
+        f.newline ();
+      }
+      f.print (" */").newline ();
     }
-    f.print (" */").newline ();
   }
 }
