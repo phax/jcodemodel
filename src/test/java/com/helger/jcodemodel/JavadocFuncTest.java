@@ -53,10 +53,34 @@ public final class JavadocFuncTest
   public void testOnPackage () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
-    final JDocComment aComment = cm._package ("foo").javadoc ();
-    aComment.add ("String");
-    aComment.addXdoclet ("since").put ("1.0", null);
+    final JPackage pkg = cm._package ("foo");
+    final JDocComment aComment = pkg.javadoc ();
+    aComment.add ("Package description");
+    aComment.addTag ("since").add ("1.0");
     aComment.addAuthor ().add ("JCodeModel unit test");
+    aComment.addDeprecated ().add ("Just for testing");
+
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testOnClass () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JPackage pkg = cm._package ("foo");
+
+    final JDefinedClass cls = pkg._class (JMod.PUBLIC | JMod.FINAL, "Dummy");
+    cls.javadoc ().add ("Class comment");
+    cls.javadoc ().addAuthor ().add ("JavadocFuncTest");
+
+    final JMethod method = cls.method (JMod.PUBLIC | JMod.STATIC, String.class, "getPlusX");
+    final JVar aParam = method.param (String.class, "any");
+    method.body ()._return (aParam.plus ("X"));
+    method.javadoc ().addParam (aParam).add ("Input value");
+    method.javadoc ().addReturn ().add ("Input value plus \"X\".");
+    method.javadoc ().addThrows (NullPointerException.class).add ("If input is null");
+    method.javadoc ().addTag ("since").add ("JCodeModel 2.8.5");
+
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 }
