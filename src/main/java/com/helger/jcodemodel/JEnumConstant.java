@@ -148,11 +148,6 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
     return m_aType.fullName () + '.' + m_sName;
   }
 
-  /**
-   * Creates, if necessary, and returns the enum constant javadoc.
-   *
-   * @return JDocComment containing javadocs for this constant.
-   */
   @Nonnull
   public JDocComment javadoc ()
   {

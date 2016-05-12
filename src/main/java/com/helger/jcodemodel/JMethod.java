@@ -523,13 +523,6 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     m_aDefaultValue = aDefaultValue;
   }
 
-  /**
-   * Creates, if necessary, and returns the class javadoc for this
-   * {@link JMethod}.
-   *
-   * @return JDocComment containing javadocs for this class. Never
-   *         <code>null</code>.
-   */
   @Nonnull
   public JDocComment javadoc ()
   {

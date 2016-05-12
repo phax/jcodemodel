@@ -102,11 +102,6 @@ public class JFieldVar extends JVar implements IJDocCommentable
     m_aOwnerClass.m_aFields.put (name, this);
   }
 
-  /**
-   * Creates, if necessary, and returns the class javadoc for this JDefinedClass
-   *
-   * @return JDocComment containing javadocs for this class
-   */
   @Nonnull
   public JDocComment javadoc ()
   {

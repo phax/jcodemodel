@@ -149,7 +149,7 @@ public class JPackage implements
 
     final int idx = m_sName.lastIndexOf ('.');
     if (idx < 0)
-      return m_aOwner.rootPackage();
+      return m_aOwner.rootPackage ();
     return m_aOwner._package (m_sName.substring (0, idx));
   }
 
@@ -372,12 +372,6 @@ public class JPackage implements
     return m_aResources.iterator ();
   }
 
-  /**
-   * Creates, if necessary, and returns the package javadoc for this
-   * JDefinedClass.
-   *
-   * @return {@link JDocComment} containing javadocs for this class
-   */
   @Nonnull
   public JDocComment javadoc ()
   {
@@ -390,13 +384,16 @@ public class JPackage implements
    * Removes a class from this package.
    *
    * @param c
-   *        Class to be removed
+   *        Class to be removed. May not be <code>null</code>.
    */
   public void remove (@Nonnull final AbstractJClass c)
   {
     if (c._package () != this)
-      throw new IllegalArgumentException ("the specified class is not a member of this package," +
-                                          " or it is a referenced class");
+      throw new IllegalArgumentException ("the specified class (" +
+                                          c.fullName () +
+                                          ") is not a member of this package (" +
+                                          name () +
+                                          "), or it is a referenced class");
 
     // note that c may not be a member of classes.
     // this happens when someone is trying to remove a non generated class

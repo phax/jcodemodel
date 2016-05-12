@@ -571,11 +571,6 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
     return null;
   }
 
-  /**
-   * Creates, if necessary, and returns the class javadoc for this JDefinedClass
-   *
-   * @return {@link JDocComment} containing javadocs for this class
-   */
   @Nonnull
   public JDocComment javadoc ()
   {

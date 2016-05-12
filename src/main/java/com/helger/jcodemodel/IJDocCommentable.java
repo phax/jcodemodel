@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel;
 
+import javax.annotation.Nonnull;
+
 /**
  * Program elements that can have Javadoc
  *
@@ -48,7 +50,8 @@ package com.helger.jcodemodel;
 public interface IJDocCommentable
 {
   /**
-   * @return the JavaDoc of the Element
+   * @return the JavaDoc of this element. Never <code>null</code>.
    */
+  @Nonnull
   JDocComment javadoc ();
 }
