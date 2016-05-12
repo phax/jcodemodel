@@ -69,6 +69,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   private final JCodeModel m_aOwner;
 
+  private boolean m_bIsSingleLineMode = false;
+
   /**
    * list of @param tags
    */
@@ -101,6 +103,32 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   public JCodeModel owner ()
   {
     return m_aOwner;
+  }
+
+  /**
+   * Change whether multi line comments or single line comments should be
+   * emitted.
+   *
+   * @param bSingleLineMode
+   *        <code>true</code> to enable single line mode, <code>false</code> for
+   *        multi line mode (which is the default).
+   * @return this for chaining
+   */
+  @Nonnull
+  public JDocComment setSingleLineMode (final boolean bSingleLineMode)
+  {
+    m_bIsSingleLineMode = bSingleLineMode;
+    return this;
+  }
+
+  /**
+   * @return <code>true</code> if single line mode is enabled,
+   *         <code>false</code> if multi line mode is enabled. Multie line mode
+   *         is the default.
+   */
+  public boolean isSingleLineMode ()
+  {
+    return m_bIsSingleLineMode;
   }
 
   @Override
@@ -391,12 +419,11 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
     if (!isEmpty () || bHasAt)
     {
       final boolean bIsJavaDoc = true;
-      final boolean bSingleLineVersion = false;
-      final String sIndent = bSingleLineVersion ? "// " : " * ";
+      final String sIndent = m_bIsSingleLineMode ? "// " : " * ";
       final String sIndentLarge = sIndent + "    ";
 
       // Start comment
-      if (!bSingleLineVersion)
+      if (!m_bIsSingleLineMode)
         f.print (bIsJavaDoc ? "/**" : "/*").newline ();
 
       // Print all simple text elements
@@ -444,7 +471,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
       }
 
       // End comment
-      if (!bSingleLineVersion)
+      if (!m_bIsSingleLineMode)
         f.print (" */").newline ();
     }
   }
