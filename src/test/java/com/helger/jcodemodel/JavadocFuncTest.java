@@ -53,7 +53,10 @@ public final class JavadocFuncTest
   public void testOnPackage () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
-    cm._package ("foo").javadoc ().add ("String");
+    final JDocComment aComment = cm._package ("foo").javadoc ();
+    aComment.add ("String");
+    aComment.addXdoclet ("since").put ("1.0", null);
+    aComment.addAuthor ().add ("JCodeModel unit test");
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

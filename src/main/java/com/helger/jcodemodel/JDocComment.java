@@ -315,7 +315,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * add an xdoclet.
+   * add an xdoclet with <code>@name attribute = "value"
    *
    * @param name
    *        xdoclet name
@@ -346,22 +346,26 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (!m_aAtParams.isEmpty () ||
-        m_aAtReturn != null ||
-        m_aAtAuthor != null ||
-        !m_aAtThrows.isEmpty () ||
-        m_aAtDeprecated != null ||
-        !m_aAtXdoclets.isEmpty ())
+    // Is any "@" comment present?
+    final boolean bHasAt = !m_aAtParams.isEmpty () ||
+                           m_aAtReturn != null ||
+                           m_aAtAuthor != null ||
+                           !m_aAtThrows.isEmpty () ||
+                           m_aAtDeprecated != null ||
+                           !m_aAtXdoclets.isEmpty ();
+    if (!isEmpty () || bHasAt)
     {
       f.print ("/**").newline ();
 
+      // Print all simple text elements
       format (f, " * ");
+      if (!isEmpty () && bHasAt)
+        f.print (" * ").newline ();
 
-      f.print (" * ").newline ();
-      for (final Map.Entry <String, JCommentPart> e : m_aAtParams.entrySet ())
+      for (final Map.Entry <String, JCommentPart> aEntry : m_aAtParams.entrySet ())
       {
-        f.print (" * @param ").print (e.getKey ()).newline ();
-        e.getValue ().format (f, INDENT);
+        f.print (" * @param ").print (aEntry.getKey ()).newline ();
+        aEntry.getValue ().format (f, INDENT);
       }
       if (m_aAtReturn != null)
       {
@@ -373,24 +377,29 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
         f.print (" * @author").newline ();
         m_aAtAuthor.format (f, INDENT);
       }
-      for (final Map.Entry <AbstractJClass, JCommentPart> e : m_aAtThrows.entrySet ())
+      for (final Map.Entry <AbstractJClass, JCommentPart> aEntry : m_aAtThrows.entrySet ())
       {
-        f.print (" * @throws ").type (e.getKey ()).newline ();
-        e.getValue ().format (f, INDENT);
+        f.print (" * @throws ").type (aEntry.getKey ()).newline ();
+        aEntry.getValue ().format (f, INDENT);
       }
       if (m_aAtDeprecated != null)
       {
         f.print (" * @deprecated").newline ();
         m_aAtDeprecated.format (f, INDENT);
       }
-      for (final Map.Entry <String, Map <String, String>> e : m_aAtXdoclets.entrySet ())
+      for (final Map.Entry <String, Map <String, String>> aEntry : m_aAtXdoclets.entrySet ())
       {
-        f.print (" * @").print (e.getKey ());
-        if (e.getValue () != null)
+        f.print (" * @").print (aEntry.getKey ());
+        if (aEntry.getValue () != null)
         {
-          for (final Map.Entry <String, String> a : e.getValue ().entrySet ())
+          for (final Map.Entry <String, String> aEntry2 : aEntry.getValue ().entrySet ())
           {
-            f.print (" ").print (a.getKey ()).print ("= \"").print (a.getValue ()).print ("\"");
+            final String sName = aEntry2.getKey ();
+            f.print (" ").print (sName);
+
+            final String sValue = aEntry2.getValue ();
+            if (sValue != null && sValue.length () > 0)
+              f.print ("= \"").print (sValue).print ("\"");
           }
         }
         f.newline ();
