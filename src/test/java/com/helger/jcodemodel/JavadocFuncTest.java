@@ -76,6 +76,7 @@ public final class JavadocFuncTest
     final JMethod method = cls.method (JMod.PUBLIC | JMod.STATIC, String.class, "getPlusX");
     final JVar aParam = method.param (String.class, "any");
     method.body ()._return (aParam.plus ("X"));
+    method.javadoc ().add ("Description");
     method.javadoc ().addParam (aParam).add ("Input value");
     method.javadoc ().addReturn ().add ("Input value plus \"X\".");
     method.javadoc ().addThrows (NullPointerException.class).add ("If input is null");

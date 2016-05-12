@@ -65,8 +65,6 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   public static final String TAG_SINCE = "since";
   public static final String TAG_VERSION = "version";
 
-  private static final String INDENT = " *     ";
-
   private static final long serialVersionUID = 1L;
 
   private final JCodeModel m_aOwner;
@@ -392,36 +390,43 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
                            !m_aAtXdoclets.isEmpty ();
     if (!isEmpty () || bHasAt)
     {
-      f.print ("/**").newline ();
+      final boolean bIsJavaDoc = true;
+      final boolean bSingleLineVersion = false;
+      final String sIndent = bSingleLineVersion ? "// " : " * ";
+      final String sIndentLarge = sIndent + "    ";
+
+      // Start comment
+      if (!bSingleLineVersion)
+        f.print (bIsJavaDoc ? "/**" : "/*").newline ();
 
       // Print all simple text elements
-      format (f, " * ");
+      format (f, sIndent);
       if (!isEmpty () && bHasAt)
-        f.print (" * ").newline ();
+        f.print (sIndent).newline ();
 
       for (final Map.Entry <String, JCommentPart> aEntry : m_aAtParams.entrySet ())
       {
-        f.print (" * @param ").print (aEntry.getKey ()).newline ();
-        aEntry.getValue ().format (f, INDENT);
+        f.print (sIndent + "@param ").print (aEntry.getKey ()).newline ();
+        aEntry.getValue ().format (f, sIndentLarge);
       }
       if (m_aAtReturn != null)
       {
-        f.print (" * @return").newline ();
-        m_aAtReturn.format (f, INDENT);
+        f.print (sIndent + "@return").newline ();
+        m_aAtReturn.format (f, sIndentLarge);
       }
       for (final Map.Entry <AbstractJClass, JCommentPart> aEntry : m_aAtThrows.entrySet ())
       {
-        f.print (" * @throws ").type (aEntry.getKey ()).newline ();
-        aEntry.getValue ().format (f, INDENT);
+        f.print (sIndent + "@throws ").type (aEntry.getKey ()).newline ();
+        aEntry.getValue ().format (f, sIndentLarge);
       }
       for (final Map.Entry <String, JCommentPart> aEntry : m_aAtTags.entrySet ())
       {
-        f.print (" * @" + aEntry.getKey () + " ");
+        f.print (sIndent + "@" + aEntry.getKey () + " ");
         aEntry.getValue ().format (f, "");
       }
       for (final Map.Entry <String, Map <String, String>> aEntry : m_aAtXdoclets.entrySet ())
       {
-        f.print (" * @").print (aEntry.getKey ());
+        f.print (sIndent + "@").print (aEntry.getKey ());
         if (aEntry.getValue () != null)
         {
           for (final Map.Entry <String, String> aEntry2 : aEntry.getValue ().entrySet ())
@@ -429,6 +434,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
             final String sName = aEntry2.getKey ();
             f.print (" ").print (sName);
 
+            // Print value only if present
             final String sValue = aEntry2.getValue ();
             if (sValue != null && sValue.length () > 0)
               f.print ("= \"").print (sValue).print ("\"");
@@ -436,7 +442,10 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
         }
         f.newline ();
       }
-      f.print (" */").newline ();
+
+      // End comment
+      if (!bSingleLineVersion)
+        f.print (" */").newline ();
     }
   }
 }
