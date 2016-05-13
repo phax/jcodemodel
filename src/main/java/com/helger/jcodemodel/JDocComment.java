@@ -377,7 +377,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * add an xdoclet with <code>@name attribute = "value"
+   * add an xdoclet with <code>@name attribute = "value"</code>. If value is
+   * <code>null</code> than it will be <code>@name attribute</code>.
    *
    * @param name
    *        xdoclet name
