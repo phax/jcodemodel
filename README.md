@@ -14,6 +14,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 News and noteworthy:
 
+* 2016-05-xx: Release 2.8.5 - improved comment handling (issue #47), improved API checks (issue #45), extended API (issue #46)
 * 2016-04-25: Release 2.8.4 - Enum values in switch statements are no longer fully qualified (issue #41); fixed generation of narrowed classes without parameters (as in `HashMap<>`); added support for `strictfp` keyword.
 * 2016-02-26: Release 2.8.3 - Add support for single line comments in blocks; improved generation of Lambdas
 * 2016-01-19: Release 2.8.2 - Customizable new line string and character set; extensions by @sviperll
