@@ -62,6 +62,11 @@ public final class JDefinedClassTest
   {
     /**
      * <pre>
+     * /-**
+     * * Line 1
+     * * Line 2
+     * * Line 3
+     * *-/
      * package myPackage;
      *
      * class MyClass
@@ -77,6 +82,7 @@ public final class JDefinedClassTest
 
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass c = cm._package ("myPackage")._class (0, "MyClass");
+    c.headerComment ().add ("Line 1\nLine 2\nLine 3");
     final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");
     c.instanceInit ().assign (JExpr._this ().ref (myField), JExpr.lit ("myValue"));
 

@@ -1031,11 +1031,16 @@ public class JFormatter implements Closeable
     m_eMode = EMode.PRINTING;
 
     assert aClassToBeWritten.parentContainer ().isPackage () : "this method is only for a pacakge-level class";
+
+    // Header before package
+    if (aClassToBeWritten.hasHeaderComment ())
+      generable (aClassToBeWritten.headerComment ());
+
+    // Emit the package name (if not empty)
     final JPackage aPackage = (JPackage) aClassToBeWritten.parentContainer ();
     if (!aPackage.isUnnamed ())
     {
-      newline ().declaration (aPackage);
-      newline ();
+      declaration (aPackage).newline ();
     }
 
     // generate import statements

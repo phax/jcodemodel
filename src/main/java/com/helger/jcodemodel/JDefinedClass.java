@@ -71,6 +71,11 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
                            implements IJDeclaration, IJGenerifiable, IJAnnotatable, IJDocCommentable
 {
   /**
+   * The optional header that is emitted prior to the package (Issue #47)
+   */
+  private JDocComment m_aHeaderComment;
+
+  /**
    * Modifiers for the class declaration
    */
   private JMods m_aMods;
@@ -238,6 +243,16 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
       m_aMods = JMods.forInterface (nMods);
     else
       m_aMods = JMods.forClass (nMods);
+  }
+
+  /**
+   * @return the current modifiers of this class. Always return non-null valid
+   *         object.
+   */
+  @Nonnull
+  public JMods mods ()
+  {
+    return m_aMods;
   }
 
   /**
@@ -571,6 +586,27 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
     return null;
   }
 
+  /**
+   * @return <code>true</code> if a header comment (before the package) is
+   *         present, <code>false</code> if not.
+   */
+  public boolean hasHeaderComment ()
+  {
+    return m_aHeaderComment != null;
+  }
+
+  /**
+   * @return The optional header comment that is emitted BEFORE the package (so
+   *         e.g. for license headers). Never <code>null</code>.
+   */
+  @Nonnull
+  public JDocComment headerComment ()
+  {
+    if (m_aHeaderComment == null)
+      m_aHeaderComment = new JDocComment (owner ());
+    return m_aHeaderComment;
+  }
+
   @Nonnull
   public JDocComment javadoc ()
   {
@@ -799,16 +835,6 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
       }
     }
     return null;
-  }
-
-  /**
-   * @return the current modifiers of this class. Always return non-null valid
-   *         object.
-   */
-  @Nonnull
-  public JMods mods ()
-  {
-    return m_aMods;
   }
 
   @Override
