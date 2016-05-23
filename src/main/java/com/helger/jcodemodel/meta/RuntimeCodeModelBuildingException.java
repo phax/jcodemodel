@@ -51,11 +51,10 @@ class RuntimeCodeModelBuildingException extends RuntimeException
   public RuntimeCodeModelBuildingException (final CodeModelBuildingException cause)
   {
     super (cause);
-    this._cause = cause;
+    _cause = cause;
   }
 
   // Remove the synchronized
-  @SuppressWarnings ("sync-override")
   @Override
   public CodeModelBuildingException getCause ()
   {

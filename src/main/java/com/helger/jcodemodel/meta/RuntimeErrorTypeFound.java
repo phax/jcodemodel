@@ -51,10 +51,10 @@ class RuntimeErrorTypeFound extends RuntimeException
   public RuntimeErrorTypeFound (final ErrorTypeFound cause)
   {
     super (cause);
-    this._cause = cause;
+    _cause = cause;
   }
 
-  @SuppressWarnings ("sync-override")
+  // Remove the synchronized
   @Override
   public ErrorTypeFound getCause ()
   {
