@@ -45,7 +45,7 @@
   <parent>
     <groupId>com.helger</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>1.4.1</version>
+    <version>1.8.4</version>
   </parent>
   <artifactId>jcodemodel</artifactId>
   <version>2.8.6-SNAPSHOT</version>
@@ -128,11 +128,10 @@
   </contributors>
   
   <dependencies>
-    <!-- Version 3.x require Java 7 -->
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>annotations</artifactId>
-      <version>2.0.3</version>
+      <version>3.0.1u2</version>
     </dependency>
     <dependency>
       <groupId>com.github.javaparser</groupId>
