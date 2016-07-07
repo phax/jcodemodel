@@ -243,14 +243,29 @@ class DecidedErrorTypesModelsAdapter
     {
       if (enclosedElement.getKind ().equals (ElementKind.INTERFACE) ||
           enclosedElement.getKind ().equals (ElementKind.CLASS) ||
+          enclosedElement.getKind ().equals (ElementKind.ENUM) ||
           enclosedElement.getKind ().equals (ElementKind.ANNOTATION_TYPE))
       {
         final EClassType classType = toClassType (enclosedElement.getKind ());
         int modifiers = toJMod (enclosedElement.getModifiers ());
-        if (classType.equals (EClassType.INTERFACE))
+        if (classType.equals (EClassType.INTERFACE) ||
+            classType.equals (EClassType.ANNOTATION_TYPE_DECL))
         {
+          // Interfaces are always implicitly abstract, but explicit abstract modifier is not allowed in the code.
           modifiers &= ~JMod.ABSTRACT;
+        }
+        if (classType.equals (EClassType.INTERFACE) ||
+            classType.equals (EClassType.ENUM) ||
+            classType.equals (EClassType.ANNOTATION_TYPE_DECL))
+        {
+          // Interfaces and enums are implicitly static. No need for static modifier.
           modifiers &= ~JMod.STATIC;
+        }
+        if (classType.equals (EClassType.ENUM))
+        {
+          // Enums are effectively final. You can't extend enums.
+          // But explicit final modifier is not allowed in the code.
+          modifiers &= ~JMod.FINAL;
         }
         JDefinedClass enclosedClass;
         try
