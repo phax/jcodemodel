@@ -243,6 +243,7 @@ class DecidedErrorTypesModelsAdapter
     {
       if (enclosedElement.getKind ().equals (ElementKind.INTERFACE) ||
           enclosedElement.getKind ().equals (ElementKind.CLASS) ||
+          enclosedElement.getKind ().equals (ElementKind.ENUM) ||
           enclosedElement.getKind ().equals (ElementKind.ANNOTATION_TYPE))
       {
         final EClassType classType = toClassType (enclosedElement.getKind ());
