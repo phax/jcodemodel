@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -54,7 +55,6 @@
   <description>Java code generation library</description>
   <url>https://github.com/phax/jcodemodel</url>
   <inceptionYear>2013</inceptionYear>
-  
   <licenses>
     <license>
       <name>CDDL+GPL 1.1</name>
@@ -62,14 +62,12 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  
   <scm>
     <connection>scm:git:git@github.com:phax/jcodemodel.git</connection>
     <developerConnection>scm:git:git@github.com:phax/jcodemodel.git</developerConnection>
     <url>http://github.com/phax/jcodemodel</url>
     <tag>HEAD</tag>
   </scm>
-
   <developers>
     <developer>
       <id>snajper</id>
@@ -107,7 +105,6 @@
       <email>philip(at)helger.com</email>
     </developer>
   </developers>
-
   <contributors>
     <contributor>
       <name>Gregory Kick</name>
@@ -126,14 +123,12 @@
       <url>https://github.com/sviperll</url>
     </contributor>
   </contributors>
-  
   <dependencies>
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>annotations</artifactId>
       <version>2.0.3</version>
     </dependency>
-
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -146,7 +141,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
   <build>
     <plugins>
       <plugin>
@@ -162,19 +156,14 @@
         <artifactId>maven-bundle-plugin</artifactId>
         <configuration>
           <instructions>
-            <Export-Package>
-              com.helger.jcodemodel.*
-            </Export-Package>
-            <Import-Package>
-              !javax.annotation.*,*
-            </Import-Package>
+            <Export-Package>com.helger.jcodemodel.*</Export-Package>
+            <Import-Package>!javax.annotation.*,*</Import-Package>
           </instructions>
         </configuration>
       </plugin>
     </plugins>
   </build>
-
-  <!-- Contains in parent POM 1.8.2+ -->  
+  <!-- Contains in parent POM 1.8.2+ -->
   <profiles>
     <profile>
       <id>coverage</id>
