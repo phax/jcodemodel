@@ -134,6 +134,7 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+    <!-- 2.5.0 requires Java 1.7 -->
     <dependency>
       <groupId>com.github.javaparser</groupId>
       <artifactId>javaparser-core</artifactId>
