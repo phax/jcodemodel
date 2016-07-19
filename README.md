@@ -14,6 +14,8 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 News and noteworthy:
 
+* Release 3.0.0 - target only Java 1.8
+* 2016-07-19: Release 2.8.6 - added PR (issue #49)
 * 2016-05-13: Release 2.8.5 - improved comment handling (issue #47), improved API checks (issue #45), extended API (issue #46)
 * 2016-04-25: Release 2.8.4 - Enum values in switch statements are no longer fully qualified (issue #41); fixed generation of narrowed classes without parameters (as in `HashMap<>`); added support for `strictfp` keyword.
 * 2016-02-26: Release 2.8.3 - Add support for single line comments in blocks; improved generation of Lambdas
@@ -41,7 +43,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>2.8.5</version>
+  <version>2.8.6</version>
 </dependency>
 ```
 
