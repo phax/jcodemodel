@@ -60,7 +60,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
 public class JTypeVar extends AbstractJClass implements IJDeclaration
 {
   private final String m_sName;
-  private final List <AbstractJClass> m_aBounds = new ArrayList <AbstractJClass> ();
+  private final List <AbstractJClass> m_aBounds = new ArrayList <> ();
 
   protected JTypeVar (@Nonnull final JCodeModel aOwner, @Nonnull final String sName)
   {
@@ -118,7 +118,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Nonnull
   public Collection <? extends AbstractJClass> bounds ()
   {
-    return Collections.unmodifiableList (new ArrayList <AbstractJClass> (m_aBounds));
+    return Collections.unmodifiableList (new ArrayList <> (m_aBounds));
   }
 
   /**

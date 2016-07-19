@@ -81,7 +81,7 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   {
     final JTypeVar v = new JTypeVar (owner (), name);
     if (_typeVariables == null)
-      _typeVariables = new LinkedHashMap <String, JTypeVar> (3);
+      _typeVariables = new LinkedHashMap <> (3);
     else
       if (_typeVariables.containsKey (name))
         throw new IllegalArgumentException ("A type parameter with name '" + name + "' is already present!");
@@ -114,6 +114,6 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   {
     if (_typeVariables == null)
       return Collections.<JTypeVar> emptyList ();
-    return new ArrayList <JTypeVar> (_typeVariables.values ());
+    return new ArrayList <> (_typeVariables.values ());
   }
 }

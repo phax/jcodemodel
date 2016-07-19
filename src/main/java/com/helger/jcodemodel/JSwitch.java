@@ -59,7 +59,7 @@ public class JSwitch implements IJStatement
   /**
    * vector of JCases.
    */
-  private final List <JCase> m_aCases = new ArrayList <JCase> ();
+  private final List <JCase> m_aCases = new ArrayList <> ();
 
   /**
    * a single default case

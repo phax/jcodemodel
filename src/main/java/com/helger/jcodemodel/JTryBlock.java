@@ -52,7 +52,7 @@ import javax.annotation.Nonnull;
 public class JTryBlock implements IJStatement
 {
   private final JBlock _body = new JBlock ();
-  private final List <JCatchBlock> _catches = new ArrayList <JCatchBlock> ();
+  private final List <JCatchBlock> _catches = new ArrayList <> ();
   private JBlock _finally;
 
   protected JTryBlock ()

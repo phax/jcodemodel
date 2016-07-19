@@ -98,13 +98,12 @@ public class JStaticFile extends AbstractJResourceFile
   @Override
   protected void build (@Nonnull final OutputStream os) throws IOException
   {
-    final DataInputStream dis = new DataInputStream (m_aClassLoader.getResourceAsStream (m_sResourceName));
-
-    final byte [] buf = new byte [256];
-    int sz;
-    while ((sz = dis.read (buf)) > 0)
-      os.write (buf, 0, sz);
-
-    dis.close ();
+    try (final DataInputStream dis = new DataInputStream (m_aClassLoader.getResourceAsStream (m_sResourceName)))
+    {
+      final byte [] buf = new byte [256];
+      int sz;
+      while ((sz = dis.read (buf)) > 0)
+        os.write (buf, 0, sz);
+    }
   }
 }

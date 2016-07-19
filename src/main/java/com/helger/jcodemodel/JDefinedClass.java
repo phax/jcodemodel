@@ -88,12 +88,12 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   /**
    * List of interfaces that this class implements
    */
-  private final Set <AbstractJClass> m_aInterfaces = new TreeSet <AbstractJClass> (ClassNameComparator.getInstance ());
+  private final Set <AbstractJClass> m_aInterfaces = new TreeSet <> (ClassNameComparator.getInstance ());
 
   /**
    * Fields keyed by their names.
    */
-  /* package */final Map <String, JFieldVar> m_aFields = new LinkedHashMap <String, JFieldVar> ();
+  /* package */final Map <String, JFieldVar> m_aFields = new LinkedHashMap <> ();
 
   /**
    * Static initializer, if this class has one
@@ -113,12 +113,12 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   /**
    * Set of constructors for this class, if any
    */
-  private final List <JMethod> m_aConstructors = new ArrayList <JMethod> ();
+  private final List <JMethod> m_aConstructors = new ArrayList <> ();
 
   /**
    * Set of methods that are members of this class
    */
-  private final List <JMethod> m_aMethods = new ArrayList <JMethod> ();
+  private final List <JMethod> m_aMethods = new ArrayList <> ();
 
   /**
    * Flag that controls whether this class should be really generated or not.
@@ -149,7 +149,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
    * is actually significant, because of order ID they get. So let's preserve
    * the order.
    */
-  private final Map <String, JEnumConstant> m_aEnumConstantsByName = new LinkedHashMap <String, JEnumConstant> ();
+  private final Map <String, JEnumConstant> m_aEnumConstantsByName = new LinkedHashMap <> ();
 
   /**
    * Annotations on this variable. Lazily created.
@@ -799,7 +799,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+      m_aAnnotations = new ArrayList <> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
     m_aAnnotations.add (a);
     return a;
@@ -815,7 +815,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   public Collection <JAnnotationUse> annotations ()
   {
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+      m_aAnnotations = new ArrayList <> ();
     return Collections.unmodifiableCollection (m_aAnnotations);
   }
 

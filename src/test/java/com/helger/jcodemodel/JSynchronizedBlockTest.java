@@ -48,7 +48,7 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
  * {@link JSynchronizedBlock} tests.
- * 
+ *
  * @author Philip Helger
  */
 public final class JSynchronizedBlockTest

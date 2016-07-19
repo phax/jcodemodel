@@ -71,7 +71,7 @@ public class FileCodeWriter extends AbstractCodeWriter
   private final boolean m_bMarkReadOnly;
 
   /** Files that shall be marked as read only. */
-  private final Set <File> m_aReadOnlyFiles = new HashSet <File> ();
+  private final Set <File> m_aReadOnlyFiles = new HashSet <> ();
 
   public FileCodeWriter (@Nonnull final File aTargetDir) throws IOException
   {

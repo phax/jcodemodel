@@ -78,7 +78,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * List of parameters for this method's declaration
    */
-  private final List <JVar> m_aParams = new ArrayList <JVar> ();
+  private final List <JVar> m_aParams = new ArrayList <> ();
 
   /**
    * Set of exceptions that this method may throw. A set instance lazily
@@ -180,7 +180,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public JMethod _throws (@Nonnull final AbstractJClass exception)
   {
     if (m_aThrows == null)
-      m_aThrows = new TreeSet <AbstractJClass> (ClassNameComparator.getInstance ());
+      m_aThrows = new TreeSet <> (ClassNameComparator.getInstance ());
     m_aThrows.add (exception);
     return this;
   }
@@ -371,7 +371,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+      m_aAnnotations = new ArrayList <> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
     m_aAnnotations.add (a);
     return a;

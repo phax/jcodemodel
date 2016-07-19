@@ -60,7 +60,7 @@ import javax.annotation.Nonnull;
 public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implements IJAnnotatable
 {
   private final JCodeModel _owner;
-  private final List <AbstractJAnnotationValue> _values = new ArrayList <AbstractJAnnotationValue> ();
+  private final List <AbstractJAnnotationValue> _values = new ArrayList <> ();
 
   public JAnnotationArrayMember (@Nonnull final JCodeModel owner)
   {

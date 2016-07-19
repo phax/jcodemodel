@@ -88,7 +88,7 @@ public class JArray extends AbstractJExpressionImpl
   public JArray add (@Nonnull final IJExpression aExpr)
   {
     if (m_aExprs == null)
-      m_aExprs = new ArrayList <IJExpression> ();
+      m_aExprs = new ArrayList <> ();
     m_aExprs.add (aExpr);
     return this;
   }
@@ -109,7 +109,7 @@ public class JArray extends AbstractJExpressionImpl
   public List <IJExpression> exprs ()
   {
     if (m_aExprs == null)
-      m_aExprs = new ArrayList <IJExpression> ();
+      m_aExprs = new ArrayList <> ();
     return Collections.unmodifiableList (m_aExprs);
   }
 

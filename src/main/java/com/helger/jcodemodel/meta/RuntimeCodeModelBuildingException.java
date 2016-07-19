@@ -55,6 +55,7 @@ class RuntimeCodeModelBuildingException extends RuntimeException
   }
 
   // Remove the synchronized
+  @SuppressWarnings ("sync-override")
   @Override
   public CodeModelBuildingException getCause ()
   {

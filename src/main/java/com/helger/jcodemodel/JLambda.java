@@ -56,7 +56,7 @@ import javax.annotation.Nullable;
  */
 public class JLambda extends AbstractJExpressionImpl
 {
-  private final List <JLambdaParam> m_aParams = new ArrayList <JLambdaParam> ();
+  private final List <JLambdaParam> m_aParams = new ArrayList <> ();
   private final JLambdaBlock m_aBodyStatement = new JLambdaBlock ();
 
   public JLambda ()

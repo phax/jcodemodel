@@ -66,7 +66,7 @@ public final class JCNameUtilities
 
     // Get all enclosing classes
     Class <?> klaus = aClass;
-    final List <Class <?>> enclosingClasses = new ArrayList <Class <?>> ();
+    final List <Class <?>> enclosingClasses = new ArrayList <> ();
     while ((klaus = klaus.getEnclosingClass ()) != null)
       enclosingClasses.add (klaus);
 

@@ -82,12 +82,12 @@ public class JPackage implements
   /**
    * List of classes contained within this package keyed by their name.
    */
-  private final Map <String, JDefinedClass> m_aClasses = new TreeMap <String, JDefinedClass> ();
+  private final Map <String, JDefinedClass> m_aClasses = new TreeMap<> ();
 
   /**
    * List of resources files inside this package.
    */
-  private final Set <AbstractJResourceFile> m_aResources = new HashSet <AbstractJResourceFile> ();
+  private final Set <AbstractJResourceFile> m_aResources = new HashSet<> ();
 
   /**
    * All {@link AbstractJClass}s in this package keyed the upper case class
@@ -128,7 +128,7 @@ public class JPackage implements
     if (m_aOwner.isCaseSensitiveFileSystem)
       m_aUpperCaseClassMap = null;
     else
-      m_aUpperCaseClassMap = new HashMap <String, JDefinedClass> ();
+      m_aUpperCaseClassMap = new HashMap<> ();
   }
 
   @Nullable
@@ -505,7 +505,7 @@ public class JPackage implements
       throw new IllegalArgumentException ("the root package cannot be annotated");
 
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+      m_aAnnotations = new ArrayList<> ();
 
     final JAnnotationUse a = new JAnnotationUse (clazz);
     m_aAnnotations.add (a);
@@ -528,7 +528,7 @@ public class JPackage implements
   public Collection <JAnnotationUse> annotations ()
   {
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+      m_aAnnotations = new ArrayList<> ();
     return Collections.unmodifiableList (m_aAnnotations);
   }
 
@@ -565,42 +565,37 @@ public class JPackage implements
         continue;
       }
 
-      final JFormatter f = _createJavaSourceFileWriter (src, c.name ());
-      f.write (c);
-      f.close ();
+      try (final JFormatter f = _createJavaSourceFileWriter (src, c.name ()))
+      {
+        f.write (c);
+      }
     }
 
     // write package annotations
     if (m_aAnnotations != null || m_aJavaDoc != null)
     {
-      final JFormatter f = _createJavaSourceFileWriter (src, "package-info");
-
-      if (m_aJavaDoc != null)
-        f.generable (m_aJavaDoc);
-
-      // TODO: think about importing
-      if (m_aAnnotations != null)
+      try (final JFormatter f = _createJavaSourceFileWriter (src, "package-info"))
       {
-        for (final JAnnotationUse a : m_aAnnotations)
-          f.generable (a).newline ();
-      }
-      f.declaration (this);
+        if (m_aJavaDoc != null)
+          f.generable (m_aJavaDoc);
 
-      f.close ();
+        // TODO: think about importing
+        if (m_aAnnotations != null)
+        {
+          for (final JAnnotationUse a : m_aAnnotations)
+            f.generable (a).newline ();
+        }
+        f.declaration (this);
+      }
     }
 
     // write resources
     for (final AbstractJResourceFile rsrc : m_aResources)
     {
       final AbstractCodeWriter cw = rsrc.isResource () ? res : src;
-      final OutputStream os = new BufferedOutputStream (cw.openBinary (this, rsrc.name ()));
-      try
+      try (final OutputStream os = new BufferedOutputStream (cw.openBinary (this, rsrc.name ())))
       {
         rsrc.build (os);
-      }
-      finally
-      {
-        os.close ();
       }
     }
   }

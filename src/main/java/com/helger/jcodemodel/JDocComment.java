@@ -74,7 +74,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   /**
    * list of @param tags
    */
-  private final Map <String, JCommentPart> m_aAtParams = new LinkedHashMap <String, JCommentPart> ();
+  private final Map <String, JCommentPart> m_aAtParams = new LinkedHashMap <> ();
 
   /**
    * The @return tag part.
@@ -84,15 +84,15 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   /**
    * list of @throws tags
    */
-  private final Map <AbstractJClass, JCommentPart> m_aAtThrows = new LinkedHashMap <AbstractJClass, JCommentPart> ();
+  private final Map <AbstractJClass, JCommentPart> m_aAtThrows = new LinkedHashMap <> ();
 
   /**
    * Other comment tags (like @author, @deprecated, @since, @version etc.)
    */
-  private final Map <String, JCommentPart> m_aAtTags = new LinkedHashMap <String, JCommentPart> ();
+  private final Map <String, JCommentPart> m_aAtTags = new LinkedHashMap <> ();
 
   /** list of generic xdoclets */
-  private final Map <String, Map <String, String>> m_aAtXdoclets = new LinkedHashMap <String, Map <String, String>> ();
+  private final Map <String, Map <String, String>> m_aAtXdoclets = new LinkedHashMap <> ();
 
   protected JDocComment (@Nonnull final JCodeModel owner)
   {
@@ -353,7 +353,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
     Map <String, String> p = m_aAtXdoclets.get (name);
     if (p == null)
     {
-      p = new LinkedHashMap <String, String> ();
+      p = new LinkedHashMap <> ();
       m_aAtXdoclets.put (name, p);
     }
     return p;

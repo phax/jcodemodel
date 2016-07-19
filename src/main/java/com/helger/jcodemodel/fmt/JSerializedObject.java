@@ -75,8 +75,9 @@ public class JSerializedObject extends AbstractJResourceFile
   protected void build (@Nonnull final OutputStream os) throws IOException
   {
     // serialize the obj into a ByteArrayOutputStream
-    final ObjectOutputStream oos = new ObjectOutputStream (os);
-    oos.writeObject (m_aObj);
-    oos.close ();
+    try (final ObjectOutputStream oos = new ObjectOutputStream (os))
+    {
+      oos.writeObject (m_aObj);
+    }
   }
 }

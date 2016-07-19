@@ -237,7 +237,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   /**
    * Check if this class is a generic class and contains the passed type
    * variable.
-   * 
+   *
    * @param aVar
    *        The type variable to check. May be <code>null</code>.
    * @return <code>true</code> if the passed type variable is contained,

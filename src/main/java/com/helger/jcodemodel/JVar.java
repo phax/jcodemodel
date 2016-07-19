@@ -204,7 +204,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+      m_aAnnotations = new ArrayList <> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
     m_aAnnotations.add (a);
     return a;
@@ -233,7 +233,7 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   public Collection <JAnnotationUse> annotations ()
   {
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+      m_aAnnotations = new ArrayList <> ();
     return Collections.unmodifiableList (m_aAnnotations);
   }
 

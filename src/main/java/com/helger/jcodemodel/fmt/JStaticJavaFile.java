@@ -134,12 +134,11 @@ public class JStaticJavaFile extends AbstractJResourceFile
   {
     final InputStream is = m_aSource.openStream ();
 
-    final BufferedReader r = new BufferedReader (new InputStreamReader (is));
-    final PrintWriter w = new PrintWriter (new BufferedWriter (new OutputStreamWriter (os)));
     final ILineFilter filter = _createLineFilter ();
     int lineNumber = 1;
 
-    try
+    try (final BufferedReader r = new BufferedReader (new InputStreamReader (is));
+         final PrintWriter w = new PrintWriter (new BufferedWriter (new OutputStreamWriter (os))))
     {
       String line;
       while ((line = r.readLine ()) != null)
@@ -154,9 +153,6 @@ public class JStaticJavaFile extends AbstractJResourceFile
     {
       throw new IOException ("unable to process " + m_aSource + " line:" + lineNumber + "\n" + e.getMessage ());
     }
-
-    w.close ();
-    r.close ();
   }
 
   /**

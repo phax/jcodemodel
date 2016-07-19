@@ -43,8 +43,6 @@ package com.helger.jcodemodel.util;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.helger.jcodemodel.util.JCNameUtilities;
-
 /**
  * @author Ben Fagin
  * @version 2013-04-01

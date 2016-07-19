@@ -215,7 +215,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   private Map <String, CLASSTYPE> _getClasses ()
   {
     if (m_aClasses == null)
-      m_aClasses = new TreeMap <String, CLASSTYPE> ();
+      m_aClasses = new TreeMap <> ();
     return m_aClasses;
   }
 

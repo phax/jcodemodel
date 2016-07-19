@@ -79,7 +79,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   /**
    * List of argument expressions for this method invocation
    */
-  private final List <IJExpression> _args = new ArrayList <IJExpression> ();
+  private final List <IJExpression> _args = new ArrayList <> ();
 
   /**
    * If isConstructor==true, this field keeps the type to be created.
@@ -318,7 +318,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   @Nonnull
   public List <IJExpression> args ()
   {
-    return new ArrayList <IJExpression> (_args);
+    return new ArrayList <> (_args);
   }
 
   @Nonnull
@@ -335,7 +335,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   {
     final JTypeVar v = new JTypeVar (_narrowOwner (), name);
     if (_typeVariables == null)
-      _typeVariables = new ArrayList <JTypeVar> (3);
+      _typeVariables = new ArrayList <> (3);
     _typeVariables.add (v);
     return this;
   }
@@ -351,7 +351,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   {
     final JTypeVar v = new JTypeVarClass (bound);
     if (_typeVariables == null)
-      _typeVariables = new ArrayList <JTypeVar> (3);
+      _typeVariables = new ArrayList <> (3);
     _typeVariables.add (v);
     return this;
   }
@@ -361,7 +361,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   {
     if (_typeVariables == null)
       return Collections.<JTypeVar> emptyList ();
-    return new ArrayList <JTypeVar> (_typeVariables);
+    return new ArrayList <> (_typeVariables);
   }
 
   private void _addTypeVars (@Nonnull final JFormatter f)

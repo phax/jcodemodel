@@ -112,8 +112,8 @@ public final class JCodeModel
 
   static
   {
-    final Map <Class <?>, Class <?>> m1 = new HashMap <Class <?>, Class <?>> ();
-    final Map <Class <?>, Class <?>> m2 = new HashMap <Class <?>, Class <?>> ();
+    final Map <Class <?>, Class <?>> m1 = new HashMap <> ();
+    final Map <Class <?>, Class <?>> m2 = new HashMap <> ();
 
     m1.put (Boolean.class, Boolean.TYPE);
     m1.put (Byte.class, Byte.TYPE);
@@ -134,10 +134,10 @@ public final class JCodeModel
   }
 
   /** The packages that this JCodeWriter contains. */
-  private final Map <String, JPackage> m_aPackages = new HashMap <String, JPackage> ();
+  private final Map <String, JPackage> m_aPackages = new HashMap <> ();
 
   /** All JReferencedClasses are pooled here. */
-  private final Map <Class <?>, JReferencedClass> m_aRefClasses = new HashMap <Class <?>, JReferencedClass> ();
+  private final Map <Class <?>, JReferencedClass> m_aRefClasses = new HashMap <> ();
 
   /** Obtains a reference to the special "null" type. */
   public final JNullType NULL = new JNullType (this);
@@ -979,7 +979,7 @@ public final class JCodeModel
         throw new IllegalArgumentException ();
       m_nIdx++;
 
-      final List <AbstractJClass> args = new ArrayList <AbstractJClass> ();
+      final List <AbstractJClass> args = new ArrayList <> ();
 
       while (true)
       {

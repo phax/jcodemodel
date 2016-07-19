@@ -68,7 +68,7 @@ public class JBlock implements IJGenerable, IJStatement
    * Declarations and statements contained in this block. Either
    * {@link IJStatement} or {@link IJDeclaration}.
    */
-  protected final List <Object> m_aContentList = new ArrayList <Object> ();
+  protected final List <Object> m_aContentList = new ArrayList <> ();
 
   private boolean m_bVirtualBlock = DEFAULT_VIRTUAL_BLOCK;
 

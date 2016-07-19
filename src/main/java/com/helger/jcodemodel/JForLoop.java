@@ -52,9 +52,9 @@ import javax.annotation.Nullable;
  */
 public class JForLoop implements IJStatement
 {
-  private final List <Object> m_aInitExprs = new ArrayList <Object> ();
+  private final List <Object> m_aInitExprs = new ArrayList <> ();
   private IJExpression m_aTestExpr;
-  private final List <IJExpression> m_aUpdateExprs = new ArrayList <IJExpression> ();
+  private final List <IJExpression> m_aUpdateExprs = new ArrayList <> ();
   private JBlock m_aBody;
 
   protected JForLoop ()

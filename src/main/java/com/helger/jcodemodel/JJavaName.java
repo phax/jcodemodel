@@ -50,7 +50,7 @@ import javax.annotation.Nonnull;
 public final class JJavaName
 {
   /** All reserved keywords of Java. */
-  private static final HashSet <String> RESERVED_KEYWORDS = new HashSet <String> ();
+  private static final HashSet <String> RESERVED_KEYWORDS = new HashSet <> ();
 
   static
   {

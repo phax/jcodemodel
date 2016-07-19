@@ -61,13 +61,8 @@ public final class JCSecureLoader
     {
       return Thread.currentThread ().getContextClassLoader ();
     }
-    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
-    {
-      public ClassLoader run ()
-      {
-        return Thread.currentThread ().getContextClassLoader ();
-      }
-    });
+    return AccessController.doPrivileged ((PrivilegedAction <ClassLoader>) () -> Thread.currentThread ()
+                                                                                       .getContextClassLoader ());
   }
 
   public static ClassLoader getClassClassLoader (final Class <?> c)
@@ -76,13 +71,7 @@ public final class JCSecureLoader
     {
       return c.getClassLoader ();
     }
-    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
-    {
-      public ClassLoader run ()
-      {
-        return c.getClassLoader ();
-      }
-    });
+    return AccessController.doPrivileged ((PrivilegedAction <ClassLoader>) () -> c.getClassLoader ());
   }
 
   public static ClassLoader getSystemClassLoader ()
@@ -91,13 +80,7 @@ public final class JCSecureLoader
     {
       return ClassLoader.getSystemClassLoader ();
     }
-    return AccessController.doPrivileged (new PrivilegedAction <ClassLoader> ()
-    {
-      public ClassLoader run ()
-      {
-        return ClassLoader.getSystemClassLoader ();
-      }
-    });
+    return AccessController.doPrivileged ((PrivilegedAction <ClassLoader>) () -> ClassLoader.getSystemClassLoader ());
   }
 
   public static void setContextClassLoader (final ClassLoader cl)
@@ -106,13 +89,9 @@ public final class JCSecureLoader
     {
       Thread.currentThread ().setContextClassLoader (cl);
     }
-    AccessController.doPrivileged (new PrivilegedAction <Object> ()
-    {
-      public Object run ()
-      {
-        Thread.currentThread ().setContextClassLoader (cl);
-        return null;
-      }
+    AccessController.doPrivileged ((PrivilegedAction <Object>) () -> {
+      Thread.currentThread ().setContextClassLoader (cl);
+      return null;
     });
   }
 }

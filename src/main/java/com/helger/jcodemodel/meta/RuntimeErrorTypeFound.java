@@ -55,6 +55,7 @@ class RuntimeErrorTypeFound extends RuntimeException
   }
 
   // Remove the synchronized
+  @SuppressWarnings ("sync-override")
   @Override
   public ErrorTypeFound getCause ()
   {

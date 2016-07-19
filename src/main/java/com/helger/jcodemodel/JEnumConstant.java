@@ -119,7 +119,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   {
     JCValueEnforcer.notNull (aArg, "Arg");
     if (m_aArgs == null)
-      m_aArgs = new ArrayList <IJExpression> ();
+      m_aArgs = new ArrayList <> ();
     m_aArgs.add (aArg);
     return this;
   }
@@ -128,7 +128,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   public List <IJExpression> args ()
   {
     if (m_aArgs == null)
-      m_aArgs = new ArrayList <IJExpression> ();
+      m_aArgs = new ArrayList <> ();
     return Collections.unmodifiableList (m_aArgs);
   }
 
@@ -166,7 +166,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+      m_aAnnotations = new ArrayList <> ();
     final JAnnotationUse a = new JAnnotationUse (clazz);
     m_aAnnotations.add (a);
     return a;
@@ -197,7 +197,7 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
   public Collection <JAnnotationUse> annotations ()
   {
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList <JAnnotationUse> ();
+      m_aAnnotations = new ArrayList <> ();
     return Collections.unmodifiableList (m_aAnnotations);
   }
 

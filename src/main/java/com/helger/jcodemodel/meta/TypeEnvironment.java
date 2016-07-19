@@ -53,7 +53,7 @@ import com.helger.jcodemodel.AbstractJType;
  */
 class TypeEnvironment
 {
-  private final Map <String, AbstractJType> map = new TreeMap <String, AbstractJType> ();
+  private final Map <String, AbstractJType> map = new TreeMap <> ();
   private final TypeEnvironment _parent;
   private final String _packageName;
 

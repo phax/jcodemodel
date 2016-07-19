@@ -168,10 +168,11 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static byte [] getAllBytes (@Nonnull final JCodeModel cm) throws IOException
   {
-    final ByteArrayOutputStream bos = new ByteArrayOutputStream ();
-    cm.build (new OutputStreamCodeWriter (bos, DEFAULT_ENCODING));
-    bos.close ();
-    return bos.toByteArray ();
+    try (final ByteArrayOutputStream bos = new ByteArrayOutputStream ())
+    {
+      cm.build (new OutputStreamCodeWriter (bos, DEFAULT_ENCODING));
+      return bos.toByteArray ();
+    }
   }
 
   @Nonnull

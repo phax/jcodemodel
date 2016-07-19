@@ -155,8 +155,13 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
     // other Java built-in types
     _checkType (arg.getClass (), rt);
     if (m.getDefaultValue () != null && m.getDefaultValue ().equals (arg))
-      // defaulted. no need to write out.
-      return proxy;
+                                                                          // defaulted.
+                                                                          // no
+                                                                          // need
+                                                                          // to
+                                                                          // write
+                                                                          // out.
+                                                                          return proxy;
 
     if (arg instanceof String)
     {
@@ -194,7 +199,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
                                  final Object arg)
   {
     if (_arrays == null)
-      _arrays = new HashMap <String, JAnnotationArrayMember> ();
+      _arrays = new HashMap <> ();
     JAnnotationArrayMember m = _arrays.get (name);
     if (m == null)
     {

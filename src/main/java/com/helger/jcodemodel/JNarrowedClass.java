@@ -103,7 +103,7 @@ public class JNarrowedClass extends AbstractJClass
   {
     JCValueEnforcer.notNull (clazz, "NarrowingClass");
 
-    final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (m_aArgs);
+    final List <AbstractJClass> newArgs = new ArrayList <> (m_aArgs);
     newArgs.add (clazz);
     return new JNarrowedClass (m_aBasis, newArgs);
   }
@@ -113,7 +113,7 @@ public class JNarrowedClass extends AbstractJClass
   {
     JCValueEnforcer.notNull (clazz, "NarrowingClass");
 
-    final List <AbstractJClass> newArgs = new ArrayList <AbstractJClass> (m_aArgs);
+    final List <AbstractJClass> newArgs = new ArrayList <> (m_aArgs);
     for (final AbstractJClass aClass : clazz)
       newArgs.add (aClass);
     return new JNarrowedClass (m_aBasis, newArgs);
@@ -292,7 +292,7 @@ public class JNarrowedClass extends AbstractJClass
     final AbstractJClass b = m_aBasis.substituteParams (variables, bindings);
     boolean different = b != m_aBasis;
 
-    final List <AbstractJClass> clazz = new ArrayList <AbstractJClass> (m_aArgs.size ());
+    final List <AbstractJClass> clazz = new ArrayList <> (m_aArgs.size ());
     for (final AbstractJClass aClass : m_aArgs)
     {
       final AbstractJClass c = aClass.substituteParams (variables, bindings);

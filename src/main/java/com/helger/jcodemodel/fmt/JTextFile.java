@@ -80,14 +80,9 @@ public class JTextFile extends AbstractJResourceFile
   public void build (@Nonnull @WillClose final OutputStream out) throws IOException
   {
     // XXX missing encoding
-    final Writer w = new OutputStreamWriter (out);
-    try
+    try (final Writer w = new OutputStreamWriter (out))
     {
       w.write (m_sContents);
-    }
-    finally
-    {
-      w.close ();
     }
   }
 }

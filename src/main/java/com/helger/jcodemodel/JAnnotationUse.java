@@ -98,7 +98,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
-    return m_aMemberValues == null ? new HashMap <String, AbstractJAnnotationValue> ()
+    return m_aMemberValues == null ? new HashMap <> ()
                                    : Collections.unmodifiableMap (m_aMemberValues);
   }
 
@@ -200,7 +200,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
     // Use ordered map to keep the code generation the same on any JVM.
     // Lazily created.
     if (m_aMemberValues == null)
-      m_aMemberValues = new LinkedHashMap <String, AbstractJAnnotationValue> ();
+      m_aMemberValues = new LinkedHashMap <> ();
     m_aMemberValues.put (sName, aAnnotationValue);
 
     return this;

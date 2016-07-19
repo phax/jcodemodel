@@ -168,7 +168,7 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
       final List <? extends TypeMirror> typeArguments = t.getTypeArguments ();
       if (typeArguments.isEmpty ())
         return jCodeModelClass;
-      final List <AbstractJClass> jArguments = new ArrayList <AbstractJClass> (typeArguments.size ());
+      final List <AbstractJClass> jArguments = new ArrayList <> (typeArguments.size ());
       for (final TypeMirror typeArgument : typeArguments)
       {
         try

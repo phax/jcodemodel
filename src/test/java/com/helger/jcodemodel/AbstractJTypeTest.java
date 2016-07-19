@@ -53,7 +53,7 @@ import org.junit.Test;
 
 /**
  * Test class for class {@link AbstractJType}
- * 
+ *
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 public final class AbstractJTypeTest
@@ -70,8 +70,8 @@ public final class AbstractJTypeTest
     }
   }
 
-  private List <AbstractJClass> freshTypes = new ArrayList <AbstractJClass> ();
-  private List <AssignmentTypes> freshAssignableTypes = new ArrayList <AssignmentTypes> ();
+  private List <AbstractJClass> freshTypes = new ArrayList <> ();
+  private List <AssignmentTypes> freshAssignableTypes = new ArrayList <> ();
 
   @Nonnull
   private void _registerType (final AbstractJClass type)
@@ -83,7 +83,7 @@ public final class AbstractJTypeTest
   private List <AbstractJClass> _refreshTypes ()
   {
     final List <AbstractJClass> result = freshTypes;
-    freshTypes = new ArrayList <AbstractJClass> ();
+    freshTypes = new ArrayList <> ();
     return result;
   }
 
@@ -91,7 +91,7 @@ public final class AbstractJTypeTest
   private List <AssignmentTypes> _refreshAssignableTypes ()
   {
     final List <AssignmentTypes> result = freshAssignableTypes;
-    freshAssignableTypes = new ArrayList <AssignmentTypes> ();
+    freshAssignableTypes = new ArrayList <> ();
     return result;
   }
 
