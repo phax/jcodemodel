@@ -98,8 +98,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
-    return m_aMemberValues == null ? new HashMap <> ()
-                                   : Collections.unmodifiableMap (m_aMemberValues);
+    return m_aMemberValues == null ? new HashMap <> () : Collections.unmodifiableMap (m_aMemberValues);
   }
 
   public boolean hasAnnotationMembers ()

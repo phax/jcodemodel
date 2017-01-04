@@ -82,12 +82,12 @@ public class JPackage implements
   /**
    * List of classes contained within this package keyed by their name.
    */
-  private final Map <String, JDefinedClass> m_aClasses = new TreeMap<> ();
+  private final Map <String, JDefinedClass> m_aClasses = new TreeMap <> ();
 
   /**
    * List of resources files inside this package.
    */
-  private final Set <AbstractJResourceFile> m_aResources = new HashSet<> ();
+  private final Set <AbstractJResourceFile> m_aResources = new HashSet <> ();
 
   /**
    * All {@link AbstractJClass}s in this package keyed the upper case class
@@ -128,7 +128,7 @@ public class JPackage implements
     if (m_aOwner.isCaseSensitiveFileSystem)
       m_aUpperCaseClassMap = null;
     else
-      m_aUpperCaseClassMap = new HashMap<> ();
+      m_aUpperCaseClassMap = new HashMap <> ();
   }
 
   @Nullable
@@ -505,7 +505,7 @@ public class JPackage implements
       throw new IllegalArgumentException ("the root package cannot be annotated");
 
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList<> ();
+      m_aAnnotations = new ArrayList <> ();
 
     final JAnnotationUse a = new JAnnotationUse (clazz);
     m_aAnnotations.add (a);
@@ -528,7 +528,7 @@ public class JPackage implements
   public Collection <JAnnotationUse> annotations ()
   {
     if (m_aAnnotations == null)
-      m_aAnnotations = new ArrayList<> ();
+      m_aAnnotations = new ArrayList <> ();
     return Collections.unmodifiableList (m_aAnnotations);
   }
 
