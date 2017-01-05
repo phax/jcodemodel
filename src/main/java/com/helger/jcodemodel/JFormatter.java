@@ -77,7 +77,7 @@ public class JFormatter implements Closeable
   {
     private final String m_sName;
 
-    private final List <AbstractJClass> m_aReferencedClasses = new ArrayList <> ();
+    private final List <AbstractJClass> m_aReferencedClasses = new ArrayList<> ();
 
     /** true if this name is used as an identifier (like a variable name.) **/
     private boolean m_bIsVariableName;
@@ -225,14 +225,14 @@ public class JFormatter implements Closeable
 
   private final class ImportedClasses
   {
-    private final Set <AbstractJClass> m_aClasses = new HashSet <> ();
-    private final Set <String> m_aNames = new HashSet <> ();
+    private final Set <AbstractJClass> m_aClasses = new HashSet<> ();
+    private final Set <String> m_aNames = new HashSet<> ();
 
     public ImportedClasses ()
     {}
 
-    @Nonnull
-    private AbstractJClass _getClassForImport (@Nonnull final AbstractJClass aClass)
+    @Nullable
+    private AbstractJClass _getClassForImport (@Nullable final AbstractJClass aClass)
     {
       AbstractJClass aRealClass = aClass;
       if (aRealClass instanceof JAnonymousClass)
@@ -288,7 +288,7 @@ public class JFormatter implements Closeable
     @Nonnull
     public List <AbstractJClass> getAllSorted ()
     {
-      final List <AbstractJClass> aImports = new ArrayList <> (m_aClasses);
+      final List <AbstractJClass> aImports = new ArrayList<> (m_aClasses);
       Collections.sort (aImports, ClassNameComparator.getInstance ());
       return aImports;
     }
@@ -309,7 +309,7 @@ public class JFormatter implements Closeable
    * map from short type name to {@link NameUsage} (list of
    * {@link AbstractJClass} and ids sharing that name)
    **/
-  private final Map <String, NameUsage> m_aCollectedReferences = new HashMap <> ();
+  private final Map <String, NameUsage> m_aCollectedReferences = new HashMap<> ();
 
   /**
    * set of imported types (including package java types, even though we won't
