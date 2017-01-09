@@ -87,7 +87,7 @@ public final class JDefinedClassTest
     c.instanceInit ().assign (JExpr._this ().ref (myField), JExpr.lit ("myValue"));
 
     final CompilationUnit compilationUnit = CodeModelTestsHelper.parseCodeModel (cm);
-    final TypeDeclaration typeDeclaration = compilationUnit.getTypes ().get (0);
+    final TypeDeclaration <?> typeDeclaration = compilationUnit.getTypes ().get (0);
     final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
     final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
                                                                                                    .get (1);

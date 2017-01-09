@@ -44,7 +44,6 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.github.javaparser.ParseException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
@@ -55,7 +54,7 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
 public final class JSwitchTest
 {
   @Test
-  public void testGenerate () throws IOException, JClassAlreadyExistsException, ParseException
+  public void testGenerate () throws IOException, JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
 

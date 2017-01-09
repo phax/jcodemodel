@@ -49,7 +49,6 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
@@ -176,7 +175,7 @@ public final class CodeModelTestsHelper
   }
 
   @Nonnull
-  public static CompilationUnit parseCodeModel (@Nonnull final JCodeModel cm) throws IOException, ParseException
+  public static CompilationUnit parseCodeModel (@Nonnull final JCodeModel cm) throws IOException
   {
     final byte [] aBytes = getAllBytes (cm);
     if (true)
@@ -184,7 +183,7 @@ public final class CodeModelTestsHelper
 
     final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes);
 
-    return JavaParser.parse (bis, DEFAULT_ENCODING.name ());
+    return JavaParser.parse (bis, DEFAULT_ENCODING);
   }
 
   public static void printCodeModel (@Nonnull final JCodeModel cm) throws IOException
