@@ -76,12 +76,12 @@ public abstract class AbstractCodeWriter implements Closeable
 
     // can't change this signature to Encoder because
     // we can't have Encoder in method signature
-    private final CharsetEncoder _encoder;
+    private final CharsetEncoder m_aEncoder;
 
     private JavaUnicodeEscapeWriter (@Nonnull final OutputStreamWriter bw)
     {
       super (bw);
-      _encoder = Charset.forName (bw.getEncoding ()).newEncoder ();
+      m_aEncoder = Charset.forName (bw.getEncoding ()).newEncoder ();
     }
 
     @Override
@@ -95,7 +95,7 @@ public abstract class AbstractCodeWriter implements Closeable
       if (ch < 0x80)
         return false;
 
-      return !_encoder.canEncode ((char) ch);
+      return !m_aEncoder.canEncode ((char) ch);
     }
   }
 

@@ -68,19 +68,19 @@ public final class ClassNameComparator implements Comparator <AbstractJClass>
   /**
    * Compare two JTypes by FQCN, giving sorting precedence to types that belong
    * to packages java and javax over all others. This method is used to sort
-   * generated import statments in a conventional way for readability.
+   * generated import statements in a conventional way for readability.
    */
-  public int compare (@Nonnull final AbstractJClass left, @Nonnull final AbstractJClass right)
+  public int compare (@Nonnull final AbstractJClass aObj1, @Nonnull final AbstractJClass aObj2)
   {
-    if (left.isError () && right.isError ())
+    if (aObj1.isError () && aObj2.isError ())
       return 0;
-    if (left.isError ())
+    if (aObj1.isError ())
       return -1;
-    if (right.isError ())
+    if (aObj2.isError ())
       return +1;
 
-    final String lhs = left.fullName ();
-    final String rhs = right.fullName ();
+    final String lhs = aObj1.fullName ();
+    final String rhs = aObj2.fullName ();
     final boolean bLeftJava = lhs.startsWith ("java");
     final boolean bRightJava = rhs.startsWith ("java");
 

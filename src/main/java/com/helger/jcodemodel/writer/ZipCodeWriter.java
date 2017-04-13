@@ -85,7 +85,9 @@ public class ZipCodeWriter extends AbstractCodeWriter
     {
       @Override
       public void close ()
-      {}
+      {
+        // Do not close
+      }
     };
   }
 

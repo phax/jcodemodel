@@ -77,7 +77,7 @@ public class JFormatter implements Closeable
   {
     private final String m_sName;
 
-    private final List <AbstractJClass> m_aReferencedClasses = new ArrayList<> ();
+    private final List <AbstractJClass> m_aReferencedClasses = new ArrayList <> ();
 
     /** true if this name is used as an identifier (like a variable name.) **/
     private boolean m_bIsVariableName;
@@ -225,8 +225,8 @@ public class JFormatter implements Closeable
 
   private final class ImportedClasses
   {
-    private final Set <AbstractJClass> m_aClasses = new HashSet<> ();
-    private final Set <String> m_aNames = new HashSet<> ();
+    private final Set <AbstractJClass> m_aClasses = new HashSet <> ();
+    private final Set <String> m_aNames = new HashSet <> ();
 
     public ImportedClasses ()
     {}
@@ -238,7 +238,7 @@ public class JFormatter implements Closeable
       if (aRealClass instanceof JAnonymousClass)
       {
         // get the super class of the anonymous class
-        aRealClass = ((JAnonymousClass) aRealClass).base ();
+        return _getClassForImport (((JAnonymousClass) aRealClass).base ());
       }
       if (aRealClass instanceof JNarrowedClass)
       {
@@ -288,7 +288,8 @@ public class JFormatter implements Closeable
     @Nonnull
     public List <AbstractJClass> getAllSorted ()
     {
-      final List <AbstractJClass> aImports = new ArrayList<> (m_aClasses);
+      // Copy and sort
+      final List <AbstractJClass> aImports = new ArrayList <> (m_aClasses);
       Collections.sort (aImports, ClassNameComparator.getInstance ());
       return aImports;
     }
@@ -309,7 +310,7 @@ public class JFormatter implements Closeable
    * map from short type name to {@link NameUsage} (list of
    * {@link AbstractJClass} and ids sharing that name)
    **/
-  private final Map <String, NameUsage> m_aCollectedReferences = new HashMap<> ();
+  private final Map <String, NameUsage> m_aCollectedReferences = new HashMap <> ();
 
   /**
    * set of imported types (including package java types, even though we won't
