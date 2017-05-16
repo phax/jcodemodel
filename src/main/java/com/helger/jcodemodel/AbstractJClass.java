@@ -267,9 +267,9 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public AbstractJClass narrow (@Nonnull final Class <?>... clazz)
   {
-    final AbstractJClass [] r = new AbstractJClass [clazz.length];
-    for (int i = 0; i < clazz.length; i++)
-      r[i] = owner ().ref (clazz[i]);
+    final List <AbstractJClass> r = new ArrayList <> (clazz.length);
+    for (final Class <?> aElement : clazz)
+      r.add (owner ().ref (aElement));
     return narrow (r);
   }
 
@@ -304,17 +304,29 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public AbstractJClass narrow (@Nonnull final List <? extends AbstractJClass> clazz)
   {
-    return new JNarrowedClass (this, new ArrayList <AbstractJClass> (clazz));
+    return new JNarrowedClass (this, new ArrayList <> (clazz));
   }
 
   /**
    * @return A narrowed type without any type parameter (as in
-   *         <code>HashMap&lt;&gt;</code>)
+   *         <code>HashMap &lt;&gt;</code>)
    */
   @Nonnull
   public AbstractJClass narrowEmpty ()
   {
-    return new JNarrowedClass (this, new ArrayList <AbstractJClass> ());
+    return new JNarrowedClass (this, new ArrayList <> ());
+  }
+
+  /**
+   * @return A narrowed type just with a "?" parameter (as in
+   *         <code>HashMap &lt;?&gt;</code>)
+   * @since 3.0.0
+   */
+  @Nonnull
+  public AbstractJClass narrowAny ()
+  {
+    // "Hack" if base class is "Object" it is omitted
+    return narrow (owner ().ref (Object.class).wildcardSuper ());
   }
 
   /**
@@ -353,9 +365,23 @@ public abstract class AbstractJClass extends AbstractJType
    * Create "? extends T" from T.
    *
    * @return never <code>null</code>
+   * @deprecated Use {@link #wildcardExtends()} instead
    */
   @Nonnull
+  @Deprecated
   public final JTypeWildcard wildcard ()
+  {
+    return wildcardExtends ();
+  }
+
+  /**
+   * Create "? extends T" from T.
+   *
+   * @return never <code>null</code>
+   * @since
+   */
+  @Nonnull
+  public final JTypeWildcard wildcardExtends ()
   {
     return wildcard (EBoundMode.EXTENDS);
   }
