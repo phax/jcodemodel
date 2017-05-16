@@ -53,7 +53,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  */
 public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationValue implements IJOwned
 {
-  protected final class JEnumConstantExpr extends AbstractJExpressionImpl
+  protected final class JEnumConstantExpr implements IJExpression
   {
     private final Enum <?> m_aEnumConstant;
 
@@ -68,7 +68,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
     }
   }
 
-  protected final class FullClassNameExpr extends AbstractJExpressionImpl
+  protected final class FullClassNameExpr implements IJExpression
   {
     private final Class <?> m_aClass;
 

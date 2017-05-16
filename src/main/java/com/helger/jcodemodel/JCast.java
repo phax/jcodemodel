@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
 /**
  * A cast operation.
  */
-public class JCast extends AbstractJExpressionImpl
+public class JCast implements IJExpression
 {
   /**
    * JType to which the expression is to be cast.

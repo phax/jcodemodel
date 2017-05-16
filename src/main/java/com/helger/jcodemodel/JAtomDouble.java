@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
 /**
  * A special atom for double values
  */
-public class JAtomDouble extends AbstractJExpressionImpl
+public class JAtomDouble implements IJExpression
 {
   public static final String JAVA_LANG_DOUBLE_NEGATIVE_INFINITY = "java.lang.Double.NEGATIVE_INFINITY";
   public static final String JAVA_LANG_DOUBLE_POSITIVE_INFINITY = "java.lang.Double.POSITIVE_INFINITY";

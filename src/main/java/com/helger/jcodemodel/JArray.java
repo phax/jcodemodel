@@ -53,7 +53,7 @@ import javax.annotation.Nullable;
 /**
  * array creation and initialization.
  */
-public class JArray extends AbstractJExpressionImpl
+public class JArray implements IJExpression
 {
   private final AbstractJType m_aType;
   private final IJExpression m_aSize;

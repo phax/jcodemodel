@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
 /**
  * A special atom for long values
  */
-public class JAtomLong extends AbstractJExpressionImpl
+public class JAtomLong implements IJExpression
 {
   public static final String SUFFIX_LONG = "L";
 

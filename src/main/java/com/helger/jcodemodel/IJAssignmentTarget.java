@@ -55,7 +55,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this = <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assign (@Nonnull IJExpression rhs);
+  default JAssignment assign (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assign (this, rhs);
+  }
 
   /**
    * @param rhs
@@ -63,7 +66,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this = <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assign (boolean rhs);
+  default JAssignment assign (final boolean rhs)
+  {
+    return assign (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -71,7 +77,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this = <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assign (char rhs);
+  default JAssignment assign (final char rhs)
+  {
+    return assign (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -79,7 +88,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this = <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assign (double rhs);
+  default JAssignment assign (final double rhs)
+  {
+    return assign (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -87,7 +99,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this = <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assign (float rhs);
+  default JAssignment assign (final float rhs)
+  {
+    return assign (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -95,7 +110,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this = <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assign (int rhs);
+  default JAssignment assign (final int rhs)
+  {
+    return assign (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -103,7 +121,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this = <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assign (long rhs);
+  default JAssignment assign (final long rhs)
+  {
+    return assign (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -111,7 +132,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this = <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assign (@Nonnull String rhs);
+  default JAssignment assign (@Nonnull final String rhs)
+  {
+    return assign (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -119,7 +143,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this += <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignPlus (@Nonnull IJExpression rhs);
+  default JAssignment assignPlus (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignPlus (this, rhs);
+  }
 
   /**
    * @param rhs
@@ -127,7 +154,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this += <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignPlus (@Nonnull char rhs);
+  default JAssignment assignPlus (@Nonnull final char rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -135,7 +165,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this += <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignPlus (@Nonnull double rhs);
+  default JAssignment assignPlus (@Nonnull final double rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -143,7 +176,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this += <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignPlus (@Nonnull float rhs);
+  default JAssignment assignPlus (@Nonnull final float rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -151,7 +187,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this += <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignPlus (@Nonnull int rhs);
+  default JAssignment assignPlus (@Nonnull final int rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -159,7 +198,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this += <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignPlus (@Nonnull long rhs);
+  default JAssignment assignPlus (@Nonnull final long rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -167,7 +209,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this += <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignPlus (@Nonnull String rhs);
+  default JAssignment assignPlus (@Nonnull final String rhs)
+  {
+    return assignPlus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -175,7 +220,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this -= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignMinus (@Nonnull IJExpression rhs);
+  default JAssignment assignMinus (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignMinus (this, rhs);
+  }
 
   /**
    * @param rhs
@@ -183,7 +231,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this -= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignMinus (double rhs);
+  default JAssignment assignMinus (final double rhs)
+  {
+    return assignMinus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -191,7 +242,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this -= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignMinus (float rhs);
+  default JAssignment assignMinus (final float rhs)
+  {
+    return assignMinus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -199,7 +253,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this -= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignMinus (int rhs);
+  default JAssignment assignMinus (final int rhs)
+  {
+    return assignMinus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -207,7 +264,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this -= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignMinus (long rhs);
+  default JAssignment assignMinus (final long rhs)
+  {
+    return assignMinus (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -215,7 +275,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this *= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignTimes (@Nonnull IJExpression rhs);
+  default JAssignment assignTimes (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignTimes (this, rhs);
+  }
 
   /**
    * @param rhs
@@ -223,7 +286,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this *= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignTimes (double rhs);
+  default JAssignment assignTimes (final double rhs)
+  {
+    return assignTimes (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -231,7 +297,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this *= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignTimes (float rhs);
+  default JAssignment assignTimes (final float rhs)
+  {
+    return assignTimes (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -239,7 +308,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this *= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignTimes (int rhs);
+  default JAssignment assignTimes (final int rhs)
+  {
+    return assignTimes (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -247,7 +319,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this *= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignTimes (long rhs);
+  default JAssignment assignTimes (final long rhs)
+  {
+    return assignTimes (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -255,7 +330,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this /= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignDivide (@Nonnull IJExpression rhs);
+  default JAssignment assignDivide (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignDivide (this, rhs);
+  }
 
   /**
    * @param rhs
@@ -263,7 +341,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this /= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignDivide (double rhs);
+  default JAssignment assignDivide (final double rhs)
+  {
+    return assignDivide (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -271,7 +352,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this /= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignDivide (float rhs);
+  default JAssignment assignDivide (final float rhs)
+  {
+    return assignDivide (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -279,7 +363,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this /= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignDivide (int rhs);
+  default JAssignment assignDivide (final int rhs)
+  {
+    return assignDivide (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -287,7 +374,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this /= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignDivide (long rhs);
+  default JAssignment assignDivide (final long rhs)
+  {
+    return assignDivide (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -295,7 +385,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this &lt;&lt;= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignShl (@Nonnull IJExpression rhs);
+  default JAssignment assignShl (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignShl (this, rhs);
+  }
 
   /**
    * @param rhs
@@ -303,7 +396,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this &lt;&lt;= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignShl (int rhs);
+  default JAssignment assignShl (final int rhs)
+  {
+    return assignShl (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -311,7 +407,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this &gt;&gt;= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignShr (@Nonnull IJExpression rhs);
+  default JAssignment assignShr (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignShr (this, rhs);
+  }
 
   /**
    * @param rhs
@@ -319,7 +418,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this &gt;&gt;= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignShr (int rhs);
+  default JAssignment assignShr (final int rhs)
+  {
+    return assignShr (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -327,7 +429,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this &gt;&gt;&gt;= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignShrz (@Nonnull IJExpression rhs);
+  default JAssignment assignShrz (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignShrz (this, rhs);
+  }
 
   /**
    * @param rhs
@@ -335,7 +440,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this &gt;&gt;&gt;= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignShrz (int rhs);
+  default JAssignment assignShrz (final int rhs)
+  {
+    return assignShrz (JExpr.lit (rhs));
+  }
 
   /**
    * @param rhs
@@ -343,15 +451,10 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this &amp;= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignBand (@Nonnull IJExpression rhs);
-
-  /**
-   * @param rhs
-   *        Expression to assign
-   * @return <code>this ^= <em>rhs</em></code>
-   */
-  @Nonnull
-  IJExpressionStatement assignXor (@Nonnull IJExpression rhs);
+  default JAssignment assignBand (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignBand (this, rhs);
+  }
 
   /**
    * @param rhs
@@ -359,5 +462,19 @@ public interface IJAssignmentTarget extends IJExpression
    * @return <code>this |= <em>rhs</em></code>
    */
   @Nonnull
-  IJExpressionStatement assignBor (@Nonnull IJExpression rhs);
+  default JAssignment assignBor (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignBor (this, rhs);
+  }
+
+  /**
+   * @param rhs
+   *        Expression to assign
+   * @return <code>this ^= <em>rhs</em></code>
+   */
+  @Nonnull
+  default JAssignment assignXor (@Nonnull final IJExpression rhs)
+  {
+    return JExpr.assignXor (this, rhs);
+  }
 }

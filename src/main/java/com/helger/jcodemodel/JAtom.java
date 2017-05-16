@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
 /**
  * JAtoms: Simple code components that merely generate themselves.
  */
-public class JAtom extends AbstractJExpressionImpl
+public class JAtom implements IJExpression
 {
   private final String m_sWhat;
 

@@ -264,19 +264,15 @@ public final class JExpr
   }
 
   @Nonnull
-  public static AbstractJExpressionImpl dotclass (@Nonnull final AbstractJClass cl)
+  public static IJExpression dotclass (@Nonnull final AbstractJClass cl)
   {
-    return new AbstractJExpressionImpl ()
-    {
-      public void generate (@Nonnull final JFormatter f)
-      {
-        AbstractJClass c;
-        if (cl instanceof JNarrowedClass)
-          c = ((JNarrowedClass) cl).basis ();
-        else
-          c = cl;
-        f.generable (c).print (".class");
-      }
+    return (@Nonnull final JFormatter f) -> {
+      AbstractJClass c;
+      if (cl instanceof JNarrowedClass)
+        c = ((JNarrowedClass) cl).basis ();
+      else
+        c = cl;
+      f.generable (c).print (".class");
     };
   }
 
@@ -473,15 +469,9 @@ public final class JExpr
    * @return Direct expression
    */
   @Nonnull
-  public static AbstractJExpressionImpl direct (@Nonnull final String source)
+  public static IJExpression direct (@Nonnull final String source)
   {
-    return new AbstractJExpressionImpl ()
-    {
-      public void generate (final JFormatter f)
-      {
-        f.print ('(').print (source).print (')');
-      }
-    };
+    return f -> f.print ('(').print (source).print (')');
   }
 
   /**

@@ -45,10 +45,12 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * array component reference.
  */
-public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
+public class JArrayCompRef implements IJAssignmentTarget
 {
   /**
    * JArray expression upon which this component will be accessed.
@@ -70,8 +72,8 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
    */
   protected JArrayCompRef (@Nonnull final IJExpression array, @Nonnull final IJExpression index)
   {
-    if (array == null || index == null)
-      throw new NullPointerException ();
+    JCValueEnforcer.notNull (array, "Array");
+    JCValueEnforcer.notNull (index, "Index");
     m_aArray = array;
     m_aIndex = index;
   }

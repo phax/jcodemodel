@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
 /**
  * A special atom for int values
  */
-public class JAtomInt extends AbstractJExpressionImpl
+public class JAtomInt implements IJExpression
 {
   private final int m_nValue;
 

@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
 /**
  * Assignment statements, which are also expressions.
  */
-public class JAssignment extends AbstractJExpressionImpl implements IJExpressionStatement
+public class JAssignment implements IJExpressionStatement
 {
   private final IJAssignmentTarget m_aLhs;
   private final String m_sOperator;

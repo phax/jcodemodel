@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * A special JBlock implementation that supports lambda expressions.
  *
@@ -50,9 +52,16 @@ import javax.annotation.Nonnull;
  */
 public class JLambdaBlock extends JBlock
 {
+  /**
+   * Remove all existing expressions and only add the provided expression
+   *
+   * @param aExpr
+   *        The expression to be used. May not be <code>null</code>.
+   */
   public void lambdaExpr (@Nonnull final IJExpression aExpr)
   {
+    JCValueEnforcer.notNull (aExpr, "Expression");
     removeAll ();
-    _insert (aExpr);
+    internalInsert (aExpr);
   }
 }

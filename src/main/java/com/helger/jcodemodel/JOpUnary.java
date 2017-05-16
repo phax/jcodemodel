@@ -47,7 +47,7 @@ import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
-public class JOpUnary extends AbstractJExpressionImpl
+public class JOpUnary implements IJExpression
 {
   private final String m_sOperator;
   private final IJExpression m_aExpr;

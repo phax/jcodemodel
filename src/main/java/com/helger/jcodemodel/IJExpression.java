@@ -60,43 +60,84 @@ public interface IJExpression extends IJGenerable
    * @return <code>-[this]" from "[this]</code>.
    */
   @Nonnull
-  IJExpression minus ();
+  default IJExpression minus ()
+  {
+    return JOp.minus (this);
+  }
 
   /**
+   * Logical 'not' <tt>'!x'</tt>.
+   *
    * @return <code>![this]" from "[this]</code>.
    */
   @Nonnull
-  IJExpression not ();
+  default IJExpression not ()
+  {
+    return JOp.not (this);
+  }
 
   /**
    * @return <code>~[this]" from "[this]</code>.
    */
   @Nonnull
-  IJExpression complement ();
+  default IJExpression complement ()
+  {
+    return JOp.complement (this);
+  }
 
   /**
    * @return <code>[this]++" from "[this]</code>.
    */
   @Nonnull
-  IJExpression incr ();
+  default IJExpression incr ()
+  {
+    return postincr ();
+  }
+
+  /**
+   * @return <code>[this]++" from "[this]</code>.
+   */
+  @Nonnull
+  default IJExpression postincr ()
+  {
+    return JOp.postincr (this);
+  }
 
   /**
    * @return <code>++[this]" from "[this]</code>.
    */
   @Nonnull
-  IJExpression preincr ();
+  default IJExpression preincr ()
+  {
+    return JOp.preincr (this);
+  }
 
   /**
    * @return <code>[this]--" from "[this]</code>.
    */
   @Nonnull
-  IJExpression decr ();
+  default IJExpression decr ()
+  {
+    return postdecr ();
+  }
+
+  /**
+   * @return <code>[this]--" from "[this]</code>.
+   */
+  @Nonnull
+  default IJExpression postdecr ()
+  {
+    return JOp.postdecr (this);
+  }
 
   /**
    * @return <code>--[this]" from "[this]</code>.
    */
   @Nonnull
-  IJExpression predecr ();
+  default IJExpression predecr ()
+  {
+    return JOp.predecr (this);
+  }
 
   /**
    * @param right
@@ -104,7 +145,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
-  IJExpression plus (@Nonnull IJExpression right);
+  default IJExpression plus (@Nonnull final IJExpression right)
+  {
+    return JOp.plus (this, right);
+  }
 
   /**
    * @param right
@@ -112,7 +156,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
-  IJExpression plus (double right);
+  default IJExpression plus (final double right)
+  {
+    return plus (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -120,7 +167,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
-  IJExpression plus (float right);
+  default IJExpression plus (final float right)
+  {
+    return plus (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -128,7 +178,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
-  IJExpression plus (int right);
+  default IJExpression plus (final int right)
+  {
+    return plus (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -136,7 +189,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
-  IJExpression plus (long right);
+  default IJExpression plus (final long right)
+  {
+    return plus (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -144,7 +200,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]+[right]</code>.
    */
   @Nonnull
-  IJExpression plus (@Nonnull String right);
+  default IJExpression plus (@Nonnull final String right)
+  {
+    return plus (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -152,7 +211,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
-  IJExpression minus (@Nonnull IJExpression right);
+  default IJExpression minus (@Nonnull final IJExpression right)
+  {
+    return JOp.minus (this, right);
+  }
 
   /**
    * @param right
@@ -160,7 +222,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
-  IJExpression minus (double right);
+  default IJExpression minus (final double right)
+  {
+    return minus (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -168,7 +233,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
-  IJExpression minus (float right);
+  default IJExpression minus (final float right)
+  {
+    return minus (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -176,7 +244,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
-  IJExpression minus (int right);
+  default IJExpression minus (final int right)
+  {
+    return minus (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -184,7 +255,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]-[right]</code>.
    */
   @Nonnull
-  IJExpression minus (long right);
+  default IJExpression minus (final long right)
+  {
+    return minus (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -192,7 +266,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
-  IJExpression mul (@Nonnull IJExpression right);
+  default IJExpression mul (@Nonnull final IJExpression right)
+  {
+    return JOp.mul (this, right);
+  }
 
   /**
    * @param right
@@ -200,7 +277,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
-  IJExpression mul (double right);
+  default IJExpression mul (final double right)
+  {
+    return mul (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -208,7 +288,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
-  IJExpression mul (float right);
+  default IJExpression mul (final float right)
+  {
+    return mul (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -216,7 +299,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
-  IJExpression mul (int right);
+  default IJExpression mul (final int right)
+  {
+    return mul (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -224,7 +310,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]*[right]</code>.
    */
   @Nonnull
-  IJExpression mul (long right);
+  default IJExpression mul (final long right)
+  {
+    return mul (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -232,7 +321,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
-  IJExpression div (@Nonnull IJExpression right);
+  default IJExpression div (@Nonnull final IJExpression right)
+  {
+    return JOp.div (this, right);
+  }
 
   /**
    * @param right
@@ -240,7 +332,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
-  IJExpression div (double right);
+  default IJExpression div (final double right)
+  {
+    return div (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -248,7 +343,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
-  IJExpression div (float right);
+  default IJExpression div (final float right)
+  {
+    return div (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -256,7 +354,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
-  IJExpression div (int right);
+  default IJExpression div (final int right)
+  {
+    return div (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -264,7 +365,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]/[right]</code>.
    */
   @Nonnull
-  IJExpression div (long right);
+  default IJExpression div (final long right)
+  {
+    return div (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -272,7 +376,32 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]%[right]</code>.
    */
   @Nonnull
-  IJExpression mod (@Nonnull IJExpression right);
+  default IJExpression mod (@Nonnull final IJExpression right)
+  {
+    return JOp.mod (this, right);
+  }
+
+  /**
+   * @param right
+   *        value to mod with
+   * @return <code>[this]%[right]</code>.
+   */
+  @Nonnull
+  default IJExpression mod (final int right)
+  {
+    return mod (JExpr.lit (right));
+  }
+
+  /**
+   * @param right
+   *        value to mod with
+   * @return <code>[this]%[right]</code>.
+   */
+  @Nonnull
+  default IJExpression mod (final long right)
+  {
+    return mod (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -280,7 +409,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]&lt;&lt;[right]</code>.
    */
   @Nonnull
-  IJExpression shl (@Nonnull IJExpression right);
+  default IJExpression shl (@Nonnull final IJExpression right)
+  {
+    return JOp.shl (this, right);
+  }
 
   /**
    * @param right
@@ -288,7 +420,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this]&lt;&lt;[right]</code>.
    */
   @Nonnull
-  IJExpression shl (int right);
+  default IJExpression shl (final int right)
+  {
+    return shl (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -296,7 +431,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &gt;&gt; [right]</code>.
    */
   @Nonnull
-  IJExpression shr (@Nonnull IJExpression right);
+  default IJExpression shr (@Nonnull final IJExpression right)
+  {
+    return JOp.shr (this, right);
+  }
 
   /**
    * @param right
@@ -304,7 +442,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &gt;&gt; [right]</code>.
    */
   @Nonnull
-  IJExpression shr (int right);
+  default IJExpression shr (final int right)
+  {
+    return shr (JExpr.lit (right));
+  }
 
   /**
    * @param right
@@ -312,7 +453,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &gt;&gt;&gt; [right]</code>.
    */
   @Nonnull
-  IJExpression shrz (@Nonnull IJExpression right);
+  default IJExpression shrz (@Nonnull final IJExpression right)
+  {
+    return JOp.shrz (this, right);
+  }
 
   /**
    * @param right
@@ -320,7 +464,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &gt;&gt;&gt; [right]</code>.
    */
   @Nonnull
-  IJExpression shrz (int right);
+  default IJExpression shrz (final int right)
+  {
+    return shrz (JExpr.lit (right));
+  }
 
   /**
    * Bit-wise AND '&amp;'.
@@ -330,7 +477,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &amp; [right]</code>.
    */
   @Nonnull
-  IJExpression band (@Nonnull IJExpression right);
+  default IJExpression band (@Nonnull final IJExpression right)
+  {
+    return JOp.band (this, right);
+  }
 
   /**
    * Bit-wise OR '|'.
@@ -340,7 +490,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] | [right]</code>.
    */
   @Nonnull
-  IJExpression bor (@Nonnull IJExpression right);
+  default IJExpression bor (@Nonnull final IJExpression right)
+  {
+    return JOp.bor (this, right);
+  }
 
   /**
    * Logical AND '&amp;&amp;'.
@@ -350,7 +503,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &amp;&amp; [right]</code>.
    */
   @Nonnull
-  IJExpression cand (@Nonnull IJExpression right);
+  default IJExpression cand (@Nonnull final IJExpression right)
+  {
+    return JOp.cand (this, right);
+  }
 
   /**
    * Logical OR '||'.
@@ -360,7 +516,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] || [right]</code>.
    */
   @Nonnull
-  IJExpression cor (@Nonnull IJExpression right);
+  default IJExpression cor (@Nonnull final IJExpression right)
+  {
+    return JOp.cor (this, right);
+  }
 
   /**
    * @param right
@@ -368,7 +527,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] ^ [right]</code>.
    */
   @Nonnull
-  IJExpression xor (@Nonnull IJExpression right);
+  default IJExpression xor (@Nonnull final IJExpression right)
+  {
+    return JOp.xor (this, right);
+  }
 
   /**
    * @param right
@@ -376,13 +538,30 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &lt; [right]</code>.
    */
   @Nonnull
-  IJExpression lt (@Nonnull IJExpression right);
+  default IJExpression lt (@Nonnull final IJExpression right)
+  {
+    return JOp.lt (this, right);
+  }
+
+  /**
+   * @param right
+   *        value to compare to
+   * @return <code>[this] &lt; [right]</code>.
+   */
+  @Nonnull
+  default IJExpression lt (final int right)
+  {
+    return lt (JExpr.lit (right));
+  }
 
   /**
    * @return <code>[this] &lt; 0</code>.
    */
   @Nonnull
-  IJExpression lt0 ();
+  default IJExpression lt0 ()
+  {
+    return lt (0);
+  }
 
   /**
    * @param right
@@ -390,13 +569,30 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &lt;= [right]</code>.
    */
   @Nonnull
-  IJExpression lte (@Nonnull IJExpression right);
+  default IJExpression lte (@Nonnull final IJExpression right)
+  {
+    return JOp.lte (this, right);
+  }
+
+  /**
+   * @param right
+   *        value to compare to
+   * @return <code>[this] &lt;= [right]</code>.
+   */
+  @Nonnull
+  default IJExpression lte (final int right)
+  {
+    return lte (JExpr.lit (right));
+  }
 
   /**
    * @return <code>[this] &lt;= 0</code>.
    */
   @Nonnull
-  IJExpression lte0 ();
+  default IJExpression lte0 ()
+  {
+    return lte (0);
+  }
 
   /**
    * @param right
@@ -404,13 +600,30 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &gt; [right]</code>.
    */
   @Nonnull
-  IJExpression gt (@Nonnull IJExpression right);
+  default IJExpression gt (@Nonnull final IJExpression right)
+  {
+    return JOp.gt (this, right);
+  }
+
+  /**
+   * @param right
+   *        value to compare to
+   * @return <code>[this] &gt; [right]</code>.
+   */
+  @Nonnull
+  default IJExpression gt (final int right)
+  {
+    return gt (JExpr.lit (right));
+  }
 
   /**
    * @return <code>[this] &gt; 0</code>.
    */
   @Nonnull
-  IJExpression gt0 ();
+  default IJExpression gt0 ()
+  {
+    return gt (0);
+  }
 
   /**
    * @param right
@@ -418,13 +631,30 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] &gt;= [right]</code>.
    */
   @Nonnull
-  IJExpression gte (@Nonnull IJExpression right);
+  default IJExpression gte (@Nonnull final IJExpression right)
+  {
+    return JOp.gte (this, right);
+  }
+
+  /**
+   * @param right
+   *        value to compare to
+   * @return <code>[this] &gt;= [right]</code>.
+   */
+  @Nonnull
+  default IJExpression gte (final int right)
+  {
+    return gte (JExpr.lit (right));
+  }
 
   /**
    * @return <code>[this] &gt;= 0</code>.
    */
   @Nonnull
-  IJExpression gte0 ();
+  default IJExpression gte0 ()
+  {
+    return gte (0);
+  }
 
   /**
    * Equals
@@ -434,7 +664,10 @@ public interface IJExpression extends IJGenerable
    * @return <code><em>expr</em> == <em>right</em></code>
    */
   @Nonnull
-  IJExpression eq (@Nonnull IJExpression right);
+  default IJExpression eq (@Nonnull final IJExpression right)
+  {
+    return JOp.eq (this, right);
+  }
 
   /**
    * Shortcut for <code>eq (JExpr._null ())</code>
@@ -442,7 +675,10 @@ public interface IJExpression extends IJGenerable
    * @return <code><em>expr</em> == null</code>
    */
   @Nonnull
-  IJExpression eqNull ();
+  default IJExpression eqNull ()
+  {
+    return eq (JExpr._null ());
+  }
 
   /**
    * Shortcut for <code>eq (JExpr.lit (0))</code>
@@ -450,7 +686,10 @@ public interface IJExpression extends IJGenerable
    * @return <code><em>expr</em> == 0</code>
    */
   @Nonnull
-  IJExpression eq0 ();
+  default IJExpression eq0 ()
+  {
+    return eq (JExpr.lit (0));
+  }
 
   /**
    * Not equals
@@ -460,7 +699,10 @@ public interface IJExpression extends IJGenerable
    * @return <code><em>expr</em> != <em>right</em></code>
    */
   @Nonnull
-  IJExpression ne (@Nonnull IJExpression right);
+  default IJExpression ne (@Nonnull final IJExpression right)
+  {
+    return JOp.ne (this, right);
+  }
 
   /**
    * Shortcut for <code>ne (JExpr._null ())</code>
@@ -468,7 +710,10 @@ public interface IJExpression extends IJGenerable
    * @return Never <code><em>expr</em> != null</code>
    */
   @Nonnull
-  IJExpression neNull ();
+  default IJExpression neNull ()
+  {
+    return ne (JExpr._null ());
+  }
 
   /**
    * Shortcut for <code>ne (JExpr.lit (0))</code>
@@ -476,7 +721,10 @@ public interface IJExpression extends IJGenerable
    * @return Never <code><em>expr</em> != 0</code>
    */
   @Nonnull
-  IJExpression ne0 ();
+  default IJExpression ne0 ()
+  {
+    return ne (JExpr.lit (0));
+  }
 
   /**
    * @param right
@@ -484,7 +732,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] instanceof [right]</code>.
    */
   @Nonnull
-  IJExpression _instanceof (@Nonnull AbstractJType right);
+  default IJExpression _instanceof (@Nonnull final AbstractJType right)
+  {
+    return JOp._instanceof (this, right);
+  }
 
   /**
    * @param method
@@ -493,7 +744,10 @@ public interface IJExpression extends IJGenerable
    *         returned {@link JInvocation} object.
    */
   @Nonnull
-  JInvocation invoke (@Nonnull JMethod method);
+  default JInvocation invoke (@Nonnull final JMethod method)
+  {
+    return JExpr.invoke (this, method);
+  }
 
   /**
    * @param method
@@ -502,13 +756,22 @@ public interface IJExpression extends IJGenerable
    *         returned {@link JInvocation} object.
    */
   @Nonnull
-  JInvocation invoke (@Nonnull String method);
+  default JInvocation invoke (@Nonnull final String method)
+  {
+    return JExpr.invoke (this, method);
+  }
 
   @Nonnull
-  JFieldRef ref (@Nonnull JVar field);
+  default JFieldRef ref (@Nonnull final JVar field)
+  {
+    return JExpr.ref (this, field);
+  }
 
   @Nonnull
-  JFieldRef ref (@Nonnull String field);
+  default JFieldRef ref (@Nonnull final String field)
+  {
+    return JExpr.ref (this, field);
+  }
 
   /**
    * @param index
@@ -516,7 +779,10 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] [ [index] ]</code>
    */
   @Nonnull
-  JArrayCompRef component (@Nonnull IJExpression index);
+  default JArrayCompRef component (@Nonnull final IJExpression index)
+  {
+    return JExpr.component (this, index);
+  }
 
   /**
    * @param index
@@ -524,11 +790,17 @@ public interface IJExpression extends IJGenerable
    * @return <code>[this] [ [index] ]</code>
    */
   @Nonnull
-  JArrayCompRef component (int index);
+  default JArrayCompRef component (final int index)
+  {
+    return component (JExpr.lit (index));
+  }
 
   /**
    * @return <code>[this] [0]</code>
    */
   @Nonnull
-  JArrayCompRef component0 ();
+  default JArrayCompRef component0 ()
+  {
+    return component (0);
+  }
 }

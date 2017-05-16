@@ -48,7 +48,7 @@ import javax.annotation.Nonnull;
 /**
  * A special atom for float values
  */
-public class JAtomFloat extends AbstractJExpressionImpl
+public class JAtomFloat implements IJExpression
 {
   public static final String JAVA_LANG_FLOAT_NEGATIVE_INFINITY = "java.lang.Float.NEGATIVE_INFINITY";
   public static final String JAVA_LANG_FLOAT_POSITIVE_INFINITY = "java.lang.Float.POSITIVE_INFINITY";

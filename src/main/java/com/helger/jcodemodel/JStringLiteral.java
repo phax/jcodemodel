@@ -50,7 +50,7 @@ import javax.annotation.Nonnull;
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class JStringLiteral extends AbstractJExpressionImpl
+public class JStringLiteral implements IJExpression
 {
   private String m_sWhat;
 

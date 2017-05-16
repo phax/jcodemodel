@@ -45,13 +45,15 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Enum Constant reference. When used as an {@link IJExpression}, this object
  * represents a reference to the enum constant.
  *
  * @author Philip Helger
  */
-public class JEnumConstantRef extends AbstractJExpressionImpl
+public class JEnumConstantRef implements IJExpression
 {
   /**
    * The enum class.
@@ -65,10 +67,8 @@ public class JEnumConstantRef extends AbstractJExpressionImpl
 
   protected JEnumConstantRef (@Nonnull final AbstractJClass type, @Nonnull final String name)
   {
-    if (type == null)
-      throw new NullPointerException ("type");
-    if (name == null)
-      throw new NullPointerException ("name");
+    JCValueEnforcer.notNull (type, "Type");
+    JCValueEnforcer.notNull (name, "Name");
     m_aType = type;
     m_sName = name;
   }

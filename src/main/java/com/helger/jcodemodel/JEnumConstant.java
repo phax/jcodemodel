@@ -59,7 +59,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  *
  * @author Bhakti Mehta (Bhakti.Mehta@sun.com)
  */
-public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclaration, IJAnnotatable, IJDocCommentable
+public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable, IJDocCommentable
 {
   /**
    * The enum class.

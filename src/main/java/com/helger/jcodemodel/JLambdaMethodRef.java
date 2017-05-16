@@ -51,7 +51,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  * @author Philip Helger
  * @since 2.8.3
  */
-public class JLambdaMethodRef extends AbstractJExpressionImpl
+public class JLambdaMethodRef implements IJExpression
 {
   private final JMethod m_aMethod;
   private final AbstractJType m_aType;
@@ -202,9 +202,8 @@ public class JLambdaMethodRef extends AbstractJExpressionImpl
 
   public void generate (@Nonnull final JFormatter f)
   {
-    final AbstractJType aType = type ();
     if (isStaticRef ())
-      f.type (aType);
+      f.type (type ());
     else
       f.generable (m_aVar);
     f.print ("::").print (methodName ());

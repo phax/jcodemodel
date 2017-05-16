@@ -57,7 +57,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
 /**
  * Variables and fields.
  */
-public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJDeclaration, IJAnnotatable
+public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
 {
   /**
    * Modifiers.

@@ -49,7 +49,7 @@ import javax.annotation.Nullable;
 /**
  * Field Reference
  */
-public class JFieldRef extends AbstractJExpressionAssignmentTargetImpl implements IJOwnedMaybe
+public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
 {
   private final JCodeModel m_aOwner;
 

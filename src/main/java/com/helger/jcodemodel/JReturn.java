@@ -51,7 +51,7 @@ public class JReturn implements IJStatement
   /**
    * {@link IJExpression} to return; may be null.
    */
-  private final IJExpression _expr;
+  private final IJExpression m_aExpr;
 
   /**
    * JReturn constructor
@@ -61,20 +61,29 @@ public class JReturn implements IJStatement
    */
   protected JReturn (@Nullable final IJExpression expr)
   {
-    _expr = expr;
+    m_aExpr = expr;
   }
 
   @Nullable
   public IJExpression expr ()
   {
-    return _expr;
+    return m_aExpr;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
     f.print ("return");
-    if (_expr != null)
-      f.print (' ').generable (_expr);
-    f.print (';').newline ();
+    boolean bAddSemicolon = true;
+    if (m_aExpr != null)
+    {
+      f.print (' ').generable (m_aExpr);
+      if (m_aExpr instanceof JLambda)
+        bAddSemicolon = false;
+    }
+    if (bAddSemicolon)
+    {
+      f.print (';');
+      f.newline ();
+    }
   }
 }

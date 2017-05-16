@@ -54,7 +54,7 @@ import com.helger.jcodemodel.util.JCHashCodeGenerator;
 /**
  * {@link JMethod} invocation
  */
-public class JInvocation extends AbstractJExpressionImpl implements IJStatement, IJOwnedMaybe
+public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
 {
   private final JCodeModel m_aOwner;
 
@@ -66,13 +66,13 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
 
   /**
    * Name of the method to be invoked. Either this field is set, or
-   * {@link #m_sMethod}, or {@link #m_aConstructorType} (in which case it's a
+   * {@link #m_aMethod}, or {@link #m_aConstructorType} (in which case it's a
    * constructor invocation.) This allows {@link JMethod#name(String) the name
    * of the method to be changed later}.
    */
   private final String m_sMethodName;
 
-  private final JMethod m_sMethod;
+  private final JMethod m_aMethod;
 
   private final boolean m_bIsConstructor;
 
@@ -146,7 +146,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     m_aOwner = owner;
     m_aObject = object;
     m_sMethodName = sName;
-    m_sMethod = null;
+    m_aMethod = null;
     m_bIsConstructor = false;
     m_aConstructorType = null;
   }
@@ -158,7 +158,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     m_aOwner = owner;
     m_aObject = object;
     m_sMethodName = null;
-    m_sMethod = method;
+    m_aMethod = method;
     m_bIsConstructor = false;
     m_aConstructorType = null;
   }
@@ -176,7 +176,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     m_aOwner = aConstructorType.owner ();
     m_aObject = null;
     m_sMethodName = null;
-    m_sMethod = null;
+    m_aMethod = null;
     m_bIsConstructor = true;
     m_aConstructorType = aConstructorType;
   }
@@ -381,9 +381,10 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     }
   }
 
-  private String methodName ()
+  @Nullable
+  private String _methodName ()
   {
-    return m_sMethodName != null ? m_sMethodName : m_sMethod.name ();
+    return m_aMethod != null ? m_aMethod.name () : m_sMethodName;
   }
 
   public void generate (@Nonnull final JFormatter f)
@@ -407,14 +408,16 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     }
     else
     {
-      final String name = methodName ();
+      // Not a constructor
+      final String name = _methodName ();
 
       if (m_aObject != null)
       {
         // object.<generics> name (
         f.generable (m_aObject).print ('.');
         _addTypeVars (f);
-        f.print (name).print ('(');
+        f.print (name);
+        f.print ('(');
       }
       else
       {
@@ -458,7 +461,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     final JInvocation rhs = (JInvocation) o;
     if (!(isEqual (m_aObject, rhs.m_aObject) &&
           isEqual (m_bIsConstructor, rhs.m_bIsConstructor) &&
-          (m_bIsConstructor || isEqual (methodName (), rhs.methodName ())) &&
+          (m_bIsConstructor || isEqual (_methodName (), rhs._methodName ())) &&
           isEqual (m_aArgs, rhs.m_aArgs) &&
           isEqual (typeFullName (), rhs.typeFullName ())))
     {
@@ -483,7 +486,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   {
     JCHashCodeGenerator hashCodeGenerator = new JCHashCodeGenerator (this).append (m_aObject).append (m_bIsConstructor);
     if (!m_bIsConstructor)
-      hashCodeGenerator = hashCodeGenerator.append (methodName ());
+      hashCodeGenerator = hashCodeGenerator.append (_methodName ());
     hashCodeGenerator = hashCodeGenerator.append (m_aArgs).append (typeFullName ());
     if (m_aTypeVariables != null)
     {
