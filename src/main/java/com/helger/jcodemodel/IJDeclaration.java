@@ -47,7 +47,7 @@ import javax.annotation.Nonnull;
  * themselves.
  */
 
-public interface IJDeclaration
+public interface IJDeclaration extends IJObject
 {
   void declare (@Nonnull JFormatter f);
 }

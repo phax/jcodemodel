@@ -46,7 +46,7 @@ import javax.annotation.Nonnull;
  * Common interface for code components that can generate uses of themselves as
  * statements.
  */
-public interface IJStatement
+public interface IJStatement extends IJObject
 {
   void state (@Nonnull JFormatter f);
 }
