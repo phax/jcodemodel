@@ -59,6 +59,9 @@ public class JLambda extends AbstractJExpressionImpl
   private final List <JLambdaParam> m_aParams = new ArrayList <> ();
   private final JLambdaBlock m_aBodyStatement = new JLambdaBlock ();
 
+  /**
+   * Create an empty lambda without any parameter.
+   */
   public JLambda ()
   {}
 

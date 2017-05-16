@@ -124,11 +124,11 @@ public class JNarrowedClass extends AbstractJClass
   {
     final StringBuilder buf = new StringBuilder ();
     buf.append (m_aBasis.name ()).append ('<');
-    boolean first = true;
+    boolean bFirst = true;
     for (final AbstractJClass c : m_aArgs)
     {
-      if (first)
-        first = false;
+      if (bFirst)
+        bFirst = false;
       else
         buf.append (',');
       buf.append (c.name ());
@@ -187,11 +187,11 @@ public class JNarrowedClass extends AbstractJClass
   {
     m_aBasis.printLink (f);
     f.print ("{@code <}");
-    boolean first = true;
+    boolean bFirst = true;
     for (final AbstractJClass c : m_aArgs)
     {
-      if (first)
-        first = false;
+      if (bFirst)
+        bFirst = false;
       else
         f.print (',');
       c.printLink (f);

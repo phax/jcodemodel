@@ -142,18 +142,18 @@ public final class AbstractJTypeTest
     _assertIsAssignable (_List.narrow (_Integer), _List.narrow (_Integer));
     _assertIsNotAssignable (_List.narrow (_Object), _List.narrow (_Integer));
     _assertIsNotAssignable (_List.narrow (_Integer), _List.narrow (_Object));
-    _assertIsAssignable (_List.narrow (_Object.wildcard ()), _List.narrow (_Integer));
-    _assertIsAssignable (_List.narrow (_Object.wildcard ()), _List.narrow (_Integer.wildcard ()));
+    _assertIsAssignable (_List.narrow (_Object.wildcardExtends ()), _List.narrow (_Integer));
+    _assertIsAssignable (_List.narrow (_Object.wildcardExtends ()), _List.narrow (_Integer.wildcardExtends ()));
     _assertIsAssignable (_List.narrow (_Integer.wildcardSuper ()), _List.narrow (_Object));
     _assertIsAssignable (_List.narrow (_Integer.wildcardSuper ()), _List.narrow (_Object.wildcardSuper ()));
-    _assertIsNotAssignable (_List.narrow (_Integer.wildcardSuper ()), _List.narrow (_Integer.wildcard ()));
-    _assertIsNotAssignable (_List.narrow (_Integer.wildcard ()), _List.narrow (_Integer.wildcardSuper ()));
+    _assertIsNotAssignable (_List.narrow (_Integer.wildcardSuper ()), _List.narrow (_Integer.wildcardExtends ()));
+    _assertIsNotAssignable (_List.narrow (_Integer.wildcardExtends ()), _List.narrow (_Integer.wildcardSuper ()));
 
     _assertIsNotAssignable (_List.narrow (_List), _List.narrow (_List.narrow (_Integer)));
-    _assertIsAssignable (_List.narrow (_List.wildcard ()), _List.narrow (_List.narrow (_Integer)));
+    _assertIsAssignable (_List.narrow (_List.wildcardExtends ()), _List.narrow (_List.narrow (_Integer)));
 
     // List<? extends List<Object>> list1 = (List<List>)list2
-    _assertIsNotAssignable (_List.narrow (_List.narrow (_Object).wildcard ()), _List.narrow (_List));
+    _assertIsNotAssignable (_List.narrow (_List.narrow (_Object).wildcardExtends ()), _List.narrow (_List));
 
     // List<? super List<List<List>>> list1 = (List<List<? super List>>)list2
     _assertIsNotAssignable (_List.narrow (_List.narrow (_List.narrow (_List)).wildcardSuper ()),
@@ -180,16 +180,16 @@ public final class AbstractJTypeTest
         _assertIsAssignable (type, type);
 
         _registerType (_List.narrow (type));
-        _registerType (_List.narrow (type.wildcard ()));
+        _registerType (_List.narrow (type.wildcardExtends ()));
         _registerType (_List.narrow (type.wildcardSuper ()));
 
         _assertIsAssignableInTopLevelPositionOnly (_List.narrow (type), _List);
         _assertIsAssignable (_List, _List.narrow (type));
 
         _assertIsAssignable (_List.narrow (type), _List.narrow (type));
-        _assertIsAssignable (_List.narrow (type.wildcard ()), _List.narrow (type));
-        _assertIsNotAssignable (_List.narrow (type.wildcard ()), _List.narrow (type.wildcardSuper ()));
-        _assertIsNotAssignable (_List.narrow (type.wildcardSuper ()), _List.narrow (type.wildcard ()));
+        _assertIsAssignable (_List.narrow (type.wildcardExtends ()), _List.narrow (type));
+        _assertIsNotAssignable (_List.narrow (type.wildcardExtends ()), _List.narrow (type.wildcardSuper ()));
+        _assertIsNotAssignable (_List.narrow (type.wildcardSuper ()), _List.narrow (type.wildcardExtends ()));
         _assertIsAssignable (_List.narrow (type.wildcardSuper ()), _List.narrow (type));
       }
       for (final AssignmentTypes assignment : _refreshAssignableTypes ())
@@ -198,9 +198,10 @@ public final class AbstractJTypeTest
         {
           _assertIsNotAssignable (_List.narrow (assignment.m_aVariable), _List.narrow (assignment.m_aValue));
         }
-        _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcard ()), _List.narrow (assignment.m_aValue));
-        _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcard ()),
-                             _List.narrow (assignment.m_aValue.wildcard ()));
+        _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcardExtends ()),
+                             _List.narrow (assignment.m_aValue));
+        _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcardExtends ()),
+                             _List.narrow (assignment.m_aValue.wildcardExtends ()));
         _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()),
                              _List.narrow (assignment.m_aVariable));
         _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()),
