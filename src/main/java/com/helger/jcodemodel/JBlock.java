@@ -891,7 +891,7 @@ public class JBlock implements IJGenerable, IJStatement
     }
   }
 
-  void generateBody (@Nonnull final JFormatter f)
+  protected void generateBody (@Nonnull final JFormatter f)
   {
     for (final IJObject aContentElement : m_aContentList)
     {

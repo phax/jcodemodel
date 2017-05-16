@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * ForEach Statement This will generate the code for statement based on the new
  * j2se 1.5 j.l.s.
@@ -54,23 +56,20 @@ public class JForEach implements IJStatement
   private final String m_sVarName;
   private JBlock m_aBody; // lazily created
   private final IJExpression m_aCollection;
-  private final JVar m_aLopVar;
+  private final JVar m_aLoopVar;
 
   protected JForEach (@Nonnull final AbstractJType aVarType,
                       @Nonnull final String sVarName,
                       @Nonnull final IJExpression aCollection)
   {
-    if (aVarType == null)
-      throw new NullPointerException ("Variable Type");
-    if (sVarName == null)
-      throw new NullPointerException ("Variable name");
-    if (aCollection == null)
-      throw new NullPointerException ("Collection expression");
+    JCValueEnforcer.notNull (aVarType, "VarType");
+    JCValueEnforcer.notNull (sVarName, "VarName");
+    JCValueEnforcer.notNull (aCollection, "Collection");
 
     m_aType = aVarType;
     m_sVarName = sVarName;
     m_aCollection = aCollection;
-    m_aLopVar = new JVar (JMods.forVar (JMod.FINAL), m_aType, m_sVarName, aCollection);
+    m_aLoopVar = new JVar (JMods.forVar (JMod.FINAL), m_aType, m_sVarName, aCollection);
   }
 
   @Nonnull
@@ -85,7 +84,7 @@ public class JForEach implements IJStatement
   @Nonnull
   public JVar var ()
   {
-    return m_aLopVar;
+    return m_aLoopVar;
   }
 
   @Nonnull

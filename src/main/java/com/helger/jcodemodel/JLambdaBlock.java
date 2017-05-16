@@ -64,4 +64,21 @@ public class JLambdaBlock extends JBlock
     removeAll ();
     internalInsert (aExpr);
   }
+
+  @Override
+  protected void generateBody (@Nonnull final JFormatter f)
+  {
+    if (m_aContentList.size () == 1)
+    {
+      // Special handling - prefer expressions over statement in case it is both
+      final IJObject aContentElement = m_aContentList.get (0);
+      if (aContentElement instanceof IJStatement && aContentElement instanceof IJExpression)
+      {
+        f.generable ((IJGenerable) aContentElement);
+        return;
+      }
+    }
+
+    super.generateBody (f);
+  }
 }

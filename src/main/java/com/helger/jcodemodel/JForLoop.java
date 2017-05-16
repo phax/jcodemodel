@@ -130,16 +130,16 @@ public class JForLoop implements IJStatement
   public void state (@Nonnull final JFormatter f)
   {
     f.print ("for (");
-    boolean first = true;
+    boolean bFirst = true;
     for (final Object o : m_aInitExprs)
     {
-      if (!first)
+      if (!bFirst)
         f.print (',');
       if (o instanceof JVar)
         f.var ((JVar) o);
       else
         f.generable ((IJExpression) o);
-      first = false;
+      bFirst = false;
     }
     f.print (';').generable (m_aTestExpr).print (';').generable (m_aUpdateExprs).print (')');
     if (m_aBody != null)

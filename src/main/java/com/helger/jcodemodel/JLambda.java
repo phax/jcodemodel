@@ -157,9 +157,9 @@ public class JLambda implements IJExpression
     f.print (" -> ");
 
     // Print body
-    final boolean bNoBraces = m_aBodyStatement.size () == 1 &&
-                              m_aBodyStatement.getContents ().get (0) instanceof IJExpression;
-    m_aBodyStatement.bracesRequired (!bNoBraces);
+    final boolean bBraces = m_aBodyStatement.size () != 1 ||
+                            !(m_aBodyStatement.getContents ().get (0) instanceof IJExpression);
+    m_aBodyStatement.bracesRequired (bBraces);
     f.statement (m_aBodyStatement);
   }
 

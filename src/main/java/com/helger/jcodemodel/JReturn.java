@@ -73,17 +73,9 @@ public class JReturn implements IJStatement
   public void state (@Nonnull final JFormatter f)
   {
     f.print ("return");
-    boolean bAddSemicolon = true;
     if (m_aExpr != null)
-    {
       f.print (' ').generable (m_aExpr);
-      if (m_aExpr instanceof JLambda)
-        bAddSemicolon = false;
-    }
-    if (bAddSemicolon)
-    {
-      f.print (';');
-      f.newline ();
-    }
+    f.print (';');
+    f.newline ();
   }
 }
