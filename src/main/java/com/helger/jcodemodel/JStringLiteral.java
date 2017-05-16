@@ -45,6 +45,8 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * String literal.
  *
@@ -65,10 +67,9 @@ public class JStringLiteral implements IJExpression
     return m_sWhat;
   }
 
-  public void what (@Nonnull final String sWhat)
+  public final void what (@Nonnull final String sWhat)
   {
-    if (sWhat == null)
-      throw new NullPointerException ("String may not be null");
+    JCValueEnforcer.notNull (sWhat, "What");
     m_sWhat = sWhat;
   }
 

@@ -46,12 +46,12 @@ package com.helger.jcodemodel.meta;
 @SuppressWarnings ("serial")
 class RuntimeErrorTypeFound extends RuntimeException
 {
-  private final ErrorTypeFound _cause;
+  private final ErrorTypeFound m_aCause;
 
   public RuntimeErrorTypeFound (final ErrorTypeFound cause)
   {
     super (cause);
-    _cause = cause;
+    m_aCause = cause;
   }
 
   // Remove the synchronized
@@ -59,6 +59,6 @@ class RuntimeErrorTypeFound extends RuntimeException
   @Override
   public ErrorTypeFound getCause ()
   {
-    return _cause;
+    return m_aCause;
   }
 }

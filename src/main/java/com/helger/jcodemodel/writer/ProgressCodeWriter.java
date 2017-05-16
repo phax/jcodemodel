@@ -50,6 +50,7 @@ import javax.annotation.Nonnull;
 import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.SourcePrintWriter;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Filter CodeWriter that writes a progress message to the specified
@@ -64,9 +65,8 @@ public class ProgressCodeWriter extends FilterCodeWriter
   public ProgressCodeWriter (@Nonnull final AbstractCodeWriter output, @Nonnull final PrintStream progress)
   {
     super (output);
-    if (progress == null)
-      throw new IllegalArgumentException ();
-    this.m_aPS = progress;
+    JCValueEnforcer.notNull (progress, "Progress");
+    m_aPS = progress;
   }
 
   @Override

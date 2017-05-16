@@ -64,42 +64,42 @@ import com.helger.jcodemodel.JVar;
  */
 class ClassFiller
 {
-  private final JDefinedClass _newClass;
-  private final JCodeModel _codeModel;
-  private final DecidedErrorTypesModelsAdapter _modelsAdapter;
+  private final JDefinedClass m_aNewClass;
+  private final JCodeModel m_aCodeModel;
+  private final DecidedErrorTypesModelsAdapter m_aModelsAdapter;
 
   ClassFiller (final JCodeModel codeModel,
                final DecidedErrorTypesModelsAdapter modelsAdapter,
                final JDefinedClass newClass)
   {
-    this._codeModel = codeModel;
-    this._modelsAdapter = modelsAdapter;
-    this._newClass = newClass;
+    m_aCodeModel = codeModel;
+    m_aModelsAdapter = modelsAdapter;
+    m_aNewClass = newClass;
   }
 
   void fillClass (final TypeElement element, final TypeEnvironment environment) throws CodeModelBuildingException,
                                                                                 ErrorTypeFound
   {
-    _newClass.hide ();
-    final Annotator classAnnotator = new Annotator (_modelsAdapter, _newClass, environment);
+    m_aNewClass.hide ();
+    final Annotator classAnnotator = new Annotator (m_aModelsAdapter, m_aNewClass, environment);
     classAnnotator.annotate (element.getAnnotationMirrors ());
     for (final TypeParameterElement parameter : element.getTypeParameters ())
     {
-      final JTypeVar typeVariable = _newClass.generify (parameter.getSimpleName ().toString ());
+      final JTypeVar typeVariable = m_aNewClass.generify (parameter.getSimpleName ().toString ());
       environment.put (typeVariable.name (), typeVariable);
       for (final TypeMirror type : parameter.getBounds ())
       {
-        typeVariable.bound ((AbstractJClass) _modelsAdapter.toJType (type, environment));
+        typeVariable.bound ((AbstractJClass) m_aModelsAdapter.toJType (type, environment));
       }
     }
     final TypeMirror superclass = element.getSuperclass ();
     if (superclass != null && superclass.getKind () != TypeKind.NONE)
     {
-      _newClass._extends ((AbstractJClass) _modelsAdapter.toJType (superclass, environment));
+      m_aNewClass._extends ((AbstractJClass) m_aModelsAdapter.toJType (superclass, environment));
     }
     for (final TypeMirror iface : element.getInterfaces ())
     {
-      _newClass._implements ((AbstractJClass) _modelsAdapter.toJType (iface, environment));
+      m_aNewClass._implements ((AbstractJClass) m_aModelsAdapter.toJType (iface, environment));
     }
     for (final Element enclosedElement : element.getEnclosedElements ())
     {
@@ -107,17 +107,17 @@ class ClassFiller
           enclosedElement.getKind ().equals (ElementKind.CLASS))
       {
         final TypeElement innerClassElement = (TypeElement) enclosedElement;
-        _modelsAdapter.defineInnerClass (_newClass, innerClassElement, environment.enclosed ());
+        m_aModelsAdapter.defineInnerClass (m_aNewClass, innerClassElement, environment.enclosed ());
       }
       else
         if (enclosedElement.getKind ().equals (ElementKind.METHOD))
         {
           final ExecutableElement executable = (ExecutableElement) enclosedElement;
-          final JMethod method = _newClass.method (DecidedErrorTypesModelsAdapter.toJMod (executable.getModifiers ()),
-                                                   _codeModel.VOID,
-                                                   executable.getSimpleName ().toString ());
+          final JMethod method = m_aNewClass.method (DecidedErrorTypesModelsAdapter.toJMod (executable.getModifiers ()),
+                                                     m_aCodeModel.VOID,
+                                                     executable.getSimpleName ().toString ());
           final TypeEnvironment methodEnvironment = environment.enclosed ();
-          final Annotator methodAnnotator = new Annotator (_modelsAdapter, method, environment);
+          final Annotator methodAnnotator = new Annotator (m_aModelsAdapter, method, environment);
           methodAnnotator.annotate (executable.getAnnotationMirrors ());
           for (final TypeParameterElement parameter : executable.getTypeParameters ())
           {
@@ -125,13 +125,13 @@ class ClassFiller
             methodEnvironment.put (typeVariable.name (), typeVariable);
             for (final TypeMirror type : parameter.getBounds ())
             {
-              typeVariable.bound ((AbstractJClass) _modelsAdapter.toJType (type, methodEnvironment));
+              typeVariable.bound ((AbstractJClass) m_aModelsAdapter.toJType (type, methodEnvironment));
             }
           }
-          method.type (_modelsAdapter.toJType (executable.getReturnType (), methodEnvironment));
+          method.type (m_aModelsAdapter.toJType (executable.getReturnType (), methodEnvironment));
           for (final TypeMirror type : executable.getThrownTypes ())
           {
-            final AbstractJClass throwable = (AbstractJClass) _modelsAdapter.toJType (type, methodEnvironment);
+            final AbstractJClass throwable = (AbstractJClass) m_aModelsAdapter.toJType (type, methodEnvironment);
             method._throws (throwable);
           }
           final List <? extends VariableElement> parameters = executable.getParameters ();
@@ -140,7 +140,7 @@ class ClassFiller
           {
             final String parameterName = variable.getSimpleName ().toString ();
             final TypeMirror parameterTypeMirror = variable.asType ();
-            final AbstractJType parameterType = _modelsAdapter.toJType (parameterTypeMirror, methodEnvironment);
+            final AbstractJType parameterType = m_aModelsAdapter.toJType (parameterTypeMirror, methodEnvironment);
             JVar param;
             if (executable.isVarArgs () && n == parameters.size () - 1)
             {
@@ -154,7 +154,7 @@ class ClassFiller
                                     parameterType,
                                     parameterName);
             }
-            final Annotator parametorAnnotator = new Annotator (_modelsAdapter, param, methodEnvironment);
+            final Annotator parametorAnnotator = new Annotator (m_aModelsAdapter, param, methodEnvironment);
             parametorAnnotator.annotate (variable.getAnnotationMirrors ());
             n++;
           }

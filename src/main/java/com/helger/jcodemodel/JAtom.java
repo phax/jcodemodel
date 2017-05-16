@@ -45,6 +45,8 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * JAtoms: Simple code components that merely generate themselves.
  */
@@ -52,11 +54,10 @@ public class JAtom implements IJExpression
 {
   private final String m_sWhat;
 
-  protected JAtom (@Nonnull final String what)
+  protected JAtom (@Nonnull final String sWhat)
   {
-    if (what == null)
-      throw new NullPointerException ("what");
-    m_sWhat = what;
+    JCValueEnforcer.notNull (sWhat, "What");
+    m_sWhat = sWhat;
   }
 
   @Nonnull

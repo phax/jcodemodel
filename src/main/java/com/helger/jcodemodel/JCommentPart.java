@@ -163,7 +163,7 @@ public class JCommentPart extends ArrayList <Object>
             f.generable ((AbstractJType) o);
           }
           else
-            throw new IllegalStateException ();
+            throw new IllegalStateException ("Invalid type present");
     }
 
     if (!isEmpty ())

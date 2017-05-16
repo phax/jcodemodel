@@ -53,20 +53,20 @@ import com.helger.jcodemodel.AbstractJType;
  */
 class TypeEnvironment
 {
-  private final Map <String, AbstractJType> map = new TreeMap <> ();
-  private final TypeEnvironment _parent;
-  private final String _packageName;
+  private final Map <String, AbstractJType> m_aMap = new TreeMap <> ();
+  private final TypeEnvironment m_aParent;
+  private final String m_sPackageName;
 
   TypeEnvironment (final String packageName)
   {
-    _parent = null;
-    _packageName = packageName;
+    m_aParent = null;
+    m_sPackageName = packageName;
   }
 
   private TypeEnvironment (final TypeEnvironment parent)
   {
-    _packageName = null;
-    _parent = parent;
+    m_sPackageName = null;
+    m_aParent = parent;
   }
 
   @Nonnull
@@ -78,20 +78,20 @@ class TypeEnvironment
   @Nullable
   public AbstractJType get (@Nonnull final String name)
   {
-    final AbstractJType result = map.get (name);
-    if (result != null || _parent == null)
+    final AbstractJType result = m_aMap.get (name);
+    if (result != null || m_aParent == null)
       return result;
-    return _parent.get (name);
+    return m_aParent.get (name);
   }
 
   public void put (@Nonnull final String name, final AbstractJType type)
   {
-    map.put (name, type);
+    m_aMap.put (name, type);
   }
 
   @Nullable
   String packageName ()
   {
-    return _parent == null ? _packageName : _parent.packageName ();
+    return m_aParent == null ? m_sPackageName : m_aParent.packageName ();
   }
 }

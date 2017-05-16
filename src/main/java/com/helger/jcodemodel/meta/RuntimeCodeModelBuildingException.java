@@ -46,12 +46,12 @@ package com.helger.jcodemodel.meta;
 @SuppressWarnings ("serial")
 class RuntimeCodeModelBuildingException extends RuntimeException
 {
-  private final CodeModelBuildingException _cause;
+  private final CodeModelBuildingException m_aCause;
 
   public RuntimeCodeModelBuildingException (final CodeModelBuildingException cause)
   {
     super (cause);
-    _cause = cause;
+    m_aCause = cause;
   }
 
   // Remove the synchronized
@@ -59,6 +59,6 @@ class RuntimeCodeModelBuildingException extends RuntimeException
   @Override
   public CodeModelBuildingException getCause ()
   {
-    return _cause;
+    return m_aCause;
   }
 }

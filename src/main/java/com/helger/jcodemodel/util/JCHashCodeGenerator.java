@@ -126,8 +126,7 @@ public final class JCHashCodeGenerator
    */
   public JCHashCodeGenerator (@Nonnull final Class <?> aClass)
   {
-    if (aClass == null)
-      throw new NullPointerException ("class");
+    JCValueEnforcer.notNull (aClass, "Class");
 
     // Use the class name
     append (aClass.getName ());

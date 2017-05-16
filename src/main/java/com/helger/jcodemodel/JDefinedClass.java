@@ -55,6 +55,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.ClassNameComparator;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * A generated Java class/interface/enum/....
@@ -205,8 +206,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
 
     if (sName != null)
     {
-      if (sName.trim ().length () == 0)
-        throw new IllegalArgumentException ("JDefinedClass name empty");
+      JCValueEnforcer.notEmpty (sName, "Name");
 
       if (!Character.isJavaIdentifierStart (sName.charAt (0)))
       {
@@ -254,14 +254,13 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   @Nonnull
   public JDefinedClass _extends (@Nonnull final AbstractJClass aSuperClass)
   {
+    JCValueEnforcer.notNull (aSuperClass, "SuperClass");
     if (isInterface ())
     {
       if (aSuperClass.isInterface ())
         return _implements (aSuperClass);
       throw new IllegalArgumentException ("unable to set the super class for an interface");
     }
-    if (aSuperClass == null)
-      throw new NullPointerException ();
 
     for (AbstractJClass o = aSuperClass.outer (); o != null; o = o.outer ())
     {

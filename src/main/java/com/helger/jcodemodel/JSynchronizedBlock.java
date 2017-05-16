@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Synchronized block within a method statement
  *
@@ -58,10 +60,9 @@ public class JSynchronizedBlock implements IJStatement
     expr (aExpression);
   }
 
-  public void expr (@Nonnull final IJExpression aExpression)
+  public final void expr (@Nonnull final IJExpression aExpression)
   {
-    if (aExpression == null)
-      throw new NullPointerException ("expression");
+    JCValueEnforcer.notNull (aExpression, "expression");
     m_aExpression = aExpression;
   }
 

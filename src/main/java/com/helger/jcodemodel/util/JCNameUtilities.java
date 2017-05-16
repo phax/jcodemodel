@@ -57,8 +57,7 @@ public final class JCNameUtilities
   @Nonnull
   public static String getFullName (@Nonnull final Class <?> aClass)
   {
-    if (aClass == null)
-      throw new IllegalArgumentException ("class cannot be null");
+    JCValueEnforcer.notNull (aClass, "Class");
 
     final StringBuilder name = new StringBuilder ();
     // Package name

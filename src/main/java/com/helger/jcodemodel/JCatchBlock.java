@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Catch block for a try/catch/finally statement
@@ -66,11 +67,12 @@ public class JCatchBlock implements IJGenerable
   public JVar param (final String name)
   {
     if (m_aVar != null)
-      throw new IllegalStateException ();
+      throw new IllegalStateException ("A variable is already present!");
     m_aVar = new JVar (JMods.forVar (JMod.FINAL), m_aException, name, null);
     return m_aVar;
   }
 
+  @Nullable
   public JVar param ()
   {
     return m_aVar;

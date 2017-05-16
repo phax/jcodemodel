@@ -225,7 +225,7 @@ public final class JCodeModel
   }
 
   @Nonnull
-  public final JPackage rootPackage ()
+  public JPackage rootPackage ()
   {
     return _package ("");
   }

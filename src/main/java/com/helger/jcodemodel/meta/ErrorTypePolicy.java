@@ -76,8 +76,8 @@ public class ErrorTypePolicy
     CREATE_ERROR_TYPE
   }
 
-  private final EAction _action;
-  private final boolean _tryBind;
+  private final EAction m_eAction;
+  private final boolean m_bTryBind;
 
   /**
    * @see ErrorTypePolicy
@@ -89,8 +89,8 @@ public class ErrorTypePolicy
    */
   public ErrorTypePolicy (@Nonnull final EAction aAction, final boolean tryBind)
   {
-    _action = JCValueEnforcer.notNull (aAction, "Action");
-    _tryBind = tryBind;
+    m_eAction = JCValueEnforcer.notNull (aAction, "Action");
+    m_bTryBind = tryBind;
   }
 
   /**
@@ -99,7 +99,7 @@ public class ErrorTypePolicy
   @Nonnull
   EAction action ()
   {
-    return _action;
+    return m_eAction;
   }
 
   /**
@@ -119,6 +119,6 @@ public class ErrorTypePolicy
    */
   boolean tryBind ()
   {
-    return _tryBind;
+    return m_bTryBind;
   }
 }

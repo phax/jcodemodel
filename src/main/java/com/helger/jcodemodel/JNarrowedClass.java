@@ -228,21 +228,21 @@ public class JNarrowedClass extends AbstractJClass
   {
     return new Iterator <AbstractJClass> ()
     {
-      private final Iterator <AbstractJClass> core = m_aBasis._implements ();
+      private final Iterator <AbstractJClass> m_aCore = m_aBasis._implements ();
 
       public void remove ()
       {
-        core.remove ();
+        m_aCore.remove ();
       }
 
       public AbstractJClass next ()
       {
-        return core.next ().substituteParams (m_aBasis.typeParams (), m_aArgs);
+        return m_aCore.next ().substituteParams (m_aBasis.typeParams (), m_aArgs);
       }
 
       public boolean hasNext ()
       {
-        return core.hasNext ();
+        return m_aCore.hasNext ();
       }
     };
   }

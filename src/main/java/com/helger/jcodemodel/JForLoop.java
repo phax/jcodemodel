@@ -47,6 +47,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * For statement
  */
@@ -107,9 +109,7 @@ public class JForLoop implements IJStatement
 
   public void update (@Nonnull final IJExpression aUpdate)
   {
-    if (aUpdate == null)
-      throw new NullPointerException ("Update expression");
-
+    JCValueEnforcer.notNull (aUpdate, "Update");
     m_aUpdateExprs.add (aUpdate);
   }
 

@@ -49,8 +49,8 @@ import com.helger.jcodemodel.JDefinedClass;
 
 public class JCodeModelJavaxLangModelAdapter
 {
-  private final JCodeModel _codeModel;
-  private final Elements _elementUtils;
+  private final JCodeModel m_aCodeModel;
+  private final Elements m_aElementUtils;
 
   /**
    * Creates new instance of JCodeModelJavaxLangModelAdapter.
@@ -62,8 +62,8 @@ public class JCodeModelJavaxLangModelAdapter
    */
   public JCodeModelJavaxLangModelAdapter (@Nonnull final JCodeModel codeModel, @Nonnull final Elements elementUtils)
   {
-    this._codeModel = codeModel;
-    this._elementUtils = elementUtils;
+    this.m_aCodeModel = codeModel;
+    this.m_aElementUtils = elementUtils;
   }
 
   /**
@@ -139,8 +139,8 @@ public class JCodeModelJavaxLangModelAdapter
                                  @Nonnull final ErrorTypePolicy policy) throws ErrorTypeFound,
                                                                         CodeModelBuildingException
   {
-    final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (_codeModel,
-                                                                                                 _elementUtils,
+    final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (m_aCodeModel,
+                                                                                                 m_aElementUtils,
                                                                                                  policy);
     return errorTypeDecision.getClass (element);
   }

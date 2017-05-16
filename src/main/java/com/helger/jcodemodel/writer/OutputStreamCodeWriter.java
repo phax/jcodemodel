@@ -77,25 +77,25 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   }
 
   /**
-   * @param os
+   * @param aOS
    *        This stream will be closed at the end of the code generation.
-   * @param encoding
+   * @param aEncoding
    *        Encoding to be used.
    * @param sNewLine
    *        The new line string to be used for source files
    */
-  public OutputStreamCodeWriter (@Nonnull final OutputStream os,
-                                 @Nullable final Charset encoding,
+  public OutputStreamCodeWriter (@Nonnull final OutputStream aOS,
+                                 @Nullable final Charset aEncoding,
                                  @Nonnull final String sNewLine)
   {
-    super (encoding, sNewLine);
+    super (aEncoding, sNewLine);
     try
     {
-      m_aPS = encoding == null ? new PrintStream (os, false) : new PrintStream (os, false, encoding.name ());
+      m_aPS = aEncoding == null ? new PrintStream (aOS, false) : new PrintStream (aOS, false, aEncoding.name ());
     }
-    catch (final UnsupportedEncodingException ueex)
+    catch (final UnsupportedEncodingException ex)
     {
-      throw new IllegalArgumentException (ueex);
+      throw new IllegalArgumentException (ex);
     }
   }
 

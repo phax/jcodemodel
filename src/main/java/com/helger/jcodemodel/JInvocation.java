@@ -50,6 +50,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.JCHashCodeGenerator;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * {@link JMethod} invocation
@@ -202,8 +203,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   @Nonnull
   public JInvocation arg (@Nonnull final IJExpression arg)
   {
-    if (arg == null)
-      throw new IllegalArgumentException ("argument may not be null");
+    JCValueEnforcer.notNull (arg, "argument");
     m_aArgs.add (arg);
     return this;
   }
@@ -303,8 +303,10 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * Returns all arguments of the invocation.
    *
    * @return If there's no arguments, an empty array will be returned.
+   * @deprecated Use {@link #args()} instead
    */
   @Nonnull
+  @Deprecated
   public IJExpression [] listArgs ()
   {
     return m_aArgs.toArray (new IJExpression [m_aArgs.size ()]);
@@ -446,7 +448,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     f.generable (this).print (';').newline ();
   }
 
-  private String typeFullName ()
+  @Nonnull
+  private String _typeFullName ()
   {
     return m_aConstructorType != null ? m_aConstructorType.fullName () : "";
   }
@@ -463,7 +466,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
           isEqual (m_bIsConstructor, rhs.m_bIsConstructor) &&
           (m_bIsConstructor || isEqual (_methodName (), rhs._methodName ())) &&
           isEqual (m_aArgs, rhs.m_aArgs) &&
-          isEqual (typeFullName (), rhs.typeFullName ())))
+          isEqual (_typeFullName (), rhs._typeFullName ())))
     {
       return false;
     }
@@ -487,7 +490,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     JCHashCodeGenerator hashCodeGenerator = new JCHashCodeGenerator (this).append (m_aObject).append (m_bIsConstructor);
     if (!m_bIsConstructor)
       hashCodeGenerator = hashCodeGenerator.append (_methodName ());
-    hashCodeGenerator = hashCodeGenerator.append (m_aArgs).append (typeFullName ());
+    hashCodeGenerator = hashCodeGenerator.append (m_aArgs).append (_typeFullName ());
     if (m_aTypeVariables != null)
     {
       hashCodeGenerator = hashCodeGenerator.append (m_aTypeVariables.size ());

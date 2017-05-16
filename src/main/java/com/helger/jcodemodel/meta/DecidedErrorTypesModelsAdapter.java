@@ -72,7 +72,7 @@ import com.helger.jcodemodel.JPackage;
  */
 class DecidedErrorTypesModelsAdapter
 {
-  private static final Logger logger = Logger.getLogger (DecidedErrorTypesModelsAdapter.class.getName ());
+  private static final Logger s_aLogger = Logger.getLogger (DecidedErrorTypesModelsAdapter.class.getName ());
 
   static int toJMod (final Collection <Modifier> modifierCollection)
   {
@@ -115,13 +115,13 @@ class DecidedErrorTypesModelsAdapter
           modifiers |= JMod.STRICTFP;
           break;
         default:
-          logger.log (Level.WARNING, "Skpping unsupported modifier: {0}", modifier);
+          s_aLogger.log (Level.WARNING, "Skpping unsupported modifier: {0}", modifier);
       }
     }
     return modifiers;
   }
 
-  private static EClassType toClassType (@Nonnull final ElementKind kind)
+  private static EClassType _toClassType (@Nonnull final ElementKind kind)
   {
     switch (kind)
     {
@@ -138,17 +138,17 @@ class DecidedErrorTypesModelsAdapter
     }
   }
 
-  private final Elements _elementUtils;
-  private final ErrorTypePolicy _errorTypePolicy;
-  private final JCodeModel _codeModel;
+  private final Elements m_aElementUtils;
+  private final ErrorTypePolicy m_aErrorTypePolicy;
+  private final JCodeModel m_aCodeModel;
 
   DecidedErrorTypesModelsAdapter (final JCodeModel codeModel,
                                   final Elements elementUtils,
                                   final ErrorTypePolicy errorTypePolicy)
   {
-    this._elementUtils = elementUtils;
-    this._errorTypePolicy = errorTypePolicy;
-    this._codeModel = codeModel;
+    m_aElementUtils = elementUtils;
+    m_aErrorTypePolicy = errorTypePolicy;
+    m_aCodeModel = codeModel;
   }
 
   public JDefinedClass getClass (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
@@ -157,12 +157,12 @@ class DecidedErrorTypesModelsAdapter
     if (enclosingElement instanceof PackageElement)
     {
       final PackageElement packageElement = (PackageElement) enclosingElement;
-      final JPackage jpackage = _codeModel._package (packageElement.getQualifiedName ().toString ());
+      final JPackage jpackage = m_aCodeModel._package (packageElement.getQualifiedName ().toString ());
       final JDefinedClass result = jpackage._getClass (element.getSimpleName ().toString ());
       if (result != null)
         return result;
 
-      final JDefinedClass jclass = defineClass (element);
+      final JDefinedClass jclass = _defineClass (element);
       jclass.hide ();
       return jclass;
     }
@@ -189,24 +189,24 @@ class DecidedErrorTypesModelsAdapter
         throw new IllegalStateException ("Enclosing element should be package or class");
   }
 
-  private JDefinedClass defineClass (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
+  private JDefinedClass _defineClass (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
   {
     final Element enclosingElement = element.getEnclosingElement ();
     if (enclosingElement instanceof PackageElement)
     {
       final PackageElement packageElement = (PackageElement) enclosingElement;
-      return defineTopLevelClass (element, new TypeEnvironment (packageElement.getQualifiedName ().toString ()));
+      return _defineTopLevelClass (element, new TypeEnvironment (packageElement.getQualifiedName ().toString ()));
     }
 
     // Only top-level classes can be directly defined
     return getClass (element);
   }
 
-  private JDefinedClass defineTopLevelClass (final TypeElement element,
+  private JDefinedClass _defineTopLevelClass (final TypeElement element,
                                              final TypeEnvironment environment) throws CodeModelBuildingException,
                                                                                 ErrorTypeFound
   {
-    final EClassType classType = toClassType (element.getKind ());
+    final EClassType classType = _toClassType (element.getKind ());
     int modifiers = toJMod (element.getModifiers ());
     if (classType.equals (EClassType.INTERFACE))
     {
@@ -219,7 +219,7 @@ class DecidedErrorTypesModelsAdapter
       throw new IllegalStateException ("Expecting top level class");
     }
     final PackageElement packageElement = (PackageElement) enclosingElement;
-    final JPackage _package = _codeModel._package (packageElement.getQualifiedName ().toString ());
+    final JPackage _package = m_aCodeModel._package (packageElement.getQualifiedName ().toString ());
     JDefinedClass newClass;
     try
     {
@@ -229,13 +229,13 @@ class DecidedErrorTypesModelsAdapter
     {
       throw new CodeModelBuildingException (ex);
     }
-    declareInnerClasses (newClass, element, environment);
-    final ClassFiller filler = new ClassFiller (_codeModel, this, newClass);
+    _declareInnerClasses (newClass, element, environment);
+    final ClassFiller filler = new ClassFiller (m_aCodeModel, this, newClass);
     filler.fillClass (element, environment);
     return newClass;
   }
 
-  private void declareInnerClasses (final JDefinedClass klass,
+  private void _declareInnerClasses (final JDefinedClass klass,
                                     final TypeElement element,
                                     final TypeEnvironment environment) throws CodeModelBuildingException
   {
@@ -246,7 +246,7 @@ class DecidedErrorTypesModelsAdapter
           enclosedElement.getKind ().equals (ElementKind.ENUM) ||
           enclosedElement.getKind ().equals (ElementKind.ANNOTATION_TYPE))
       {
-        final EClassType classType = toClassType (enclosedElement.getKind ());
+        final EClassType classType = _toClassType (enclosedElement.getKind ());
         int modifiers = toJMod (enclosedElement.getModifiers ());
         if (classType.equals (EClassType.INTERFACE) || classType.equals (EClassType.ANNOTATION_TYPE_DECL))
         {
@@ -277,7 +277,7 @@ class DecidedErrorTypesModelsAdapter
         {
           throw new CodeModelBuildingException (ex);
         }
-        declareInnerClasses (enclosedClass, (TypeElement) enclosedElement, environment);
+        _declareInnerClasses (enclosedClass, (TypeElement) enclosedElement, environment);
       }
     }
   }
@@ -291,7 +291,7 @@ class DecidedErrorTypesModelsAdapter
       final String innerClassName = innerClass.fullName ();
       if (innerClassName != null && innerClassName.equals (element.getQualifiedName ().toString ()))
       {
-        final ClassFiller filler = new ClassFiller (_codeModel, this, innerClass);
+        final ClassFiller filler = new ClassFiller (m_aCodeModel, this, innerClass);
         filler.fillClass (element, environment);
         return;
       }
@@ -306,7 +306,7 @@ class DecidedErrorTypesModelsAdapter
     try
     {
       final Class <?> klass = Class.forName (element.getQualifiedName ().toString ());
-      final AbstractJType declaredClass = _codeModel.ref (klass);
+      final AbstractJType declaredClass = m_aCodeModel.ref (klass);
       return (AbstractJClass) declaredClass;
     }
     catch (final ClassNotFoundException ex)
@@ -320,7 +320,7 @@ class DecidedErrorTypesModelsAdapter
   {
     try
     {
-      return type.accept (new TypeMirrorToJTypeVisitor (_codeModel, this, _errorTypePolicy, environment), null);
+      return type.accept (new TypeMirrorToJTypeVisitor (m_aCodeModel, this, m_aErrorTypePolicy, environment), null);
     }
     catch (final RuntimeErrorTypeFound ex)
     {
@@ -334,6 +334,6 @@ class DecidedErrorTypesModelsAdapter
 
   Map <? extends ExecutableElement, ? extends AnnotationValue> getElementValuesWithDefaults (final AnnotationMirror annotation)
   {
-    return _elementUtils.getElementValuesWithDefaults (annotation);
+    return m_aElementUtils.getElementValuesWithDefaults (annotation);
   }
 }
