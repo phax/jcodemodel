@@ -56,7 +56,6 @@ import javax.annotation.Nullable;
  */
 public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 {
-
   private final String m_sFullName;
 
   @Deprecated

@@ -93,7 +93,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   /**
    * Fields keyed by their names.
    */
-  /* package */final Map <String, JFieldVar> m_aFields = new LinkedHashMap <> ();
+  private final Map <String, JFieldVar> m_aFields = new LinkedHashMap <> ();
 
   /**
    * Static initializer, if this class has one
@@ -129,20 +129,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   private boolean m_bHideFile = false;
 
   /**
-   * Client-app specific metadata associated with this user-created class.
-   */
-  @Deprecated
-  public Object metadata;
-
-  /**
    * String that will be put directly inside the generated code. Can be null.
    */
   private String m_sDirectBlock;
-
-  /**
-   * List containing the enum value declarations
-   */
-  // private List enumValues = new ArrayList();
 
   /**
    * Set of enum constants that are keyed by names. In Java, enum constant order
@@ -452,7 +441,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   public void removeField (@Nonnull final JFieldVar aField)
   {
     if (m_aFields.remove (aField.name ()) != aField)
-      throw new IllegalArgumentException ();
+      throw new IllegalArgumentException ("Failed to remove field " + aField);
   }
 
   /**
@@ -464,6 +453,19 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   public boolean containsField (@Nullable final String sName)
   {
     return sName != null && m_aFields.containsKey (sName);
+  }
+
+  void internalRenameField (@Nonnull final String sOldName,
+                            @Nonnull final String sNewName,
+                            @Nonnull final JFieldVar aField)
+  {
+    if (m_aFields.remove (sOldName) == null)
+      throw new IllegalArgumentException ("Failed to remove field with name '" +
+                                          sOldName +
+                                          "' for replacement with field with name '" +
+                                          sNewName +
+                                          "'");
+    m_aFields.put (sNewName, aField);
   }
 
   /**
@@ -803,12 +805,6 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
     final JAnnotationUse a = new JAnnotationUse (clazz);
     m_aAnnotations.add (a);
     return a;
-  }
-
-  @Nonnull
-  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
-  {
-    return TypedAnnotationWriter.create (clazz, this);
   }
 
   @Nonnull

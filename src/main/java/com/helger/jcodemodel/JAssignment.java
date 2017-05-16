@@ -50,9 +50,9 @@ import javax.annotation.Nonnull;
  */
 public class JAssignment extends AbstractJExpressionImpl implements IJExpressionStatement
 {
-  private final IJAssignmentTarget _lhs;
-  private final IJExpression _rhs;
-  private final String _op;
+  private final IJAssignmentTarget m_aLhs;
+  private final String m_sOperator;
+  private final IJExpression m_aRhs;
 
   /**
    * Constructor for "=" operator
@@ -81,21 +81,21 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
                          @Nonnull final IJExpression rhs,
                          @Nonnull final String op)
   {
-    _lhs = lhs;
-    _rhs = rhs;
-    _op = op;
+    m_aLhs = lhs;
+    m_aRhs = rhs;
+    m_sOperator = op;
   }
 
   @Nonnull
   public IJAssignmentTarget lhs ()
   {
-    return _lhs;
+    return m_aLhs;
   }
 
   @Nonnull
   public IJExpression rhs ()
   {
-    return _rhs;
+    return m_aRhs;
   }
 
   /**
@@ -104,12 +104,21 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
   @Nonnull
   public String op ()
   {
-    return _op;
+    return m_sOperator;
+  }
+
+  /**
+   * @return The additional operator (with the "=")
+   */
+  @Nonnull
+  public String opFull ()
+  {
+    return m_sOperator + '=';
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.generable (_lhs).print (_op + '=').generable (_rhs);
+    f.generable (m_aLhs).print (opFull ()).generable (m_aRhs);
   }
 
   public void state (@Nonnull final JFormatter f)
@@ -125,12 +134,12 @@ public class JAssignment extends AbstractJExpressionImpl implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAssignment rhs = (JAssignment) o;
-    return isEqual (_lhs, rhs._lhs) && isEqual (_rhs, rhs._rhs) && isEqual (_op, rhs._op);
+    return isEqual (m_aLhs, rhs.m_aLhs) && isEqual (m_aRhs, rhs.m_aRhs) && isEqual (m_sOperator, rhs.m_sOperator);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _lhs, _rhs, _op);
+    return getHashCode (this, m_aLhs, m_aRhs, m_sOperator);
   }
 }

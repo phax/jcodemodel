@@ -184,12 +184,6 @@ public class JEnumConstant extends AbstractJExpressionImpl implements IJDeclarat
     return annotate (m_aType.owner ().ref (clazz));
   }
 
-  @Nonnull
-  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
-  {
-    return TypedAnnotationWriter.create (clazz, this);
-  }
-
   /**
    * {@link IJAnnotatable#annotations()}
    */

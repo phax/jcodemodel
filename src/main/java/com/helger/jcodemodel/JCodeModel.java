@@ -152,7 +152,7 @@ public final class JCodeModel
   public final JPrimitiveType SHORT = new JPrimitiveType (this, "short", Short.class, true);
   public final JPrimitiveType VOID = new JPrimitiveType (this, "void", Void.class, false);
 
-  protected static boolean getFileSystemCaseSensitivity ()
+  protected static boolean determinFileSystemCaseSensitivity ()
   {
     try
     {
@@ -179,7 +179,17 @@ public final class JCodeModel
    * If the flag is true, we will consider two classes "Foo" and "foo" as a
    * collision.
    */
-  protected final boolean isCaseSensitiveFileSystem = getFileSystemCaseSensitivity ();
+  private static final boolean s_bIsCaseSensitiveFileSystem = determinFileSystemCaseSensitivity ();
+
+  /**
+   * @return <code>true</code> if the file system is case sensitive (*x) or
+   *         <code>false</code> if not (e.g. Windows).
+   * @since 3.0.0
+   */
+  public static boolean isFileSystemCaseSensitive ()
+  {
+    return s_bIsCaseSensitiveFileSystem;
+  }
 
   /**
    * Cached for {@link #wildcard()}.
@@ -825,7 +835,10 @@ public final class JCodeModel
   public AbstractJClass wildcard ()
   {
     if (m_aWildcard == null)
-      m_aWildcard = ref (Object.class).wildcard ();
+    {
+      // "Hack" if base class is "Object" it is omitted
+      m_aWildcard = ref (Object.class).wildcardExtends ();
+    }
     return m_aWildcard;
   }
 
@@ -898,7 +911,7 @@ public final class JCodeModel
           // 7 == "extends".length
           m_nIdx += 7;
           _skipWs ();
-          return parseTypeName ().wildcard ();
+          return parseTypeName ().wildcardExtends ();
         }
 
         if (head.startsWith ("super"))

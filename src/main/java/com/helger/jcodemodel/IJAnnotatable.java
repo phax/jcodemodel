@@ -83,7 +83,10 @@ public interface IJAnnotatable
    *        Implementation type
    */
   @Nonnull
-  <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull Class <W> clazz);
+  default <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
+  {
+    return TypedAnnotationWriter.create (clazz, this);
+  }
 
   /**
    * Read-only live view of all annotations on this {@link IJAnnotatable}

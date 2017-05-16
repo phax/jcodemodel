@@ -51,9 +51,9 @@ import javax.annotation.Nonnull;
  */
 public class JTryBlock implements IJStatement
 {
-  private final JBlock _body = new JBlock ();
-  private final List <JCatchBlock> _catches = new ArrayList <> ();
-  private JBlock _finally;
+  private final JBlock m_aBody = new JBlock ();
+  private final List <JCatchBlock> m_aCatches = new ArrayList <> ();
+  private JBlock m_aFinally;
 
   protected JTryBlock ()
   {}
@@ -61,38 +61,38 @@ public class JTryBlock implements IJStatement
   @Nonnull
   public JBlock body ()
   {
-    return _body;
+    return m_aBody;
   }
 
   @Nonnull
   public JCatchBlock _catch (@Nonnull final AbstractJClass exception)
   {
     final JCatchBlock cb = new JCatchBlock (exception);
-    _catches.add (cb);
+    m_aCatches.add (cb);
     return cb;
   }
 
   @Nonnull
   public List <JCatchBlock> catches ()
   {
-    return Collections.unmodifiableList (_catches);
+    return Collections.unmodifiableList (m_aCatches);
   }
 
   @Nonnull
   public JBlock _finally ()
   {
-    if (_finally == null)
-      _finally = new JBlock ();
-    return _finally;
+    if (m_aFinally == null)
+      m_aFinally = new JBlock ();
+    return m_aFinally;
   }
 
   public void state (@Nonnull final JFormatter f)
   {
-    f.print ("try").generable (_body);
-    for (final JCatchBlock cb : _catches)
+    f.print ("try").generable (m_aBody);
+    for (final JCatchBlock cb : m_aCatches)
       f.generable (cb);
-    if (_finally != null)
-      f.print ("finally").generable (_finally);
+    if (m_aFinally != null)
+      f.print ("finally").generable (m_aFinally);
     f.newline ();
   }
 }

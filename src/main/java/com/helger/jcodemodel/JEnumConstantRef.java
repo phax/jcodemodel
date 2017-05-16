@@ -56,12 +56,12 @@ public class JEnumConstantRef extends AbstractJExpressionImpl
   /**
    * The enum class.
    */
-  private final AbstractJClass _type;
+  private final AbstractJClass m_aType;
 
   /**
    * The constant.
    */
-  private final String _name;
+  private final String m_sName;
 
   protected JEnumConstantRef (@Nonnull final AbstractJClass type, @Nonnull final String name)
   {
@@ -69,14 +69,14 @@ public class JEnumConstantRef extends AbstractJExpressionImpl
       throw new NullPointerException ("type");
     if (name == null)
       throw new NullPointerException ("name");
-    _type = type;
-    _name = name;
+    m_aType = type;
+    m_sName = name;
   }
 
   @Nonnull
   public AbstractJClass type ()
   {
-    return _type;
+    return m_aType;
   }
 
   /**
@@ -85,7 +85,7 @@ public class JEnumConstantRef extends AbstractJExpressionImpl
   @Nonnull
   public String name ()
   {
-    return _name;
+    return m_sName;
   }
 
   /**
@@ -96,12 +96,12 @@ public class JEnumConstantRef extends AbstractJExpressionImpl
   @Nonnull
   public String getName ()
   {
-    return _type.fullName () + '.' + _name;
+    return m_aType.fullName () + '.' + m_sName;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.type (_type).print ('.').print (_name);
+    f.type (m_aType).print ('.').print (m_sName);
   }
 
   @Override
@@ -112,12 +112,12 @@ public class JEnumConstantRef extends AbstractJExpressionImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JEnumConstantRef rhs = (JEnumConstantRef) o;
-    return isEqual (_type.fullName (), rhs._type.fullName ()) && isEqual (_name, rhs._name);
+    return isEqual (m_aType.fullName (), rhs.m_aType.fullName ()) && isEqual (m_sName, rhs.m_sName);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _type.fullName (), _name);
+    return getHashCode (this, m_aType.fullName (), m_sName);
   }
 }

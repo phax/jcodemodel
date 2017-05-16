@@ -53,12 +53,12 @@ public class JCast extends AbstractJExpressionImpl
   /**
    * JType to which the expression is to be cast.
    */
-  private final AbstractJType _type;
+  private final AbstractJType m_aType;
 
   /**
    * JExpression to be cast.
    */
-  private final IJExpression _object;
+  private final IJExpression m_aObject;
 
   /**
    * JCast constructor
@@ -70,25 +70,25 @@ public class JCast extends AbstractJExpressionImpl
    */
   protected JCast (@Nonnull final AbstractJType type, @Nonnull final IJExpression object)
   {
-    this._type = type;
-    this._object = object;
+    this.m_aType = type;
+    this.m_aObject = object;
   }
 
   @Nonnull
   public AbstractJType type ()
   {
-    return _type;
+    return m_aType;
   }
 
   @Nonnull
   public IJExpression object ()
   {
-    return _object;
+    return m_aObject;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print ("((").generable (_type).print (')').generable (_object).print (')');
+    f.print ("((").generable (m_aType).print (')').generable (m_aObject).print (')');
   }
 
   @Override
@@ -99,12 +99,12 @@ public class JCast extends AbstractJExpressionImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JCast rhs = (JCast) o;
-    return isEqual (_type.fullName (), rhs._type.fullName ()) && isEqual (_object, rhs._object);
+    return isEqual (m_aType.fullName (), rhs.m_aType.fullName ()) && isEqual (m_aObject, rhs.m_aObject);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _type.fullName (), _object);
+    return getHashCode (this, m_aType.fullName (), m_aObject);
   }
 }

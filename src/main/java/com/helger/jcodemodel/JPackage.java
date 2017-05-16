@@ -125,7 +125,7 @@ public class JPackage implements
 
     m_aOwner = aOwner;
     m_sName = sName;
-    if (m_aOwner.isCaseSensitiveFileSystem)
+    if (JCodeModel.isFileSystemCaseSensitive ())
       m_aUpperCaseClassMap = null;
     else
       m_aUpperCaseClassMap = new HashMap <> ();
@@ -516,12 +516,6 @@ public class JPackage implements
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
   {
     return annotate (m_aOwner.ref (clazz));
-  }
-
-  @Nonnull
-  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
-  {
-    return TypedAnnotationWriter.create (clazz, this);
   }
 
   @Nonnull

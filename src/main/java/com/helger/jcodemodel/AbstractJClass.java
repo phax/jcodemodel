@@ -325,8 +325,7 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public AbstractJClass narrowAny ()
   {
-    // "Hack" if base class is "Object" it is omitted
-    return narrow (owner ().ref (Object.class).wildcardSuper ());
+    return narrow (owner ().wildcard ());
   }
 
   /**

@@ -230,7 +230,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
                                  @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
   {
     String sRealName;
-    if (owner ().isCaseSensitiveFileSystem)
+    if (JCodeModel.isFileSystemCaseSensitive ())
       sRealName = sName.toUpperCase ();
     else
       sRealName = sName;

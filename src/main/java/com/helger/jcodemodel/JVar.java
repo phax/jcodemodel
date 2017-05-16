@@ -224,12 +224,6 @@ public class JVar extends AbstractJExpressionAssignmentTargetImpl implements IJD
   }
 
   @Nonnull
-  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
-  {
-    return TypedAnnotationWriter.create (clazz, this);
-  }
-
-  @Nonnull
   public Collection <JAnnotationUse> annotations ()
   {
     if (m_aAnnotations == null)

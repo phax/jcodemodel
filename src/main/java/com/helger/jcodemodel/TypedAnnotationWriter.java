@@ -66,38 +66,38 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
   /**
    * This is what we are writing to.
    */
-  private final JAnnotationUse _use;
+  private final JAnnotationUse m_aUse;
 
   /**
    * The annotation that we are writing.
    */
-  private final Class <A> _annotation;
+  private final Class <A> m_aAnnotation;
 
   /**
    * The type of the writer.
    */
-  private final Class <W> _writerType;
+  private final Class <W> m_aWriterType;
 
   /**
    * Keeps track of writers for array members. Lazily created.
    */
-  private Map <String, JAnnotationArrayMember> _arrays;
+  private Map <String, JAnnotationArrayMember> m_aArrays;
 
   protected TypedAnnotationWriter (final Class <A> annotation, final Class <W> writer, final JAnnotationUse use)
   {
-    this._annotation = annotation;
-    this._writerType = writer;
-    this._use = use;
+    this.m_aAnnotation = annotation;
+    this.m_aWriterType = writer;
+    this.m_aUse = use;
   }
 
   public JAnnotationUse getAnnotationUse ()
   {
-    return _use;
+    return m_aUse;
   }
 
   public Class <A> getAnnotationType ()
   {
-    return _annotation;
+    return m_aAnnotation;
   }
 
   public Object invoke (final Object proxy, final Method method, final Object [] args) throws Throwable
@@ -120,7 +120,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
       arg = args[0];
 
     // check how it's defined on the annotation
-    final Method m = _annotation.getDeclaredMethod (name);
+    final Method m = m_aAnnotation.getDeclaredMethod (name);
     final Class <?> rt = m.getReturnType ();
 
     // array value
@@ -133,7 +133,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
     if (Annotation.class.isAssignableFrom (rt))
     {
       final Class <? extends Annotation> r = (Class <? extends Annotation>) rt;
-      return new TypedAnnotationWriter (r, method.getReturnType (), _use.annotationParam (name, r))._createProxy ();
+      return new TypedAnnotationWriter (r, method.getReturnType (), m_aUse.annotationParam (name, r))._createProxy ();
     }
 
     // scalar value
@@ -148,44 +148,42 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
         if (targ.equals (targ.owner ().ref ((Class <?>) m.getDefaultValue ())))
           return proxy; // defaulted
       }
-      _use.param (name, targ);
+      m_aUse.param (name, targ);
       return proxy;
     }
 
     // other Java built-in types
     _checkType (arg.getClass (), rt);
     if (m.getDefaultValue () != null && m.getDefaultValue ().equals (arg))
-      // defaulted.
-      // no
-      // need
-      // to
-      // write
-      // out.
+    {
+      /*
+       * defaulted. no need to write out.
+       */
       return proxy;
-
+    }
     if (arg instanceof String)
     {
-      _use.param (name, (String) arg);
+      m_aUse.param (name, (String) arg);
       return proxy;
     }
     if (arg instanceof Boolean)
     {
-      _use.param (name, ((Boolean) arg).booleanValue ());
+      m_aUse.param (name, ((Boolean) arg).booleanValue ());
       return proxy;
     }
     if (arg instanceof Integer)
     {
-      _use.param (name, ((Integer) arg).intValue ());
+      m_aUse.param (name, ((Integer) arg).intValue ());
       return proxy;
     }
     if (arg instanceof Class <?>)
     {
-      _use.param (name, (Class <?>) arg);
+      m_aUse.param (name, (Class <?>) arg);
       return proxy;
     }
     if (arg instanceof Enum <?>)
     {
-      _use.param (name, (Enum <?>) arg);
+      m_aUse.param (name, (Enum <?>) arg);
       return proxy;
     }
 
@@ -198,13 +196,13 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
                                  final Class <?> expectedReturnType,
                                  final Object arg)
   {
-    if (_arrays == null)
-      _arrays = new HashMap <> ();
-    JAnnotationArrayMember m = _arrays.get (name);
+    if (m_aArrays == null)
+      m_aArrays = new HashMap <> ();
+    JAnnotationArrayMember m = m_aArrays.get (name);
     if (m == null)
     {
-      m = _use.paramArray (name);
-      _arrays.put (name, m);
+      m = m_aUse.paramArray (name);
+      m_aArrays.put (name, m);
     }
 
     // sub annotation
@@ -269,8 +267,8 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
    */
   private W _createProxy ()
   {
-    return (W) Proxy.newProxyInstance (JCSecureLoader.getClassClassLoader (_writerType),
-                                       new Class [] { _writerType },
+    return (W) Proxy.newProxyInstance (JCSecureLoader.getClassClassLoader (m_aWriterType),
+                                       new Class [] { m_aWriterType },
                                        this);
   }
 

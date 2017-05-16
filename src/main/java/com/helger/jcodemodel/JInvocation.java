@@ -79,7 +79,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   /**
    * List of argument expressions for this method invocation
    */
-  private final List <IJExpression> _args = new ArrayList <> ();
+  private final List <IJExpression> m_aArgs = new ArrayList <> ();
 
   /**
    * If isConstructor==true, this field keeps the type to be created.
@@ -89,7 +89,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   /**
    * Lazily created list of {@link JTypeVar}s.
    */
-  private List <JTypeVar> _typeVariables;
+  private List <JTypeVar> m_aTypeVariables;
 
   /**
    * Invokes a method on an object.
@@ -204,7 +204,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   {
     if (arg == null)
       throw new IllegalArgumentException ("argument may not be null");
-    _args.add (arg);
+    m_aArgs.add (arg);
     return this;
   }
 
@@ -307,7 +307,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   @Nonnull
   public IJExpression [] listArgs ()
   {
-    return _args.toArray (new IJExpression [_args.size ()]);
+    return m_aArgs.toArray (new IJExpression [m_aArgs.size ()]);
   }
 
   /**
@@ -318,7 +318,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   @Nonnull
   public List <IJExpression> args ()
   {
-    return new ArrayList <> (_args);
+    return new ArrayList <> (m_aArgs);
   }
 
   @Nonnull
@@ -334,9 +334,9 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   public JInvocation narrow (@Nonnull final String name)
   {
     final JTypeVar v = new JTypeVar (_narrowOwner (), name);
-    if (_typeVariables == null)
-      _typeVariables = new ArrayList <> (3);
-    _typeVariables.add (v);
+    if (m_aTypeVariables == null)
+      m_aTypeVariables = new ArrayList <> (3);
+    m_aTypeVariables.add (v);
     return this;
   }
 
@@ -350,27 +350,27 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
   public JInvocation narrow (@Nonnull final AbstractJClass bound)
   {
     final JTypeVar v = new JTypeVarClass (bound);
-    if (_typeVariables == null)
-      _typeVariables = new ArrayList <> (3);
-    _typeVariables.add (v);
+    if (m_aTypeVariables == null)
+      m_aTypeVariables = new ArrayList <> (3);
+    m_aTypeVariables.add (v);
     return this;
   }
 
   @Nonnull
   public List <JTypeVar> typeParamList ()
   {
-    if (_typeVariables == null)
+    if (m_aTypeVariables == null)
       return Collections.<JTypeVar> emptyList ();
-    return new ArrayList <> (_typeVariables);
+    return new ArrayList <> (m_aTypeVariables);
   }
 
   private void _addTypeVars (@Nonnull final JFormatter f)
   {
-    if (_typeVariables != null && !_typeVariables.isEmpty ())
+    if (m_aTypeVariables != null && !m_aTypeVariables.isEmpty ())
     {
       f.print ('<');
       int nIndex = 0;
-      for (final JTypeVar aTypeVar : _typeVariables)
+      for (final JTypeVar aTypeVar : m_aTypeVariables)
       {
         if (nIndex++ > 0)
           f.print (',');
@@ -424,7 +424,7 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     }
 
     // Method arguments
-    f.generable (_args);
+    f.generable (m_aArgs);
 
     // Close arg list
     if (m_bIsConstructor && m_aConstructorType.isArray ())
@@ -459,20 +459,20 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     if (!(isEqual (m_aObject, rhs.m_aObject) &&
           isEqual (m_bIsConstructor, rhs.m_bIsConstructor) &&
           (m_bIsConstructor || isEqual (methodName (), rhs.methodName ())) &&
-          isEqual (_args, rhs._args) &&
+          isEqual (m_aArgs, rhs.m_aArgs) &&
           isEqual (typeFullName (), rhs.typeFullName ())))
     {
       return false;
     }
-    if (_typeVariables == null)
-      return rhs._typeVariables == null;
-    if (rhs._typeVariables == null)
+    if (m_aTypeVariables == null)
+      return rhs.m_aTypeVariables == null;
+    if (rhs.m_aTypeVariables == null)
       return false;
-    if (_typeVariables.size () != rhs._typeVariables.size ())
+    if (m_aTypeVariables.size () != rhs.m_aTypeVariables.size ())
       return false;
-    for (int i = 0; i < _typeVariables.size (); i++)
+    for (int i = 0; i < m_aTypeVariables.size (); i++)
     {
-      if (!isEqual (_typeVariables.get (i).fullName (), rhs._typeVariables.get (i).fullName ()))
+      if (!isEqual (m_aTypeVariables.get (i).fullName (), rhs.m_aTypeVariables.get (i).fullName ()))
         return false;
     }
     return true;
@@ -484,11 +484,11 @@ public class JInvocation extends AbstractJExpressionImpl implements IJStatement,
     JCHashCodeGenerator hashCodeGenerator = new JCHashCodeGenerator (this).append (m_aObject).append (m_bIsConstructor);
     if (!m_bIsConstructor)
       hashCodeGenerator = hashCodeGenerator.append (methodName ());
-    hashCodeGenerator = hashCodeGenerator.append (_args).append (typeFullName ());
-    if (_typeVariables != null)
+    hashCodeGenerator = hashCodeGenerator.append (m_aArgs).append (typeFullName ());
+    if (m_aTypeVariables != null)
     {
-      hashCodeGenerator = hashCodeGenerator.append (_typeVariables.size ());
-      for (final JTypeVar typeVariable : _typeVariables)
+      hashCodeGenerator = hashCodeGenerator.append (m_aTypeVariables.size ());
+      for (final JTypeVar typeVariable : m_aTypeVariables)
       {
         hashCodeGenerator = hashCodeGenerator.append (typeVariable.fullName ());
       }

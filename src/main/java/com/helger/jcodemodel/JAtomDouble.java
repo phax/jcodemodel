@@ -54,30 +54,30 @@ public class JAtomDouble extends AbstractJExpressionImpl
   public static final String JAVA_LANG_DOUBLE_POSITIVE_INFINITY = "java.lang.Double.POSITIVE_INFINITY";
   public static final String JAVA_LANG_DOUBLE_NAN = "java.lang.Double.NaN";
 
-  private final double _what;
+  private final double m_aWhat;
 
   protected JAtomDouble (final double what)
   {
-    this._what = what;
+    this.m_aWhat = what;
   }
 
   public double what ()
   {
-    return _what;
+    return m_aWhat;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (_what == Double.NEGATIVE_INFINITY)
+    if (m_aWhat == Double.NEGATIVE_INFINITY)
       f.print (JAVA_LANG_DOUBLE_NEGATIVE_INFINITY);
     else
-      if (_what == Double.POSITIVE_INFINITY)
+      if (m_aWhat == Double.POSITIVE_INFINITY)
         f.print (JAVA_LANG_DOUBLE_POSITIVE_INFINITY);
       else
-        if (Double.isNaN (_what))
+        if (Double.isNaN (m_aWhat))
           f.print (JAVA_LANG_DOUBLE_NAN);
         else
-          f.print (Double.toString (_what));
+          f.print (Double.toString (m_aWhat));
   }
 
   @Override
@@ -88,12 +88,12 @@ public class JAtomDouble extends AbstractJExpressionImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtomDouble rhs = (JAtomDouble) o;
-    return isEqual (_what, rhs._what);
+    return isEqual (m_aWhat, rhs.m_aWhat);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, Double.valueOf (_what));
+    return getHashCode (this, Double.valueOf (m_aWhat));
   }
 }

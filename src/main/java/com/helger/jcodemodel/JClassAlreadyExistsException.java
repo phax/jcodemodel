@@ -49,8 +49,6 @@ import javax.annotation.Nonnull;
  */
 public class JClassAlreadyExistsException extends Exception
 {
-  private static final long serialVersionUID = 1L;
-
   private final AbstractJClass m_aExisting;
 
   public JClassAlreadyExistsException (@Nonnull final AbstractJClass existing)

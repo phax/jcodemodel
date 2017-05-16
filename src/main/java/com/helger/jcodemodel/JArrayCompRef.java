@@ -53,12 +53,12 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
   /**
    * JArray expression upon which this component will be accessed.
    */
-  private final IJExpression _array;
+  private final IJExpression m_aArray;
 
   /**
    * Integer expression representing index of the component
    */
-  private final IJExpression _index;
+  private final IJExpression m_aIndex;
 
   /**
    * JArray component reference constructor given an array expression and index.
@@ -72,25 +72,25 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
   {
     if (array == null || index == null)
       throw new NullPointerException ();
-    this._array = array;
-    this._index = index;
+    m_aArray = array;
+    m_aIndex = index;
   }
 
   @Nonnull
   public IJExpression array ()
   {
-    return _array;
+    return m_aArray;
   }
 
   @Nonnull
   public IJExpression index ()
   {
-    return _index;
+    return m_aIndex;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.generable (_array).print ('[').generable (_index).print (']');
+    f.generable (m_aArray).print ('[').generable (m_aIndex).print (']');
   }
 
   @Override
@@ -101,12 +101,12 @@ public class JArrayCompRef extends AbstractJExpressionAssignmentTargetImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JArrayCompRef rhs = (JArrayCompRef) o;
-    return isEqual (_array, rhs._array) && isEqual (_index, rhs._index);
+    return isEqual (m_aArray, rhs.m_aArray) && isEqual (m_aIndex, rhs.m_aIndex);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _array, _index);
+    return getHashCode (this, m_aArray, m_aIndex);
   }
 }

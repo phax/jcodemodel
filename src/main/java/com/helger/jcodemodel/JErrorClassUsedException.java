@@ -48,8 +48,6 @@ package com.helger.jcodemodel;
  */
 public class JErrorClassUsedException extends UnsupportedOperationException
 {
-  private static final long serialVersionUID = 1L;
-
   JErrorClassUsedException (final String message)
   {
     super (message);

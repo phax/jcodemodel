@@ -50,24 +50,24 @@ import javax.annotation.Nonnull;
  */
 public class JAtom extends AbstractJExpressionImpl
 {
-  private final String _what;
+  private final String m_sWhat;
 
   protected JAtom (@Nonnull final String what)
   {
     if (what == null)
       throw new NullPointerException ("what");
-    this._what = what;
+    m_sWhat = what;
   }
 
   @Nonnull
   public String what ()
   {
-    return _what;
+    return m_sWhat;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    f.print (_what);
+    f.print (m_sWhat);
   }
 
   @Override
@@ -78,12 +78,12 @@ public class JAtom extends AbstractJExpressionImpl
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtom rhs = (JAtom) o;
-    return isEqual (_what, rhs._what);
+    return isEqual (m_sWhat, rhs.m_sWhat);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, _what);
+    return getHashCode (this, m_sWhat);
   }
 }

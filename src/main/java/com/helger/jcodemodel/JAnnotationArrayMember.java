@@ -59,20 +59,20 @@ import javax.annotation.Nonnull;
  */
 public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implements IJAnnotatable
 {
-  private final JCodeModel _owner;
-  private final List <AbstractJAnnotationValue> _values = new ArrayList <> ();
+  private final JCodeModel m_aOwner;
+  private final List <AbstractJAnnotationValue> m_aValues = new ArrayList <> ();
 
   public JAnnotationArrayMember (@Nonnull final JCodeModel owner)
   {
     if (owner == null)
       throw new NullPointerException ("owner");
-    _owner = owner;
+    m_aOwner = owner;
   }
 
   @Nonnull
   public JCodeModel owner ()
   {
-    return _owner;
+    return m_aOwner;
   }
 
   /**
@@ -86,7 +86,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final String value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -94,7 +94,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final String... values)
   {
     for (final String value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -109,7 +109,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final boolean value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -117,7 +117,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final boolean... values)
   {
     for (final boolean value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -132,7 +132,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final byte value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -140,7 +140,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final byte... values)
   {
     for (final byte value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -155,7 +155,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final char value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -163,7 +163,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final char... values)
   {
     for (final char value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -178,7 +178,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final double value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -186,7 +186,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final double... values)
   {
     for (final double value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -201,7 +201,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final long value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -209,7 +209,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final long... values)
   {
     for (final long value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -224,7 +224,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final short value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -232,7 +232,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final short... values)
   {
     for (final short value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -247,7 +247,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final int value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -255,7 +255,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final int... values)
   {
     for (final int value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -270,7 +270,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final float value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -278,7 +278,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final float... values)
   {
     for (final float value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -293,7 +293,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (@Nonnull final Enum <?> aEnumConstant)
   {
-    _values.add (wrap (aEnumConstant));
+    m_aValues.add (wrap (aEnumConstant));
     return this;
   }
 
@@ -301,7 +301,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final Enum <?>... values)
   {
     for (final Enum <?> value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -316,7 +316,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final JEnumConstant value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -324,7 +324,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final JEnumConstant... values)
   {
     for (final JEnumConstant value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -339,7 +339,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final IJExpression value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -347,7 +347,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final IJExpression... values)
   {
     for (final IJExpression value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -362,7 +362,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   @Nonnull
   public JAnnotationArrayMember param (final Class <?> value)
   {
-    _values.add (wrap (value));
+    m_aValues.add (wrap (value));
     return this;
   }
 
@@ -370,14 +370,14 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final Class <?>... values)
   {
     for (final Class <?> value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
   @Nonnull
   public JAnnotationArrayMember param (final AbstractJType type)
   {
-    _values.add (wrap (type));
+    m_aValues.add (wrap (type));
     return this;
   }
 
@@ -385,7 +385,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationArrayMember params (@Nonnull final AbstractJType... values)
   {
     for (final AbstractJType value : values)
-      _values.add (wrap (value));
+      m_aValues.add (wrap (value));
     return this;
   }
 
@@ -405,14 +405,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
     final JAnnotationUse a = new JAnnotationUse (clazz);
-    _values.add (a);
+    m_aValues.add (a);
     return a;
-  }
-
-  @Nonnull
-  public <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
-  {
-    return TypedAnnotationWriter.create (clazz, this);
   }
 
   /**
@@ -427,26 +421,26 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
     // FIXME this invocation is invalid if the caller isn't adding annotations
     // into an array so this potentially type-unsafe conversion would be
     // justified.
-    return Collections.<JAnnotationUse> unmodifiableList ((List) _values);
+    return Collections.<JAnnotationUse> unmodifiableList ((List) m_aValues);
   }
 
   @Nonnull
   public Collection <AbstractJAnnotationValue> getAllAnnotations ()
   {
-    return Collections.unmodifiableList (_values);
+    return Collections.unmodifiableList (m_aValues);
   }
 
   @Nonnegative
   public int size ()
   {
-    return _values.size ();
+    return m_aValues.size ();
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
     f.print ('{').newline ().indent ();
     boolean first = true;
-    for (final AbstractJAnnotationValue aValue : _values)
+    for (final AbstractJAnnotationValue aValue : m_aValues)
     {
       if (!first)
         f.print (',').newline ();

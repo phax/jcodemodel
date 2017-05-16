@@ -58,15 +58,15 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   /**
    * Lazily created list of {@link JTypeVar}s.
    */
-  private Map <String, JTypeVar> _typeVariables;
+  private Map <String, JTypeVar> m_aTypeVariables;
 
   public void declare (@Nonnull final JFormatter f)
   {
-    if (_typeVariables != null && !_typeVariables.isEmpty ())
+    if (m_aTypeVariables != null && !m_aTypeVariables.isEmpty ())
     {
       f.print ('<');
       int nIndex = 0;
-      for (final JTypeVar aTypeVar : _typeVariables.values ())
+      for (final JTypeVar aTypeVar : m_aTypeVariables.values ())
       {
         if (nIndex++ > 0)
           f.print (',');
@@ -80,12 +80,12 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   public JTypeVar generify (@Nonnull final String name)
   {
     final JTypeVar v = new JTypeVar (owner (), name);
-    if (_typeVariables == null)
-      _typeVariables = new LinkedHashMap <> (3);
+    if (m_aTypeVariables == null)
+      m_aTypeVariables = new LinkedHashMap <> (3);
     else
-      if (_typeVariables.containsKey (name))
+      if (m_aTypeVariables.containsKey (name))
         throw new IllegalArgumentException ("A type parameter with name '" + name + "' is already present!");
-    _typeVariables.put (name, v);
+    m_aTypeVariables.put (name, v);
     return v;
   }
 
@@ -104,16 +104,16 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   @Nonnull
   public JTypeVar [] typeParams ()
   {
-    if (_typeVariables == null)
+    if (m_aTypeVariables == null)
       return AbstractJClass.EMPTY_ARRAY;
-    return _typeVariables.values ().toArray (new JTypeVar [_typeVariables.size ()]);
+    return m_aTypeVariables.values ().toArray (new JTypeVar [m_aTypeVariables.size ()]);
   }
 
   @Nonnull
   public List <JTypeVar> typeParamList ()
   {
-    if (_typeVariables == null)
+    if (m_aTypeVariables == null)
       return Collections.<JTypeVar> emptyList ();
-    return new ArrayList <> (_typeVariables.values ());
+    return new ArrayList <> (m_aTypeVariables.values ());
   }
 }
