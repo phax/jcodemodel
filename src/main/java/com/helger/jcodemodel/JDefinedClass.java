@@ -68,7 +68,7 @@ import com.helger.jcodemodel.util.ClassNameComparator;
  * {@link #field(int, AbstractJType, String)}.
  */
 public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
-                           implements IJDeclaration, IJGenerifiable, IJAnnotatable, IJDocCommentable
+                           implements IJGenerifiable, IJAnnotatable, IJDocCommentable
 {
   /**
    * The optional header that is emitted prior to the package (Issue #47)
@@ -148,7 +148,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   /**
    * Helper class to implement {@link IJGenerifiable}.
    */
-  private final AbstractJGenerifiableImpl m_aGenerifiable = new AbstractJGenerifiableImpl ()
+  private final IJGenerifiable m_aGenerifiable = new AbstractJGenerifiableImpl ()
   {
     @Nonnull
     public JCodeModel owner ()
@@ -776,12 +776,6 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
   public JTypeVar [] typeParams ()
   {
     return m_aGenerifiable.typeParams ();
-  }
-
-  @Nonnull
-  public List <JTypeVar> typeParamList ()
-  {
-    return m_aGenerifiable.typeParamList ();
   }
 
   @Override

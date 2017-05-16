@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -69,6 +70,11 @@ public class JNarrowedClass extends AbstractJClass
   public JNarrowedClass (@Nonnull final AbstractJClass basis, @Nonnull final AbstractJClass arg)
   {
     this (basis, Collections.singletonList (arg));
+  }
+
+  public JNarrowedClass (@Nonnull final AbstractJClass basis, @Nonnull final AbstractJClass [] args)
+  {
+    this (basis, Arrays.asList (args));
   }
 
   public JNarrowedClass (@Nonnull final AbstractJClass basis, @Nonnull final List <? extends AbstractJClass> args)
@@ -290,17 +296,17 @@ public class JNarrowedClass extends AbstractJClass
                                              final List <? extends AbstractJClass> bindings)
   {
     final AbstractJClass b = m_aBasis.substituteParams (variables, bindings);
-    boolean different = b != m_aBasis;
+    boolean bDifferent = b != m_aBasis;
 
     final List <AbstractJClass> clazz = new ArrayList <> (m_aArgs.size ());
     for (final AbstractJClass aClass : m_aArgs)
     {
       final AbstractJClass c = aClass.substituteParams (variables, bindings);
       clazz.add (c);
-      different |= c != aClass;
+      bDifferent |= c != aClass;
     }
 
-    if (different)
+    if (bDifferent)
       return new JNarrowedClass (b, clazz);
     return this;
   }

@@ -40,8 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 /**
@@ -50,7 +48,7 @@ import javax.annotation.Nonnull;
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public interface IJGenerifiable
+public interface IJGenerifiable extends IJDeclaration, IJOwned
 {
   /**
    * Adds a new type variable to this declaration.
@@ -67,24 +65,30 @@ public interface IJGenerifiable
    *
    * @param name
    *        type variable name
-   * @param bound
+   * @param _extends
    *        Bound class
    * @return The created {@link JTypeVar}
    */
   @Nonnull
-  JTypeVar generify (@Nonnull String name, @Nonnull Class <?> bound);
+  default JTypeVar generify (@Nonnull final String name, @Nonnull final Class <?> _extends)
+  {
+    return generify (name, owner ().ref (_extends));
+  }
 
   /**
    * Adds a new type variable to this declaration with a bound.
    *
    * @param name
    *        type variable name
-   * @param bound
+   * @param _extends
    *        Bound class
    * @return The created {@link JTypeVar}
    */
   @Nonnull
-  JTypeVar generify (@Nonnull String name, @Nonnull AbstractJClass bound);
+  default JTypeVar generify (@Nonnull final String name, @Nonnull final AbstractJClass _extends)
+  {
+    return generify (name).bound (_extends);
+  }
 
   /**
    * Iterates all the type parameters of this declaration.
@@ -93,12 +97,4 @@ public interface IJGenerifiable
    */
   @Nonnull
   JTypeVar [] typeParams ();
-
-  /**
-   * Get a list of all type parameters of this declaration.
-   *
-   * @return All type parameters
-   */
-  @Nonnull
-  List <JTypeVar> typeParamList ();
 }

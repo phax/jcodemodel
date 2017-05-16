@@ -40,8 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import java.util.List;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -68,8 +66,8 @@ public class JTypeVarClass extends JTypeVar
     // This method is used for the main printing
     if (m_aClass instanceof JDefinedClass)
     {
-      final List <JTypeVar> aTypeParams = ((JDefinedClass) m_aClass).typeParamList ();
-      if (!aTypeParams.isEmpty ())
+      final JTypeVar [] aTypeParams = ((JDefinedClass) m_aClass).typeParams ();
+      if (aTypeParams.length > 0)
       {
         // We need the type params here!
         return new JNarrowedClass (m_aClass, aTypeParams).name ();

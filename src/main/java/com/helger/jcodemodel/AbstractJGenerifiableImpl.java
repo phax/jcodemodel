@@ -40,10 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -53,7 +50,7 @@ import javax.annotation.Nonnull;
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDeclaration, IJOwned
+public abstract class AbstractJGenerifiableImpl implements IJGenerifiable
 {
   /**
    * Lazily created list of {@link JTypeVar}s.
@@ -90,30 +87,10 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable, IJDec
   }
 
   @Nonnull
-  public JTypeVar generify (@Nonnull final String name, @Nonnull final Class <?> _extends)
-  {
-    return generify (name, owner ().ref (_extends));
-  }
-
-  @Nonnull
-  public JTypeVar generify (@Nonnull final String name, @Nonnull final AbstractJClass _extends)
-  {
-    return generify (name).bound (_extends);
-  }
-
-  @Nonnull
   public JTypeVar [] typeParams ()
   {
     if (m_aTypeVariables == null)
       return AbstractJClass.EMPTY_ARRAY;
     return m_aTypeVariables.values ().toArray (new JTypeVar [m_aTypeVariables.size ()]);
-  }
-
-  @Nonnull
-  public List <JTypeVar> typeParamList ()
-  {
-    if (m_aTypeVariables == null)
-      return Collections.<JTypeVar> emptyList ();
-    return new ArrayList <> (m_aTypeVariables.values ());
   }
 }
