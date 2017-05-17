@@ -118,7 +118,17 @@ public class JCase implements IJStatement
     }
     else
     {
-      f.print ("case ").generable (m_aLabelExpr).print (':').newline ();
+      // Hack for #41 :)
+      IJExpression aLabelName;
+      if (m_aLabelExpr instanceof JEnumConstant)
+      {
+        // Just use the name, but not the type of the enum
+        aLabelName = f1 -> f1.print (((JEnumConstant) m_aLabelExpr).name ());
+      }
+      else
+        aLabelName = m_aLabelExpr;
+
+      f.print ("case ").generable (aLabelName).print (':').newline ();
     }
     if (m_aBody != null)
       f.statement (m_aBody);

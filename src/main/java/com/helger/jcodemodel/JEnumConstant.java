@@ -209,11 +209,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
 
   public void generate (@Nonnull final JFormatter f)
   {
-    // Type must not be emitted - see issue #41
-    if (false)
-      f.type (m_aType).print ('.').print (m_sName);
-    else
-      f.print (m_sName);
+    f.type (m_aType).print ('.').print (m_sName);
   }
 
   @Override
