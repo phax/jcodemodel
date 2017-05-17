@@ -351,7 +351,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   @Nonnull
   public JInvocation narrow (@Nonnull final AbstractJClass bound)
   {
-    final JTypeVar v = new JTypeVarClass (bound);
+    final JTypeVarClass v = new JTypeVarClass (bound);
     if (m_aTypeVariables == null)
       m_aTypeVariables = new ArrayList <> (3);
     m_aTypeVariables.add (v);

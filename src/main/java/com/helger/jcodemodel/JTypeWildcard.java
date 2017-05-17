@@ -46,6 +46,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Represents a wildcard type like "? extends Foo" or "? super Foo".
  * <p>
@@ -59,34 +61,13 @@ import javax.annotation.Nullable;
  */
 public class JTypeWildcard extends AbstractJClass
 {
-  public static enum EBoundMode
-  {
-    EXTENDS ("? extends "),
-    SUPER ("? super ");
-
-    /**
-     * The keyword used to declare this type.
-     */
-    private final String m_sDeclarationTokens;
-
-    private EBoundMode (@Nonnull final String token)
-    {
-      m_sDeclarationTokens = token;
-    }
-
-    @Nonnull
-    public String declarationTokens ()
-    {
-      return m_sDeclarationTokens;
-    }
-  }
-
   private final AbstractJClass m_aBoundClass;
-  private final EBoundMode m_eBoundMode;
+  private final EWildcardBoundMode m_eBoundMode;
 
-  protected JTypeWildcard (@Nonnull final AbstractJClass aBoundClass, @Nonnull final EBoundMode eBoundMode)
+  protected JTypeWildcard (@Nonnull final AbstractJClass aBoundClass, @Nonnull final EWildcardBoundMode eBoundMode)
   {
     super (aBoundClass.owner ());
+    JCValueEnforcer.notNull (eBoundMode, "BoundMode");
     m_aBoundClass = aBoundClass;
     m_eBoundMode = eBoundMode;
   }
@@ -111,7 +92,7 @@ public class JTypeWildcard extends AbstractJClass
   }
 
   @Nonnull
-  public EBoundMode boundMode ()
+  public EWildcardBoundMode boundMode ()
   {
     return m_eBoundMode;
   }
@@ -146,7 +127,7 @@ public class JTypeWildcard extends AbstractJClass
   @Override
   public AbstractJClass _extends ()
   {
-    return m_eBoundMode == EBoundMode.EXTENDS ? m_aBoundClass : _package ().owner ().ref (Object.class);
+    return m_eBoundMode == EWildcardBoundMode.EXTENDS ? m_aBoundClass : _package ().owner ().ref (Object.class);
   }
 
   /**
@@ -185,7 +166,7 @@ public class JTypeWildcard extends AbstractJClass
     final AbstractJClass nb = m_aBoundClass.substituteParams (aVariables, aBindings);
     if (nb == m_aBoundClass)
       return this;
-    return new JTypeWildcard (nb, EBoundMode.EXTENDS);
+    return new JTypeWildcard (nb, EWildcardBoundMode.EXTENDS);
   }
 
   @Override

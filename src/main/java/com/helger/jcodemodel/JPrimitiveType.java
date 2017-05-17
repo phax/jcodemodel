@@ -42,23 +42,14 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Java built-in primitive types. Instances of this class can be obtained as
  * constants of {@link JCodeModel}, such as {@link JCodeModel#BOOLEAN}.
  */
 public class JPrimitiveType extends AbstractJType
 {
-  private static final JCodeModel CODE_MODEL = new JCodeModel ();
-  public static final JPrimitiveType VOID = CODE_MODEL.VOID;
-  public static final JPrimitiveType BOOLEAN = CODE_MODEL.BOOLEAN;
-  public static final JPrimitiveType BYTE = CODE_MODEL.BYTE;
-  public static final JPrimitiveType SHORT = CODE_MODEL.SHORT;
-  public static final JPrimitiveType CHAR = CODE_MODEL.CHAR;
-  public static final JPrimitiveType INT = CODE_MODEL.INT;
-  public static final JPrimitiveType FLOAT = CODE_MODEL.FLOAT;
-  public static final JPrimitiveType LONG = CODE_MODEL.LONG;
-  public static final JPrimitiveType DOUBLE = CODE_MODEL.DOUBLE;
-
   private final JCodeModel m_aOwner;
   private final String m_sTypeName;
   /**
@@ -74,6 +65,9 @@ public class JPrimitiveType extends AbstractJType
                             @Nonnull final Class <?> aWrapper,
                             final boolean bUseValueOf)
   {
+    JCValueEnforcer.notNull (aOwner, "Owner");
+    JCValueEnforcer.notNull (sTypeName, "TypeName");
+    JCValueEnforcer.notNull (aWrapper, "Wrapper");
     m_aOwner = aOwner;
     m_sTypeName = sTypeName;
     m_aWrapperClass = aOwner.ref (aWrapper);
@@ -101,7 +95,7 @@ public class JPrimitiveType extends AbstractJType
   }
 
   @Override
-  public boolean isPrimitive ()
+  public final boolean isPrimitive ()
   {
     return true;
   }
@@ -121,7 +115,7 @@ public class JPrimitiveType extends AbstractJType
    */
   @Override
   @Nonnull
-  public AbstractJClass boxify ()
+  public final AbstractJClass boxify ()
   {
     return m_aWrapperClass;
   }
@@ -134,7 +128,7 @@ public class JPrimitiveType extends AbstractJType
   @Deprecated
   @Override
   @Nonnull
-  public AbstractJType unboxify ()
+  public final AbstractJType unboxify ()
   {
     return this;
   }

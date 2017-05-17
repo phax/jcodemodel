@@ -58,9 +58,9 @@ import javax.lang.model.util.AbstractTypeVisitor6;
 
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
+import com.helger.jcodemodel.EWildcardBoundMode;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JTypeWildcard;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
@@ -228,13 +228,13 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
       if (extendsBoundMirror != null)
       {
         final AbstractJClass extendsBound = (AbstractJClass) m_aModelsAdapter.toJType (extendsBoundMirror, m_aEnvironment);
-        return extendsBound.wildcard (JTypeWildcard.EBoundMode.EXTENDS);
+        return extendsBound.wildcard (EWildcardBoundMode.EXTENDS);
       }
       final TypeMirror superBoundMirror = t.getSuperBound ();
       if (superBoundMirror != null)
       {
         final AbstractJClass superBound = (AbstractJClass) m_aModelsAdapter.toJType (superBoundMirror, m_aEnvironment);
-        return superBound.wildcard (JTypeWildcard.EBoundMode.SUPER);
+        return superBound.wildcard (EWildcardBoundMode.SUPER);
       }
       return m_aCodeModel.wildcard ();
     }

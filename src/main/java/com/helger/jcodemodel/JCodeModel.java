@@ -101,6 +101,45 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  */
 public final class JCodeModel
 {
+  protected static boolean determinFileSystemCaseSensitivity ()
+  {
+    try
+    {
+      // let the system property override, in case the user really
+      // wants to override.
+      if (System.getProperty ("com.sun.codemodel.FileSystemCaseSensitive") != null)
+        return true;
+
+      // Add special override to differentiate if Sun implementation is also in
+      // scope
+      if (System.getProperty ("com.helger.jcodemodel.FileSystemCaseSensitive") != null)
+        return true;
+    }
+    catch (final Exception e)
+    {
+      // Fall through
+    }
+
+    // on Unix, it's case sensitive.
+    return File.separatorChar == '/';
+  }
+
+  /**
+   * If the flag is true, we will consider two classes "Foo" and "foo" as a
+   * collision.
+   */
+  private static final boolean s_bIsCaseSensitiveFileSystem = determinFileSystemCaseSensitivity ();
+
+  /**
+   * @return <code>true</code> if the file system is case sensitive (*x) or
+   *         <code>false</code> if not (e.g. Windows).
+   * @since 3.0.0
+   */
+  public static boolean isFileSystemCaseSensitive ()
+  {
+    return s_bIsCaseSensitiveFileSystem;
+  }
+
   /**
    * Conversion from primitive type {@link Class} (such as {@link Integer#TYPE})
    * to its boxed type (such as <tt>Integer.class</tt>). It's an unmodifiable
@@ -154,45 +193,6 @@ public final class JCodeModel
   public final JPrimitiveType LONG = new JPrimitiveType (this, "long", Long.class, true);
   public final JPrimitiveType SHORT = new JPrimitiveType (this, "short", Short.class, true);
   public final JPrimitiveType VOID = new JPrimitiveType (this, "void", Void.class, false);
-
-  protected static boolean determinFileSystemCaseSensitivity ()
-  {
-    try
-    {
-      // let the system property override, in case the user really
-      // wants to override.
-      if (System.getProperty ("com.sun.codemodel.FileSystemCaseSensitive") != null)
-        return true;
-
-      // Add special override to differentiate if Sun implementation is also in
-      // scope
-      if (System.getProperty ("com.helger.jcodemodel.FileSystemCaseSensitive") != null)
-        return true;
-    }
-    catch (final Exception e)
-    {
-      // Fall through
-    }
-
-    // on Unix, it's case sensitive.
-    return File.separatorChar == '/';
-  }
-
-  /**
-   * If the flag is true, we will consider two classes "Foo" and "foo" as a
-   * collision.
-   */
-  private static final boolean s_bIsCaseSensitiveFileSystem = determinFileSystemCaseSensitivity ();
-
-  /**
-   * @return <code>true</code> if the file system is case sensitive (*x) or
-   *         <code>false</code> if not (e.g. Windows).
-   * @since 3.0.0
-   */
-  public static boolean isFileSystemCaseSensitive ()
-  {
-    return s_bIsCaseSensitiveFileSystem;
-  }
 
   /**
    * Cached for {@link #wildcard()}.

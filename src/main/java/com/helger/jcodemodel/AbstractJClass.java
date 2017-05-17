@@ -49,7 +49,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.JTypeWildcard.EBoundMode;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
@@ -160,17 +159,17 @@ public abstract class AbstractJClass extends AbstractJType
    */
   @Deprecated
   @Override
-  public AbstractJClass boxify ()
+  public final AbstractJClass boxify ()
   {
     return this;
   }
 
   @Override
   @Nonnull
-  public AbstractJType unboxify ()
+  public final AbstractJType unboxify ()
   {
-    final JPrimitiveType pt = getPrimitiveType ();
-    return pt == null ? this : pt;
+    final JPrimitiveType aPrimitiveType = getPrimitiveType ();
+    return aPrimitiveType == null ? this : aPrimitiveType;
   }
 
   @Override
@@ -377,12 +376,12 @@ public abstract class AbstractJClass extends AbstractJType
    * Create "? extends T" from T.
    *
    * @return never <code>null</code>
-   * @since
+   * @since 3.0.0
    */
   @Nonnull
   public final JTypeWildcard wildcardExtends ()
   {
-    return wildcard (EBoundMode.EXTENDS);
+    return wildcard (EWildcardBoundMode.EXTENDS);
   }
 
   /**
@@ -393,7 +392,7 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public final JTypeWildcard wildcardSuper ()
   {
-    return wildcard (EBoundMode.SUPER);
+    return wildcard (EWildcardBoundMode.SUPER);
   }
 
   /**
@@ -404,7 +403,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return never <code>null</code>
    */
   @Nonnull
-  public final JTypeWildcard wildcard (@Nonnull final EBoundMode eMode)
+  public final JTypeWildcard wildcard (@Nonnull final EWildcardBoundMode eMode)
   {
     return new JTypeWildcard (this, eMode);
   }

@@ -63,6 +63,10 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
 {
   private final Class <?> m_aClass;
 
+  // Cached status vars
+  private transient boolean m_bResolvedPrimitive = false;
+  private transient JPrimitiveType m_aPrimitiveType;
+
   JReferencedClass (@Nonnull final JCodeModel aOwner, @Nonnull final Class <?> aClass)
   {
     super (aOwner);
@@ -168,12 +172,19 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
 
   @Override
   @Nullable
-  public JPrimitiveType getPrimitiveType ()
+  public final JPrimitiveType getPrimitiveType ()
   {
-    final Class <?> v = JCodeModel.boxToPrimitive.get (m_aClass);
-    if (v != null)
-      return AbstractJType.parse (owner (), v.getName ());
-    return null;
+    // Resolve only once
+    if (!m_bResolvedPrimitive)
+    {
+      final Class <?> v = JCodeModel.boxToPrimitive.get (m_aClass);
+      if (v != null)
+        m_aPrimitiveType = AbstractJType.parse (owner (), v.getName ());
+      else
+        m_aPrimitiveType = null;
+      m_bResolvedPrimitive = true;
+    }
+    return m_aPrimitiveType;
   }
 
   public void declare (final JFormatter f)

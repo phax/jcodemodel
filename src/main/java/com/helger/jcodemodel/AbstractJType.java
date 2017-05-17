@@ -144,10 +144,21 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * Tell whether or not this is a built-in primitive type, such as int or void.
    *
    * @return <code>true</code> if this is a primitive type
+   * @see #isReference()
    */
   public boolean isPrimitive ()
   {
     return false;
+  }
+
+  /**
+   * @return <code>true</code> if this is a reference type (which means it is
+   *         not a primitive type).
+   * @see #isPrimitive()
+   */
+  public final boolean isReference ()
+  {
+    return !isPrimitive ();
   }
 
   /**
@@ -208,15 +219,6 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   public AbstractJType declarable ()
   {
     return this;
-  }
-
-  /**
-   * @return <code>true</code> if this is a referenced type (which means it is
-   *         not a primitive type).
-   */
-  public final boolean isReference ()
-  {
-    return !isPrimitive ();
   }
 
   /**
@@ -335,16 +337,16 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
               final JTypeWildcard thatWildcard = (JTypeWildcard) thatParameter;
               if (thisWildcard.boundMode () != thatWildcard.boundMode ())
                 return false;
-              if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS)
+              if (thisWildcard.boundMode () == EWildcardBoundMode.EXTENDS)
                 return thisWildcard.bound ().isAssignableFrom (thatWildcard.bound (), false);
-              if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.SUPER)
+              if (thisWildcard.boundMode () == EWildcardBoundMode.SUPER)
                 return thatWildcard.bound ().isAssignableFrom (thisWildcard.bound (), false);
               throw new IllegalStateException ("Unsupported wildcard bound mode: " + thisWildcard.boundMode ());
             }
 
-            if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.EXTENDS)
+            if (thisWildcard.boundMode () == EWildcardBoundMode.EXTENDS)
               return thisWildcard.bound ().isAssignableFrom (thatParameter, false);
-            if (thisWildcard.boundMode () == JTypeWildcard.EBoundMode.SUPER)
+            if (thisWildcard.boundMode () == EWildcardBoundMode.SUPER)
               return thatParameter.isAssignableFrom (thisWildcard.bound (), false);
             throw new IllegalStateException ("Unsupported wildcard bound mode: " + thisWildcard.boundMode ());
           }
