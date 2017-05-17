@@ -45,6 +45,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import javax.annotation.Nonnull;
 
@@ -67,7 +68,7 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
  */
 public final class CodeModelTestsHelper
 {
-  public static final Charset DEFAULT_ENCODING = Charset.forName ("UTF-8");
+  public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
 
   /** Hidden constructor. */
   private CodeModelTestsHelper ()
@@ -76,19 +77,18 @@ public final class CodeModelTestsHelper
   /**
    * Prints an expression into a string.
    *
-   * @param aExpression
+   * @param aGenerable
    *        expression to print into a string.
    * @return Expression formatted as a string.
    */
   @Nonnull
-  public static String toString (@Nonnull final IJExpression aExpression)
+  public static String toString (@Nonnull final IJExpression aGenerable)
   {
-    if (aExpression == null)
-      throw new IllegalArgumentException ("Generable must not be null.");
+    JCValueEnforcer.notNull (aGenerable, "Generable");
 
     final StringWriter aSW = new StringWriter ();
     final JFormatter formatter = new JFormatter (aSW);
-    aExpression.generate (formatter);
+    aGenerable.generate (formatter);
     return aSW.toString ();
   }
 
@@ -102,8 +102,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String toString (@Nonnull final IJDeclaration aDeclaration)
   {
-    if (aDeclaration == null)
-      throw new IllegalArgumentException ("Declaration must not be null.");
+    JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
     final StringWriter aSW = new StringWriter ();
     final JFormatter formatter = new JFormatter (aSW);
@@ -121,8 +120,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String toString (@Nonnull final IJStatement aStatement)
   {
-    if (aStatement == null)
-      throw new IllegalArgumentException ("Statement must not be null.");
+    JCValueEnforcer.notNull (aStatement, "Statement");
 
     final StringWriter aSW = new StringWriter ();
     final JFormatter formatter = new JFormatter (aSW);
@@ -131,26 +129,24 @@ public final class CodeModelTestsHelper
   }
 
   @Nonnull
-  public static String declare (@Nonnull final IJDeclaration declaration)
+  public static String declare (@Nonnull final IJDeclaration aDeclaration)
   {
-    if (declaration == null)
-      throw new IllegalArgumentException ("Declaration must not be null.");
+    JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
     final StringWriter aSW = new StringWriter ();
     final JFormatter formatter = new JFormatter (aSW);
-    declaration.declare (formatter);
+    aDeclaration.declare (formatter);
     return aSW.toString ();
   }
 
   @Nonnull
-  public static String generate (@Nonnull final IJGenerable generable)
+  public static String generate (@Nonnull final IJGenerable aGenerable)
   {
-    if (generable == null)
-      throw new IllegalArgumentException ("Generable must not be null.");
+    JCValueEnforcer.notNull (aGenerable, "Generable");
 
     final StringWriter aSW = new StringWriter ();
     final JFormatter formatter = new JFormatter (aSW);
-    generable.generate (formatter);
+    aGenerable.generate (formatter);
     return aSW.toString ();
   }
 
@@ -179,7 +175,7 @@ public final class CodeModelTestsHelper
   {
     final byte [] aBytes = getAllBytes (cm);
     if (true)
-      System.out.println (new String (aBytes, DEFAULT_ENCODING.name ()));
+      System.out.println (new String (aBytes, DEFAULT_ENCODING));
 
     final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes);
 

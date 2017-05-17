@@ -225,6 +225,7 @@ public class JFormatter implements Closeable
 
   private final class ImportedClasses
   {
+    private final Set <AbstractJClass> m_aDontImportClasses = new HashSet <> ();
     private final Set <AbstractJClass> m_aClasses = new HashSet <> ();
     private final Set <String> m_aNames = new HashSet <> ();
 
@@ -248,9 +249,22 @@ public class JFormatter implements Closeable
       return aRealClass;
     }
 
+    public void addDontImportClass (@Nonnull final AbstractJClass aClass)
+    {
+      final AbstractJClass aRealClass = _getClassForImport (aClass);
+      m_aDontImportClasses.add (aRealClass);
+    }
+
     public boolean add (@Nonnull final AbstractJClass aClass)
     {
       final AbstractJClass aRealClass = _getClassForImport (aClass);
+
+      if (m_aDontImportClasses.contains (aRealClass))
+      {
+        if (m_bImportDebug)
+          System.out.println ("The class '" + aRealClass.fullName () + "' should not be imported!");
+        return false;
+      }
 
       // Avoid importing 2 classes with the same class name
       if (!m_aNames.add (aRealClass.name ()))
@@ -1065,6 +1079,20 @@ public class JFormatter implements Closeable
       newline ();
 
     declaration (aClassToBeWritten);
+  }
+
+  /**
+   * Add classes that should not be imported.
+   * 
+   * @param aClasses
+   *        The classes to not be used in "import" statements. May be
+   *        <code>null</code>.
+   */
+  public void addDontImportClasses (@Nullable final Iterable <? extends AbstractJClass> aClasses)
+  {
+    if (aClasses != null)
+      for (final AbstractJClass aClass : aClasses)
+        m_aImportedClasses.addDontImportClass (aClass);
   }
 
   public static boolean containsErrorTypes (@Nonnull final JDefinedClass c)

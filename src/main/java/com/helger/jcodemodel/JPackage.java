@@ -58,6 +58,7 @@ import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.WillNotClose;
 
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
@@ -548,7 +549,19 @@ public class JPackage implements
     f.print (m_sName);
   }
 
-  void build (final AbstractCodeWriter src, final AbstractCodeWriter res) throws IOException
+  @Nonnull
+  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter src,
+                                                  @Nonnull final String className) throws IOException
+  {
+    final SourcePrintWriter aWriter = src.openSource (this, className + ".java");
+    final JFormatter ret = new JFormatter (aWriter);
+    // Add all classes to not be imported (may be empty)
+    ret.addDontImportClasses (m_aOwner.getAllDontImportClasses ());
+    return ret;
+  }
+
+  void build (@Nonnull @WillNotClose final AbstractCodeWriter aSrcWriter,
+              @Nonnull @WillNotClose final AbstractCodeWriter aResWriter) throws IOException
   {
     // write classes
     for (final JDefinedClass c : m_aClasses.values ())
@@ -559,7 +572,7 @@ public class JPackage implements
         continue;
       }
 
-      try (final JFormatter f = _createJavaSourceFileWriter (src, c.name ()))
+      try (final JFormatter f = _createJavaSourceFileWriter (aSrcWriter, c.name ()))
       {
         f.write (c);
       }
@@ -568,7 +581,7 @@ public class JPackage implements
     // write package annotations
     if (m_aAnnotations != null || m_aJavaDoc != null)
     {
-      try (final JFormatter f = _createJavaSourceFileWriter (src, "package-info"))
+      try (final JFormatter f = _createJavaSourceFileWriter (aSrcWriter, "package-info"))
       {
         if (m_aJavaDoc != null)
           f.generable (m_aJavaDoc);
@@ -586,7 +599,7 @@ public class JPackage implements
     // write resources
     for (final AbstractJResourceFile rsrc : m_aResources)
     {
-      final AbstractCodeWriter cw = rsrc.isResource () ? res : src;
+      final AbstractCodeWriter cw = rsrc.isResource () ? aResWriter : aSrcWriter;
       try (final OutputStream os = new BufferedOutputStream (cw.openBinary (this, rsrc.name ())))
       {
         rsrc.build (os);
@@ -633,13 +646,5 @@ public class JPackage implements
     ret += m_aResources.size ();
 
     return ret;
-  }
-
-  @Nonnull
-  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter src,
-                                                  @Nonnull final String className) throws IOException
-  {
-    final SourcePrintWriter aWriter = src.openSource (this, className + ".java");
-    return new JFormatter (aWriter);
   }
 }

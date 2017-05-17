@@ -45,11 +45,14 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -197,10 +200,12 @@ public final class JCodeModel
   private AbstractJClass m_aWildcard;
 
   /** The charset used for building the output - null means system default */
-  private Charset m_aBuildingCharset = null;
+  private Charset m_aBuildingCharset;
 
   /** The newline string to be used. Defaults to system default */
   private String m_sBuildingNewLine = AbstractCodeWriter.getDefaultNewLine ();
+
+  private final Set <AbstractJClass> m_aDontImportClasses = new HashSet <> ();
 
   public JCodeModel ()
   {}
@@ -555,26 +560,26 @@ public final class JCodeModel
    * Generates Java source code. A convenience method that calls
    * {@link #build(AbstractCodeWriter,AbstractCodeWriter)}.
    *
-   * @param srcDir
+   * @param aSrcDir
    *        Java source files are generated into this directory.
-   * @param resourceDir
+   * @param aResourceDir
    *        Other resource files are generated into this directory.
-   * @param status
+   * @param aStatus
    *        Progress stream. May be <code>null</code>.
    * @throws IOException
    *         on IO error if non-null, progress indication will be sent to this
    *         stream.
    */
-  public void build (@Nonnull final File srcDir,
-                     @Nonnull final File resourceDir,
-                     @Nullable final PrintStream status) throws IOException
+  public void build (@Nonnull final File aSrcDir,
+                     @Nonnull final File aResourceDir,
+                     @Nullable final PrintStream aStatus) throws IOException
   {
-    AbstractCodeWriter res = new FileCodeWriter (resourceDir, m_aBuildingCharset, m_sBuildingNewLine);
-    AbstractCodeWriter src = new FileCodeWriter (srcDir, m_aBuildingCharset, m_sBuildingNewLine);
-    if (status != null)
+    AbstractCodeWriter res = new FileCodeWriter (aResourceDir, m_aBuildingCharset, m_sBuildingNewLine);
+    AbstractCodeWriter src = new FileCodeWriter (aSrcDir, m_aBuildingCharset, m_sBuildingNewLine);
+    if (aStatus != null)
     {
-      src = new ProgressCodeWriter (src, status);
-      res = new ProgressCodeWriter (res, status);
+      src = new ProgressCodeWriter (src, aStatus);
+      res = new ProgressCodeWriter (res, aStatus);
     }
     build (src, res);
   }
@@ -582,68 +587,68 @@ public final class JCodeModel
   /**
    * A convenience method for <code>build(destDir,System.out)</code>.
    *
-   * @param destDir
+   * @param aDestDir
    *        source files and resources are generated into this directory.
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final File destDir) throws IOException
+  public void build (@Nonnull final File aDestDir) throws IOException
   {
-    build (destDir, System.out);
+    build (aDestDir, System.out);
   }
 
   /**
    * A convenience method for <code>build(srcDir,resourceDir,System.out)</code>.
    *
-   * @param srcDir
+   * @param aSrcDir
    *        Java source files are generated into this directory.
-   * @param resourceDir
+   * @param aResourceDir
    *        Other resource files are generated into this directory.
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final File srcDir, @Nonnull final File resourceDir) throws IOException
+  public void build (@Nonnull final File aSrcDir, @Nonnull final File aResourceDir) throws IOException
   {
-    build (srcDir, resourceDir, System.out);
+    build (aSrcDir, aResourceDir, System.out);
   }
 
   /**
    * A convenience method for <code>build(out,out)</code>.
    *
-   * @param out
+   * @param aWriter
    *        Source code and resource writer
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final AbstractCodeWriter out) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter aWriter) throws IOException
   {
-    build (out, out);
+    build (aWriter, aWriter);
   }
 
   /**
    * Generates Java source code.
    *
-   * @param source
+   * @param aSource
    *        Source code writer
-   * @param resource
+   * @param aResource
    *        Resource writer
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final AbstractCodeWriter source,
-                     @Nonnull final AbstractCodeWriter resource) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter aSource,
+                     @Nonnull final AbstractCodeWriter aResource) throws IOException
   {
     try
     {
-      final JPackage [] pkgs = m_aPackages.values ().toArray (new JPackage [m_aPackages.size ()]);
-      // avoid concurrent modification exception
+      // Copy to avoid concurrent modification exception
+      final List <JPackage> pkgs = new ArrayList <> (m_aPackages.values ());
       for (final JPackage pkg : pkgs)
-        pkg.build (source, resource);
+        pkg.build (aSource, aResource);
     }
     finally
     {
-      source.close ();
-      resource.close ();
+      aSource.close ();
+      aResource.close ();
     }
   }
 
@@ -1008,5 +1013,45 @@ public final class JCodeModel
         m_nIdx++;
       }
     }
+  }
+
+  /**
+   * Add a class that should <strong>NOT</strong> be imported.
+   *
+   * @param aClass
+   *        The class to use. May not be <code>null</code>.
+   * @return <code>true</code> if it was added, <code>false</code> if it was
+   *         already contained.
+   * @since 3.0.0
+   */
+  public boolean addDontImportClass (@Nonnull final Class <?> aClass)
+  {
+    return addDontImportClass (ref (aClass));
+  }
+
+  /**
+   * Add a class that should <strong>NOT</strong> be imported.
+   *
+   * @param aClass
+   *        The class to use. May not be <code>null</code>.
+   * @return <code>true</code> if it was added, <code>false</code> if it was
+   *         already contained.
+   * @since 3.0.0
+   */
+  public boolean addDontImportClass (@Nonnull final AbstractJClass aClass)
+  {
+    JCValueEnforcer.notNull (aClass, "Class");
+    return m_aDontImportClasses.add (aClass);
+  }
+
+  /**
+   * @return A copy all classes that should not be imported. Never
+   *         <code>null</code> but maybe empty.
+   * @since 3.0.0
+   */
+  @Nonnull
+  public Collection <AbstractJClass> getAllDontImportClasses ()
+  {
+    return new HashSet <> (m_aDontImportClasses);
   }
 }
