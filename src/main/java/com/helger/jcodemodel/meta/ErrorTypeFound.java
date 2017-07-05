@@ -45,7 +45,6 @@ package com.helger.jcodemodel.meta;
  *
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
-@SuppressWarnings ("serial")
 public class ErrorTypeFound extends Exception
 {
   ErrorTypeFound (final String message)

@@ -43,7 +43,6 @@ package com.helger.jcodemodel.meta;
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
-@SuppressWarnings ("serial")
 class RuntimeCodeModelBuildingException extends RuntimeException
 {
   private final CodeModelBuildingException m_aCause;

@@ -45,7 +45,6 @@ import com.helger.jcodemodel.JClassAlreadyExistsException;
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
-@SuppressWarnings ("serial")
 public class CodeModelBuildingException extends Exception
 {
   public CodeModelBuildingException (final JClassAlreadyExistsException ex)

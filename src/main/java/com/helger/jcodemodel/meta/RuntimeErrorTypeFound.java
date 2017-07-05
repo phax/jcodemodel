@@ -43,7 +43,6 @@ package com.helger.jcodemodel.meta;
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
-@SuppressWarnings ("serial")
 class RuntimeErrorTypeFound extends RuntimeException
 {
   private final ErrorTypeFound m_aCause;
