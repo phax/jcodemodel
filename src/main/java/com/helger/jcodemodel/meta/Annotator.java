@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnull;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.ExecutableElement;
@@ -79,9 +80,9 @@ class Annotator
     m_aTypeEnvironment = typeEnvironment;
   }
 
-  void annotate (final List <? extends AnnotationMirror> annotationMirrors) throws CodeModelBuildingException,
-                                                                            IllegalStateException,
-                                                                            ErrorTypeFound
+  void annotate (@Nonnull final List <? extends AnnotationMirror> annotationMirrors) throws CodeModelBuildingException,
+                                                                                     IllegalStateException,
+                                                                                     ErrorTypeFound
   {
     for (final AnnotationMirror annotation : annotationMirrors)
     {
@@ -89,9 +90,9 @@ class Annotator
     }
   }
 
-  private void _annotate (final AnnotationMirror annotation) throws CodeModelBuildingException,
-                                                            IllegalStateException,
-                                                            ErrorTypeFound
+  private void _annotate (@Nonnull final AnnotationMirror annotation) throws CodeModelBuildingException,
+                                                                      IllegalStateException,
+                                                                      ErrorTypeFound
   {
     final JAnnotationUse annotationUse = m_aAnnotatable.annotate ((AbstractJClass) m_aModelsAdapter.toJType (annotation.getAnnotationType (),
                                                                                                              m_aTypeEnvironment));
@@ -103,7 +104,7 @@ class Annotator
   {
     private final JAnnotationUse m_aAnnotationUse;
 
-    public ArgumentAdder (final JAnnotationUse annotationUse)
+    public ArgumentAdder (@Nonnull final JAnnotationUse annotationUse)
     {
       m_aAnnotationUse = annotationUse;
     }
@@ -122,8 +123,8 @@ class Annotator
     }
 
     private void _addArgument (final String name, final Object value) throws IllegalStateException,
-                                                                     CodeModelBuildingException,
-                                                                     ErrorTypeFound
+                                                                      CodeModelBuildingException,
+                                                                      ErrorTypeFound
     {
       if (value instanceof String)
         m_aAnnotationUse.param (name, (String) value);
@@ -170,9 +171,10 @@ class Annotator
                               }
                               catch (final ClassNotFoundException ex)
                               {
-                                Logger.getLogger (Annotator.class.getName ()).log (Level.WARNING,
-                                                                                   "Not processing annotation argument: {0}: {1}",
-                                                                                   new Object [] { name, value });
+                                Logger.getLogger (Annotator.class.getName ())
+                                      .log (Level.WARNING,
+                                            "Not processing annotation argument: {0}: {1}",
+                                            new Object [] { name, value });
                               }
                             }
                             else

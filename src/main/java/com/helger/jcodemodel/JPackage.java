@@ -120,8 +120,7 @@ public class JPackage implements
   protected JPackage (@Nonnull final String sName, @Nonnull final JCodeModel aOwner)
   {
     JCValueEnforcer.notNull (sName, "Name");
-    if (sName.equals ("."))
-      throw new IllegalArgumentException ("Package name . is not allowed");
+    JCValueEnforcer.isFalse (sName.equals ("."), "Package name . is not allowed");
     JCValueEnforcer.notNull (aOwner, "CodeModel");
 
     m_aOwner = aOwner;

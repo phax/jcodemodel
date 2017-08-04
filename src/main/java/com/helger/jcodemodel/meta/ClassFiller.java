@@ -42,6 +42,7 @@ package com.helger.jcodemodel.meta;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -77,8 +78,8 @@ class ClassFiller
     m_aNewClass = newClass;
   }
 
-  void fillClass (final TypeElement element, final TypeEnvironment environment) throws CodeModelBuildingException,
-                                                                                ErrorTypeFound
+  void fillClass (@Nonnull final TypeElement element,
+                  @Nonnull final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
   {
     m_aNewClass.hide ();
     final Annotator classAnnotator = new Annotator (m_aModelsAdapter, m_aNewClass, environment);

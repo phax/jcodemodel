@@ -90,7 +90,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    * @param aMods
    *        Modifiers to use
    * @param aType
-   *        Datatype of this variable
+   *        Data type of this variable
    * @param sName
    *        Name of this variable
    * @param aInitExpr
@@ -101,8 +101,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
                @Nonnull final String sName,
                @Nullable final IJExpression aInitExpr)
   {
-    if (!JJavaName.isJavaIdentifier (sName))
-      throw new IllegalArgumentException ("Illegal variable name '" + sName + "'");
+    JCValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_aMods = aMods;
     m_aType = aType;
     m_sName = sName;
@@ -151,8 +150,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    */
   public void name (@Nonnull final String sName)
   {
-    if (!JJavaName.isJavaIdentifier (sName))
-      throw new IllegalArgumentException ("Illegal variable name '" + sName + "'");
+    JCValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_sName = sName;
   }
 

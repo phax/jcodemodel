@@ -123,12 +123,6 @@ public abstract class AbstractCodeWriter implements Closeable
     return ret;
   }
 
-  @Deprecated
-  protected AbstractCodeWriter (@Nullable final Charset aEncoding)
-  {
-    this (aEncoding, getDefaultNewLine ());
-  }
-
   protected AbstractCodeWriter (@Nullable final Charset aEncoding, @Nonnull final String sNewLine)
   {
     JCValueEnforcer.notNull (sNewLine, "NewLine");

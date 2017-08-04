@@ -196,15 +196,15 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   /**
    * Add an expression to this invocation's argument list
    *
-   * @param arg
+   * @param aArg
    *        Argument to add to argument list
    * @return this for chaining
    */
   @Nonnull
-  public JInvocation arg (@Nonnull final IJExpression arg)
+  public JInvocation arg (@Nonnull final IJExpression aArg)
   {
-    JCValueEnforcer.notNull (arg, "argument");
-    m_aArgs.add (arg);
+    JCValueEnforcer.notNull (aArg, "Argument");
+    m_aArgs.add (aArg);
     return this;
   }
 

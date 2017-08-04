@@ -65,12 +65,12 @@ public class JEnumConstantRef implements IJExpression
    */
   private final String m_sName;
 
-  protected JEnumConstantRef (@Nonnull final AbstractJClass type, @Nonnull final String name)
+  protected JEnumConstantRef (@Nonnull final AbstractJClass aType, @Nonnull final String sName)
   {
-    JCValueEnforcer.notNull (type, "Type");
-    JCValueEnforcer.notNull (name, "Name");
-    m_aType = type;
-    m_sName = name;
+    JCValueEnforcer.notNull (aType, "Type");
+    JCValueEnforcer.notNull (sName, "Name");
+    m_aType = aType;
+    m_sName = sName;
   }
 
   @Nonnull

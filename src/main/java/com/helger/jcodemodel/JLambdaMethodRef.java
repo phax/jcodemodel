@@ -67,8 +67,8 @@ public class JLambdaMethodRef implements IJExpression
   public JLambdaMethodRef (@Nonnull final JMethod aMethod)
   {
     JCValueEnforcer.notNull (aMethod, "Method");
-    if (!aMethod.mods ().isStatic ())
-      throw new IllegalArgumentException ("Only static methods can be used with this constructor. Use the constructor with JVar for instance methods.");
+    JCValueEnforcer.isTrue (aMethod.mods ().isStatic (),
+                            "Only static methods can be used with this constructor. Use the constructor with JVar for instance methods.");
 
     m_aMethod = aMethod;
     m_aType = null;
@@ -137,8 +137,8 @@ public class JLambdaMethodRef implements IJExpression
   {
     JCValueEnforcer.notNull (aVar, "Var");
     JCValueEnforcer.notNull (aMethod, "Method");
-    if (aMethod.mods ().isStatic ())
-      throw new IllegalArgumentException ("Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
+    JCValueEnforcer.isTrue (aMethod.mods ().isStatic (),
+                            "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
 
     m_aMethod = aMethod;
     m_aType = null;

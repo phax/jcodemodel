@@ -80,8 +80,7 @@ public class JNarrowedClass extends AbstractJClass
   public JNarrowedClass (@Nonnull final AbstractJClass basis, @Nonnull final List <? extends AbstractJClass> args)
   {
     super (basis.owner ());
-    if (basis instanceof JNarrowedClass)
-      throw new IllegalArgumentException ("basis may not be a narrowed class: " + basis);
+    JCValueEnforcer.isFalse (basis instanceof JNarrowedClass, () -> "basis may not be a narrowed class: " + basis);
     JCValueEnforcer.notNull (args, "NarrowingClass");
     m_aBasis = basis;
     m_aArgs = args;

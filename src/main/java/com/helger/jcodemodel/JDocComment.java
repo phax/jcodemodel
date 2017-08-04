@@ -123,7 +123,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   /**
    * @return <code>true</code> if single line mode is enabled,
-   *         <code>false</code> if multi line mode is enabled. Multie line mode
+   *         <code>false</code> if multi line mode is enabled. Multi line mode
    *         is the default.
    */
   public boolean isSingleLineMode ()
@@ -148,13 +148,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   @Nonnull
   public JCommentPart addParam (@Nonnull final String param)
   {
-    JCommentPart p = m_aAtParams.get (param);
-    if (p == null)
-    {
-      p = new JCommentPart ();
-      m_aAtParams.put (param, p);
-    }
-    return p;
+    return m_aAtParams.computeIfAbsent (param, k -> new JCommentPart ());
   }
 
   /**
@@ -241,15 +235,10 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *        Exception to be added. May not be <code>null</code>.
    * @return New {@link JCommentPart}
    */
+  @Nonnull
   public JCommentPart addThrows (@Nonnull final AbstractJClass exception)
   {
-    JCommentPart p = m_aAtThrows.get (exception);
-    if (p == null)
-    {
-      p = new JCommentPart ();
-      m_aAtThrows.put (exception, p);
-    }
-    return p;
+    return m_aAtThrows.computeIfAbsent (exception, k -> new JCommentPart ());
   }
 
   @Nullable
@@ -285,13 +274,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   public JCommentPart addTag (@Nonnull final String sName)
   {
     JCValueEnforcer.notEmpty (sName, "Name");
-    JCommentPart aPart = m_aAtTags.get (sName);
-    if (aPart == null)
-    {
-      aPart = new JCommentPart ();
-      m_aAtTags.put (sName, aPart);
-    }
-    return aPart;
+    return m_aAtTags.computeIfAbsent (sName, k -> new JCommentPart ());
   }
 
   @Nullable
@@ -343,36 +326,33 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   /**
    * add an xdoclet.
    *
-   * @param name
+   * @param sName
    *        xdoclet name
    * @return Map with the key/value pairs
    */
   @Nonnull
-  public Map <String, String> addXdoclet (@Nonnull final String name)
+  public Map <String, String> addXdoclet (@Nonnull final String sName)
   {
-    Map <String, String> p = m_aAtXdoclets.get (name);
-    if (p == null)
-    {
-      p = new LinkedHashMap <> ();
-      m_aAtXdoclets.put (name, p);
-    }
-    return p;
+    JCValueEnforcer.notNull (sName, "Name");
+    return m_aAtXdoclets.computeIfAbsent (sName, k -> new LinkedHashMap <> ());
   }
 
   /**
    * add an xdoclet.
    *
-   * @param name
+   * @param sName
    *        xdoclet name
-   * @param attributes
+   * @param aAttributes
    *        Attributes to be added
    * @return Map with the key/value pairs
    */
   @Nonnull
-  public Map <String, String> addXdoclet (@Nonnull final String name, @Nonnull final Map <String, String> attributes)
+  public Map <String, String> addXdoclet (@Nonnull final String sName, @Nonnull final Map <String, String> aAttributes)
   {
-    final Map <String, String> p = addXdoclet (name);
-    p.putAll (attributes);
+    JCValueEnforcer.notNull (sName, "Name");
+    JCValueEnforcer.notNull (aAttributes, "Attributes");
+    final Map <String, String> p = addXdoclet (sName);
+    p.putAll (aAttributes);
     return p;
   }
 
@@ -380,21 +360,23 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    * add an xdoclet with <code>@name attribute = "value"</code>. If value is
    * <code>null</code> than it will be <code>@name attribute</code>.
    *
-   * @param name
+   * @param sName
    *        xdoclet name
-   * @param attribute
+   * @param sAttribute
    *        Attribute name to be added
-   * @param value
+   * @param sValue
    *        Attribute value to be added
    * @return Map with the key/value pairs
    */
   @Nonnull
-  public Map <String, String> addXdoclet (@Nonnull final String name,
-                                          @Nonnull final String attribute,
-                                          @Nullable final String value)
+  public Map <String, String> addXdoclet (@Nonnull final String sName,
+                                          @Nonnull final String sAttribute,
+                                          @Nullable final String sValue)
   {
-    final Map <String, String> p = addXdoclet (name);
-    p.put (attribute, value);
+    JCValueEnforcer.notNull (sName, "Name");
+    JCValueEnforcer.notNull (sAttribute, "Attribute");
+    final Map <String, String> p = addXdoclet (sName);
+    p.put (sAttribute, sValue);
     return p;
   }
 

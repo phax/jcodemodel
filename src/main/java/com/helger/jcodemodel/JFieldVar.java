@@ -62,22 +62,22 @@ public class JFieldVar extends JVar implements IJDocCommentable
    *
    * @param aOwnerClass
    *        The owning class.
-   * @param mods
+   * @param aMods
    *        modifiers to use
-   * @param type
-   *        Datatype of this variable
-   * @param name
+   * @param aType
+   *        Data type of this variable
+   * @param sName
    *        Name of this variable
-   * @param init
+   * @param aInit
    *        Value to initialize this variable to
    */
   protected JFieldVar (@Nonnull final JDefinedClass aOwnerClass,
-                       @Nonnull final JMods mods,
-                       @Nonnull final AbstractJType type,
-                       @Nonnull final String name,
-                       @Nullable final IJExpression init)
+                       @Nonnull final JMods aMods,
+                       @Nonnull final AbstractJType aType,
+                       @Nonnull final String sName,
+                       @Nullable final IJExpression aInit)
   {
-    super (mods, type, name, init);
+    super (aMods, aType, sName, aInit);
     m_aOwnerClass = JCValueEnforcer.notNull (aOwnerClass, "OwnerClass");
   }
 
@@ -91,11 +91,12 @@ public class JFieldVar extends JVar implements IJDocCommentable
   }
 
   @Override
-  public void name (final String sNewName)
+  public void name (@Nonnull final String sNewName)
   {
     // make sure that the new name is available
     if (m_aOwnerClass.containsField (sNewName))
       throw new IllegalArgumentException ("Field name '" + sNewName + "' is already in use");
+
     final String sOldName = name ();
     super.name (sNewName);
     m_aOwnerClass.internalRenameField (sOldName, sNewName, this);
