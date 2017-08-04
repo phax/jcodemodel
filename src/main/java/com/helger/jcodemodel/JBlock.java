@@ -219,9 +219,10 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnegative
   public int pos (@Nonnegative final int nNewPos)
   {
+    JCValueEnforcer.isTrue (nNewPos <= m_aContentList.size () && nNewPos >= 0,
+                            () -> "Illegal position provided: " + nNewPos);
+
     final int nOldPos = m_nPos;
-    if (nNewPos > m_aContentList.size () || nNewPos < 0)
-      throw new IllegalArgumentException ("Illegal position provided: " + nNewPos);
     m_nPos = nNewPos;
     return nOldPos;
   }

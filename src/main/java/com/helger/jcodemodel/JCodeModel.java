@@ -460,9 +460,8 @@ public final class JCodeModel
     final int nIndex = sFullyQualifiedClassName.lastIndexOf ('.');
     if (nIndex < 0)
       return rootPackage ()._getClass (sFullyQualifiedClassName);
-    return _package (sFullyQualifiedClassName.substring (0, nIndex))
-                                                                    ._getClass (sFullyQualifiedClassName.substring (nIndex +
-                                                                                                                    1));
+    return _package (sFullyQualifiedClassName.substring (0,
+                                                         nIndex))._getClass (sFullyQualifiedClassName.substring (nIndex + 1));
   }
 
   /**
@@ -993,8 +992,7 @@ public final class JCodeModel
     @Nonnull
     private AbstractJClass _parseArguments (@Nonnull final AbstractJClass rawType)
     {
-      if (m_sTypeName.charAt (m_nIdx) != '<')
-        throw new IllegalArgumentException ();
+      JCValueEnforcer.isTrue (m_sTypeName.charAt (m_nIdx) == '<', "Expected '<' at current index");
       m_nIdx++;
 
       final List <AbstractJClass> args = new ArrayList <> ();

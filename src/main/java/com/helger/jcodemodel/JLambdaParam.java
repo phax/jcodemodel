@@ -43,6 +43,8 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * This represent a single parameter to a Java 8 lambda expression.
  *
@@ -56,8 +58,7 @@ public class JLambdaParam implements IJAssignmentTarget, IJDeclaration
 
   public JLambdaParam (@Nullable final AbstractJType aType, @Nonnull final String sName)
   {
-    if (!JJavaName.isJavaIdentifier (sName))
-      throw new IllegalArgumentException ("Illegal variable name '" + sName + "'");
+    JCValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_aType = aType;
     m_sName = sName;
   }

@@ -94,8 +94,8 @@ public class JFieldVar extends JVar implements IJDocCommentable
   public void name (@Nonnull final String sNewName)
   {
     // make sure that the new name is available
-    if (m_aOwnerClass.containsField (sNewName))
-      throw new IllegalArgumentException ("Field name '" + sNewName + "' is already in use");
+    JCValueEnforcer.isFalse (m_aOwnerClass.containsField (sNewName),
+                             () -> "Field name '" + sNewName + "' is already in use");
 
     final String sOldName = name ();
     super.name (sNewName);

@@ -393,16 +393,19 @@ class Annotator
       }
       catch (final NoSuchFieldException ex)
       {
-        throw new IllegalStateException (MessageFormat.format ("Unable to load enum constant: {0}.{1}",
-                                                               enumClassElement.getQualifiedName ().toString (),
-                                                               variableElement.getSimpleName ().toString ()),
+        throw new IllegalStateException ("Unable to load enum constant: " +
+                                         enumClassElement.getQualifiedName ().toString () +
+                                         "." +
+                                         variableElement.getSimpleName ().toString (),
                                          ex);
       }
       catch (final SecurityException ex)
       {
-        throw new IllegalStateException (MessageFormat.format ("Unable to load enum constant: {0}.{1}",
-                                                               enumClassElement.getQualifiedName ().toString (),
-                                                               variableElement.getSimpleName ().toString ()),
+        throw new IllegalStateException ("Unable to load enum constant: " +
+                                         enumClassElement.getQualifiedName ().toString () +
+                                         "" +
+                                         "." +
+                                         variableElement.getSimpleName ().toString (),
                                          ex);
       }
       Enum <?> enumValue;
@@ -412,16 +415,18 @@ class Annotator
       }
       catch (final IllegalArgumentException ex)
       {
-        throw new IllegalStateException (MessageFormat.format ("Unable to load enum constant actual value: {0}.{1}",
-                                                               enumClassElement.getQualifiedName ().toString (),
-                                                               variableElement.getSimpleName ().toString ()),
+        throw new IllegalStateException ("Unable to load enum constant actual value: " +
+                                         enumClassElement.getQualifiedName ().toString () +
+                                         "." +
+                                         variableElement.getSimpleName ().toString (),
                                          ex);
       }
       catch (final IllegalAccessException ex)
       {
-        throw new IllegalStateException (MessageFormat.format ("Unable to load enum constant actual value: {0}.{1}",
-                                                               enumClassElement.getQualifiedName ().toString (),
-                                                               variableElement.getSimpleName ().toString ()),
+        throw new IllegalStateException ("Unable to load enum constant actual value:" +
+                                         enumClassElement.getQualifiedName ().toString () +
+                                         "." +
+                                         variableElement.getSimpleName ().toString (),
                                          ex);
       }
       return enumValue;

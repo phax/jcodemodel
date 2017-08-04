@@ -68,8 +68,10 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  * {@link #method(int, AbstractJType, String)} and
  * {@link #field(int, AbstractJType, String)}.
  */
-public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
-                           implements IJGenerifiable, IJAnnotatable, IJDocCommentable
+public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> implements
+                           IJGenerifiable,
+                           IJAnnotatable,
+                           IJDocCommentable
 {
   /**
    * The optional header that is emitted prior to the package (Issue #47)
@@ -403,10 +405,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass>
                           @Nonnull final String name,
                           @Nullable final IJExpression init)
   {
-    final JFieldVar f = new JFieldVar (this, JMods.forField (mods), type, name, init);
-    if (m_aFields.containsKey (name))
-      throw new IllegalArgumentException ("trying to create the same field twice: " + name);
+    JCValueEnforcer.isFalse (m_aFields.containsKey (name), () -> "trying to create the same field twice: " + name);
 
+    final JFieldVar f = new JFieldVar (this, JMods.forField (mods), type, name, init);
     m_aFields.put (name, f);
     return f;
   }

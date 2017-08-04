@@ -325,10 +325,10 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JVar varParam (final int mods, @Nonnull final AbstractJType type, @Nonnull final String name)
   {
-    if (hasVarArgs ())
-      throw new IllegalStateException ("Cannot have two varargs in a method,\n" +
-                                       "Check if varParam method of JMethod is" +
-                                       " invoked more than once");
+    JCValueEnforcer.isFalse (hasVarArgs (),
+                             "Cannot have two varargs in a method,\n" +
+                                            "Check if varParam method of JMethod is" +
+                                            " invoked more than once");
 
     m_aVarParam = new JVar (JMods.forVar (mods), type.array (), name, null);
     return m_aVarParam;

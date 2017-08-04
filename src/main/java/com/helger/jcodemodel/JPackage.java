@@ -388,12 +388,12 @@ public class JPackage implements
    */
   public void remove (@Nonnull final AbstractJClass c)
   {
-    if (c._package () != this)
-      throw new IllegalArgumentException ("the specified class (" +
-                                          c.fullName () +
-                                          ") is not a member of this package (" +
-                                          name () +
-                                          "), or it is a referenced class");
+    JCValueEnforcer.isTrue (c._package () == this,
+                            () -> "the specified class (" +
+                                  c.fullName () +
+                                  ") is not a member of this package (" +
+                                  name () +
+                                  "), or it is a referenced class");
 
     // note that c may not be a member of classes.
     // this happens when someone is trying to remove a non generated class
@@ -414,8 +414,7 @@ public class JPackage implements
   @Nonnull
   public AbstractJClass ref (@Nonnull final String sClassLocalName) throws ClassNotFoundException
   {
-    if (sClassLocalName.indexOf ('.') >= 0)
-      throw new IllegalArgumentException ("JClass name contains '.': " + sClassLocalName);
+    JCValueEnforcer.isTrue (sClassLocalName.indexOf ('.') < 0, () -> "JClass name contains '.': " + sClassLocalName);
 
     String sFQCN;
     if (isUnnamed ())
@@ -501,8 +500,7 @@ public class JPackage implements
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
   {
-    if (isUnnamed ())
-      throw new IllegalArgumentException ("the root package cannot be annotated");
+    JCValueEnforcer.isFalse (isUnnamed (), "the root package cannot be annotated");
 
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();

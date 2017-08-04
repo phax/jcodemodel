@@ -142,8 +142,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
                        @Nullable final IJGenerable object,
                        @Nonnull final String sName)
   {
-    if (sName.indexOf ('.') >= 0)
-      throw new IllegalArgumentException ("method name contains '.': " + sName);
+    JCValueEnforcer.notNull (sName, "Name");
+    JCValueEnforcer.isFalse (sName.indexOf ('.') >= 0, () -> "method name contains '.': " + sName);
     m_aOwner = owner;
     m_aObject = object;
     m_sMethodName = sName;
@@ -152,14 +152,16 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     m_aConstructorType = null;
   }
 
-  private JInvocation (@Nonnull final JCodeModel owner,
-                       @Nullable final IJGenerable object,
-                       @Nonnull final JMethod method)
+  private JInvocation (@Nonnull final JCodeModel aOwner,
+                       @Nullable final IJGenerable aObject,
+                       @Nonnull final JMethod aMethod)
   {
-    m_aOwner = owner;
-    m_aObject = object;
+    JCValueEnforcer.notNull (aOwner, "Owner");
+    JCValueEnforcer.notNull (aMethod, "Method");
+    m_aOwner = aOwner;
+    m_aObject = aObject;
     m_sMethodName = null;
-    m_aMethod = method;
+    m_aMethod = aMethod;
     m_bIsConstructor = false;
     m_aConstructorType = null;
   }
@@ -174,6 +176,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    */
   protected JInvocation (@Nonnull final AbstractJType aConstructorType)
   {
+    JCValueEnforcer.notNull (aConstructorType, "ConstructorType");
     m_aOwner = aConstructorType.owner ();
     m_aObject = null;
     m_sMethodName = null;

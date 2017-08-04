@@ -66,14 +66,14 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   private final PrintStream m_aPS;
 
   /**
-   * @param os
+   * @param aOS
    *        This stream will be closed at the end of the code generation.
-   * @param encoding
+   * @param aEncoding
    *        Encoding to be used.
    */
-  public OutputStreamCodeWriter (@Nonnull final OutputStream os, @Nullable final Charset encoding)
+  public OutputStreamCodeWriter (@Nonnull final OutputStream aOS, @Nullable final Charset aEncoding)
   {
-    this (os, encoding, getDefaultNewLine ());
+    this (aOS, aEncoding, getDefaultNewLine ());
   }
 
   /**

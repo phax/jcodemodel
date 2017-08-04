@@ -44,6 +44,8 @@ import java.io.StringWriter;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Modifier groups.
  */
@@ -95,10 +97,8 @@ public class JMods implements IJGenerable
 
   private static void _check (final int nMods, final int legal, final String what)
   {
-    if ((nMods & ~legal) != 0)
-    {
-      throw new IllegalArgumentException ("Illegal modifiers for " + what + ": " + new JMods (nMods).toString ());
-    }
+    JCValueEnforcer.isFalse ((nMods & ~legal) != 0,
+                             () -> "Illegal modifiers for " + what + ": " + new JMods (nMods).toString ());
     /* ## check for illegal combinations too */
   }
 

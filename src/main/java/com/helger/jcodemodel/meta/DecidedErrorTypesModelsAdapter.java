@@ -40,7 +40,6 @@
  */
 package com.helger.jcodemodel.meta;
 
-import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
@@ -203,8 +202,8 @@ class DecidedErrorTypesModelsAdapter
   }
 
   private JDefinedClass _defineTopLevelClass (final TypeElement element,
-                                             final TypeEnvironment environment) throws CodeModelBuildingException,
-                                                                                ErrorTypeFound
+                                              final TypeEnvironment environment) throws CodeModelBuildingException,
+                                                                                 ErrorTypeFound
   {
     final EClassType classType = _toClassType (element.getKind ());
     int modifiers = toJMod (element.getModifiers ());
@@ -236,8 +235,8 @@ class DecidedErrorTypesModelsAdapter
   }
 
   private void _declareInnerClasses (final JDefinedClass klass,
-                                    final TypeElement element,
-                                    final TypeEnvironment environment) throws CodeModelBuildingException
+                                     final TypeElement element,
+                                     final TypeEnvironment environment) throws CodeModelBuildingException
   {
     for (final Element enclosedElement : element.getEnclosedElements ())
     {
@@ -296,9 +295,10 @@ class DecidedErrorTypesModelsAdapter
         return;
       }
     }
-    throw new IllegalStateException (MessageFormat.format ("Inner class should always be defined if outer class is defined: inner class {0}, enclosing class {1}",
-                                                           element,
-                                                           enclosingClass));
+    throw new IllegalStateException ("Inner class should always be defined if outer class is defined: inner class " +
+                                     element +
+                                     ", enclosing class " +
+                                     enclosingClass);
   }
 
   AbstractJClass ref (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound

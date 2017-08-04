@@ -46,6 +46,8 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Field Reference
  */
@@ -137,10 +139,8 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
                      @Nullable final JVar aVar,
                      final boolean bExplicitThis)
   {
-    if (sName != null && sName.indexOf ('.') >= 0)
-      throw new IllegalArgumentException ("Field name contains '.': " + sName);
-    if (sName == null && aVar == null)
-      throw new IllegalArgumentException ("name or var must be present");
+    JCValueEnforcer.isTrue (sName == null || sName.indexOf ('.') < 0, () -> "Field name contains '.': " + sName);
+    JCValueEnforcer.isFalse (sName == null && aVar == null, "name or var must be present");
     m_aOwner = aOwner;
     m_aObject = aObject;
     m_sName = sName;
