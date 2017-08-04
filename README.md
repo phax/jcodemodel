@@ -12,7 +12,7 @@ this would be very tricky.
 
 A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. is available.
 
-News and noteworthy:
+## News and noteworthy
 
 * v3.0.0 - work in progress
   * Requires Java 8
