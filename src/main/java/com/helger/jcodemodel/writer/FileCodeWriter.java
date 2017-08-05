@@ -134,7 +134,6 @@ public class FileCodeWriter extends AbstractCodeWriter
       dir.mkdirs ();
 
     final File fn = new File (dir, fileName);
-
     if (fn.exists ())
     {
       if (!fn.delete ())
@@ -155,6 +154,7 @@ public class FileCodeWriter extends AbstractCodeWriter
   }
 
   /** Converts a package name to the directory name. */
+  @Nonnull
   private static String _toDirName (@Nonnull final JPackage aPkg)
   {
     return aPkg.name ().replace ('.', File.separatorChar);

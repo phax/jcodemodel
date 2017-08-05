@@ -66,9 +66,9 @@ public class UnicodeEscapeWriter extends FilterWriter
         ESCAPE.set (i, true);
   }
 
-  public UnicodeEscapeWriter (@Nonnull final Writer next)
+  public UnicodeEscapeWriter (@Nonnull final Writer aNext)
   {
-    super (next);
+    super (aNext);
   }
 
   @Override
@@ -101,31 +101,31 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   @Override
-  public final void write (@Nonnull final char [] buf,
-                           @Nonnegative final int off,
-                           @Nonnegative final int len) throws IOException
+  public final void write (@Nonnull final char [] aBuf,
+                           @Nonnegative final int nOfs,
+                           @Nonnegative final int nLen) throws IOException
   {
-    for (int i = 0; i < len; i++)
-      write (buf[off + i]);
+    for (int i = 0; i < nLen; i++)
+      write (aBuf[nOfs + i]);
   }
 
   @Override
-  public final void write (@Nonnull final char [] buf) throws IOException
+  public final void write (@Nonnull final char [] aBuf) throws IOException
   {
-    write (buf, 0, buf.length);
+    write (aBuf, 0, aBuf.length);
   }
 
   @Override
-  public final void write (@Nonnull final String buf,
-                           @Nonnegative final int off,
-                           @Nonnegative final int len) throws IOException
+  public final void write (@Nonnull final String sStr,
+                           @Nonnegative final int nOfs,
+                           @Nonnegative final int nLen) throws IOException
   {
-    write (buf.toCharArray (), off, len);
+    write (sStr.toCharArray (), nOfs, nLen);
   }
 
   @Override
-  public final void write (@Nonnull final String buf) throws IOException
+  public final void write (@Nonnull final String sStr) throws IOException
   {
-    write (buf.toCharArray (), 0, buf.length ());
+    write (sStr.toCharArray (), 0, sStr.length ());
   }
 }
