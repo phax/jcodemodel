@@ -153,9 +153,9 @@ public abstract class AbstractCodeWriter implements Closeable
    * The returned stream will be closed before the next file is stored. So the
    * callee can assume that only one OutputStream is active at any given time.
    *
-   * @param pkg
+   * @param aPackage
    *        The package of the file to be written.
-   * @param fileName
+   * @param sFilename
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
    * @return OutputStream to write to
@@ -163,7 +163,7 @@ public abstract class AbstractCodeWriter implements Closeable
    *         On IO error
    */
   @Nonnull
-  public abstract OutputStream openBinary (@Nonnull JPackage pkg, @Nonnull String fileName) throws IOException;
+  public abstract OutputStream openBinary (@Nonnull JPackage aPackage, @Nonnull String sFilename) throws IOException;
 
   /**
    * Called by CodeModel to store the specified file. The callee must allocate a
@@ -171,7 +171,7 @@ public abstract class AbstractCodeWriter implements Closeable
    * The returned stream will be closed before the next file is stored. So the
    * callee can assume that only one OutputStream is active at any given time.
    *
-   * @param pkg
+   * @param aPackage
    *        The package of the file to be written.
    * @param sFilename
    *        File name without the path. Something like "Foo.java" or
@@ -181,21 +181,22 @@ public abstract class AbstractCodeWriter implements Closeable
    *         On IO error
    */
   @Nonnull
-  public SourcePrintWriter openSource (@Nonnull final JPackage pkg, @Nonnull final String sFilename) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage,
+                                       @Nonnull final String sFilename) throws IOException
   {
-    final OutputStream os = openBinary (pkg, sFilename);
-    final OutputStreamWriter bw = m_aEncoding != null ? new OutputStreamWriter (os, m_aEncoding)
-                                                      : new OutputStreamWriter (os);
+    final OutputStream aOS = openBinary (aPackage, sFilename);
+    final OutputStreamWriter aOSW = m_aEncoding != null ? new OutputStreamWriter (aOS, m_aEncoding)
+                                                        : new OutputStreamWriter (aOS);
 
     // create writer
     Writer aWriter;
     try
     {
-      aWriter = new JavaUnicodeEscapeWriter (bw);
+      aWriter = new JavaUnicodeEscapeWriter (aOSW);
     }
     catch (final Throwable t)
     {
-      aWriter = new UnicodeEscapeWriter (bw);
+      aWriter = new UnicodeEscapeWriter (aOSW);
     }
 
     // Ensure result is buffered

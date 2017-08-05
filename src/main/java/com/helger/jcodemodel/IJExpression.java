@@ -140,418 +140,418 @@ public interface IJExpression extends IJGenerable
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to add
-   * @return <code>[this]+[right]</code>.
+   * @return <code>[this]+[rhs]</code>.
    */
   @Nonnull
-  default IJExpression plus (@Nonnull final IJExpression right)
+  default IJExpression plus (@Nonnull final IJExpression rhs)
   {
-    return JOp.plus (this, right);
+    return JOp.plus (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to add
-   * @return <code>[this]+[right]</code>.
+   * @return <code>[this]+[rhs]</code>.
    */
   @Nonnull
-  default IJExpression plus (final double right)
+  default IJExpression plus (final double rhs)
   {
-    return plus (JExpr.lit (right));
+    return plus (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to add
-   * @return <code>[this]+[right]</code>.
+   * @return <code>[this]+[rhs]</code>.
    */
   @Nonnull
-  default IJExpression plus (final float right)
+  default IJExpression plus (final float rhs)
   {
-    return plus (JExpr.lit (right));
+    return plus (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to add
-   * @return <code>[this]+[right]</code>.
+   * @return <code>[this]+[rhs]</code>.
    */
   @Nonnull
-  default IJExpression plus (final int right)
+  default IJExpression plus (final int rhs)
   {
-    return plus (JExpr.lit (right));
+    return plus (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to add
-   * @return <code>[this]+[right]</code>.
+   * @return <code>[this]+[rhs]</code>.
    */
   @Nonnull
-  default IJExpression plus (final long right)
+  default IJExpression plus (final long rhs)
   {
-    return plus (JExpr.lit (right));
+    return plus (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to add
-   * @return <code>[this]+[right]</code>.
+   * @return <code>[this]+[rhs]</code>.
    */
   @Nonnull
-  default IJExpression plus (@Nonnull final String right)
+  default IJExpression plus (@Nonnull final String rhs)
   {
-    return plus (JExpr.lit (right));
+    return plus (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to add
-   * @return <code>[this]-[right]</code>.
+   * @return <code>[this]-[rhs]</code>.
    */
   @Nonnull
-  default IJExpression minus (@Nonnull final IJExpression right)
+  default IJExpression minus (@Nonnull final IJExpression rhs)
   {
-    return JOp.minus (this, right);
+    return JOp.minus (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to subtract
-   * @return <code>[this]-[right]</code>.
+   * @return <code>[this]-[rhs]</code>.
    */
   @Nonnull
-  default IJExpression minus (final double right)
+  default IJExpression minus (final double rhs)
   {
-    return minus (JExpr.lit (right));
+    return minus (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to subtract
-   * @return <code>[this]-[right]</code>.
+   * @return <code>[this]-[rhs]</code>.
    */
   @Nonnull
-  default IJExpression minus (final float right)
+  default IJExpression minus (final float rhs)
   {
-    return minus (JExpr.lit (right));
+    return minus (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to subtract
-   * @return <code>[this]-[right]</code>.
+   * @return <code>[this]-[rhs]</code>.
    */
   @Nonnull
-  default IJExpression minus (final int right)
+  default IJExpression minus (final int rhs)
   {
-    return minus (JExpr.lit (right));
+    return minus (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to subtract
-   * @return <code>[this]-[right]</code>.
+   * @return <code>[this]-[rhs]</code>.
    */
   @Nonnull
-  default IJExpression minus (final long right)
+  default IJExpression minus (final long rhs)
   {
-    return minus (JExpr.lit (right));
+    return minus (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to multiply
-   * @return <code>[this]*[right]</code>.
+   * @return <code>[this]*[rhs]</code>.
    */
   @Nonnull
-  default IJExpression mul (@Nonnull final IJExpression right)
+  default IJExpression mul (@Nonnull final IJExpression rhs)
   {
-    return JOp.mul (this, right);
+    return JOp.mul (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to multiply
-   * @return <code>[this]*[right]</code>.
+   * @return <code>[this]*[rhs]</code>.
    */
   @Nonnull
-  default IJExpression mul (final double right)
+  default IJExpression mul (final double rhs)
   {
-    return mul (JExpr.lit (right));
+    return mul (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to multiply
-   * @return <code>[this]*[right]</code>.
+   * @return <code>[this]*[rhs]</code>.
    */
   @Nonnull
-  default IJExpression mul (final float right)
+  default IJExpression mul (final float rhs)
   {
-    return mul (JExpr.lit (right));
+    return mul (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to multiply
-   * @return <code>[this]*[right]</code>.
+   * @return <code>[this]*[rhs]</code>.
    */
   @Nonnull
-  default IJExpression mul (final int right)
+  default IJExpression mul (final int rhs)
   {
-    return mul (JExpr.lit (right));
+    return mul (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to multiply
-   * @return <code>[this]*[right]</code>.
+   * @return <code>[this]*[rhs]</code>.
    */
   @Nonnull
-  default IJExpression mul (final long right)
+  default IJExpression mul (final long rhs)
   {
-    return mul (JExpr.lit (right));
+    return mul (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to divide through
-   * @return <code>[this]/[right]</code>.
+   * @return <code>[this]/[rhs]</code>.
    */
   @Nonnull
-  default IJExpression div (@Nonnull final IJExpression right)
+  default IJExpression div (@Nonnull final IJExpression rhs)
   {
-    return JOp.div (this, right);
+    return JOp.div (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to divide through
-   * @return <code>[this]/[right]</code>.
+   * @return <code>[this]/[rhs]</code>.
    */
   @Nonnull
-  default IJExpression div (final double right)
+  default IJExpression div (final double rhs)
   {
-    return div (JExpr.lit (right));
+    return div (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to divide through
-   * @return <code>[this]/[right]</code>.
+   * @return <code>[this]/[rhs]</code>.
    */
   @Nonnull
-  default IJExpression div (final float right)
+  default IJExpression div (final float rhs)
   {
-    return div (JExpr.lit (right));
+    return div (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to divide through
-   * @return <code>[this]/[right]</code>.
+   * @return <code>[this]/[rhs]</code>.
    */
   @Nonnull
-  default IJExpression div (final int right)
+  default IJExpression div (final int rhs)
   {
-    return div (JExpr.lit (right));
+    return div (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to divide through
-   * @return <code>[this]/[right]</code>.
+   * @return <code>[this]/[rhs]</code>.
    */
   @Nonnull
-  default IJExpression div (final long right)
+  default IJExpression div (final long rhs)
   {
-    return div (JExpr.lit (right));
+    return div (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to mod with
-   * @return <code>[this]%[right]</code>.
+   * @return <code>[this]%[rhs]</code>.
    */
   @Nonnull
-  default IJExpression mod (@Nonnull final IJExpression right)
+  default IJExpression mod (@Nonnull final IJExpression rhs)
   {
-    return JOp.mod (this, right);
+    return JOp.mod (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to mod with
-   * @return <code>[this]%[right]</code>.
+   * @return <code>[this]%[rhs]</code>.
    */
   @Nonnull
-  default IJExpression mod (final int right)
+  default IJExpression mod (final int rhs)
   {
-    return mod (JExpr.lit (right));
+    return mod (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to mod with
-   * @return <code>[this]%[right]</code>.
+   * @return <code>[this]%[rhs]</code>.
    */
   @Nonnull
-  default IJExpression mod (final long right)
+  default IJExpression mod (final long rhs)
   {
-    return mod (JExpr.lit (right));
+    return mod (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        number of bits to shift
-   * @return <code>[this]&lt;&lt;[right]</code>.
+   * @return <code>[this]&lt;&lt;[rhs]</code>.
    */
   @Nonnull
-  default IJExpression shl (@Nonnull final IJExpression right)
+  default IJExpression shl (@Nonnull final IJExpression rhs)
   {
-    return JOp.shl (this, right);
+    return JOp.shl (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        number of bits to shift
-   * @return <code>[this]&lt;&lt;[right]</code>.
+   * @return <code>[this]&lt;&lt;[rhs]</code>.
    */
   @Nonnull
-  default IJExpression shl (final int right)
+  default IJExpression shl (final int rhs)
   {
-    return shl (JExpr.lit (right));
+    return shl (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        number of bits to shift
-   * @return <code>[this] &gt;&gt; [right]</code>.
+   * @return <code>[this] &gt;&gt; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression shr (@Nonnull final IJExpression right)
+  default IJExpression shr (@Nonnull final IJExpression rhs)
   {
-    return JOp.shr (this, right);
+    return JOp.shr (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        number of bits to shift
-   * @return <code>[this] &gt;&gt; [right]</code>.
+   * @return <code>[this] &gt;&gt; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression shr (final int right)
+  default IJExpression shr (final int rhs)
   {
-    return shr (JExpr.lit (right));
+    return shr (JExpr.lit (rhs));
   }
 
   /**
-   * @param right
+   * @param rhs
    *        number of bits to shift
-   * @return <code>[this] &gt;&gt;&gt; [right]</code>.
+   * @return <code>[this] &gt;&gt;&gt; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression shrz (@Nonnull final IJExpression right)
+  default IJExpression shrz (@Nonnull final IJExpression rhs)
   {
-    return JOp.shrz (this, right);
+    return JOp.shrz (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        number of bits to shift
-   * @return <code>[this] &gt;&gt;&gt; [right]</code>.
+   * @return <code>[this] &gt;&gt;&gt; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression shrz (final int right)
+  default IJExpression shrz (final int rhs)
   {
-    return shrz (JExpr.lit (right));
+    return shrz (JExpr.lit (rhs));
   }
 
   /**
    * Bit-wise AND '&amp;'.
    *
-   * @param right
+   * @param rhs
    *        value to combine with
-   * @return <code>[this] &amp; [right]</code>.
+   * @return <code>[this] &amp; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression band (@Nonnull final IJExpression right)
+  default IJExpression band (@Nonnull final IJExpression rhs)
   {
-    return JOp.band (this, right);
+    return JOp.band (this, rhs);
   }
 
   /**
    * Bit-wise OR '|'.
    *
-   * @param right
+   * @param rhs
    *        value to combine with
-   * @return <code>[this] | [right]</code>.
+   * @return <code>[this] | [rhs]</code>.
    */
   @Nonnull
-  default IJExpression bor (@Nonnull final IJExpression right)
+  default IJExpression bor (@Nonnull final IJExpression rhs)
   {
-    return JOp.bor (this, right);
+    return JOp.bor (this, rhs);
   }
 
   /**
    * Logical AND '&amp;&amp;'.
    *
-   * @param right
+   * @param rhs
    *        value to combine with
-   * @return <code>[this] &amp;&amp; [right]</code>.
+   * @return <code>[this] &amp;&amp; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression cand (@Nonnull final IJExpression right)
+  default IJExpression cand (@Nonnull final IJExpression rhs)
   {
-    return JOp.cand (this, right);
+    return JOp.cand (this, rhs);
   }
 
   /**
    * Logical OR '||'.
    *
-   * @param right
+   * @param rhs
    *        value to combine with
-   * @return <code>[this] || [right]</code>.
+   * @return <code>[this] || [rhs]</code>.
    */
   @Nonnull
-  default IJExpression cor (@Nonnull final IJExpression right)
+  default IJExpression cor (@Nonnull final IJExpression rhs)
   {
-    return JOp.cor (this, right);
+    return JOp.cor (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to combine with
-   * @return <code>[this] ^ [right]</code>.
+   * @return <code>[this] ^ [rhs]</code>.
    */
   @Nonnull
-  default IJExpression xor (@Nonnull final IJExpression right)
+  default IJExpression xor (@Nonnull final IJExpression rhs)
   {
-    return JOp.xor (this, right);
+    return JOp.xor (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to compare to
-   * @return <code>[this] &lt; [right]</code>.
+   * @return <code>[this] &lt; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression lt (@Nonnull final IJExpression right)
+  default IJExpression lt (@Nonnull final IJExpression rhs)
   {
-    return JOp.lt (this, right);
+    return JOp.lt (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to compare to
-   * @return <code>[this] &lt; [right]</code>.
+   * @return <code>[this] &lt; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression lt (final int right)
+  default IJExpression lt (final int rhs)
   {
-    return lt (JExpr.lit (right));
+    return lt (JExpr.lit (rhs));
   }
 
   /**
@@ -564,25 +564,25 @@ public interface IJExpression extends IJGenerable
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to compare to
-   * @return <code>[this] &lt;= [right]</code>.
+   * @return <code>[this] &lt;= [rhs]</code>.
    */
   @Nonnull
-  default IJExpression lte (@Nonnull final IJExpression right)
+  default IJExpression lte (@Nonnull final IJExpression rhs)
   {
-    return JOp.lte (this, right);
+    return JOp.lte (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to compare to
-   * @return <code>[this] &lt;= [right]</code>.
+   * @return <code>[this] &lt;= [rhs]</code>.
    */
   @Nonnull
-  default IJExpression lte (final int right)
+  default IJExpression lte (final int rhs)
   {
-    return lte (JExpr.lit (right));
+    return lte (JExpr.lit (rhs));
   }
 
   /**
@@ -595,25 +595,25 @@ public interface IJExpression extends IJGenerable
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to compare to
-   * @return <code>[this] &gt; [right]</code>.
+   * @return <code>[this] &gt; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression gt (@Nonnull final IJExpression right)
+  default IJExpression gt (@Nonnull final IJExpression rhs)
   {
-    return JOp.gt (this, right);
+    return JOp.gt (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to compare to
-   * @return <code>[this] &gt; [right]</code>.
+   * @return <code>[this] &gt; [rhs]</code>.
    */
   @Nonnull
-  default IJExpression gt (final int right)
+  default IJExpression gt (final int rhs)
   {
-    return gt (JExpr.lit (right));
+    return gt (JExpr.lit (rhs));
   }
 
   /**
@@ -626,25 +626,25 @@ public interface IJExpression extends IJGenerable
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to compare to
-   * @return <code>[this] &gt;= [right]</code>.
+   * @return <code>[this] &gt;= [rhs]</code>.
    */
   @Nonnull
-  default IJExpression gte (@Nonnull final IJExpression right)
+  default IJExpression gte (@Nonnull final IJExpression rhs)
   {
-    return JOp.gte (this, right);
+    return JOp.gte (this, rhs);
   }
 
   /**
-   * @param right
+   * @param rhs
    *        value to compare to
-   * @return <code>[this] &gt;= [right]</code>.
+   * @return <code>[this] &gt;= [rhs]</code>.
    */
   @Nonnull
-  default IJExpression gte (final int right)
+  default IJExpression gte (final int rhs)
   {
-    return gte (JExpr.lit (right));
+    return gte (JExpr.lit (rhs));
   }
 
   /**
@@ -659,14 +659,14 @@ public interface IJExpression extends IJGenerable
   /**
    * Equals
    *
-   * @param right
+   * @param rhs
    *        expression to compare to
-   * @return <code><em>expr</em> == <em>right</em></code>
+   * @return <code><em>expr</em> == <em>rhs</em></code>
    */
   @Nonnull
-  default IJExpression eq (@Nonnull final IJExpression right)
+  default IJExpression eq (@Nonnull final IJExpression rhs)
   {
-    return JOp.eq (this, right);
+    return JOp.eq (this, rhs);
   }
 
   /**
@@ -694,14 +694,14 @@ public interface IJExpression extends IJGenerable
   /**
    * Not equals
    *
-   * @param right
+   * @param rhs
    *        expression to compare to
-   * @return <code><em>expr</em> != <em>right</em></code>
+   * @return <code><em>expr</em> != <em>rhs</em></code>
    */
   @Nonnull
-  default IJExpression ne (@Nonnull final IJExpression right)
+  default IJExpression ne (@Nonnull final IJExpression rhs)
   {
-    return JOp.ne (this, right);
+    return JOp.ne (this, rhs);
   }
 
   /**
@@ -727,72 +727,72 @@ public interface IJExpression extends IJGenerable
   }
 
   /**
-   * @param right
+   * @param rhs
    *        type to check
-   * @return <code>[this] instanceof [right]</code>.
+   * @return <code>[this] instanceof [rhs]</code>.
    */
   @Nonnull
-  default IJExpression _instanceof (@Nonnull final AbstractJType right)
+  default IJExpression _instanceof (@Nonnull final AbstractJType rhs)
   {
-    return JOp._instanceof (this, right);
+    return JOp._instanceof (this, rhs);
   }
 
   /**
-   * @param method
+   * @param aMethod
    *        Method to be invoked
    * @return <code>[this].[method]</code>. Arguments shall be added to the
    *         returned {@link JInvocation} object.
    */
   @Nonnull
-  default JInvocation invoke (@Nonnull final JMethod method)
+  default JInvocation invoke (@Nonnull final JMethod aMethod)
   {
-    return JExpr.invoke (this, method);
+    return JExpr.invoke (this, aMethod);
   }
 
   /**
-   * @param method
+   * @param sMethod
    *        name of the method to invoke
    * @return <code>[this].[method]</code>. Arguments shall be added to the
    *         returned {@link JInvocation} object.
    */
   @Nonnull
-  default JInvocation invoke (@Nonnull final String method)
+  default JInvocation invoke (@Nonnull final String sMethod)
   {
-    return JExpr.invoke (this, method);
+    return JExpr.invoke (this, sMethod);
   }
 
   @Nonnull
-  default JFieldRef ref (@Nonnull final JVar field)
+  default JFieldRef ref (@Nonnull final JVar aField)
   {
-    return JExpr.ref (this, field);
+    return JExpr.ref (this, aField);
   }
 
   @Nonnull
-  default JFieldRef ref (@Nonnull final String field)
+  default JFieldRef ref (@Nonnull final String sField)
   {
-    return JExpr.ref (this, field);
+    return JExpr.ref (this, sField);
   }
 
   /**
-   * @param index
+   * @param aIndex
    *        array index
    * @return <code>[this] [ [index] ]</code>
    */
   @Nonnull
-  default JArrayCompRef component (@Nonnull final IJExpression index)
+  default JArrayCompRef component (@Nonnull final IJExpression aIndex)
   {
-    return JExpr.component (this, index);
+    return JExpr.component (this, aIndex);
   }
 
   /**
-   * @param index
+   * @param nIndex
    *        array index
    * @return <code>[this] [ [index] ]</code>
    */
   @Nonnull
-  default JArrayCompRef component (final int index)
+  default JArrayCompRef component (final int nIndex)
   {
-    return component (JExpr.lit (index));
+    return component (JExpr.lit (nIndex));
   }
 
   /**

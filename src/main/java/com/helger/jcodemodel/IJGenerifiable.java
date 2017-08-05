@@ -53,41 +53,41 @@ public interface IJGenerifiable extends IJDeclaration, IJOwned
   /**
    * Adds a new type variable to this declaration.
    *
-   * @param name
+   * @param sName
    *        type variable name
    * @return The created {@link JTypeVar}
    */
   @Nonnull
-  JTypeVar generify (@Nonnull String name);
+  JTypeVar generify (@Nonnull String sName);
 
   /**
    * Adds a new type variable to this declaration with a bound.
    *
-   * @param name
+   * @param sName
    *        type variable name
-   * @param _extends
+   * @param aExtends
    *        Bound class
    * @return The created {@link JTypeVar}
    */
   @Nonnull
-  default JTypeVar generify (@Nonnull final String name, @Nonnull final Class <?> _extends)
+  default JTypeVar generify (@Nonnull final String sName, @Nonnull final Class <?> aExtends)
   {
-    return generify (name, owner ().ref (_extends));
+    return generify (sName, owner ().ref (aExtends));
   }
 
   /**
    * Adds a new type variable to this declaration with a bound.
    *
-   * @param name
+   * @param sName
    *        type variable name
-   * @param _extends
+   * @param aExtends
    *        Bound class
    * @return The created {@link JTypeVar}
    */
   @Nonnull
-  default JTypeVar generify (@Nonnull final String name, @Nonnull final AbstractJClass _extends)
+  default JTypeVar generify (@Nonnull final String sName, @Nonnull final AbstractJClass aExtends)
   {
-    return generify (name).bound (_extends);
+    return generify (sName).bound (aExtends);
   }
 
   /**

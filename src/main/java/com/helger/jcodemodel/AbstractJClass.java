@@ -202,21 +202,21 @@ public abstract class AbstractJClass extends AbstractJType
    * </code>
    * </pre>
    *
-   * @param baseType
+   * @param aBaseType
    *        The class whose parameterization we are interested in.
    * @return The use of {@code baseType} in {@code this} type. or null if the
    *         type is not assignable to the base type.
    */
   @Nullable
-  public final AbstractJClass getBaseClass (@Nonnull final AbstractJClass baseType)
+  public final AbstractJClass getBaseClass (@Nonnull final AbstractJClass aBaseType)
   {
-    if (erasure ().equals (baseType))
+    if (erasure ().equals (aBaseType))
       return this;
 
     final AbstractJClass b = _extends ();
     if (b != null)
     {
-      final AbstractJClass bc = b.getBaseClass (baseType);
+      final AbstractJClass bc = b.getBaseClass (aBaseType);
       if (bc != null)
         return bc;
     }
@@ -224,7 +224,7 @@ public abstract class AbstractJClass extends AbstractJType
     final Iterator <AbstractJClass> itfs = _implements ();
     while (itfs.hasNext ())
     {
-      final AbstractJClass bc = itfs.next ().getBaseClass (baseType);
+      final AbstractJClass bc = itfs.next ().getBaseClass (aBaseType);
       if (bc != null)
         return bc;
     }
@@ -233,9 +233,9 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   @Nullable
-  public final AbstractJClass getBaseClass (@Nonnull final Class <?> baseType)
+  public final AbstractJClass getBaseClass (@Nonnull final Class <?> aBaseType)
   {
-    return getBaseClass (owner ().ref (baseType));
+    return getBaseClass (owner ().ref (aBaseType));
   }
 
   @Override
@@ -253,21 +253,21 @@ public abstract class AbstractJClass extends AbstractJType
    * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from
    * <code>Set</code>.
    *
-   * @param clazz
+   * @param aClazz
    *        class to narrow with
    * @return Never <code>null</code>. Narrowed class.
    */
   @Nonnull
-  public JNarrowedClass narrow (@Nonnull final Class <?> clazz)
+  public JNarrowedClass narrow (@Nonnull final Class <?> aClazz)
   {
-    return narrow (owner ().ref (clazz));
+    return narrow (owner ().ref (aClazz));
   }
 
   @Nonnull
-  public AbstractJClass narrow (@Nonnull final Class <?>... clazz)
+  public AbstractJClass narrow (@Nonnull final Class <?>... aClazzes)
   {
-    final List <AbstractJClass> r = new ArrayList <> (clazz.length);
-    for (final Class <?> aElement : clazz)
+    final List <AbstractJClass> r = new ArrayList <> (aClazzes.length);
+    for (final Class <?> aElement : aClazzes)
       r.add (owner ().ref (aElement));
     return narrow (r);
   }
@@ -278,32 +278,32 @@ public abstract class AbstractJClass extends AbstractJType
    * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from
    * <code>Set</code>.
    *
-   * @param clazz
+   * @param aClazz
    *        class to narrow with
    * @return Never <code>null</code>. Narrowed class.
    */
   @Nonnull
-  public JNarrowedClass narrow (final AbstractJClass clazz)
+  public JNarrowedClass narrow (@Nonnull final AbstractJClass aClazz)
   {
-    return new JNarrowedClass (this, clazz);
+    return new JNarrowedClass (this, aClazz);
   }
 
   @Nonnull
-  public JNarrowedClass narrow (@Nonnull final AbstractJType type)
+  public JNarrowedClass narrow (@Nonnull final AbstractJType aType)
   {
-    return narrow (type.boxify ());
+    return narrow (aType.boxify ());
   }
 
   @Nonnull
-  public AbstractJClass narrow (@Nonnull final AbstractJClass... clazz)
+  public AbstractJClass narrow (@Nonnull final AbstractJClass... aClazz)
   {
-    return new JNarrowedClass (this, Arrays.asList (clazz.clone ()));
+    return new JNarrowedClass (this, Arrays.asList (aClazz.clone ()));
   }
 
   @Nonnull
-  public AbstractJClass narrow (@Nonnull final List <? extends AbstractJClass> clazz)
+  public AbstractJClass narrow (@Nonnull final List <? extends AbstractJClass> aClazz)
   {
-    return new JNarrowedClass (this, new ArrayList <> (clazz));
+    return new JNarrowedClass (this, new ArrayList <> (aClazz));
   }
 
   /**
@@ -415,15 +415,15 @@ public abstract class AbstractJClass extends AbstractJType
    * for <code>Map&lt;String,Map&lt;Integer&gt;&gt;</code>. <br>
    * This method needs to work recursively.
    *
-   * @param variables
+   * @param aVariables
    *        Type variables
-   * @param bindings
+   * @param aBindings
    *        Bindings
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] variables,
-                                                      @Nonnull List <? extends AbstractJClass> bindings);
+  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables,
+                                                      @Nonnull List <? extends AbstractJClass> aBindings);
 
   /**
    * @return name<code>.class</code>
@@ -468,7 +468,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return Newly created {@link JFieldRef}
    */
   @Nonnull
-  public final JFieldRef staticRef (final String sField)
+  public final JFieldRef staticRef (@Nonnull final String sField)
   {
     return new JFieldRef (this, sField);
   }
@@ -481,7 +481,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return Newly created {@link JFieldRef}
    */
   @Nonnull
-  public final JFieldRef staticRef (final JVar aField)
+  public final JFieldRef staticRef (@Nonnull final JVar aField)
   {
     return new JFieldRef (this, aField);
   }

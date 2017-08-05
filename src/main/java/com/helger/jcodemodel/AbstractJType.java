@@ -57,7 +57,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   /**
    * Obtains a reference to the primitive type object from a type name.
    *
-   * @param codeModel
+   * @param aCodeModel
    *        Base code model
    * @param sTypeName
    *        primitive type to be parsed (e.g. "int" or "void")
@@ -66,26 +66,26 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    *         If the passed type name is not a primitive type name
    */
   @Nonnull
-  public static JPrimitiveType parse (@Nonnull final JCodeModel codeModel, @Nonnull final String sTypeName)
+  public static JPrimitiveType parse (@Nonnull final JCodeModel aCodeModel, @Nonnull final String sTypeName)
   {
     if (sTypeName.equals ("void"))
-      return codeModel.VOID;
+      return aCodeModel.VOID;
     if (sTypeName.equals ("boolean"))
-      return codeModel.BOOLEAN;
+      return aCodeModel.BOOLEAN;
     if (sTypeName.equals ("byte"))
-      return codeModel.BYTE;
+      return aCodeModel.BYTE;
     if (sTypeName.equals ("short"))
-      return codeModel.SHORT;
+      return aCodeModel.SHORT;
     if (sTypeName.equals ("char"))
-      return codeModel.CHAR;
+      return aCodeModel.CHAR;
     if (sTypeName.equals ("int"))
-      return codeModel.INT;
+      return aCodeModel.INT;
     if (sTypeName.equals ("float"))
-      return codeModel.FLOAT;
+      return aCodeModel.FLOAT;
     if (sTypeName.equals ("long"))
-      return codeModel.LONG;
+      return aCodeModel.LONG;
     if (sTypeName.equals ("double"))
-      return codeModel.DOUBLE;
+      return aCodeModel.DOUBLE;
     throw new IllegalArgumentException ("Not a primitive type: " + sTypeName);
   }
 
@@ -280,26 +280,26 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * ([[List&lt;List&lt;Integer&gt;&gt;]])</li>
    * </ol>
    *
-   * @param that
+   * @param aThat
    *        Type to check
    * @return <code>true</code> if assignable, <code>false</code> if not
    */
-  public boolean isAssignableFrom (@Nonnull final AbstractJType that)
+  public boolean isAssignableFrom (@Nonnull final AbstractJType aThat)
   {
-    return isAssignableFrom (that, true);
+    return isAssignableFrom (aThat, true);
   }
 
-  protected boolean isAssignableFrom (@Nonnull final AbstractJType that, final boolean bAllowsRawTypeUnchekedConversion)
+  protected boolean isAssignableFrom (@Nonnull final AbstractJType aThat, final boolean bAllowsRawTypeUnchekedConversion)
   {
-    if (isError () || that.isError ())
+    if (isError () || aThat.isError ())
       return false;
-    if (this.equals (that))
+    if (this.equals (aThat))
       return true;
 
-    if (this.isReference () && that.isReference ())
+    if (this.isReference () && aThat.isReference ())
     {
       final AbstractJClass thisClass = (AbstractJClass) this;
-      final AbstractJClass thatClass = (AbstractJClass) that;
+      final AbstractJClass thatClass = (AbstractJClass) aThat;
 
       // Bottom: Anything anything = null
       if (thatClass instanceof JNullType)
@@ -310,8 +310,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
         return true;
 
       // Array covariance: i. e. Object[] array1 = (Integer[])array2
-      if (this.isArray () && that.isArray ())
-        return this.elementType ().isAssignableFrom (that.elementType (), false);
+      if (this.isArray () && aThat.isArray ())
+        return this.elementType ().isAssignableFrom (aThat.elementType (), false);
 
       if (thisClass.erasure ().equals (thatClass.erasure ()))
       {

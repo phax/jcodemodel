@@ -59,10 +59,10 @@ public class JArray implements IJExpression
   private final IJExpression m_aSize;
   private List <IJExpression> m_aExprs;
 
-  protected JArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
+  protected JArray (@Nonnull final AbstractJType aType, @Nullable final IJExpression aSize)
   {
-    m_aType = type;
-    m_aSize = size;
+    m_aType = aType;
+    m_aSize = aSize;
   }
 
   @Nonnull

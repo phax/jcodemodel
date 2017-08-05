@@ -60,8 +60,9 @@ import com.helger.jcodemodel.util.JCSecureLoader;
  * @author Kohsuke Kawaguchi
  */
 @SuppressWarnings ({ "unchecked", "rawtypes" })
-public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotationWriter <A>>
-                                   implements InvocationHandler, IJAnnotationWriter <A>
+public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotationWriter <A>> implements
+                                   InvocationHandler,
+                                   IJAnnotationWriter <A>
 {
   /**
    * This is what we are writing to.
@@ -85,9 +86,9 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
 
   protected TypedAnnotationWriter (final Class <A> annotation, final Class <W> writer, final JAnnotationUse use)
   {
-    this.m_aAnnotation = annotation;
-    this.m_aWriterType = writer;
-    this.m_aUse = use;
+    m_aAnnotation = annotation;
+    m_aWriterType = writer;
+    m_aUse = use;
   }
 
   public JAnnotationUse getAnnotationUse ()

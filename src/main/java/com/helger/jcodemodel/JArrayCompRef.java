@@ -65,17 +65,17 @@ public class JArrayCompRef implements IJAssignmentTarget
   /**
    * JArray component reference constructor given an array expression and index.
    *
-   * @param array
+   * @param aArray
    *        JExpression for the array upon which the component will be accessed,
-   * @param index
+   * @param aIndex
    *        JExpression for index of component to access
    */
-  protected JArrayCompRef (@Nonnull final IJExpression array, @Nonnull final IJExpression index)
+  protected JArrayCompRef (@Nonnull final IJExpression aArray, @Nonnull final IJExpression aIndex)
   {
-    JCValueEnforcer.notNull (array, "Array");
-    JCValueEnforcer.notNull (index, "Index");
-    m_aArray = array;
-    m_aIndex = index;
+    JCValueEnforcer.notNull (aArray, "Array");
+    JCValueEnforcer.notNull (aIndex, "Index");
+    m_aArray = aArray;
+    m_aIndex = aIndex;
   }
 
   @Nonnull

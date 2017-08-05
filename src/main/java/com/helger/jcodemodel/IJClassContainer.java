@@ -96,6 +96,7 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JClassAlreadyExistsException
    *         If another class/interface/... with the same name already exists
    */
+  @Nonnull
   CLASSTYPE _class (int nMods,
                     @Nonnull String sName,
                     @Nonnull EClassType eClassType) throws JClassAlreadyExistsException;
@@ -109,7 +110,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JClassAlreadyExistsException
    *         If another class/interface/... with the same name already exists
    */
-  CLASSTYPE _class (@Nonnull String sName) throws JClassAlreadyExistsException;
+  @Nonnull
+  default CLASSTYPE _class (@Nonnull final String sName) throws JClassAlreadyExistsException
+  {
+    return _class (JMod.PUBLIC, sName);
+  }
 
   /**
    * Add a new class to this package/class.
@@ -122,7 +127,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JClassAlreadyExistsException
    *         If another class/interface/... with the same name already exists
    */
-  CLASSTYPE _class (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
+  @Nonnull
+  default CLASSTYPE _class (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
+  {
+    return _class (nMods, sName, EClassType.CLASS);
+  }
 
   /**
    * Adds a public interface to this package.
@@ -133,7 +142,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JClassAlreadyExistsException
    *         If another class/interface/... with the same name already exists
    */
-  CLASSTYPE _interface (@Nonnull String sName) throws JClassAlreadyExistsException;
+  @Nonnull
+  default CLASSTYPE _interface (@Nonnull final String sName) throws JClassAlreadyExistsException
+  {
+    return _interface (JMod.PUBLIC, sName);
+  }
 
   /**
    * Add an interface to this class/package.
@@ -146,7 +159,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JClassAlreadyExistsException
    *         If another class/interface/... with the same name already exists
    */
-  CLASSTYPE _interface (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
+  @Nonnull
+  default CLASSTYPE _interface (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
+  {
+    return _class (JMod.PUBLIC, sName, EClassType.INTERFACE);
+  }
 
   /**
    * Add an annotationType Declaration to this package
@@ -157,7 +174,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JClassAlreadyExistsException
    *         If another class/interface/... with the same name already exists
    */
-  CLASSTYPE _annotationTypeDeclaration (@Nonnull String sName) throws JClassAlreadyExistsException;
+  @Nonnull
+  default CLASSTYPE _annotationTypeDeclaration (@Nonnull final String sName) throws JClassAlreadyExistsException
+  {
+    return _annotationTypeDeclaration (JMod.PUBLIC, sName);
+  }
 
   /**
    * Add an annotationType Declaration to this package
@@ -170,7 +191,12 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JClassAlreadyExistsException
    *         If another class/interface/... with the same name already exists
    */
-  CLASSTYPE _annotationTypeDeclaration (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
+  @Nonnull
+  default CLASSTYPE _annotationTypeDeclaration (final int nMods,
+                                                @Nonnull final String sName) throws JClassAlreadyExistsException
+  {
+    return _class (nMods, sName, EClassType.ANNOTATION_TYPE_DECL);
+  }
 
   /**
    * Add a public enum to this package
@@ -181,7 +207,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JClassAlreadyExistsException
    *         If another class/interface/... with the same name already exists
    */
-  CLASSTYPE _enum (@Nonnull String sName) throws JClassAlreadyExistsException;
+  @Nonnull
+  default CLASSTYPE _enum (@Nonnull final String sName) throws JClassAlreadyExistsException
+  {
+    return _enum (JMod.PUBLIC, sName);
+  }
 
   /**
    * Add a enum to this package
@@ -195,7 +225,10 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  CLASSTYPE _enum (int nMods, @Nonnull String sName) throws JClassAlreadyExistsException;
+  default CLASSTYPE _enum (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
+  {
+    return _class (nMods, sName, EClassType.ENUM);
+  }
 
   /**
    * @return A collection with all nested classes defined in this class. Never

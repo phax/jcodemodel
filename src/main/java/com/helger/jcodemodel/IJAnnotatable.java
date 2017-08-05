@@ -55,37 +55,37 @@ public interface IJAnnotatable
   /**
    * Adds an annotation to this program element.
    *
-   * @param clazz
+   * @param aClazz
    *        The annotation class to annotate the program element with
    * @return Newly created {@link JAnnotationUse}
    */
   @Nonnull
-  JAnnotationUse annotate (@Nonnull AbstractJClass clazz);
+  JAnnotationUse annotate (@Nonnull AbstractJClass aClazz);
 
   /**
    * Adds an annotation to this program element.
    *
-   * @param clazz
+   * @param aClazz
    *        The annotation class to annotate the program element with
    * @return Newly created {@link JAnnotationUse}
    */
   @Nonnull
-  JAnnotationUse annotate (@Nonnull Class <? extends Annotation> clazz);
+  JAnnotationUse annotate (@Nonnull Class <? extends Annotation> aClazz);
 
   /**
    * Adds an annotation to this program element and returns a type-safe writer
    * to fill in the values of such annotations.
    *
-   * @param clazz
+   * @param aClazz
    *        Source class
    * @return Instance of the source class
    * @param <W>
    *        Implementation type
    */
   @Nonnull
-  default <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> clazz)
+  default <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> aClazz)
   {
-    return TypedAnnotationWriter.create (clazz, this);
+    return TypedAnnotationWriter.create (aClazz, this);
   }
 
   /**

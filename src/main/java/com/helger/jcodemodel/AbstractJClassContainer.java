@@ -42,6 +42,7 @@ package com.helger.jcodemodel;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -55,8 +56,9 @@ import javax.annotation.Nullable;
  *
  * @author Philip Helger
  */
-public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>>
-                                              extends AbstractJClass implements IJClassContainer <CLASSTYPE>
+public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends
+                                              AbstractJClass implements
+                                              IJClassContainer <CLASSTYPE>
 {
   /**
    * If this is a package-member class, this is {@link JPackage}. If this is a
@@ -231,7 +233,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   {
     String sRealName;
     if (JCodeModel.isFileSystemCaseSensitive ())
-      sRealName = sName.toUpperCase ();
+      sRealName = sName.toUpperCase (Locale.US);
     else
       sRealName = sName;
 
@@ -244,55 +246,6 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
     return c;
   }
 
-  @Nonnull
-  public final CLASSTYPE _class (@Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _class (JMod.PUBLIC, sName);
-  }
-
-  @Nonnull
-  public final CLASSTYPE _class (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _class (nMods, sName, EClassType.CLASS);
-  }
-
-  @Nonnull
-  public final CLASSTYPE _interface (@Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _interface (JMod.PUBLIC, sName);
-  }
-
-  @Nonnull
-  public final CLASSTYPE _interface (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _class (nMods, sName, EClassType.INTERFACE);
-  }
-
-  @Nonnull
-  public final CLASSTYPE _annotationTypeDeclaration (@Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _annotationTypeDeclaration (JMod.PUBLIC, sName);
-  }
-
-  @Nonnull
-  public final CLASSTYPE _annotationTypeDeclaration (final int nMods,
-                                                     @Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _class (nMods, sName, EClassType.ANNOTATION_TYPE_DECL);
-  }
-
-  @Nonnull
-  public final CLASSTYPE _enum (@Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _enum (JMod.PUBLIC, sName);
-  }
-
-  @Nonnull
-  public final CLASSTYPE _enum (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _class (nMods, sName, EClassType.ENUM);
-  }
-
   /**
    * Returns an iterator that walks the nested classes defined in this class.
    */
@@ -300,7 +253,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   public final Collection <CLASSTYPE> classes ()
   {
     if (m_aClasses == null)
-      return Collections.<CLASSTYPE> emptyList ();
+      return Collections.emptyList ();
     return m_aClasses.values ();
   }
 }

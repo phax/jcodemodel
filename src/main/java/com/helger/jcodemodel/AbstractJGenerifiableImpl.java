@@ -74,15 +74,15 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable
   }
 
   @Nonnull
-  public JTypeVar generify (@Nonnull final String name)
+  public JTypeVar generify (@Nonnull final String sName)
   {
-    final JTypeVar v = new JTypeVar (owner (), name);
+    final JTypeVar v = new JTypeVar (owner (), sName);
     if (m_aTypeVariables == null)
       m_aTypeVariables = new LinkedHashMap <> (3);
     else
-      if (m_aTypeVariables.containsKey (name))
-        throw new IllegalArgumentException ("A type parameter with name '" + name + "' is already present!");
-    m_aTypeVariables.put (name, v);
+      if (m_aTypeVariables.containsKey (sName))
+        throw new IllegalArgumentException ("A type parameter with name '" + sName + "' is already present!");
+    m_aTypeVariables.put (sName, v);
     return v;
   }
 

@@ -50,59 +50,59 @@ import javax.annotation.Nonnull;
 public abstract class AbstractJAnnotationValue implements IJGenerable
 {
   @Nonnull
-  public static JAnnotationStringValue wrap (final boolean value)
+  public static JAnnotationStringValue wrap (final boolean bValue)
   {
-    return new JAnnotationStringValue (JExpr.lit (value), Boolean.valueOf (value));
+    return new JAnnotationStringValue (JExpr.lit (bValue), Boolean.valueOf (bValue));
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (final byte value)
+  public static JAnnotationStringValue wrap (final byte nValue)
   {
-    return new JAnnotationStringValue (JExpr.lit (value), Byte.valueOf (value));
+    return new JAnnotationStringValue (JExpr.lit (nValue), Byte.valueOf (nValue));
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (final char value)
+  public static JAnnotationStringValue wrap (final char cValue)
   {
-    return new JAnnotationStringValue (JExpr.lit (value), Character.valueOf (value));
+    return new JAnnotationStringValue (JExpr.lit (cValue), Character.valueOf (cValue));
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (final double value)
+  public static JAnnotationStringValue wrap (final double dValue)
   {
-    return new JAnnotationStringValue (JExpr.lit (value), Double.valueOf (value));
+    return new JAnnotationStringValue (JExpr.lit (dValue), Double.valueOf (dValue));
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (final float value)
+  public static JAnnotationStringValue wrap (final float fValue)
   {
-    return new JAnnotationStringValue (JExpr.lit (value), Float.valueOf (value));
+    return new JAnnotationStringValue (JExpr.lit (fValue), Float.valueOf (fValue));
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (final int value)
+  public static JAnnotationStringValue wrap (final int nValue)
   {
-    return new JAnnotationStringValue (JExpr.lit (value), Integer.valueOf (value));
+    return new JAnnotationStringValue (JExpr.lit (nValue), Integer.valueOf (nValue));
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (final long value)
+  public static JAnnotationStringValue wrap (final long nValue)
   {
-    return new JAnnotationStringValue (JExpr.lit (value), Long.valueOf (value));
+    return new JAnnotationStringValue (JExpr.lit (nValue), Long.valueOf (nValue));
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (final short value)
+  public static JAnnotationStringValue wrap (final short nValue)
   {
-    return new JAnnotationStringValue (JExpr.lit (value), Short.valueOf (value));
+    return new JAnnotationStringValue (JExpr.lit (nValue), Short.valueOf (nValue));
   }
 
   @Nonnull
-  public static JAnnotationStringValue wrap (@Nonnull final String value)
+  public static JAnnotationStringValue wrap (@Nonnull final String sValue)
   {
     // Escape string values with quotes so that they can
     // be generated accordingly
-    return new JAnnotationStringValue (JExpr.lit (value), value);
+    return new JAnnotationStringValue (JExpr.lit (sValue), sValue);
   }
 
   @Nonnull

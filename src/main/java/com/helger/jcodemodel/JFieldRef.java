@@ -81,56 +81,56 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
    * <code>object.name</code> or just <code>name</code> if object is
    * <code>null</code>.
    *
-   * @param object
+   * @param aObject
    *        JExpression for the object upon which the named field will be
    *        accessed. May be <code>null</code>.
-   * @param name
+   * @param sName
    *        Name of field to access. May not be <code>null</code>.
    */
-  protected JFieldRef (@Nullable final IJExpression object, @Nonnull final String name)
+  protected JFieldRef (@Nullable final IJExpression aObject, @Nonnull final String sName)
   {
-    this (null, object, name, (JVar) null, false);
+    this (null, aObject, sName, (JVar) null, false);
   }
 
-  protected JFieldRef (@Nullable final IJExpression object, @Nonnull final JVar var)
+  protected JFieldRef (@Nullable final IJExpression aObject, @Nonnull final JVar aVar)
   {
-    this (null, object, (String) null, var, false);
+    this (null, aObject, (String) null, aVar, false);
   }
 
   /**
    * Static field reference.
    *
-   * @param type
+   * @param aType
    *        Type to use
-   * @param name
+   * @param sName
    *        Field name
    */
-  protected JFieldRef (@Nonnull final AbstractJType type, @Nonnull final String name)
+  protected JFieldRef (@Nonnull final AbstractJType aType, @Nonnull final String sName)
   {
-    this (type.owner (), type, name, (JVar) null, false);
+    this (aType.owner (), aType, sName, (JVar) null, false);
   }
 
   /**
    * Static field reference.
    *
-   * @param type
+   * @param aType
    *        Type to use
-   * @param var
+   * @param aVar
    *        Referenced variable
    */
-  protected JFieldRef (@Nonnull final AbstractJType type, @Nonnull final JVar var)
+  protected JFieldRef (@Nonnull final AbstractJType aType, @Nonnull final JVar aVar)
   {
-    this (type.owner (), type, (String) null, var, false);
+    this (aType.owner (), aType, (String) null, aVar, false);
   }
 
-  protected JFieldRef (@Nullable final IJGenerable object, @Nonnull final String name, final boolean explicitThis)
+  protected JFieldRef (@Nullable final IJGenerable aObject, @Nonnull final String sName, final boolean bExplicitThis)
   {
-    this (null, object, name, (JVar) null, explicitThis);
+    this (null, aObject, sName, (JVar) null, bExplicitThis);
   }
 
-  protected JFieldRef (@Nullable final IJGenerable object, @Nonnull final JVar var, final boolean explicitThis)
+  protected JFieldRef (@Nullable final IJGenerable aObject, @Nonnull final JVar aVar, final boolean bExplicitThis)
   {
-    this (null, object, (String) null, var, explicitThis);
+    this (null, aObject, (String) null, aVar, bExplicitThis);
   }
 
   private JFieldRef (@Nullable final JCodeModel aOwner,

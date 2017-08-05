@@ -169,23 +169,6 @@ public class JPackage implements
     return this;
   }
 
-  /**
-   * Add a class to this package.
-   *
-   * @param nMods
-   *        Modifiers for this class declaration
-   * @param sName
-   *        Name of class to be added to this package
-   * @return Newly generated class
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  @Nonnull
-  public JDefinedClass _class (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _class (nMods, sName, EClassType.CLASS);
-  }
-
   @Nonnull
   public JDefinedClass _class (final int nMods,
                                @Nonnull final String sName,
@@ -210,15 +193,6 @@ public class JPackage implements
   }
 
   /**
-   * Adds a public class to this package.
-   */
-  @Nonnull
-  public JDefinedClass _class (@Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _class (JMod.PUBLIC, sName);
-  }
-
-  /**
    * Gets a reference to the already created {@link JDefinedClass}.
    *
    * @param sName
@@ -240,95 +214,6 @@ public class JPackage implements
   public int compareTo (@Nonnull final JPackage aOther)
   {
     return m_sName.compareTo (aOther.m_sName);
-  }
-
-  /**
-   * Add an interface to this package.
-   *
-   * @param nMods
-   *        Modifiers for this interface declaration
-   * @param sName
-   *        Name of interface to be added to this package
-   * @return Newly generated interface
-   */
-  @Nonnull
-  public JDefinedClass _interface (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _class (nMods, sName, EClassType.INTERFACE);
-  }
-
-  /**
-   * Adds a public interface to this package.
-   */
-  @Nonnull
-  public JDefinedClass _interface (@Nonnull final String sName) throws JClassAlreadyExistsException
-  {
-    return _interface (JMod.PUBLIC, sName);
-  }
-
-  /**
-   * Add a annotationType Declaration to this package
-   *
-   * @param mods
-   *        Modifiers for this annotationType declaration
-   * @param name
-   *        Name of the annotation Type declaration to be added to this package
-   * @return newly created Annotation Type Declaration
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  @Nonnull
-  public JDefinedClass _annotationTypeDeclaration (final int mods,
-                                                   @Nonnull final String name) throws JClassAlreadyExistsException
-  {
-    return _class (mods, name, EClassType.ANNOTATION_TYPE_DECL);
-  }
-
-  /**
-   * Add a public annotationType Declaration to this package
-   *
-   * @param name
-   *        Name of the annotation Type declaration to be added to this package
-   * @return newly created Annotation Type Declaration
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  @Nonnull
-  public JDefinedClass _annotationTypeDeclaration (@Nonnull final String name) throws JClassAlreadyExistsException
-  {
-    return _annotationTypeDeclaration (JMod.PUBLIC, name);
-  }
-
-  /**
-   * Add a enum to this package
-   *
-   * @param mods
-   *        Modifiers for this enum declaration
-   * @param name
-   *        Name of the enum to be added to this package
-   * @return newly created Enum
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  @Nonnull
-  public JDefinedClass _enum (final int mods, @Nonnull final String name) throws JClassAlreadyExistsException
-  {
-    return _class (mods, name, EClassType.ENUM);
-  }
-
-  /**
-   * Add a public enum to this package
-   *
-   * @param name
-   *        Name of the enum to be added to this package
-   * @return newly created Enum
-   * @exception JClassAlreadyExistsException
-   *            When the specified class/interface was already created.
-   */
-  @Nonnull
-  public JDefinedClass _enum (@Nonnull final String name) throws JClassAlreadyExistsException
-  {
-    return _enum (JMod.PUBLIC, name);
   }
 
   /**

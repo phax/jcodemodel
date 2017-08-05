@@ -45,6 +45,8 @@ import java.io.OutputStream;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * Represents a resource file in the application-specific file format.
  */
@@ -52,9 +54,10 @@ public abstract class AbstractJResourceFile
 {
   private final String m_sName;
 
-  protected AbstractJResourceFile (@Nonnull final String name)
+  protected AbstractJResourceFile (@Nonnull final String sName)
   {
-    m_sName = name;
+    JCValueEnforcer.notNull (sName, "Name");
+    m_sName = sName;
   }
 
   /**
@@ -80,10 +83,10 @@ public abstract class AbstractJResourceFile
   /**
    * called by {@link JPackage} to produce the file image.
    *
-   * @param os
+   * @param aOS
    *        OutputStream to write to
    * @throws IOException
    *         If writing on the stream throws an error
    */
-  protected abstract void build (@Nonnull OutputStream os) throws IOException;
+  protected abstract void build (@Nonnull OutputStream aOS) throws IOException;
 }

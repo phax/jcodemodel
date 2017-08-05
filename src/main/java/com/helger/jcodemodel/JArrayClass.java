@@ -141,6 +141,21 @@ public class JArrayClass extends AbstractJClass
     return true;
   }
 
+  @Override
+  @Nonnull
+  protected AbstractJClass substituteParams (final JTypeVar [] aVariables,
+                                             final List <? extends AbstractJClass> aBindings)
+  {
+    if (m_aComponentType.isPrimitive ())
+      return this;
+
+    final AbstractJClass c = ((AbstractJClass) m_aComponentType).substituteParams (aVariables, aBindings);
+    if (c == m_aComponentType)
+      return this;
+
+    return new JArrayClass (owner (), c);
+  }
+
   //
   // Equality is based on value
   //
@@ -161,20 +176,5 @@ public class JArrayClass extends AbstractJClass
   public int hashCode ()
   {
     return m_aComponentType.hashCode ();
-  }
-
-  @Override
-  @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables,
-                                             final List <? extends AbstractJClass> bindings)
-  {
-    if (m_aComponentType.isPrimitive ())
-      return this;
-
-    final AbstractJClass c = ((AbstractJClass) m_aComponentType).substituteParams (variables, bindings);
-    if (c == m_aComponentType)
-      return this;
-
-    return new JArrayClass (owner (), c);
   }
 }

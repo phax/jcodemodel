@@ -74,7 +74,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   private final AbstractJClass m_aAnnotationClass;
 
   /**
-   * Map of member values.
+   * Map of member aValues.
    */
   private Map <String, AbstractJAnnotationValue> m_aMemberValues;
 
@@ -113,35 +113,35 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @SuppressWarnings ("unchecked")
-  private static <T> T _castAnnotationArgument (@Nullable final AbstractJAnnotationValue value,
-                                                @Nonnull final Class <T> klass) throws ClassCastException
+  private static <T> T _castAnnotationArgument (@Nullable final AbstractJAnnotationValue aValue,
+                                                @Nonnull final Class <T> aClazz) throws ClassCastException
   {
-    if (!klass.isArray ())
+    if (!aClazz.isArray ())
     {
-      if (value == null)
-        throw new ClassCastException ("Can't cast null annotation value to " + klass + " class");
+      if (aValue == null)
+        throw new ClassCastException ("Can't cast null annotation value to " + aClazz + " class");
 
-      if (JAnnotationUse.class.isAssignableFrom (klass))
-        return klass.cast (value);
+      if (JAnnotationUse.class.isAssignableFrom (aClazz))
+        return aClazz.cast (aValue);
 
-      if (!(value instanceof JAnnotationStringValue))
-        throw new ClassCastException ("Can't cast " + value + " annotation value to " + klass + " class");
+      if (!(aValue instanceof JAnnotationStringValue))
+        throw new ClassCastException ("Can't cast " + aValue + " annotation value to " + aClazz + " class");
 
-      final JAnnotationStringValue aStringValue = (JAnnotationStringValue) value;
+      final JAnnotationStringValue aStringValue = (JAnnotationStringValue) aValue;
       return (T) aStringValue.nativeValue ();
     }
 
     // It's any array
-    if (value == null)
-      return (T) Array.newInstance (klass.getComponentType (), 0);
+    if (aValue == null)
+      return (T) Array.newInstance (aClazz.getComponentType (), 0);
 
-    final JAnnotationArrayMember jarray = (JAnnotationArrayMember) value;
+    final JAnnotationArrayMember jarray = (JAnnotationArrayMember) aValue;
     final Collection <AbstractJAnnotationValue> interfaceJArray = jarray.getAllAnnotations ();
-    final Object [] result = (Object []) Array.newInstance (klass.getComponentType (), interfaceJArray.size ());
+    final Object [] result = (Object []) Array.newInstance (aClazz.getComponentType (), interfaceJArray.size ());
     final Iterator <AbstractJAnnotationValue> iterator = interfaceJArray.iterator ();
     for (int i = 0; iterator.hasNext (); i++)
     {
-      result[i] = _castAnnotationArgument (iterator.next (), klass.getComponentType ());
+      result[i] = _castAnnotationArgument (iterator.next (), aClazz.getComponentType ());
     }
     return (T) result;
   }
@@ -164,15 +164,15 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        return type
    * @param sName
    *        annotation parameter name
-   * @param klass
+   * @param aClazz
    *        type to use as a return type
    * @return annotation argument represented as required type
    */
   @Nullable
-  public <T> T getParam (@Nonnull final String sName, @Nonnull final Class <T> klass) throws ClassCastException
+  public <T> T getParam (@Nonnull final String sName, @Nonnull final Class <T> aClazz) throws ClassCastException
   {
     final AbstractJAnnotationValue value = getParam (sName);
-    return _castAnnotationArgument (value, klass);
+    return _castAnnotationArgument (value, aClazz);
   }
 
   @Nullable
@@ -210,251 +210,251 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *
    * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param bValue
    *        The boolean value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final boolean value)
+  public JAnnotationUse param (@Nonnull final String sName, final boolean bValue)
   {
-    return _addValue (sName, wrap (value));
+    return _addValue (sName, wrap (bValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final boolean... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final boolean... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param nValue
    *        The byte member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, final byte value)
+  public JAnnotationUse param (@Nonnull final String sName, final byte nValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (nValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final byte... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final byte... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param cValue
    *        The char member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, final char value)
+  public JAnnotationUse param (@Nonnull final String sName, final char cValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (cValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final char... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final char... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param dValue
    *        The double member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, final double value)
+  public JAnnotationUse param (@Nonnull final String sName, final double dValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (dValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final double... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final double... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param fValue
    *        The float member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, final float value)
+  public JAnnotationUse param (@Nonnull final String sName, final float fValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (fValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final float... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final float... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param nValue
    *        The long member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, final long value)
+  public JAnnotationUse param (@Nonnull final String sName, final long nValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (nValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final long... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final long... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param nValue
    *        The short member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, final short value)
+  public JAnnotationUse param (@Nonnull final String sName, final short nValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (nValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final short... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final short... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param nValue
    *        The int member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, final int value)
+  public JAnnotationUse param (@Nonnull final String sName, final int nValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (nValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final int... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final int... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param sValue
    *        The String member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, final String value)
+  public JAnnotationUse param (@Nonnull final String sName, final String sValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (sValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final String... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final String... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param aValue
    *        The enum class which is member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final Enum <?> value)
+  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final Enum <?> aValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (aValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final Enum <?>... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final Enum <?>... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param aValue
    *        The {@link JEnumConstant} which is member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final JEnumConstant value)
+  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final JEnumConstant aValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (aValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final JEnumConstant... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final JEnumConstant... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
@@ -469,23 +469,23 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * For adding a value of Class&lt;? extends Annotation&gt;
    * {@link #annotationParam(String, Class)}
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation param
-   * @param value
+   * @param aValue
    *        The class type of the param
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final Class <?> value)
+  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final Class <?> aValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (aValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final Class <?>... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final Class <?>... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
@@ -493,47 +493,47 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * Adds a member value pair to this annotation based on the type represented
    * by the given {@link AbstractJType}
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation param
-   * @param type
+   * @param aValue
    *        the {@link AbstractJType} representing the actual type
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final AbstractJType type)
+  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final AbstractJType aValue)
   {
-    return _addValue (name, wrap (type));
+    return _addValue (sName, wrap (aValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final AbstractJType... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final AbstractJType... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
   /**
    * Adds a member value pair to this annotation.
    *
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param aValue
    *        The {@link IJExpression} which provides the content value for this
    *        annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String name, @Nonnull final IJExpression value)
+  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final IJExpression aValue)
   {
-    return _addValue (name, wrap (value));
+    return _addValue (sName, wrap (aValue));
   }
 
   @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String name, @Nonnull final IJExpression... values)
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final IJExpression... aValues)
   {
-    paramArray (name).params (values);
+    paramArray (sName).params (aValues);
     return this;
   }
 
@@ -542,7 +542,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *
    * @param sName
    *        The simple name for this annotation
-   * @return The {@link JAnnotationArrayMember}. For adding array values
+   * @return The {@link JAnnotationArrayMember}. For adding array aValues
    * @see JAnnotationArrayMember
    */
   @Nonnull
@@ -558,17 +558,17 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * param
    *
    * @see #param(String, Class)
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param aValue
    *        The annotation class which is member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse annotationParam (@Nonnull final String name, @Nonnull final Class <? extends Annotation> value)
+  public JAnnotationUse annotationParam (@Nonnull final String sName, @Nonnull final Class <? extends Annotation> aValue)
   {
-    return annotationParam (name, owner ().ref (value));
+    return annotationParam (sName, owner ().ref (aValue));
   }
 
   /**
@@ -576,18 +576,18 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * param
    *
    * @see #param(String, Class)
-   * @param name
+   * @param sName
    *        The simple name for this annotation
-   * @param value
+   * @param aValue
    *        The annotation class which is member value for this annotation
    * @return The {@link JAnnotationUse}. More member value pairs can be added to
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse annotationParam (@Nonnull final String name, @Nonnull final AbstractJClass value)
+  public JAnnotationUse annotationParam (@Nonnull final String sName, @Nonnull final AbstractJClass aValue)
   {
-    final JAnnotationUse annotationUse = new JAnnotationUse (value);
-    _addValue (name, annotationUse);
+    final JAnnotationUse annotationUse = new JAnnotationUse (aValue);
+    _addValue (sName, annotationUse);
     return annotationUse;
   }
 
