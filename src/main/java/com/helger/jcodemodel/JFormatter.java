@@ -788,7 +788,8 @@ public class JFormatter implements Closeable
   }
 
   /**
-   * Cause the {@link JVar} to generate source for itself
+   * Cause the {@link JVar} to generate source for itself. With annotations,
+   * type, name and init expression.
    *
    * @param v
    *        the {@link JVar} object
@@ -1083,7 +1084,7 @@ public class JFormatter implements Closeable
 
   /**
    * Add classes that should not be imported.
-   * 
+   *
    * @param aClasses
    *        The classes to not be used in "import" statements. May be
    *        <code>null</code>.

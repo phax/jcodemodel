@@ -74,255 +74,251 @@ public final class JExpr
   {}
 
   @Nonnull
-  public static JAssignment assign (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assign (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs);
+    return new JAssignment (aLhs, aRhs);
   }
 
   @Nonnull
-  public static JAssignment assignPlus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignPlus (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, "+");
+    return new JAssignment (aLhs, aRhs, "+");
   }
 
   @Nonnull
-  public static JAssignment assignMinus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignMinus (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, "-");
+    return new JAssignment (aLhs, aRhs, "-");
   }
 
   @Nonnull
-  public static JAssignment assignTimes (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignTimes (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, "*");
+    return new JAssignment (aLhs, aRhs, "*");
   }
 
   @Nonnull
-  public static JAssignment assignDivide (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignDivide (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, "/");
+    return new JAssignment (aLhs, aRhs, "/");
   }
 
   @Nonnull
-  public static JAssignment assignShl (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignShl (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, "<<");
+    return new JAssignment (aLhs, aRhs, "<<");
   }
 
   @Nonnull
-  public static JAssignment assignShr (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignShr (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, ">>");
+    return new JAssignment (aLhs, aRhs, ">>");
   }
 
   @Nonnull
-  public static JAssignment assignShrz (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignShrz (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, ">>>");
+    return new JAssignment (aLhs, aRhs, ">>>");
   }
 
   @Nonnull
-  public static JAssignment assignBand (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignBand (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, "&");
+    return new JAssignment (aLhs, aRhs, "&");
   }
 
   @Nonnull
-  public static JAssignment assignXor (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignXor (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, "^");
+    return new JAssignment (aLhs, aRhs, "^");
   }
 
   @Nonnull
-  public static JAssignment assignBor (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  public static JAssignment assignBor (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
   {
-    return new JAssignment (lhs, rhs, "|");
+    return new JAssignment (aLhs, aRhs, "|");
   }
 
   @Nonnull
-  public static JOpUnaryTight incr (@Nonnull final IJExpression expression)
+  public static JOpUnaryTight incr (@Nonnull final IJExpression aExpr)
   {
-    return JOp.postincr (expression);
+    return JOp.postincr (aExpr);
   }
 
   @Nonnull
-  public static JOpUnaryTight preincr (@Nonnull final IJExpression expression)
+  public static JOpUnaryTight preincr (@Nonnull final IJExpression aExpr)
   {
-    return JOp.preincr (expression);
+    return JOp.preincr (aExpr);
   }
 
   @Nonnull
-  public static JOpUnaryTight decr (@Nonnull final IJExpression expression)
+  public static JOpUnaryTight decr (@Nonnull final IJExpression aExpr)
   {
-    return JOp.postdecr (expression);
+    return JOp.postdecr (aExpr);
   }
 
   @Nonnull
-  public static JOpUnaryTight predecr (@Nonnull final IJExpression expression)
+  public static JOpUnaryTight predecr (@Nonnull final IJExpression aExpr)
   {
-    return JOp.predecr (expression);
+    return JOp.predecr (aExpr);
   }
 
   @Nonnull
-  public static JInvocation _new (@Nonnull final AbstractJClass c)
+  public static JInvocation _new (@Nonnull final AbstractJClass aClass)
   {
-    return new JInvocation (c);
+    return new JInvocation (aClass);
   }
 
   @Nonnull
-  public static JInvocation _new (@Nonnull final AbstractJType t)
+  public static JInvocation _new (@Nonnull final AbstractJType aType)
   {
-    return new JInvocation (t);
+    return new JInvocation (aType);
   }
 
   @Nonnull
-  public static JInvocation invoke (@Nonnull final String method)
+  public static JInvocation invoke (@Nonnull final String sMethod)
   {
-    return new JInvocation ((IJExpression) null, method);
+    return invoke (null, sMethod);
   }
 
   @Nonnull
-  public static JInvocation invoke (@Nonnull final JMethod method)
+  public static JInvocation invoke (@Nonnull final JMethod aMethod)
   {
-    return new JInvocation ((IJExpression) null, method);
+    return invoke (null, aMethod);
   }
 
   @Nonnull
-  public static JInvocation invoke (@Nullable final IJExpression lhs, @Nonnull final JMethod method)
+  public static JInvocation invoke (@Nullable final IJExpression aLhs, @Nonnull final JMethod aMethod)
   {
-    return new JInvocation (lhs, method);
+    return new JInvocation (aLhs, aMethod);
   }
 
   @Nonnull
-  public static JInvocation invoke (@Nullable final IJExpression lhs, @Nonnull final String method)
+  public static JInvocation invoke (@Nullable final IJExpression aLhs, @Nonnull final String sMethod)
   {
-    return new JInvocation (lhs, method);
+    return new JInvocation (aLhs, sMethod);
   }
 
   @Nonnull
-  public static JFieldRef ref (@Nonnull final JVar field)
+  public static JFieldRef ref (@Nonnull final JVar aField)
   {
-    return new JFieldRef ((IJExpression) null, field);
+    return ref (null, aField);
   }
 
   @Nonnull
-  public static JFieldRef ref (@Nonnull final String field)
+  public static JFieldRef ref (@Nonnull final String sField)
   {
-    return new JFieldRef ((IJExpression) null, field);
+    return ref (null, sField);
   }
 
   @Nonnull
-  public static JFieldRef ref (@Nullable final IJExpression lhs, @Nonnull final JVar field)
+  public static JFieldRef ref (@Nullable final IJExpression aLhs, @Nonnull final JVar aField)
   {
-    return new JFieldRef (lhs, field);
+    return new JFieldRef (aLhs, aField);
   }
 
   @Nonnull
-  public static JFieldRef ref (@Nullable final IJExpression lhs, @Nonnull final String field)
+  public static JFieldRef ref (@Nullable final IJExpression aLhs, @Nonnull final String sField)
   {
-    return new JFieldRef (lhs, field);
+    return new JFieldRef (aLhs, sField);
   }
 
   @Nonnull
-  public static JEnumConstantRef enumConstantRef (@Nonnull final AbstractJClass type, @Nonnull final String name)
+  public static JEnumConstantRef enumConstantRef (@Nonnull final AbstractJClass aType, @Nonnull final String sName)
   {
-    return new JEnumConstantRef (type, name);
+    return new JEnumConstantRef (aType, sName);
   }
 
   /**
-   * @param field
+   * @param aField
    *        field name to reference
    * @return [this].[field]
    */
   @Nonnull
-  public static JFieldRef refthis (@Nonnull final JVar field)
+  public static JFieldRef refthis (@Nonnull final JVar aField)
   {
-    return new JFieldRef (null, field, true);
+    return new JFieldRef (null, aField, true);
   }
 
   /**
-   * @param field
+   * @param sField
    *        field name to reference
    * @return [this].[field]
    */
   @Nonnull
-  public static JFieldRef refthis (@Nonnull final String field)
+  public static JFieldRef refthis (@Nonnull final String sField)
   {
-    return new JFieldRef (null, field, true);
+    return new JFieldRef (null, sField, true);
   }
 
   @Nonnull
-  public static JFieldRef refthis (@Nullable final IJExpression lhs, @Nonnull final JVar field)
+  public static JFieldRef refthis (@Nullable final IJExpression aLhs, @Nonnull final JVar aField)
   {
-    return new JFieldRef (lhs, field, true);
+    return new JFieldRef (aLhs, aField, true);
   }
 
   @Nonnull
-  public static JFieldRef refthis (@Nullable final IJExpression lhs, @Nonnull final String field)
+  public static JFieldRef refthis (@Nullable final IJExpression aLhs, @Nonnull final String sField)
   {
-    return new JFieldRef (lhs, field, true);
+    return new JFieldRef (aLhs, sField, true);
   }
 
   @Nonnull
-  public static IJExpression dotclass (@Nonnull final AbstractJClass cl)
+  public static IJExpression dotclass (@Nonnull final AbstractJClass aClass)
   {
     return (@Nonnull final JFormatter f) -> {
-      AbstractJClass c;
-      if (cl instanceof JNarrowedClass)
-        c = ((JNarrowedClass) cl).basis ();
-      else
-        c = cl;
+      final AbstractJClass c = aClass instanceof JNarrowedClass ? ((JNarrowedClass) aClass).basis () : aClass;
       f.generable (c).print (".class");
     };
   }
 
   @Nonnull
-  public static JArrayCompRef component (@Nonnull final IJExpression lhs, @Nonnull final IJExpression index)
+  public static JArrayCompRef component (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aIndex)
   {
-    return new JArrayCompRef (lhs, index);
+    return new JArrayCompRef (aLhs, aIndex);
   }
 
   @Nonnull
-  public static JCast cast (@Nonnull final AbstractJType type, @Nonnull final IJExpression expr)
+  public static JCast cast (@Nonnull final AbstractJType aType, @Nonnull final IJExpression aExpr)
   {
-    return new JCast (type, expr);
+    return new JCast (aType, aExpr);
   }
 
   @Nonnull
-  public static JArray newArray (@Nonnull final AbstractJType type)
+  public static JArray newArray (@Nonnull final AbstractJType aType)
   {
-    return newArray (type, null);
-  }
-
-  /**
-   * Generates {@code new T[size]}.
-   *
-   * @param type
-   *        The type of the array component. 'T' or {@code new T[size]}.
-   * @param size
-   *        Size of the array
-   * @return New {@link JArray}
-   */
-  @Nonnull
-  public static JArray newArray (@Nonnull final AbstractJType type, @Nullable final IJExpression size)
-  {
-    // you cannot create an array whose component type is a generic
-    return new JArray (type.erasure (), size);
+    return newArray (aType, null);
   }
 
   /**
    * Generates {@code new T[size]}.
    *
-   * @param type
-   *        The type of the array component. 'T' or {@code new T[size]}.
-   * @param size
+   * @param aType
+   *        The aType of the array component. 'T' or {@code new T[size]}.
+   * @param aSize
    *        Size of the array
    * @return New {@link JArray}
    */
   @Nonnull
-  public static JArray newArray (@Nonnull final AbstractJType type, @Nonnegative final int size)
+  public static JArray newArray (@Nonnull final AbstractJType aType, @Nullable final IJExpression aSize)
   {
-    return newArray (type, lit (size));
+    // you cannot create an array whose component aType is a generic
+    return new JArray (aType.erasure (), aSize);
+  }
+
+  /**
+   * Generates {@code new T[size]}.
+   *
+   * @param aType
+   *        The aType of the array component. 'T' or {@code new T[size]}.
+   * @param nSize
+   *        Size of the array
+   * @return New {@link JArray}
+   */
+  @Nonnull
+  public static JArray newArray (@Nonnull final AbstractJType aType, @Nonnegative final int nSize)
+  {
+    return newArray (aType, lit (nSize));
   }
 
   /**
@@ -385,25 +381,25 @@ public final class JExpr
    * Escapes the given string, then surrounds it by the specified quotation
    * mark.
    *
-   * @param quote
+   * @param cQuote
    *        Quote char. Either single quote (') or double quote (")
-   * @param s
+   * @param sStr
    *        Source string to quote
    * @return Qutoed string
    */
   @Nonnull
-  public static String quotify (final char quote, @Nonnull final String s)
+  public static String quotify (final char cQuote, @Nonnull final String sStr)
   {
-    final int n = s.length ();
+    final int n = sStr.length ();
     final StringBuilder sb = new StringBuilder (n + 2);
-    sb.append (quote);
+    sb.append (cQuote);
     for (int i = 0; i < n; i++)
     {
-      final char c = s.charAt (i);
+      final char c = sStr.charAt (i);
       final int j = CHAR_ESCAPE.indexOf (c);
       if (j >= 0)
       {
-        if ((quote == '"' && c == '\'') || (quote == '\'' && c == '"'))
+        if ((cQuote == '"' && c == '\'') || (cQuote == '\'' && c == '"'))
         {
           sb.append (c);
         }
@@ -438,7 +434,7 @@ public final class JExpr
         }
       }
     }
-    sb.append (quote);
+    sb.append (cQuote);
     return sb.toString ();
   }
 
@@ -449,13 +445,13 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JStringLiteral lit (@Nonnull final String s)
+  public static JStringLiteral lit (@Nonnull final String sStr)
   {
-    return new JStringLiteral (s);
+    return new JStringLiteral (sStr);
   }
 
   /**
-   * Creates an expression directly from a source code fragment.
+   * Creates an aExpr directly from a source code fragment.
    * <p>
    * This method can be used as a short-cut to create a JExpression. For
    * example, instead of <code>_a.gt(_b)</code>, you can write it as:
@@ -464,14 +460,14 @@ public final class JExpr
    * Be warned that there is a danger in using this method, as it obfuscates the
    * object model.
    *
-   * @param source
+   * @param sSourceCode
    *        Java source code
-   * @return Direct expression
+   * @return Direct aExpr
    */
   @Nonnull
-  public static IJExpression direct (@Nonnull final String source)
+  public static IJExpression direct (@Nonnull final String sSourceCode)
   {
-    return f -> f.print ('(').print (source).print (')');
+    return f -> f.print ('(').print (sSourceCode).print (')');
   }
 
   /**
@@ -479,19 +475,19 @@ public final class JExpr
    * {@link JOp#cond(IJExpression, IJExpression, IJExpression)} for easier
    * finding.
    *
-   * @param cond
+   * @param aCond
    *        Condition
-   * @param ifTrue
+   * @param aIfTrue
    *        True condition
-   * @param ifFalse
+   * @param aIfFalse
    *        False condition
-   * @return The created expression
+   * @return The created aExpr
    */
   @Nonnull
-  public static JOpTernary cond (@Nonnull final IJExpression cond,
-                                 @Nonnull final IJExpression ifTrue,
-                                 @Nonnull final IJExpression ifFalse)
+  public static JOpTernary cond (@Nonnull final IJExpression aCond,
+                                 @Nonnull final IJExpression aIfTrue,
+                                 @Nonnull final IJExpression aIfFalse)
   {
-    return JOp.cond (cond, ifTrue, ifFalse);
+    return JOp.cond (aCond, aIfTrue, aIfFalse);
   }
 }

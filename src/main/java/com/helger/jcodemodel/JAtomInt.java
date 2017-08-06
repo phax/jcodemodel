@@ -52,9 +52,9 @@ public class JAtomInt implements IJExpression
 {
   private final int m_nValue;
 
-  protected JAtomInt (final int what)
+  protected JAtomInt (final int nWhat)
   {
-    this.m_nValue = what;
+    m_nValue = nWhat;
   }
 
   public int what ()

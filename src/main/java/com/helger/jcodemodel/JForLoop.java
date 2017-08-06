@@ -63,12 +63,12 @@ public class JForLoop implements IJStatement
   {}
 
   @Nonnull
-  public JVar init (final int mods,
+  public JVar init (final int nMods,
                     @Nonnull final AbstractJType aType,
                     @Nonnull final String sVarName,
                     @Nullable final IJExpression aInitExpr)
   {
-    final JVar aVar = new JVar (JMods.forVar (mods), aType, sVarName, aInitExpr);
+    final JVar aVar = new JVar (JMods.forVar (nMods), aType, sVarName, aInitExpr);
     m_aInitExprs.add (aVar);
     return aVar;
   }

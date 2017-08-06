@@ -143,8 +143,8 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables,
-                                             final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] aVariables,
+                                             final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }

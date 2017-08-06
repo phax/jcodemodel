@@ -53,12 +53,12 @@ public class JBreak implements IJStatement
   /**
    * {@link JBreak} constructor
    *
-   * @param label
+   * @param aLabel
    *        break label or <code>null</code>.
    */
-  public JBreak (@Nullable final JLabel label)
+  public JBreak (@Nullable final JLabel aLabel)
   {
-    m_aLabel = label;
+    m_aLabel = aLabel;
   }
 
   @Nullable

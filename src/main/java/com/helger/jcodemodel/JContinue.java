@@ -53,12 +53,12 @@ public class JContinue implements IJStatement
   /**
    * {@link JContinue} constructor.
    *
-   * @param label
+   * @param aLabel
    *        a valid label or <code>null</code>.
    */
-  public JContinue (@Nullable final JLabel label)
+  public JContinue (@Nullable final JLabel aLabel)
   {
-    m_aLabel = label;
+    m_aLabel = aLabel;
   }
 
   @Nullable

@@ -74,16 +74,16 @@ public class JAssignment implements IJExpressionStatement
    *        left
    * @param rhs
    *        right
-   * @param op
+   * @param sOperator
    *        additional operator
    */
   protected JAssignment (@Nonnull final IJAssignmentTarget lhs,
                          @Nonnull final IJExpression rhs,
-                         @Nonnull final String op)
+                         @Nonnull final String sOperator)
   {
     m_aLhs = lhs;
     m_aRhs = rhs;
-    m_sOperator = op;
+    m_sOperator = sOperator;
   }
 
   @Nonnull

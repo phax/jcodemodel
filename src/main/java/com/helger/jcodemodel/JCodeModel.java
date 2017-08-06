@@ -45,7 +45,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -101,7 +100,7 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  */
 public final class JCodeModel
 {
-  protected static boolean determinFileSystemCaseSensitivity ()
+  protected static boolean checkIfFileSystemIsCaseSensitive ()
   {
     try
     {
@@ -128,7 +127,7 @@ public final class JCodeModel
    * If the flag is true, we will consider two classes "Foo" and "foo" as a
    * collision.
    */
-  private static final boolean s_bIsCaseSensitiveFileSystem = determinFileSystemCaseSensitivity ();
+  private static final boolean s_bIsCaseSensitiveFileSystem = checkIfFileSystemIsCaseSensitive ();
 
   /**
    * @return <code>true</code> if the file system is case sensitive (*x) or
@@ -213,20 +212,14 @@ public final class JCodeModel
   /**
    * Add a package to the list of packages to be generated
    *
-   * @param name
+   * @param sName
    *        Name of the package. Use "" to indicate the root package.
    * @return Newly generated package
    */
   @Nonnull
-  public JPackage _package (@Nonnull final String name)
+  public JPackage _package (@Nonnull final String sName)
   {
-    JPackage p = m_aPackages.get (name);
-    if (p == null)
-    {
-      p = new JPackage (name, this);
-      m_aPackages.put (name, p);
-    }
-    return p;
+    return m_aPackages.computeIfAbsent (sName, k -> new JPackage (k, this));
   }
 
   @Nonnull
@@ -543,16 +536,17 @@ public final class JCodeModel
    * Generates Java source code. A convenience method for
    * <code>build(destDir,destDir,status)</code>.
    *
-   * @param destDir
+   * @param aDestDir
    *        source files and resources are generated into this directory.
-   * @param status
-   *        if non-null, progress indication will be sent to this stream.
+   * @param aStatusPS
+   *        if non-<code>null</code>, progress indication will be sent to this
+   *        stream.
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final File destDir, @Nullable final PrintStream status) throws IOException
+  public void build (@Nonnull final File aDestDir, @Nullable final PrintStream aStatusPS) throws IOException
   {
-    build (destDir, destDir, status);
+    build (aDestDir, aDestDir, aStatusPS);
   }
 
   /**
@@ -563,7 +557,7 @@ public final class JCodeModel
    *        Java source files are generated into this directory.
    * @param aResourceDir
    *        Other resource files are generated into this directory.
-   * @param aStatus
+   * @param aStatusPS
    *        Progress stream. May be <code>null</code>.
    * @throws IOException
    *         on IO error if non-null, progress indication will be sent to this
@@ -571,14 +565,14 @@ public final class JCodeModel
    */
   public void build (@Nonnull final File aSrcDir,
                      @Nonnull final File aResourceDir,
-                     @Nullable final PrintStream aStatus) throws IOException
+                     @Nullable final PrintStream aStatusPS) throws IOException
   {
     AbstractCodeWriter res = new FileCodeWriter (aResourceDir, m_aBuildingCharset, m_sBuildingNewLine);
     AbstractCodeWriter src = new FileCodeWriter (aSrcDir, m_aBuildingCharset, m_sBuildingNewLine);
-    if (aStatus != null)
+    if (aStatusPS != null)
     {
-      src = new ProgressCodeWriter (src, aStatus);
-      res = new ProgressCodeWriter (res, aStatus);
+      src = new ProgressCodeWriter (src, aStatusPS);
+      res = new ProgressCodeWriter (res, aStatusPS);
     }
     build (src, res);
   }
@@ -671,33 +665,33 @@ public final class JCodeModel
    * <p>
    * The parameter may not be primitive.
    *
-   * @param clazz
+   * @param aClazz
    *        Existing class to reference
    * @return Singleton reference to this class. Might be a
    *         {@link JReferencedClass} or a {@link JArrayClass}
    * @see #_ref(Class) for the version that handles more cases.
    */
   @Nonnull
-  public AbstractJClass ref (@Nonnull final Class <?> clazz)
+  public AbstractJClass ref (@Nonnull final Class <?> aClazz)
   {
-    JReferencedClass aRefClass = m_aRefClasses.get (clazz);
+    JReferencedClass aRefClass = m_aRefClasses.get (aClazz);
     if (aRefClass == null)
     {
-      if (clazz.isPrimitive ())
+      if (aClazz.isPrimitive ())
       {
         // Cannot return BYTE etc. because the return type does not match
-        throw new IllegalArgumentException (clazz + " is a primitive");
+        throw new IllegalArgumentException (aClazz + " is a primitive");
       }
 
-      if (clazz.isArray ())
+      if (aClazz.isArray ())
       {
-        final Class <?> aComponentType = clazz.getComponentType ();
+        final Class <?> aComponentType = aClazz.getComponentType ();
         // Component type may be a primitive!
         return new JArrayClass (this, _ref (aComponentType));
       }
 
-      aRefClass = new JReferencedClass (this, clazz);
-      m_aRefClasses.put (clazz, aRefClass);
+      aRefClass = new JReferencedClass (this, aClazz);
+      m_aRefClasses.put (aClazz, aRefClass);
     }
     return aRefClass;
   }
@@ -719,9 +713,9 @@ public final class JCodeModel
    * annotation processing stage at last. You can catch {@link ErrorTypeFound}
    * exception to achieve this.
    *
-   * @param element
+   * @param aElement
    *        Processable class to reference
-   * @param elementUtils
+   * @param aElementUtils
    *        Utility functions to handle Element-objects
    * @return Singleton reference to this class.
    * @throws ErrorTypeFound
@@ -732,11 +726,11 @@ public final class JCodeModel
    * @see #refWithErrorTypes(TypeElement,Elements)
    */
   @Nonnull
-  public JDefinedClass ref (@Nonnull final TypeElement element,
-                            @Nonnull final Elements elementUtils) throws ErrorTypeFound, CodeModelBuildingException
+  public JDefinedClass ref (@Nonnull final TypeElement aElement,
+                            @Nonnull final Elements aElementUtils) throws ErrorTypeFound, CodeModelBuildingException
   {
-    final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, elementUtils);
-    return adapter.getClass (element);
+    final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
+    return adapter.getClass (aElement);
   }
 
   /**
@@ -756,9 +750,9 @@ public final class JCodeModel
    * {@link JCodeModel#buildsErrorTypeRefs()} methods to handle error-types and
    * to prevent error-types to leak into generated code.
    *
-   * @param element
+   * @param aElement
    *        Processable class to reference
-   * @param elementUtils
+   * @param aElementUtils
    *        Utility functions to handle Element-objects
    * @return Singleton reference to this class.
    * @throws CodeModelBuildingException
@@ -769,26 +763,26 @@ public final class JCodeModel
    * @see #buildsErrorTypeRefs()
    */
   @Nonnull
-  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement element,
-                                          @Nonnull final Elements elementUtils) throws CodeModelBuildingException
+  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement,
+                                          @Nonnull final Elements aElementUtils) throws CodeModelBuildingException
   {
-    final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, elementUtils);
-    return adapter.getClassWithErrorTypes (element);
+    final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
+    return adapter.getClassWithErrorTypes (aElement);
   }
 
   /**
    * Like {@link #ref(Class)} but also handling primitive types!
    *
-   * @param c
+   * @param aClass
    *        Class to be referenced
    * @return primitive or class
    */
   @Nonnull
-  public AbstractJType _ref (@Nonnull final Class <?> c)
+  public AbstractJType _ref (@Nonnull final Class <?> aClass)
   {
-    if (c.isPrimitive ())
-      return AbstractJType.parse (this, c.getName ());
-    return ref (c);
+    if (aClass.isPrimitive ())
+      return AbstractJType.parse (this, aClass.getName ());
+    return ref (aClass);
   }
 
   /**
@@ -851,26 +845,26 @@ public final class JCodeModel
    * <p>
    * This method handles primitive types, arrays, and existing {@link Class}es.
    *
-   * @param name
+   * @param sName
    *        Type name to parse
    * @return The internal representation of the specified name. Might be a
    *         {@link JArrayClass}, a {@link JPrimitiveType}, a
    *         {@link JReferencedClass}, a {@link JNarrowedClass}
    */
   @Nonnull
-  public AbstractJType parseType (@Nonnull final String name)
+  public AbstractJType parseType (@Nonnull final String sName)
   {
     // array
-    if (name.endsWith ("[]"))
+    if (sName.endsWith ("[]"))
     {
       // Simply remove trailing "[]"
-      return parseType (name.substring (0, name.length () - 2)).array ();
+      return parseType (sName.substring (0, sName.length () - 2)).array ();
     }
 
     // try primitive type
     try
     {
-      return AbstractJType.parse (this, name);
+      return AbstractJType.parse (this, sName);
     }
     catch (final IllegalArgumentException e)
     {
@@ -878,7 +872,7 @@ public final class JCodeModel
     }
 
     // existing class
-    return new TypeNameParser (name).parseTypeName ();
+    return new TypeNameParser (sName).parseTypeName ();
   }
 
   @NotThreadSafe
@@ -887,9 +881,9 @@ public final class JCodeModel
     private final String m_sTypeName;
     private int m_nIdx;
 
-    public TypeNameParser (@Nonnull final String s)
+    public TypeNameParser (@Nonnull final String sTypeName)
     {
-      m_sTypeName = s;
+      m_sTypeName = sTypeName;
     }
 
     /**
@@ -940,8 +934,8 @@ public final class JCodeModel
           break;
       }
 
-      final AbstractJClass clazz = ref (m_sTypeName.substring (nStart, m_nIdx));
-      return _parseSuffix (clazz);
+      final AbstractJClass aClazz = ref (m_sTypeName.substring (nStart, m_nIdx));
+      return _parseSuffix (aClazz);
     }
 
     /**
@@ -949,30 +943,30 @@ public final class JCodeModel
      * array specifiers.
      */
     @Nonnull
-    private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass clazz)
+    private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass aClazz)
     {
       if (m_nIdx == m_sTypeName.length ())
       {
         // hit EOL
-        return clazz;
+        return aClazz;
       }
 
       final char ch = m_sTypeName.charAt (m_nIdx);
 
       if (ch == '<')
-        return _parseSuffix (_parseArguments (clazz));
+        return _parseSuffix (_parseArguments (aClazz));
 
       if (ch == '[')
       {
         if (m_sTypeName.charAt (m_nIdx + 1) == ']')
         {
           m_nIdx += 2;
-          return _parseSuffix (clazz.array ());
+          return _parseSuffix (aClazz.array ());
         }
         throw new IllegalArgumentException ("Expected ']' but found " + m_sTypeName.substring (m_nIdx + 1));
       }
 
-      return clazz;
+      return aClazz;
     }
 
     /**
@@ -990,7 +984,7 @@ public final class JCodeModel
      * @return the index of the character next to '>'
      */
     @Nonnull
-    private AbstractJClass _parseArguments (@Nonnull final AbstractJClass rawType)
+    private AbstractJClass _parseArguments (@Nonnull final AbstractJClass aRawType)
     {
       JCValueEnforcer.isTrue (m_sTypeName.charAt (m_nIdx) == '<', "Expected '<' at current index");
       m_nIdx++;
@@ -1004,7 +998,7 @@ public final class JCodeModel
           throw new IllegalArgumentException ("Missing '>' in " + m_sTypeName);
         final char ch = m_sTypeName.charAt (m_nIdx);
         if (ch == '>')
-          return rawType.narrow (args);
+          return aRawType.narrow (args);
 
         if (ch != ',')
           throw new IllegalArgumentException (m_sTypeName);
@@ -1048,7 +1042,7 @@ public final class JCodeModel
    * @since 3.0.0
    */
   @Nonnull
-  public Collection <AbstractJClass> getAllDontImportClasses ()
+  public Set <AbstractJClass> getAllDontImportClasses ()
   {
     return new HashSet <> (m_aDontImportClasses);
   }

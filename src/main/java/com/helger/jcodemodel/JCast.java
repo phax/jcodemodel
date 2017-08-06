@@ -63,15 +63,15 @@ public class JCast implements IJExpression
   /**
    * JCast constructor
    *
-   * @param type
+   * @param aType
    *        JType to which the expression is cast
-   * @param object
+   * @param aObject
    *        JExpression for the object upon which the cast is applied
    */
-  protected JCast (@Nonnull final AbstractJType type, @Nonnull final IJExpression object)
+  protected JCast (@Nonnull final AbstractJType aType, @Nonnull final IJExpression aObject)
   {
-    this.m_aType = type;
-    this.m_aObject = object;
+    m_aType = aType;
+    m_aObject = aObject;
   }
 
   @Nonnull

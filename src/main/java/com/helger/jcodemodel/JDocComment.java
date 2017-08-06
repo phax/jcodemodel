@@ -141,38 +141,38 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   /**
    * Append a text to a @param tag to the javadoc
    *
-   * @param param
+   * @param sParam
    *        Parameter to be added
    * @return The created {@link JCommentPart}
    */
   @Nonnull
-  public JCommentPart addParam (@Nonnull final String param)
+  public JCommentPart addParam (@Nonnull final String sParam)
   {
-    return m_aAtParams.computeIfAbsent (param, k -> new JCommentPart ());
+    return m_aAtParams.computeIfAbsent (sParam, k -> new JCommentPart ());
   }
 
   /**
    * Append a text to an @param tag.
    *
-   * @param param
+   * @param sParam
    *        Parameter to be added
    * @return The created {@link JCommentPart}
    */
-  public JCommentPart addParam (@Nonnull final JVar param)
+  public JCommentPart addParam (@Nonnull final JVar sParam)
   {
-    return addParam (param.name ());
+    return addParam (sParam.name ());
   }
 
   @Nullable
-  public JCommentPart removeParam (@Nullable final String param)
+  public JCommentPart removeParam (@Nullable final String sParam)
   {
-    return m_aAtParams.remove (param);
+    return m_aAtParams.remove (sParam);
   }
 
   @Nullable
-  public JCommentPart removeParam (@Nonnull final JVar param)
+  public JCommentPart removeParam (@Nonnull final JVar aParam)
   {
-    return removeParam (param.name ());
+    return removeParam (aParam.name ());
   }
 
   public void removeAllParams ()
@@ -181,15 +181,15 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   @Nullable
-  public JCommentPart getParam (@Nullable final String param)
+  public JCommentPart getParam (@Nullable final String sParam)
   {
-    return m_aAtParams.get (param);
+    return m_aAtParams.get (sParam);
   }
 
   @Nullable
-  public JCommentPart getParam (@Nonnull final JVar param)
+  public JCommentPart getParam (@Nonnull final JVar aParam)
   {
-    return getParam (param.name ());
+    return getParam (aParam.name ());
   }
 
   /**
@@ -219,38 +219,38 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   /**
    * add a @throws tag to the javadoc
    *
-   * @param exception
+   * @param aException
    *        Exception to be added. May not be <code>null</code>.
    * @return New {@link JCommentPart}
    */
-  public JCommentPart addThrows (@Nonnull final Class <? extends Throwable> exception)
+  public JCommentPart addThrows (@Nonnull final Class <? extends Throwable> aException)
   {
-    return addThrows (m_aOwner.ref (exception));
+    return addThrows (m_aOwner.ref (aException));
   }
 
   /**
    * add a @throws tag to the javadoc
    *
-   * @param exception
+   * @param aException
    *        Exception to be added. May not be <code>null</code>.
    * @return New {@link JCommentPart}
    */
   @Nonnull
-  public JCommentPart addThrows (@Nonnull final AbstractJClass exception)
+  public JCommentPart addThrows (@Nonnull final AbstractJClass aException)
   {
-    return m_aAtThrows.computeIfAbsent (exception, k -> new JCommentPart ());
+    return m_aAtThrows.computeIfAbsent (aException, k -> new JCommentPart ());
   }
 
   @Nullable
-  public JCommentPart removeThrows (@Nonnull final Class <? extends Throwable> exception)
+  public JCommentPart removeThrows (@Nonnull final Class <? extends Throwable> aException)
   {
-    return removeThrows (m_aOwner.ref (exception));
+    return removeThrows (m_aOwner.ref (aException));
   }
 
   @Nullable
-  public JCommentPart removeThrows (@Nullable final AbstractJClass exception)
+  public JCommentPart removeThrows (@Nullable final AbstractJClass aException)
   {
-    return m_aAtThrows.remove (exception);
+    return m_aAtThrows.remove (aException);
   }
 
   public void removeAllThrows ()
@@ -259,15 +259,15 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   @Nullable
-  public JCommentPart getThrows (@Nonnull final Class <? extends Throwable> exception)
+  public JCommentPart getThrows (@Nonnull final Class <? extends Throwable> aException)
   {
-    return getThrows (m_aOwner.ref (exception));
+    return getThrows (m_aOwner.ref (aException));
   }
 
   @Nullable
-  public JCommentPart getThrows (@Nullable final AbstractJClass exception)
+  public JCommentPart getThrows (@Nullable final AbstractJClass aException)
   {
-    return m_aAtThrows.get (exception);
+    return m_aAtThrows.get (aException);
   }
 
   @Nonnull

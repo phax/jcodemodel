@@ -52,9 +52,9 @@ public class JCatchBlock implements IJGenerable
   private JVar m_aVar;
   private final JBlock m_aBody = new JBlock ();
 
-  protected JCatchBlock (@Nonnull final AbstractJClass exception)
+  protected JCatchBlock (@Nonnull final AbstractJClass aException)
   {
-    this.m_aException = exception;
+    m_aException = aException;
   }
 
   @Nonnull
@@ -64,11 +64,11 @@ public class JCatchBlock implements IJGenerable
   }
 
   @Nonnull
-  public JVar param (final String name)
+  public JVar param (final String sName)
   {
     if (m_aVar != null)
       throw new IllegalStateException ("A variable is already present!");
-    m_aVar = new JVar (JMods.forVar (JMod.FINAL), m_aException, name, null);
+    m_aVar = new JVar (JMods.forVar (JMod.FINAL), m_aException, sName, null);
     return m_aVar;
   }
 

@@ -74,16 +74,16 @@ public class JErrorClass extends AbstractJClass
   private final String m_sMessage;
   private final String m_sName;
 
-  protected JErrorClass (@Nonnull final JCodeModel _owner, @Nonnull final String sMessage, @Nullable final String sName)
+  protected JErrorClass (@Nonnull final JCodeModel aOwner, @Nonnull final String sMessage)
   {
-    super (_owner);
-    m_sMessage = sMessage;
-    m_sName = sName;
+    this (aOwner, sMessage, null);
   }
 
-  protected JErrorClass (@Nonnull final JCodeModel _owner, @Nonnull final String sMessage)
+  protected JErrorClass (@Nonnull final JCodeModel aOwner, @Nonnull final String sMessage, @Nullable final String sName)
   {
-    this (_owner, sMessage, null);
+    super (aOwner);
+    m_sMessage = sMessage;
+    m_sName = sName;
   }
 
   @Override
@@ -147,8 +147,8 @@ public class JErrorClass extends AbstractJClass
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables,
-                                             final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
+                                             @Nonnull final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }

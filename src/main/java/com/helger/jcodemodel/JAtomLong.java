@@ -54,9 +54,9 @@ public class JAtomLong implements IJExpression
 
   private final long m_nValue;
 
-  protected JAtomLong (final long what)
+  protected JAtomLong (final long nWhat)
   {
-    m_nValue = what;
+    m_nValue = nWhat;
   }
 
   public long what ()

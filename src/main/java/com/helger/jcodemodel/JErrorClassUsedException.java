@@ -48,8 +48,8 @@ package com.helger.jcodemodel;
  */
 public class JErrorClassUsedException extends UnsupportedOperationException
 {
-  JErrorClassUsedException (final String message)
+  JErrorClassUsedException (final String sMessage)
   {
-    super (message);
+    super (sMessage);
   }
 }

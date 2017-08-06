@@ -69,23 +69,23 @@ public class JCommentPart extends ArrayList <Object>
   /**
    * Appends a new value.
    *
-   * @param o
+   * @param aValue
    *        If the value is {@link AbstractJType} it will be printed as a @link
    *        tag. Otherwise it will be converted to String via
    *        {@link Object#toString()}.
    * @return this for chaining
    */
   @Nonnull
-  public JCommentPart append (@Nullable final Object o)
+  public JCommentPart append (@Nullable final Object aValue)
   {
-    add (o);
+    add (aValue);
     return this;
   }
 
   @Override
-  public boolean add (@Nullable final Object o)
+  public boolean add (@Nullable final Object aValue)
   {
-    _flattenAppend (o);
+    _flattenAppend (aValue);
     return true;
   }
 
@@ -113,10 +113,10 @@ public class JCommentPart extends ArrayList <Object>
    *
    * @param f
    *        Formatter to use
-   * @param indent
+   * @param sIndent
    *        Indentation to use
    */
-  protected void format (@Nonnull final JFormatter f, final String indent)
+  protected void format (@Nonnull final JFormatter f, final String sIndent)
   {
     if (!f.isPrinting ())
     {
@@ -129,7 +129,7 @@ public class JCommentPart extends ArrayList <Object>
     }
 
     if (!isEmpty ())
-      f.print (indent);
+      f.print (sIndent);
 
     final Iterator <Object> itr = iterator ();
     while (itr.hasNext ())
@@ -146,7 +146,7 @@ public class JCommentPart extends ArrayList <Object>
           if (line.length () > 0)
             f.print (_escape (line));
           s = s.substring (idx + 1);
-          f.newline ().print (indent);
+          f.newline ().print (sIndent);
         }
         if (s.length () != 0)
           f.print (_escape (s));

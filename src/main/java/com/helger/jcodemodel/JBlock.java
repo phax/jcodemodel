@@ -86,13 +86,6 @@ public class JBlock implements IJGenerable, IJStatement
   public JBlock ()
   {}
 
-  @Deprecated
-  protected JBlock (final boolean bBracesRequired, final boolean bIndentRequired)
-  {
-    bracesRequired (bBracesRequired);
-    indentRequired (bIndentRequired);
-  }
-
   /**
    * @return <code>true</code> if this is a virtual block never emitting braces
    *         or indent. The default is {@link #DEFAULT_VIRTUAL_BLOCK}
@@ -104,7 +97,7 @@ public class JBlock implements IJGenerable, IJStatement
 
   /**
    * Mark this block virtual or not. Default is <code>false</code>. Virtual
-   * blocks NEVER have braces and are never indented!
+   * blocks NEVER have braces and are NEVER indented!
    *
    * @param bVirtualBlock
    *        <code>true</code> to make this block a virtual block.
@@ -219,7 +212,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnegative
   public int pos (@Nonnegative final int nNewPos)
   {
-    JCValueEnforcer.isTrue (nNewPos <= m_aContentList.size () && nNewPos >= 0,
+    JCValueEnforcer.isTrue (nNewPos >= 0 && nNewPos <= m_aContentList.size (),
                             () -> "Illegal position provided: " + nNewPos);
 
     final int nOldPos = m_nPos;
@@ -249,75 +242,75 @@ public class JBlock implements IJGenerable, IJStatement
    * Adds a local variable declaration to this block. This enforces braces and
    * indentation to be enabled!
    *
-   * @param type
+   * @param aType
    *        JType of the variable
-   * @param name
+   * @param sName
    *        Name of the variable
    * @return Newly generated {@link JVar}
    */
   @Nonnull
-  public JVar decl (@Nonnull final AbstractJType type, @Nonnull final String name)
+  public JVar decl (@Nonnull final AbstractJType aType, @Nonnull final String sName)
   {
-    return decl (JMod.NONE, type, name, null);
+    return decl (JMod.NONE, aType, sName, null);
   }
 
   /**
    * Adds a local variable declaration to this block. This enforces braces and
    * indentation to be enabled!
    *
-   * @param mods
+   * @param nMods
    *        Modifiers for the variable
-   * @param type
+   * @param aType
    *        JType of the variable
-   * @param name
+   * @param sName
    *        Name of the variable
    * @return Newly generated {@link JVar}
    */
   @Nonnull
-  public JVar decl (final int mods, @Nonnull final AbstractJType type, @Nonnull final String name)
+  public JVar decl (final int nMods, @Nonnull final AbstractJType aType, @Nonnull final String sName)
   {
-    return decl (mods, type, name, null);
+    return decl (nMods, aType, sName, null);
   }
 
   /**
    * Adds a local variable declaration to this block. This enforces braces and
    * indentation to be enabled!
    *
-   * @param type
+   * @param aType
    *        JType of the variable
-   * @param name
+   * @param sName
    *        Name of the variable
-   * @param init
+   * @param aInit
    *        Initialization expression for this variable. May be null.
    * @return Newly generated {@link JVar}
    */
   @Nonnull
-  public JVar decl (@Nonnull final AbstractJType type, @Nonnull final String name, @Nullable final IJExpression init)
+  public JVar decl (@Nonnull final AbstractJType aType, @Nonnull final String sName, @Nullable final IJExpression aInit)
   {
-    return decl (JMod.NONE, type, name, init);
+    return decl (JMod.NONE, aType, sName, aInit);
   }
 
   /**
    * Adds a local variable declaration to this block. This enforces braces and
    * indentation to be enabled!
    *
-   * @param mods
+   * @param nMods
    *        Modifiers for the variable
-   * @param type
+   * @param aType
    *        JType of the variable
-   * @param name
+   * @param sName
    *        Name of the variable
-   * @param init
+   * @param aInit
    *        Initialization expression for this variable. May be null.
    * @return Newly generated {@link JVar}
    */
   @Nonnull
-  public JVar decl (final int mods,
-                    @Nonnull final AbstractJType type,
-                    @Nonnull final String name,
-                    @Nullable final IJExpression init)
+  public JVar decl (final int nMods,
+                    @Nonnull final AbstractJType aType,
+                    @Nonnull final String sName,
+                    @Nullable final IJExpression aInit)
   {
-    final JVar v = new JVar (JMods.forVar (mods), type, name, init);
+    final JVar v = new JVar (JMods.forVar (nMods), aType, sName, aInit);
     internalInsert (v);
     return v;
   }
@@ -326,122 +319,122 @@ public class JBlock implements IJGenerable, IJStatement
    * Insert a variable before another element of this block. This enforces
    * braces and indentation to be enabled!
    *
-   * @param var
+   * @param aVar
    *        The variable to be inserted. May not be <code>null</code>.
-   * @param before
+   * @param aBefore
    *        The object before the variable should be inserted. If the passed
    *        object is not contained in this block, an
    *        {@link IndexOutOfBoundsException} is thrown.
    * @return this for chaining
    */
   @Nonnull
-  public JBlock insertBefore (@Nonnull final JVar var, @Nonnull final Object before)
+  public JBlock insertBefore (@Nonnull final JVar aVar, @Nonnull final Object aBefore)
   {
-    final int i = m_aContentList.indexOf (before);
-    internalInsertAt (i, var);
+    final int i = m_aContentList.indexOf (aBefore);
+    internalInsertAt (i, aVar);
     return this;
   }
 
   /**
    * Creates an assignment statement and adds it to this block.
    *
-   * @param lhs
+   * @param aLhs
    *        Assignable variable or field for left hand side of expression
-   * @param exp
+   * @param aExpr
    *        Right hand side expression
    * @return this for chaining
    */
   @Nonnull
-  public JBlock assign (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression exp)
+  public JBlock assign (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
   {
-    internalInsert (JExpr.assign (lhs, exp));
+    internalInsert (JExpr.assign (aLhs, aExpr));
     return this;
   }
 
   @Nonnull
-  public JBlock assignPlus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression exp)
+  public JBlock assignPlus (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
   {
-    internalInsert (JExpr.assignPlus (lhs, exp));
+    internalInsert (JExpr.assignPlus (aLhs, aExpr));
     return this;
   }
 
   @Nonnull
-  public JBlock assignMinus (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression exp)
+  public JBlock assignMinus (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
   {
-    internalInsert (JExpr.assignMinus (lhs, exp));
+    internalInsert (JExpr.assignMinus (aLhs, aExpr));
     return this;
   }
 
   @Nonnull
-  public JBlock assignTimes (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression exp)
+  public JBlock assignTimes (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
   {
-    internalInsert (JExpr.assignTimes (lhs, exp));
+    internalInsert (JExpr.assignTimes (aLhs, aExpr));
     return this;
   }
 
   @Nonnull
-  public JBlock assignDivide (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression exp)
+  public JBlock assignDivide (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
   {
-    internalInsert (JExpr.assignDivide (lhs, exp));
+    internalInsert (JExpr.assignDivide (aLhs, aExpr));
     return this;
   }
 
   /**
    * Creates an invocation statement and adds it to this block.
    *
-   * @param expr
+   * @param aExpr
    *        {@link IJExpression} evaluating to the class or object upon which
    *        the named method will be invoked
-   * @param method
+   * @param sMethod
    *        Name of method to invoke
    * @return Newly generated {@link JInvocation}
    */
   @Nonnull
-  public JInvocation invoke (@Nonnull final IJExpression expr, @Nonnull final String method)
+  public JInvocation invoke (@Nonnull final IJExpression aExpr, @Nonnull final String sMethod)
   {
-    return internalInsert (new JInvocation (expr, method));
+    return internalInsert (new JInvocation (aExpr, sMethod));
   }
 
   /**
    * Creates an invocation statement and adds it to this block.
    *
-   * @param method
+   * @param sMethod
    *        Name of method to invoke on this
    * @return Newly generated {@link JInvocation}
    */
   @Nonnull
-  public JInvocation invokeThis (@Nonnull final String method)
+  public JInvocation invokeThis (@Nonnull final String sMethod)
   {
-    return invoke (JExpr._this (), method);
+    return invoke (JExpr._this (), sMethod);
   }
 
   /**
    * Creates an invocation statement and adds it to this block.
    *
-   * @param expr
+   * @param aExpr
    *        {@link IJExpression} evaluating to the class or object upon which
    *        the method will be invoked
-   * @param method
+   * @param aMethod
    *        {@link JMethod} to invoke
    * @return Newly generated {@link JInvocation}
    */
   @Nonnull
-  public JInvocation invoke (@Nonnull final IJExpression expr, @Nonnull final JMethod method)
+  public JInvocation invoke (@Nonnull final IJExpression aExpr, @Nonnull final JMethod aMethod)
   {
-    return internalInsert (new JInvocation (expr, method));
+    return internalInsert (new JInvocation (aExpr, aMethod));
   }
 
   /**
    * Creates an invocation statement and adds it to this block.
    *
-   * @param method
+   * @param aMethod
    *        {@link JMethod} to invoke on this
    * @return Newly generated {@link JInvocation}
    */
   @Nonnull
-  public JInvocation invokeThis (@Nonnull final JMethod method)
+  public JInvocation invokeThis (@Nonnull final JMethod aMethod)
   {
-    return invoke (JExpr._this (), method);
+    return invoke (JExpr._this (), aMethod);
   }
 
   /**
@@ -486,28 +479,28 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   @Nonnull
-  public JInvocation _new (@Nonnull final AbstractJClass c)
+  public JInvocation _new (@Nonnull final AbstractJClass aClass)
   {
-    return internalInsert (new JInvocation (c));
+    return internalInsert (new JInvocation (aClass));
   }
 
   @Nonnull
-  public JInvocation _new (@Nonnull final AbstractJType t)
+  public JInvocation _new (@Nonnull final AbstractJType aType)
   {
-    return internalInsert (new JInvocation (t));
+    return internalInsert (new JInvocation (aType));
   }
 
   /**
    * Adds an arbitrary statement to this block
    *
-   * @param s
+   * @param aStmt
    *        {@link IJStatement} to be added. May not be <code>null</code>.
    * @return this for chaining
    */
   @Nonnull
-  public JBlock add (@Nonnull final IJStatement s)
+  public JBlock add (@Nonnull final IJStatement aStmt)
   {
-    internalInsert (s);
+    internalInsert (aStmt);
     return this;
   }
 
@@ -607,40 +600,40 @@ public class JBlock implements IJGenerable, IJStatement
   /**
    * Create a While statement and add it to this block
    *
-   * @param test
+   * @param aTestExpr
    *        Test expression for the while statement
    * @return Newly generated {@link JWhileLoop} statement
    */
   @Nonnull
-  public JWhileLoop _while (@Nonnull final IJExpression test)
+  public JWhileLoop _while (@Nonnull final IJExpression aTestExpr)
   {
-    return internalInsert (new JWhileLoop (test));
+    return internalInsert (new JWhileLoop (aTestExpr));
   }
 
   /**
    * Create a switch/case statement and add it to this block
    *
-   * @param test
+   * @param aTestExpr
    *        Test expression for the switch statement
    * @return Newly created {@link JSwitch}
    */
   @Nonnull
-  public JSwitch _switch (@Nonnull final IJExpression test)
+  public JSwitch _switch (@Nonnull final IJExpression aTestExpr)
   {
-    return internalInsert (new JSwitch (test));
+    return internalInsert (new JSwitch (aTestExpr));
   }
 
   /**
    * Create a Do statement and add it to this block
    *
-   * @param test
+   * @param aTestExpr
    *        Test expression for the while statement
    * @return Newly generated {@link JDoLoop} statement
    */
   @Nonnull
-  public JDoLoop _do (@Nonnull final IJExpression test)
+  public JDoLoop _do (@Nonnull final IJExpression aTestExpr)
   {
-    return internalInsert (new JDoLoop (test));
+    return internalInsert (new JDoLoop (aTestExpr));
   }
 
   /**
@@ -719,14 +712,14 @@ public class JBlock implements IJGenerable, IJStatement
    * Create a label, which can be referenced from <code>continue</code> and
    * <code>break</code> statements.
    *
-   * @param name
+   * @param sName
    *        Label name
    * @return Newly created {@link JLabel}
    */
   @Nonnull
-  public JLabel label (@Nonnull final String name)
+  public JLabel label (@Nonnull final String sName)
   {
-    final JLabel l = new JLabel (name);
+    final JLabel l = new JLabel (sName);
     internalInsert (l);
     return l;
   }

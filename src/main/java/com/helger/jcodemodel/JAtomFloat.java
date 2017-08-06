@@ -55,30 +55,30 @@ public class JAtomFloat implements IJExpression
   public static final String JAVA_LANG_FLOAT_NAN = "java.lang.Float.NaN";
   public static final String SUFFIX_FLOAT = "F";
 
-  private final float m_aWhat;
+  private final float m_fWhat;
 
-  protected JAtomFloat (final float what)
+  protected JAtomFloat (final float fWhat)
   {
-    this.m_aWhat = what;
+    m_fWhat = fWhat;
   }
 
   public float what ()
   {
-    return m_aWhat;
+    return m_fWhat;
   }
 
   public void generate (@Nonnull final JFormatter f)
   {
-    if (m_aWhat == Float.NEGATIVE_INFINITY)
+    if (m_fWhat == Float.NEGATIVE_INFINITY)
       f.print (JAVA_LANG_FLOAT_NEGATIVE_INFINITY);
     else
-      if (m_aWhat == Float.POSITIVE_INFINITY)
+      if (m_fWhat == Float.POSITIVE_INFINITY)
         f.print (JAVA_LANG_FLOAT_POSITIVE_INFINITY);
       else
-        if (Float.isNaN (m_aWhat))
+        if (Float.isNaN (m_fWhat))
           f.print (JAVA_LANG_FLOAT_NAN);
         else
-          f.print (Float.toString (m_aWhat) + SUFFIX_FLOAT);
+          f.print (Float.toString (m_fWhat) + SUFFIX_FLOAT);
   }
 
   @Override
@@ -89,12 +89,12 @@ public class JAtomFloat implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtomFloat rhs = (JAtomFloat) o;
-    return isEqual (m_aWhat, rhs.m_aWhat);
+    return isEqual (m_fWhat, rhs.m_fWhat);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, Float.valueOf (m_aWhat));
+    return getHashCode (this, Float.valueOf (m_fWhat));
   }
 }

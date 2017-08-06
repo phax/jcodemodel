@@ -51,9 +51,9 @@ public class JClassAlreadyExistsException extends Exception
 {
   private final AbstractJClass m_aExisting;
 
-  public JClassAlreadyExistsException (@Nonnull final AbstractJClass existing)
+  public JClassAlreadyExistsException (@Nonnull final AbstractJClass aExisting)
   {
-    m_aExisting = existing;
+    m_aExisting = aExisting;
   }
 
   /**
