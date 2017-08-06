@@ -95,21 +95,21 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   /**
    * Invokes a method on an object.
    *
-   * @param object
+   * @param aObject
    *        JExpression for the object upon which the named method will be
    *        invoked, or null if none
-   * @param name
+   * @param sName
    *        Name of method to invoke
    */
-  protected JInvocation (@Nullable final IJExpression object, @Nonnull final String name)
+  protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final String sName)
   {
     // Not possible to determine an owner :(
-    this (null, object, name);
+    this (null, aObject, sName);
   }
 
-  protected JInvocation (@Nullable final IJExpression object, @Nonnull final JMethod method)
+  protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final JMethod aMethod)
   {
-    this (method.owner (), object, method);
+    this (aMethod.owner (), aObject, aMethod);
   }
 
   /**
@@ -138,14 +138,14 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     this (aType.owner (), aType, aMethod);
   }
 
-  private JInvocation (@Nullable final JCodeModel owner,
-                       @Nullable final IJGenerable object,
+  private JInvocation (@Nullable final JCodeModel aOwner,
+                       @Nullable final IJGenerable aObject,
                        @Nonnull final String sName)
   {
     JCValueEnforcer.notNull (sName, "Name");
     JCValueEnforcer.isFalse (sName.indexOf ('.') >= 0, () -> "method name contains '.': " + sName);
-    m_aOwner = owner;
-    m_aObject = object;
+    m_aOwner = aOwner;
+    m_aObject = aObject;
     m_sMethodName = sName;
     m_aMethod = null;
     m_bIsConstructor = false;
@@ -336,9 +336,9 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   }
 
   @Nonnull
-  public JInvocation narrow (@Nonnull final String name)
+  public JInvocation narrow (@Nonnull final String sName)
   {
-    final JTypeVar v = new JTypeVar (_narrowOwner (), name);
+    final JTypeVar v = new JTypeVar (_narrowOwner (), sName);
     if (m_aTypeVariables == null)
       m_aTypeVariables = new ArrayList <> (3);
     m_aTypeVariables.add (v);
@@ -346,15 +346,15 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   }
 
   @Nonnull
-  public JInvocation narrow (@Nonnull final Class <?> bound)
+  public JInvocation narrow (@Nonnull final Class <?> aBound)
   {
-    return narrow (_narrowOwner ().ref (bound));
+    return narrow (_narrowOwner ().ref (aBound));
   }
 
   @Nonnull
-  public JInvocation narrow (@Nonnull final AbstractJClass bound)
+  public JInvocation narrow (@Nonnull final AbstractJClass aBound)
   {
-    final JTypeVarClass v = new JTypeVarClass (bound);
+    final JTypeVarClass v = new JTypeVarClass (aBound);
     if (m_aTypeVariables == null)
       m_aTypeVariables = new ArrayList <> (3);
     m_aTypeVariables.add (v);

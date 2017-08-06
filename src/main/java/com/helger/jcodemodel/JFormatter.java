@@ -91,7 +91,7 @@ public class JFormatter implements Closeable
      * @return <code>true</code> if the short name is ambiguous in context of
      *         enclosingClass and classes with this name can't be imported.
      */
-    public boolean isAmbiguousIn (final JDefinedClass aEnclosingClass)
+    public boolean isAmbiguousIn (@Nonnull final JDefinedClass aEnclosingClass)
     {
       // more than one type with the same name
       if (m_aReferencedClasses.size () > 1)
@@ -134,18 +134,18 @@ public class JFormatter implements Closeable
       return false;
     }
 
-    public boolean addReferencedType (@Nonnull final AbstractJClass clazz)
+    public boolean addReferencedType (@Nonnull final AbstractJClass aClazz)
     {
       if (false)
-        System.out.println ("Adding referenced type[" + m_sName + "]: " + clazz.fullName ());
-      if (m_aReferencedClasses.contains (clazz))
+        System.out.println ("Adding referenced type[" + m_sName + "]: " + aClazz.fullName ());
+      if (m_aReferencedClasses.contains (aClazz))
         return false;
-      return m_aReferencedClasses.add (clazz);
+      return m_aReferencedClasses.add (aClazz);
     }
 
-    public boolean containsReferencedType (@Nullable final AbstractJClass clazz)
+    public boolean containsReferencedType (@Nullable final AbstractJClass aClazz)
     {
-      return m_aReferencedClasses.contains (clazz);
+      return m_aReferencedClasses.contains (aClazz);
     }
 
     @Nonnull
@@ -261,7 +261,7 @@ public class JFormatter implements Closeable
 
       if (m_aDontImportClasses.contains (aRealClass))
       {
-        if (m_bImportDebug)
+        if (m_bDebugImport)
           System.out.println ("The class '" + aRealClass.fullName () + "' should not be imported!");
         return false;
       }
@@ -269,19 +269,19 @@ public class JFormatter implements Closeable
       // Avoid importing 2 classes with the same class name
       if (!m_aNames.add (aRealClass.name ()))
       {
-        if (m_bImportDebug)
+        if (m_bDebugImport)
           System.out.println ("A class with local name '" + aRealClass.name () + "' is already in the import list.");
         return false;
       }
 
       if (!m_aClasses.add (aRealClass))
       {
-        if (m_bImportDebug)
+        if (m_bDebugImport)
           System.out.println ("The class '" + aRealClass.fullName () + "' is already in the import list.");
         return false;
       }
 
-      if (m_bImportDebug)
+      if (m_bDebugImport)
         System.out.println ("Added import class '" + aClass.fullName () + "'");
       return true;
     }
@@ -363,6 +363,8 @@ public class JFormatter implements Closeable
    */
   private boolean m_bContainsErrorTypes;
 
+  private boolean m_bDebugImport = false;
+
   /**
    * Creates a formatter with default incremental indentations of four spaces.
    *
@@ -435,6 +437,16 @@ public class JFormatter implements Closeable
     this (aWriter instanceof SourcePrintWriter ? (SourcePrintWriter) aWriter
                                                : new SourcePrintWriter (aWriter, sNewLine),
           sIndentSpace);
+  }
+
+  public void setDebugImports (final boolean bDebug)
+  {
+    m_bDebugImport = bDebug;
+  }
+
+  public boolean isDebugImports ()
+  {
+    return m_bDebugImport;
   }
 
   /**
@@ -585,18 +597,18 @@ public class JFormatter implements Closeable
   /**
    * Print a String into the stream. Indentation happens automatically.
    *
-   * @param s
+   * @param sStr
    *        the String
    * @return this
    */
   @Nonnull
-  public JFormatter print (@Nonnull final String s)
+  public JFormatter print (@Nonnull final String sStr)
   {
-    if (m_eMode == EMode.PRINTING && s.length () > 0)
+    if (m_eMode == EMode.PRINTING && sStr.length () > 0)
     {
-      _spaceIfNeeded (s.charAt (0));
-      m_aPW.print (s);
-      m_cLastChar = s.charAt (s.length () - 1);
+      _spaceIfNeeded (sStr.charAt (0));
+      m_aPW.print (sStr);
+      m_cLastChar = sStr.charAt (sStr.length () - 1);
     }
     return this;
   }
@@ -675,29 +687,29 @@ public class JFormatter implements Closeable
   /**
    * Print an identifier
    *
-   * @param id
+   * @param sID
    *        identifier
    * @return this for chaining
    */
   @Nonnull
-  public JFormatter id (@Nonnull final String id)
+  public JFormatter id (@Nonnull final String sID)
   {
     switch (m_eMode)
     {
       case COLLECTING:
         // see if there is a type name that collides with this id
-        NameUsage aUsages = m_aCollectedReferences.get (id);
+        NameUsage aUsages = m_aCollectedReferences.get (sID);
         if (aUsages == null)
         {
           // not a type, but we need to create a place holder to
           // see if there might be a collision with a type
-          aUsages = new NameUsage (id);
-          m_aCollectedReferences.put (id, aUsages);
+          aUsages = new NameUsage (sID);
+          m_aCollectedReferences.put (sID, aUsages);
         }
         aUsages.setVariableName ();
         break;
       case PRINTING:
-        print (id);
+        print (sID);
         break;
     }
     return this;
@@ -776,14 +788,14 @@ public class JFormatter implements Closeable
   /**
    * Cause the JStatement to generate source for itself
    *
-   * @param s
+   * @param aStmt
    *        the JStatement object
    * @return this for chaining
    */
   @Nonnull
-  public JFormatter statement (@Nonnull final IJStatement s)
+  public JFormatter statement (@Nonnull final IJStatement aStmt)
   {
-    s.state (this);
+    aStmt.state (this);
     return this;
   }
 
@@ -791,23 +803,21 @@ public class JFormatter implements Closeable
    * Cause the {@link JVar} to generate source for itself. With annotations,
    * type, name and init expression.
    *
-   * @param v
+   * @param aVar
    *        the {@link JVar} object
    * @return this for chaining
    */
   @Nonnull
-  public JFormatter var (@Nonnull final JVar v)
+  public JFormatter var (@Nonnull final JVar aVar)
   {
-    v.bind (this);
+    aVar.bind (this);
     return this;
   }
-
-  private final boolean m_bImportDebug = false;
 
   private boolean _collectCausesNoAmbiguities (@Nonnull final AbstractJClass aReference,
                                                @Nonnull final JDefinedClass aClassToBeWritten)
   {
-    if (m_bImportDebug)
+    if (m_bDebugImport)
       System.out.println ("_collectCausesNoAmbiguities(" +
                           aReference.fullName () +
                           ", " +
@@ -834,7 +844,7 @@ public class JFormatter implements Closeable
   private boolean _collectShouldBeImported (@Nonnull final AbstractJClass aReference,
                                             @Nonnull final JDefinedClass aClassToBeWritten)
   {
-    if (m_bImportDebug)
+    if (m_bDebugImport)
       System.out.println ("_collectShouldBeImported(" +
                           aReference.fullName () +
                           ", " +
@@ -888,7 +898,7 @@ public class JFormatter implements Closeable
   private void _collectImportOuterClassIfCausesNoAmbiguities (@Nonnull final AbstractJClass aReference,
                                                               @Nonnull final JDefinedClass aClassToBeWritten)
   {
-    if (m_bImportDebug)
+    if (m_bDebugImport)
       System.out.println ("_collectImportOuterClassIfCausesNoAmbiguities(" +
                           aReference.fullName () +
                           ", " +
@@ -923,7 +933,7 @@ public class JFormatter implements Closeable
   private boolean _printIsImplicitlyImported (@Nonnull final AbstractJClass aReference,
                                               @Nonnull final AbstractJClass aClassToBeWrittem)
   {
-    if (m_bImportDebug)
+    if (m_bDebugImport)
       System.out.println ("_printIsImplicitlyImported(" +
                           aReference.fullName () +
                           ", " +
@@ -1006,7 +1016,7 @@ public class JFormatter implements Closeable
     m_aImportedClasses.clear ();
     declaration (aClassToBeWritten);
 
-    if (m_bImportDebug)
+    if (m_bDebugImport)
       System.out.println ("***Start collecting***");
 
     // the class itself that we will be generating is always accessible and must
@@ -1040,7 +1050,7 @@ public class JFormatter implements Closeable
       }
     }
 
-    if (m_bImportDebug)
+    if (m_bDebugImport)
       System.out.println ("***Finished collecting***");
 
     // then print the declaration
@@ -1071,7 +1081,7 @@ public class JFormatter implements Closeable
         print ("import").print (aImportClass.fullName ()).print (';').newline ();
         bAnyImport = true;
 
-        if (m_bImportDebug)
+        if (m_bDebugImport)
           System.out.println ("  import " + aImportClass.fullName ());
       }
     }
@@ -1096,12 +1106,12 @@ public class JFormatter implements Closeable
         m_aImportedClasses.addDontImportClass (aClass);
   }
 
-  public static boolean containsErrorTypes (@Nonnull final JDefinedClass c)
+  public static boolean containsErrorTypes (@Nonnull final JDefinedClass aClass)
   {
     final JFormatter aFormatter = new JFormatter (NullWriter.getInstance ());
     aFormatter.m_eMode = EMode.FIND_ERROR_TYPES;
     aFormatter.m_bContainsErrorTypes = false;
-    aFormatter.declaration (c);
+    aFormatter.declaration (aClass);
     return aFormatter.m_bContainsErrorTypes;
   }
 }
