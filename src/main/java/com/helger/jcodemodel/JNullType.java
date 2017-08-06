@@ -93,7 +93,7 @@ public final class JNullType extends AbstractJClass
   @Nonnull
   public Iterator <AbstractJClass> _implements ()
   {
-    return Collections.<AbstractJClass> emptyList ().iterator ();
+    return Collections.emptyIterator ();
   }
 
   @Override
@@ -110,8 +110,8 @@ public final class JNullType extends AbstractJClass
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] variables,
-                                             final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
+                                             @Nonnull final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }

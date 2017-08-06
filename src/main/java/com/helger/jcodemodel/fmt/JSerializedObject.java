@@ -46,6 +46,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.WillNotClose;
 
 import com.helger.jcodemodel.AbstractJResourceFile;
 
@@ -58,24 +59,29 @@ public class JSerializedObject extends AbstractJResourceFile
   private final Serializable m_aObj;
 
   /**
-   * @param name
+   * @param sName
    *        Name
-   * @param obj
+   * @param aObj
    *        Serializable object
    * @throws IOException
    *         If the serialization fails, this exception is thrown
    */
-  public JSerializedObject (@Nonnull final String name, @Nonnull final Serializable obj) throws IOException
+  public JSerializedObject (@Nonnull final String sName, @Nonnull final Serializable aObj) throws IOException
   {
-    super (name);
-    m_aObj = obj;
+    super (sName);
+    m_aObj = aObj;
   }
 
   @Override
-  protected void build (@Nonnull final OutputStream os) throws IOException
+  protected void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
-    // serialize the obj into a ByteArrayOutputStream
-    try (final ObjectOutputStream oos = new ObjectOutputStream (os))
+    // serialize the obj into an OutputStream
+    try (final ObjectOutputStream oos = new ObjectOutputStream (aOS)
+    {
+      @Override
+      public void close ()
+      {}
+    })
     {
       oos.writeObject (m_aObj);
     }

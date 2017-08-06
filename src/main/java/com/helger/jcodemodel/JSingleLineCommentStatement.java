@@ -84,7 +84,7 @@ public class JSingleLineCommentStatement implements IJStatement
    *        The new comment string. May not be <code>null</code> but maybe
    *        empty.
    */
-  public void comment (@Nonnull final String sComment)
+  public final void comment (@Nonnull final String sComment)
   {
     JCValueEnforcer.notNull (sComment, "Comment");
     m_sComment = sComment;

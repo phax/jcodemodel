@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.JCSecureLoader;
 
@@ -72,7 +73,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
   /**
    * The annotation that we are writing.
    */
-  private final Class <A> m_aAnnotation;
+  private final Class <A> m_aAnnotationType;
 
   /**
    * The type of the writer.
@@ -84,11 +85,11 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
    */
   private Map <String, JAnnotationArrayMember> m_aArrays;
 
-  protected TypedAnnotationWriter (final Class <A> annotation, final Class <W> writer, final JAnnotationUse use)
+  protected TypedAnnotationWriter (final Class <A> aAnnotation, final Class <W> aWriterType, final JAnnotationUse aUse)
   {
-    m_aAnnotation = annotation;
-    m_aWriterType = writer;
-    m_aUse = use;
+    m_aAnnotationType = aAnnotation;
+    m_aWriterType = aWriterType;
+    m_aUse = aUse;
   }
 
   public JAnnotationUse getAnnotationUse ()
@@ -98,16 +99,16 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
 
   public Class <A> getAnnotationType ()
   {
-    return m_aAnnotation;
+    return m_aAnnotationType;
   }
 
-  public Object invoke (final Object proxy, final Method method, final Object [] args) throws Throwable
+  public Object invoke (final Object aProxy, final Method aMethod, final Object [] aArgs) throws Throwable
   {
-    if (method.getDeclaringClass () == IJAnnotationWriter.class)
+    if (aMethod.getDeclaringClass () == IJAnnotationWriter.class)
     {
       try
       {
-        return method.invoke (this, args);
+        return aMethod.invoke (this, aArgs);
       }
       catch (final InvocationTargetException e)
       {
@@ -115,26 +116,26 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
       }
     }
 
-    final String name = method.getName ();
+    final String name = aMethod.getName ();
     Object arg = null;
-    if (args != null && args.length > 0)
-      arg = args[0];
+    if (aArgs != null && aArgs.length > 0)
+      arg = aArgs[0];
 
     // check how it's defined on the annotation
-    final Method m = m_aAnnotation.getDeclaredMethod (name);
+    final Method m = m_aAnnotationType.getDeclaredMethod (name);
     final Class <?> rt = m.getReturnType ();
 
     // array value
     if (rt.isArray ())
     {
-      return _addArrayValue (proxy, name, rt.getComponentType (), method.getReturnType (), arg);
+      return _addArrayValue (aProxy, name, rt.getComponentType (), aMethod.getReturnType (), arg);
     }
 
     // sub annotation
     if (Annotation.class.isAssignableFrom (rt))
     {
       final Class <? extends Annotation> r = (Class <? extends Annotation>) rt;
-      return new TypedAnnotationWriter (r, method.getReturnType (), m_aUse.annotationParam (name, r))._createProxy ();
+      return new TypedAnnotationWriter (r, aMethod.getReturnType (), m_aUse.annotationParam (name, r))._createProxy ();
     }
 
     // scalar value
@@ -147,10 +148,10 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
       {
         // check the default
         if (targ.equals (targ.owner ().ref ((Class <?>) m.getDefaultValue ())))
-          return proxy; // defaulted
+          return aProxy; // defaulted
       }
       m_aUse.param (name, targ);
-      return proxy;
+      return aProxy;
     }
 
     // other Java built-in types
@@ -160,88 +161,83 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
       /*
        * defaulted. no need to write out.
        */
-      return proxy;
+      return aProxy;
     }
     if (arg instanceof String)
     {
       m_aUse.param (name, (String) arg);
-      return proxy;
+      return aProxy;
     }
     if (arg instanceof Boolean)
     {
       m_aUse.param (name, ((Boolean) arg).booleanValue ());
-      return proxy;
+      return aProxy;
     }
     if (arg instanceof Integer)
     {
       m_aUse.param (name, ((Integer) arg).intValue ());
-      return proxy;
+      return aProxy;
     }
     if (arg instanceof Class <?>)
     {
       m_aUse.param (name, (Class <?>) arg);
-      return proxy;
+      return aProxy;
     }
     if (arg instanceof Enum <?>)
     {
       m_aUse.param (name, (Enum <?>) arg);
-      return proxy;
+      return aProxy;
     }
 
-    throw new IllegalArgumentException ("Unable to handle this method call " + method.toString ());
+    throw new IllegalArgumentException ("Unable to handle this method call " + aMethod.toString ());
   }
 
-  private Object _addArrayValue (final Object proxy,
-                                 final String name,
-                                 final Class <?> itemType,
-                                 final Class <?> expectedReturnType,
+  private Object _addArrayValue (final Object aProxy,
+                                 final String sName,
+                                 final Class <?> aItemType,
+                                 final Class <?> aExpectedReturnType,
                                  final Object arg)
   {
     if (m_aArrays == null)
       m_aArrays = new HashMap <> ();
-    JAnnotationArrayMember m = m_aArrays.get (name);
-    if (m == null)
-    {
-      m = m_aUse.paramArray (name);
-      m_aArrays.put (name, m);
-    }
+    final JAnnotationArrayMember m = m_aArrays.computeIfAbsent (sName, k -> m_aUse.paramArray (k));
 
     // sub annotation
-    if (Annotation.class.isAssignableFrom (itemType))
+    if (Annotation.class.isAssignableFrom (aItemType))
     {
-      final Class <? extends Annotation> r = (Class <? extends Annotation>) itemType;
-      if (!IJAnnotationWriter.class.isAssignableFrom (expectedReturnType))
-        throw new IllegalArgumentException ("Unexpected return type " + expectedReturnType);
-      return new TypedAnnotationWriter (r, expectedReturnType, m.annotate (r))._createProxy ();
+      final Class <? extends Annotation> r = (Class <? extends Annotation>) aItemType;
+      if (!IJAnnotationWriter.class.isAssignableFrom (aExpectedReturnType))
+        throw new IllegalArgumentException ("Unexpected return type " + aExpectedReturnType);
+      return new TypedAnnotationWriter (r, aExpectedReturnType, m.annotate (r))._createProxy ();
     }
 
     // primitive
     if (arg instanceof AbstractJType)
     {
-      _checkType (Class.class, itemType);
+      _checkType (Class.class, aItemType);
       m.param ((AbstractJType) arg);
-      return proxy;
+      return aProxy;
     }
-    _checkType (arg.getClass (), itemType);
+    _checkType (arg.getClass (), aItemType);
     if (arg instanceof String)
     {
       m.param ((String) arg);
-      return proxy;
+      return aProxy;
     }
     if (arg instanceof Boolean)
     {
       m.param (((Boolean) arg).booleanValue ());
-      return proxy;
+      return aProxy;
     }
     if (arg instanceof Integer)
     {
       m.param (((Integer) arg).intValue ());
-      return proxy;
+      return aProxy;
     }
     if (arg instanceof Class <?>)
     {
       m.param ((Class <?>) arg);
-      return proxy;
+      return aProxy;
     }
     // TODO: enum constant. how should we handle it?
 
@@ -252,15 +248,15 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
    * Check if the type of the argument matches our expectation. If not, report
    * an error.
    */
-  private void _checkType (final Class <?> actual, final Class <?> expected)
+  private void _checkType (final Class <?> aActual, final Class <?> aExpected)
   {
-    if (expected == actual || expected.isAssignableFrom (actual))
+    if (aExpected == aActual || aExpected.isAssignableFrom (aActual))
       return; // no problem
 
-    if (expected == JCodeModel.boxToPrimitive.get (actual))
+    if (aExpected == JCodeModel.boxToPrimitive.get (aActual))
       return; // no problem
 
-    throw new IllegalArgumentException ("Expected " + expected + " but found " + actual);
+    throw new IllegalArgumentException ("Expected " + aExpected + " but found " + aActual);
   }
 
   /**
@@ -277,16 +273,17 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
    * Creates a new typed annotation writer.
    */
   @Nonnull
-  static <W extends IJAnnotationWriter <?>> W create (@Nonnull final Class <W> w,
-                                                      @Nonnull final IJAnnotatable annotatable)
+  static <W extends IJAnnotationWriter <?>> W create (@Nonnull final Class <W> aWriterType,
+                                                      @Nonnull final IJAnnotatable aAnnotatable)
   {
-    final Class <? extends Annotation> a = _findAnnotationType (w);
-    return (W) new TypedAnnotationWriter (a, w, annotatable.annotate (a))._createProxy ();
+    final Class <? extends Annotation> a = _findAnnotationType (aWriterType);
+    return (W) new TypedAnnotationWriter (a, aWriterType, aAnnotatable.annotate (a))._createProxy ();
   }
 
-  private static Class <? extends Annotation> _findAnnotationType (@Nonnull final Class <?> clazz)
+  @Nullable
+  private static Class <? extends Annotation> _findAnnotationType (@Nonnull final Class <?> aClazz)
   {
-    for (final Type t : clazz.getGenericInterfaces ())
+    for (final Type t : aClazz.getGenericInterfaces ())
     {
       if (t instanceof ParameterizedType)
       {

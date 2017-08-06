@@ -95,10 +95,10 @@ public class JMods implements IJGenerable
     return m_nMods;
   }
 
-  private static void _check (final int nMods, final int legal, final String what)
+  private static void _check (final int nMods, final int nLegal, final String sWhat)
   {
-    JCValueEnforcer.isFalse ((nMods & ~legal) != 0,
-                             () -> "Illegal modifiers for " + what + ": " + new JMods (nMods).toString ());
+    JCValueEnforcer.isFalse ((nMods & ~nLegal) != 0,
+                             () -> "Illegal modifiers for " + sWhat + ": " + new JMods (nMods).toString ());
     /* ## check for illegal combinations too */
   }
 

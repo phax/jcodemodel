@@ -98,15 +98,15 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   /**
    * Adds a bound to this variable.
    *
-   * @param bound
+   * @param aBound
    *        Bound class to be added
    * @return this
    */
   @Nonnull
-  public JTypeVar bound (@Nonnull final AbstractJClass bound)
+  public JTypeVar bound (@Nonnull final AbstractJClass aBound)
   {
-    JCValueEnforcer.notNull (bound, "Bound");
-    m_aBounds.add (bound);
+    JCValueEnforcer.notNull (aBound, "Bound");
+    m_aBounds.add (aBound);
     return this;
   }
 
@@ -124,16 +124,16 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   /**
    * Copy bounds from another type-variable into this one.
    *
-   * @param sourceTypeParameter
+   * @param aSourceTypeParameter
    *        existing type-variable to copy bounds from
    * @return this (for fluent method chaining)
    */
   @Nonnull
-  public JTypeVar boundLike (@Nonnull final JTypeVar sourceTypeParameter)
+  public JTypeVar boundLike (@Nonnull final JTypeVar aSourceTypeParameter)
   {
-    JCValueEnforcer.notNull (sourceTypeParameter, "sourceTypeParameter");
+    JCValueEnforcer.notNull (aSourceTypeParameter, "sourceTypeParameter");
 
-    for (final AbstractJClass bound : sourceTypeParameter.bounds ())
+    for (final AbstractJClass bound : aSourceTypeParameter.bounds ())
       bound (bound);
     return this;
   }
@@ -181,12 +181,12 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] variables,
-                                             @Nonnull final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
+                                             @Nonnull final List <? extends AbstractJClass> aBindings)
   {
-    for (int i = 0; i < variables.length; i++)
-      if (variables[i] == this)
-        return bindings.get (i);
+    for (int i = 0; i < aVariables.length; i++)
+      if (aVariables[i] == this)
+        return aBindings.get (i);
     return this;
   }
 

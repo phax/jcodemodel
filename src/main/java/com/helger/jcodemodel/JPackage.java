@@ -234,14 +234,14 @@ public class JPackage implements
   /**
    * Checks if a resource of the given name exists.
    *
-   * @param name
+   * @param sName
    *        Filename to check
    * @return <code>true</code> if contained
    */
-  public boolean hasResourceFile (@Nullable final String name)
+  public boolean hasResourceFile (@Nullable final String sName)
   {
     for (final AbstractJResourceFile r : m_aResources)
-      if (r.name ().equals (name))
+      if (r.name ().equals (sName))
         return true;
     return false;
   }
@@ -268,23 +268,23 @@ public class JPackage implements
   /**
    * Removes a class from this package.
    *
-   * @param c
+   * @param aClass
    *        Class to be removed. May not be <code>null</code>.
    */
-  public void remove (@Nonnull final AbstractJClass c)
+  public void remove (@Nonnull final AbstractJClass aClass)
   {
-    JCValueEnforcer.isTrue (c._package () == this,
+    JCValueEnforcer.isTrue (aClass._package () == this,
                             () -> "the specified class (" +
-                                  c.fullName () +
+                                  aClass.fullName () +
                                   ") is not a member of this package (" +
                                   name () +
                                   "), or it is a referenced class");
 
     // note that c may not be a member of classes.
     // this happens when someone is trying to remove a non generated class
-    m_aClasses.remove (c.name ());
+    m_aClasses.remove (aClass.name ());
     if (m_aUpperCaseClassMap != null)
-      m_aUpperCaseClassMap.remove (c.name ().toUpperCase ());
+      m_aUpperCaseClassMap.remove (aClass.name ().toUpperCase ());
   }
 
   /**
@@ -338,14 +338,14 @@ public class JPackage implements
   /**
    * Checks if a given name is already defined as a class/interface
    *
-   * @param classLocalName
+   * @param sClassLocalName
    *        Class local name
    * @return <code>true</code> if contained in this package
    */
-  public boolean isDefined (@Nullable final String classLocalName)
+  public boolean isDefined (@Nullable final String sClassLocalName)
   {
     for (final JDefinedClass clazz : m_aClasses.values ())
-      if (clazz.name ().equals (classLocalName))
+      if (clazz.name ().equals (sClassLocalName))
         return true;
     return false;
   }
@@ -383,22 +383,22 @@ public class JPackage implements
   }
 
   @Nonnull
-  public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
+  public JAnnotationUse annotate (@Nonnull final AbstractJClass aClazz)
   {
     JCValueEnforcer.isFalse (isUnnamed (), "the root package cannot be annotated");
 
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
 
-    final JAnnotationUse a = new JAnnotationUse (clazz);
+    final JAnnotationUse a = new JAnnotationUse (aClazz);
     m_aAnnotations.add (a);
     return a;
   }
 
   @Nonnull
-  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
+  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> aClazz)
   {
-    return annotate (m_aOwner.ref (clazz));
+    return annotate (m_aOwner.ref (aClazz));
   }
 
   @Nonnull
@@ -413,11 +413,11 @@ public class JPackage implements
    * Convert the package name to directory path equivalent
    */
   @Nonnull
-  File toPath (@Nonnull final File dir)
+  File toPath (@Nonnull final File aDir)
   {
     if (m_sName == null)
-      return dir;
-    return new File (dir, m_sName.replace ('.', File.separatorChar));
+      return aDir;
+    return new File (aDir, m_sName.replace ('.', File.separatorChar));
   }
 
   public void declare (@Nonnull final JFormatter f)
@@ -432,10 +432,10 @@ public class JPackage implements
   }
 
   @Nonnull
-  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter src,
-                                                  @Nonnull final String className) throws IOException
+  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter aSrc,
+                                                  @Nonnull final String sClassName) throws IOException
   {
-    final SourcePrintWriter aWriter = src.openSource (this, className + ".java");
+    final SourcePrintWriter aWriter = aSrc.openSource (this, sClassName + ".java");
     final JFormatter ret = new JFormatter (aWriter);
     // Add all classes to not be imported (may be empty)
     ret.addDontImportClasses (m_aOwner.getAllDontImportClasses ());

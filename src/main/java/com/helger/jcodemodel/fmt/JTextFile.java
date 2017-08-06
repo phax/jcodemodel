@@ -44,12 +44,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.WillClose;
+import javax.annotation.WillNotClose;
 
 import com.helger.jcodemodel.AbstractJResourceFile;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Simple text file.
@@ -59,15 +61,17 @@ import com.helger.jcodemodel.AbstractJResourceFile;
 public class JTextFile extends AbstractJResourceFile
 {
   private String m_sContents;
+  private final Charset m_aEncoding;
 
-  public JTextFile (@Nonnull final String name)
+  public JTextFile (@Nonnull final String sName, @Nonnull final Charset aEncoding)
   {
-    super (name);
+    super (sName);
+    m_aEncoding = JCValueEnforcer.notNull (aEncoding, "Encoding");
   }
 
-  public void setContents (@Nullable final String contents)
+  public void setContents (@Nullable final String sContents)
   {
-    m_sContents = contents;
+    m_sContents = sContents;
   }
 
   @Nullable
@@ -76,13 +80,24 @@ public class JTextFile extends AbstractJResourceFile
     return m_sContents;
   }
 
-  @Override
-  public void build (@Nonnull @WillClose final OutputStream out) throws IOException
+  @Nonnull
+  public Charset encoding ()
   {
-    // XXX missing encoding
-    try (final Writer w = new OutputStreamWriter (out))
-    {
-      w.write (m_sContents);
-    }
+    return m_aEncoding;
+  }
+
+  @Override
+  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  {
+    if (m_sContents != null)
+      try (final Writer w = new OutputStreamWriter (aOS, m_aEncoding)
+      {
+        @Override
+        public void close ()
+        {}
+      })
+      {
+        w.write (m_sContents);
+      }
   }
 }

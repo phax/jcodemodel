@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.annotation.Nonnull;
+import javax.annotation.WillNotClose;
 
 import com.helger.jcodemodel.AbstractJResourceFile;
 
@@ -74,8 +75,8 @@ public class JBinaryFile extends AbstractJResourceFile
   }
 
   @Override
-  public void build (@Nonnull final OutputStream os) throws IOException
+  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
-    m_aBAOS.writeTo (os);
+    m_aBAOS.writeTo (aOS);
   }
 }

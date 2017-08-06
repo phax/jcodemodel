@@ -55,12 +55,12 @@ public class JThrow implements IJStatement
   /**
    * JThrow constructor
    *
-   * @param expr
+   * @param aExpr
    *        JExpression which evaluates to JThrow value
    */
-  protected JThrow (@Nonnull final IJExpression expr)
+  protected JThrow (@Nonnull final IJExpression aExpr)
   {
-    m_aExpr = expr;
+    m_aExpr = aExpr;
   }
 
   @Nonnull
@@ -75,5 +75,4 @@ public class JThrow implements IJStatement
     f.generable (m_aExpr);
     f.print (';').newline ();
   }
-
 }

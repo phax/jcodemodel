@@ -200,8 +200,8 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  protected AbstractJClass substituteParams (final JTypeVar [] variables,
-                                             final List <? extends AbstractJClass> bindings)
+  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
+                                             @Nonnull final List <? extends AbstractJClass> aBindings)
   {
     // TODO: does JDK 1.5 reflection provides these information?
     return this;

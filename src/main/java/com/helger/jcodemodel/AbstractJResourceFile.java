@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.annotation.Nonnull;
+import javax.annotation.WillNotClose;
 
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
@@ -88,5 +89,5 @@ public abstract class AbstractJResourceFile
    * @throws IOException
    *         If writing on the stream throws an error
    */
-  protected abstract void build (@Nonnull OutputStream aOS) throws IOException;
+  protected abstract void build (@Nonnull @WillNotClose OutputStream aOS) throws IOException;
 }

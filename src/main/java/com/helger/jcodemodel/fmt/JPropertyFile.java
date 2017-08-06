@@ -45,6 +45,7 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
+import javax.annotation.WillNotClose;
 
 import com.helger.jcodemodel.AbstractJResourceFile;
 
@@ -55,9 +56,9 @@ public class JPropertyFile extends AbstractJResourceFile
 {
   private final Properties m_aProps = new Properties ();
 
-  public JPropertyFile (@Nonnull final String name)
+  public JPropertyFile (@Nonnull final String sName)
   {
-    super (name);
+    super (sName);
   }
 
   /**
@@ -75,8 +76,8 @@ public class JPropertyFile extends AbstractJResourceFile
   }
 
   @Override
-  public void build (@Nonnull final OutputStream out) throws IOException
+  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
-    m_aProps.store (out, null);
+    m_aProps.store (aOS, null);
   }
 }

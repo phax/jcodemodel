@@ -89,23 +89,28 @@ public class JCommentPart extends ArrayList <Object>
     return true;
   }
 
-  private void _flattenAppend (@Nullable final Object value)
+  private void _flattenAppend (@Nullable final Object aValue)
   {
-    if (value == null)
+    if (aValue == null)
       return;
-    if (value instanceof Object [])
+    if (aValue instanceof Object [])
     {
-      for (final Object o : (Object []) value)
+      for (final Object o : (Object []) aValue)
         _flattenAppend (o);
     }
     else
-      if (value instanceof Collection <?>)
+      if (aValue instanceof Collection <?>)
       {
-        for (final Object o : (Collection <?>) value)
+        for (final Object o : (Collection <?>) aValue)
           _flattenAppend (o);
       }
       else
-        super.add (value);
+      {
+        // Only String and AbstractJType are allowed
+        if (aValue instanceof String || aValue instanceof AbstractJType)
+          super.add (aValue);
+        throw new IllegalArgumentException ("Value is of an unsupported type: " + aValue.getClass ().toString ());
+      }
   }
 
   /**
@@ -139,17 +144,17 @@ public class JCommentPart extends ArrayList <Object>
       if (o instanceof String)
       {
         int idx;
-        String s = (String) o;
-        while ((idx = s.indexOf ('\n')) != -1)
+        String sStr = (String) o;
+        while ((idx = sStr.indexOf ('\n')) != -1)
         {
-          final String line = s.substring (0, idx);
+          final String line = sStr.substring (0, idx);
           if (line.length () > 0)
             f.print (_escape (line));
-          s = s.substring (idx + 1);
+          sStr = sStr.substring (idx + 1);
           f.newline ().print (sIndent);
         }
-        if (s.length () != 0)
-          f.print (_escape (s));
+        if (sStr.length () != 0)
+          f.print (_escape (sStr));
       }
       else
         if (o instanceof AbstractJClass)
@@ -163,7 +168,7 @@ public class JCommentPart extends ArrayList <Object>
             f.generable ((AbstractJType) o);
           }
           else
-            throw new IllegalStateException ("Invalid type present");
+            throw new IllegalStateException ("Invalid type present: " + o);
     }
 
     if (!isEmpty ())

@@ -53,6 +53,14 @@ public class JOpUnary implements IJExpression
   private final IJExpression m_aExpr;
   private final boolean m_bOperatorComesFirst;
 
+  /**
+   * Constructor for operator before expression
+   * 
+   * @param sOperator
+   *        operator
+   * @param aExpr
+   *        expression
+   */
   protected JOpUnary (@Nonnull final String sOperator, @Nonnull final IJExpression aExpr)
   {
     m_sOperator = JCValueEnforcer.notNull (sOperator, "Operator");
@@ -60,6 +68,14 @@ public class JOpUnary implements IJExpression
     m_bOperatorComesFirst = true;
   }
 
+  /**
+   * Constructor for expression before operator
+   * 
+   * @param aExpr
+   *        expression
+   * @param sOperator
+   *        operator
+   */
   protected JOpUnary (@Nonnull final IJExpression aExpr, @Nonnull final String sOperator)
   {
     m_sOperator = JCValueEnforcer.notNull (sOperator, "Operator");

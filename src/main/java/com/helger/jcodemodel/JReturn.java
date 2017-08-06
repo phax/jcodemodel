@@ -56,12 +56,12 @@ public class JReturn implements IJStatement
   /**
    * JReturn constructor
    *
-   * @param expr
+   * @param aExpr
    *        {@link IJExpression} which evaluates to return value
    */
-  protected JReturn (@Nullable final IJExpression expr)
+  protected JReturn (@Nullable final IJExpression aExpr)
   {
-    m_aExpr = expr;
+    m_aExpr = aExpr;
   }
 
   @Nullable

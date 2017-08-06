@@ -49,12 +49,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.WillNotClose;
 
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJResourceFile;
@@ -89,7 +90,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
   private final String m_sClassName;
   private final URL m_aSource;
   private final JStaticClass m_aClazz;
-  private final ILineFilter m_aFilter;
+  private final Function <String, String> m_aFilter;
 
   public JStaticJavaFile (@Nonnull final JPackage aPkg,
                           @Nonnull final String sClassName,
@@ -104,7 +105,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
   public JStaticJavaFile (@Nonnull final JPackage aPkg,
                           @Nonnull final String sClassName,
                           @Nonnull final URL aSource,
-                          @Nullable final ILineFilter aFilter)
+                          @Nullable final Function <String, String> aFilter)
   {
     super (sClassName + ".java");
     m_aPkg = JCValueEnforcer.notNull (aPkg, "Package");
@@ -130,28 +131,27 @@ public class JStaticJavaFile extends AbstractJResourceFile
   }
 
   @Override
-  protected void build (@Nonnull final OutputStream os) throws IOException
+  protected void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
-    final InputStream is = m_aSource.openStream ();
+    final Function <String, String> aFilter = _createLineFilter ();
+    int nLineNumber = 1;
 
-    final ILineFilter filter = _createLineFilter ();
-    int lineNumber = 1;
-
-    try (final BufferedReader r = new BufferedReader (new InputStreamReader (is));
-         final PrintWriter w = new PrintWriter (new BufferedWriter (new OutputStreamWriter (os))))
+    try (final InputStream is = m_aSource.openStream ();
+         final BufferedReader r = new BufferedReader (new InputStreamReader (is));
+         final PrintWriter w = new PrintWriter (new BufferedWriter (new OutputStreamWriter (aOS))))
     {
-      String line;
-      while ((line = r.readLine ()) != null)
+      String sLine;
+      while ((sLine = r.readLine ()) != null)
       {
-        line = filter.process (line);
-        if (line != null)
-          w.println (line);
-        lineNumber++;
+        sLine = aFilter.apply (sLine);
+        if (sLine != null)
+          w.println (sLine);
+        nLineNumber++;
       }
     }
-    catch (final ParseException e)
+    catch (final Exception e)
     {
-      throw new IOException ("unable to process " + m_aSource + " line:" + lineNumber + "\n" + e.getMessage ());
+      throw new IOException ("unable to process " + m_aSource + " line:" + nLineNumber + "\n" + e.getMessage ());
     }
   }
 
@@ -162,71 +162,28 @@ public class JStaticJavaFile extends AbstractJResourceFile
    * source file.
    */
   @Nonnull
-  private ILineFilter _createLineFilter ()
+  private Function <String, String> _createLineFilter ()
   {
     // this filter replaces the package declaration.
-    final ILineFilter f = new ILineFilter ()
-    {
-      @Nullable
-      public String process (@Nonnull final String line)
+    final Function <String, String> f = sLine -> {
+      if (sLine.startsWith ("package "))
       {
-        if (line.startsWith ("package "))
-        {
-          // replace package decl
-          if (m_aPkg.isUnnamed ())
-            return null;
-          return "package " + m_aPkg.name () + ";";
-        }
-        return line;
+        // replace package decl
+        if (m_aPkg.isUnnamed ())
+          return null;
+        return "package " + m_aPkg.name () + ";";
       }
+      return sLine;
     };
-    if (m_aFilter != null)
-      return new ChainFilter (m_aFilter, f);
-    return f;
-  }
+    if (m_aFilter == null)
+      return f;
 
-  /**
-   * Filter that alters the Java source code.
-   * <p>
-   * By implementing this interface, derived classes can modify the Java source
-   * file before it's written out.
-   */
-  public interface ILineFilter
-  {
-    /**
-     * @param sLine
-     *        a non-null valid String that corresponds to one line. No '\n'
-     *        included.
-     * @return null to strip the line off. Otherwise the returned String will be
-     *         written out. Do not add '\n' at the end of this string.
-     * @exception ParseException
-     *            when for some reason there's an error in the line.
-     */
-    @Nullable
-    String process (@Nonnull String sLine) throws ParseException;
-  }
-
-  /**
-   * A {@link ILineFilter} that combines two {@link ILineFilter}s.
-   */
-  public static final class ChainFilter implements ILineFilter
-  {
-    private final ILineFilter m_aFirst, m_aSecond;
-
-    public ChainFilter (@Nonnull final ILineFilter aFirst, @Nonnull final ILineFilter aSecond)
-    {
-      m_aFirst = aFirst;
-      m_aSecond = aSecond;
-    }
-
-    @Nullable
-    public String process (@Nonnull final String sLine) throws ParseException
-    {
-      final String sProcessedLine = m_aFirst.process (sLine);
-      if (sProcessedLine == null)
-        return null;
-      return m_aSecond.process (sProcessedLine);
-    }
+    return sLine -> {
+      String ret = m_aFilter.apply (sLine);
+      if (ret != null)
+        ret = f.apply (ret);
+      return ret;
+    };
   }
 
   private class JStaticClass extends AbstractJClass

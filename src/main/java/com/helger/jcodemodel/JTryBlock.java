@@ -65,9 +65,9 @@ public class JTryBlock implements IJStatement
   }
 
   @Nonnull
-  public JCatchBlock _catch (@Nonnull final AbstractJClass exception)
+  public JCatchBlock _catch (@Nonnull final AbstractJClass aException)
   {
-    final JCatchBlock cb = new JCatchBlock (exception);
+    final JCatchBlock cb = new JCatchBlock (aException);
     m_aCatches.add (cb);
     return cb;
   }

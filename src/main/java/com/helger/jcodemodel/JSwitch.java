@@ -90,9 +90,9 @@ public class JSwitch implements IJStatement
   }
 
   @Nonnull
-  public JCase _case (@Nonnull final IJExpression label)
+  public JCase _case (@Nonnull final IJExpression aLabel)
   {
-    final JCase c = new JCase (label);
+    final JCase c = new JCase (aLabel);
     m_aCases.add (c);
     return c;
   }

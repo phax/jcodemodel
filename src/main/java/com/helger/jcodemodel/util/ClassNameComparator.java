@@ -81,8 +81,8 @@ public final class ClassNameComparator implements Comparator <AbstractJClass>
 
     final String lhs = aObj1.fullName ();
     final String rhs = aObj2.fullName ();
-    final boolean bLeftJava = lhs.startsWith ("java");
-    final boolean bRightJava = rhs.startsWith ("java");
+    final boolean bLeftJava = lhs.startsWith ("java.");
+    final boolean bRightJava = rhs.startsWith ("java.");
 
     if (bLeftJava && !bRightJava)
       return -1;

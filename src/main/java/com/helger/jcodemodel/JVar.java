@@ -194,16 +194,16 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   /**
    * Adds an annotation to this variable.
    *
-   * @param clazz
+   * @param aClazz
    *        The annotation class to annotate the field with
    * @return New {@link JAnnotationUse}
    */
   @Nonnull
-  public JAnnotationUse annotate (@Nonnull final AbstractJClass clazz)
+  public JAnnotationUse annotate (@Nonnull final AbstractJClass aClazz)
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
-    final JAnnotationUse a = new JAnnotationUse (clazz);
+    final JAnnotationUse a = new JAnnotationUse (aClazz);
     m_aAnnotations.add (a);
     return a;
   }
@@ -211,14 +211,14 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   /**
    * Adds an annotation to this variable.
    *
-   * @param clazz
+   * @param aClazz
    *        The annotation class to annotate the field with
    * @return New {@link JAnnotationUse}
    */
   @Nonnull
-  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> clazz)
+  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> aClazz)
   {
-    return annotate (m_aType.owner ().ref (clazz));
+    return annotate (m_aType.owner ().ref (aClazz));
   }
 
   @Nonnull

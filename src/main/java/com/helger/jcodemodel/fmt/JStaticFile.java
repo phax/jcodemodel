@@ -45,6 +45,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.annotation.Nonnull;
+import javax.annotation.WillNotClose;
 
 import com.helger.jcodemodel.AbstractJResourceFile;
 import com.helger.jcodemodel.util.JCSecureLoader;
@@ -96,14 +97,14 @@ public class JStaticFile extends AbstractJResourceFile
   }
 
   @Override
-  protected void build (@Nonnull final OutputStream os) throws IOException
+  protected void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
     try (final DataInputStream dis = new DataInputStream (m_aClassLoader.getResourceAsStream (m_sResourceName)))
     {
       final byte [] buf = new byte [256];
       int sz;
       while ((sz = dis.read (buf)) > 0)
-        os.write (buf, 0, sz);
+        aOS.write (buf, 0, sz);
     }
   }
 }

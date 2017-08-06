@@ -53,9 +53,9 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  * <p>
  * A javadoc comment consists of multiple parts. There's the main part (that
  * comes the first in in the comment section), then the parameter parts
- * (@param), the return part (@return), and the throws parts (@throws). TODO: it
- * would be nice if we have JComment class and we can derive this class from
- * there.
+ * (@param), the return part (@return), and the throws parts (@throws).<br>
+ * TODO: it would be nice if we have JComment class and we can derive this class
+ * from there.
  */
 public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 {

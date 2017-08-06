@@ -241,7 +241,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    *         object.
    */
   @Nonnull
-  public JMods nMods ()
+  public JMods mods ()
   {
     return m_aMods;
   }

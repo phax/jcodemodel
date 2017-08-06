@@ -56,67 +56,67 @@ public final class JJavaName
   {
     // see
     // http://java.sun.com/docs/books/tutorial/java/nutsandbolts/_keywords.html
-    final String [] words = new String [] { "abstract",
-                                            "boolean",
-                                            "break",
-                                            "byte",
-                                            "case",
-                                            "catch",
-                                            "char",
-                                            "class",
-                                            "const",
-                                            "continue",
-                                            "default",
-                                            "do",
-                                            "double",
-                                            "else",
-                                            "extends",
-                                            "final",
-                                            "finally",
-                                            "float",
-                                            "for",
-                                            "goto",
-                                            "if",
-                                            "implements",
-                                            "import",
-                                            "instanceof",
-                                            "int",
-                                            "interface",
-                                            "long",
-                                            "native",
-                                            "new",
-                                            "package",
-                                            "private",
-                                            "protected",
-                                            "public",
-                                            "return",
-                                            "short",
-                                            "static",
-                                            "strictfp",
-                                            "super",
-                                            "switch",
-                                            "synchronized",
-                                            "this",
-                                            "throw",
-                                            "throws",
-                                            "transient",
-                                            "try",
-                                            "void",
-                                            "volatile",
-                                            "while",
-
-                                            // technically these are not
-                                            // reserved
-                                            // words but they cannot be used as
-                                            // identifiers.
-                                            "true",
-                                            "false",
-                                            "null",
-
-                                            "assert",
-                                            "enum" };
-    for (final String w : words)
-      RESERVED_KEYWORDS.add (w);
+    final String [] aKeyWords = new String [] { "abstract",
+                                                "boolean",
+                                                "break",
+                                                "byte",
+                                                "case",
+                                                "catch",
+                                                "char",
+                                                "class",
+                                                "const",
+                                                "continue",
+                                                "default",
+                                                "do",
+                                                "double",
+                                                "else",
+                                                "extends",
+                                                "final",
+                                                "finally",
+                                                "float",
+                                                "for",
+                                                "goto",
+                                                "if",
+                                                "implements",
+                                                "import",
+                                                "instanceof",
+                                                "int",
+                                                "interface",
+                                                "long",
+                                                "native",
+                                                "new",
+                                                "package",
+                                                "private",
+                                                "protected",
+                                                "public",
+                                                "return",
+                                                "short",
+                                                "static",
+                                                "strictfp",
+                                                "super",
+                                                "switch",
+                                                "synchronized",
+                                                "this",
+                                                "throw",
+                                                "throws",
+                                                "transient",
+                                                "try",
+                                                "void",
+                                                "volatile",
+                                                "while",
+                                                /*
+                                                 * technically these are not
+                                                 * reserved words but they
+                                                 * cannot be used as
+                                                 * identifiers.
+                                                 */
+                                                "true",
+                                                "false",
+                                                "null",
+                                                "assert",
+                                                "enum" };
+    for (final String sKeyword : aKeyWords)
+      RESERVED_KEYWORDS.add (sKeyword);
   }
 
   private JJavaName ()
@@ -125,22 +125,22 @@ public final class JJavaName
   /**
    * Checks if a given string is usable as a Java identifier.
    *
-   * @param s
-   *        Source string
+   * @param sStr
+   *        Source string. May not be <code>null</code>.
    * @return <code>true</code> if the string is a valid Java identifier
    */
-  public static boolean isJavaIdentifier (@Nonnull final String s)
+  public static boolean isJavaIdentifier (@Nonnull final String sStr)
   {
-    if (s.length () == 0)
+    if (sStr.length () == 0)
       return false;
-    if (RESERVED_KEYWORDS.contains (s))
-      return false;
-
-    if (!Character.isJavaIdentifierStart (s.charAt (0)))
+    if (RESERVED_KEYWORDS.contains (sStr))
       return false;
 
-    for (int i = 1; i < s.length (); i++)
-      if (!Character.isJavaIdentifierPart (s.charAt (i)))
+    if (!Character.isJavaIdentifierStart (sStr.charAt (0)))
+      return false;
+
+    for (int i = 1; i < sStr.length (); i++)
+      if (!Character.isJavaIdentifierPart (sStr.charAt (i)))
         return false;
 
     return true;
