@@ -14,7 +14,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 ## News and noteworthy
 
-* v3.0.0 - work in progress
+* v3.0.0 - 2017-08-06
   * Requires Java 8
   * Reworked #41 so that it is finally working in all cases
   * Add option for classes to not be imported (issue #51)
@@ -79,7 +79,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>2.8.6</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 

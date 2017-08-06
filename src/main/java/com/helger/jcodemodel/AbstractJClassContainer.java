@@ -80,7 +80,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   /**
    * Nested classes as a map from name to JDefinedClass. The name is all
    * capitalized in a case sensitive file system (
-   * {@link JCodeModel#isCaseSensitiveFileSystem}) to avoid conflicts. Lazily
+   * {@link JCodeModel#isFileSystemCaseSensitive()}) to avoid conflicts. Lazily
    * created to save footprint.
    *
    * @see #_getClasses()

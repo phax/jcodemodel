@@ -50,8 +50,8 @@ import javax.annotation.Nullable;
 
 /**
  * This is a single Java 8 lambda expression. It consists of 0-n parameters and
- * a body statement. For example in <code>(a, b) -> a + b</code> "a" and "b" are
- * parameters and "a + b" is the body statement.
+ * a body statement. For example in <code>(a, b) -&gt; a + b</code> "a" and "b"
+ * are parameters and "a + b" is the body statement.
  *
  * @author Philip Helger
  * @since 2.7.10
