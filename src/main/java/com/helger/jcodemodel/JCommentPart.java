@@ -109,7 +109,8 @@ public class JCommentPart extends ArrayList <Object>
         // Only String and AbstractJType are allowed
         if (aValue instanceof String || aValue instanceof AbstractJType)
           super.add (aValue);
-        throw new IllegalArgumentException ("Value is of an unsupported type: " + aValue.getClass ().toString ());
+        else
+          throw new IllegalArgumentException ("Value is of an unsupported type: " + aValue.getClass ().toString ());
       }
   }
 
