@@ -174,7 +174,7 @@ public final class CodeModelTestsHelper
   public static CompilationUnit parseCodeModel (@Nonnull final JCodeModel cm) throws IOException
   {
     final byte [] aBytes = getAllBytes (cm);
-    if (true)
+    if (false)
       System.out.println (new String (aBytes, DEFAULT_ENCODING));
 
     final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes);

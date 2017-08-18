@@ -40,11 +40,15 @@
  */
 package com.helger.jcodemodel.supplementary.issues;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JEnumConstant;
+import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JSwitch;
 import com.helger.jcodemodel.JVar;
@@ -58,7 +62,7 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
 public final class Issue41FuncTest
 {
   @Test
-  public void testCase () throws Exception
+  public void testSwitchInnerEnum () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
 
@@ -75,6 +79,53 @@ public final class Issue41FuncTest
     s._case (ca).body ()._break ();
     s._case (cb).body ()._break ();
     s._default ().body ()._break ();
+
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testSwitchInt () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+
+    final JDefinedClass c2 = cm._package ("issue41")._class ("Issue41Test2");
+
+    final JDefinedClass jEnumClass = c2._enum ("MyEnum");
+    final JEnumConstant ca = jEnumClass.enumConstant ("A");
+    final JEnumConstant cb = jEnumClass.enumConstant ("B");
+    jEnumClass.enumConstant ("C");
+
+    final JMethod m = c2.method (0, jEnumClass, "dummy");
+    final JVar p = m.param (cm.INT, "val");
+    final JSwitch s = m.body ()._switch (p);
+    s._case (JExpr.lit (1)).body ()._return (ca);
+    s._case (JExpr.lit (2)).body ()._return (cb);
+    s._default ().body ()._return (JExpr._null ());
+
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testSwitchInt2 () throws Exception
+  {
+    final Map <Integer, String> aMap = new HashMap <> ();
+    aMap.put (Integer.valueOf (1), "One");
+    aMap.put (Integer.valueOf (2), "Two");
+    aMap.put (Integer.valueOf (3), "Three");
+
+    final JCodeModel cm = new JCodeModel ();
+
+    final JDefinedClass c2 = cm._package ("issue41")._class ("Issue41Test3");
+    final JDefinedClass jEnumClass = c2._enum ("MyEnum");
+
+    final JMethod m = c2.method (0, jEnumClass, "dummy");
+    final JVar p = m.param (cm.INT, "val");
+    final JSwitch s = m.body ()._switch (p);
+    for (final Map.Entry <Integer, String> aEntry : aMap.entrySet ())
+    {
+      final JEnumConstant ec = jEnumClass.enumConstant (aEntry.getValue ());
+      s._case (JExpr.lit (aEntry.getKey ().intValue ())).body ()._return (ec);
+    }
 
     CodeModelTestsHelper.printCodeModel (cm);
   }
