@@ -1,6 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node1_0" href="../AbstractCodeWriter.html" title="com.helger.jcodemodel.AbstractCodeWriter" alt="" coords="93,16,238,43"/>
-<area shape="rect" id="node4_1" href="./FilterCodeWriter.html" title="com.helger.jcodemodel.writer.FilterCodeWriter" alt="" coords="108,112,223,139"/>
-<area shape="rect" id="node2_2" href="./PrologCodeWriter.html" title="com.helger.jcodemodel.writer.PrologCodeWriter" alt="" coords="16,208,139,235"/>
-<area shape="rect" id="node3_3" href="./ProgressCodeWriter.html" title="com.helger.jcodemodel.writer.ProgressCodeWriter" alt="" coords="185,208,322,235"/>
-</map>

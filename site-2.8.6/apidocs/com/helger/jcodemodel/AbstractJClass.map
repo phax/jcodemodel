@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JTypeWildcard.html" title="com.helger.jcodemodel.JTypeWildcard" alt="" coords="16,209,120,234"/>
+<area shape="rect" id="node2_1" href="./JTypeVar.html" title="com.helger.jcodemodel.JTypeVar" alt="" coords="166,209,239,234"/>
+<area shape="rect" id="node3_2" href="./JNullType.html" title="com.helger.jcodemodel.JNullType" alt="" coords="285,209,361,234"/>
+<area shape="rect" id="node4_3" href="./JNarrowedClass.html" title="com.helger.jcodemodel.JNarrowedClass" alt="" coords="407,209,519,234"/>
+<area shape="rect" id="node5_4" href="./JErrorClass.html" title="com.helger.jcodemodel.JErrorClass" alt="" coords="565,209,651,234"/>
+<area shape="rect" id="node6_5" href="./JArrayClass.html" title="com.helger.jcodemodel.JArrayClass" alt="" coords="697,209,786,234"/>
+<area shape="rect" id="node7_6" href="./AbstractJType.html" title="com.helger.jcodemodel.AbstractJType" alt="" coords="413,17,513,42"/>
+<area shape="rect" id="node9_7" href="./AbstractJClass.html" title="com.helger.jcodemodel.AbstractJClass" alt="" coords="412,113,513,138"/>
+<area shape="rect" id="node8_8" href="./AbstractJClassContainer.html" title="com.helger.jcodemodel.AbstractJClassContainer" alt="" coords="831,209,1347,234"/>
+</map>

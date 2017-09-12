@@ -1,0 +1,9 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JPackage.html" title="com.helger.jcodemodel.JPackage" alt="" coords="495,118,571,143"/>
+<area shape="rect" id="node2_1" href="./IJGenerable.html" title="com.helger.jcodemodel.IJGenerable" alt="" coords="16,11,104,53"/>
+<area shape="rect" id="node3_2" href="./IJDocCommentable.html" title="com.helger.jcodemodel.IJDocCommentable" alt="" coords="150,11,282,53"/>
+<area shape="rect" id="node4_3" href="./IJDeclaration.html" title="com.helger.jcodemodel.IJDeclaration" alt="" coords="328,11,421,53"/>
+<area shape="rect" id="node5_4" href="./IJClassContainer.html" title="com.helger.jcodemodel.IJClassContainer" alt="" coords="467,11,920,53"/>
+<area shape="rect" id="node6_5" href="./IJAnnotatable.html" title="com.helger.jcodemodel.IJAnnotatable" alt="" coords="966,11,1063,53"/>
+<area shape="rect" id="node7_6" href="http://java.sun.com/j2se/1.4.2/docs/api/java/lang/Comparable.html" title="java.lang.Comparable" alt="" coords="1109,11,1221,53"/>
+</map>

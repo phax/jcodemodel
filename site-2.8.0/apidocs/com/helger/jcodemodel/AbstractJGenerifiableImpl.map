@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node1_0" href="./JMethod.html" title="com.helger.jcodemodel.JMethod" alt="" coords="159,216,228,243"/>
-<area shape="rect" id="node2_1" href="./IJOwned.html" title="com.helger.jcodemodel.IJOwned" alt="" coords="15,11,99,55"/>
-<area shape="rect" id="node5_2" href="./AbstractJGenerifiableImpl.html" title="com.helger.jcodemodel.AbstractJGenerifiableImpl" alt="" coords="103,120,284,147"/>
-<area shape="rect" id="node3_3" href="./IJGenerifiable.html" title="com.helger.jcodemodel.IJGenerifiable" alt="" coords="145,11,242,55"/>
-<area shape="rect" id="node4_4" href="./IJDeclaration.html" title="com.helger.jcodemodel.IJDeclaration" alt="" coords="287,11,382,55"/>
-</map>
