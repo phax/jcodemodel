@@ -1,0 +1,26 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./VarArgsFuncTest.html" title="com.helger.jcodemodel.VarArgsFuncTest" alt="" coords="16,17,136,42"/>
+<area shape="rect" id="node2_1" href="./NestedClassFuncTest.html" title="com.helger.jcodemodel.NestedClassFuncTest" alt="" coords="182,17,330,42"/>
+<area shape="rect" id="node3_2" href="./NestedClassFuncTest.MockInnerClass.html" title="com.helger.jcodemodel.NestedClassFuncTest.MockInnerClass" alt="" coords="376,17,488,42"/>
+<area shape="rect" id="node4_3" href="./JTypeVarTest.html" title="com.helger.jcodemodel.JTypeVarTest" alt="" coords="533,17,632,42"/>
+<area shape="rect" id="node5_4" href="./JSynchronizedBlockTest.html" title="com.helger.jcodemodel.JSynchronizedBlockTest" alt="" coords="677,17,840,42"/>
+<area shape="rect" id="node6_5" href="./JSwitchTest.html" title="com.helger.jcodemodel.JSwitchTest" alt="" coords="886,17,975,42"/>
+<area shape="rect" id="node7_6" href="./JPackageTest.html" title="com.helger.jcodemodel.JPackageTest" alt="" coords="1021,17,1123,42"/>
+<area shape="rect" id="node8_7" href="./JMethodTest.html" title="com.helger.jcodemodel.JMethodTest" alt="" coords="1168,17,1261,42"/>
+<area shape="rect" id="node9_8" href="./JLambdaTest.html" title="com.helger.jcodemodel.JLambdaTest" alt="" coords="1307,17,1403,42"/>
+<area shape="rect" id="node10_9" href="./JLambdaMethodRefTest.html" title="com.helger.jcodemodel.JLambdaMethodRefTest" alt="" coords="1449,17,1607,42"/>
+<area shape="rect" id="node11_10" href="./JInvocationTest.html" title="com.helger.jcodemodel.JInvocationTest" alt="" coords="1653,17,1761,42"/>
+<area shape="rect" id="node12_11" href="./JFieldRefTest.html" title="com.helger.jcodemodel.JFieldRefTest" alt="" coords="1806,17,1903,42"/>
+<area shape="rect" id="node13_12" href="./JExprTest.html" title="com.helger.jcodemodel.JExprTest" alt="" coords="1949,17,2027,42"/>
+<area shape="rect" id="node14_13" href="./JDirectClassTest.html" title="com.helger.jcodemodel.JDirectClassTest" alt="" coords="2072,17,2189,42"/>
+<area shape="rect" id="node15_14" href="./JDefinedClassTest.html" title="com.helger.jcodemodel.JDefinedClassTest" alt="" coords="2235,17,2362,42"/>
+<area shape="rect" id="node16_15" href="./JCodeModelTest.html" title="com.helger.jcodemodel.JCodeModelTest" alt="" coords="2407,17,2523,42"/>
+<area shape="rect" id="node17_16" href="./JBlockTest.html" title="com.helger.jcodemodel.JBlockTest" alt="" coords="2569,17,2653,42"/>
+<area shape="rect" id="node18_17" href="./JavadocFuncTest.html" title="com.helger.jcodemodel.JavadocFuncTest" alt="" coords="2699,17,2819,42"/>
+<area shape="rect" id="node19_18" href="./JAnnotationUseTest.html" title="com.helger.jcodemodel.JAnnotationUseTest" alt="" coords="2864,17,3000,42"/>
+<area shape="rect" id="node20_19" href="./InnerClassFuncTest.html" title="com.helger.jcodemodel.InnerClassFuncTest" alt="" coords="3046,17,3181,42"/>
+<area shape="rect" id="node21_20" href="./ForEachFuncTest.html" title="com.helger.jcodemodel.ForEachFuncTest" alt="" coords="3227,17,3349,42"/>
+<area shape="rect" id="node22_21" href="./AnonymousClassFuncTest.html" title="com.helger.jcodemodel.AnonymousClassFuncTest" alt="" coords="3395,17,3571,42"/>
+<area shape="rect" id="node23_22" href="./AnnotationUseFuncTest.html" title="com.helger.jcodemodel.AnnotationUseFuncTest" alt="" coords="3617,17,3775,42"/>
+<area shape="rect" id="node24_23" href="./AbstractJTypeTest.html" title="com.helger.jcodemodel.AbstractJTypeTest" alt="" coords="3821,17,3949,42"/>
+</map>

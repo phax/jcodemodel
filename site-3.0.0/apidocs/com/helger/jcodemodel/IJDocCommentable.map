@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JPackage.html" title="com.helger.jcodemodel.JPackage" alt="" coords="16,118,92,143"/>
+<area shape="rect" id="node2_1" href="./JMethod.html" title="com.helger.jcodemodel.JMethod" alt="" coords="137,118,205,143"/>
+<area shape="rect" id="node3_2" href="./JFieldVar.html" title="com.helger.jcodemodel.JFieldVar" alt="" coords="251,118,324,143"/>
+<area shape="rect" id="node4_3" href="./JEnumConstant.html" title="com.helger.jcodemodel.JEnumConstant" alt="" coords="370,118,482,143"/>
+<area shape="rect" id="node5_4" href="./JDefinedClass.html" title="com.helger.jcodemodel.JDefinedClass" alt="" coords="527,118,629,143"/>
+<area shape="rect" id="node6_5" href="./IJDocCommentable.html" title="com.helger.jcodemodel.IJDocCommentable" alt="" coords="221,11,353,53"/>
+</map>

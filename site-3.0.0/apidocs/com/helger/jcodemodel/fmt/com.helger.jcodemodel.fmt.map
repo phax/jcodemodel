@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JTextFile.html" title="com.helger.jcodemodel.fmt.JTextFile" alt="" coords="16,17,88,42"/>
+<area shape="rect" id="node2_1" href="./JStaticJavaFile.html" title="com.helger.jcodemodel.fmt.JStaticJavaFile" alt="" coords="134,17,239,42"/>
+<area shape="rect" id="node3_2" href="./JStaticFile.html" title="com.helger.jcodemodel.fmt.JStaticFile" alt="" coords="285,17,365,42"/>
+<area shape="rect" id="node4_3" href="./JSerializedObject.html" title="com.helger.jcodemodel.fmt.JSerializedObject" alt="" coords="411,17,531,42"/>
+<area shape="rect" id="node5_4" href="./JPropertyFile.html" title="com.helger.jcodemodel.fmt.JPropertyFile" alt="" coords="576,17,672,42"/>
+<area shape="rect" id="node6_5" href="./JBinaryFile.html" title="com.helger.jcodemodel.fmt.JBinaryFile" alt="" coords="718,17,802,42"/>
+</map>

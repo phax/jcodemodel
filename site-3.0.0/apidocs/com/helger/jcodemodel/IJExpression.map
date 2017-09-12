@@ -1,0 +1,23 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JStringLiteral.html" title="com.helger.jcodemodel.JStringLiteral" alt="" coords="16,222,111,247"/>
+<area shape="rect" id="node2_1" href="./JOpUnary.html" title="com.helger.jcodemodel.JOpUnary" alt="" coords="156,222,232,247"/>
+<area shape="rect" id="node3_2" href="./JOpTernary.html" title="com.helger.jcodemodel.JOpTernary" alt="" coords="278,222,363,247"/>
+<area shape="rect" id="node4_3" href="./JOpBinary.html" title="com.helger.jcodemodel.JOpBinary" alt="" coords="409,222,489,247"/>
+<area shape="rect" id="node5_4" href="./JLambdaMethodRef.html" title="com.helger.jcodemodel.JLambdaMethodRef" alt="" coords="534,222,667,247"/>
+<area shape="rect" id="node6_5" href="./JLambda.html" title="com.helger.jcodemodel.JLambda" alt="" coords="713,222,785,247"/>
+<area shape="rect" id="node7_6" href="./JEnumConstantRef.html" title="com.helger.jcodemodel.JEnumConstantRef" alt="" coords="830,222,961,247"/>
+<area shape="rect" id="node8_7" href="./JEnumConstant.html" title="com.helger.jcodemodel.JEnumConstant" alt="" coords="1006,222,1118,247"/>
+<area shape="rect" id="node9_8" href="./JCast.html" title="com.helger.jcodemodel.JCast" alt="" coords="1164,222,1216,247"/>
+<area shape="rect" id="node10_9" href="./JAtomLong.html" title="com.helger.jcodemodel.JAtomLong" alt="" coords="1261,222,1345,247"/>
+<area shape="rect" id="node11_10" href="./JAtomInt.html" title="com.helger.jcodemodel.JAtomInt" alt="" coords="1391,222,1461,247"/>
+<area shape="rect" id="node12_11" href="./JAtomFloat.html" title="com.helger.jcodemodel.JAtomFloat" alt="" coords="1507,222,1593,247"/>
+<area shape="rect" id="node13_12" href="./JAtomDouble.html" title="com.helger.jcodemodel.JAtomDouble" alt="" coords="1638,222,1734,247"/>
+<area shape="rect" id="node14_13" href="./JAtom.html" title="com.helger.jcodemodel.JAtom" alt="" coords="1779,222,1835,247"/>
+<area shape="rect" id="node15_14" href="./JArray.html" title="com.helger.jcodemodel.JArray" alt="" coords="1881,222,1937,247"/>
+<area shape="rect" id="node16_15" href="./IJGenerable.html" title="com.helger.jcodemodel.IJGenerable" alt="" coords="1259,11,1347,53"/>
+<area shape="rect" id="node18_16" href="./IJExpression.html" title="com.helger.jcodemodel.IJExpression" alt="" coords="1257,112,1350,155"/>
+<area shape="rect" id="node17_17" href="./IJExpressionStatement.html" title="com.helger.jcodemodel.IJExpressionStatement" alt="" coords="1983,213,2136,256"/>
+<area shape="rect" id="node19_18" href="./IJAssignmentTarget.html" title="com.helger.jcodemodel.IJAssignmentTarget" alt="" coords="2182,213,2315,256"/>
+<area shape="rect" id="node20_19" href="./AbstractJAnnotationValueOwned.JEnumConstantExpr.html" title="com.helger.jcodemodel.AbstractJAnnotationValueOwned.JEnumConstantExpr" alt="" coords="2361,222,2499,247"/>
+<area shape="rect" id="node21_20" href="./AbstractJAnnotationValueOwned.FullClassNameExpr.html" title="com.helger.jcodemodel.AbstractJAnnotationValueOwned.FullClassNameExpr" alt="" coords="2545,222,2680,247"/>
+</map>

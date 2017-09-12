@@ -1,0 +1,12 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JPackage.html" title="com.helger.jcodemodel.JPackage" alt="" coords="16,222,92,247"/>
+<area shape="rect" id="node2_1" href="./JMods.html" title="com.helger.jcodemodel.JMods" alt="" coords="137,222,195,247"/>
+<area shape="rect" id="node3_2" href="./JDocComment.html" title="com.helger.jcodemodel.JDocComment" alt="" coords="241,222,345,247"/>
+<area shape="rect" id="node4_3" href="./JCatchBlock.html" title="com.helger.jcodemodel.JCatchBlock" alt="" coords="391,222,483,247"/>
+<area shape="rect" id="node5_4" href="./JBlock.html" title="com.helger.jcodemodel.JBlock" alt="" coords="529,222,587,247"/>
+<area shape="rect" id="node6_5" href="./IJObject.html" title="com.helger.jcodemodel.IJObject" alt="" coords="455,11,538,53"/>
+<area shape="rect" id="node7_6" href="./IJGenerable.html" title="com.helger.jcodemodel.IJGenerable" alt="" coords="453,112,541,155"/>
+<area shape="rect" id="node8_7" href="./IJExpression.html" title="com.helger.jcodemodel.IJExpression" alt="" coords="633,213,726,256"/>
+<area shape="rect" id="node9_8" href="./AbstractJType.html" title="com.helger.jcodemodel.AbstractJType" alt="" coords="772,222,872,247"/>
+<area shape="rect" id="node10_9" href="./AbstractJAnnotationValue.html" title="com.helger.jcodemodel.AbstractJAnnotationValue" alt="" coords="917,222,1081,247"/>
+</map>
