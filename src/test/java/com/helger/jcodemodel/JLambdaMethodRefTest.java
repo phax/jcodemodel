@@ -149,4 +149,40 @@ public final class JLambdaMethodRefTest
     assertSame (aVar, aLambda.var ());
     assertEquals ("myToString", aLambda.methodName ());
   }
+
+  @Test
+  public void testInvocationMethodRef_Name () throws JClassAlreadyExistsException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cl = cm._class ("com.helger.test.LambdaInvocationMethodRefName");
+
+    final JLambdaMethodRef lambdaMethod = new JLambdaMethodRef (cm.ref ("test.Person"), "getFirstName");
+    final JInvocation jInvocation = JExpr._this ().invoke ("andThen").arg (lambdaMethod);
+    final JLambdaMethodRef aLambda = new JLambdaMethodRef (jInvocation, "apply");
+    assertEquals ("this.andThen(test.Person::getFirstName)::apply", CodeModelTestsHelper.toString (aLambda));
+
+    final JMethod con = cl.constructor (JMod.PUBLIC);
+    con.body ().decl (cm.ref (Object.class), "any", aLambda);
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testInvocationMethodRef_JMethod () throws JClassAlreadyExistsException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cl = cm._class ("com.helger.test.LambdaInvocationMethodRefJMethod");
+
+    final JMethod m = cl.method (JMod.PUBLIC, cm.ref (String.class), "myToString");
+    final JVar p = m.param (Object.class, "obj");
+    m.body ()._return (cm.ref (String.class).staticInvoke ("valueOf").arg (p));
+
+    final JLambdaMethodRef lambdaMethod = new JLambdaMethodRef (cm.ref ("test.Person"), "getFirstName");
+    final JInvocation jInvocation = JExpr._this ().invoke ("andThen").arg (lambdaMethod);
+    final JLambdaMethodRef aLambda = new JLambdaMethodRef (jInvocation, m);
+    assertEquals ("this.andThen(test.Person::getFirstName)::myToString", CodeModelTestsHelper.toString (aLambda));
+
+    final JMethod con = cl.constructor (JMod.PUBLIC);
+    con.body ().decl (cm.ref (Object.class), "any", aLambda);
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
 }
