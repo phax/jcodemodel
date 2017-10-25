@@ -16,6 +16,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 * v3.0.1 - work in progress
   * Added explicit support for invoking `super` - thx to @heruan for pointing this out
+  * Added possibility to create a lambda reference from an invocation (issue #56 and PR #57)
 * v3.0.0 - 2017-08-06
   * Requires Java 8
   * Reworked #41 so that it is finally working in all cases
