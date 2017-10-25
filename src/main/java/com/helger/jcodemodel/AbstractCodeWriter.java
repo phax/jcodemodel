@@ -105,21 +105,27 @@ public abstract class AbstractCodeWriter implements Closeable
   private final Charset m_aEncoding;
   private final String m_sNewLine;
 
-  @Nonnull
-  protected static String getDefaultNewLine ()
-  {
-    String ret = null;
-    try
-    {
-      ret = System.getProperty ("line.separator");
-    }
-    catch (final Exception ex)
-    {
-      // Fall through
-    }
+  private static String s_sDefaultNewLine = null;
 
-    if (ret == null || ret.length () == 0)
-      ret = "\n";
+  @Nonnull
+  public static String getDefaultNewLine ()
+  {
+    String ret = s_sDefaultNewLine;
+    if (ret == null)
+    {
+      try
+      {
+        ret = s_sDefaultNewLine = System.getProperty ("line.separator");
+      }
+      catch (final Exception ex)
+      {
+        // Fall through
+      }
+
+      // Fall back
+      if (ret == null || ret.length () == 0)
+        ret = s_sDefaultNewLine = "\n";
+    }
     return ret;
   }
 
@@ -131,6 +137,9 @@ public abstract class AbstractCodeWriter implements Closeable
     m_sNewLine = sNewLine;
   }
 
+  /**
+   * @return The encoding provided in the constructor. May be <code>null</code>.
+   */
   @Nullable
   public Charset encoding ()
   {
