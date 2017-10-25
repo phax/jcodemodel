@@ -504,4 +504,18 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     }
     return hashCodeGenerator.getHashCode ();
   }
+
+  /**
+   * Create a special <code>super()</code> invocation. It may only be used as
+   * the first statement inside a constructor - but this is not enforced by this
+   * API!
+   * 
+   * @return A new non-<code>null</code> {@link JInvocation}
+   * @since 3.0.1
+   */
+  @Nonnull
+  public static JInvocation _super ()
+  {
+    return new JInvocation (null, null, JExpr._super ().what ());
+  }
 }

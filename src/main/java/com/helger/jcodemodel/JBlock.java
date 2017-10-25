@@ -409,6 +409,19 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
+   * Explicitly call the super class constructor in this block. This method may
+   * only be called as the first call inside a constructor block!
+   *
+   * @return Newly generated super {@link JInvocation}
+   * @since 3.0.1
+   */
+  @Nonnull
+  public JInvocation invokeSuper ()
+  {
+    return internalInsert (JInvocation._super ());
+  }
+
+  /**
    * Creates an invocation statement and adds it to this block.
    *
    * @param aExpr
