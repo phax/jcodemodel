@@ -57,6 +57,7 @@ public class JLambdaMethodRef implements IJExpression
   private final AbstractJType m_aType;
   private final JVar m_aVar;
   private final String m_sMethodName;
+  private final JInvocation m_aInvocation;
 
   /**
    * Constructor to reference the passed method
@@ -74,6 +75,7 @@ public class JLambdaMethodRef implements IJExpression
     m_aType = null;
     m_aVar = null;
     m_sMethodName = null;
+    m_aInvocation = null;
   }
 
   /**
@@ -103,6 +105,7 @@ public class JLambdaMethodRef implements IJExpression
     m_aType = JCValueEnforcer.notNull (aType, "Type");
     m_aVar = null;
     m_sMethodName = JCValueEnforcer.notEmpty (sMethod, "Method");
+    m_aInvocation = null;
   }
 
   /**
@@ -123,6 +126,7 @@ public class JLambdaMethodRef implements IJExpression
     m_aType = null;
     m_aVar = aVar;
     m_sMethodName = sMethod;
+    m_aInvocation = null;
   }
 
   /**
@@ -144,6 +148,28 @@ public class JLambdaMethodRef implements IJExpression
     m_aType = null;
     m_aVar = aVar;
     m_sMethodName = null;
+    m_aInvocation = null;
+  }
+
+  /**
+   * Constructor for an arbitrary invocation method reference.
+   *
+   * @param aInvocation
+   *        Variable containing the invocation. May not be <code>null</code>.
+   * @param sMethod
+   *        Name of the method to reference. May neither be <code>null</code>
+   *        nor empty.
+   */
+  public JLambdaMethodRef (@Nonnull final JInvocation aInvocation, @Nonnull final String sMethod)
+  {
+    JCValueEnforcer.notNull (aInvocation, "Invocation");
+    JCValueEnforcer.notEmpty (sMethod, "Method");
+
+    m_aMethod = null;
+    m_aType = null;
+    m_aVar = null;
+    m_sMethodName = sMethod;
+    m_aInvocation = aInvocation;
   }
 
   /**
@@ -183,12 +209,22 @@ public class JLambdaMethodRef implements IJExpression
 
   /**
    * @return The variable for the instance reference. May be <code>null</code>
-   *         if this is a static reference.
+   *         if this is a static or invocation reference.
    */
   @Nullable
   public JVar var ()
   {
     return m_aVar;
+  }
+
+  /**
+   * @return The invocation reference. May be <code>null</code> if this is a
+   *         static or variable reference.
+   */
+  @Nullable
+  public JInvocation invocation ()
+  {
+    return m_aInvocation;
   }
 
   /**
@@ -200,12 +236,16 @@ public class JLambdaMethodRef implements IJExpression
     return m_aMethod != null ? m_aMethod.name () : m_sMethodName;
   }
 
+  @Override
   public void generate (@Nonnull final JFormatter f)
   {
     if (isStaticRef ())
       f.type (type ());
     else
-      f.generable (m_aVar);
+      if (m_aVar != null)
+        f.generable (m_aVar);
+      else
+        f.generable (m_aInvocation);
     f.print ("::").print (methodName ());
   }
 }
