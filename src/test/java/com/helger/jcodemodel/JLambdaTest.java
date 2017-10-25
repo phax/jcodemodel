@@ -53,7 +53,7 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
  */
 public final class JLambdaTest
 {
-  private static final String CRLF = System.getProperty ("line.separator");
+  private static final String CRLF = AbstractCodeWriter.getDefaultNewLine ();
 
   @Test
   public void testExpressionBasic ()
@@ -113,12 +113,7 @@ public final class JLambdaTest
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
     aLambda.body ()._return (aParam.plus (1));
-    assertEquals ("(int x) -> {" +
-                  CRLF +
-                  "    return (x + 1);" +
-                  CRLF +
-                  "}" +
-                  CRLF,
+    assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF,
                   CodeModelTestsHelper.toString (aLambda));
   }
 }

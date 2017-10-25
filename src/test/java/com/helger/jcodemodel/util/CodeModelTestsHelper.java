@@ -45,6 +45,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -89,10 +90,15 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aGenerable, "Generable");
 
-    final StringWriter aSW = new StringWriter ();
-    final JFormatter formatter = new JFormatter (aSW);
-    aGenerable.generate (formatter);
-    return aSW.toString ();
+    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = new JFormatter (aSW))
+    {
+      aGenerable.generate (aFormatter);
+      return aSW.toString ();
+    }
+    catch (final IOException ex)
+    {
+      throw new UncheckedIOException (ex);
+    }
   }
 
   /**
@@ -107,10 +113,15 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    final StringWriter aSW = new StringWriter ();
-    final JFormatter formatter = new JFormatter (aSW);
-    aDeclaration.declare (formatter);
-    return aSW.toString ();
+    try (final StringWriter aSW = new StringWriter (); final JFormatter formatter = new JFormatter (aSW))
+    {
+      aDeclaration.declare (formatter);
+      return aSW.toString ();
+    }
+    catch (final IOException ex)
+    {
+      throw new UncheckedIOException (ex);
+    }
   }
 
   /**
@@ -125,10 +136,15 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aStatement, "Statement");
 
-    final StringWriter aSW = new StringWriter ();
-    final JFormatter formatter = new JFormatter (aSW);
-    aStatement.state (formatter);
-    return aSW.toString ();
+    try (final StringWriter aSW = new StringWriter (); final JFormatter formatter = new JFormatter (aSW))
+    {
+      aStatement.state (formatter);
+      return aSW.toString ();
+    }
+    catch (final IOException ex)
+    {
+      throw new UncheckedIOException (ex);
+    }
   }
 
   @Nonnull
@@ -136,10 +152,15 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    final StringWriter aSW = new StringWriter ();
-    final JFormatter formatter = new JFormatter (aSW);
-    aDeclaration.declare (formatter);
-    return aSW.toString ();
+    try (final StringWriter aSW = new StringWriter (); final JFormatter formatter = new JFormatter (aSW))
+    {
+      aDeclaration.declare (formatter);
+      return aSW.toString ();
+    }
+    catch (final IOException ex)
+    {
+      throw new UncheckedIOException (ex);
+    }
   }
 
   @Nonnull
@@ -147,10 +168,15 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aGenerable, "Generable");
 
-    final StringWriter aSW = new StringWriter ();
-    final JFormatter formatter = new JFormatter (aSW);
-    aGenerable.generate (formatter);
-    return aSW.toString ();
+    try (final StringWriter aSW = new StringWriter (); final JFormatter formatter = new JFormatter (aSW))
+    {
+      aGenerable.generate (formatter);
+      return aSW.toString ();
+    }
+    catch (final IOException ex)
+    {
+      throw new UncheckedIOException (ex);
+    }
   }
 
   /**
@@ -160,60 +186,69 @@ public final class CodeModelTestsHelper
    * @param cm
    *        Source code model
    * @return The byte array
-   * @throws IOException
-   *         Theoretically only
    */
   @Nonnull
-  public static byte [] getAllBytes (@Nonnull final JCodeModel cm) throws IOException
+  public static byte [] getAllBytes (@Nonnull final JCodeModel cm)
   {
     try (final ByteArrayOutputStream bos = new ByteArrayOutputStream ())
     {
       cm.build (new OutputStreamCodeWriter (bos, DEFAULT_ENCODING));
       return bos.toByteArray ();
     }
+    catch (final IOException ex)
+    {
+      throw new UncheckedIOException (ex);
+    }
   }
 
-  public static void parseCodeModel (@Nonnull final JCodeModel cm) throws IOException
+  public static void parseCodeModel (@Nonnull final JCodeModel cm)
   {
-    cm.build (new AbstractCodeWriter (DEFAULT_ENCODING, "\n")
+    try
     {
-      @Override
-      public OutputStream openBinary (final JPackage aPackage, final String sFilename) throws IOException
+      cm.build (new AbstractCodeWriter (DEFAULT_ENCODING, "\n")
       {
-        return new ByteArrayOutputStream ()
+        @Override
+        public OutputStream openBinary (final JPackage aPackage, final String sFilename) throws IOException
         {
-          @Override
-          public void close () throws IOException
+          return new ByteArrayOutputStream ()
           {
-            super.close ();
-
-            // Get as bytes
-            final byte [] aBytes = toByteArray ();
-            if (false)
-              System.out.println (new String (aBytes, DEFAULT_ENCODING));
-
-            System.out.println ("Parsing " +
-                                (aPackage.isUnnamed () ? "" : aPackage.name () + ".") +
-                                (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5)
-                                                              : sFilename));
-
-            // Parse again
-            try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
+            @Override
+            public void close () throws IOException
             {
-              JavaParser.parse (bis, DEFAULT_ENCODING);
-            }
-          }
-        };
-      }
+              super.close ();
 
-      @Override
-      public void close () throws IOException
-      {}
-    });
+              // Get as bytes
+              final byte [] aBytes = toByteArray ();
+              if (false)
+                System.out.println (new String (aBytes, DEFAULT_ENCODING));
+
+              System.out.println ("Parsing " +
+                                  (aPackage.isUnnamed () ? "" : aPackage.name () + ".") +
+                                  (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5)
+                                                                : sFilename));
+
+              // Parse again
+              try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
+              {
+                JavaParser.parse (bis, DEFAULT_ENCODING);
+              }
+            }
+          };
+        }
+
+        @Override
+        public void close () throws IOException
+        {}
+      });
+    }
+    catch (final IOException ex)
+    {
+      throw new UncheckedIOException (ex);
+    }
   }
 
   @Nonnull
-  public static CompilationUnit parseAndGetSingleClassCodeModel (@Nonnull final JCodeModel cm) throws IOException
+  public static CompilationUnit parseAndGetSingleClassCodeModel (@Nonnull final JCodeModel cm)
   {
     final byte [] aBytes = getAllBytes (cm);
     if (false)
@@ -223,10 +258,21 @@ public final class CodeModelTestsHelper
     {
       return JavaParser.parse (bis, DEFAULT_ENCODING);
     }
+    catch (final IOException ex)
+    {
+      throw new UncheckedIOException (ex);
+    }
   }
 
-  public static void printCodeModel (@Nonnull final JCodeModel cm) throws IOException
+  public static void printCodeModel (@Nonnull final JCodeModel cm)
   {
-    cm.build (new SingleStreamCodeWriter (System.out));
+    try
+    {
+      cm.build (new SingleStreamCodeWriter (System.out));
+    }
+    catch (final IOException ex)
+    {
+      throw new UncheckedIOException (ex);
+    }
   }
 }

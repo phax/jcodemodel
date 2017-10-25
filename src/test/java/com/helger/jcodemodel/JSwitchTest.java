@@ -40,8 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
@@ -54,7 +52,7 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
 public final class JSwitchTest
 {
   @Test
-  public void testGenerate () throws IOException, JClassAlreadyExistsException
+  public void testGenerate () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
 

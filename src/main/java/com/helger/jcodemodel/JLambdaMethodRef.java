@@ -53,17 +53,21 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  */
 public class JLambdaMethodRef implements IJExpression
 {
-  private final JMethod m_aMethod;
+  private final boolean m_bStatic;
   private final AbstractJType m_aType;
   private final JVar m_aVar;
-  private final String m_sMethodName;
   private final JInvocation m_aInvocation;
+  private final JMethod m_aMethod;
+  private final String m_sMethodName;
 
   /**
-   * Constructor to reference the passed method
+   * Constructor to reference the passed static method. It uses the name of the
+   * owning class as base (<code>owning::method</code>).
    *
    * @param aMethod
    *        The static method to reference. May not be <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If the passed method is not static
    */
   public JLambdaMethodRef (@Nonnull final JMethod aMethod)
   {
@@ -71,15 +75,17 @@ public class JLambdaMethodRef implements IJExpression
     JCValueEnforcer.isTrue (aMethod.mods ().isStatic (),
                             "Only static methods can be used with this constructor. Use the constructor with JVar for instance methods.");
 
-    m_aMethod = aMethod;
-    m_aType = null;
+    m_bStatic = true;
+    m_aType = aMethod.owningClass ();
     m_aVar = null;
-    m_sMethodName = null;
     m_aInvocation = null;
+    m_aMethod = aMethod;
+    m_sMethodName = null;
   }
 
   /**
-   * Constructor for a constructor method reference (<code>type::new</code>).
+   * Constructor for a static constructor method reference
+   * (<code>type::new</code>).
    *
    * @param aType
    *        Type to reference the constructor from. May not be <code>null</code>
@@ -91,7 +97,8 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * Constructor for an arbitrary method reference.
+   * Constructor for an arbitrary static method reference
+   * (<code>type::name</code>).
    *
    * @param aType
    *        Type the method belongs to. May not be <code>null</code>.
@@ -101,15 +108,20 @@ public class JLambdaMethodRef implements IJExpression
    */
   public JLambdaMethodRef (@Nonnull final AbstractJType aType, @Nonnull final String sMethod)
   {
-    m_aMethod = null;
-    m_aType = JCValueEnforcer.notNull (aType, "Type");
+    JCValueEnforcer.notNull (aType, "Type");
+    JCValueEnforcer.notEmpty (sMethod, "Method");
+
+    m_bStatic = true;
+    m_aType = aType;
     m_aVar = null;
-    m_sMethodName = JCValueEnforcer.notEmpty (sMethod, "Method");
     m_aInvocation = null;
+    m_aMethod = null;
+    m_sMethodName = sMethod;
   }
 
   /**
-   * Constructor for an arbitrary instance method reference.
+   * Constructor for an arbitrary instance method reference
+   * (<code>var::name</code>).
    *
    * @param aVar
    *        Variable containing the instance. May not be <code>null</code>.
@@ -122,15 +134,17 @@ public class JLambdaMethodRef implements IJExpression
     JCValueEnforcer.notNull (aVar, "Var");
     JCValueEnforcer.notEmpty (sMethod, "Method");
 
-    m_aMethod = null;
-    m_aType = null;
+    m_bStatic = false;
+    m_aType = aVar.type ();
     m_aVar = aVar;
-    m_sMethodName = sMethod;
     m_aInvocation = null;
+    m_aMethod = null;
+    m_sMethodName = sMethod;
   }
 
   /**
-   * Constructor for an arbitrary instance method reference.
+   * Constructor for an arbitrary instance method reference
+   * (<code>var::name</code>).
    *
    * @param aVar
    *        Variable containing the instance. May not be <code>null</code>.
@@ -144,11 +158,12 @@ public class JLambdaMethodRef implements IJExpression
     JCValueEnforcer.isFalse (aMethod.mods ().isStatic (),
                              "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
 
-    m_aMethod = aMethod;
-    m_aType = null;
+    m_bStatic = false;
+    m_aType = aVar.type ();
     m_aVar = aVar;
-    m_sMethodName = null;
     m_aInvocation = null;
+    m_aMethod = aMethod;
+    m_sMethodName = null;
   }
 
   /**
@@ -165,11 +180,35 @@ public class JLambdaMethodRef implements IJExpression
     JCValueEnforcer.notNull (aInvocation, "Invocation");
     JCValueEnforcer.notEmpty (sMethod, "Method");
 
-    m_aMethod = null;
+    m_bStatic = false;
     m_aType = null;
     m_aVar = null;
-    m_sMethodName = sMethod;
     m_aInvocation = aInvocation;
+    m_aMethod = null;
+    m_sMethodName = sMethod;
+  }
+
+  /**
+   * Constructor for an arbitrary invocation method reference.
+   *
+   * @param aInvocation
+   *        Variable containing the invocation. May not be <code>null</code>.
+   * @param aMethod
+   *        The instance method to reference. May not be <code>null</code>.
+   */
+  public JLambdaMethodRef (@Nonnull final JInvocation aInvocation, @Nonnull final JMethod aMethod)
+  {
+    JCValueEnforcer.notNull (aInvocation, "Invocation");
+    JCValueEnforcer.notNull (aMethod, "Method");
+    JCValueEnforcer.isFalse (aMethod.mods ().isStatic (),
+                             "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
+
+    m_bStatic = false;
+    m_aType = aMethod.owningClass ();
+    m_aVar = null;
+    m_aInvocation = aInvocation;
+    m_aMethod = aMethod;
+    m_sMethodName = null;
   }
 
   /**
@@ -178,32 +217,16 @@ public class JLambdaMethodRef implements IJExpression
    */
   public boolean isStaticRef ()
   {
-    if (m_aMethod != null)
-      return m_aMethod.mods ().isStatic ();
-
-    return m_aType != null;
+    return m_bStatic;
   }
 
   /**
-   * @return The owning method. May be <code>null</code> if a constructor with
-   *         method name was used.
+   * @return The type owning the method. May be <code>null</code> if invoked
+   *         with another JInvocation.
    */
   @Nullable
-  public JMethod method ()
-  {
-    return m_aMethod;
-  }
-
-  /**
-   * @return The type owning the method. Never <code>null</code> .
-   */
-  @Nonnull
   public AbstractJType type ()
   {
-    if (m_aVar != null)
-      return m_aVar.type ();
-    if (m_aMethod != null)
-      return m_aMethod.owningClass ();
     return m_aType;
   }
 
@@ -225,6 +248,16 @@ public class JLambdaMethodRef implements IJExpression
   public JInvocation invocation ()
   {
     return m_aInvocation;
+  }
+
+  /**
+   * @return The owning method. May be <code>null</code> if a constructor with
+   *         method name was used.
+   */
+  @Nullable
+  public JMethod method ()
+  {
+    return m_aMethod;
   }
 
   /**

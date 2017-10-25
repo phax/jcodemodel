@@ -44,7 +44,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
-import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Test;
@@ -96,7 +95,7 @@ public final class JCodeModelTest
   }
 
   @Test
-  public void testEmptyNarrowed () throws JClassAlreadyExistsException, IOException
+  public void testEmptyNarrowed () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass jClass = cm._class ("EmptyNarrowed", EClassType.INTERFACE);
