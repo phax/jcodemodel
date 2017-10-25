@@ -43,6 +43,7 @@ package com.helger.jcodemodel.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -51,12 +52,14 @@ import javax.annotation.Nonnull;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JFormatter;
+import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
@@ -170,16 +173,56 @@ public final class CodeModelTestsHelper
     }
   }
 
+  public static void parseCodeModel (@Nonnull final JCodeModel cm) throws IOException
+  {
+    cm.build (new AbstractCodeWriter (DEFAULT_ENCODING, "\n")
+    {
+      @Override
+      public OutputStream openBinary (final JPackage aPackage, final String sFilename) throws IOException
+      {
+        return new ByteArrayOutputStream ()
+        {
+          @Override
+          public void close () throws IOException
+          {
+            super.close ();
+
+            // Get as bytes
+            final byte [] aBytes = toByteArray ();
+            if (false)
+              System.out.println (new String (aBytes, DEFAULT_ENCODING));
+
+            System.out.println ("Parsing " +
+                                (aPackage.isUnnamed () ? "" : aPackage.name () + ".") +
+                                (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5)
+                                                              : sFilename));
+
+            // Parse again
+            try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
+            {
+              JavaParser.parse (bis, DEFAULT_ENCODING);
+            }
+          }
+        };
+      }
+
+      @Override
+      public void close () throws IOException
+      {}
+    });
+  }
+
   @Nonnull
-  public static CompilationUnit parseCodeModel (@Nonnull final JCodeModel cm) throws IOException
+  public static CompilationUnit parseAndGetSingleClassCodeModel (@Nonnull final JCodeModel cm) throws IOException
   {
     final byte [] aBytes = getAllBytes (cm);
     if (false)
       System.out.println (new String (aBytes, DEFAULT_ENCODING));
 
-    final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes);
-
-    return JavaParser.parse (bis, DEFAULT_ENCODING);
+    try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
+    {
+      return JavaParser.parse (bis, DEFAULT_ENCODING);
+    }
   }
 
   public static void printCodeModel (@Nonnull final JCodeModel cm) throws IOException

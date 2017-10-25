@@ -68,16 +68,12 @@ public final class Issue30FuncTest
     final JPackage aPkg1 = cm._package ("id.myapp");
     final JDefinedClass aClass_R = aPkg1._class ("R");
     final JDefinedClass aClass_id = aClass_R._class (JMod.PUBLIC | JMod.STATIC, "id");
-    final JFieldVar aFieldItem = aClass_id.field (JMod.PUBLIC |
-                                                  JMod.STATIC |
-                                                  JMod.FINAL,
+    final JFieldVar aFieldItem = aClass_id.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
                                                   cm.INT,
                                                   "myItem",
                                                   JExpr.lit (1));
     final JDefinedClass aClass_menu = aClass_R._class (JMod.PUBLIC | JMod.STATIC, "menu");
-    final JFieldVar aFieldMenu = aClass_menu.field (JMod.PUBLIC |
-                                                    JMod.STATIC |
-                                                    JMod.FINAL,
+    final JFieldVar aFieldMenu = aClass_menu.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
                                                     cm.INT,
                                                     "myMenu",
                                                     JExpr.lit (2));
@@ -89,8 +85,7 @@ public final class Issue30FuncTest
     final JMethod aMethodSelected = aClassAct.method (JMod.PUBLIC, cm.BOOLEAN, "onOptionsItemSelected");
     aMethodSelected.body ()._if (JExpr.ref ("itemId_").eq (aFieldItem.fieldRef ()));
 
-    // Multiple packages - print only
-    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 
   @Test
@@ -111,7 +106,6 @@ public final class Issue30FuncTest
     constructorBody.decl (cm.INT, "myInt", androidRId.staticRef ("someId"));
     constructorBody.decl (cm.INT, "myInt2", myRId.staticRef ("otherId"));
 
-    CodeModelTestsHelper.printCodeModel (cm);
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 
@@ -134,7 +128,6 @@ public final class Issue30FuncTest
     constructorBody.decl (cm.INT, "myInt", androidRId.staticRef ("someId"));
     constructorBody.decl (cm.INT, "myInt2", myRId.staticRef ("otherId"));
 
-    CodeModelTestsHelper.printCodeModel (cm);
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

@@ -89,25 +89,25 @@ public class FileCodeWriter extends AbstractCodeWriter
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir,
-                         @Nullable final Charset encoding,
+                         @Nullable final Charset aEncoding,
                          @Nonnull final String sNewLine) throws IOException
   {
-    this (aTargetDir, DEFAULT_MARK_READ_ONLY, encoding, sNewLine);
+    this (aTargetDir, DEFAULT_MARK_READ_ONLY, aEncoding, sNewLine);
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir,
                          final boolean bMarkReadOnly,
-                         @Nullable final Charset encoding) throws IOException
+                         @Nullable final Charset aEncoding) throws IOException
   {
-    this (aTargetDir, bMarkReadOnly, encoding, getDefaultNewLine ());
+    this (aTargetDir, bMarkReadOnly, aEncoding, getDefaultNewLine ());
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir,
                          final boolean bMarkReadOnly,
-                         @Nullable final Charset encoding,
+                         @Nullable final Charset aEncoding,
                          @Nonnull final String sNewLine) throws IOException
   {
-    super (encoding, sNewLine);
+    super (aEncoding, sNewLine);
     m_aTargetDir = aTargetDir;
     m_bMarkReadOnly = bMarkReadOnly;
     if (!aTargetDir.exists () || !aTargetDir.isDirectory ())

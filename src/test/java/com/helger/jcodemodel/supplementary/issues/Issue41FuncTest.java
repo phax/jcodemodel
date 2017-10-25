@@ -127,6 +127,6 @@ public final class Issue41FuncTest
       s._case (JExpr.lit (aEntry.getKey ().intValue ())).body ()._return (ec);
     }
 
-    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

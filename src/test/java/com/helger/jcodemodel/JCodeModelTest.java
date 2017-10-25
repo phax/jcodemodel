@@ -76,7 +76,7 @@ public final class JCodeModelTest
       .constructor (JMod.PUBLIC)
       .body ()
       .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
-    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 
   @Test
@@ -102,6 +102,6 @@ public final class JCodeModelTest
     final JDefinedClass jClass = cm._class ("EmptyNarrowed", EClassType.INTERFACE);
     final AbstractJClass hashMap = cm.ref (java.util.HashMap.class).narrowEmpty ();
     jClass.field (JMod.PRIVATE, cm.ref (Map.class).narrow (String.class), "strMap", JExpr._new (hashMap));
-    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

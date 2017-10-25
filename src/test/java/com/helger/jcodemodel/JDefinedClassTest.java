@@ -86,11 +86,31 @@ public final class JDefinedClassTest
     final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");
     c.instanceInit ().assign (JExpr._this ().ref (myField), JExpr.lit ("myValue"));
 
-    final CompilationUnit compilationUnit = CodeModelTestsHelper.parseCodeModel (cm);
-    final TypeDeclaration <?> typeDeclaration = compilationUnit.getTypes ().get (0);
+    final CompilationUnit aCU = CodeModelTestsHelper.parseAndGetSingleClassCodeModel (cm);
+    final TypeDeclaration <?> typeDeclaration = aCU.getTypes ().get (0);
     final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
     final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
                                                                                                    .get (1);
     assertNotNull (initializerDeclaration);
+  }
+
+  @Test
+  public void testCallSuper () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+
+    // Base class
+    final JDefinedClass c1 = cm._package ("myPackage")._class (0, "BaseClass");
+    final JMethod con1 = c1.constructor (JMod.PUBLIC);
+    final JVar p1 = con1.param (JMod.FINAL, cm.ref (String.class), "str");
+    con1.body ()
+        .add (new JFieldRef (cm.ref (System.class), "out").invoke ("println").arg (JExpr.lit ("Got ").plus (p1)));
+
+    // Derived class
+    final JDefinedClass c2 = cm._package ("myPackage")._class (0, "DerivedClass");
+    c2._extends (c1);
+    final JMethod con2 = c2.constructor (JMod.PUBLIC);
+    con2.body ().invokeSuper ().arg ("Test");
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }
