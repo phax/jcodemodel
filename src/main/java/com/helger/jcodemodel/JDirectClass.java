@@ -43,6 +43,7 @@ package com.helger.jcodemodel;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -154,5 +155,23 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   protected JDirectClass createInnerClass (final int nMods, final EClassType eClassType, final String sName)
   {
     return new JDirectClass (owner (), this, eClassType, sName);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final JDirectClass other = (JDirectClass) obj;
+    if (!Objects.equals(this.m_sFullName, other.m_sFullName)) {
+      return false;
+    }
+    return true;
   }
 }
