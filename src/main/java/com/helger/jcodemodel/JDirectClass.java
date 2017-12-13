@@ -43,10 +43,11 @@ package com.helger.jcodemodel;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import com.helger.jcodemodel.util.JCHashCodeGenerator;
 
 /**
  * A special {@link AbstractJClass} that represents an unknown class (except its
@@ -158,20 +159,21 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   }
 
   @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
+  public boolean equals (final Object o)
+  {
+    if (o == this)
       return true;
-    }
-    if (obj == null) {
+
+    if (o == null || !getClass ().equals (o.getClass ()))
       return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final JDirectClass other = (JDirectClass) obj;
-    if (!Objects.equals(this.m_sFullName, other.m_sFullName)) {
-      return false;
-    }
-    return true;
+
+    final JDirectClass rhs = (JDirectClass) o;
+    return m_sFullName.equals (rhs.m_sFullName);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return JCHashCodeGenerator.getHashCode (this, m_sFullName);
   }
 }
