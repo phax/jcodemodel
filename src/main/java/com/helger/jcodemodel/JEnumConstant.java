@@ -127,9 +127,19 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
   @Nonnull
   public List <IJExpression> args ()
   {
+    return Collections.unmodifiableList (argsMutable ());
+  }
+
+  /**
+   * @return Mutable list of arguments. Never <code>null</code>.
+   * @since 3.0.2
+   */
+  @Nonnull
+  public List <IJExpression> argsMutable ()
+  {
     if (m_aArgs == null)
       m_aArgs = new ArrayList <> ();
-    return Collections.unmodifiableList (m_aArgs);
+    return m_aArgs;
   }
 
   public boolean hasArgs ()
