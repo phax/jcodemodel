@@ -16,6 +16,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 * v3.0.2 - work in progress
   * Fixed method resolution using direct class references (issue #58)
+  * Added some additional `JInvocation.arg...` sanity methods
 * v3.0.1 - 2017-10-25
   * Added explicit support for invoking `super` - thx to @heruan for pointing this out
   * Added possibility to create a lambda reference from an invocation (issue #56 and PR #57 from @heruan)
