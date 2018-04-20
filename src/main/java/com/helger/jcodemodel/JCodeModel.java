@@ -775,7 +775,9 @@ public final class JCodeModel
    *
    * @param aClass
    *        Class to be referenced
-   * @return primitive or class
+   * @return Might be a {@link JReferencedClass} or a {@link JArrayClass} or a
+   *         {@link JPrimitiveType}
+   * @see #ref(Class)
    */
   @Nonnull
   public AbstractJType _ref (@Nonnull final Class <?> aClass)
