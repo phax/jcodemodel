@@ -246,6 +246,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
 
   /**
    * Returns an iterator that walks the nested classes defined in this class.
+   * Don't modify the returned collection!
    */
   @Nonnull
   public final Collection <CLASSTYPE> classes ()

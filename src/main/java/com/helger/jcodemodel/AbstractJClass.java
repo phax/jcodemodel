@@ -427,6 +427,24 @@ public abstract class AbstractJClass extends AbstractJType
                                                       @Nonnull List <? extends AbstractJClass> aBindings);
 
   /**
+   * Get all inner classes of this class.
+   *
+   * @return Never <code>null</code>.
+   * @since 3.0.3
+   */
+  @Nonnull
+  public Collection <AbstractJClassContainer <?>> getAllInnerClasses ()
+  {
+    if (this instanceof AbstractJClassContainer <?>)
+    {
+      @SuppressWarnings ("rawtypes")
+      final Collection <AbstractJClassContainer <?>> aInnerClasses = ((AbstractJClassContainer) this).classes ();
+      return aInnerClasses;
+    }
+    return Collections.emptyList ();
+  }
+
+  /**
    * Check if this class is a class container and if so try to find the inner
    * class with the provided name.
    *
@@ -438,14 +456,9 @@ public abstract class AbstractJClass extends AbstractJType
   @Nullable
   public AbstractJClassContainer <?> getInnerClass (@Nullable final String sName)
   {
-    if (sName != null && this instanceof AbstractJClassContainer <?>)
-    {
-      @SuppressWarnings ("rawtypes")
-      final Collection <AbstractJClassContainer <?>> aInnerClasses = ((AbstractJClassContainer) this).classes ();
-      for (final AbstractJClassContainer <?> aInnerClass : aInnerClasses)
-        if (aInnerClass.name ().equals (sName))
-          return aInnerClass;
-    }
+    for (final AbstractJClassContainer <?> aInnerClass : getAllInnerClasses ())
+      if (aInnerClass.name ().equals (sName))
+        return aInnerClass;
     return null;
   }
 
