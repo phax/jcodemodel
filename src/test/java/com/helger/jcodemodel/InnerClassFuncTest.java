@@ -41,6 +41,8 @@
 package com.helger.jcodemodel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
@@ -57,6 +59,8 @@ public final class InnerClassFuncTest
     final JDefinedClass daInnerInner = daInner1._class ("InnerInner");
     final JDefinedClass daInner2 = aClass._class ("DaTestClassInner");
     final JDefinedClass daInner2Inner = daInner2._class ("Inner2");
+    assertSame (daInner2Inner, daInner2.getInnerClass ("Inner2"));
+    assertNull (daInner2.getInnerClass ("Inner3"));
 
     assertEquals ("Inner", daInner1.name ());
     assertEquals ("org.test.DaTestClass.Inner", daInner1.fullName ());

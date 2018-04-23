@@ -82,8 +82,6 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
    * capitalized in a case sensitive file system (
    * {@link JCodeModel#isFileSystemCaseSensitive()}) to avoid conflicts. Lazily
    * created to save footprint.
-   *
-   * @see #_getClasses()
    */
   protected Map <String, CLASSTYPE> m_aClasses;
 
@@ -178,7 +176,8 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   }
 
   /**
-   * @return <code>true</code> if this is an anonymous class.
+   * @return <code>true</code> if this is an anonymous class. Note: this applies
+   *         only to classes.
    */
   public final boolean isAnonymous ()
   {
@@ -214,14 +213,6 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   }
 
   @Nonnull
-  private Map <String, CLASSTYPE> _getClasses ()
-  {
-    if (m_aClasses == null)
-      m_aClasses = new TreeMap <> ();
-    return m_aClasses;
-  }
-
-  @Nonnull
   protected abstract CLASSTYPE createInnerClass (final int nMods,
                                                  @Nonnull final EClassType eClassType,
                                                  @Nonnull final String sName);
@@ -237,12 +228,19 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
     else
       sRealName = sName;
 
-    final CLASSTYPE aExistingClass = _getClasses ().get (sRealName);
-    if (aExistingClass != null)
-      throw new JClassAlreadyExistsException (aExistingClass);
+    // Existing class?
+    if (m_aClasses != null)
+    {
+      final CLASSTYPE aExistingClass = m_aClasses.get (sRealName);
+      if (aExistingClass != null)
+        throw new JClassAlreadyExistsException (aExistingClass);
+    }
+    else
+      m_aClasses = new TreeMap <> ();
 
+    // Create and add inner class
     final CLASSTYPE c = createInnerClass (nMods, eClassType, sName);
-    _getClasses ().put (sRealName, c);
+    m_aClasses.put (sRealName, c);
     return c;
   }
 

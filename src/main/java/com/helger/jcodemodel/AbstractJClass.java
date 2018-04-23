@@ -42,6 +42,7 @@ package com.helger.jcodemodel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -424,6 +425,29 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables,
                                                       @Nonnull List <? extends AbstractJClass> aBindings);
+
+  /**
+   * Check if this class is a class container and if so try to find the inner
+   * class with the provided name.
+   *
+   * @param sName
+   *        The name to check. May be <code>null</code>.
+   * @return The inner class with the provided name.
+   * @since 3.0.3
+   */
+  @Nullable
+  public AbstractJClassContainer <?> getInnerClass (@Nullable final String sName)
+  {
+    if (sName != null && this instanceof AbstractJClassContainer <?>)
+    {
+      @SuppressWarnings ("rawtypes")
+      final Collection <AbstractJClassContainer <?>> aInnerClasses = ((AbstractJClassContainer) this).classes ();
+      for (final AbstractJClassContainer <?> aInnerClass : aInnerClasses)
+        if (aInnerClass.name ().equals (sName))
+          return aInnerClass;
+    }
+    return null;
+  }
 
   /**
    * @return name<code>.class</code>
