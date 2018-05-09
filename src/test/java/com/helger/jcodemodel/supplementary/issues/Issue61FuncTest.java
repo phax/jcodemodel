@@ -38,67 +38,34 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.fmt;
+package com.helger.jcodemodel.supplementary.issues;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.fmt.JTextFile;
+import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.WillNotClose;
-
-import com.helger.jcodemodel.AbstractJResourceFile;
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
- * Simple text file.
+ * Test for https://github.com/phax/jcodemodel/issues/61
  *
- * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Flavio Baronti
  */
-public class JTextFile extends AbstractJResourceFile
-{
-  private String m_sContents;
-  private final Charset m_aEncoding;
-
-  public JTextFile (@Nonnull final String sName, @Nonnull final Charset aEncoding)
+public class Issue61FuncTest {
+  @Test
+  public void testIssue () throws Exception
   {
-    super (sName);
-    m_aEncoding = JCValueEnforcer.notNull (aEncoding, "Encoding");
-  }
-
-  public void setContents (@Nullable final String sContents)
-  {
-    m_sContents = sContents;
-  }
-
-  @Nullable
-  public String contents ()
-  {
-    return m_sContents;
-  }
-
-  @Nonnull
-  public Charset encoding ()
-  {
-    return m_aEncoding;
-  }
-
-  @Override
-  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
-  {
-    if (m_sContents != null)
-      try (final Writer w = new OutputStreamWriter (aOS, m_aEncoding)
-      {
-        @Override
-        public void close ()
-        {}
-      })
-      {
-        w.write (m_sContents);
-        w.flush();
-      }
+    final JCodeModel generator = new JCodeModel ();
+    final Charset ascii = Charset.forName("US-ASCII");
+    final ByteArrayOutputStream resOut = new ByteArrayOutputStream();
+    final JTextFile res = (JTextFile) generator.rootPackage().addResourceFile(new JTextFile("example.txt", ascii));
+    
+    res.setContents("Testing");
+    generator.build(new SingleStreamCodeWriter(new ByteArrayOutputStream()), new SingleStreamCodeWriter(resOut));
+    String txtRes = ascii.decode(ByteBuffer.wrap(resOut.toByteArray())).toString();
+    assertTrue(txtRes.contains("Testing"));
   }
 }
