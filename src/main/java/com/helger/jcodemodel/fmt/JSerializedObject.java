@@ -84,6 +84,7 @@ public class JSerializedObject extends AbstractJResourceFile
     })
     {
       oos.writeObject (m_aObj);
+      oos.flush();
     }
   }
 }
