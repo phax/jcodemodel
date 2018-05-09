@@ -2,7 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- * Portions Copyright 2013-2017 Philip Helger + contributors
+ * Portions Copyright 2013-2018 Philip Helger + contributors
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,18 +40,17 @@
  */
 package com.helger.jcodemodel.supplementary.issues;
 
-import com.helger.jcodemodel.AbstractJType;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertSame;
-
+import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JMethod;
 
 /**
- * Test for https://github.com/phax/jcodemodel/issues/57
+ * Test for https://github.com/phax/jcodemodel/issues/58
  *
  * @author Flavio Baronti
  */
@@ -60,10 +59,10 @@ public final class Issue58FuncTest
   @Test
   public void testIssue () throws Exception
   {
-    JCodeModel generator = new JCodeModel ();
-    JDefinedClass aClass = generator._class("test.Test");
-    JMethod aMethod = aClass.method(0, generator.VOID, "name");
-    aMethod.param(generator.ref("test.UnknownClass"), "p");
-    assertSame(aMethod, aClass.getMethod("name", new AbstractJType[] { generator.ref("test.UnknownClass") }));
+    final JCodeModel generator = new JCodeModel ();
+    final JDefinedClass aClass = generator._class ("test.Test");
+    final JMethod aMethod = aClass.method (0, generator.VOID, "name");
+    aMethod.param (generator.ref ("test.UnknownClass"), "p");
+    assertSame (aMethod, aClass.getMethod ("name", new AbstractJType [] { generator.ref ("test.UnknownClass") }));
   }
 }

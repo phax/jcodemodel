@@ -2,7 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- * Portions Copyright 2013-2017 Philip Helger + contributors
+ * Portions Copyright 2013-2018 Philip Helger + contributors
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -775,7 +775,9 @@ public final class JCodeModel
    *
    * @param aClass
    *        Class to be referenced
-   * @return primitive or class
+   * @return Might be a {@link JReferencedClass} or a {@link JArrayClass} or a
+   *         {@link JPrimitiveType}
+   * @see #ref(Class)
    */
   @Nonnull
   public AbstractJType _ref (@Nonnull final Class <?> aClass)

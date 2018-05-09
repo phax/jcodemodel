@@ -2,7 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- * Portions Copyright 2013-2017 Philip Helger + contributors
+ * Portions Copyright 2013-2018 Philip Helger + contributors
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,6 +42,7 @@ package com.helger.jcodemodel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -424,6 +425,42 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables,
                                                       @Nonnull List <? extends AbstractJClass> aBindings);
+
+  /**
+   * Get all inner classes of this class.
+   *
+   * @return Never <code>null</code>.
+   * @since 3.0.3
+   */
+  @Nonnull
+  public Collection <AbstractJClassContainer <?>> getAllInnerClasses ()
+  {
+    if (this instanceof AbstractJClassContainer <?>)
+    {
+      @SuppressWarnings ("rawtypes")
+      final Collection <AbstractJClassContainer <?>> aInnerClasses = ((AbstractJClassContainer) this).classes ();
+      return aInnerClasses;
+    }
+    return Collections.emptyList ();
+  }
+
+  /**
+   * Check if this class is a class container and if so try to find the inner
+   * class with the provided name.
+   *
+   * @param sName
+   *        The name to check. May be <code>null</code>.
+   * @return The inner class with the provided name.
+   * @since 3.0.3
+   */
+  @Nullable
+  public AbstractJClassContainer <?> getInnerClass (@Nullable final String sName)
+  {
+    for (final AbstractJClassContainer <?> aInnerClass : getAllInnerClasses ())
+      if (aInnerClass.name ().equals (sName))
+        return aInnerClass;
+    return null;
+  }
 
   /**
    * @return name<code>.class</code>

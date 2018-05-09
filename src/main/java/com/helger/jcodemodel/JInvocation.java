@@ -2,7 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- * Portions Copyright 2013-2017 Philip Helger + contributors
+ * Portions Copyright 2013-2018 Philip Helger + contributors
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -303,6 +303,30 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   }
 
   /**
+   * Add <code>null</code> as argument.
+   *
+   * @return this for chaining
+   * @since 3.0.2
+   */
+  @Nonnull
+  public JInvocation argNull ()
+  {
+    return arg (JExpr._null ());
+  }
+
+  /**
+   * Add <code>this</code> as argument.
+   *
+   * @return this for chaining
+   * @since 3.0.2
+   */
+  @Nonnull
+  public JInvocation argThis ()
+  {
+    return arg (JExpr._this ());
+  }
+
+  /**
    * Returns all arguments of the invocation.
    *
    * @return If there's no arguments, an empty array will be returned.
@@ -509,7 +533,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * Create a special <code>super()</code> invocation. It may only be used as
    * the first statement inside a constructor - but this is not enforced by this
    * API!
-   * 
+   *
    * @return A new non-<code>null</code> {@link JInvocation}
    * @since 3.0.1
    */

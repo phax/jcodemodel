@@ -12,8 +12,14 @@ this would be very tricky.
 
 A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. is available.
 
-## News and noteworthy
+# News and noteworthy
 
+* v3.0.3 - work in progress
+  * Improved API access to inner classes (issue #60)
+* v3.0.2 - 2018-04-11
+  * Fixed method resolution using direct class references (issue #58)
+  * Added some additional `JInvocation.arg...` sanity methods
+  * Enum constant argument list is now accessible
 * v3.0.1 - 2017-10-25
   * Added explicit support for invoking `super` - thx to @heruan for pointing this out
   * Added possibility to create a lambda reference from an invocation (issue #56 and PR #57 from @heruan)
@@ -82,11 +88,11 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.0.1</version>
+  <version>3.0.2</version>
 </dependency>
 ```
 
 ---
 
-My personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodeingStyleguide.md) |
+My personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md) |
 On Twitter: <a href="https://twitter.com/philiphelger">@philiphelger</a>

@@ -2,7 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- * Portions Copyright 2013-2017 Philip Helger + contributors
+ * Portions Copyright 2013-2018 Philip Helger + contributors
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,6 +41,8 @@
 package com.helger.jcodemodel;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
@@ -57,6 +59,8 @@ public final class InnerClassFuncTest
     final JDefinedClass daInnerInner = daInner1._class ("InnerInner");
     final JDefinedClass daInner2 = aClass._class ("DaTestClassInner");
     final JDefinedClass daInner2Inner = daInner2._class ("Inner2");
+    assertSame (daInner2Inner, daInner2.getInnerClass ("Inner2"));
+    assertNull (daInner2.getInnerClass ("Inner3"));
 
     assertEquals ("Inner", daInner1.name ());
     assertEquals ("org.test.DaTestClass.Inner", daInner1.fullName ());

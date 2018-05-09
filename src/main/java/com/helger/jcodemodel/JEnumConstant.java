@@ -2,7 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- * Portions Copyright 2013-2017 Philip Helger + contributors
+ * Portions Copyright 2013-2018 Philip Helger + contributors
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -127,9 +127,19 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
   @Nonnull
   public List <IJExpression> args ()
   {
+    return Collections.unmodifiableList (argsMutable ());
+  }
+
+  /**
+   * @return Mutable list of arguments. Never <code>null</code>.
+   * @since 3.0.2
+   */
+  @Nonnull
+  public List <IJExpression> argsMutable ()
+  {
     if (m_aArgs == null)
       m_aArgs = new ArrayList <> ();
-    return Collections.unmodifiableList (m_aArgs);
+    return m_aArgs;
   }
 
   public boolean hasArgs ()
