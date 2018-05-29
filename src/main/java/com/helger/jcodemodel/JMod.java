@@ -63,6 +63,9 @@ public final class JMod
   public static final int DEFAULT = 0x400;
   public static final int STRICTFP = 0x800;
 
+  public static final int PRIVATE_FINAL = PRIVATE | FINAL;
+  public static final int PUBLIC_STATIC_FINAL = PUBLIC | STATIC | FINAL;
+
   private JMod ()
   {}
 }
