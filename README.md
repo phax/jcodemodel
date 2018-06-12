@@ -14,7 +14,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
-* v3.0.3 - work in progress
+* v3.0.3 - 2018-06-12
   * Improved API access to inner classes (issue #60)
   * Changed order of emitted modifiers (`final static` -> `static final`) 
 * v3.0.2 - 2018-04-11
@@ -89,7 +89,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.0.2</version>
+  <version>3.0.3</version>
 </dependency>
 ```
 

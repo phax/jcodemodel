@@ -230,6 +230,7 @@ public class JMods implements IJGenerable
 
   public void generate (@Nonnull final JFormatter f)
   {
+    // The order is taken from popular CodeStyle tools
     if ((m_nMods & JMod.PUBLIC) != 0)
       f.print ("public");
     if ((m_nMods & JMod.PROTECTED) != 0)
