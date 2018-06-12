@@ -236,24 +236,24 @@ public class JMods implements IJGenerable
       f.print ("protected");
     if ((m_nMods & JMod.PRIVATE) != 0)
       f.print ("private");
-    if ((m_nMods & JMod.FINAL) != 0)
-      f.print ("final");
-    if ((m_nMods & JMod.STATIC) != 0)
-      f.print ("static");
     if ((m_nMods & JMod.ABSTRACT) != 0)
       f.print ("abstract");
-    if ((m_nMods & JMod.NATIVE) != 0)
-      f.print ("native");
-    if ((m_nMods & JMod.SYNCHRONIZED) != 0)
-      f.print ("synchronized");
+    if ((m_nMods & JMod.STATIC) != 0)
+      f.print ("static");
+    if ((m_nMods & JMod.FINAL) != 0)
+      f.print ("final");
     if ((m_nMods & JMod.TRANSIENT) != 0)
       f.print ("transient");
     if ((m_nMods & JMod.VOLATILE) != 0)
       f.print ("volatile");
-    if ((m_nMods & JMod.DEFAULT) != 0)
-      f.print ("default");
+    if ((m_nMods & JMod.SYNCHRONIZED) != 0)
+      f.print ("synchronized");
+    if ((m_nMods & JMod.NATIVE) != 0)
+      f.print ("native");
     if ((m_nMods & JMod.STRICTFP) != 0)
       f.print ("strictfp");
+    if ((m_nMods & JMod.DEFAULT) != 0)
+      f.print ("default");
   }
 
   @Override

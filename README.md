@@ -16,6 +16,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 * v3.0.3 - work in progress
   * Improved API access to inner classes (issue #60)
+  * Changed order of emitted modifiers (`final static` -> `static final`) 
 * v3.0.2 - 2018-04-11
   * Fixed method resolution using direct class references (issue #58)
   * Added some additional `JInvocation.arg...` sanity methods
