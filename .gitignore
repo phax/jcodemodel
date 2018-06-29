@@ -8,3 +8,6 @@
 target
 /**/.pmd
 **/*.iml
+/.settings/ 
+/.project 
+/.classpath 
