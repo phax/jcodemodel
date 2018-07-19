@@ -71,7 +71,7 @@ import com.helger.jcodemodel.JPackage;
  */
 class DecidedErrorTypesModelsAdapter
 {
-  private static final Logger s_aLogger = Logger.getLogger (DecidedErrorTypesModelsAdapter.class.getName ());
+  private static final Logger LOGGER = Logger.getLogger (DecidedErrorTypesModelsAdapter.class.getName ());
 
   static int toJMod (final Collection <Modifier> modifierCollection)
   {
@@ -114,7 +114,7 @@ class DecidedErrorTypesModelsAdapter
           modifiers |= JMod.STRICTFP;
           break;
         default:
-          s_aLogger.log (Level.WARNING, "Skpping unsupported modifier: {0}", modifier);
+          LOGGER.log (Level.WARNING, "Skpping unsupported modifier: {0}", modifier);
       }
     }
     return modifiers;
