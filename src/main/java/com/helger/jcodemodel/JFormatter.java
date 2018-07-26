@@ -88,6 +88,8 @@ public class JFormatter implements Closeable
     }
 
     /**
+     * @param aEnclosingClass
+     *        the class to check
      * @return <code>true</code> if the short name is ambiguous in context of
      *         enclosingClass and classes with this name can't be imported.
      */
@@ -893,7 +895,6 @@ public class JFormatter implements Closeable
    *        {@link AbstractJClass} that may or may not have an import
    * @param aGeneratingClass
    *        {@link AbstractJClass} that is the current class being processed
-   * @return true if an import statement should be suppressed, false otherwise
    */
   private void _collectImportOuterClassIfCausesNoAmbiguities (@Nonnull final AbstractJClass aReference,
                                                               @Nonnull final JDefinedClass aClassToBeWritten)
@@ -1108,10 +1109,12 @@ public class JFormatter implements Closeable
 
   public static boolean containsErrorTypes (@Nonnull final JDefinedClass aClass)
   {
-    final JFormatter aFormatter = new JFormatter (NullWriter.getInstance ());
-    aFormatter.m_eMode = EMode.FIND_ERROR_TYPES;
-    aFormatter.m_bContainsErrorTypes = false;
-    aFormatter.declaration (aClass);
-    return aFormatter.m_bContainsErrorTypes;
+    try (final JFormatter aFormatter = new JFormatter (NullWriter.getInstance ()))
+    {
+      aFormatter.m_eMode = EMode.FIND_ERROR_TYPES;
+      aFormatter.m_bContainsErrorTypes = false;
+      aFormatter.declaration (aClass);
+      return aFormatter.m_bContainsErrorTypes;
+    }
   }
 }

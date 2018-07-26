@@ -14,6 +14,8 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
+* v3.0.4 - work in progress
+  * Added ` AbstractJType._new`()`
 * v3.0.3 - 2018-06-12
   * Improved API access to inner classes (issue #60)
   * Changed order of emitted modifiers (`final static` -> `static final`) 

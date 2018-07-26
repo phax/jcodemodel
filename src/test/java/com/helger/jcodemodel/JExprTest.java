@@ -55,7 +55,7 @@ public final class JExprTest
    * Tests double literal expression.
    */
   @Test
-  public void testLitDouble () throws Exception
+  public void testLitDouble ()
   {
     assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_POSITIVE_INFINITY,
                   CodeModelTestsHelper.toString (JExpr.lit (Double.POSITIVE_INFINITY)));
@@ -65,7 +65,7 @@ public final class JExprTest
   }
 
   @Test
-  public void testLitFloat () throws Exception
+  public void testLitFloat ()
   {
     assertEquals (JAtomFloat.JAVA_LANG_FLOAT_POSITIVE_INFINITY,
                   CodeModelTestsHelper.toString (JExpr.lit (Float.POSITIVE_INFINITY)));
@@ -75,7 +75,7 @@ public final class JExprTest
   }
 
   @Test
-  public void testLitIntAndLong () throws Exception
+  public void testLitIntAndLong ()
   {
     assertEquals ("5", CodeModelTestsHelper.toString (JExpr.lit (5)));
     assertEquals ("5L", CodeModelTestsHelper.toString (JExpr.lit (5l)));

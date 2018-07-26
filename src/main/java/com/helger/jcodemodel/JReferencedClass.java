@@ -52,12 +52,12 @@ import com.helger.jcodemodel.util.JCNameUtilities;
 /**
  * References to existing classes.
  * <p>
- * {@link JReferencedClass} is kept in a pool so that they are shared. There is
+ * Instances of this class are kept in a pool so that they are shared. There is
  * one pool for each {@link JCodeModel} object.
  * <p>
  * It is impossible to cache JReferencedClass globally only because there is the
- * {@link #_package()} method, which obtains the owner {@link JPackage} object,
- * which is scoped to JCodeModel.
+ * <code>_package()</code> method, which obtains the owner {@link JPackage}
+ * object, which is scoped to JCodeModel.
  */
 class JReferencedClass extends AbstractJClass implements IJDeclaration
 {

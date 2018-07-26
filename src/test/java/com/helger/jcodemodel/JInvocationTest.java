@@ -100,12 +100,12 @@ public final class JInvocationTest
            .narrow (cm.ref (List.class).narrow (Long.class))
            .arg ("jippie")
            .arg (JExpr._this ())
-           .arg (JExpr._new (cm.ref (ArrayList.class).narrow (Long.class)));
+           .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ());
     minvoke.body ()
            .invoke (m2)
            .arg ("jippie")
            .arg (JExpr._this ())
-           .arg (JExpr._new (cm.ref (ArrayList.class).narrow (Long.class)));
+           .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ());
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }

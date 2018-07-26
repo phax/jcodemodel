@@ -59,6 +59,10 @@ import com.helger.jcodemodel.util.JCSecureLoader;
  * Dynamically implements the typed annotation writer interfaces.
  *
  * @author Kohsuke Kawaguchi
+ * @param <A>
+ *        Annotation type
+ * @param <W>
+ *        Annotation twriter type
  */
 @SuppressWarnings ({ "unchecked", "rawtypes" })
 public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotationWriter <A>> implements

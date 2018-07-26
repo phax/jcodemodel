@@ -55,6 +55,8 @@ import javax.annotation.Nullable;
  * as a reference, it inherits {@link AbstractJClass}.
  *
  * @author Philip Helger
+ * @param <CLASSTYPE>
+ *        Implementation type
  */
 public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends
                                               AbstractJClass implements

@@ -106,9 +106,12 @@ public final class AnnotationUseFuncTest
    *   }
    * }
    * </pre>
+   * 
+   * @throws JClassAlreadyExistsException
+   *         internally only
    */
   @Test
-  public void testMain () throws Exception
+  public void testMain () throws JClassAlreadyExistsException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");

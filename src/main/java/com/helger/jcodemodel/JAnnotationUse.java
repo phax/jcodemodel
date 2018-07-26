@@ -167,6 +167,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @param aClazz
    *        type to use as a return type
    * @return annotation argument represented as required type
+   * @throws ClassCastException
+   *         If the parameter is not of the specified type
    */
   @Nullable
   public <T> T getParam (@Nonnull final String sName, @Nonnull final Class <T> aClazz) throws ClassCastException
@@ -566,7 +568,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *         it using the same or the overloaded methods.
    */
   @Nonnull
-  public JAnnotationUse annotationParam (@Nonnull final String sName, @Nonnull final Class <? extends Annotation> aValue)
+  public JAnnotationUse annotationParam (@Nonnull final String sName,
+                                         @Nonnull final Class <? extends Annotation> aValue)
   {
     return annotationParam (sName, owner ().ref (aValue));
   }

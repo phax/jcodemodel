@@ -668,7 +668,7 @@ public final class JCodeModel
    * @param aClazz
    *        Existing class to reference
    * @return Singleton reference to this class. Might be a
-   *         {@link JReferencedClass} or a {@link JArrayClass}
+   *         <code>JReferencedClass</code> or a {@link JArrayClass}
    * @see #_ref(Class) for the version that handles more cases.
    */
   @Nonnull
@@ -775,8 +775,8 @@ public final class JCodeModel
    *
    * @param aClass
    *        Class to be referenced
-   * @return Might be a {@link JReferencedClass} or a {@link JArrayClass} or a
-   *         {@link JPrimitiveType}
+   * @return Might be a <code>JReferencedClass</code> or a {@link JArrayClass}
+   *         or a {@link JPrimitiveType}
    * @see #ref(Class)
    */
   @Nonnull
@@ -797,7 +797,7 @@ public final class JCodeModel
    * @param sFullyQualifiedClassName
    *        FQCN
    * @return Singleton reference to this class. Might be a
-   *         {@link JReferencedClass} or a {@link JArrayClass} or a
+   *         <code>JReferencedClass</code> or a {@link JArrayClass} or a
    *         {@link JDirectClass}
    */
   @Nonnull
@@ -851,7 +851,7 @@ public final class JCodeModel
    *        Type name to parse
    * @return The internal representation of the specified name. Might be a
    *         {@link JArrayClass}, a {@link JPrimitiveType}, a
-   *         {@link JReferencedClass}, a {@link JNarrowedClass}
+   *         <code>JReferencedClass</code>, a {@link JNarrowedClass}
    */
   @Nonnull
   public AbstractJType parseType (@Nonnull final String sName)
