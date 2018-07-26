@@ -289,7 +289,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     return isAssignableFrom (aThat, true);
   }
 
-  protected boolean isAssignableFrom (@Nonnull final AbstractJType aThat, final boolean bAllowsRawTypeUnchekedConversion)
+  protected boolean isAssignableFrom (@Nonnull final AbstractJType aThat,
+                                      final boolean bAllowsRawTypeUnchekedConversion)
   {
     if (isError () || aThat.isError ())
       return false;
@@ -372,6 +373,12 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     }
 
     return false;
+  }
+
+  @Nonnull
+  public JInvocation _new ()
+  {
+    return JExpr._new (this);
   }
 
   @Override
