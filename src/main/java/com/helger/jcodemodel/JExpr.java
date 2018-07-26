@@ -164,12 +164,6 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JInvocation _new (@Nonnull final AbstractJClass aClass)
-  {
-    return new JInvocation (aClass);
-  }
-
-  @Nonnull
   public static JInvocation _new (@Nonnull final AbstractJType aType)
   {
     return new JInvocation (aType);
