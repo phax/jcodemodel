@@ -363,6 +363,14 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     return owner;
   }
 
+  /**
+   * Add a type variable. This method requires a {@link JCodeModel} to be
+   * provided in the constructor!
+   *
+   * @param sName
+   *        Bound type name. May neither be <code>null</code> nor empty.
+   * @return this for chaining
+   */
   @Nonnull
   public JInvocation narrow (@Nonnull final String sName)
   {
@@ -373,12 +381,27 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     return this;
   }
 
+  /**
+   * Add a type variable. This method requires a {@link JCodeModel} to be
+   * provided in the constructor!
+   *
+   * @param aBound
+   *        Bound class. May not be <code>null</code>.
+   * @return this for chaining
+   */
   @Nonnull
   public JInvocation narrow (@Nonnull final Class <?> aBound)
   {
     return narrow (_narrowOwner ().ref (aBound));
   }
 
+  /**
+   * Add a type variable
+   *
+   * @param aBound
+   *        Bound class. May not be <code>null</code>.
+   * @return this for chaining
+   */
   @Nonnull
   public JInvocation narrow (@Nonnull final AbstractJClass aBound)
   {
