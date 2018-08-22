@@ -15,8 +15,8 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 # News and noteworthy
 
 * v3.1.0 - 2018-08-22
-  * Added ` AbstractJType._new`()`
-  * Change return types of special `JBlock` methods to `void` to avoid chaining (issue #62) - incompatible change
+  * Added ` AbstractJType._new()`
+  * Change return types of special `JBlock` methods to `void` to avoid chaining (issue #62) - incompatible change!
   * Added new `JExpr.invokeThis` and `JExpr.invokeSuper` static methods
 * v3.0.3 - 2018-06-12
   * Improved API access to inner classes (issue #60)
