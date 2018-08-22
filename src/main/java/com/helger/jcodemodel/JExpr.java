@@ -176,9 +176,21 @@ public final class JExpr
   }
 
   @Nonnull
+  public static JInvocation invokeThis (@Nonnull final String sMethod)
+  {
+    return invoke (JExpr._this (), sMethod);
+  }
+
+  @Nonnull
   public static JInvocation invoke (@Nonnull final JMethod aMethod)
   {
     return invoke ((IJExpression) null, aMethod);
+  }
+
+  @Nonnull
+  public static JInvocation invokeThis (@Nonnull final JMethod aMethod)
+  {
+    return invoke (JExpr._this (), aMethod);
   }
 
   @Nonnull
@@ -200,6 +212,12 @@ public final class JExpr
                                     @Nonnull final String sMethod)
   {
     return new JInvocation (aOwner, aLhs, sMethod);
+  }
+
+  @Nonnull
+  public static JInvocation invokeSuper ()
+  {
+    return JInvocation._super ();
   }
 
   @Nonnull
