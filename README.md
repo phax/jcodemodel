@@ -14,7 +14,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
-* v3.1.0 - work in progress
+* v3.1.0 - 2018-08-22
   * Added ` AbstractJType._new`()`
   * Change return types of special `JBlock` methods to `void` to avoid chaining (issue #62) - incompatible change
   * Added new `JExpr.invokeThis` and `JExpr.invokeSuper` static methods
@@ -93,7 +93,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.0.3</version>
+  <version>3.1.0</version>
 </dependency>
 ```
 
