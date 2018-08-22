@@ -101,12 +101,14 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * @param sName
    *        Name of method to invoke
    */
+  @Deprecated
   protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final String sName)
   {
     // Not possible to determine an owner :(
     this (null, aObject, sName);
   }
 
+  @Deprecated
   protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final JMethod aMethod)
   {
     this (aMethod.owner (), aObject, aMethod);
@@ -120,6 +122,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * @param sMethodName
    *        Method name to be invoked
    */
+  @Deprecated
   protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final String sMethodName)
   {
     this (aType.owner (), aType, sMethodName);
@@ -133,14 +136,15 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * @param aMethod
    *        Method to be invoked
    */
+  @Deprecated
   protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final JMethod aMethod)
   {
     this (aType.owner (), aType, aMethod);
   }
 
-  private JInvocation (@Nullable final JCodeModel aOwner,
-                       @Nullable final IJGenerable aObject,
-                       @Nonnull final String sName)
+  protected JInvocation (@Nullable final JCodeModel aOwner,
+                         @Nullable final IJGenerable aObject,
+                         @Nonnull final String sName)
   {
     JCValueEnforcer.notNull (sName, "Name");
     JCValueEnforcer.isFalse (sName.indexOf ('.') >= 0, () -> "method name contains '.': " + sName);
@@ -152,9 +156,9 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     m_aConstructorType = null;
   }
 
-  private JInvocation (@Nonnull final JCodeModel aOwner,
-                       @Nullable final IJGenerable aObject,
-                       @Nonnull final JMethod aMethod)
+  protected JInvocation (@Nonnull final JCodeModel aOwner,
+                         @Nullable final IJGenerable aObject,
+                         @Nonnull final JMethod aMethod)
   {
     JCValueEnforcer.notNull (aOwner, "Owner");
     JCValueEnforcer.notNull (aMethod, "Method");
@@ -443,7 +447,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
       if (m_aObject != null)
       {
         // object.<generics> name (
-        f.generable (m_aObject).print ('.');
+        f.generable (m_aObject);
+        f.print ('.');
         _addTypeVars (f);
         f.print (name);
         f.print ('(');
@@ -514,19 +519,19 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   @Override
   public int hashCode ()
   {
-    JCHashCodeGenerator hashCodeGenerator = new JCHashCodeGenerator (this).append (m_aObject).append (m_bIsConstructor);
+    JCHashCodeGenerator aHCGen = new JCHashCodeGenerator (this).append (m_aObject).append (m_bIsConstructor);
     if (!m_bIsConstructor)
-      hashCodeGenerator = hashCodeGenerator.append (_methodName ());
-    hashCodeGenerator = hashCodeGenerator.append (m_aArgs).append (_typeFullName ());
+      aHCGen = aHCGen.append (_methodName ());
+    aHCGen = aHCGen.append (m_aArgs).append (_typeFullName ());
     if (m_aTypeVariables != null)
     {
-      hashCodeGenerator = hashCodeGenerator.append (m_aTypeVariables.size ());
+      aHCGen = aHCGen.append (m_aTypeVariables.size ());
       for (final JTypeVar typeVariable : m_aTypeVariables)
       {
-        hashCodeGenerator = hashCodeGenerator.append (typeVariable.fullName ());
+        aHCGen = aHCGen.append (typeVariable.fullName ());
       }
     }
-    return hashCodeGenerator.getHashCode ();
+    return aHCGen.getHashCode ();
   }
 
   /**

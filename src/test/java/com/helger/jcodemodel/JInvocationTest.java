@@ -109,4 +109,22 @@ public final class JInvocationTest
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }
+
+  @Test
+  public void testChainedInvoke () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._class ("TestInvocation2");
+
+    final JMethod m1 = cls.method (JMod.PUBLIC, cls, "foo1");
+    m1.body ()._return (JExpr._this ());
+
+    final JMethod m2 = cls.method (JMod.PUBLIC, cls, "foo2");
+    m2.body ()._return (JExpr._this ());
+
+    final JMethod minvoke = cls.method (JMod.PUBLIC, cm.VOID, "bar");
+    minvoke.body ().invoke (m1).invoke (m2);
+
+    CodeModelTestsHelper.printCodeModel (cm);
+  }
 }

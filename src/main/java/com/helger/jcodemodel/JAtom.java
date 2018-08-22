@@ -60,6 +60,10 @@ public class JAtom implements IJExpression
     m_sWhat = sWhat;
   }
 
+  /**
+   * @return The text representation of this atom content. The same as what as
+   *         passed in the constructor.
+   */
   @Nonnull
   public String what ()
   {

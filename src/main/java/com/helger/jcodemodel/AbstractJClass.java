@@ -481,7 +481,7 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public final JInvocation staticInvoke (@Nonnull final JMethod aMethod)
   {
-    return new JInvocation (this, aMethod);
+    return new JInvocation (owner (), this, aMethod);
   }
 
   /**
@@ -494,7 +494,7 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public final JInvocation staticInvoke (@Nonnull final String sMethod)
   {
-    return new JInvocation (this, sMethod);
+    return new JInvocation (owner (), this, sMethod);
   }
 
   /**

@@ -392,7 +392,28 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   public JInvocation invoke (@Nonnull final IJExpression aExpr, @Nonnull final String sMethod)
   {
-    return internalInsert (new JInvocation (aExpr, sMethod));
+    return invoke ((JCodeModel) null, aExpr, sMethod);
+  }
+
+  /**
+   * Creates an invocation statement and adds it to this block.
+   *
+   * @param aCM
+   *        CodeModel to use. May be <code>null</code>.
+   * @param aExpr
+   *        {@link IJExpression} evaluating to the class or object upon which
+   *        the named method will be invoked
+   * @param sMethod
+   *        Name of method to invoke
+   * @return Newly generated {@link JInvocation}
+   * @since 3.0.5
+   */
+  @Nonnull
+  public JInvocation invoke (@Nullable final JCodeModel aCM,
+                             @Nonnull final IJExpression aExpr,
+                             @Nonnull final String sMethod)
+  {
+    return internalInsert (new JInvocation (aCM, aExpr, sMethod));
   }
 
   /**
@@ -434,7 +455,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   public JInvocation invoke (@Nonnull final IJExpression aExpr, @Nonnull final JMethod aMethod)
   {
-    return internalInsert (new JInvocation (aExpr, aMethod));
+    return internalInsert (new JInvocation (aMethod.owner (), aExpr, aMethod));
   }
 
   /**
@@ -462,7 +483,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   public JInvocation staticInvoke (@Nonnull final AbstractJClass aType, @Nonnull final String sMethod)
   {
-    return internalInsert (new JInvocation (aType, sMethod));
+    return internalInsert (new JInvocation (aType.owner (), aType, sMethod));
   }
 
   /**
@@ -475,7 +496,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   public JInvocation invoke (@Nonnull final String sMethod)
   {
-    return internalInsert (new JInvocation ((IJExpression) null, sMethod));
+    return internalInsert (new JInvocation ((JCodeModel) null, (IJExpression) null, sMethod));
   }
 
   /**
@@ -488,7 +509,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   public JInvocation invoke (@Nonnull final JMethod aMethod)
   {
-    return internalInsert (new JInvocation ((IJExpression) null, aMethod));
+    return internalInsert (new JInvocation (aMethod.owner (), (IJExpression) null, aMethod));
   }
 
   @Nonnull

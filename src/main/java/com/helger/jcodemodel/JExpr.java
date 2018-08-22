@@ -172,25 +172,34 @@ public final class JExpr
   @Nonnull
   public static JInvocation invoke (@Nonnull final String sMethod)
   {
-    return invoke (null, sMethod);
+    return invoke ((IJExpression) null, sMethod);
   }
 
   @Nonnull
   public static JInvocation invoke (@Nonnull final JMethod aMethod)
   {
-    return invoke (null, aMethod);
+    return invoke ((IJExpression) null, aMethod);
   }
 
   @Nonnull
   public static JInvocation invoke (@Nullable final IJExpression aLhs, @Nonnull final JMethod aMethod)
   {
-    return new JInvocation (aLhs, aMethod);
+    return new JInvocation (aMethod.owner (), aLhs, aMethod);
   }
 
   @Nonnull
   public static JInvocation invoke (@Nullable final IJExpression aLhs, @Nonnull final String sMethod)
   {
-    return new JInvocation (aLhs, sMethod);
+    // No owner available
+    return new JInvocation ((JCodeModel) null, aLhs, sMethod);
+  }
+
+  @Nonnull
+  public static JInvocation invoke (@Nullable final JCodeModel aOwner,
+                                    @Nullable final IJExpression aLhs,
+                                    @Nonnull final String sMethod)
+  {
+    return new JInvocation (aOwner, aLhs, sMethod);
   }
 
   @Nonnull
