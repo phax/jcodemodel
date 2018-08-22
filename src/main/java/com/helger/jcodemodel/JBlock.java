@@ -380,23 +380,25 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
-   * Creates an invocation statement and adds it to this block.
+   * Creates an invocation statement and adds it to this block.<br>
+   * Note: since 3.1.0 this method no longer returns the invocation, to avoid
+   * chaining, as this would not work (see #62)
    *
    * @param aExpr
    *        {@link IJExpression} evaluating to the class or object upon which
    *        the named method will be invoked
    * @param sMethod
    *        Name of method to invoke
-   * @return Newly generated {@link JInvocation}
    */
-  @Nonnull
-  public JInvocation invoke (@Nonnull final IJExpression aExpr, @Nonnull final String sMethod)
+  public void invoke (@Nonnull final IJExpression aExpr, @Nonnull final String sMethod)
   {
-    return invoke ((JCodeModel) null, aExpr, sMethod);
+    invoke ((JCodeModel) null, aExpr, sMethod);
   }
 
   /**
-   * Creates an invocation statement and adds it to this block.
+   * Creates an invocation statement and adds it to this block.<br>
+   * Note: since 3.1.0 this method no longer returns the invocation, to avoid
+   * chaining, as this would not work (see #62)
    *
    * @param aCM
    *        CodeModel to use. May be <code>null</code>.
@@ -405,123 +407,117 @@ public class JBlock implements IJGenerable, IJStatement
    *        the named method will be invoked
    * @param sMethod
    *        Name of method to invoke
-   * @return Newly generated {@link JInvocation}
-   * @since 3.0.5
+   * @since 3.1.0
    */
-  @Nonnull
-  public JInvocation invoke (@Nullable final JCodeModel aCM,
-                             @Nonnull final IJExpression aExpr,
-                             @Nonnull final String sMethod)
+  public void invoke (@Nullable final JCodeModel aCM, @Nonnull final IJExpression aExpr, @Nonnull final String sMethod)
   {
-    return internalInsert (new JInvocation (aCM, aExpr, sMethod));
+    internalInsert (new JInvocation (aCM, aExpr, sMethod));
   }
 
   /**
-   * Creates an invocation statement and adds it to this block.
+   * Creates an invocation statement and adds it to this block.<br>
+   * Note: since 3.1.0 this method no longer returns the invocation, to avoid
+   * chaining, as this would not work (see #62)
    *
    * @param sMethod
    *        Name of method to invoke on this
-   * @return Newly generated {@link JInvocation}
    */
-  @Nonnull
-  public JInvocation invokeThis (@Nonnull final String sMethod)
+  public void invokeThis (@Nonnull final String sMethod)
   {
-    return invoke (JExpr._this (), sMethod);
+    invoke (JExpr._this (), sMethod);
   }
 
   /**
    * Explicitly call the super class constructor in this block. This method may
-   * only be called as the first call inside a constructor block!
+   * only be called as the first call inside a constructor block!<br>
+   * Note: since 3.1.0 this method no longer returns the invocation, to avoid
+   * chaining, as this would not work (see #62)
    *
-   * @return Newly generated super {@link JInvocation}
    * @since 3.0.1
    */
-  @Nonnull
-  public JInvocation invokeSuper ()
+  public void invokeSuper ()
   {
-    return internalInsert (JInvocation._super ());
+    internalInsert (JInvocation._super ());
   }
 
   /**
-   * Creates an invocation statement and adds it to this block.
+   * Creates an invocation statement and adds it to this block.<br>
+   * Note: since 3.1.0 this method no longer returns the invocation, to avoid
+   * chaining, as this would not work (see #62)
    *
    * @param aExpr
    *        {@link IJExpression} evaluating to the class or object upon which
    *        the method will be invoked
    * @param aMethod
    *        {@link JMethod} to invoke
-   * @return Newly generated {@link JInvocation}
    */
-  @Nonnull
-  public JInvocation invoke (@Nonnull final IJExpression aExpr, @Nonnull final JMethod aMethod)
+  public void invoke (@Nullable final IJExpression aExpr, @Nonnull final JMethod aMethod)
   {
-    return internalInsert (new JInvocation (aMethod.owner (), aExpr, aMethod));
+    internalInsert (new JInvocation (aMethod.owner (), aExpr, aMethod));
   }
 
   /**
-   * Creates an invocation statement and adds it to this block.
+   * Creates an invocation statement and adds it to this block.<br>
+   * Note: since 3.1.0 this method no longer returns the invocation, to avoid
+   * chaining, as this would not work (see #62)
    *
    * @param aMethod
    *        {@link JMethod} to invoke on this
-   * @return Newly generated {@link JInvocation}
    */
-  @Nonnull
-  public JInvocation invokeThis (@Nonnull final JMethod aMethod)
+  public void invokeThis (@Nonnull final JMethod aMethod)
   {
-    return invoke (JExpr._this (), aMethod);
+    invoke (JExpr._this (), aMethod);
   }
 
   /**
-   * Creates a static invocation statement.
+   * Creates a static invocation statement.<br>
+   * Note: since 3.1.0 this method no longer returns the invocation, to avoid
+   * chaining, as this would not work (see #62)
    *
    * @param aType
    *        Type upon which the method should be invoked
    * @param sMethod
    *        Name of method to invoke
-   * @return Newly generated {@link JInvocation}
    */
-  @Nonnull
-  public JInvocation staticInvoke (@Nonnull final AbstractJClass aType, @Nonnull final String sMethod)
+  public void staticInvoke (@Nonnull final AbstractJClass aType, @Nonnull final String sMethod)
   {
-    return internalInsert (new JInvocation (aType.owner (), aType, sMethod));
+    internalInsert (new JInvocation (aType.owner (), aType, sMethod));
   }
 
   /**
-   * Creates an invocation statement and adds it to this block.
+   * Creates an invocation statement and adds it to this block.<br>
+   * Note: since 3.1.0 this method no longer returns the invocation, to avoid
+   * chaining, as this would not work (see #62)
    *
    * @param sMethod
    *        Name of method to invoke
-   * @return Newly generated {@link JInvocation}
    */
-  @Nonnull
-  public JInvocation invoke (@Nonnull final String sMethod)
+  public void invoke (@Nonnull final String sMethod)
   {
-    return internalInsert (new JInvocation ((JCodeModel) null, (IJExpression) null, sMethod));
+    internalInsert (new JInvocation ((JCodeModel) null, (IJExpression) null, sMethod));
   }
 
   /**
-   * Creates an invocation statement and adds it to this block.
+   * Creates an invocation statement and adds it to this block.<br>
+   * Note: since 3.1.0 this method no longer returns the invocation, to avoid
+   * chaining, as this would not work (see #62)
    *
    * @param aMethod
    *        JMethod to invoke
-   * @return Newly generated {@link JInvocation}
    */
-  @Nonnull
-  public JInvocation invoke (@Nonnull final JMethod aMethod)
+  public void invoke (@Nonnull final JMethod aMethod)
   {
-    return internalInsert (new JInvocation (aMethod.owner (), (IJExpression) null, aMethod));
+    internalInsert (new JInvocation (aMethod.owner (), (IJExpression) null, aMethod));
   }
 
-  @Nonnull
-  public JInvocation _new (@Nonnull final AbstractJClass aClass)
+  public void _new (@Nonnull final AbstractJClass aClass)
   {
-    return internalInsert (new JInvocation (aClass));
+    internalInsert (new JInvocation (aClass));
   }
 
-  @Nonnull
-  public JInvocation _new (@Nonnull final AbstractJType aType)
+  public void _new (@Nonnull final AbstractJType aType)
   {
-    return internalInsert (new JInvocation (aType));
+    internalInsert (new JInvocation (aType));
   }
 
   /**

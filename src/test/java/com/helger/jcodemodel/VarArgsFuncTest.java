@@ -99,7 +99,7 @@ public final class VarArgsFuncTest
     assertNotNull (typearray);
 
     // JInvocation invocation =
-    forloop.body ().invoke (out, "println").arg (JExpr.direct ("param3[count]"));
+    forloop.body ().add (JExpr.invoke (out, "println").arg (JExpr.direct ("param3[count]")));
 
     final JMethod main = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "main");
     main.param (stringArray, "args");

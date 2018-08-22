@@ -75,7 +75,7 @@ public final class ForEachFuncTest
     // printing out the variable
     final JFieldRef out1 = cm.ref (System.class).staticRef ("out");
     // JInvocation invocation =
-    foreach.body ().invoke (out1, "println").arg ($count1);
+    foreach.body ().add (JExpr.invoke (out1, "println").arg ($count1));
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }

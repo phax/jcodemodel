@@ -110,7 +110,7 @@ public final class JDefinedClassTest
     final JDefinedClass c2 = cm._package ("myPackage")._class (0, "DerivedClass");
     c2._extends (c1);
     final JMethod con2 = c2.constructor (JMod.PUBLIC);
-    con2.body ().invokeSuper ().arg ("Test");
+    con2.body ().add (JExpr.invokeSuper ().arg ("Test"));
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

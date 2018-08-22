@@ -90,22 +90,22 @@ public final class JInvocationTest
     m2.body ()._return ();
 
     final JMethod minvoke = cls.method (JMod.PUBLIC, cm.VOID, "bar");
-    minvoke.body ()._new (cls).narrow (Integer.class).arg (cm.INT.wrap (JExpr.lit (17)));
-    minvoke.body ().invokeThis (m1).narrow (String.class).arg ("jippie");
-    minvoke.body ().invoke (m1).arg ("jippie");
+    minvoke.body ().add (JExpr._new (cls).narrow (Integer.class).arg (cm.INT.wrap (JExpr.lit (17))));
+    minvoke.body ().add (JExpr.invokeThis (m1).narrow (String.class).arg ("jippie"));
+    minvoke.body ().add (JExpr.invoke (m1).arg ("jippie"));
     minvoke.body ()
-           .invokeThis (m2)
-           .narrow (String.class)
-           .narrow (cls)
-           .narrow (cm.ref (List.class).narrow (Long.class))
-           .arg ("jippie")
-           .arg (JExpr._this ())
-           .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ());
+           .add (JExpr.invokeThis (m2)
+                      .narrow (String.class)
+                      .narrow (cls)
+                      .narrow (cm.ref (List.class).narrow (Long.class))
+                      .arg ("jippie")
+                      .arg (JExpr._this ())
+                      .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
     minvoke.body ()
-           .invoke (m2)
-           .arg ("jippie")
-           .arg (JExpr._this ())
-           .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ());
+           .add (JExpr.invoke (m2)
+                      .arg ("jippie")
+                      .arg (JExpr._this ())
+                      .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }
@@ -123,8 +123,8 @@ public final class JInvocationTest
     m2.body ()._return (JExpr._this ());
 
     final JMethod minvoke = cls.method (JMod.PUBLIC, cm.VOID, "bar");
-    minvoke.body ().invoke (m1).invoke (m2);
+    minvoke.body ().add (JExpr.invoke (m1).invoke (m2));
 
-    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }
