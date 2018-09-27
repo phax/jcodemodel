@@ -414,9 +414,8 @@ public final class JExpr
     final int n = sStr.length ();
     final StringBuilder sb = new StringBuilder (n + 2);
     sb.append (cQuote);
-    for (int i = 0; i < n; i++)
+    for (final char c : sStr.toCharArray ())
     {
-      final char c = sStr.charAt (i);
       final int j = CHAR_ESCAPE.indexOf (c);
       if (j >= 0)
       {
