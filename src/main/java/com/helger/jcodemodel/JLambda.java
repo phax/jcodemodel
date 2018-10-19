@@ -121,7 +121,7 @@ public class JLambda implements IJExpression
     return m_aBodyStatement;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     final int nParams = m_aParams.size ();
     if (nParams > 0)

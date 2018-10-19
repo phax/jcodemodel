@@ -88,7 +88,7 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
     return m_aNativeValue instanceof IJExpression;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.generable (m_aValue);
   }

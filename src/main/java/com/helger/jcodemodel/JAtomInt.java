@@ -62,7 +62,7 @@ public class JAtomInt implements IJExpression
     return m_nValue;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.print (Integer.toString (m_nValue));
   }

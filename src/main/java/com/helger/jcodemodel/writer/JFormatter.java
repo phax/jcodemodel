@@ -38,9 +38,8 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.writer;
 
-import java.io.Closeable;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,6 +54,17 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.helger.jcodemodel.AbstractJClass;
+import com.helger.jcodemodel.IJDeclaration;
+import com.helger.jcodemodel.IJFormatter;
+import com.helger.jcodemodel.IJGenerable;
+import com.helger.jcodemodel.IJStatement;
+import com.helger.jcodemodel.JAnonymousClass;
+import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JNarrowedClass;
+import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.util.NullWriter;
@@ -64,7 +74,7 @@ import com.helger.jcodemodel.util.NullWriter;
  * for PrintWriter.
  */
 @NotThreadSafe
-public class JFormatter implements Closeable
+public class JFormatter implements IJFormatter
 {
   /**
    * Used during the optimization of class imports. List of
@@ -218,7 +228,7 @@ public class JFormatter implements Closeable
     /**
      * Find any error types in output code. In this mode we don't actually
      * generate anything. <br/>
-     * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass)
+     * Only used by {@link IJFormatter#containsErrorTypes(JDefinedClass)
      * containsErrorTypes} method
      */
     FIND_ERROR_TYPES
@@ -310,18 +320,6 @@ public class JFormatter implements Closeable
     }
   }
 
-  // Use constant in JCMWriter instead
-  @Deprecated
-  public static final String DEFAULT_INDENT_SPACE = "    ";
-
-  /**
-   * Special character token we use to differentiate '&gt;' as an operator and
-   * '&gt;' as the end of the type arguments. The former uses '&gt;' and it
-   * requires a preceding whitespace. The latter uses this, and it does not have
-   * a preceding whitespace.
-   */
-  /* package */static final char CLOSE_TYPE_ARGS = '\uFFFF';
-
   /**
    * all classes and ids encountered during the collection mode.<br>
    * map from short type name to {@link NameUsage} (list of
@@ -352,7 +350,7 @@ public class JFormatter implements Closeable
   private final String m_sIndentString;
 
   /**
-   * Writer associated with this {@link JFormatter}
+   * Writer associated with this {@link IJFormatter}
    */
   private final SourcePrintWriter m_aPW;
 
@@ -361,7 +359,7 @@ public class JFormatter implements Closeable
   private JPackage m_aPckJavaLang;
 
   /**
-   * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass)
+   * Only used by {@link IJFormatter#containsErrorTypes(JDefinedClass)
    * containsErrorTypes} method
    */
   private boolean m_bContainsErrorTypes;
@@ -372,7 +370,7 @@ public class JFormatter implements Closeable
    * Constructor
    *
    * @param aPW
-   *        {@link PrintWriter} to {@link JFormatter} to use. May not be
+   *        {@link PrintWriter} to {@link IJFormatter} to use. May not be
    *        <code>null</code>.
    * @param sIndentString
    *        Incremental indentation string, similar to tab value. May not be
@@ -405,36 +403,22 @@ public class JFormatter implements Closeable
     m_aPW.close ();
   }
 
-  /**
-   * @return <code>true</code> if we are in the printing mode, where we actually
-   *         produce text. The other mode is the "collecting mode'
-   */
   public boolean isPrinting ()
   {
     return m_eMode == EMode.PRINTING;
   }
 
-  /**
-   * Decrement the indentation level.
-   *
-   * @return this for chaining
-   */
-  @Nonnull
-  public JFormatter outdent ()
-  {
-    m_nIndentLevel--;
-    return this;
-  }
-
-  /**
-   * Increment the indentation level.
-   *
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter indent ()
   {
     m_nIndentLevel++;
+    return this;
+  }
+
+  @Nonnull
+  public JFormatter outdent ()
+  {
+    m_nIndentLevel--;
     return this;
   }
 
@@ -516,13 +500,6 @@ public class JFormatter implements Closeable
         m_aPW.print (' ');
   }
 
-  /**
-   * Print a char into the stream
-   *
-   * @param c
-   *        the char
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter print (final char c)
   {
@@ -542,13 +519,6 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  /**
-   * Print a String into the stream. Indentation happens automatically.
-   *
-   * @param sStr
-   *        the String
-   * @return this
-   */
   @Nonnull
   public JFormatter print (@Nonnull final String sStr)
   {
@@ -561,24 +531,6 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  @Nonnull
-  public JFormatter type (@Nonnull final AbstractJType aType)
-  {
-    if (aType.isReference ())
-      return type ((AbstractJClass) aType);
-    return generable (aType);
-  }
-
-  /**
-   * Print a type name.
-   * <p>
-   * In the collecting mode we use this information to decide what types to
-   * import and what not to.
-   *
-   * @param aType
-   *        Type to be emitted
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter type (@Nonnull final AbstractJClass aType)
   {
@@ -632,13 +584,6 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  /**
-   * Print an identifier
-   *
-   * @param sID
-   *        identifier
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter id (@Nonnull final String sID)
   {
@@ -663,11 +608,6 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  /**
-   * Print a new line into the stream
-   *
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter newline ()
   {
@@ -680,13 +620,6 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  /**
-   * Cause the JGenerable object to generate source for iteself
-   *
-   * @param g
-   *        the JGenerable object
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter generable (@Nonnull final IJGenerable g)
   {
@@ -694,14 +627,6 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  /**
-   * Produces {@link IJGenerable}s separated by ','
-   *
-   * @param list
-   *        List of {@link IJGenerable} objects that will be separated by a
-   *        comma
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter generable (@Nonnull final Collection <? extends IJGenerable> list)
   {
@@ -719,13 +644,6 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  /**
-   * Cause the JDeclaration to generate source for itself
-   *
-   * @param d
-   *        the JDeclaration object
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter declaration (@Nonnull final IJDeclaration d)
   {
@@ -733,13 +651,6 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  /**
-   * Cause the JStatement to generate source for itself
-   *
-   * @param aStmt
-   *        the JStatement object
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter statement (@Nonnull final IJStatement aStmt)
   {
@@ -747,14 +658,6 @@ public class JFormatter implements Closeable
     return this;
   }
 
-  /**
-   * Cause the {@link JVar} to generate source for itself. With annotations,
-   * type, name and init expression.
-   *
-   * @param aVar
-   *        the {@link JVar} object
-   * @return this for chaining
-   */
   @Nonnull
   public JFormatter var (@Nonnull final JVar aVar)
   {
@@ -953,7 +856,7 @@ public class JFormatter implements Closeable
    * @param aClassToBeWritten
    *        Class to be written
    */
-  public void writeClassFull (@Nonnull final JDefinedClass aClassToBeWritten)
+  void writeClassFull (@Nonnull final JDefinedClass aClassToBeWritten)
   {
     m_aPckJavaLang = aClassToBeWritten.owner ()._package ("java.lang");
 
@@ -1046,7 +949,7 @@ public class JFormatter implements Closeable
    *        The classes to not be used in "import" statements. May be
    *        <code>null</code>.
    */
-  public void addDontImportClasses (@Nullable final Iterable <? extends AbstractJClass> aClasses)
+  void addDontImportClasses (@Nullable final Iterable <? extends AbstractJClass> aClasses)
   {
     if (aClasses != null)
       for (final AbstractJClass aClass : aClasses)

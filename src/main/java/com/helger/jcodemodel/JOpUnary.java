@@ -104,7 +104,7 @@ public class JOpUnary implements IJExpression
     return m_bOperatorComesFirst;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     if (m_bOperatorComesFirst)
       f.print ('(').print (m_sOperator).generable (m_aExpr).print (')');

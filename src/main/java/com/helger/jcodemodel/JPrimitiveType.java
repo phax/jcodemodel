@@ -202,7 +202,7 @@ public class JPrimitiveType extends AbstractJType
     m_bUseValueOf = bUseValueOf;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.print (m_sTypeName);
   }

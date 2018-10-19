@@ -70,7 +70,7 @@ public class JAtom implements IJExpression
     return m_sWhat;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.print (m_sWhat);
   }

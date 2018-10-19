@@ -605,7 +605,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
     return m_aMemberValues.size () == 1 && m_aMemberValues.containsKey (SPECIAL_KEY_VALUE);
   }
 
-  public void generate (final JFormatter f)
+  public void generate (final IJFormatter f)
   {
     f.print ('@').generable (m_aAnnotationClass);
     if (m_aMemberValues != null && !m_aMemberValues.isEmpty ())

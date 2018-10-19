@@ -62,7 +62,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
       m_aEnumConstant = JCValueEnforcer.notNull (aEnumConstant, "EnumConstant");
     }
 
-    public void generate (@Nonnull final JFormatter f)
+    public void generate (@Nonnull final IJFormatter f)
     {
       f.type (owner ().ref (m_aEnumConstant.getDeclaringClass ())).print ('.').print (m_aEnumConstant.name ());
     }
@@ -77,7 +77,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
       m_aClass = JCValueEnforcer.notNull (aClass, "Class");
     }
 
-    public void generate (@Nonnull final JFormatter f)
+    public void generate (@Nonnull final IJFormatter f)
     {
       f.print (JCNameUtilities.getFullName (m_aClass)).print (".class");
     }

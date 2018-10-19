@@ -270,7 +270,7 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   @Override
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     if (isStaticRef ())
       f.type (type ());

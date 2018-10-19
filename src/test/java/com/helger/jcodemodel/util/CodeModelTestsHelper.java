@@ -55,14 +55,15 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JFormatter;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
+import com.helger.jcodemodel.writer.JFormatter;
 import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
@@ -77,7 +78,7 @@ public final class CodeModelTestsHelper
   public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
 
   @Nonnull
-  private static JFormatter _createFormatter (@Nonnull final StringWriter aWriter)
+  private static IJFormatter _createFormatter (@Nonnull final StringWriter aWriter)
   {
     return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()),
                            JCMWriter.DEFAULT_INDENT_STRING);
@@ -99,7 +100,7 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aGenerable.generate (aFormatter);
       return aSW.toString ();
@@ -122,7 +123,7 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aDeclaration.declare (aFormatter);
       return aSW.toString ();
@@ -145,7 +146,7 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aStatement, "Statement");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aStatement.state (aFormatter);
       return aSW.toString ();
@@ -161,7 +162,7 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aDeclaration.declare (aFormatter);
       return aSW.toString ();
@@ -177,7 +178,7 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aGenerable.generate (aFormatter);
       return aSW.toString ();

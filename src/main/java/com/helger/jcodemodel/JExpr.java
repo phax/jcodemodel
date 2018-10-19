@@ -287,7 +287,7 @@ public final class JExpr
   @Nonnull
   public static IJExpression dotclass (@Nonnull final AbstractJClass aClass)
   {
-    return (@Nonnull final JFormatter f) -> {
+    return (@Nonnull final IJFormatter f) -> {
       final AbstractJClass c = aClass instanceof JNarrowedClass ? ((JNarrowedClass) aClass).basis () : aClass;
       f.generable (c).print (".class");
     };

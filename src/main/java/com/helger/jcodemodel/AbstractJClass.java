@@ -536,7 +536,7 @@ public abstract class AbstractJClass extends AbstractJType
     return new JLambdaMethodRef (this, sMethod);
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.type (this);
   }
@@ -547,7 +547,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @param f
    *        Formatter to be used
    */
-  void printLink (@Nonnull final JFormatter f)
+  void printLink (@Nonnull final IJFormatter f)
   {
     f.print ("{@link ").generable (this).print ('}');
   }

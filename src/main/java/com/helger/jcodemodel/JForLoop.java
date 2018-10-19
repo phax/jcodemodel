@@ -127,7 +127,7 @@ public class JForLoop implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.print ("for (");
     boolean bFirst = true;

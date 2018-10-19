@@ -57,7 +57,7 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable
    */
   private Map <String, JTypeVar> m_aTypeVariables;
 
-  public void declare (@Nonnull final JFormatter f)
+  public void declare (@Nonnull final IJFormatter f)
   {
     if (m_aTypeVariables != null && !m_aTypeVariables.isEmpty ())
     {
@@ -69,7 +69,7 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable
           f.print (',');
         f.declaration (aTypeVar);
       }
-      f.print (JFormatter.CLOSE_TYPE_ARGS);
+      f.printCloseTypeArgs ();
     }
   }
 

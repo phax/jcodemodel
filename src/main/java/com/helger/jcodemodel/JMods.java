@@ -226,7 +226,7 @@ public class JMods implements IJGenerable
     m_nMods = (m_nMods & ~bit) | (bNewValue ? bit : 0);
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     // The order is taken from popular CodeStyle tools
     if ((m_nMods & JMod.PUBLIC) != 0)

@@ -67,7 +67,7 @@ public class JContinue implements IJStatement
     return m_aLabel;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     if (m_aLabel == null)
       f.print ("continue;").newline ();

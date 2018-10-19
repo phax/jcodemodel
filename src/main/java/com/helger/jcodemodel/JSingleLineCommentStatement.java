@@ -90,7 +90,7 @@ public class JSingleLineCommentStatement implements IJStatement
     m_sComment = sComment;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     if (m_sComment.length () > 0)
       f.print ("// ").print (m_sComment).newline ();

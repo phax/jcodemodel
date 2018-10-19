@@ -193,7 +193,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   /**
    * Prints out the declaration of the variable.
    */
-  public void declare (@Nonnull final JFormatter f)
+  public void declare (@Nonnull final IJFormatter f)
   {
     f.id (name ());
     if (!m_aBounds.isEmpty ())
@@ -207,7 +207,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.id (m_sName);
   }

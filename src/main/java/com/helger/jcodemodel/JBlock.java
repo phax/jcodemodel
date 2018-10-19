@@ -891,7 +891,7 @@ public class JBlock implements IJGenerable, IJStatement
     return aStatement;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     if (m_bVirtualBlock)
     {
@@ -915,7 +915,7 @@ public class JBlock implements IJGenerable, IJStatement
     }
   }
 
-  protected void generateBody (@Nonnull final JFormatter f)
+  protected void generateBody (@Nonnull final IJFormatter f)
   {
     for (final IJObject aContentElement : m_aContentList)
     {
@@ -932,7 +932,7 @@ public class JBlock implements IJGenerable, IJStatement
     }
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.generable (this);
     if (m_bBracesRequired)

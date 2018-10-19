@@ -187,7 +187,7 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
     return m_aPrimitiveType;
   }
 
-  public void declare (final JFormatter f)
+  public void declare (final IJFormatter f)
   {
     // Nothing to do here...
   }

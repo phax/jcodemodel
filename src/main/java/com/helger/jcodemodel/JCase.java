@@ -109,7 +109,7 @@ public class JCase implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.indent ();
     if (m_bIsDefaultCase)

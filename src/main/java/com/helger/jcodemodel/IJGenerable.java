@@ -47,5 +47,5 @@ import javax.annotation.Nonnull;
  */
 public interface IJGenerable extends IJObject
 {
-  void generate (@Nonnull JFormatter f);
+  void generate (@Nonnull IJFormatter f);
 }

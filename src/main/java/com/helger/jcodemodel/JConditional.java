@@ -119,7 +119,7 @@ public class JConditional implements IJStatement
     return _else ()._if (aTestExpr);
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     if (m_aTestExpr == JExpr.TRUE)
     {

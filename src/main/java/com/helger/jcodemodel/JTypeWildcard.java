@@ -170,7 +170,7 @@ public class JTypeWildcard extends AbstractJClass
   }
 
   @Override
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     if (m_aBoundClass._extends () == null)
     {

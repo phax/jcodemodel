@@ -80,7 +80,7 @@ public class JSynchronizedBlock implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.print ("synchronized (").generable (m_aExpression).print (")").newline ();
     if (m_aBody != null)

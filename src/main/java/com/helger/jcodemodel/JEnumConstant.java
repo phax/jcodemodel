@@ -205,7 +205,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
     return Collections.unmodifiableList (m_aAnnotations);
   }
 
-  public void declare (@Nonnull final JFormatter f)
+  public void declare (@Nonnull final IJFormatter f)
   {
     if (m_aJavaDoc != null)
       f.newline ().generable (m_aJavaDoc);
@@ -217,7 +217,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
       f.print ('(').generable (m_aArgs).print (')');
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.type (m_aType).print ('.').print (m_sName);
   }

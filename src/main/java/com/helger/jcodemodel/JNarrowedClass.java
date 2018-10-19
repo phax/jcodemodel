@@ -182,13 +182,13 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  public void generate (final JFormatter f)
+  public void generate (final IJFormatter f)
   {
-    f.type (m_aBasis).print ('<').generable (m_aArgs).print (JFormatter.CLOSE_TYPE_ARGS);
+    f.type (m_aBasis).print ('<').generable (m_aArgs).printCloseTypeArgs ();
   }
 
   @Override
-  void printLink (final JFormatter f)
+  void printLink (final IJFormatter f)
   {
     m_aBasis.printLink (f);
     f.print ("{@code <}");

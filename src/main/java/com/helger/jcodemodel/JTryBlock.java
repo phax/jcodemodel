@@ -86,7 +86,7 @@ public class JTryBlock implements IJStatement
     return m_aFinally;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.print ("try").generable (m_aBody);
     for (final JCatchBlock cb : m_aCatches)

@@ -101,7 +101,7 @@ public class JForEach implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.print ("for (");
     f.generable (m_aType).id (m_sVarName).print (": ").generable (m_aCollection);

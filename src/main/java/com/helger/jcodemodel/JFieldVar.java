@@ -121,7 +121,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
   }
 
   @Override
-  public void declare (@Nonnull final JFormatter f)
+  public void declare (@Nonnull final IJFormatter f)
   {
     // Declaration
     if (m_aJavaDoc != null)
@@ -130,7 +130,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
   }
 
   @Override
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     // Usage
     super.generate (f);

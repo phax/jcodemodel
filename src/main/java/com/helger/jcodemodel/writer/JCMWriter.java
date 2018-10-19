@@ -12,11 +12,11 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JAnnotationUse;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JDocComment;
-import com.helger.jcodemodel.JFormatter;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
@@ -289,7 +289,7 @@ public class JCMWriter
     final JDocComment aJavaDoc = aPackage.javadoc ();
     if (!aAnnotations.isEmpty () || !aJavaDoc.isEmpty ())
     {
-      try (final JFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, "package-info"))
+      try (final IJFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, "package-info"))
       {
         if (!aJavaDoc.isEmpty ())
           f.generable (aJavaDoc);

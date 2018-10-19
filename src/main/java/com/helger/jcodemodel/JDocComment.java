@@ -391,7 +391,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
     m_aAtXdoclets.clear ();
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     // Is any "@" comment present?
     final boolean bHasAt = !m_aAtParams.isEmpty () ||

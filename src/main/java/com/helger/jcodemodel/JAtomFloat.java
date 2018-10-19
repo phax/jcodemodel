@@ -67,7 +67,7 @@ public class JAtomFloat implements IJExpression
     return m_fWhat;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     if (m_fWhat == Float.NEGATIVE_INFINITY)
       f.print (JAVA_LANG_FLOAT_NEGATIVE_INFINITY);

@@ -122,11 +122,11 @@ public class JCommentPart extends ArrayList <Object>
    * @param sIndent
    *        Indentation to use
    */
-  protected void format (@Nonnull final JFormatter f, final String sIndent)
+  protected void format (@Nonnull final IJFormatter f, final String sIndent)
   {
     if (!f.isPrinting ())
     {
-      // quickly pass the types to JFormatter, as that's all we care.
+      // quickly pass the types to IJFormatter, as that's all we care.
       // we don't need to worry about the exact formatting of text.
       for (final Object o : this)
         if (o instanceof AbstractJClass)

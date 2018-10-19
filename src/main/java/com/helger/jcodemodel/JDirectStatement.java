@@ -72,7 +72,7 @@ public final class JDirectStatement implements IJStatement
     m_sSource = sSource;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.print (m_sSource).newline ();
   }

@@ -99,7 +99,7 @@ public class JEnumConstantRef implements IJExpression
     return m_aType.fullName () + '.' + m_sName;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.type (m_aType).print ('.').print (m_sName);
   }

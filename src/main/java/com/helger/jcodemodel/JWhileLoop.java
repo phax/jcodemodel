@@ -82,7 +82,7 @@ public class JWhileLoop implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     if (JOp.hasTopOp (m_aTextExpr))
     {

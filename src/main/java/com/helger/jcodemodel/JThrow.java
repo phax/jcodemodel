@@ -69,7 +69,7 @@ public class JThrow implements IJStatement
     return m_aExpr;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.print ("throw");
     f.generable (m_aExpr);

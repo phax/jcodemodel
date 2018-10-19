@@ -78,7 +78,7 @@ public class JAnonymousClass extends JDefinedClass
   }
 
   @Override
-  public void generate (final JFormatter f)
+  public void generate (final IJFormatter f)
   {
     f.type (m_aBaseClass);
   }

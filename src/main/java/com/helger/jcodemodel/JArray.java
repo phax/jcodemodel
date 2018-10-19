@@ -118,7 +118,7 @@ public class JArray implements IJExpression
     return m_aExprs != null && !m_aExprs.isEmpty ();
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     // generally we produce new T[x], but when T is an array type (T=T'[])
     // then new T'[][x] is wrong. It has to be new T'[x][].

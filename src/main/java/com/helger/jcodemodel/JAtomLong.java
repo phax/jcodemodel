@@ -64,7 +64,7 @@ public class JAtomLong implements IJExpression
     return m_nValue;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.print (Long.toString (m_nValue) + SUFFIX_LONG);
   }

@@ -234,7 +234,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
     return m_aAnnotations != null;
   }
 
-  public void bind (@Nonnull final JFormatter f)
+  public void bind (@Nonnull final IJFormatter f)
   {
     if (m_aAnnotations != null)
       for (final JAnnotationUse annotation : m_aAnnotations)
@@ -244,12 +244,12 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
       f.print ('=').generable (m_aInitExpr);
   }
 
-  public void declare (@Nonnull final JFormatter f)
+  public void declare (@Nonnull final IJFormatter f)
   {
     f.var (this).print (';').newline ();
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.id (m_sName);
   }

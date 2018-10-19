@@ -187,7 +187,7 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
     return this;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     final String name = name ();
 

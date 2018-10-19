@@ -70,7 +70,7 @@ public class JLabel implements IJStatement
     return m_sLabel;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.print (m_sLabel + ':').newline ();
   }

@@ -420,7 +420,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     return new ArrayList <> (m_aTypeVariables);
   }
 
-  private void _addTypeVars (@Nonnull final JFormatter f)
+  private void _addTypeVars (@Nonnull final IJFormatter f)
   {
     if (m_aTypeVariables != null && !m_aTypeVariables.isEmpty ())
     {
@@ -433,7 +433,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
         // Use type here to get the import (if needed)
         f.type (aTypeVar);
       }
-      f.print (JFormatter.CLOSE_TYPE_ARGS);
+      f.printCloseTypeArgs ();
     }
   }
 
@@ -443,7 +443,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     return m_aMethod != null ? m_aMethod.name () : m_sMethodName;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     if (m_bIsConstructor)
     {
@@ -498,7 +498,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     }
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.generable (this).print (';').newline ();
   }

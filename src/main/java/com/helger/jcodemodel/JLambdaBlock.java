@@ -66,7 +66,7 @@ public class JLambdaBlock extends JBlock
   }
 
   @Override
-  protected void generateBody (@Nonnull final JFormatter f)
+  protected void generateBody (@Nonnull final IJFormatter f)
   {
     if (m_aContentList.size () == 1)
     {

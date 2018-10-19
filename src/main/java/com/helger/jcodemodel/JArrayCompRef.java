@@ -90,7 +90,7 @@ public class JArrayCompRef implements IJAssignmentTarget
     return m_aIndex;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.generable (m_aArray).print ('[').generable (m_aIndex).print (']');
   }

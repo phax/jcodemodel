@@ -443,13 +443,13 @@ public class JPackage implements
     return new File (aDir, m_sName.replace ('.', File.separatorChar));
   }
 
-  public void declare (@Nonnull final JFormatter f)
+  public void declare (@Nonnull final IJFormatter f)
   {
     if (m_sName.length () != 0)
       f.print ("package").print (m_sName).print (';').newline ();
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.print (m_sName);
   }

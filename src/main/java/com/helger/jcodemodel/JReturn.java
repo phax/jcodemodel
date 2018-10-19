@@ -70,7 +70,7 @@ public class JReturn implements IJStatement
     return m_aExpr;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.print ("return");
     if (m_aExpr != null)

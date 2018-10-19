@@ -84,7 +84,7 @@ public class JDoLoop implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.print ("do");
     if (m_aBody != null)

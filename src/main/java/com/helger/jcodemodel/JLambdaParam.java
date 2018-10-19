@@ -80,14 +80,14 @@ public class JLambdaParam implements IJAssignmentTarget, IJDeclaration
     return m_sName;
   }
 
-  public void declare (@Nonnull final JFormatter f)
+  public void declare (@Nonnull final IJFormatter f)
   {
     if (m_aType != null)
       f.generable (m_aType);
     f.id (m_sName);
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.id (m_sName);
   }

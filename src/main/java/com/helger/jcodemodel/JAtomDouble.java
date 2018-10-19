@@ -66,7 +66,7 @@ public class JAtomDouble implements IJExpression
     return m_dWhat;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     if (m_dWhat == Double.NEGATIVE_INFINITY)
       f.print (JAVA_LANG_DOUBLE_NEGATIVE_INFINITY);

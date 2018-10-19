@@ -56,6 +56,7 @@ import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.jcodemodel.writer.JFormatter;
 
 /**
  * A generated Java class/interface/enum/....
@@ -626,7 +627,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     return m_bHideFile;
   }
 
-  public void declare (@Nonnull final JFormatter f)
+  public void declare (@Nonnull final IJFormatter f)
   {
     // Java docs
     if (m_aJDoc != null)
@@ -670,7 +671,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @param f
    *        Formatter to use
    */
-  protected void declareBody (@Nonnull final JFormatter f)
+  protected void declareBody (@Nonnull final IJFormatter f)
   {
     f.print ('{').newline ().indent ();
     boolean bFirst = true;

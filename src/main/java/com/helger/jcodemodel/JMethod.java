@@ -527,7 +527,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Override
-  public void declare (@Nonnull final JFormatter f)
+  public void declare (@Nonnull final IJFormatter f)
   {
     if (m_aJDoc != null)
       f.generable (m_aJDoc);

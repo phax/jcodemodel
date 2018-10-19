@@ -98,7 +98,7 @@ public class JOpTernary implements IJExpression
     return m_aExpr3;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.print ('(')
      .generable (m_aExpr1)

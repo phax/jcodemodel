@@ -437,7 +437,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
     return m_aValues.size ();
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.print ('{').newline ().indent ();
     boolean first = true;

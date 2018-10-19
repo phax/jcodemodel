@@ -108,7 +108,7 @@ public class JSwitch implements IJStatement
     return m_aDefaultCase;
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     if (JOp.hasTopOp (m_aTestExpr))
     {

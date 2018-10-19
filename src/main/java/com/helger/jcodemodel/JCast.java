@@ -86,7 +86,7 @@ public class JCast implements IJExpression
     return m_aObject;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.print ("((").generable (m_aType).print (')').generable (m_aObject).print (')');
   }

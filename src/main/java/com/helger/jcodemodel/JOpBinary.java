@@ -80,7 +80,7 @@ public class JOpBinary implements IJExpression
     return m_aRight;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.print ('(').generable (m_aLeft).print (m_sOperator).generable (m_aRight).print (')');
   }

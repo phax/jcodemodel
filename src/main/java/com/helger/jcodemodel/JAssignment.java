@@ -116,12 +116,12 @@ public class JAssignment implements IJExpressionStatement
     return m_sOperator + '=';
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     f.generable (m_aLhs).print (opFull ()).generable (m_aRhs);
   }
 
-  public void state (@Nonnull final JFormatter f)
+  public void state (@Nonnull final IJFormatter f)
   {
     f.generable (this).print (';').newline ();
   }

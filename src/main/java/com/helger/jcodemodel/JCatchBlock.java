@@ -84,7 +84,7 @@ public class JCatchBlock implements IJGenerable
     return m_aBody;
   }
 
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     if (m_aVar == null)
       m_aVar = new JVar (JMods.forVar (JMod.FINAL), m_aException, "ex", null);

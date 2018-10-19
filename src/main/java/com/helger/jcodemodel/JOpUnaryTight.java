@@ -55,7 +55,7 @@ public class JOpUnaryTight extends JOpUnary
   }
 
   @Override
-  public void generate (@Nonnull final JFormatter f)
+  public void generate (@Nonnull final IJFormatter f)
   {
     if (opFirst ())
       f.print (op ()).generable (expr ());
