@@ -38,7 +38,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.writer;
 
 import java.io.BufferedWriter;
 import java.io.Closeable;
@@ -53,6 +53,8 @@ import java.util.BitSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
@@ -104,30 +106,6 @@ public abstract class AbstractCodeWriter implements Closeable
    */
   private final Charset m_aEncoding;
   private final String m_sNewLine;
-
-  private static String s_sDefaultNewLine = null;
-
-  @Nonnull
-  public static String getDefaultNewLine ()
-  {
-    String ret = s_sDefaultNewLine;
-    if (ret == null)
-    {
-      try
-      {
-        ret = s_sDefaultNewLine = System.getProperty ("line.separator");
-      }
-      catch (final Exception ex)
-      {
-        // Fall through
-      }
-
-      // Fall back
-      if (ret == null || ret.length () == 0)
-        ret = s_sDefaultNewLine = "\n";
-    }
-    return ret;
-  }
 
   protected AbstractCodeWriter (@Nullable final Charset aEncoding, @Nonnull final String sNewLine)
   {

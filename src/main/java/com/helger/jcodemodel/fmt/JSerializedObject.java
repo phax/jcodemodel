@@ -48,8 +48,6 @@ import java.io.Serializable;
 import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
 
-import com.helger.jcodemodel.AbstractJResourceFile;
-
 /**
  * A simple class that takes an object and serializes it into a file in the
  * parent package with the given name.
@@ -73,18 +71,20 @@ public class JSerializedObject extends AbstractJResourceFile
   }
 
   @Override
-  protected void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
     // serialize the obj into an OutputStream
     try (final ObjectOutputStream oos = new ObjectOutputStream (aOS)
     {
       @Override
       public void close ()
-      {}
+      {
+        // Don't close the OS!
+      }
     })
     {
       oos.writeObject (m_aObj);
-      oos.flush();
+      oos.flush ();
     }
   }
 }

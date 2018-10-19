@@ -47,7 +47,6 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
 
-import com.helger.jcodemodel.AbstractJResourceFile;
 import com.helger.jcodemodel.util.JCSecureLoader;
 
 /**
@@ -91,13 +90,13 @@ public class JStaticFile extends AbstractJResourceFile
   }
 
   @Override
-  protected boolean isResource ()
+  public final boolean isResource ()
   {
     return m_bIsResource;
   }
 
   @Override
-  protected void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
     try (final DataInputStream dis = new DataInputStream (m_aClassLoader.getResourceAsStream (m_sResourceName)))
     {

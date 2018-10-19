@@ -47,8 +47,6 @@ import java.util.Properties;
 import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
 
-import com.helger.jcodemodel.AbstractJResourceFile;
-
 /**
  * A property file.
  */

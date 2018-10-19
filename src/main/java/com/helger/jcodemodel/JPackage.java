@@ -40,10 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,8 +55,8 @@ import java.util.TreeMap;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.WillNotClose;
 
+import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
@@ -250,11 +247,31 @@ public class JPackage implements
    * Iterates all resource files in this package.
    *
    * @return Iterator
+   * @deprecated Use {@link #resourceFiles()} instead
    */
+  @Deprecated
   @Nonnull
   public Iterator <AbstractJResourceFile> propertyFiles ()
   {
+    return resourceFiles ();
+  }
+
+  /**
+   * Iterates all resource files in this package.
+   *
+   * @return Iterator
+   * @since 3.2.0
+   */
+  @Nonnull
+  public Iterator <AbstractJResourceFile> resourceFiles ()
+  {
     return m_aResources.iterator ();
+  }
+
+  @Nonnull
+  public List <AbstractJResourceFile> getAllResourceFiles ()
+  {
+    return new ArrayList <> (m_aResources);
   }
 
   @Nonnull
@@ -262,6 +279,12 @@ public class JPackage implements
   {
     if (m_aJavaDoc == null)
       m_aJavaDoc = new JDocComment (owner ());
+    return m_aJavaDoc;
+  }
+
+  @Nullable
+  public JDocComment javadocOrNull ()
+  {
     return m_aJavaDoc;
   }
 
@@ -429,64 +452,6 @@ public class JPackage implements
   public void generate (@Nonnull final JFormatter f)
   {
     f.print (m_sName);
-  }
-
-  @Nonnull
-  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter aSrc,
-                                                  @Nonnull final String sClassName) throws IOException
-  {
-    final SourcePrintWriter aWriter = aSrc.openSource (this, sClassName + ".java");
-    final JFormatter ret = new JFormatter (aWriter);
-    // Add all classes to not be imported (may be empty)
-    ret.addDontImportClasses (m_aOwner.getAllDontImportClasses ());
-    return ret;
-  }
-
-  void build (@Nonnull @WillNotClose final AbstractCodeWriter aSrcWriter,
-              @Nonnull @WillNotClose final AbstractCodeWriter aResWriter) throws IOException
-  {
-    // write classes
-    for (final JDefinedClass c : m_aClasses.values ())
-    {
-      if (c.isHidden ())
-      {
-        // don't generate this file
-        continue;
-      }
-
-      try (final JFormatter f = _createJavaSourceFileWriter (aSrcWriter, c.name ()))
-      {
-        f.write (c);
-      }
-    }
-
-    // write package annotations
-    if (m_aAnnotations != null || m_aJavaDoc != null)
-    {
-      try (final JFormatter f = _createJavaSourceFileWriter (aSrcWriter, "package-info"))
-      {
-        if (m_aJavaDoc != null)
-          f.generable (m_aJavaDoc);
-
-        // TODO: think about importing
-        if (m_aAnnotations != null)
-        {
-          for (final JAnnotationUse a : m_aAnnotations)
-            f.generable (a).newline ();
-        }
-        f.declaration (this);
-      }
-    }
-
-    // write resources
-    for (final AbstractJResourceFile rsrc : m_aResources)
-    {
-      final AbstractCodeWriter cw = rsrc.isResource () ? aResWriter : aSrcWriter;
-      try (final OutputStream os = new BufferedOutputStream (cw.openBinary (this, rsrc.name ())))
-      {
-        rsrc.build (os);
-      }
-    }
   }
 
   boolean buildsErrorTypeRefs ()

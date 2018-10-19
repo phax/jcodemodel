@@ -45,6 +45,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.writer.JCMWriter;
 
 /**
  * {@link JSynchronizedBlock} tests.
@@ -53,15 +54,12 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
  */
 public final class JSynchronizedBlockTest
 {
-  private static final String CRLF = System.getProperty ("line.separator");
+  private static final String CRLF = JCMWriter.getDefaultNewLine ();
 
   @Test
   public void testBasic ()
   {
-    assertEquals ("synchronized (a)" +
-                  CRLF +
-                  "{}" +
-                  CRLF,
+    assertEquals ("synchronized (a)" + CRLF + "{}" + CRLF,
                   CodeModelTestsHelper.toString (new JSynchronizedBlock (JExpr.ref ("a"))));
 
     final JSynchronizedBlock aSB = new JSynchronizedBlock (JExpr.ref ("abc"));
@@ -70,7 +68,7 @@ public final class JSynchronizedBlockTest
                   CRLF +
                   "{" +
                   CRLF +
-                  JFormatter.DEFAULT_INDENT_SPACE +
+                  JCMWriter.DEFAULT_INDENT_STRING +
                   "x = y;" +
                   CRLF +
                   "}" +

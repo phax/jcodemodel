@@ -65,7 +65,9 @@ import com.helger.jcodemodel.meta.ErrorTypeFound;
 import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
 import com.helger.jcodemodel.util.JCSecureLoader;
 import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.FileCodeWriter;
+import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter;
 
 /**
@@ -199,10 +201,12 @@ public final class JCodeModel
   private AbstractJClass m_aWildcard;
 
   /** The charset used for building the output - null means system default */
+  @Deprecated
   private Charset m_aBuildingCharset;
 
   /** The newline string to be used. Defaults to system default */
-  private String m_sBuildingNewLine = AbstractCodeWriter.getDefaultNewLine ();
+  @Deprecated
+  private String m_sBuildingNewLine = JCMWriter.getDefaultNewLine ();
 
   private final Set <AbstractJClass> m_aDontImportClasses = new HashSet <> ();
 
@@ -235,6 +239,16 @@ public final class JCodeModel
   public Iterator <JPackage> packages ()
   {
     return m_aPackages.values ().iterator ();
+  }
+
+  /**
+   * @return a list with all packages. The list is mutable. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public List <JPackage> getAllPackages ()
+  {
+    return new ArrayList <> (m_aPackages.values ());
   }
 
   /**
@@ -429,13 +443,10 @@ public final class JCodeModel
    */
   public boolean buildsErrorTypeRefs ()
   {
-    final JPackage [] pkgs = m_aPackages.values ().toArray (new JPackage [m_aPackages.size ()]);
     // avoid concurrent modification exception
-    for (final JPackage pkg : pkgs)
-    {
-      if (pkg.buildsErrorTypeRefs ())
+    for (final JPackage aPackage : getAllPackages ())
+      if (aPackage.buildsErrorTypeRefs ())
         return true;
-    }
     return false;
   }
 
@@ -488,6 +499,7 @@ public final class JCodeModel
    *         system default.
    */
   @Nullable
+  @Deprecated
   public Charset getBuildingCharset ()
   {
     return m_aBuildingCharset;
@@ -502,6 +514,7 @@ public final class JCodeModel
    * @return this for chaining
    */
   @Nonnull
+  @Deprecated
   public JCodeModel setBuildingCharset (@Nullable final Charset aCharset)
   {
     m_aBuildingCharset = aCharset;
@@ -511,6 +524,7 @@ public final class JCodeModel
   /**
    * @return The newline string to be used. Defaults to system default
    */
+  @Deprecated
   public String getBuildingNewLine ()
   {
     return m_sBuildingNewLine;
@@ -525,6 +539,7 @@ public final class JCodeModel
    * @return this for chaining
    */
   @Nonnull
+  @Deprecated
   public JCodeModel setBuildingNewLine (@Nonnull final String sNewLine)
   {
     JCValueEnforcer.notEmpty (sNewLine, "NewLine");
@@ -544,6 +559,7 @@ public final class JCodeModel
    * @throws IOException
    *         on IO error
    */
+  @Deprecated
   public void build (@Nonnull final File aDestDir, @Nullable final PrintStream aStatusPS) throws IOException
   {
     build (aDestDir, aDestDir, aStatusPS);
@@ -563,6 +579,7 @@ public final class JCodeModel
    *         on IO error if non-null, progress indication will be sent to this
    *         stream.
    */
+  @Deprecated
   public void build (@Nonnull final File aSrcDir,
                      @Nonnull final File aResourceDir,
                      @Nullable final PrintStream aStatusPS) throws IOException
@@ -585,6 +602,7 @@ public final class JCodeModel
    * @throws IOException
    *         on IO error
    */
+  @Deprecated
   public void build (@Nonnull final File aDestDir) throws IOException
   {
     build (aDestDir, System.out);
@@ -600,6 +618,7 @@ public final class JCodeModel
    * @throws IOException
    *         on IO error
    */
+  @Deprecated
   public void build (@Nonnull final File aSrcDir, @Nonnull final File aResourceDir) throws IOException
   {
     build (aSrcDir, aResourceDir, System.out);
@@ -613,6 +632,7 @@ public final class JCodeModel
    * @throws IOException
    *         on IO error
    */
+  @Deprecated
   public void build (@Nonnull final AbstractCodeWriter aWriter) throws IOException
   {
     build (aWriter, aWriter);
@@ -628,21 +648,11 @@ public final class JCodeModel
    * @throws IOException
    *         on IO error
    */
+  @Deprecated
   public void build (@Nonnull final AbstractCodeWriter aSource,
                      @Nonnull final AbstractCodeWriter aResource) throws IOException
   {
-    try
-    {
-      // Copy to avoid concurrent modification exception
-      final List <JPackage> pkgs = new ArrayList <> (m_aPackages.values ());
-      for (final JPackage pkg : pkgs)
-        pkg.build (aSource, aResource);
-    }
-    finally
-    {
-      aSource.close ();
-      aResource.close ();
-    }
+    new JCMWriter (this).setCharset (m_aBuildingCharset).setNewLine (m_sBuildingNewLine).build (aSource, aResource);
   }
 
   /**

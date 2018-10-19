@@ -50,7 +50,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
 
-import com.helger.jcodemodel.AbstractJResourceFile;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**

@@ -53,7 +53,6 @@ import javax.annotation.Nonnull;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJGenerable;
@@ -61,6 +60,9 @@ import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JFormatter;
 import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.SourcePrintWriter;
+import com.helger.jcodemodel.writer.AbstractCodeWriter;
+import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
@@ -73,6 +75,13 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 public final class CodeModelTestsHelper
 {
   public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
+
+  @Nonnull
+  private static JFormatter _createFormatter (@Nonnull final StringWriter aWriter)
+  {
+    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()),
+                           JCMWriter.DEFAULT_INDENT_STRING);
+  }
 
   /** Hidden constructor. */
   private CodeModelTestsHelper ()
@@ -90,7 +99,7 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = new JFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
     {
       aGenerable.generate (aFormatter);
       return aSW.toString ();
@@ -113,9 +122,9 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter formatter = new JFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
     {
-      aDeclaration.declare (formatter);
+      aDeclaration.declare (aFormatter);
       return aSW.toString ();
     }
     catch (final IOException ex)
@@ -136,9 +145,9 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aStatement, "Statement");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter formatter = new JFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
     {
-      aStatement.state (formatter);
+      aStatement.state (aFormatter);
       return aSW.toString ();
     }
     catch (final IOException ex)
@@ -152,9 +161,9 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter formatter = new JFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
     {
-      aDeclaration.declare (formatter);
+      aDeclaration.declare (aFormatter);
       return aSW.toString ();
     }
     catch (final IOException ex)
@@ -168,9 +177,9 @@ public final class CodeModelTestsHelper
   {
     JCValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final StringWriter aSW = new StringWriter (); final JFormatter formatter = new JFormatter (aSW))
+    try (final StringWriter aSW = new StringWriter (); final JFormatter aFormatter = _createFormatter (aSW))
     {
-      aGenerable.generate (formatter);
+      aGenerable.generate (aFormatter);
       return aSW.toString ();
     }
     catch (final IOException ex)
@@ -190,10 +199,10 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static byte [] getAllBytes (@Nonnull final JCodeModel cm)
   {
-    try (final ByteArrayOutputStream bos = new ByteArrayOutputStream ())
+    try (final ByteArrayOutputStream aBAOS = new ByteArrayOutputStream ())
     {
-      cm.build (new OutputStreamCodeWriter (bos, DEFAULT_ENCODING));
-      return bos.toByteArray ();
+      new JCMWriter (cm).build (new OutputStreamCodeWriter (aBAOS, DEFAULT_ENCODING));
+      return aBAOS.toByteArray ();
     }
     catch (final IOException ex)
     {
@@ -205,7 +214,7 @@ public final class CodeModelTestsHelper
   {
     try
     {
-      cm.build (new AbstractCodeWriter (DEFAULT_ENCODING, "\n")
+      new JCMWriter (cm).build (new AbstractCodeWriter (DEFAULT_ENCODING, "\n")
       {
         @Override
         public OutputStream openBinary (final JPackage aPackage, final String sFilename) throws IOException
@@ -268,7 +277,7 @@ public final class CodeModelTestsHelper
   {
     try
     {
-      cm.build (new SingleStreamCodeWriter (System.out));
+      new JCMWriter (cm).build (new SingleStreamCodeWriter (System.out));
     }
     catch (final IOException ex)
     {

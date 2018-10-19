@@ -58,7 +58,6 @@ import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
 
 import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.AbstractJResourceFile;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.util.JCSecureLoader;
@@ -125,13 +124,13 @@ public class JStaticJavaFile extends AbstractJResourceFile
   }
 
   @Override
-  protected boolean isResource ()
+  public final boolean isResource ()
   {
     return false;
   }
 
   @Override
-  protected void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
     final Function <String, String> aFilter = _createLineFilter ();
     int nLineNumber = 1;

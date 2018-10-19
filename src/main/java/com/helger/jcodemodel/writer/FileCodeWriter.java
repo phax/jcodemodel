@@ -51,7 +51,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
@@ -75,17 +74,17 @@ public class FileCodeWriter extends AbstractCodeWriter
 
   public FileCodeWriter (@Nonnull final File aTargetDir) throws IOException
   {
-    this (aTargetDir, DEFAULT_MARK_READ_ONLY, DEFAULT_CHARSET, getDefaultNewLine ());
+    this (aTargetDir, DEFAULT_MARK_READ_ONLY, DEFAULT_CHARSET, JCMWriter.getDefaultNewLine ());
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir, @Nullable final Charset encoding) throws IOException
   {
-    this (aTargetDir, DEFAULT_MARK_READ_ONLY, encoding, getDefaultNewLine ());
+    this (aTargetDir, DEFAULT_MARK_READ_ONLY, encoding, JCMWriter.getDefaultNewLine ());
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir, final boolean bMarkReadOnly) throws IOException
   {
-    this (aTargetDir, bMarkReadOnly, DEFAULT_CHARSET, getDefaultNewLine ());
+    this (aTargetDir, bMarkReadOnly, DEFAULT_CHARSET, JCMWriter.getDefaultNewLine ());
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir,
@@ -99,7 +98,7 @@ public class FileCodeWriter extends AbstractCodeWriter
                          final boolean bMarkReadOnly,
                          @Nullable final Charset aEncoding) throws IOException
   {
-    this (aTargetDir, bMarkReadOnly, aEncoding, getDefaultNewLine ());
+    this (aTargetDir, bMarkReadOnly, aEncoding, JCMWriter.getDefaultNewLine ());
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir,

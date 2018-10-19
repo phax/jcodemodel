@@ -38,7 +38,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.fmt;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -46,6 +46,7 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
 
+import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
@@ -76,7 +77,7 @@ public abstract class AbstractJResourceFile
    *         this file should be generated into the directory where other source
    *         files go.
    */
-  protected boolean isResource ()
+  public boolean isResource ()
   {
     return true;
   }
@@ -89,5 +90,5 @@ public abstract class AbstractJResourceFile
    * @throws IOException
    *         If writing on the stream throws an error
    */
-  protected abstract void build (@Nonnull @WillNotClose OutputStream aOS) throws IOException;
+  public abstract void build (@Nonnull @WillNotClose OutputStream aOS) throws IOException;
 }

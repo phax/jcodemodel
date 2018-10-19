@@ -48,7 +48,6 @@ import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
@@ -67,7 +66,7 @@ public class ZipCodeWriter extends AbstractCodeWriter
    */
   public ZipCodeWriter (@Nonnull final OutputStream target)
   {
-    this (target, getDefaultNewLine ());
+    this (target, JCMWriter.getDefaultNewLine ());
   }
 
   /**

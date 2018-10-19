@@ -47,7 +47,6 @@ import java.io.PrintStream;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 /**
@@ -70,7 +69,7 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
    */
   public SingleStreamCodeWriter (@Nonnull final OutputStream aOS)
   {
-    this (aOS, getDefaultNewLine ());
+    this (aOS, JCMWriter.getDefaultNewLine ());
   }
 
   /**

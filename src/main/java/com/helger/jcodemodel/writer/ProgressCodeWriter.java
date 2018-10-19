@@ -47,7 +47,6 @@ import java.io.PrintStream;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.util.JCValueEnforcer;

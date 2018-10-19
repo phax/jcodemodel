@@ -47,8 +47,6 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
 
-import com.helger.jcodemodel.AbstractJResourceFile;
-
 /**
  * Allows the application to use OutputStream to define data that will be stored
  * into a file.

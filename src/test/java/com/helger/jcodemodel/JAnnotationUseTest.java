@@ -46,6 +46,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.writer.JCMWriter;
 
 /**
  * Unit test for class {@link JAnnotationUse}.
@@ -74,7 +75,7 @@ public final class JAnnotationUseTest
     final JAnnotationUse suppressWarningAnnotation = testClass.annotate (SuppressWarnings.class);
     suppressWarningAnnotation.paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, "unused", "deprecation");
 
-    final String sCRLF = System.getProperty ("line.separator");
+    final String sCRLF = JCMWriter.getDefaultNewLine ();
     Assert.assertEquals ("@java.lang.SuppressWarnings({" +
                          sCRLF +
                          "    \"unused\"," +

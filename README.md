@@ -15,6 +15,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 # News and noteworthy
 
 * v3.2.0 - work in progress
+    * Introduced class `JCMWriter` that should be used to emit the outgoing Java files. This replaces `codemodel.build` and offers a more consistent API. Most existing method remain existing and deprecated and just forward to `JCMWriter`.
 * v3.1.0 - 2018-08-22
     * Added ` AbstractJType._new()`
     * Change return types of special `JBlock` methods to `void` to avoid chaining (issue #62) - incompatible change!

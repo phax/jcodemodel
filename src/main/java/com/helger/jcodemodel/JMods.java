@@ -40,8 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import java.io.StringWriter;
-
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.util.JCValueEnforcer;
@@ -255,14 +253,5 @@ public class JMods implements IJGenerable
       f.print ("strictfp");
     if ((m_nMods & JMod.DEFAULT) != 0)
       f.print ("default");
-  }
-
-  @Override
-  public String toString ()
-  {
-    final StringWriter aWriter = new StringWriter ();
-    final JFormatter f = new JFormatter (aWriter);
-    this.generate (f);
-    return aWriter.toString ();
   }
 }

@@ -42,7 +42,6 @@ package com.helger.jcodemodel;
 
 import java.io.Closeable;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -311,6 +310,8 @@ public class JFormatter implements Closeable
     }
   }
 
+  // Use constant in JCMWriter instead
+  @Deprecated
   public static final String DEFAULT_INDENT_SPACE = "    ";
 
   /**
@@ -348,7 +349,7 @@ public class JFormatter implements Closeable
   /**
    * String to be used for each indentation. Defaults to four spaces.
    */
-  private final String m_sIndentSpace;
+  private final String m_sIndentString;
 
   /**
    * Writer associated with this {@link JFormatter}
@@ -368,77 +369,22 @@ public class JFormatter implements Closeable
   private boolean m_bDebugImport = false;
 
   /**
-   * Creates a formatter with default incremental indentations of four spaces.
-   *
-   * @param aPW
-   *        The {@link PrintWriter} to use
-   */
-  public JFormatter (@Nonnull final SourcePrintWriter aPW)
-  {
-    this (aPW, DEFAULT_INDENT_SPACE);
-  }
-
-  /**
-   * Creates a JFormatter.
+   * Constructor
    *
    * @param aPW
    *        {@link PrintWriter} to {@link JFormatter} to use. May not be
    *        <code>null</code>.
-   * @param sIndentSpace
+   * @param sIndentString
    *        Incremental indentation string, similar to tab value. May not be
    *        <code>null</code>.
    */
-  public JFormatter (@Nonnull final SourcePrintWriter aPW, @Nonnull final String sIndentSpace)
+  public JFormatter (@Nonnull final SourcePrintWriter aPW, @Nonnull final String sIndentString)
   {
     JCValueEnforcer.notNull (aPW, "PrintWriter");
-    JCValueEnforcer.notNull (sIndentSpace, "IndentSpace");
+    JCValueEnforcer.notNull (sIndentString, "IndentString");
 
     m_aPW = aPW;
-    m_sIndentSpace = sIndentSpace;
-  }
-
-  /**
-   * Creates a formatter with default incremental indentations of four spaces.
-   *
-   * @param aWriter
-   *        The {@link Writer} to be wrapped in a {@link PrintWriter}
-   */
-  public JFormatter (@Nonnull final Writer aWriter)
-  {
-    this (aWriter, DEFAULT_INDENT_SPACE);
-  }
-
-  /**
-   * Creates a formatter with default incremental indentations of four spaces.
-   *
-   * @param aWriter
-   *        The {@link Writer} to be wrapped in a {@link PrintWriter}
-   * @param sIndentSpace
-   *        Incremental indentation string, similar to tab value. May not be
-   *        <code>null</code>.
-   */
-  public JFormatter (@Nonnull final Writer aWriter, @Nonnull final String sIndentSpace)
-  {
-    this (aWriter, sIndentSpace, System.getProperty ("line.separator"));
-  }
-
-  /**
-   * Creates a formatter with default incremental indentations of four spaces.
-   *
-   * @param aWriter
-   *        The {@link Writer} to be wrapped in a {@link PrintWriter}
-   * @param sIndentSpace
-   *        Incremental indentation string, similar to tab value. May not be
-   *        <code>null</code>.
-   * @param sNewLine
-   *        The new line string to be used. May neither be <code>null</code> nor
-   *        empty.
-   */
-  public JFormatter (@Nonnull final Writer aWriter, @Nonnull final String sIndentSpace, @Nonnull final String sNewLine)
-  {
-    this (aWriter instanceof SourcePrintWriter ? (SourcePrintWriter) aWriter
-                                               : new SourcePrintWriter (aWriter, sNewLine),
-          sIndentSpace);
+    m_sIndentString = sIndentString;
   }
 
   public void setDebugImports (final boolean bDebug)
@@ -562,7 +508,7 @@ public class JFormatter implements Closeable
     if (m_bAtBeginningOfLine)
     {
       for (int i = 0; i < m_nIndentLevel; i++)
-        m_aPW.print (m_sIndentSpace);
+        m_aPW.print (m_sIndentString);
       m_bAtBeginningOfLine = false;
     }
     else
@@ -1007,7 +953,7 @@ public class JFormatter implements Closeable
    * @param aClassToBeWritten
    *        Class to be written
    */
-  void write (@Nonnull final JDefinedClass aClassToBeWritten)
+  public void writeClassFull (@Nonnull final JDefinedClass aClassToBeWritten)
   {
     m_aPckJavaLang = aClassToBeWritten.owner ()._package ("java.lang");
 
@@ -1109,7 +1055,7 @@ public class JFormatter implements Closeable
 
   public static boolean containsErrorTypes (@Nonnull final JDefinedClass aClass)
   {
-    try (final JFormatter aFormatter = new JFormatter (NullWriter.getInstance ()))
+    try (final JFormatter aFormatter = new JFormatter (new SourcePrintWriter (NullWriter.getInstance (), "\n"), "\t"))
     {
       aFormatter.m_eMode = EMode.FIND_ERROR_TYPES;
       aFormatter.m_bContainsErrorTypes = false;

@@ -45,6 +45,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.writer.JCMWriter;
 
 /**
  * Test class for class {@link JLambda}.
@@ -53,7 +54,7 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
  */
 public final class JLambdaTest
 {
-  private static final String CRLF = AbstractCodeWriter.getDefaultNewLine ();
+  private static final String CRLF = JCMWriter.getDefaultNewLine ();
 
   @Test
   public void testExpressionBasic ()

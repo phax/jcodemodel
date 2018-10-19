@@ -58,7 +58,6 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.AbstractCodeWriter;
 import com.helger.jcodemodel.JPackage;
 
 public class OutputStreamCodeWriter extends AbstractCodeWriter
@@ -73,7 +72,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
    */
   public OutputStreamCodeWriter (@Nonnull final OutputStream aOS, @Nullable final Charset aEncoding)
   {
-    this (aOS, aEncoding, getDefaultNewLine ());
+    this (aOS, aEncoding, JCMWriter.getDefaultNewLine ());
   }
 
   /**
