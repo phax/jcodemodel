@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -61,7 +62,7 @@ public class JCMWriter
   private final JCodeModel m_aCM;
 
   /** The charset used for building the output - null means system default */
-  private Charset m_aCharset;
+  private Charset m_aCharset = StandardCharsets.UTF_8;
 
   /** The newline string to be used. Defaults to system default */
   private String m_sNewLine = getDefaultNewLine ();
