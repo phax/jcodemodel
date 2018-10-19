@@ -4,7 +4,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
@@ -21,6 +20,7 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
 /**
  * Java Code Model Builder
@@ -146,15 +146,15 @@ public class JCMWriter
    *
    * @param aDestDir
    *        source files and resources are generated into this directory.
-   * @param aStatusPS
+   * @param aStatusPT
    *        if non-<code>null</code>, progress indication will be sent to this
    *        stream.
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final File aDestDir, @Nullable final PrintStream aStatusPS) throws IOException
+  public void build (@Nonnull final File aDestDir, @Nullable final IProgressTracker aStatusPT) throws IOException
   {
-    build (aDestDir, aDestDir, aStatusPS);
+    build (aDestDir, aDestDir, aStatusPT);
   }
 
   /**
@@ -165,22 +165,22 @@ public class JCMWriter
    *        Java source files are generated into this directory.
    * @param aResourceDir
    *        Other resource files are generated into this directory.
-   * @param aStatusPS
-   *        Progress stream. May be <code>null</code>.
+   * @param aStatusPT
+   *        Progress tracker. May be <code>null</code>.
    * @throws IOException
    *         on IO error if non-null, progress indication will be sent to this
    *         stream.
    */
   public void build (@Nonnull final File aSrcDir,
                      @Nonnull final File aResourceDir,
-                     @Nullable final PrintStream aStatusPS) throws IOException
+                     @Nullable final IProgressTracker aStatusPT) throws IOException
   {
     AbstractCodeWriter aSrcWriter = new FileCodeWriter (aSrcDir, m_aCharset, m_sNewLine);
     AbstractCodeWriter aResWriter = new FileCodeWriter (aResourceDir, m_aCharset, m_sNewLine);
-    if (aStatusPS != null)
+    if (aStatusPT != null)
     {
-      aSrcWriter = new ProgressCodeWriter (aSrcWriter, aStatusPS);
-      aResWriter = new ProgressCodeWriter (aResWriter, aStatusPS);
+      aSrcWriter = new ProgressCodeWriter (aSrcWriter, aStatusPT);
+      aResWriter = new ProgressCodeWriter (aResWriter, aStatusPT);
     }
     build (aSrcWriter, aResWriter);
   }
@@ -195,7 +195,7 @@ public class JCMWriter
    */
   public void build (@Nonnull final File aDestDir) throws IOException
   {
-    build (aDestDir, System.out);
+    build (aDestDir, System.out::println);
   }
 
   /**
@@ -210,7 +210,7 @@ public class JCMWriter
    */
   public void build (@Nonnull final File aSrcDir, @Nonnull final File aResourceDir) throws IOException
   {
-    build (aSrcDir, aResourceDir, System.out);
+    build (aSrcDir, aResourceDir, System.out::println);
   }
 
   /**

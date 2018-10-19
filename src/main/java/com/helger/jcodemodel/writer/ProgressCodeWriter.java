@@ -43,7 +43,7 @@ package com.helger.jcodemodel.writer;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.PrintStream;
+import java.io.Serializable;
 
 import javax.annotation.Nonnull;
 
@@ -53,40 +53,47 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Filter CodeWriter that writes a progress message to the specified
- * PrintStream.
+ * {@link IProgressTracker}.
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public class ProgressCodeWriter extends FilterCodeWriter
 {
-  private final PrintStream m_aPS;
+  @FunctionalInterface
+  public static interface IProgressTracker extends Serializable
+  {
+    void println (@Nonnull String sLine);
+  }
 
-  public ProgressCodeWriter (@Nonnull final AbstractCodeWriter output, @Nonnull final PrintStream progress)
+  private final IProgressTracker m_aPT;
+
+  public ProgressCodeWriter (@Nonnull final AbstractCodeWriter output, @Nonnull final IProgressTracker progress)
   {
     super (output);
     JCValueEnforcer.notNull (progress, "Progress");
-    m_aPS = progress;
+    m_aPT = progress;
   }
 
-  @Override
-  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  protected void report (@Nonnull final JPackage aPackage, @Nonnull final String sFilename)
   {
-    _report (pkg, fileName);
-    return super.openBinary (pkg, fileName);
-  }
-
-  @Override
-  public SourcePrintWriter openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
-  {
-    _report (pkg, fileName);
-    return super.openSource (pkg, fileName);
-  }
-
-  private void _report (@Nonnull final JPackage pkg, @Nonnull final String fileName)
-  {
-    if (pkg.isUnnamed ())
-      m_aPS.println (fileName);
+    if (aPackage.isUnnamed ())
+      m_aPT.println (sFilename);
     else
-      m_aPS.println (pkg.name ().replace ('.', File.separatorChar) + File.separatorChar + fileName);
+      m_aPT.println (aPackage.name ().replace ('.', File.separatorChar) + File.separatorChar + sFilename);
+  }
+
+  @Override
+  public OutputStream openBinary (@Nonnull final JPackage aPackage, @Nonnull final String sFilename) throws IOException
+  {
+    report (aPackage, sFilename);
+    return super.openBinary (aPackage, sFilename);
+  }
+
+  @Override
+  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage,
+                                       @Nonnull final String sFilename) throws IOException
+  {
+    report (aPackage, sFilename);
+    return super.openSource (aPackage, sFilename);
   }
 }

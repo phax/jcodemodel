@@ -588,8 +588,8 @@ public final class JCodeModel
     AbstractCodeWriter src = new FileCodeWriter (aSrcDir, m_aBuildingCharset, m_sBuildingNewLine);
     if (aStatusPS != null)
     {
-      src = new ProgressCodeWriter (src, aStatusPS);
-      res = new ProgressCodeWriter (res, aStatusPS);
+      src = new ProgressCodeWriter (src, aStatusPS::println);
+      res = new ProgressCodeWriter (res, aStatusPS::println);
     }
     build (src, res);
   }
