@@ -74,10 +74,7 @@ public final class VarArgsFuncTest
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
     m.param (String.class, "param1");
     m.param (Integer.class, "param2");
-    final JVar var = m.varParam (Object.class, "param3");
-
-    if (false)
-      System.out.println ("First varParam " + var);
+    m.varParam (Object.class, "param3");
 
     // checking for param after varParam it behaves ok
     // JVar[] var1 = m.varParam(Float.class, "param4");
