@@ -168,6 +168,6 @@ public final class AnnotationUseFuncTest
     myuse.param ("junk", 7);
     myuse.param ("value-value");
 
-    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }
