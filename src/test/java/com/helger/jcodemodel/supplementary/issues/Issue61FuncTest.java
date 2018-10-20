@@ -40,32 +40,38 @@
  */
 package com.helger.jcodemodel.supplementary.issues;
 
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.fmt.JTextFile;
-import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
+
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.fmt.JTextFile;
+import com.helger.jcodemodel.writer.JCMWriter;
+import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
  * Test for https://github.com/phax/jcodemodel/issues/61
  *
  * @author Flavio Baronti
  */
-public class Issue61FuncTest {
+public class Issue61FuncTest
+{
   @Test
   public void testIssue () throws Exception
   {
-    final JCodeModel generator = new JCodeModel ();
-    final Charset ascii = Charset.forName("US-ASCII");
-    final ByteArrayOutputStream resOut = new ByteArrayOutputStream();
-    final JTextFile res = (JTextFile) generator.rootPackage().addResourceFile(new JTextFile("example.txt", ascii));
-    
-    res.setContents("Testing");
-    generator.build(new SingleStreamCodeWriter(new ByteArrayOutputStream()), new SingleStreamCodeWriter(resOut));
-    String txtRes = ascii.decode(ByteBuffer.wrap(resOut.toByteArray())).toString();
-    assertTrue(txtRes.contains("Testing"));
+    final JCodeModel cm = new JCodeModel ();
+    final Charset ascii = Charset.forName ("US-ASCII");
+    final ByteArrayOutputStream resOut = new ByteArrayOutputStream ();
+    final JTextFile res = (JTextFile) cm.rootPackage ().addResourceFile (new JTextFile ("example.txt", ascii));
+
+    res.setContents ("Testing");
+    new JCMWriter (cm).build (new SingleStreamCodeWriter (new ByteArrayOutputStream ()),
+                              new SingleStreamCodeWriter (resOut));
+    final String txtRes = ascii.decode (ByteBuffer.wrap (resOut.toByteArray ())).toString ();
+    assertTrue (txtRes.contains ("Testing"));
   }
 }
