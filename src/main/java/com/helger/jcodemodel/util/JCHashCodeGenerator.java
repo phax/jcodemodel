@@ -619,7 +619,7 @@ public final class JCHashCodeGenerator
    *        A list of all members. Primitive types must be boxed.
    * @return The generated hashCode.
    */
-  public static int getHashCode (@Nonnull final int nSuperHashCode, @Nullable final Object... aMembers)
+  public static int getHashCode (final int nSuperHashCode, @Nullable final Object... aMembers)
   {
     final JCHashCodeGenerator aHCGen = getDerived (nSuperHashCode);
     if (aMembers != null)

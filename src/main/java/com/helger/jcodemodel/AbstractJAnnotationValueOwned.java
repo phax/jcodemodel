@@ -68,7 +68,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
     }
   }
 
-  protected final class FullClassNameExpr implements IJExpression
+  protected static final class FullClassNameExpr implements IJExpression
   {
     private final Class <?> m_aClass;
 

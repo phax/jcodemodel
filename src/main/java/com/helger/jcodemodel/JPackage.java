@@ -67,7 +67,6 @@ public class JPackage implements
                       IJGenerable,
                       IJClassContainer <JDefinedClass>,
                       IJAnnotatable,
-                      Comparable <JPackage>,
                       IJDocCommentable
 {
   /**
@@ -200,17 +199,6 @@ public class JPackage implements
   public JDefinedClass _getClass (@Nullable final String sName)
   {
     return m_aClasses.get (sName);
-  }
-
-  /**
-   * Order is based on the lexicographic order of the package name.
-   *
-   * @param aOther
-   *        Other package to compare to
-   */
-  public int compareTo (@Nonnull final JPackage aOther)
-  {
-    return m_sName.compareTo (aOther.m_sName);
   }
 
   /**

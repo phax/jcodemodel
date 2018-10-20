@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 import javax.annotation.Nonnull;
@@ -52,7 +53,7 @@ import javax.annotation.Nullable;
  * <code>Comparable &lt;AbstractJType&gt;</code>. Since this was specific to
  * import handling on emitting code, it was removed with 2.7.7!
  */
-public abstract class AbstractJType implements IJGenerable, IJOwned
+public abstract class AbstractJType implements IJGenerable, IJOwned, Serializable
 {
   /**
    * Obtains a reference to the primitive type object from a type name.
@@ -116,9 +117,9 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
   /**
    * Gets the name of this type.
    *
-   * @return Names like "int", "void", "BigInteger".
+   * @return Names like "int", "void", "BigInteger". May be <code>null</code>
+   *         for class containers.
    */
-  @Nonnull
   public abstract String name ();
 
   /**

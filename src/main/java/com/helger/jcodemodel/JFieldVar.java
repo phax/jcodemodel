@@ -40,6 +40,9 @@
  */
 package com.helger.jcodemodel;
 
+import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
+import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -134,5 +137,22 @@ public class JFieldVar extends JVar implements IJDocCommentable
   {
     // Usage
     super.generate (f);
+  }
+
+  @Override
+  public boolean equals (final Object o)
+  {
+    if (o == this)
+      return true;
+    if (!super.equals (o))
+      return false;
+    final JFieldVar rhs = (JFieldVar) o;
+    return isEqual (m_aOwnerClass, rhs.m_aOwnerClass);
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    return getHashCode (super.hashCode (), new Object [] { m_aOwnerClass });
   }
 }
