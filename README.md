@@ -16,9 +16,11 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 * v3.2.0 - work in progress
     * Introduced class `JCMWriter` that should be used to emit the outgoing Java files. This replaces `codemodel.build` and offers a more consistent API. Most existing method remain existing and deprecated and just forward to `JCMWriter`.
+        * Instead of `cm.build (...)` use `new JCMWriter (cm).build (...)` 
     * Extracted `IJFormatter` interface for better separation of concerns. `JFormatter` was moved to a sub-package
     * `ProgressCodeWriter` no longer needs an explicit `PrintStream` but a `ProgressCodeWriter.IProgressTracker` instead.
     * Default charset for Java classes is now `UTF-8`.
+    * Added new `JAnnotationUse` method overloads that automatically pass `value` as the annotation parameter name (issue #64) 
 * v3.1.0 - 2018-08-22
     * Added ` AbstractJType._new()`
     * Change return types of special `JBlock` methods to `void` to avoid chaining (issue #62) - incompatible change!

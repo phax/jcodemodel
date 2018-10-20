@@ -208,14 +208,28 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param bValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (final boolean bValue)
+  {
+    return param (SPECIAL_KEY_VALUE, bValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation
    *
    * @param sName
    *        The simple name for this annotation
    * @param bValue
-   *        The boolean value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, final boolean bValue)
@@ -231,14 +245,28 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param nValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (final byte nValue)
+  {
+    return param (SPECIAL_KEY_VALUE, nValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation
    *
    * @param sName
    *        The simple name for this annotation
    * @param nValue
-   *        The byte member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, final byte nValue)
@@ -254,14 +282,28 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param cValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (final char cValue)
+  {
+    return param (SPECIAL_KEY_VALUE, cValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation
    *
    * @param sName
    *        The simple name for this annotation
    * @param cValue
-   *        The char member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, final char cValue)
@@ -277,14 +319,28 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param dValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (final double dValue)
+  {
+    return param (SPECIAL_KEY_VALUE, dValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation
    *
    * @param sName
    *        The simple name for this annotation
    * @param dValue
-   *        The double member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, final double dValue)
@@ -300,14 +356,28 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param fValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (final float fValue)
+  {
+    return param (SPECIAL_KEY_VALUE, fValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation
    *
    * @param sName
    *        The simple name for this annotation
    * @param fValue
-   *        The float member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, final float fValue)
@@ -323,26 +393,18 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
    *
-   * @param sName
-   *        The simple name for this annotation
    * @param nValue
-   *        The long member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final long nValue)
+  public JAnnotationUse param (final int nValue)
   {
-    return _addValue (sName, wrap (nValue));
-  }
-
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final long... aValues)
-  {
-    paramArray (sName).params (aValues);
-    return this;
+    return param (SPECIAL_KEY_VALUE, nValue);
   }
 
   /**
@@ -351,32 +413,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @param sName
    *        The simple name for this annotation
    * @param nValue
-   *        The short member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
-   */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final short nValue)
-  {
-    return _addValue (sName, wrap (nValue));
-  }
-
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final short... aValues)
-  {
-    paramArray (sName).params (aValues);
-    return this;
-  }
-
-  /**
-   * Adds a member value pair to this annotation
-   *
-   * @param sName
-   *        The simple name for this annotation
-   * @param nValue
-   *        The int member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, final int nValue)
@@ -392,17 +430,105 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param nValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (final long nValue)
+  {
+    return param (SPECIAL_KEY_VALUE, nValue);
+  }
+
+  /**
+   * Adds a member value pair to this annotation
+   *
+   * @param sName
+   *        The simple name for this annotation
+   * @param nValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   */
+  @Nonnull
+  public JAnnotationUse param (@Nonnull final String sName, final long nValue)
+  {
+    return _addValue (sName, wrap (nValue));
+  }
+
+  @Nonnull
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final long... aValues)
+  {
+    paramArray (sName).params (aValues);
+    return this;
+  }
+
+  /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param nValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (final short nValue)
+  {
+    return param (SPECIAL_KEY_VALUE, nValue);
+  }
+
+  /**
+   * Adds a member value pair to this annotation
+   *
+   * @param sName
+   *        The simple name for this annotation
+   * @param nValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   */
+  @Nonnull
+  public JAnnotationUse param (@Nonnull final String sName, final short nValue)
+  {
+    return _addValue (sName, wrap (nValue));
+  }
+
+  @Nonnull
+  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final short... aValues)
+  {
+    paramArray (sName).params (aValues);
+    return this;
+  }
+
+  /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param sValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (@Nonnull final String sValue)
+  {
+    return param (SPECIAL_KEY_VALUE, sValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation
    *
    * @param sName
    *        The simple name for this annotation
    * @param sValue
-   *        The String member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final String sValue)
+  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final String sValue)
   {
     return _addValue (sName, wrap (sValue));
   }
@@ -415,14 +541,28 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param aValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (@Nonnull final Enum <?> aValue)
+  {
+    return param (SPECIAL_KEY_VALUE, aValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation
    *
    * @param sName
    *        The simple name for this annotation
    * @param aValue
-   *        The enum class which is member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, @Nonnull final Enum <?> aValue)
@@ -438,14 +578,28 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param aValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (@Nonnull final JEnumConstant aValue)
+  {
+    return param (SPECIAL_KEY_VALUE, aValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation
    *
    * @param sName
    *        The simple name for this annotation
    * @param aValue
-   *        The {@link JEnumConstant} which is member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, @Nonnull final JEnumConstant aValue)
@@ -461,7 +615,29 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation This can be used for e.g to
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}. This can be used for e.g to specify
+   *
+   * <pre>
+   * &#64;Anno(value=Integer.class);
+   * </pre>
+   *
+   * For adding a value of Class&lt;? extends Annotation&gt;
+   * {@link #annotationParam(String, Class)}
+   *
+   * @param aValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (@Nonnull final Class <?> aValue)
+  {
+    return param (SPECIAL_KEY_VALUE, aValue);
+  }
+
+  /**
+   * Adds a member value pair to this annotation. This can be used for e.g to
    * specify
    *
    * <pre>
@@ -474,9 +650,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @param sName
    *        The simple name for this annotation param
    * @param aValue
-   *        The class type of the param
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, @Nonnull final Class <?> aValue)
@@ -492,15 +667,29 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param aValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (@Nonnull final AbstractJType aValue)
+  {
+    return param (SPECIAL_KEY_VALUE, aValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation based on the type represented
    * by the given {@link AbstractJType}
    *
    * @param sName
    *        The simple name for this annotation param
    * @param aValue
-   *        the {@link AbstractJType} representing the actual type
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, @Nonnull final AbstractJType aValue)
@@ -516,15 +705,28 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
+   * Adds a member value pair to this annotation using the name
+   * {@value #SPECIAL_KEY_VALUE}.
+   *
+   * @param aValue
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
+   * @since 3.2.0
+   */
+  @Nonnull
+  public JAnnotationUse param (@Nonnull final IJExpression aValue)
+  {
+    return param (SPECIAL_KEY_VALUE, aValue);
+  }
+
+  /**
    * Adds a member value pair to this annotation.
    *
    * @param sName
    *        The simple name for this annotation
    * @param aValue
-   *        The {@link IJExpression} which provides the content value for this
-   *        annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   *        The value for this annotation
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse param (@Nonnull final String sName, @Nonnull final IJExpression aValue)
@@ -556,7 +758,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation For adding class values as
+   * Adds a member value pair to this annotation for adding class values as
    * param
    *
    * @see #param(String, Class)
@@ -564,8 +766,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The simple name for this annotation
    * @param aValue
    *        The annotation class which is member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse annotationParam (@Nonnull final String sName,
@@ -575,7 +776,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation For adding class values as
+   * Adds a member value pair to this annotation for adding class values as
    * param
    *
    * @see #param(String, Class)
@@ -583,15 +784,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The simple name for this annotation
    * @param aValue
    *        The annotation class which is member value for this annotation
-   * @return The {@link JAnnotationUse}. More member value pairs can be added to
-   *         it using the same or the overloaded methods.
+   * @return <code>this</code> for chaining
    */
   @Nonnull
   public JAnnotationUse annotationParam (@Nonnull final String sName, @Nonnull final AbstractJClass aValue)
   {
-    final JAnnotationUse annotationUse = new JAnnotationUse (aValue);
-    _addValue (sName, annotationUse);
-    return annotationUse;
+    final JAnnotationUse aAnnotationUse = new JAnnotationUse (aValue);
+    _addValue (sName, aAnnotationUse);
+    return aAnnotationUse;
   }
 
   @Nonnegative

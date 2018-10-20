@@ -106,7 +106,7 @@ public final class AnnotationUseFuncTest
    *   }
    * }
    * </pre>
-   * 
+   *
    * @throws JClassAlreadyExistsException
    *         internally only
    */
@@ -166,7 +166,8 @@ public final class AnnotationUseFuncTest
     // adding an annotation as a member value pair
     final JAnnotationUse myuse = aUse.annotationParam ("foo", Target.class);
     myuse.param ("junk", 7);
+    myuse.param ("value-value");
 
-    CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.printCodeModel (cm);
   }
 }
