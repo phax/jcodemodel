@@ -43,6 +43,7 @@ package com.helger.jcodemodel;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -100,7 +101,7 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  * Most of the time you'd want to populate new type definitions in a
  * {@link JCodeModel}. See {@link #_class(String, EClassType)}.
  */
-public final class JCodeModel
+public class JCodeModel implements Serializable
 {
   protected static boolean checkIfFileSystemIsCaseSensitive ()
   {

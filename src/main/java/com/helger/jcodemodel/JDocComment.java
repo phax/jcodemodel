@@ -65,8 +65,6 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   public static final String TAG_SINCE = "since";
   public static final String TAG_VERSION = "version";
 
-  private static final long serialVersionUID = 1L;
-
   private final JCodeModel m_aOwner;
 
   private boolean m_bIsSingleLineMode = false;

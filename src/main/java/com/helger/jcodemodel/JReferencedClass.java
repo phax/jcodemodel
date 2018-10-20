@@ -61,6 +61,8 @@ import com.helger.jcodemodel.util.JCNameUtilities;
  */
 class JReferencedClass extends AbstractJClass implements IJDeclaration
 {
+  private static final long serialVersionUID = 1;
+
   private final Class <?> m_aClass;
 
   // Cached status vars

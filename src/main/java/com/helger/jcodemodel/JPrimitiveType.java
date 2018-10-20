@@ -138,8 +138,8 @@ public class JPrimitiveType extends AbstractJType
    * example, if this class represents "float", this method will return the
    * expression <code>new Float(x)</code> or <code>Float.valueOf(x)</code> for
    * the parameter <code>x</code>.<br>
-   * For void type it throws an {@link IllegalStateException} because this would
-   * lead to corrupt code!
+   * For void type it throws an {@link IllegalState.Exception} because this
+   * would lead to corrupt code!
    *
    * @param aExpr
    *        Expression to be wrapped

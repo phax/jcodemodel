@@ -40,13 +40,15 @@
  */
 package com.helger.jcodemodel;
 
+import java.io.Serializable;
+
 /**
  * Marker base interface for jcodemodel syntax objects.
  *
  * @author Philip Helger
  * @since 3.0.0
  */
-public interface IJObject
+public interface IJObject extends Serializable
 {
   /* empty */
 }

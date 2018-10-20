@@ -130,7 +130,8 @@ public class FileCodeWriter extends AbstractCodeWriter
       dir = new File (m_aTargetDir, _toDirName (pkg));
 
     if (!dir.exists ())
-      dir.mkdirs ();
+      if (!dir.mkdirs ())
+        throw new IOException (dir + ": failed to create directory");
 
     final File fn = new File (dir, fileName);
     if (fn.exists ())
@@ -149,7 +150,8 @@ public class FileCodeWriter extends AbstractCodeWriter
   {
     // mark files as read-only if necessary
     for (final File f : m_aReadOnlyFiles)
-      f.setReadOnly ();
+      if (!f.setReadOnly ())
+        throw new IOException (f + ": Can't make file read-only");
   }
 
   /** Converts a package name to the directory name. */
