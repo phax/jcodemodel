@@ -14,7 +14,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
-* v3.2.0 - work in progress
+* v3.2.0 - 2018-10-20
     * Introduced class `JCMWriter` that should be used to emit the outgoing Java files. This replaces `codemodel.build` and offers a more consistent API. Most existing method remain existing and deprecated and just forward to `JCMWriter`.
         * Instead of `cm.build (...)` use `new JCMWriter (cm).build (...)` 
     * Extracted `IJFormatter` interface for better separation of concerns. `JFormatter` was moved to a sub-package
@@ -101,7 +101,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.1.0</version>
+  <version>3.2.0</version>
 </dependency>
 ```
 
