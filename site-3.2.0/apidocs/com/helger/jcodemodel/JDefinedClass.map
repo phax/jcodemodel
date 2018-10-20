@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./JDefinedClass.html" title="com.helger.jcodemodel.JDefinedClass" alt="" coords="253,118,355,143"/>
+<area shape="rect" id="node2_1" href="./JAnonymousClass.html" title="com.helger.jcodemodel.JAnonymousClass" alt="" coords="240,214,368,239"/>
+<area shape="rect" id="node3_2" href="./IJGenerifiable.html" title="com.helger.jcodemodel.IJGenerifiable" alt="" coords="16,11,112,53"/>
+<area shape="rect" id="node4_3" href="./IJDocCommentable.html" title="com.helger.jcodemodel.IJDocCommentable" alt="" coords="158,11,290,53"/>
+<area shape="rect" id="node5_4" href="./IJAnnotatable.html" title="com.helger.jcodemodel.IJAnnotatable" alt="" coords="335,11,433,53"/>
+<area shape="rect" id="node6_5" href="./AbstractJClassContainer.html" title="com.helger.jcodemodel.AbstractJClassContainer" alt="" coords="478,19,994,45"/>
+</map>
