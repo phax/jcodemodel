@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -208,5 +209,14 @@ public final class AbstractJTypeTest
                              _List.narrow (assignment.m_aVariable.wildcardSuper ()));
       }
     }
+  }
+
+  @Test
+  public void testNarrowSimple ()
+  {
+    final JCodeModel codeModel = new JCodeModel ();
+    final AbstractJClass aList = codeModel.ref (List.class);
+    final JNarrowedClass cls = aList.narrow (aList.narrow (codeModel.ref (Integer.class)));
+    assertEquals ("List<List<Integer>>", cls.name ());
   }
 }
