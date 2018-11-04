@@ -101,6 +101,7 @@ public final class JJavaName
                                                 "throws",
                                                 "transient",
                                                 "try",
+                                                "var",
                                                 "void",
                                                 "volatile",
                                                 "while",
