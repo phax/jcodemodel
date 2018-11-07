@@ -53,8 +53,8 @@ public class JPrimitiveType extends AbstractJType
   private final JCodeModel m_aOwner;
   private final String m_sTypeName;
   /**
-   * Corresponding wrapper class. For example, this would be "java.lang.Short"
-   * for short.
+   * Corresponding wrapper class. For example, this would be "java.lang.Short" for
+   * short.
    */
   private final AbstractJClass m_aWrapperClass;
   private JArrayClass m_aArrayClass;
@@ -136,10 +136,10 @@ public class JPrimitiveType extends AbstractJType
   /**
    * Wraps an expression of this type to the corresponding wrapper class. For
    * example, if this class represents "float", this method will return the
-   * expression <code>new Float(x)</code> or <code>Float.valueOf(x)</code> for
-   * the parameter <code>x</code>.<br>
-   * For void type it throws an {@link IllegalState.Exception} because this
-   * would lead to corrupt code!
+   * expression <code>new Float(x)</code> or <code>Float.valueOf(x)</code> for the
+   * parameter <code>x</code>.<br>
+   * For void type it throws an {@link IllegalStateException} because this would
+   * lead to corrupt code!
    *
    * @param aExpr
    *        Expression to be wrapped
@@ -183,8 +183,8 @@ public class JPrimitiveType extends AbstractJType
    * @return <code>true</code> if <code>valueOf</code> should be used in
    *         {@link #wrap(IJExpression)}, <code>false</code> if
    *         <code>new X(y)</code> should be used there. Note:
-   *         <code>valueOf</code> is faster in execution since it uses
-   *         potentially built in caches of the objects.
+   *         <code>valueOf</code> is faster in execution since it uses potentially
+   *         built in caches of the objects.
    */
   public boolean useValueOf ()
   {

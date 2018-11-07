@@ -187,8 +187,7 @@ public class JFormatter implements IJFormatter
     }
 
     /**
-     * @return true if this name is used as an identifier (like a variable
-     *         name.).
+     * @return true if this name is used as an identifier (like a variable name.).
      */
     public boolean isVariableName ()
     {
@@ -216,8 +215,8 @@ public class JFormatter implements IJFormatter
   private static enum EMode
   {
     /**
-     * Collect all the type names and identifiers. In this mode we don't
-     * actually generate anything.
+     * Collect all the type names and identifiers. In this mode we don't actually
+     * generate anything.
      */
     COLLECTING,
     /**
@@ -226,9 +225,9 @@ public class JFormatter implements IJFormatter
     PRINTING,
 
     /**
-     * Find any error types in output code. In this mode we don't actually
-     * generate anything. <br/>
-     * Only used by {@link IJFormatter#containsErrorTypes(JDefinedClass)
+     * Find any error types in output code. In this mode we don't actually generate
+     * anything. <br/>
+     * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass)
      * containsErrorTypes} method
      */
     FIND_ERROR_TYPES
@@ -322,8 +321,8 @@ public class JFormatter implements IJFormatter
 
   /**
    * all classes and ids encountered during the collection mode.<br>
-   * map from short type name to {@link NameUsage} (list of
-   * {@link AbstractJClass} and ids sharing that name)
+   * map from short type name to {@link NameUsage} (list of {@link AbstractJClass}
+   * and ids sharing that name)
    **/
   private final Map <String, NameUsage> m_aCollectedReferences = new HashMap <> ();
 
