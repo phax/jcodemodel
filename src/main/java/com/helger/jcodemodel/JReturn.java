@@ -59,7 +59,7 @@ public class JReturn implements IJStatement
    * @param aExpr
    *        {@link IJExpression} which evaluates to return value
    */
-  protected JReturn (@Nullable final IJExpression aExpr)
+  public JReturn (@Nullable final IJExpression aExpr)
   {
     m_aExpr = aExpr;
   }
