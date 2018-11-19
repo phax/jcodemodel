@@ -803,4 +803,10 @@ public interface IJExpression extends IJGenerable
   {
     return component (0);
   }
+
+  @Nonnull
+  default JCast castTo (@Nonnull final AbstractJType aType)
+  {
+    return JExpr.cast (aType, this);
+  }
 }

@@ -18,6 +18,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
     * Added `var` as reserved word
     * Made `JReturn` constructor public
     * Added `JInvocation._this` static method
+    * Added `IJExpression.castTo` method
 * v3.2.0 - 2018-10-20
     * Introduced class `JCMWriter` that should be used to emit the outgoing Java files. This replaces `codemodel.build` and offers a more consistent API. Most existing method remain existing and deprecated and just forward to `JCMWriter`.
         * Instead of `cm.build (...)` use `new JCMWriter (cm).build (...)` 
