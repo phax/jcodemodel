@@ -854,7 +854,30 @@ public class JBlock implements IJGenerable, IJStatement
                            @Nonnull final String sName,
                            @Nonnull final IJExpression aCollection)
   {
-    return internalInsert (new JForEach (aVarType, sName, aCollection));
+    return forEach (0, aVarType, sName, aCollection);
+  }
+
+  /**
+   * Creates an enhanced For statement based on j2se 1.5 JLS and add it to this
+   * block
+   *
+   * @param nMods
+   *        Modifier for the variable
+   * @param aVarType
+   *        Variable type
+   * @param sName
+   *        Variable name
+   * @param aCollection
+   *        Collection to be iterated
+   * @return Newly generated enhanced For statement per j2se 1.5 specification
+   */
+  @Nonnull
+  public JForEach forEach (final int nMods,
+                           @Nonnull final AbstractJType aVarType,
+                           @Nonnull final String sName,
+                           @Nonnull final IJExpression aCollection)
+  {
+    return internalInsert (new JForEach (JMods.forVar (nMods), aVarType, sName, aCollection));
   }
 
   /**

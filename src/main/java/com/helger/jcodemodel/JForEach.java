@@ -52,24 +52,38 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  */
 public class JForEach implements IJStatement
 {
+  private final JMods m_aMods;
   private final AbstractJType m_aType;
   private final String m_sVarName;
   private JBlock m_aBody; // lazily created
   private final IJExpression m_aCollection;
   private final JVar m_aLoopVar;
 
-  protected JForEach (@Nonnull final AbstractJType aVarType,
+  protected JForEach (@Nonnull final JMods aMods,
+                      @Nonnull final AbstractJType aVarType,
                       @Nonnull final String sVarName,
                       @Nonnull final IJExpression aCollection)
   {
+    JCValueEnforcer.notNull (aMods, "Mods");
     JCValueEnforcer.notNull (aVarType, "VarType");
     JCValueEnforcer.notNull (sVarName, "VarName");
     JCValueEnforcer.notNull (aCollection, "Collection");
 
+    m_aMods = aMods;
     m_aType = aVarType;
     m_sVarName = sVarName;
     m_aCollection = aCollection;
     m_aLoopVar = new JVar (JMods.forVar (JMod.FINAL), m_aType, m_sVarName, aCollection);
+  }
+
+  /**
+   * @return the current modifiers of this method. Always return non-null valid
+   *         object.
+   */
+  @Nonnull
+  public JMods mods ()
+  {
+    return m_aMods;
   }
 
   @Nonnull
@@ -104,7 +118,7 @@ public class JForEach implements IJStatement
   public void state (@Nonnull final IJFormatter f)
   {
     f.print ("for (");
-    f.generable (m_aType).id (m_sVarName).print (": ").generable (m_aCollection);
+    f.generable (m_aMods).generable (m_aType).id (m_sVarName).print (": ").generable (m_aCollection);
     f.print (')');
     if (m_aBody != null)
       f.generable (m_aBody);
