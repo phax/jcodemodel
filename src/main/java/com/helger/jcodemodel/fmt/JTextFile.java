@@ -97,7 +97,17 @@ public class JTextFile extends AbstractJResourceFile
       })
       {
         w.write (m_sContents);
-        w.flush();
+        w.flush ();
       }
+  }
+
+  @Nonnull
+  public static JTextFile createFully (@Nonnull final String sName,
+                                       @Nonnull final Charset aEncoding,
+                                       @Nullable final String sContents)
+  {
+    final JTextFile ret = new JTextFile (sName, aEncoding);
+    ret.setContents (sContents);
+    return ret;
   }
 }
