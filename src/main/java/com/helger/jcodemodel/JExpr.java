@@ -285,10 +285,17 @@ public final class JExpr
   }
 
   @Nonnull
+  @Deprecated
   public static IJExpression dotclass (@Nonnull final AbstractJClass aClass)
   {
+    return dotClass (aClass);
+  }
+
+  @Nonnull
+  public static IJExpression dotClass (@Nonnull final AbstractJType aClass)
+  {
     return (@Nonnull final IJFormatter f) -> {
-      final AbstractJClass c = aClass instanceof JNarrowedClass ? ((JNarrowedClass) aClass).basis () : aClass;
+      final AbstractJType c = aClass instanceof JNarrowedClass ? ((JNarrowedClass) aClass).basis () : aClass;
       f.generable (c).print (".class");
     };
   }

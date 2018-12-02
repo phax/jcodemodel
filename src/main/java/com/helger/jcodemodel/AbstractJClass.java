@@ -468,7 +468,7 @@ public abstract class AbstractJClass extends AbstractJType
   @Nonnull
   public final IJExpression dotclass ()
   {
-    return JExpr.dotclass (this);
+    return JExpr.dotClass (this);
   }
 
   /**
