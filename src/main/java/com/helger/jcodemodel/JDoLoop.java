@@ -65,7 +65,7 @@ public class JDoLoop implements IJStatement
    * @param aTest
    *        Test expression
    */
-  protected JDoLoop (@Nonnull final IJExpression aTest)
+  public JDoLoop (@Nonnull final IJExpression aTest)
   {
     m_aTest = JCValueEnforcer.notNull (aTest, "Test");
   }

@@ -70,7 +70,7 @@ public class JConditional implements IJStatement
    * @param aTestExpr
    *        JExpression which will determine branching
    */
-  protected JConditional (@Nonnull final IJExpression aTestExpr)
+  public JConditional (@Nonnull final IJExpression aTestExpr)
   {
     JCValueEnforcer.notNull (aTestExpr, "Test expression");
     m_aTestExpr = aTestExpr;

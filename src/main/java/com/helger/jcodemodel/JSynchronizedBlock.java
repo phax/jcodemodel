@@ -55,7 +55,7 @@ public class JSynchronizedBlock implements IJStatement
   private IJExpression m_aExpression;
   private JBlock m_aBody;
 
-  protected JSynchronizedBlock (@Nonnull final IJExpression aExpression)
+  public JSynchronizedBlock (@Nonnull final IJExpression aExpression)
   {
     expr (aExpression);
   }

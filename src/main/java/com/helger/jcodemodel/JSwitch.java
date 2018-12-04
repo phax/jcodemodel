@@ -72,7 +72,7 @@ public class JSwitch implements IJStatement
    * @param aTestExpr
    *        expression
    */
-  protected JSwitch (@Nonnull final IJExpression aTestExpr)
+  public JSwitch (@Nonnull final IJExpression aTestExpr)
   {
     m_aTestExpr = aTestExpr;
   }

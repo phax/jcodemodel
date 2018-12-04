@@ -59,7 +59,7 @@ public class JForLoop implements IJStatement
   private final List <IJExpression> m_aUpdateExprs = new ArrayList <> ();
   private JBlock m_aBody;
 
-  protected JForLoop ()
+  public JForLoop ()
   {}
 
   @Nonnull

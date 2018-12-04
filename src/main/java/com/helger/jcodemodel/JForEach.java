@@ -59,10 +59,10 @@ public class JForEach implements IJStatement
   private final IJExpression m_aCollection;
   private final JVar m_aLoopVar;
 
-  protected JForEach (@Nonnull final JMods aMods,
-                      @Nonnull final AbstractJType aVarType,
-                      @Nonnull final String sVarName,
-                      @Nonnull final IJExpression aCollection)
+  public JForEach (@Nonnull final JMods aMods,
+                   @Nonnull final AbstractJType aVarType,
+                   @Nonnull final String sVarName,
+                   @Nonnull final IJExpression aCollection)
   {
     JCValueEnforcer.notNull (aMods, "Mods");
     JCValueEnforcer.notNull (aVarType, "VarType");

@@ -59,7 +59,7 @@ public class JLabel implements IJStatement
    * @param sLabel
    *        label name.
    */
-  protected JLabel (@Nonnull final String sLabel)
+  public JLabel (@Nonnull final String sLabel)
   {
     m_sLabel = JCValueEnforcer.notNull (sLabel, "Label");
   }

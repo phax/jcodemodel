@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * While statement
  */
@@ -63,8 +65,9 @@ public class JWhileLoop implements IJStatement
    * @param aTestExpr
    *        Test expression to use.
    */
-  protected JWhileLoop (@Nonnull final IJExpression aTestExpr)
+  public JWhileLoop (@Nonnull final IJExpression aTestExpr)
   {
+    JCValueEnforcer.notNull (aTestExpr, "TestExpr");
     m_aTextExpr = aTestExpr;
   }
 

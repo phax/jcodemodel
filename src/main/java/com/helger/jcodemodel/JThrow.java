@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.jcodemodel.util.JCValueEnforcer;
+
 /**
  * JThrow statement
  */
@@ -58,8 +60,9 @@ public class JThrow implements IJStatement
    * @param aExpr
    *        JExpression which evaluates to JThrow value
    */
-  protected JThrow (@Nonnull final IJExpression aExpr)
+  public JThrow (@Nonnull final IJExpression aExpr)
   {
+    JCValueEnforcer.notNull (aExpr, "Expr");
     m_aExpr = aExpr;
   }
 

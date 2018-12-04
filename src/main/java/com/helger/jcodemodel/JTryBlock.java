@@ -55,7 +55,7 @@ public class JTryBlock implements IJStatement
   private final List <JCatchBlock> m_aCatches = new ArrayList <> ();
   private JBlock m_aFinally;
 
-  protected JTryBlock ()
+  public JTryBlock ()
   {}
 
   @Nonnull
