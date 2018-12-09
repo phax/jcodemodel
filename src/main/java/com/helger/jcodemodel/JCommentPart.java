@@ -85,33 +85,71 @@ public class JCommentPart extends ArrayList <Object>
   @Override
   public boolean add (@Nullable final Object aValue)
   {
-    _flattenAppend (aValue);
-    return true;
+    return _flattenAppend (aValue);
   }
 
-  private void _flattenAppend (@Nullable final Object aValue)
+  /**
+   * Add the provided value, but before correct HTML character masking ("&lt;"
+   * becomes "&amp;lt;" etc.).
+   * 
+   * @param sValue
+   *        Source value. May be null <a>.
+   * @return <code>true</code> if added, <code>false</code> if the source is
+   *         <code>null</code>.
+   */
+  public boolean addMasked (@Nullable final String sValue)
+  {
+    if (sValue == null)
+      return false;
+    if (sValue.length () == 0)
+      return super.add ("");
+
+    final StringBuilder aSB = new StringBuilder (sValue.length () * 2);
+    for (final char c : sValue.toCharArray ())
+      if (c == '&')
+        aSB.append ("&amp;");
+      else
+        if (c == '<')
+          aSB.append ("&lt;");
+        else
+          if (c == '>')
+            aSB.append ("&gt;");
+          else
+            if (c == '"')
+              aSB.append ("&quot;");
+            else
+              aSB.append (c);
+    return super.add (aSB.toString ());
+  }
+
+  private boolean _flattenAppend (@Nullable final Object aValue)
   {
     if (aValue == null)
-      return;
+      return false;
+
+    boolean bAny = false;
     if (aValue instanceof Object [])
     {
       for (final Object o : (Object []) aValue)
-        _flattenAppend (o);
+        if (_flattenAppend (o))
+          bAny = true;
     }
     else
       if (aValue instanceof Collection <?>)
       {
         for (final Object o : (Collection <?>) aValue)
-          _flattenAppend (o);
+          if (_flattenAppend (o))
+            bAny = true;
       }
       else
       {
         // Only String and AbstractJType are allowed
         if (aValue instanceof String || aValue instanceof AbstractJType)
-          super.add (aValue);
+          bAny = super.add (aValue);
         else
           throw new IllegalArgumentException ("Value is of an unsupported type: " + aValue.getClass ().toString ());
       }
+    return bAny;
   }
 
   /**
