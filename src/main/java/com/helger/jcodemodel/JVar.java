@@ -237,8 +237,17 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   public void bind (@Nonnull final IJFormatter f)
   {
     if (m_aAnnotations != null)
+    {
+      final boolean bNewLine = this instanceof JFieldVar;
       for (final JAnnotationUse annotation : m_aAnnotations)
-        f.generable (annotation).print (' ');
+      {
+        f.generable (annotation);
+        if (bNewLine)
+          f.newline ();
+        else
+          f.print (' ');
+      }
+    }
     f.generable (m_aMods).generable (m_aType).id (m_sName);
     if (m_aInitExpr != null)
       f.print ('=').generable (m_aInitExpr);
