@@ -238,7 +238,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   {
     if (m_aAnnotations != null)
       for (final JAnnotationUse annotation : m_aAnnotations)
-        f.generable (annotation).newline ();
+        f.generable (annotation).print (' ');
     f.generable (m_aMods).generable (m_aType).id (m_sName);
     if (m_aInitExpr != null)
       f.print ('=').generable (m_aInitExpr);

@@ -546,25 +546,36 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     f.id (m_sName).print ('(').indent ();
     // when parameters are printed in new lines, we want them to be indented.
     // there's a good chance no newlines happen, too, but just in case it does.
-    boolean first = true;
+
+    boolean bFirst = true;
+    // break only if more than 3 variables are present
+    final boolean bNewLineAfterParam = (m_aParams.size () + (hasVarArgs () ? 1 : 0)) > 3;
     for (final JVar var : m_aParams)
     {
-      if (!first)
+      if (bFirst)
+        bFirst = false;
+      else
+      {
         f.print (',');
-      if (var.isAnnotated ())
-        f.newline ();
+        if (bNewLineAfterParam)
+          f.newline ();
+      }
       f.var (var);
-      first = false;
     }
     if (hasVarArgs ())
     {
-      if (!first)
+      if (!bFirst)
+      {
         f.print (',');
+        if (bNewLineAfterParam)
+          f.newline ();
+      }
       for (final JAnnotationUse annotation : m_aVarParam.annotations ())
-        f.generable (annotation).newline ();
-      f.generable (m_aVarParam.mods ()).generable (m_aVarParam.type ().elementType ());
-      f.print ("... ");
-      f.id (m_aVarParam.name ());
+        f.generable (annotation).print (' ');
+      f.generable (m_aVarParam.mods ())
+       .generable (m_aVarParam.type ().elementType ())
+       .print ("... ")
+       .id (m_aVarParam.name ());
     }
 
     f.outdent ().print (')');
