@@ -88,21 +88,13 @@ public class JCommentPart extends ArrayList <Object>
     return _flattenAppend (aValue);
   }
 
-  /**
-   * Add the provided value, but before correct HTML character masking ("&lt;"
-   * becomes "&amp;lt;" etc.).
-   * 
-   * @param sValue
-   *        Source value. May be null <a>.
-   * @return <code>true</code> if added, <code>false</code> if the source is
-   *         <code>null</code>.
-   */
-  public boolean addMasked (@Nullable final String sValue)
+  @Nullable
+  public static String getHTMLEscaped (@Nullable final String sValue)
   {
     if (sValue == null)
-      return false;
+      return null;
     if (sValue.length () == 0)
-      return super.add ("");
+      return "";
 
     final StringBuilder aSB = new StringBuilder (sValue.length () * 2);
     for (final char c : sValue.toCharArray ())
@@ -119,7 +111,24 @@ public class JCommentPart extends ArrayList <Object>
               aSB.append ("&quot;");
             else
               aSB.append (c);
-    return super.add (aSB.toString ());
+    return aSB.toString ();
+  }
+
+  /**
+   * Add the provided value, but before correct HTML character masking ("&lt;"
+   * becomes "&amp;lt;" etc.).
+   *
+   * @param sValue
+   *        Source value. May be null <a>.
+   * @return <code>true</code> if added, <code>false</code> if the source is
+   *         <code>null</code>.
+   */
+  public boolean addMasked (@Nullable final String sValue)
+  {
+    final String sMasked = getHTMLEscaped (sValue);
+    if (sMasked == null)
+      return false;
+    return super.add (sMasked);
   }
 
   private boolean _flattenAppend (@Nullable final Object aValue)
