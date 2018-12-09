@@ -177,22 +177,25 @@ public class JCommentPart extends ArrayList <Object>
   }
 
   /**
-   * Escapes the appearance of the comment terminator.
+   * Escapes the appearance of the comment terminator "*" followed by "/". Note:
+   * quotes etc are not masked!
    *
    * @param sText
-   *        Source text
+   *        Source text. May not be <code>null</code>.
    * @return Escaped text
    */
+  @Nonnull
   private static String _escape (@Nonnull final String sText)
   {
     String s = sText;
     while (true)
     {
-      final int idx = s.indexOf ("*/");
-      if (idx < 0)
-        return s;
-
-      s = s.substring (0, idx + 1) + "<!---->" + s.substring (idx + 1);
+      final int nIdx = s.indexOf ("*/");
+      if (nIdx < 0)
+        break;
+      // Put an empty comment between "*" and "/"
+      s = s.substring (0, nIdx + 1) + "<!---->" + s.substring (nIdx + 1);
     }
+    return s;
   }
 }
