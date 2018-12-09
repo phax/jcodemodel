@@ -800,7 +800,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
     return m_aMemberValues.size ();
   }
 
-  private boolean _isOptimizable ()
+  public boolean isDefaultOnly ()
   {
     return m_aMemberValues.size () == 1 && m_aMemberValues.containsKey (SPECIAL_KEY_VALUE);
   }
@@ -811,20 +811,22 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
     if (m_aMemberValues != null && !m_aMemberValues.isEmpty ())
     {
       f.print ('(');
-      if (_isOptimizable ())
+      if (isDefaultOnly ())
       {
         // short form
         f.generable (m_aMemberValues.get (SPECIAL_KEY_VALUE));
       }
       else
       {
+        // More than 1 or not just "default"
         boolean bFirst = true;
         for (final Map.Entry <String, AbstractJAnnotationValue> mapEntry : m_aMemberValues.entrySet ())
         {
-          if (!bFirst)
+          if (bFirst)
+            bFirst = false;
+          else
             f.print (',');
           f.print (mapEntry.getKey ()).print ('=').generable (mapEntry.getValue ());
-          bFirst = false;
         }
       }
       f.print (')');
