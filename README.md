@@ -14,7 +14,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
-* v3.2.1 - work in progress
+* v3.2.1 - 2019-01-23
     * Added `var` as reserved word
     * Made `JReturn` constructor public
     * Added `JInvocation._this` static method
@@ -111,7 +111,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.2.0</version>
+  <version>3.2.1</version>
 </dependency>
 ```
 
