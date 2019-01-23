@@ -119,7 +119,7 @@ public class JCommentPart extends ArrayList <Object>
    * becomes "&amp;lt;" etc.).
    *
    * @param sValue
-   *        Source value. May be null <a>.
+   *        Source value. May be <code>null</code>.
    * @return <code>true</code> if added, <code>false</code> if the source is
    *         <code>null</code>.
    */
