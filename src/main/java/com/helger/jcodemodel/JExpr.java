@@ -284,6 +284,15 @@ public final class JExpr
     return new JFieldRef (aLhs, sField, true);
   }
 
+  /**
+   * Add ".class"
+   * 
+   * @param aClass
+   *        The class to use ".class" of
+   * @return The ".class" expression
+   * @deprecated Use the {@link #dotClass(AbstractJType)} - simply correct
+   *             camel-casing
+   */
   @Nonnull
   @Deprecated
   public static IJExpression dotclass (@Nonnull final AbstractJClass aClass)
@@ -406,8 +415,7 @@ public final class JExpr
   }
 
   /**
-   * Escapes the given string, then surrounds it by the specified quotation
-   * mark.
+   * Escapes the given string, then surrounds it by the specified quotation mark.
    *
    * @param cQuote
    *        Quote char. Either single quote (') or double quote (")
@@ -480,8 +488,8 @@ public final class JExpr
   /**
    * Creates an aExpr directly from a source code fragment.
    * <p>
-   * This method can be used as a short-cut to create a JExpression. For
-   * example, instead of <code>_a.gt(_b)</code>, you can write it as:
+   * This method can be used as a short-cut to create a JExpression. For example,
+   * instead of <code>_a.gt(_b)</code>, you can write it as:
    * <code>JExpr.direct("a&gt;b")</code>.
    * <p>
    * Be warned that there is a danger in using this method, as it obfuscates the

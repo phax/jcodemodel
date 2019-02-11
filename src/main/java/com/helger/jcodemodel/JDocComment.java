@@ -104,8 +104,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * Change whether multi line comments or single line comments should be
-   * emitted.
+   * Change whether multi line comments or single line comments should be emitted.
    *
    * @param bSingleLineMode
    *        <code>true</code> to enable single line mode, <code>false</code> for
@@ -120,9 +119,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * @return <code>true</code> if single line mode is enabled,
-   *         <code>false</code> if multi line mode is enabled. Multi line mode
-   *         is the default.
+   * @return <code>true</code> if single line mode is enabled, <code>false</code>
+   *         if multi line mode is enabled. Multi line mode is the default.
    */
   public boolean isSingleLineMode ()
   {
@@ -305,7 +303,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * add a @deprecated tag to the javadoc, with the associated message.
+   * add a <code>@deprecated</code> tag to the javadoc, with the associated
+   * message.
    *
    * @return Always the same {@link JCommentPart}
    * @see #addTag(String)

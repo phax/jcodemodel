@@ -144,8 +144,7 @@ public class JCodeModel implements Serializable
 
   /**
    * Conversion from primitive type {@link Class} (such as {@link Integer#TYPE})
-   * to its boxed type (such as <tt>Integer.class</tt>). It's an unmodifiable
-   * map.
+   * to its boxed type (such as <tt>Integer.class</tt>). It's an unmodifiable map.
    */
   public static final Map <Class <?>, Class <?>> primitiveToBox;
 
@@ -334,8 +333,8 @@ public class JCodeModel implements Serializable
    * Creates a dummy, unknown {@link JDirectClass} that represents a given name.
    * <br>
    * This method is useful when the code generation needs to include the
-   * user-specified class that may or may not exist, and only thing known about
-   * it is a class name.
+   * user-specified class that may or may not exist, and only thing known about it
+   * is a class name.
    *
    * @param sName
    *        The fully qualified name of the class. When using type parameters
@@ -352,8 +351,8 @@ public class JCodeModel implements Serializable
    * Creates a dummy, unknown {@link JDirectClass} that represents a given name.
    * <br>
    * This method is useful when the code generation needs to include the
-   * user-specified class that may or may not exist, and only thing known about
-   * it is a class name.
+   * user-specified class that may or may not exist, and only thing known about it
+   * is a class name.
    *
    * @param eClassType
    *        Class type to use.
@@ -376,18 +375,18 @@ public class JCodeModel implements Serializable
    * class that should never leak into actually written code.
    * <p>
    * Error-types represents holes or place-holders that can't be filled.
-   * References to error-classes can be used in hidden class-models. Such
-   * classes should never be actually written but can be somehow used during
-   * code generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test
-   * if your generated Java-sources contains references to error-types.
+   * References to error-classes can be used in hidden class-models. Such classes
+   * should never be actually written but can be somehow used during code
+   * generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test if your
+   * generated Java-sources contains references to error-types.
    * <p>
    * You should probably always check generated code with
    * {@code JCodeModel#buildsErrorTypeRefs} method if you use any error-types.
    * <p>
-   * Most of error-types methods throws {@code JErrorClassUsedException}
-   * unchecked exceptions. Be careful and use {@link AbstractJType#isError()
-   * AbstractJType#isError} method to check for error-types before actually
-   * using it's methods.
+   * Most of error-types methods throws {@code JErrorClassUsedException} unchecked
+   * exceptions. Be careful and use {@link AbstractJType#isError()
+   * AbstractJType#isError} method to check for error-types before actually using
+   * it's methods.
    *
    * @param sMessage
    *        some free form text message to identify source of error
@@ -409,18 +408,18 @@ public class JCodeModel implements Serializable
    * class that should never leak into actually written code.
    * <p>
    * Error-types represents holes or place-holders that can't be filled.
-   * References to error-classes can be used in hidden class-models. Such
-   * classes should never be actually written but can be somehow used during
-   * code generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test
-   * if your generated Java-sources contains references to error-types.
+   * References to error-classes can be used in hidden class-models. Such classes
+   * should never be actually written but can be somehow used during code
+   * generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test if your
+   * generated Java-sources contains references to error-types.
    * <p>
    * You should probably always check generated code with
    * {@code JCodeModel#buildsErrorTypeRefs} method if you use any error-types.
    * <p>
-   * Most of error-types methods throws {@code JErrorClassUsedException}
-   * unchecked exceptions. Be careful and use {@link AbstractJType#isError()
-   * AbstractJType#isError} method to check for error-types before actually
-   * using it's methods.
+   * Most of error-types methods throws {@code JErrorClassUsedException} unchecked
+   * exceptions. Be careful and use {@link AbstractJType#isError()
+   * AbstractJType#isError} method to check for error-types before actually using
+   * it's methods.
    *
    * @param sName
    *        name of missing class if it is known
@@ -496,8 +495,10 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * @return The default charset used for building. <code>null</code> means
-   *         system default.
+   * @return The default charset used for building. <code>null</code> means system
+   *         default.
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Nullable
   @Deprecated
@@ -513,6 +514,8 @@ public class JCodeModel implements Serializable
    *        The charset to be used. May be <code>null</code> to indicate the use
    *        of the system default.
    * @return this for chaining
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Nonnull
   @Deprecated
@@ -524,6 +527,8 @@ public class JCodeModel implements Serializable
 
   /**
    * @return The newline string to be used. Defaults to system default
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Deprecated
   public String getBuildingNewLine ()
@@ -538,6 +543,8 @@ public class JCodeModel implements Serializable
    *        The new line string to be used. May neither be <code>null</code> nor
    *        empty.
    * @return this for chaining
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Nonnull
   @Deprecated
@@ -559,6 +566,8 @@ public class JCodeModel implements Serializable
    *        stream.
    * @throws IOException
    *         on IO error
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Deprecated
   public void build (@Nonnull final File aDestDir, @Nullable final PrintStream aStatusPS) throws IOException
@@ -579,6 +588,8 @@ public class JCodeModel implements Serializable
    * @throws IOException
    *         on IO error if non-null, progress indication will be sent to this
    *         stream.
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Deprecated
   public void build (@Nonnull final File aSrcDir,
@@ -602,6 +613,8 @@ public class JCodeModel implements Serializable
    *        source files and resources are generated into this directory.
    * @throws IOException
    *         on IO error
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Deprecated
   public void build (@Nonnull final File aDestDir) throws IOException
@@ -618,6 +631,8 @@ public class JCodeModel implements Serializable
    *        Other resource files are generated into this directory.
    * @throws IOException
    *         on IO error
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Deprecated
   public void build (@Nonnull final File aSrcDir, @Nonnull final File aResourceDir) throws IOException
@@ -632,6 +647,8 @@ public class JCodeModel implements Serializable
    *        Source code and resource writer
    * @throws IOException
    *         on IO error
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Deprecated
   public void build (@Nonnull final AbstractCodeWriter aWriter) throws IOException
@@ -648,6 +665,8 @@ public class JCodeModel implements Serializable
    *        Resource writer
    * @throws IOException
    *         on IO error
+   * @deprecated In favor of the new {@link JCMWriter} class offering more
+   *             configuration flexibility.
    */
   @Deprecated
   public void build (@Nonnull final AbstractCodeWriter aSource,
@@ -657,8 +676,7 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * @return the number of files to be generated if {@link #build} is invoked
-   *         now.
+   * @return the number of files to be generated if {@link #build} is invoked now.
    */
   @Nonnegative
   public int countArtifacts ()
@@ -708,21 +726,20 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Obtains a reference to a processable class from its TypeElement
-   * description.
+   * Obtains a reference to a processable class from its TypeElement description.
    * <p>
    * Annotation processors can get access of {@link TypeElement} objects during
-   * annotation processing. These TypeElement objects can be used with
-   * jcodemodel as a references to classes.
+   * annotation processing. These TypeElement objects can be used with jcodemodel
+   * as a references to classes.
    * <p>
    * This method result-class definition can never include references to
-   * "error"-types. Error-types araise during annotation processing when
-   * something is not fully defined.
+   * "error"-types. Error-types araise during annotation processing when something
+   * is not fully defined.
    * <p>
    * You can post-pond annotation processing for later stages of annotation
-   * processor hoping that all error-types will become defined on some
-   * annotation processing stage at last. You can catch {@link ErrorTypeFound}
-   * exception to achieve this.
+   * processor hoping that all error-types will become defined on some annotation
+   * processing stage at last. You can catch {@link ErrorTypeFound} exception to
+   * achieve this.
    *
    * @param aElement
    *        Processable class to reference
@@ -745,21 +762,20 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Obtains a reference to a processable class from its TypeElement
-   * description.
+   * Obtains a reference to a processable class from its TypeElement description.
    * <p>
-   * Annotation processors can get access of TypeElement objects during
-   * annotation processing. These TypeElement objects can be used with
-   * jcodemodel as a references to classes.
+   * Annotation processors can get access of TypeElement objects during annotation
+   * processing. These TypeElement objects can be used with jcodemodel as a
+   * references to classes.
    * <p>
-   * This method result-class definition can include references to
-   * "error"-types. Error-types araise during annotation processing when
-   * something is not fully defined.
+   * This method result-class definition can include references to "error"-types.
+   * Error-types araise during annotation processing when something is not fully
+   * defined.
    * <p>
    * Sometimes direct treatment of error-types is required. You can use
-   * {@link AbstractJType#isError()} and
-   * {@link JCodeModel#buildsErrorTypeRefs()} methods to handle error-types and
-   * to prevent error-types to leak into generated code.
+   * {@link AbstractJType#isError()} and {@link JCodeModel#buildsErrorTypeRefs()}
+   * methods to handle error-types and to prevent error-types to leak into
+   * generated code.
    *
    * @param aElement
    *        Processable class to reference
@@ -786,8 +802,8 @@ public class JCodeModel implements Serializable
    *
    * @param aClass
    *        Class to be referenced
-   * @return Might be a <code>JReferencedClass</code> or a {@link JArrayClass}
-   *         or a {@link JPrimitiveType}
+   * @return Might be a <code>JReferencedClass</code> or a {@link JArrayClass} or
+   *         a {@link JPrimitiveType}
    * @see #ref(Class)
    */
   @Nonnull
@@ -799,11 +815,11 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Obtains a reference to an existing class from its fully-qualified class
-   * name. <br>
+   * Obtains a reference to an existing class from its fully-qualified class name.
+   * <br>
    * First, this method attempts to load the class of the given name. If that
-   * fails, we assume that the class is derived straight from {@link Object},
-   * and return a {@link AbstractJClass}.
+   * fails, we assume that the class is derived straight from {@link Object}, and
+   * return a {@link AbstractJClass}.
    *
    * @param sFullyQualifiedClassName
    *        FQCN
@@ -952,8 +968,8 @@ public class JCodeModel implements Serializable
     }
 
     /**
-     * Parses additional left-associative suffixes, like type arguments and
-     * array specifiers.
+     * Parses additional left-associative suffixes, like type arguments and array
+     * specifiers.
      */
     @Nonnull
     private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass aClazz)
