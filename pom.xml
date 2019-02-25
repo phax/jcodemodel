@@ -129,10 +129,11 @@
   </contributors>
 
   <dependencies>
+    <!-- We need jsr305 and not annotations because SuppressFBWarnings is contained! -->
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
-      <artifactId>annotations</artifactId>
-      <version>3.0.1u2</version>
+      <artifactId>jsr305</artifactId>
+      <version>3.0.2</version>
     </dependency>
     
     <dependency>

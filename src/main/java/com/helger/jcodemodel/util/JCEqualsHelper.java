@@ -45,8 +45,6 @@ import java.util.Arrays;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-
 /**
  * A small helper class that provides helper methods for easy
  * <code>equals</code> method generation
@@ -180,7 +178,6 @@ public final class JCEqualsHelper
     return aObj1.equals (aObj2);
   }
 
-  @SuppressFBWarnings ({ "ES_COMPARING_PARAMETER_STRING_WITH_EQ" })
   public static boolean nullSafeEqualsIgnoreCase (@Nullable final String sObj1, @Nullable final String sObj2)
   {
     return sObj1 == null ? sObj2 == null : sObj1.equalsIgnoreCase (sObj2);

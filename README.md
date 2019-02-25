@@ -14,6 +14,8 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
+* v3.2.2 - 2019-02-25
+    * Using `jsr305` instead of `annotations` in POM (issue #66 from @jjYBdx4IL)
 * v3.2.1 - 2019-01-23
     * Added `var` as reserved word
     * Made `JReturn` constructor public
@@ -106,12 +108,14 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 * 2013-09-23: Changes from https://github.com/UnquietCode/JCodeModel have been incorporated.
 
 ## Maven usage
+
 Add the following to your pom.xml to use this artifact:
-```
+
+```xml
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.2.1</version>
+  <version>3.2.2</version>
 </dependency>
 ```
 
