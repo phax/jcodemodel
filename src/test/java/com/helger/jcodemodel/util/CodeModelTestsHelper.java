@@ -52,6 +52,7 @@ import java.nio.charset.StandardCharsets;
 import javax.annotation.Nonnull;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
@@ -240,7 +241,7 @@ public final class CodeModelTestsHelper
               // Parse again
               try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
               {
-                JavaParser.parse (bis, DEFAULT_ENCODING);
+                new JavaParser ().parse (bis, DEFAULT_ENCODING);
               }
             }
           };
@@ -266,7 +267,8 @@ public final class CodeModelTestsHelper
 
     try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
     {
-      return JavaParser.parse (bis, DEFAULT_ENCODING);
+      final ParseResult <CompilationUnit> ret = new JavaParser ().parse (bis, DEFAULT_ENCODING);
+      return ret.getResult ().get ();
     }
     catch (final IOException ex)
     {
