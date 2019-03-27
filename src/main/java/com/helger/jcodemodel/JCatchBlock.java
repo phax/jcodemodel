@@ -52,7 +52,7 @@ public class JCatchBlock implements IJGenerable
   private JVar m_aVar;
   private final JBlock m_aBody = new JBlock ();
 
-  protected JCatchBlock (@Nonnull final AbstractJClass aException)
+  public JCatchBlock (@Nonnull final AbstractJClass aException)
   {
     m_aException = aException;
   }

@@ -14,6 +14,9 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
+* v3.2.3 - work in progress
+    * Extended `JTryBlock` API to have more control.
+    * Added support for `try-with-resources` support (issue #67 from @gmcfall)
 * v3.2.2 - 2019-02-25
     * Using `jsr305` instead of `annotations` in POM (issue #66 from @jjYBdx4IL)
 * v3.2.1 - 2019-01-23
