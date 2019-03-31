@@ -14,7 +14,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
-* v3.2.3 - work in progress
+* v3.2.3 - 2019-03-31
     * Extended `JTryBlock` API to have more control.
     * Added support for `try-with-resources` support (issue #67 from @gmcfall)
 * v3.2.2 - 2019-02-25
@@ -118,7 +118,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.2.2</version>
+  <version>3.2.3</version>
 </dependency>
 ```
 
