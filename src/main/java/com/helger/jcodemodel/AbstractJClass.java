@@ -550,8 +550,9 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * @param Enumeration
-   *        constant name. May neither be <code>null</code> nor empty.
+   * @param sName
+   *        Enumeration constant name. May neither be <code>null</code> nor
+   *        empty.
    * @return <code>class.name</code>
    * @since 3.2.4
    */
@@ -559,6 +560,18 @@ public abstract class AbstractJClass extends AbstractJType
   public final IJExpression enumConstantRef (@Nonnull final String sName)
   {
     return JExpr.enumConstantRef (this, sName);
+  }
+
+  /**
+   * @param aEnumEntry
+   *        Enumeration item. May not be <code>null</code>.
+   * @return <code>class.name</code>
+   * @since 3.2.4
+   */
+  @Nonnull
+  public final IJExpression enumConstantRef (@Nonnull final Enum <?> aEnumEntry)
+  {
+    return enumConstantRef (aEnumEntry.name ());
   }
 
   public void generate (@Nonnull final IJFormatter f)
