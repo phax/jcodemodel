@@ -104,7 +104,7 @@ public final class JLambdaMethodRefTest
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
 
-    final JLambdaMethodRef aLambda = new JLambdaMethodRef (cl);
+    final JLambdaMethodRef aLambda = JLambdaMethodRef.createForNew (cl);
     assertEquals ("com.helger.test.LambdaTest::new", CodeModelTestsHelper.toString (aLambda));
     assertTrue (aLambda.isStaticRef ());
     assertNull (aLambda.method ());

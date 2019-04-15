@@ -90,7 +90,10 @@ public class JLambdaMethodRef implements IJExpression
    * @param aType
    *        Type to reference the constructor from. May not be <code>null</code>
    *        .
+   * @deprecated Use the factory method {@link #createForNew(AbstractJType)}
+   *             instead.
    */
+  @Deprecated
   public JLambdaMethodRef (@Nonnull final AbstractJType aType)
   {
     this (aType, "new");
@@ -280,5 +283,20 @@ public class JLambdaMethodRef implements IJExpression
       else
         f.generable (m_aInvocation);
     f.print ("::").print (methodName ());
+  }
+
+  /**
+   * Factory method for a static constructor method reference
+   * (<code>type::new</code>).
+   *
+   * @param aType
+   *        Type to reference the constructor from. May not be <code>null</code>
+   *        .
+   * @since 3.2.4
+   */
+  @Nonnull
+  public static JLambdaMethodRef createForNew (@Nonnull final AbstractJType aType)
+  {
+    return new JLambdaMethodRef (aType, "new");
   }
 }
