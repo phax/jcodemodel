@@ -524,6 +524,19 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
+   * Method reference for JDK8 (as in <code>String::valueOf</code>) for the
+   * special <code>::new</code>.
+   *
+   * @return Newly created {@link JLambdaMethodRef}
+   * @since 3.2.4
+   */
+  @Nonnull
+  public final JLambdaMethodRef methodRefNew ()
+  {
+    return JLambdaMethodRef.createForNew (this);
+  }
+
+  /**
    * Method reference for JDK8 (as in <code>String::valueOf</code>).
    *
    * @param sMethod
@@ -534,6 +547,18 @@ public abstract class AbstractJClass extends AbstractJType
   public final JLambdaMethodRef methodRef (@Nonnull final String sMethod)
   {
     return new JLambdaMethodRef (this, sMethod);
+  }
+
+  /**
+   * @param Enumeration
+   *        constant name. May neither be <code>null</code> nor empty.
+   * @return <code>class.name</code>
+   * @since 3.2.4
+   */
+  @Nonnull
+  public final IJExpression enumConstantRef (@Nonnull final String sName)
+  {
+    return JExpr.enumConstantRef (this, sName);
   }
 
   public void generate (@Nonnull final IJFormatter f)
