@@ -68,7 +68,7 @@ public final class JExpr
   private static final JAtom NULL = new JAtom ("null");
 
   /**
-   * This class is not instanciable.
+   * This class is not instancable.
    */
   private JExpr ()
   {}
@@ -244,6 +244,17 @@ public final class JExpr
     return new JFieldRef (aLhs, sField);
   }
 
+  /**
+   * Create a fully qualified reference to an enum constant in the form
+   * <code>class.enumentry</code>
+   * 
+   * @param aType
+   *        Class/type to use. May not be <code>null</code>.
+   * @param sName
+   *        Name of the enum constant. May neither be <code>null</code> nor
+   *        empty.
+   * @return [type].[name]
+   */
   @Nonnull
   public static JEnumConstantRef enumConstantRef (@Nonnull final AbstractJClass aType, @Nonnull final String sName)
   {
@@ -286,7 +297,7 @@ public final class JExpr
 
   /**
    * Add ".class"
-   * 
+   *
    * @param aClass
    *        The class to use ".class" of
    * @return The ".class" expression
@@ -415,7 +426,8 @@ public final class JExpr
   }
 
   /**
-   * Escapes the given string, then surrounds it by the specified quotation mark.
+   * Escapes the given string, then surrounds it by the specified quotation
+   * mark.
    *
    * @param cQuote
    *        Quote char. Either single quote (') or double quote (")
@@ -488,8 +500,8 @@ public final class JExpr
   /**
    * Creates an aExpr directly from a source code fragment.
    * <p>
-   * This method can be used as a short-cut to create a JExpression. For example,
-   * instead of <code>_a.gt(_b)</code>, you can write it as:
+   * This method can be used as a short-cut to create a JExpression. For
+   * example, instead of <code>_a.gt(_b)</code>, you can write it as:
    * <code>JExpr.direct("a&gt;b")</code>.
    * <p>
    * Be warned that there is a danger in using this method, as it obfuscates the
