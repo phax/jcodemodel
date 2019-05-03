@@ -63,9 +63,9 @@ import javax.annotation.Nonnull;
  */
 public class JavadocEscapeWriter extends FilterWriter
 {
-  public JavadocEscapeWriter (@Nonnull final Writer next)
+  public JavadocEscapeWriter (@Nonnull final Writer aOut)
   {
-    super (next);
+    super (aOut);
   }
 
   @Override
@@ -81,31 +81,32 @@ public class JavadocEscapeWriter extends FilterWriter
   }
 
   @Override
-  public void write (@Nonnull final char [] buf,
-                     @Nonnegative final int off,
-                     @Nonnegative final int len) throws IOException
+  public void write (@Nonnull final char [] aBuf,
+                     @Nonnegative final int nOfs,
+                     @Nonnegative final int nLen) throws IOException
   {
-    for (int i = 0; i < len; i++)
-      write (buf[off + i]);
+    final int nMax = nOfs + nLen;
+    for (int i = nOfs; i < nMax; i++)
+      write (aBuf[i]);
   }
 
   @Override
-  public void write (@Nonnull final char [] buf) throws IOException
+  public void write (@Nonnull final char [] aBuf) throws IOException
   {
-    write (buf, 0, buf.length);
+    write (aBuf, 0, aBuf.length);
   }
 
   @Override
-  public void write (@Nonnull final String buf,
-                     @Nonnegative final int off,
-                     @Nonnegative final int len) throws IOException
+  public void write (@Nonnull final String sStr,
+                     @Nonnegative final int nOfs,
+                     @Nonnegative final int nLen) throws IOException
   {
-    write (buf.toCharArray (), off, len);
+    write (sStr.toCharArray (), nOfs, nLen);
   }
 
   @Override
-  public void write (@Nonnull final String buf) throws IOException
+  public void write (@Nonnull final String sStr) throws IOException
   {
-    write (buf.toCharArray (), 0, buf.length ());
+    write (sStr.toCharArray (), 0, sStr.length ());
   }
 }

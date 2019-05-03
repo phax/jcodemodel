@@ -71,28 +71,13 @@ public class UnicodeEscapeWriter extends FilterWriter
     super (aNext);
   }
 
-  @Override
-  public final void write (final int ch) throws IOException
-  {
-    if (requireEscaping (ch))
-    {
-      // need to escape
-      out.write ("\\u");
-      final String s = Integer.toHexString (ch);
-      for (int i = s.length (); i < 4; i++)
-        out.write ('0');
-      out.write (s);
-    }
-    else
-      out.write (ch);
-  }
-
   /**
-   * Can be overridden.
+   * Check if a character needs escaping or not. Can be overridden in
+   * subclasses.
    *
    * @param ch
    *        Character to check
-   * @return true if the character needs to be escaped.
+   * @return <code>true</code> if the character needs to be escaped.
    */
   protected boolean requireEscaping (final int ch)
   {
@@ -101,12 +86,30 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   @Override
+  public final void write (final int ch) throws IOException
+  {
+    if (requireEscaping (ch))
+    {
+      // need to escape
+      out.write ("\\u");
+      final String s = Integer.toHexString (ch);
+      // Leading spaces
+      for (int i = s.length (); i < 4; i++)
+        out.write ('0');
+      out.write (s);
+    }
+    else
+      out.write (ch);
+  }
+
+  @Override
   public final void write (@Nonnull final char [] aBuf,
                            @Nonnegative final int nOfs,
                            @Nonnegative final int nLen) throws IOException
   {
-    for (int i = 0; i < nLen; i++)
-      write (aBuf[nOfs + i]);
+    final int nMax = nOfs + nLen;
+    for (int i = nOfs; i < nMax; i++)
+      write (aBuf[i]);
   }
 
   @Override
