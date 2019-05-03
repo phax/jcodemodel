@@ -77,9 +77,9 @@ public class FileCodeWriter extends AbstractCodeWriter
     this (aTargetDir, DEFAULT_MARK_READ_ONLY, DEFAULT_CHARSET, JCMWriter.getDefaultNewLine ());
   }
 
-  public FileCodeWriter (@Nonnull final File aTargetDir, @Nullable final Charset encoding) throws IOException
+  public FileCodeWriter (@Nonnull final File aTargetDir, @Nullable final Charset aEncoding) throws IOException
   {
-    this (aTargetDir, DEFAULT_MARK_READ_ONLY, encoding, JCMWriter.getDefaultNewLine ());
+    this (aTargetDir, DEFAULT_MARK_READ_ONLY, aEncoding, JCMWriter.getDefaultNewLine ());
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir, final boolean bMarkReadOnly) throws IOException

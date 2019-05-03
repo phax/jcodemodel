@@ -47,8 +47,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
-import java.nio.charset.CharsetEncoder;
-import java.util.BitSet;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -65,42 +63,6 @@ import com.helger.jcodemodel.util.UnicodeEscapeWriter;
  */
 public abstract class AbstractCodeWriter implements Closeable
 {
-  private static final class JavaUnicodeEscapeWriter extends UnicodeEscapeWriter
-  {
-    private static final BitSet ESCAPE = new BitSet (128);
-
-    static
-    {
-      for (int i = 0; i < 0x20; i++)
-        if (i != '\t' && i != '\r' && i != '\n')
-          ESCAPE.set (i, true);
-    }
-
-    // can't change this signature to Encoder because
-    // we can't have Encoder in method signature
-    private final CharsetEncoder m_aEncoder;
-
-    private JavaUnicodeEscapeWriter (@Nonnull final OutputStreamWriter bw)
-    {
-      super (bw);
-      m_aEncoder = Charset.forName (bw.getEncoding ()).newEncoder ();
-    }
-
-    @Override
-    protected boolean requireEscaping (final int ch)
-    {
-      // control characters
-      if (ESCAPE.get (ch))
-        return true;
-
-      // check ASCII chars, for better performance
-      if (ch < 0x80)
-        return false;
-
-      return !m_aEncoder.canEncode ((char) ch);
-    }
-  }
-
   /**
    * Encoding to be used by the writer. Null means platform specific encoding.
    */
