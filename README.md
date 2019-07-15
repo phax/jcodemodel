@@ -14,8 +14,9 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
-* v3.2.4 - work in progress
+* v3.2.4 - 2019-07-15
     * Made class `JavaUnicodeEscapeWriter` publicly accessible
+    * Extended enum constant ref APU (issue #68 from @guiguilechat)
 * v3.2.3 - 2019-03-31
     * Extended `JTryBlock` API to have more control.
     * Added support for `try-with-resources` support (issue #67 from @gmcfall)
@@ -120,7 +121,7 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.2.3</version>
+  <version>3.2.4</version>
 </dependency>
 ```
 
