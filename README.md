@@ -16,12 +16,12 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 * v3.2.4 - 2019-07-15
     * Made class `JavaUnicodeEscapeWriter` publicly accessible
-    * Extended enum constant ref APU (issue #68 from @guiguilechat)
+    * Extended enum constant ref APU ([issue #68](https://github.com/phax/jcodemodel/issues/68) from @guiguilechat)
 * v3.2.3 - 2019-03-31
     * Extended `JTryBlock` API to have more control.
-    * Added support for `try-with-resources` support (issue #67 from @gmcfall)
+    * Added support for `try-with-resources` support ([issue #67](https://github.com/phax/jcodemodel/issues/67) from @gmcfall)
 * v3.2.2 - 2019-02-25
-    * Using `jsr305` instead of `annotations` in POM (issue #66 from @jjYBdx4IL)
+    * Using `jsr305` instead of `annotations` in POM ([issue #66](https://github.com/phax/jcodemodel/issues/66) from @jjYBdx4IL)
 * v3.2.1 - 2019-01-23
     * Added `var` as reserved word
     * Made `JReturn` constructor public
@@ -38,29 +38,29 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
     * Extracted `IJFormatter` interface for better separation of concerns. `JFormatter` was moved to a sub-package
     * `ProgressCodeWriter` no longer needs an explicit `PrintStream` but a `ProgressCodeWriter.IProgressTracker` instead.
     * Default charset for Java classes is now `UTF-8`.
-    * Added new `JAnnotationUse` method overloads that automatically pass `value` as the annotation parameter name (issue #64) 
+    * Added new `JAnnotationUse` method overloads that automatically pass `value` as the annotation parameter name ([issue #64](https://github.com/phax/jcodemodel/issues/64)) 
 * v3.1.0 - 2018-08-22
     * Added ` AbstractJType._new()`
-    * Change return types of special `JBlock` methods to `void` to avoid chaining (issue #62) - incompatible change!
+    * Change return types of special `JBlock` methods to `void` to avoid chaining ([issue #62](https://github.com/phax/jcodemodel/issues/62)) - incompatible change!
     * Added new `JExpr.invokeThis` and `JExpr.invokeSuper` static methods
 * v3.0.3 - 2018-06-12
-    * Improved API access to inner classes (issue #60)
+    * Improved API access to inner classes ([issue #60](https://github.com/phax/jcodemodel/issues/60))
     * Changed order of emitted modifiers (`final static` -> `static final`) 
-    * Flush needed when writing resources fixed (issue #61 from @fbaro)
+    * Flush needed when writing resources fixed ([issue #61](https://github.com/phax/jcodemodel/issues/61) from @fbaro)
 * v3.0.2 - 2018-04-11
-    * Fixed method resolution using direct class references (issue #58)
+    * Fixed method resolution using direct class references ([issue #58](https://github.com/phax/jcodemodel/issues/458))
     * Added some additional `JInvocation.arg...` sanity methods
     * Enum constant argument list is now accessible
 * v3.0.1 - 2017-10-25
     * Added explicit support for invoking `super` - thx to @heruan for pointing this out
-    * Added possibility to create a lambda reference from an invocation (issue #56 and PR #57 from @heruan)
+    * Added possibility to create a lambda reference from an invocation ([issue #56](https://github.com/phax/jcodemodel/issues/56) and [PR #57](https://github.com/phax/jcodemodel/pull/57) from @heruan)
 * v3.0.0 - 2017-08-06
     * Requires Java 8
-    * Reworked #41 so that it is finally working in all cases
-    * Add option for classes to not be imported (issue #51)
-    * Fixed extra semicolon on Lambdas (issue #53)
+    * Reworked [#41](https://github.com/phax/jcodemodel/issues/41) so that it is finally working in all cases
+    * Add option for classes to not be imported ([issue #51](https://github.com/phax/jcodemodel/issues/51))
+    * Fixed extra semicolon on Lambdas ([issue #53](https://github.com/phax/jcodemodel/issues/53))
 * v2.8.6  2016-07-19
-    * added PR (issue #49)
+    * added PR ([issue #49](https://github.com/phax/jcodemodel/issues/49))
 * v2.8.5 - 2016-05-13
     * improved comment handling (issue #47)
     * improved API checks (issue #45)
