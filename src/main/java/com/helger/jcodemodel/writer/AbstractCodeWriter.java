@@ -143,7 +143,7 @@ public abstract class AbstractCodeWriter implements Closeable
     {
       aWriter = new JavaUnicodeEscapeWriter (aOSW);
     }
-    catch (final Throwable t)
+    catch (final Exception ex)
     {
       aWriter = new UnicodeEscapeWriter (aOSW);
     }

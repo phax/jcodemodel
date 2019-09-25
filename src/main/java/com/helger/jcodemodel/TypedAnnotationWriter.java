@@ -159,7 +159,9 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
     }
 
     // other Java built-in types
-    _checkType (arg.getClass (), rt);
+    if (arg != null)
+      _checkType (arg.getClass (), rt);
+
     if (m.getDefaultValue () != null && m.getDefaultValue ().equals (arg))
     {
       /*

@@ -187,7 +187,8 @@ public class JFormatter implements IJFormatter
     }
 
     /**
-     * @return true if this name is used as an identifier (like a variable name.).
+     * @return true if this name is used as an identifier (like a variable
+     *         name.).
      */
     public boolean isVariableName ()
     {
@@ -215,8 +216,8 @@ public class JFormatter implements IJFormatter
   private static enum EMode
   {
     /**
-     * Collect all the type names and identifiers. In this mode we don't actually
-     * generate anything.
+     * Collect all the type names and identifiers. In this mode we don't
+     * actually generate anything.
      */
     COLLECTING,
     /**
@@ -225,8 +226,8 @@ public class JFormatter implements IJFormatter
     PRINTING,
 
     /**
-     * Find any error types in output code. In this mode we don't actually generate
-     * anything. <br/>
+     * Find any error types in output code. In this mode we don't actually
+     * generate anything. <br/>
      * Only used by {@link JFormatter#containsErrorTypes(JDefinedClass)
      * containsErrorTypes} method
      */
@@ -321,8 +322,8 @@ public class JFormatter implements IJFormatter
 
   /**
    * all classes and ids encountered during the collection mode.<br>
-   * map from short type name to {@link NameUsage} (list of {@link AbstractJClass}
-   * and ids sharing that name)
+   * map from short type name to {@link NameUsage} (list of
+   * {@link AbstractJClass} and ids sharing that name)
    **/
   private final Map <String, NameUsage> m_aCollectedReferences = new HashMap <> ();
 
@@ -741,7 +742,7 @@ public class JFormatter implements IJFormatter
    *
    * @param aClassToBeWritten
    *        {@link AbstractJClass} that may or may not have an import
-   * @param aGeneratingClass
+   * @param aClassToBeWritten
    *        {@link AbstractJClass} that is the current class being processed
    */
   private void _collectImportOuterClassIfCausesNoAmbiguities (@Nonnull final AbstractJClass aReference,
@@ -775,7 +776,7 @@ public class JFormatter implements IJFormatter
    *
    * @param aReference
    *        {@link AbstractJClass} that may or may not have an import
-   * @param aGeneratingClass
+   * @param aClassToBeWrittem
    *        {@link AbstractJClass} that is the current class being processed
    * @return true if an import statement should be suppressed, false otherwise
    */
