@@ -128,7 +128,8 @@ public class JConditional implements IJStatement
     }
     if (m_aTestExpr == JExpr.FALSE)
     {
-      m_aElseBlock.generateBody (f);
+      if (m_aElseBlock != null)
+        m_aElseBlock.generateBody (f);
       return;
     }
 
