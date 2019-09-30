@@ -57,6 +57,7 @@ public final class JJavaName
     // see
     // http://java.sun.com/docs/books/tutorial/java/nutsandbolts/_keywords.html
     final String [] aKeyWords = new String [] { "abstract",
+                                                "assert",
                                                 "boolean",
                                                 "break",
                                                 "byte",
@@ -70,6 +71,7 @@ public final class JJavaName
                                                 "do",
                                                 "double",
                                                 "else",
+                                                "enum",
                                                 "extends",
                                                 "final",
                                                 "finally",
@@ -113,9 +115,7 @@ public final class JJavaName
                                                  */
                                                 "true",
                                                 "false",
-                                                "null",
-                                                "assert",
-                                                "enum" };
+                                                "null" };
     for (final String sKeyword : aKeyWords)
       RESERVED_KEYWORDS.add (sKeyword);
   }
