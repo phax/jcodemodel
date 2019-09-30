@@ -90,7 +90,7 @@ public class JPackage implements
 
   /**
    * Only allow lower case package names
-   * 
+   *
    * @param bForcePackageNameLowercase
    *        <code>true</code> to force lower case package names are recommended
    *        by
@@ -191,7 +191,7 @@ public class JPackage implements
       final String [] aParts = JCStringHelper.getExplodedArray ('.', sName);
       for (final String sPart : aParts)
         if (isForbiddenPackageNamePart (sPart))
-          throw new IllegalArgumentException ("The package name '" + sName + "' is invalid");
+          throw new IllegalArgumentException ("Part '" + sPart + "' of the package name '" + sName + "' is invalid");
     }
 
     m_aOwner = aOwner;
