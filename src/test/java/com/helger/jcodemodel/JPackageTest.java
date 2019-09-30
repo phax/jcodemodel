@@ -152,7 +152,7 @@ public final class JPackageTest
     // May not be a keyword
     try
     {
-      aCM._package ("org.example.var");
+      aCM._package ("org.example.enum");
       fail ();
     }
     catch (final IllegalArgumentException ex)
@@ -193,6 +193,9 @@ public final class JPackageTest
     }
     catch (final IllegalArgumentException ex)
     {}
+
+    // Allow for uppercase stuff
+    aCM._package ("Org.PUB.blaFooBar.baZ");
   }
 
   @Test
