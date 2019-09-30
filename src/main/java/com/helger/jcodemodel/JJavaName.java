@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
@@ -50,7 +51,7 @@ import javax.annotation.Nonnull;
 public final class JJavaName
 {
   /** All reserved keywords of Java. */
-  private static final HashSet <String> RESERVED_KEYWORDS = new HashSet <> ();
+  private static final Set <String> RESERVED_KEYWORDS = new HashSet <> ();
 
   static
   {
@@ -122,6 +123,19 @@ public final class JJavaName
 
   private JJavaName ()
   {}
+
+  /**
+   * Check if the passed string is Java keyword or not.
+   * 
+   * @param sStr
+   *        The string to be checked.
+   * @return <code>true</code> if the string is a Java keyword,
+   *         <code>false</code> if not.
+   */
+  public static boolean isJavaReservedKeyword (@Nonnull final String sStr)
+  {
+    return sStr.length () > 0 && RESERVED_KEYWORDS.contains (sStr);
+  }
 
   /**
    * Checks if a given string is usable as a Java identifier.

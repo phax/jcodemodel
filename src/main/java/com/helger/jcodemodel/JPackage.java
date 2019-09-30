@@ -52,11 +52,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
+import com.helger.jcodemodel.util.JCStringHelper;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
@@ -69,6 +72,70 @@ public class JPackage implements
                       IJAnnotatable,
                       IJDocCommentable
 {
+  public static final Pattern VALID_PACKAGE_NAME_ANYCASE = Pattern.compile ("[A-Za-z_][A-Za-z0-9_]*");
+  public static final Pattern VALID_PACKAGE_NAME_LOWERCASE = Pattern.compile ("[a-z_][a-z0-9_]*");
+  private static final AtomicBoolean FORCE_PACKAGE_NAME_LOWERCASE = new AtomicBoolean (false);
+
+  /**
+   * @return <code>true</code> if only lower case package names should be
+   *         allowed, <code>false</code> if also upper case characters are
+   *         allowed. For backwards compatibility upper case characters are
+   *         allowed so this method returns <code>false</code>.
+   * @since 3.2.5
+   */
+  public static boolean isForcePackageNameLowercase ()
+  {
+    return FORCE_PACKAGE_NAME_LOWERCASE.get ();
+  }
+
+  /**
+   * Only allow lower case package names
+   * 
+   * @param bForcePackageNameLowercase
+   *        <code>true</code> to force lower case package names are recommended
+   *        by
+   *        https://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html
+   */
+  public static void setForcePackageNameLowercase (final boolean bForcePackageNameLowercase)
+  {
+    FORCE_PACKAGE_NAME_LOWERCASE.set (bForcePackageNameLowercase);
+  }
+
+  /**
+   * Check if the package name part is valid or not.
+   *
+   * @param sName
+   *        The name part to check
+   * @return <code>true</code> if it is invalid, <code>false</code> if it is
+   *         valid
+   */
+  public static boolean isForbiddenPackageNamePart (@Nonnull final String sName)
+  {
+    // Empty is not allowed
+    if (sName == null || sName.length () == 0)
+      return true;
+
+    // Java keywords are now allowed
+    if (JJavaName.isJavaReservedKeyword (sName))
+      return true;
+
+    if (isForcePackageNameLowercase ())
+    {
+      // Lowercase check required?
+      if (!VALID_PACKAGE_NAME_LOWERCASE.matcher (sName).matches ())
+        return true;
+    }
+    else
+    {
+      // Mixed case possible
+      if (!VALID_PACKAGE_NAME_ANYCASE.matcher (sName).matches ())
+        return true;
+    }
+
+    // not forbidden -> allowed
+    return false;
+  }
+
   /**
    * Name of the package. May be the empty string for the root package.
    */
@@ -116,8 +183,16 @@ public class JPackage implements
   protected JPackage (@Nonnull final String sName, @Nonnull final JCodeModel aOwner)
   {
     JCValueEnforcer.notNull (sName, "Name");
-    JCValueEnforcer.isFalse (sName.equals ("."), "Package name . is not allowed");
     JCValueEnforcer.notNull (aOwner, "CodeModel");
+
+    // An empty package name is okay
+    if (sName.length () > 0)
+    {
+      final String [] aParts = JCStringHelper.getExplodedArray ('.', sName);
+      for (final String sPart : aParts)
+        if (isForbiddenPackageNamePart (sPart))
+          throw new IllegalArgumentException ("The package name '" + sName + "' is invalid");
+    }
 
     m_aOwner = aOwner;
     m_sName = sName;

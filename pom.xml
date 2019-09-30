@@ -49,7 +49,7 @@
     <version>1.10.9</version>
   </parent>
   <artifactId>jcodemodel</artifactId>
-  <version>3.2.5-SNAPSHOT</version>
+  <version>3.3.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>jcodemodel</name>
   <description>Java code generation library</description>

@@ -14,6 +14,8 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
+* v3.3.0 - work in progress
+    * Added check for package names so that no invalid package names can be created ([issue #70](https://github.com/phax/jcodemodel/issues/70) from @guiguilechat)
 * v3.2.4 - 2019-07-15
     * Made class `JavaUnicodeEscapeWriter` publicly accessible
     * Extended enum constant ref APU ([issue #68](https://github.com/phax/jcodemodel/issues/68) from @guiguilechat)

@@ -40,8 +40,10 @@
  */
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -54,10 +56,10 @@ public final class JPackageTest
   public void testGetParent () throws Exception
   {
     // Create JCodeModel
-    final JCodeModel wModel = new JCodeModel ();
+    final JCodeModel aCM = new JCodeModel ();
 
     // Reflect into class
-    final AbstractJClass wClass = wModel.ref (JExpr.class);
+    final AbstractJClass wClass = aCM.ref (JExpr.class);
 
     // Walk up to the root package
     JPackage wCurrentPackage = wClass._package ();
@@ -66,5 +68,174 @@ public final class JPackageTest
 
     assertNotNull (wCurrentPackage);
     assertNull (wCurrentPackage.parent ());
+  }
+
+  @Test
+  public void testInvalidNamesAnyCase ()
+  {
+    final JCodeModel aCM = new JCodeModel ();
+
+    assertFalse (JPackage.isForcePackageNameLowercase ());
+
+    // May not contain empty parts
+    try
+    {
+      aCM._package (".");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not contain empty parts
+    try
+    {
+      aCM._package ("abc.");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not contain empty parts
+    try
+    {
+      aCM._package ("abc.def.");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not contain empty parts
+    try
+    {
+      aCM._package (".abc");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not contain empty parts
+    try
+    {
+      aCM._package (".abc.def");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not contain empty parts
+    try
+    {
+      aCM._package ("abc..def");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not start with a number
+    try
+    {
+      aCM._package ("123");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not be a keyword
+    try
+    {
+      aCM._package ("class");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not be a keyword
+    try
+    {
+      aCM._package ("org.example.var");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not be a keyword
+    try
+    {
+      aCM._package ("org.class.simple");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not contain special chars
+    try
+    {
+      aCM._package ("org.pub$.anything");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not contain special chars
+    try
+    {
+      aCM._package ("org.pub+.anything");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+
+    // May not contain special chars
+    try
+    {
+      aCM._package ("org.pub.any/thing");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {}
+  }
+
+  @Test
+  public void testInvalidNamesLowerCase ()
+  {
+    final JCodeModel aCM = new JCodeModel ();
+
+    assertFalse (JPackage.isForcePackageNameLowercase ());
+    try
+    {
+      // Enforce lowercase
+      JPackage.setForcePackageNameLowercase (true);
+
+      // May not contain an upper case char
+      try
+      {
+        aCM._package ("Abc");
+        fail ();
+      }
+      catch (final IllegalArgumentException ex)
+      {}
+
+      // May not contain an upper case char
+      try
+      {
+        aCM._package ("org.EXAMPLE.simple");
+        fail ();
+      }
+      catch (final IllegalArgumentException ex)
+      {}
+
+      // May not contain an upper case char
+      try
+      {
+        aCM._package ("org.exmaple.UpperCase");
+        fail ();
+      }
+      catch (final IllegalArgumentException ex)
+      {}
+    }
+    finally
+    {
+      JPackage.setForcePackageNameLowercase (false);
+    }
   }
 }
