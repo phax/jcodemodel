@@ -104,7 +104,8 @@ public final class JJavaName
                                                 "throws",
                                                 "transient",
                                                 "try",
-                                                "var",
+                                                // var is not a keyword
+                                                /* "var", */
                                                 "void",
                                                 "volatile",
                                                 "while",
@@ -126,7 +127,7 @@ public final class JJavaName
 
   /**
    * Check if the passed string is Java keyword or not.
-   * 
+   *
    * @param sStr
    *        The string to be checked.
    * @return <code>true</code> if the string is a Java keyword,
