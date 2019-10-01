@@ -117,7 +117,8 @@ public final class JJavaName
                                                  */
                                                 "true",
                                                 "false",
-                                                "null" };
+                                                "null",
+                                                "_" };
     for (final String sKeyword : aKeyWords)
       RESERVED_KEYWORDS.add (sKeyword);
   }
