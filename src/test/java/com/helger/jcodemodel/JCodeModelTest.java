@@ -129,6 +129,8 @@ public final class JCodeModelTest
     final JDefinedClass cln = cl._class (JMod.PUBLIC | JMod.STATIC, "Number");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Number.class), "obj");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cln, "obj");
+    cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Byte.class), "obj");
+    cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Long.class), "obj");
     CodeModelTestsHelper.printCodeModel (cm);
   }
 }

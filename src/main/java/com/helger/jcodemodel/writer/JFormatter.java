@@ -175,13 +175,11 @@ public class JFormatter implements IJFormatter
     {
       // Check if something can be a variable or a type
       for (final AbstractJClass aRefedType : m_aReferencedClasses)
-      {
         if (aRefedType.outer () != null)
         {
           m_bIsVariableName = false;
           return;
         }
-      }
       m_bIsVariableName = true;
     }
 
@@ -301,6 +299,7 @@ public class JFormatter implements IJFormatter
     public boolean add (@Nonnull final AbstractJClass aClass)
     {
       final AbstractJClass aRealClass = _getClassForImport (aClass);
+      final String sSimpleName = aRealClass.name ();
 
       if (m_aDontImportClasses.contains (aRealClass))
       {
@@ -310,19 +309,10 @@ public class JFormatter implements IJFormatter
       }
 
       // Avoid importing 2 classes with the same class name
-      if (!m_aNames.add (aRealClass.name ()))
+      if (!m_aNames.add (sSimpleName))
       {
         if (m_bDebugImport)
-          System.out.println ("A class with local name '" + aRealClass.name () + "' is already in the import list.");
-        return false;
-      }
-
-      if (isJavaLangClass (aRealClass.name ()))
-      {
-        if (m_bDebugImport)
-          System.out.println ("A class with local name '" +
-                              aRealClass.name () +
-                              "' exists in package 'java.lang' and is therefore not imported.");
+          System.out.println ("A class with local name '" + sSimpleName + "' is already in the import list.");
         return false;
       }
 
@@ -581,13 +571,8 @@ public class JFormatter implements IJFormatter
         if (!aType.isError ())
         {
           final String sShortName = aType.name ();
-          NameUsage aUsages = m_aCollectedReferences.get (sShortName);
-          if (aUsages == null)
-          {
-            aUsages = new NameUsage (sShortName);
-            m_aCollectedReferences.put (sShortName, aUsages);
-          }
-          aUsages.addReferencedType (aType);
+          m_aCollectedReferences.computeIfAbsent (sShortName, k -> new NameUsage (sShortName))
+                                .addReferencedType (aType);
         }
         break;
       case PRINTING:
@@ -596,9 +581,19 @@ public class JFormatter implements IJFormatter
           print ("Object");
         }
         else
+        {
           // many of the JTypes in this list are either primitive or belong to
           // package java so we don't need a FQCN
-          if (m_aImportedClasses.contains (aType) || aType._package () == m_aPckJavaLang)
+          final boolean bCanUseShortName;
+          if (m_aImportedClasses.contains (aType))
+            bCanUseShortName = true;
+          else
+            if (aType._package () == m_aPckJavaLang)
+              bCanUseShortName = _isUnambiguousJavaLangImport (aType);
+            else
+              bCanUseShortName = false;
+
+          if (bCanUseShortName)
           {
             // FQCN imported or not necessary, so generate short name
             print (aType.name ());
@@ -616,6 +611,7 @@ public class JFormatter implements IJFormatter
               print (aType.fullName ());
             }
           }
+        }
         break;
       case FIND_ERROR_TYPES:
         if (aType.isError ())
@@ -632,15 +628,9 @@ public class JFormatter implements IJFormatter
     {
       case COLLECTING:
         // see if there is a type name that collides with this id
-        NameUsage aUsages = m_aCollectedReferences.get (sID);
-        if (aUsages == null)
-        {
-          // not a type, but we need to create a place holder to
-          // see if there might be a collision with a type
-          aUsages = new NameUsage (sID);
-          m_aCollectedReferences.put (sID, aUsages);
-        }
-        aUsages.setVariableName ();
+        // not a type, but we need to create a place holder to
+        // see if there might be a collision with a type
+        m_aCollectedReferences.computeIfAbsent (sID, k -> new NameUsage (k)).setVariableName ();
         break;
       case PRINTING:
         print (sID);
@@ -810,6 +800,20 @@ public class JFormatter implements IJFormatter
         _collectImportOuterClassIfCausesNoAmbiguities (aOuter, aClassToBeWritten);
       }
     }
+  }
+
+  private boolean _isUnambiguousJavaLangImport (@Nonnull final AbstractJClass aJavaLangReference)
+  {
+    final NameUsage aNU = m_aCollectedReferences.get (aJavaLangReference.name ());
+    if (aNU == null)
+      return true;
+    final List <AbstractJClass> aRefs = aNU.getReferencedTypes ();
+    if (aRefs.size () > 1)
+      return false;
+    if (aRefs.isEmpty ())
+      return true;
+    // refs.size == 1
+    return aRefs.get (0).equals (aJavaLangReference);
   }
 
   /**
