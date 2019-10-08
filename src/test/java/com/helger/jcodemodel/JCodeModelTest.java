@@ -115,7 +115,7 @@ public final class JCodeModelTest
     aClass2.method (JMod.PUBLIC, aOtherByteClass, "testByte").body ()._return (JExpr._null ());
     // Whereas the Foo class may be imported
     aClass2.method (JMod.PUBLIC, aFooClass, "testFoo").body ()._return (JExpr._null ());
-    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 
   @Test
@@ -131,6 +131,6 @@ public final class JCodeModelTest
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cln, "obj");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Byte.class), "obj");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Long.class), "obj");
-    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

@@ -48,8 +48,19 @@ import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.compiler.IProblem;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -212,6 +223,51 @@ public final class CodeModelTestsHelper
     }
   }
 
+  @Nonnull
+  private static CompilationUnit _parseWithJavaParser (final byte [] aBytes,
+                                                       final JPackage aPackage,
+                                                       final String sFilename) throws IOException
+  {
+    if (false)
+      System.out.println (new String (aBytes, DEFAULT_ENCODING));
+
+    System.out.println ("Parsing " +
+                        (aPackage == null || aPackage.isUnnamed () ? "" : aPackage.name () + ".") +
+                        (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
+
+    try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
+    {
+      // Parse what was written
+      final ParseResult <CompilationUnit> ret = new JavaParser ().parse (bis, DEFAULT_ENCODING);
+      return ret.getResult ().get ();
+    }
+  }
+
+  private static org.eclipse.jdt.core.dom.CompilationUnit _parseWithJDT (final String sUnitName, final char [] aCode)
+  {
+    final ASTParser parser = ASTParser.newParser (AST.JLS8);
+    parser.setResolveBindings (true);
+    parser.setStatementsRecovery (true);
+    parser.setBindingsRecovery (true);
+    parser.setKind (ASTParser.K_COMPILATION_UNIT);
+    parser.setSource (aCode);
+    parser.setUnitName (sUnitName);
+    final Map <String, String> aOptions = new HashMap <> ();
+    aOptions.put (CompilerOptions.OPTION_Source, "1.8");
+    parser.setCompilerOptions (aOptions);
+
+    final IProgressMonitor aPM = null;
+    final org.eclipse.jdt.core.dom.CompilationUnit astRoot = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST (aPM);
+    if (astRoot == null)
+      throw new IllegalStateException ("Failed to compile:\n" + new String (aCode));
+    if (false)
+      System.out.println (astRoot.toString ());
+    final IProblem [] aProblems = astRoot.getProblems ();
+    if (aProblems != null && aProblems.length > 0)
+      throw new IllegalStateException ("Compilation problems " + Arrays.toString (aProblems));
+    return astRoot;
+  }
+
   public static void parseCodeModel (@Nonnull final JCodeModel cm)
   {
     try
@@ -228,21 +284,11 @@ public final class CodeModelTestsHelper
             {
               super.close ();
 
-              // Get as bytes
               final byte [] aBytes = toByteArray ();
-              if (false)
-                System.out.println (new String (aBytes, DEFAULT_ENCODING));
 
-              System.out.println ("Parsing " +
-                                  (aPackage.isUnnamed () ? "" : aPackage.name () + ".") +
-                                  (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5)
-                                                                : sFilename));
-
-              // Parse again
-              try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
-              {
-                new JavaParser ().parse (bis, DEFAULT_ENCODING);
-              }
+              // Get result as bytes and parse
+              _parseWithJavaParser (aBytes, aPackage, sFilename);
+              _parseWithJDT (sFilename, new String (aBytes, DEFAULT_ENCODING).toCharArray ());
             }
           };
         }
@@ -258,17 +304,28 @@ public final class CodeModelTestsHelper
     }
   }
 
+  @Nonnegative
+  private static int _count (final Iterator <?> x)
+  {
+    int ret = 0;
+    while (x.hasNext ())
+    {
+      x.next ();
+      ret++;
+    }
+    return ret;
+  }
+
   @Nonnull
   public static CompilationUnit parseAndGetSingleClassCodeModel (@Nonnull final JCodeModel cm)
   {
+    assert cm != null;
+    assert _count (cm.packages ()) == 1;
+    assert cm.packages ().next ().classes ().size () == 1;
     final byte [] aBytes = getAllBytes (cm);
-    if (false)
-      System.out.println (new String (aBytes, DEFAULT_ENCODING));
-
-    try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
+    try
     {
-      final ParseResult <CompilationUnit> ret = new JavaParser ().parse (bis, DEFAULT_ENCODING);
-      return ret.getResult ().get ();
+      return _parseWithJavaParser (aBytes, null, "full-jcodemodel");
     }
     catch (final IOException ex)
     {

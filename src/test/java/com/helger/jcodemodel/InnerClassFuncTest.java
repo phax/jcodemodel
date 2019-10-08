@@ -81,6 +81,6 @@ public final class InnerClassFuncTest
     otherClass.method (JMod.PUBLIC, daInner2Inner, "getInner2Inner");
     otherClass.method (JMod.PUBLIC, aClass, "getOuter");
 
-    CodeModelTestsHelper.printCodeModel (cm);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

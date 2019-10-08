@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.function.Supplier;
+
 import org.junit.Test;
 
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
@@ -141,5 +143,24 @@ public final class JLambdaTest
                   "}" +
                   CRLF,
                   CodeModelTestsHelper.toString (aLambda));
+  }
+
+  String method1 ()
+  {
+    return "bla";
+  }
+
+  @Test
+  public void testFullClass () throws JClassAlreadyExistsException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cl = cm._package ("test.lambda")._class ("LambdaTest");
+
+    final JMethod m1 = cl.method (JMod.PUBLIC | JMod.STATIC, cm.ref (String.class), "method1");
+    m1.body ()._return (JExpr.lit ("bla"));
+
+    final JMethod m2 = cl.method (JMod.PUBLIC, cm.VOID, "method2");
+    m2.body ().decl (JMod.FINAL, cm.ref (Supplier.class).narrow (String.class), "var1", new JLambdaMethodRef (m1));
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }
