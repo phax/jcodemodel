@@ -117,4 +117,18 @@ public final class JCodeModelTest
     aClass2.method (JMod.PUBLIC, aFooClass, "testFoo").body ()._return (JExpr._null ());
     CodeModelTestsHelper.printCodeModel (cm);
   }
+
+  @Test
+  public void testIssue71v2 () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cl = cm._package ("jcodemodel")._class ("MyClass");
+    final JDefinedClass clo = cl._class (JMod.PUBLIC | JMod.STATIC, "Object");
+    cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Object.class), "obj");
+    cl.method (JMod.PUBLIC, cm.VOID, "call").param (clo, "obj");
+    final JDefinedClass cln = cl._class (JMod.PUBLIC | JMod.STATIC, "Number");
+    cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Number.class), "obj");
+    cl.method (JMod.PUBLIC, cm.VOID, "call").param (cln, "obj");
+    CodeModelTestsHelper.printCodeModel (cm);
+  }
 }
