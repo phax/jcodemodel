@@ -64,7 +64,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
 /**
- * Java Code Model Builder
+ * Java Code Model Writer
  *
  * @author Philip Helger
  * @since 3.2.0
@@ -347,9 +347,10 @@ public class JCMWriter
     for (final AbstractJResourceFile rsrc : aPackage.getAllResourceFiles ())
     {
       final AbstractCodeWriter cw = rsrc.isResource () ? aResWriter : aSrcWriter;
-      try (final OutputStream os = new BufferedOutputStream (cw.openBinary (aPackage, rsrc.name ())))
+      try (final OutputStream os = cw.openBinary (aPackage, rsrc.name ());
+           final OutputStream bos = new BufferedOutputStream (os))
       {
-        rsrc.build (os);
+        rsrc.build (bos);
       }
     }
   }

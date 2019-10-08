@@ -103,4 +103,18 @@ public final class JCodeModelTest
     jClass.field (JMod.PRIVATE, cm.ref (Map.class).narrow (String.class), "strMap", JExpr._new (hashMap));
     CodeModelTestsHelper.parseCodeModel (cm);
   }
+
+  @Test
+  public void testIssue71 () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass aOtherByteClass = cm._package ("com.helger.issue71")._class ("Byte");
+    final JDefinedClass aFooClass = cm._package ("com.helger.issue71")._class ("Foo");
+    final JDefinedClass aClass2 = cm._package ("com.helger.issue71.second")._class ("Class2");
+    // The reference in the second class may not be imported:
+    aClass2.method (JMod.PUBLIC, aOtherByteClass, "testByte").body ()._return (JExpr._null ());
+    // Whereas the Foo class may be imported
+    aClass2.method (JMod.PUBLIC, aFooClass, "testFoo").body ()._return (JExpr._null ());
+    CodeModelTestsHelper.printCodeModel (cm);
+  }
 }

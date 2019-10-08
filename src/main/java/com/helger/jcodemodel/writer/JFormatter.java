@@ -43,7 +43,6 @@ package com.helger.jcodemodel.writer;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -234,6 +233,39 @@ public class JFormatter implements IJFormatter
     FIND_ERROR_TYPES
   }
 
+  private static final Map <String, Boolean> RESERVERD_JAVA_LANG_NAME = new HashMap <> ();
+
+  /**
+   * check if a name already represents a class in the "java.lang" package. e.g.
+   * "String" should return <code>true</code>, but "blub" should return
+   * <code>false</code>. See https://github.com/phax/jcodemodel/issues/71
+   *
+   * @param sSimpleClassName
+   *        simple class name to test (without the package).
+   * @return the existence of such a class in the java.lang (cached)
+   */
+  static boolean isJavaLangClass (final String sSimpleClassName)
+  {
+    if (sSimpleClassName == null)
+      return false;
+
+    final Boolean ret = RESERVERD_JAVA_LANG_NAME.get (sSimpleClassName);
+    if (ret != null)
+      return ret.booleanValue ();
+
+    boolean bIsJavaLang = true;
+    try
+    {
+      Class.forName ("java.lang." + sSimpleClassName);
+    }
+    catch (final Exception ex)
+    {
+      bIsJavaLang = false;
+    }
+    RESERVERD_JAVA_LANG_NAME.put (sSimpleClassName, Boolean.valueOf (bIsJavaLang));
+    return bIsJavaLang;
+  }
+
   private final class ImportedClasses
   {
     private final Set <AbstractJClass> m_aDontImportClasses = new HashSet <> ();
@@ -285,6 +317,15 @@ public class JFormatter implements IJFormatter
         return false;
       }
 
+      if (isJavaLangClass (aRealClass.name ()))
+      {
+        if (m_bDebugImport)
+          System.out.println ("A class with local name '" +
+                              aRealClass.name () +
+                              "' exists in package 'java.lang' and is therefore not imported.");
+        return false;
+      }
+
       if (!m_aClasses.add (aRealClass))
       {
         if (m_bDebugImport)
@@ -315,7 +356,7 @@ public class JFormatter implements IJFormatter
     {
       // Copy and sort
       final List <AbstractJClass> aImports = new ArrayList <> (m_aClasses);
-      Collections.sort (aImports, ClassNameComparator.getInstance ());
+      aImports.sort (ClassNameComparator.getInstance ());
       return aImports;
     }
   }
