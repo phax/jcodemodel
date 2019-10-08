@@ -50,7 +50,11 @@ import org.junit.Test;
 public final class JCNameUtilitiesTest
 {
   public static class Inner
-  {}
+  {
+    public static class Inner2
+    {}
+
+  }
 
   @Test
   public void testInnerClassNaming ()
@@ -59,9 +63,24 @@ public final class JCNameUtilitiesTest
                             "." +
                             JCNameUtilitiesTest.class.getSimpleName () +
                             "." +
-                            "Inner";
+                            Inner.class.getSimpleName ();
 
     final String name = JCNameUtilities.getFullName (Inner.class);
+    Assert.assertEquals (expected, name);
+  }
+
+  @Test
+  public void testInner2ClassNaming ()
+  {
+    final String expected = JCNameUtilitiesTest.class.getPackage ().getName () +
+                            "." +
+                            JCNameUtilitiesTest.class.getSimpleName () +
+                            "." +
+                            Inner.class.getSimpleName () +
+                            "." +
+                            Inner.Inner2.class.getSimpleName ();
+
+    final String name = JCNameUtilities.getFullName (Inner.Inner2.class);
     Assert.assertEquals (expected, name);
   }
 }
