@@ -292,6 +292,7 @@ public class JLambdaMethodRef implements IJExpression
    * @param aType
    *        Type to reference the constructor from. May not be <code>null</code>
    *        .
+   * @return The created object. Never <code>null</code>.
    * @since 3.2.4
    */
   @Nonnull
