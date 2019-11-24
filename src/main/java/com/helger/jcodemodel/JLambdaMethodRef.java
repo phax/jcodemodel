@@ -56,7 +56,7 @@ public class JLambdaMethodRef implements IJExpression
   private final boolean m_bStatic;
   private final AbstractJType m_aType;
   private final JVar m_aVar;
-  private final JInvocation m_aInvocation;
+  private final IJExpression m_aLhsExpr;
   private final JMethod m_aMethod;
   private final String m_sMethodName;
 
@@ -78,7 +78,7 @@ public class JLambdaMethodRef implements IJExpression
     m_bStatic = true;
     m_aType = aMethod.owningClass ();
     m_aVar = null;
-    m_aInvocation = null;
+    m_aLhsExpr = null;
     m_aMethod = aMethod;
     m_sMethodName = null;
   }
@@ -117,7 +117,7 @@ public class JLambdaMethodRef implements IJExpression
     m_bStatic = true;
     m_aType = aType;
     m_aVar = null;
-    m_aInvocation = null;
+    m_aLhsExpr = null;
     m_aMethod = null;
     m_sMethodName = sMethod;
   }
@@ -140,7 +140,7 @@ public class JLambdaMethodRef implements IJExpression
     m_bStatic = false;
     m_aType = aVar.type ();
     m_aVar = aVar;
-    m_aInvocation = null;
+    m_aLhsExpr = null;
     m_aMethod = null;
     m_sMethodName = sMethod;
   }
@@ -164,44 +164,50 @@ public class JLambdaMethodRef implements IJExpression
     m_bStatic = false;
     m_aType = aVar.type ();
     m_aVar = aVar;
-    m_aInvocation = null;
+    m_aLhsExpr = null;
     m_aMethod = aMethod;
     m_sMethodName = null;
   }
 
   /**
-   * Constructor for an arbitrary invocation method reference.
+   * Constructor for an arbitrary invocation method reference.<br>
+   * Note: in v3.3.0 the parameter type changed from {@link JInvocation} to
+   * {@link IJExpression}.
    *
-   * @param aInvocation
-   *        Variable containing the invocation. May not be <code>null</code>.
+   * @param aLhsExpr
+   *        Left hand side of the lambda expression. May not be
+   *        <code>null</code>.
    * @param sMethod
    *        Name of the method to reference. May neither be <code>null</code>
    *        nor empty.
    */
-  public JLambdaMethodRef (@Nonnull final JInvocation aInvocation, @Nonnull final String sMethod)
+  public JLambdaMethodRef (@Nonnull final IJExpression aLhsExpr, @Nonnull final String sMethod)
   {
-    JCValueEnforcer.notNull (aInvocation, "Invocation");
+    JCValueEnforcer.notNull (aLhsExpr, "Invocation");
     JCValueEnforcer.notEmpty (sMethod, "Method");
 
     m_bStatic = false;
     m_aType = null;
     m_aVar = null;
-    m_aInvocation = aInvocation;
+    m_aLhsExpr = aLhsExpr;
     m_aMethod = null;
     m_sMethodName = sMethod;
   }
 
   /**
-   * Constructor for an arbitrary invocation method reference.
+   * Constructor for an arbitrary invocation method reference.<br>
+   * Note: in v3.3.0 the parameter type changed from {@link JInvocation} to
+   * {@link IJExpression}.
    *
-   * @param aInvocation
-   *        Variable containing the invocation. May not be <code>null</code>.
+   * @param aLhsExpr
+   *        Left hand side of the lambda expression. May not be
+   *        <code>null</code>.
    * @param aMethod
    *        The instance method to reference. May not be <code>null</code>.
    */
-  public JLambdaMethodRef (@Nonnull final JInvocation aInvocation, @Nonnull final JMethod aMethod)
+  public JLambdaMethodRef (@Nonnull final IJExpression aLhsExpr, @Nonnull final JMethod aMethod)
   {
-    JCValueEnforcer.notNull (aInvocation, "Invocation");
+    JCValueEnforcer.notNull (aLhsExpr, "Invocation");
     JCValueEnforcer.notNull (aMethod, "Method");
     JCValueEnforcer.isFalse (aMethod.mods ().isStatic (),
                              "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
@@ -209,7 +215,7 @@ public class JLambdaMethodRef implements IJExpression
     m_bStatic = false;
     m_aType = aMethod.owningClass ();
     m_aVar = null;
-    m_aInvocation = aInvocation;
+    m_aLhsExpr = aLhsExpr;
     m_aMethod = aMethod;
     m_sMethodName = null;
   }
@@ -244,13 +250,28 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
+   * Note: v3.3.0 changed the return type to be {@link IJExpression}
+   *
    * @return The invocation reference. May be <code>null</code> if this is a
    *         static or variable reference.
+   * @deprecated Use {@link #lhsExpr()} instead
    */
+  @Deprecated
   @Nullable
   public JInvocation invocation ()
   {
-    return m_aInvocation;
+    return m_aLhsExpr instanceof JInvocation ? (JInvocation) m_aLhsExpr : null;
+  }
+
+  /**
+   * @return The left hand side expression. May be <code>null</code> if this is
+   *         a static or variable reference.
+   * @since 3.3.0
+   */
+  @Nullable
+  public IJExpression lhsExpr ()
+  {
+    return m_aLhsExpr;
   }
 
   /**
@@ -281,7 +302,7 @@ public class JLambdaMethodRef implements IJExpression
       if (m_aVar != null)
         f.generable (m_aVar);
       else
-        f.generable (m_aInvocation);
+        f.generable (m_aLhsExpr);
     f.print ("::").print (methodName ());
   }
 
