@@ -49,7 +49,7 @@
     <version>1.11.0</version>
   </parent>
   <artifactId>jcodemodel</artifactId>
-  <version>3.3.0-SNAPSHOT</version>
+  <version>3.3.0</version>
   <packaging>bundle</packaging>
   <name>jcodemodel</name>
   <description>Java code generation library</description>
@@ -68,7 +68,7 @@
     <connection>scm:git:git@github.com:phax/jcodemodel.git</connection>
     <developerConnection>scm:git:git@github.com:phax/jcodemodel.git</developerConnection>
     <url>http://github.com/phax/jcodemodel</url>
-    <tag>HEAD</tag>
+    <tag>jcodemodel-3.3.0</tag>
   </scm>
 
   <developers>
