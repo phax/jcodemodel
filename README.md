@@ -20,7 +20,7 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
     * `JLambdaMethodRef` now works with arbitrary expressions as the left hand side
 * v3.2.4 - 2019-07-15
     * Made class `JavaUnicodeEscapeWriter` publicly accessible
-    * Extended enum constant ref APU ([issue #68](https://github.com/phax/jcodemodel/issues/68) from @guiguilechat)
+    * Extended enum constant ref API ([issue #68](https://github.com/phax/jcodemodel/issues/68) from @guiguilechat)
 * v3.2.3 - 2019-03-31
     * Extended `JTryBlock` API to have more control.
     * Added support for `try-with-resources` support ([issue #67](https://github.com/phax/jcodemodel/issues/67) from @gmcfall)
