@@ -58,8 +58,6 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.JPackage;
-
 public class OutputStreamCodeWriter extends AbstractCodeWriter
 {
   private final PrintStream m_aPS;
@@ -99,7 +97,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
   {
     return new FilterOutputStream (m_aPS)
     {

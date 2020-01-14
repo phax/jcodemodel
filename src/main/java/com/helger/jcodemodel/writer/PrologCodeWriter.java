@@ -77,9 +77,9 @@ public class PrologCodeWriter extends FilterCodeWriter
   }
 
   @Override
-  public SourcePrintWriter openSource (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage pkg, @Nonnull final String sFilename) throws IOException
   {
-    final SourcePrintWriter w = super.openSource (pkg, fileName);
+    final SourcePrintWriter w = super.openSource (pkg, sFilename);
 
     // write prolog if this is a java source file
     if (m_sProlog != null)

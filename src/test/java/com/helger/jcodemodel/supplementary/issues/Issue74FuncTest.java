@@ -38,53 +38,38 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.writer;
+package com.helger.jcodemodel.supplementary.issues;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
-import javax.annotation.Nonnull;
+import org.junit.Test;
 
-import com.helger.jcodemodel.JPackage;
-import com.helger.jcodemodel.SourcePrintWriter;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.fmt.JTextFile;
+import com.helger.jcodemodel.writer.JCMWriter;
+import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 
 /**
- * {@link AbstractCodeWriter} that delegates to another
- * {@link AbstractCodeWriter}.
+ * Test for https://github.com/phax/jcodemodel/issues/74
  *
- * @author Kohsuke Kawaguchi
+ * @author Philip Helger
  */
-public class FilterCodeWriter extends AbstractCodeWriter
+public final class Issue74FuncTest
 {
-  private final AbstractCodeWriter m_aCore;
-
-  public FilterCodeWriter (@Nonnull final AbstractCodeWriter aCore)
+  @Test
+  public void testIssue () throws Exception
   {
-    super (aCore.encoding (), aCore.getNewLine ());
-    m_aCore = aCore;
-  }
+    final JCodeModel cm = new JCodeModel ();
+    cm.resourceDir ("META-INF/services/")
+      .addResourceFile (new JTextFile ("Interface1", StandardCharsets.UTF_8))
+      .setContents ("Testing\n");
+    cm.resourceDir ("META-INF/services/")
+      .addResourceFile (new JTextFile ("Interface2", StandardCharsets.UTF_8))
+      .setContents ("Testing again\n");
+    cm.resourceDir ("META-INF/services/another/and/so/on/and/so/forth")
+      .addResourceFile (new JTextFile ("Interface3", StandardCharsets.UTF_8))
+      .setContents ("Testing 3\n");
 
-  @Nonnull
-  protected final AbstractCodeWriter core ()
-  {
-    return m_aCore;
-  }
-
-  @Override
-  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
-  {
-    return m_aCore.openBinary (sDirName, sFilename);
-  }
-
-  @Override
-  public SourcePrintWriter openSource (@Nonnull final JPackage aPkg, @Nonnull final String sFilename) throws IOException
-  {
-    return m_aCore.openSource (aPkg, sFilename);
-  }
-
-  @Override
-  public void close () throws IOException
-  {
-    m_aCore.close ();
+    new JCMWriter (cm).build (new SingleStreamCodeWriter (System.out), new SingleStreamCodeWriter (System.out));
   }
 }

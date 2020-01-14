@@ -48,7 +48,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.util.JCStringHelper;
 
 /**
  * Writes all the files into a zip file.
@@ -91,20 +91,16 @@ public class ZipCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
   {
-    String name = fileName;
-    if (!pkg.isUnnamed ())
-      name = _toDirName (pkg) + name;
+    final String sFullName;
+    if (JCStringHelper.hasText (sDirName))
+      sFullName = sDirName + '/' + sFilename;
+    else
+      sFullName = sFilename;
 
-    m_aZOS.putNextEntry (new ZipEntry (name));
+    m_aZOS.putNextEntry (new ZipEntry (sFullName));
     return m_aFOS;
-  }
-
-  /** Converts a package name to the directory name. */
-  private static String _toDirName (@Nonnull final JPackage pkg)
-  {
-    return pkg.name ().replace ('.', '/') + '/';
   }
 
   @Override

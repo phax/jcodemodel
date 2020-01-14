@@ -282,8 +282,11 @@ public class JPackage implements
    * @param rsrc
    *        Resource file to add
    * @return Parameter resource file
+   * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
+   *             v3.3.1
    */
   @Nonnull
+  @Deprecated
   public AbstractJResourceFile addResourceFile (@Nonnull final AbstractJResourceFile rsrc)
   {
     JCValueEnforcer.notNull (rsrc, "ResourceFile");
@@ -297,7 +300,10 @@ public class JPackage implements
    * @param sName
    *        Filename to check
    * @return <code>true</code> if contained
+   * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
+   *             v3.3.1
    */
+  @Deprecated
   public boolean hasResourceFile (@Nullable final String sName)
   {
     for (final AbstractJResourceFile r : m_aResources)
@@ -310,7 +316,7 @@ public class JPackage implements
    * Iterates all resource files in this package.
    *
    * @return Iterator
-   * @deprecated Use {@link #resourceFiles()} instead
+   * @deprecated Use {@link #resourceFiles()} instead. Deprecated since v3.3.1
    */
   @Deprecated
   @Nonnull
@@ -324,13 +330,22 @@ public class JPackage implements
    *
    * @return Iterator
    * @since 3.2.0
+   * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
+   *             v3.3.1
    */
+  @Deprecated
   @Nonnull
   public Iterator <AbstractJResourceFile> resourceFiles ()
   {
     return m_aResources.iterator ();
   }
 
+  /**
+   * @return A copy of all contained resource files. Never <code>null</code>.
+   * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
+   *             v3.3.1
+   */
+  @Deprecated
   @Nonnull
   public List <AbstractJResourceFile> getAllResourceFiles ()
   {
@@ -501,14 +516,14 @@ public class JPackage implements
   @Nonnull
   File toPath (@Nonnull final File aDir)
   {
-    if (m_sName == null)
+    if (isUnnamed ())
       return aDir;
     return new File (aDir, m_sName.replace ('.', File.separatorChar));
   }
 
   public void declare (@Nonnull final IJFormatter f)
   {
-    if (m_sName.length () != 0)
+    if (!isUnnamed ())
       f.print ("package").print (m_sName).print (';').newline ();
   }
 

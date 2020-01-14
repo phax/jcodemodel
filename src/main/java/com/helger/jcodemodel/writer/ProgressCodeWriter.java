@@ -40,7 +40,6 @@
  */
 package com.helger.jcodemodel.writer;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -49,6 +48,7 @@ import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.SourcePrintWriter;
+import com.helger.jcodemodel.util.JCStringHelper;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
@@ -74,26 +74,26 @@ public class ProgressCodeWriter extends FilterCodeWriter
     m_aPT = progress;
   }
 
-  protected void report (@Nonnull final JPackage aPackage, @Nonnull final String sFilename)
+  protected void report (@Nonnull final String sDirName, @Nonnull final String sFilename)
   {
-    if (aPackage.isUnnamed ())
+    if (JCStringHelper.hasNoText (sDirName))
       m_aPT.println (sFilename);
     else
-      m_aPT.println (aPackage.name ().replace ('.', File.separatorChar) + File.separatorChar + sFilename);
+      m_aPT.println (sDirName + '/' + sFilename);
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final JPackage aPackage, @Nonnull final String sFilename) throws IOException
+  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
   {
-    report (aPackage, sFilename);
-    return super.openBinary (aPackage, sFilename);
+    report (sDirName, sFilename);
+    return super.openBinary (sDirName, sFilename);
   }
 
   @Override
   public SourcePrintWriter openSource (@Nonnull final JPackage aPackage,
                                        @Nonnull final String sFilename) throws IOException
   {
-    report (aPackage, sFilename);
+    report (toDirName (aPackage), sFilename);
     return super.openSource (aPackage, sFilename);
   }
 }

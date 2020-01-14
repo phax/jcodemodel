@@ -50,8 +50,46 @@ public final class JCStringHelper
   /** Constant empty String array */
   public static final String [] EMPTY_STRING_ARRAY = new String [0];
 
+  /**
+   * The constant to be returned if an String.indexOf call did not find a match!
+   */
+  public static final int STRING_NOT_FOUND = -1;
+
+  /**
+   * Represents an illegal character (\0).
+   */
+  public static final char ILLEGAL_CHAR = '\0';
+
   private JCStringHelper ()
   {}
+
+  /**
+   * Get the length of the passed character sequence.
+   *
+   * @param aCS
+   *        The character sequence who's length is to be determined. May be
+   *        <code>null</code>.
+   * @return 0 if the parameter is <code>null</code>, its length otherwise.
+   * @see CharSequence#length()
+   */
+  @Nonnegative
+  public static int getLength (@Nullable final CharSequence aCS)
+  {
+    return aCS == null ? 0 : aCS.length ();
+  }
+
+  /**
+   * Check if the string contains any char.
+   *
+   * @param aCS
+   *        The character sequence to check. May be <code>null</code>.
+   * @return <code>true</code> if the string contains at least one,
+   *         <code>false</code> otherwise
+   */
+  public static boolean hasText (@Nullable final CharSequence aCS)
+  {
+    return aCS != null && aCS.length () > 0;
+  }
 
   /**
    * Check if the string is <code>null</code> or empty.
@@ -158,5 +196,89 @@ public final class JCStringHelper
     if (nItemsAdded != ret.length)
       throw new IllegalStateException ("Added " + nItemsAdded + " but expected " + ret.length);
     return ret;
+  }
+
+  /**
+   * This is a fast replacement for {@link String#replace(char, char)} for
+   * characters. The problem with the mentioned String method is, that is uses
+   * internally regular expressions which use a synchronized block to compile
+   * the patterns. This method is inherently thread safe since {@link String} is
+   * immutable and we're operating on different temporary {@link StringBuilder}
+   * objects.
+   *
+   * @param sInputString
+   *        The input string where the text should be replace. If this parameter
+   *        is <code>null</code> or empty, no replacement is done.
+   * @param cSearchChar
+   *        The character to be replaced.
+   * @param cReplacementChar
+   *        The character with the replacement.
+   * @return The input string as is, if the input string is empty or if the
+   *         search pattern and the replacement are equal or if the string to be
+   *         replaced is not contained.
+   */
+  @Nullable
+  public static String replaceAll (@Nullable final String sInputString,
+                                   final char cSearchChar,
+                                   final char cReplacementChar)
+  {
+    // Is input string empty?
+    if (hasNoText (sInputString))
+      return sInputString;
+
+    // Replace old with the same new?
+    if (cSearchChar == cReplacementChar)
+      return sInputString;
+
+    // Does the old text occur anywhere?
+    int nIndex = sInputString.indexOf (cSearchChar, 0);
+    if (nIndex == STRING_NOT_FOUND)
+      return sInputString;
+
+    // build output buffer
+    final StringBuilder ret = new StringBuilder (sInputString.length ());
+    int nOldIndex = 0;
+    do
+    {
+      ret.append (sInputString, nOldIndex, nIndex).append (cReplacementChar);
+      nIndex++;
+      nOldIndex = nIndex;
+      nIndex = sInputString.indexOf (cSearchChar, nIndex);
+    } while (nIndex != STRING_NOT_FOUND);
+    ret.append (sInputString, nOldIndex, sInputString.length ());
+    return ret.toString ();
+  }
+
+  /**
+   * Get the first character of the passed character sequence
+   *
+   * @param aCS
+   *        The source character sequence
+   * @return {@link #ILLEGAL_CHAR} if the passed sequence was empty
+   */
+  public static char getFirstChar (@Nullable final CharSequence aCS)
+  {
+    return hasText (aCS) ? aCS.charAt (0) : ILLEGAL_CHAR;
+  }
+
+  /**
+   * Get the last character of the passed character sequence
+   *
+   * @param aCS
+   *        The source character sequence
+   * @return {@link #ILLEGAL_CHAR} if the passed sequence was empty
+   */
+  public static char getLastChar (@Nullable final CharSequence aCS)
+  {
+    final int nLength = getLength (aCS);
+    return nLength > 0 ? aCS.charAt (nLength - 1) : ILLEGAL_CHAR;
+  }
+
+  public static boolean endsWithAny (@Nullable final CharSequence aCS, @Nullable final char [] aChars)
+  {
+    if (hasText (aCS) && aChars != null)
+      if (JCArrayHelper.contains (aChars, getLastChar (aCS)))
+        return true;
+    return false;
   }
 }

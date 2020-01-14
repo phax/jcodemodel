@@ -45,6 +45,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
@@ -64,11 +65,12 @@ public class Issue61FuncTest
   public void testIssue () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
-    final Charset ascii = Charset.forName ("US-ASCII");
-    final ByteArrayOutputStream resOut = new ByteArrayOutputStream ();
-    final JTextFile res = (JTextFile) cm.rootPackage ().addResourceFile (new JTextFile ("example.txt", ascii));
+    final Charset ascii = StandardCharsets.US_ASCII;
+    final JTextFile res = cm.rootResourceDir ().addResourceFile (new JTextFile ("example.txt", ascii));
 
     res.setContents ("Testing");
+
+    final ByteArrayOutputStream resOut = new ByteArrayOutputStream ();
     new JCMWriter (cm).build (new SingleStreamCodeWriter (new ByteArrayOutputStream ()),
                               new SingleStreamCodeWriter (resOut));
     final String txtRes = ascii.decode (ByteBuffer.wrap (resOut.toByteArray ())).toString ();

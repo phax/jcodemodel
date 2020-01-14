@@ -51,7 +51,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.util.JCStringHelper;
 
 /**
  * Writes all the source files under the specified file folder.
@@ -115,34 +115,34 @@ public class FileCodeWriter extends AbstractCodeWriter
 
   @Override
   @Nonnull
-  public OutputStream openBinary (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
   {
-    return new FileOutputStream (getFile (pkg, fileName));
+    return new FileOutputStream (getFile (sDirName, sFilename));
   }
 
   @Nonnull
-  protected File getFile (@Nonnull final JPackage pkg, @Nonnull final String fileName) throws IOException
+  protected File getFile (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
   {
-    File dir;
-    if (pkg.isUnnamed ())
-      dir = m_aTargetDir;
+    final File aDir;
+    if (JCStringHelper.hasNoText (sDirName))
+      aDir = m_aTargetDir;
     else
-      dir = new File (m_aTargetDir, _toDirName (pkg));
+      aDir = new File (m_aTargetDir, sDirName);
 
-    if (!dir.exists ())
-      if (!dir.mkdirs ())
-        throw new IOException (dir + ": failed to create directory");
+    if (!aDir.exists ())
+      if (!aDir.mkdirs ())
+        throw new IOException (aDir + ": failed to create directory");
 
-    final File fn = new File (dir, fileName);
-    if (fn.exists ())
+    final File aFile = new File (aDir, sFilename);
+    if (aFile.exists ())
     {
-      if (!fn.delete ())
-        throw new IOException (fn + ": Can't delete previous version");
+      if (!aFile.delete ())
+        throw new IOException (aFile + ": Can't delete previous version");
     }
 
     if (m_bMarkReadOnly)
-      m_aReadOnlyFiles.add (fn);
-    return fn;
+      m_aReadOnlyFiles.add (aFile);
+    return aFile;
   }
 
   @Override
@@ -152,12 +152,5 @@ public class FileCodeWriter extends AbstractCodeWriter
     for (final File f : m_aReadOnlyFiles)
       if (!f.setReadOnly ())
         throw new IOException (f + ": Can't make file read-only");
-  }
-
-  /** Converts a package name to the directory name. */
-  @Nonnull
-  private static String _toDirName (@Nonnull final JPackage aPkg)
-  {
-    return aPkg.name ().replace ('.', File.separatorChar);
   }
 }

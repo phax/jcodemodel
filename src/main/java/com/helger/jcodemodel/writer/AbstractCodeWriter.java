@@ -98,6 +98,34 @@ public abstract class AbstractCodeWriter implements Closeable
 
   /**
    * Called by CodeModel to store the specified file. The callee must allocate a
+   * storage to store the specified file.<br>
+   * The returned stream will be closed before the next file is stored. So the
+   * callee can assume that only one OutputStream is active at any given time.
+   *
+   * @param sDirName
+   *        The directory name, relative to the target directory. May not be
+   *        <code>null</code> but maybe empty.
+   * @param sFilename
+   *        File name without the path. Something like "Foo.java" or
+   *        "Bar.properties"
+   * @return OutputStream to write to
+   * @throws IOException
+   *         On IO error
+   * @since v3.3.1
+   */
+  @Nonnull
+  public abstract OutputStream openBinary (@Nonnull String sDirName, @Nonnull String sFilename) throws IOException;
+
+  @Nonnull
+  protected static String toDirName (@Nonnull final JPackage aPackage)
+  {
+    // Convert package name to directory name
+    // Forward slash works for Windows, Linux and ZIP files
+    return aPackage.isUnnamed () ? "" : aPackage.name ().replace ('.', '/');
+  }
+
+  /**
+   * Called by CodeModel to store the specified file. The callee must allocate a
    * storage to store the specified file. <br>
    * The returned stream will be closed before the next file is stored. So the
    * callee can assume that only one OutputStream is active at any given time.
@@ -112,7 +140,11 @@ public abstract class AbstractCodeWriter implements Closeable
    *         On IO error
    */
   @Nonnull
-  public abstract OutputStream openBinary (@Nonnull JPackage aPackage, @Nonnull String sFilename) throws IOException;
+  public final OutputStream openBinary (@Nonnull final JPackage aPackage,
+                                        @Nonnull final String sFilename) throws IOException
+  {
+    return openBinary (toDirName (aPackage), sFilename);
+  }
 
   /**
    * Called by CodeModel to store the specified file. The callee must allocate a

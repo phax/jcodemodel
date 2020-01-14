@@ -47,8 +47,6 @@ import java.io.PrintStream;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.JPackage;
-
 /**
  * Output all source files into a single stream with a little formatting header
  * in front of each file. This is primarily for human consumption of the
@@ -88,11 +86,11 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final JPackage aPkg, @Nonnull final String sFilename) throws IOException
+  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
   {
-    String sPkgName = aPkg.name ();
+    String sPkgName = sDirName;
     if (sPkgName.length () > 0)
-      sPkgName += '.';
+      sPkgName += '/';
 
     m_aPS.println ("-----------------------------------" +
                    sPkgName +

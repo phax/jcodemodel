@@ -71,7 +71,6 @@ import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -225,14 +224,14 @@ public final class CodeModelTestsHelper
 
   @Nonnull
   private static CompilationUnit _parseWithJavaParser (final byte [] aBytes,
-                                                       final JPackage aPackage,
+                                                       @Nonnull final String sDirName,
                                                        final String sFilename) throws IOException
   {
     if (false)
       System.out.println (new String (aBytes, DEFAULT_ENCODING));
 
     System.out.println ("Parsing " +
-                        (aPackage == null || aPackage.isUnnamed () ? "" : aPackage.name () + ".") +
+                        JCStringHelper.replaceAll (sDirName, '/', '.') +
                         (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
 
     try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
@@ -246,7 +245,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   private static org.eclipse.jdt.core.dom.CompilationUnit _parseWithJDT (final String sUnitName, final char [] aCode)
   {
-    final ASTParser parser = ASTParser.newParser (AST.JLS11);
+    final ASTParser parser = ASTParser.newParser (AST.JLS13);
     parser.setResolveBindings (true);
     parser.setStatementsRecovery (true);
     parser.setBindingsRecovery (true);
@@ -276,7 +275,7 @@ public final class CodeModelTestsHelper
       new JCMWriter (cm).build (new AbstractCodeWriter (DEFAULT_ENCODING, "\n")
       {
         @Override
-        public OutputStream openBinary (final JPackage aPackage, final String sFilename) throws IOException
+        public OutputStream openBinary (final String sDirName, final String sFilename) throws IOException
         {
           return new ByteArrayOutputStream ()
           {
@@ -288,7 +287,7 @@ public final class CodeModelTestsHelper
               final byte [] aBytes = toByteArray ();
 
               // Get result as bytes and parse
-              _parseWithJavaParser (aBytes, aPackage, sFilename);
+              _parseWithJavaParser (aBytes, sDirName, sFilename);
               _parseWithJDT (sFilename, new String (aBytes, DEFAULT_ENCODING).toCharArray ());
             }
           };
