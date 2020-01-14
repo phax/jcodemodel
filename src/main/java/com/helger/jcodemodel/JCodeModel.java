@@ -57,7 +57,6 @@ import java.util.Set;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.Resource;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
@@ -262,8 +261,8 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Add a {@link Resource} directory to the list of resource directories to be
-   * generated
+   * Add a {@link JResourceDir} directory to the list of resource directories to
+   * be generated
    *
    * @param sName
    *        Name of the resource directory. Use "" to indicate the root
