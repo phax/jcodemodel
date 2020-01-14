@@ -68,21 +68,34 @@ public class JTextFile extends AbstractJResourceFile
     m_aEncoding = JCValueEnforcer.notNull (aEncoding, "Encoding");
   }
 
-  public void setContents (@Nullable final String sContents)
+  /**
+   * @return The encoding as provided in the constructor. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public final Charset encoding ()
   {
-    m_sContents = sContents;
+    return m_aEncoding;
   }
 
+  /**
+   * @return The content of the text file. <code>null</code> by default.
+   */
   @Nullable
   public String contents ()
   {
     return m_sContents;
   }
 
-  @Nonnull
-  public Charset encoding ()
+  /**
+   * Set the contents to be written. Overwrites a previous content.
+   * 
+   * @param sContents
+   *        The contents to be used. May be <code>null</code>.
+   */
+  public void setContents (@Nullable final String sContents)
   {
-    return m_aEncoding;
+    m_sContents = sContents;
   }
 
   @Override
@@ -93,7 +106,9 @@ public class JTextFile extends AbstractJResourceFile
       {
         @Override
         public void close ()
-        {}
+        {
+          // Don't close underlying OS
+        }
       })
       {
         w.write (m_sContents);
