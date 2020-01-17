@@ -46,7 +46,6 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
 
-import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
@@ -83,10 +82,11 @@ public abstract class AbstractJResourceFile
   }
 
   /**
-   * called by {@link JPackage} to produce the file image.
+   * called by JCMWriter to produce the file image.
    *
    * @param aOS
-   *        OutputStream to write to
+   *        OutputStream to write to. May not be <code>null</code> and will not
+   *        be closed afterwards.
    * @throws IOException
    *         If writing on the stream throws an error
    */
