@@ -222,7 +222,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   @Nonnull
   public final CLASSTYPE _class (final int nMods,
                                  @Nonnull final String sName,
-                                 @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
+                                 @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     String sRealName;
     if (JCodeModel.isFileSystemCaseSensitive ())

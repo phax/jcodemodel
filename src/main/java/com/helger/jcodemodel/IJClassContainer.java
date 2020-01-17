@@ -93,13 +93,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param eClassType
    *        The type of class to create. May not be <code>null</code>.
    * @return The created ...
-   * @throws JClassAlreadyExistsException
+   * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  CLASSTYPE _class (int nMods,
-                    @Nonnull String sName,
-                    @Nonnull EClassType eClassType) throws JClassAlreadyExistsException;
+  CLASSTYPE _class (int nMods, @Nonnull String sName, @Nonnull EClassType eClassType) throws JCodeModelException;
 
   /**
    * Add a new public class to this class/package.
@@ -107,11 +105,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param sName
    *        Name of class to be added to this package
    * @return Newly generated class
-   * @throws JClassAlreadyExistsException
+   * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  default CLASSTYPE _class (@Nonnull final String sName) throws JClassAlreadyExistsException
+  default CLASSTYPE _class (@Nonnull final String sName) throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sName);
   }
@@ -124,11 +122,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param sName
    *        Name of class to be added to this package
    * @return Newly generated class
-   * @throws JClassAlreadyExistsException
+   * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  default CLASSTYPE _class (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
+  default CLASSTYPE _class (final int nMods, @Nonnull final String sName) throws JCodeModelException
   {
     return _class (nMods, sName, EClassType.CLASS);
   }
@@ -139,11 +137,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param sName
    *        Name of interface to be added to this package
    * @return Newly generated interface
-   * @throws JClassAlreadyExistsException
+   * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  default CLASSTYPE _interface (@Nonnull final String sName) throws JClassAlreadyExistsException
+  default CLASSTYPE _interface (@Nonnull final String sName) throws JCodeModelException
   {
     return _interface (JMod.PUBLIC, sName);
   }
@@ -156,11 +154,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param sName
    *        Name of interface to be added to this package
    * @return Newly generated interface
-   * @throws JClassAlreadyExistsException
+   * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  default CLASSTYPE _interface (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
+  default CLASSTYPE _interface (final int nMods, @Nonnull final String sName) throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sName, EClassType.INTERFACE);
   }
@@ -171,11 +169,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param sName
    *        Name of the annotation Type declaration to be added to this package
    * @return newly created Annotation Type Declaration
-   * @throws JClassAlreadyExistsException
+   * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  default CLASSTYPE _annotationTypeDeclaration (@Nonnull final String sName) throws JClassAlreadyExistsException
+  default CLASSTYPE _annotationTypeDeclaration (@Nonnull final String sName) throws JCodeModelException
   {
     return _annotationTypeDeclaration (JMod.PUBLIC, sName);
   }
@@ -188,12 +186,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param sName
    *        Name of the annotation Type declaration to be added to this package
    * @return newly created Annotation Type Declaration
-   * @throws JClassAlreadyExistsException
+   * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  default CLASSTYPE _annotationTypeDeclaration (final int nMods,
-                                                @Nonnull final String sName) throws JClassAlreadyExistsException
+  default CLASSTYPE _annotationTypeDeclaration (final int nMods, @Nonnull final String sName) throws JCodeModelException
   {
     return _class (nMods, sName, EClassType.ANNOTATION_TYPE_DECL);
   }
@@ -204,11 +201,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param sName
    *        Name of the enum to be added to this package
    * @return newly created enum
-   * @throws JClassAlreadyExistsException
+   * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  default CLASSTYPE _enum (@Nonnull final String sName) throws JClassAlreadyExistsException
+  default CLASSTYPE _enum (@Nonnull final String sName) throws JCodeModelException
   {
     return _enum (JMod.PUBLIC, sName);
   }
@@ -221,11 +218,11 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @param sName
    *        Name of the enum to be added to this package
    * @return newly created Enum
-   * @throws JClassAlreadyExistsException
+   * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
   @Nonnull
-  default CLASSTYPE _enum (final int nMods, @Nonnull final String sName) throws JClassAlreadyExistsException
+  default CLASSTYPE _enum (final int nMods, @Nonnull final String sName) throws JCodeModelException
   {
     return _class (nMods, sName, EClassType.ENUM);
   }

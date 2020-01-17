@@ -72,7 +72,7 @@ public final class JLambdaMethodRefTest
   }
 
   @Test
-  public void testStaticMethodRef_JMethod () throws JClassAlreadyExistsException
+  public void testStaticMethodRef_JMethod () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
@@ -99,7 +99,7 @@ public final class JLambdaMethodRefTest
   }
 
   @Test
-  public void testStaticMethodRef_New () throws JClassAlreadyExistsException
+  public void testStaticMethodRef_New () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
@@ -130,7 +130,7 @@ public final class JLambdaMethodRefTest
   }
 
   @Test
-  public void testInstanceMethodRef_JMethod () throws JClassAlreadyExistsException
+  public void testInstanceMethodRef_JMethod () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
@@ -151,7 +151,7 @@ public final class JLambdaMethodRefTest
   }
 
   @Test
-  public void testInvocationMethodRef_Name () throws JClassAlreadyExistsException
+  public void testInvocationMethodRef_Name () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaInvocationMethodRefName");
@@ -167,7 +167,7 @@ public final class JLambdaMethodRefTest
   }
 
   @Test
-  public void testInvocationMethodRef_JMethod () throws JClassAlreadyExistsException
+  public void testInvocationMethodRef_JMethod () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaInvocationMethodRefJMethod");

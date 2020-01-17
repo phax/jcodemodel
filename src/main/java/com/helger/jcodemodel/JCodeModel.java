@@ -319,13 +319,13 @@ public class JCodeModel implements Serializable
    * @param eClassType
    *        Class type to use (enum/class/interface/annotation)
    * @return New {@link JDefinedClass}
-   * @exception JClassAlreadyExistsException
+   * @exception JCodeModelException
    *            When the specified class/interface was already created.
    */
   @Nonnull
   public JDefinedClass _class (final int nMods,
                                @Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
+                               @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     final int nIdx = sFullyQualifiedClassName.lastIndexOf ('.');
     if (nIdx < 0)
@@ -342,11 +342,11 @@ public class JCodeModel implements Serializable
    * @param sFullyQualifiedClassName
    *        FQCN
    * @return New {@link JDefinedClass}
-   * @exception JClassAlreadyExistsException
+   * @exception JCodeModelException
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName) throws JClassAlreadyExistsException
+  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName) throws JCodeModelException
   {
     return _class (sFullyQualifiedClassName, EClassType.CLASS);
   }
@@ -359,12 +359,12 @@ public class JCodeModel implements Serializable
    * @param sFullyQualifiedClassName
    *        FQCN
    * @return New {@link JDefinedClass}
-   * @exception JClassAlreadyExistsException
+   * @exception JCodeModelException
    *            When the specified class/interface was already created.
    */
   @Nonnull
   public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sFullyQualifiedClassName) throws JClassAlreadyExistsException
+                               @Nonnull final String sFullyQualifiedClassName) throws JCodeModelException
   {
     return _class (nMods, sFullyQualifiedClassName, EClassType.CLASS);
   }
@@ -377,12 +377,12 @@ public class JCodeModel implements Serializable
    * @param eClassType
    *        Class type to use (enum/class/interface/annotation)
    * @return New {@link JDefinedClass}
-   * @exception JClassAlreadyExistsException
+   * @exception JCodeModelException
    *            When the specified class/interface was already created.
    */
   @Nonnull
   public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
+                               @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
   }

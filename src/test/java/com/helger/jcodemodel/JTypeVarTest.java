@@ -56,7 +56,7 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
 public final class JTypeVarTest
 {
   @Test
-  public void testBasic () throws JClassAlreadyExistsException
+  public void testBasic () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cls = cm._class ("Test");
@@ -66,8 +66,7 @@ public final class JTypeVarTest
     tv.bound (cm.ref (Serializable.class));
 
     assertEquals ("T extends java.lang.Comparable<T> & java.io.Serializable", CodeModelTestsHelper.toString (tv));
-    assertEquals ("public<T extends java.lang.Comparable<T> & java.io.Serializable> void foo() {\n" +
-                  "}\n",
+    assertEquals ("public<T extends java.lang.Comparable<T> & java.io.Serializable> void foo() {\n" + "}\n",
                   CodeModelTestsHelper.toString (m).replace ("\r", ""));
   }
 }

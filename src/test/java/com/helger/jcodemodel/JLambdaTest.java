@@ -151,7 +151,7 @@ public final class JLambdaTest
   }
 
   @Test
-  public void testFullClass () throws JClassAlreadyExistsException
+  public void testFullClass () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass cl = cm._package ("test.lambda")._class ("LambdaTest");

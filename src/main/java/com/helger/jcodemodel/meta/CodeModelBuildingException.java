@@ -40,14 +40,14 @@
  */
 package com.helger.jcodemodel.meta;
 
-import com.helger.jcodemodel.JClassAlreadyExistsException;
+import com.helger.jcodemodel.JCodeModelException;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
 public class CodeModelBuildingException extends Exception
 {
-  public CodeModelBuildingException (final JClassAlreadyExistsException ex)
+  public CodeModelBuildingException (final JCodeModelException ex)
   {
     super (ex);
   }
@@ -57,7 +57,7 @@ public class CodeModelBuildingException extends Exception
     super (ex);
   }
 
-  CodeModelBuildingException (final String message, final JClassAlreadyExistsException exception)
+  CodeModelBuildingException (final String message, final JCodeModelException exception)
   {
     super (message, exception);
   }

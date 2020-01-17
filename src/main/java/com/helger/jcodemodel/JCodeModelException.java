@@ -40,36 +40,27 @@
  */
 package com.helger.jcodemodel;
 
-import org.junit.Test;
-
-import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * {@link JSwitch} tests.
+ * Base class for all code model related exception.
  *
  * @author Philip Helger
+ * @since 3.4.0
  */
-public final class JSwitchTest
+public class JCodeModelException extends Exception
 {
-  @Test
-  public void testGenerate () throws JCodeModelException
+  protected JCodeModelException ()
+  {}
+
+  public JCodeModelException (@Nonnull final String sMsg)
   {
-    final JCodeModel cm = new JCodeModel ();
+    super (sMsg);
+  }
 
-    final JDefinedClass c2 = cm._package ("myPackage")._class ("SwitchTest");
-
-    final JDefinedClass jEnumClass = c2._enum ("MyEnum");
-    final JEnumConstant ca = jEnumClass.enumConstant ("A");
-    final JEnumConstant cb = jEnumClass.enumConstant ("B");
-    jEnumClass.enumConstant ("C");
-
-    final JMethod m = c2.method (0, cm.VOID, "dummy");
-    final JVar p = m.param (jEnumClass, "enumParam");
-    final JSwitch s = m.body ()._switch (p);
-    s._case (ca).body ()._break ();
-    s._case (cb).body ()._break ();
-    s._default ().body ()._break ();
-
-    CodeModelTestsHelper.parseCodeModel (cm);
+  public JCodeModelException (@Nonnull final String sMsg, @Nullable final Throwable aCause)
+  {
+    super (sMsg, aCause);
   }
 }

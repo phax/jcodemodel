@@ -45,6 +45,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
@@ -62,6 +63,7 @@ import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
 import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
@@ -73,7 +75,8 @@ class DecidedErrorTypesModelsAdapter
 {
   private static final Logger LOGGER = Logger.getLogger (DecidedErrorTypesModelsAdapter.class.getName ());
 
-  static int toJMod (final Collection <Modifier> modifierCollection)
+  @Nonnegative
+  static int toJMod (@Nonnull final Collection <Modifier> modifierCollection)
   {
     int modifiers = 0;
     for (final Modifier eModifier : modifierCollection)
@@ -123,9 +126,10 @@ class DecidedErrorTypesModelsAdapter
     return modifiers;
   }
 
-  private static EClassType _toClassType (@Nonnull final ElementKind kind)
+  @Nonnull
+  private static EClassType _toClassType (@Nonnull final ElementKind eKind)
   {
-    switch (kind)
+    switch (eKind)
     {
       case CLASS:
         return EClassType.CLASS;
@@ -136,7 +140,7 @@ class DecidedErrorTypesModelsAdapter
       case ANNOTATION_TYPE:
         return EClassType.ANNOTATION_TYPE_DECL;
       default:
-        throw new UnsupportedOperationException ("Unsupported ElementKind: " + kind);
+        throw new UnsupportedOperationException ("Unsupported ElementKind: " + eKind);
     }
   }
 
@@ -229,7 +233,7 @@ class DecidedErrorTypesModelsAdapter
     {
       newClass = _package._class (modifiers, element.getSimpleName ().toString (), classType);
     }
-    catch (final JClassAlreadyExistsException ex)
+    catch (final JCodeModelException ex)
     {
       throw new CodeModelBuildingException (ex);
     }
@@ -277,7 +281,7 @@ class DecidedErrorTypesModelsAdapter
         {
           enclosedClass = klass._class (modifiers, enclosedElement.getSimpleName ().toString (), classType);
         }
-        catch (final JClassAlreadyExistsException ex)
+        catch (final JCodeModelException ex)
         {
           throw new CodeModelBuildingException (ex);
         }

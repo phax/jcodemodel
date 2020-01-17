@@ -42,10 +42,11 @@ package com.helger.jcodemodel;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -95,9 +96,15 @@ public class JResourceDir implements IJOwned
   private final JCodeModel m_aOwner;
 
   /**
-   * List of resources files inside this package.
+   * Map of resources files inside this package.
    */
-  private final Set <AbstractJResourceFile> m_aResources = new HashSet <> ();
+  private final Map <String, AbstractJResourceFile> m_aResources = new TreeMap <> ();
+
+  /**
+   * Map of upper case resource names, if the underlying file system is not case
+   * sensitive (e.g. Windows).
+   */
+  private final Map <String, AbstractJResourceFile> m_aUpperCaseResources;
 
   /**
    * Constructor
@@ -123,6 +130,10 @@ public class JResourceDir implements IJOwned
       String sCleanPath = JCFilenameHelper.getPathUsingUnixSeparator (sName);
       // Ensure last part is not a "/"
       sCleanPath = JCFilenameHelper.ensurePathEndingWithoutSeparator (sCleanPath);
+
+      if (sCleanPath.startsWith ("/"))
+        throw new IllegalArgumentException ("A resource directory may not be an absolute path: '" + sName + "'");
+
       final String [] aParts = JCStringHelper.getExplodedArray (SEPARATOR, sCleanPath);
       for (final String sPart : aParts)
         if (isForbiddenDirectoryNamePart (sPart))
@@ -135,6 +146,11 @@ public class JResourceDir implements IJOwned
     }
     else
       m_sName = "";
+
+    if (JCodeModel.isFileSystemCaseSensitive ())
+      m_aUpperCaseResources = null;
+    else
+      m_aUpperCaseResources = new TreeMap <> ();
   }
 
   /**
@@ -179,18 +195,52 @@ public class JResourceDir implements IJOwned
   /**
    * Adds a new resource file to this package.
    *
-   * @param rsrc
+   * @param aResFile
    *        Resource file to add
    * @return Parameter resource file
    * @param <T>
    *        The implementation type used
+   * @throws JCodeModelException
+   *         if another resource with the same name already exists
    */
   @Nonnull
-  public <T extends AbstractJResourceFile> T addResourceFile (@Nonnull final T rsrc)
+  public <T extends AbstractJResourceFile> T addResourceFile (@Nonnull final T aResFile) throws JCodeModelException
   {
-    JCValueEnforcer.notNull (rsrc, "ResourceFile");
-    m_aResources.add (rsrc);
-    return rsrc;
+    JCValueEnforcer.notNull (aResFile, "ResourceFile");
+
+    // Check uniqueness (case sensitive)
+    final String sName = aResFile.name ();
+    if (m_aResources.containsKey (sName))
+      throw new JResourceAlreadyExistsException (fullChildName (sName));
+
+    // Check uniqueness (case insensitive)
+    final String sUpperName = sName.toUpperCase (Locale.ROOT);
+    if (m_aUpperCaseResources != null)
+    {
+      if (m_aUpperCaseResources.containsKey (sUpperName))
+        throw new JResourceAlreadyExistsException (fullChildName (sName));
+    }
+
+    // Check if a Java class with the same name already exists
+    final boolean bIsPotentiallyJavaSrcFile;
+    if (m_aUpperCaseResources != null)
+      bIsPotentiallyJavaSrcFile = sUpperName.endsWith (".JAVA");
+    else
+      bIsPotentiallyJavaSrcFile = sName.endsWith (".java");
+    if (bIsPotentiallyJavaSrcFile)
+    {
+      final JPackage aPackage = owner ()._package (m_sName.replace ('/', '.'));
+      final JDefinedClass aDC = aPackage.getClassResource (sName.substring (0, sName.length () - 5));
+      if (aDC != null)
+        throw new JClassAlreadyExistsException (aDC);
+    }
+
+    // All checks good - add to map
+    m_aResources.put (sName, aResFile);
+    if (m_aUpperCaseResources != null)
+      m_aUpperCaseResources.put (sUpperName, aResFile);
+
+    return aResFile;
   }
 
   /**
@@ -202,9 +252,8 @@ public class JResourceDir implements IJOwned
    */
   public boolean hasResourceFile (@Nullable final String sName)
   {
-    for (final AbstractJResourceFile r : m_aResources)
-      if (r.name ().equals (sName))
-        return true;
+    if (m_aResources.containsKey (sName))
+      return true;
     return false;
   }
 
@@ -216,7 +265,7 @@ public class JResourceDir implements IJOwned
   @Nonnull
   public Iterator <AbstractJResourceFile> resourceFiles ()
   {
-    return m_aResources.iterator ();
+    return m_aResources.values ().iterator ();
   }
 
   /**
@@ -225,7 +274,7 @@ public class JResourceDir implements IJOwned
   @Nonnull
   public List <AbstractJResourceFile> getAllResourceFiles ()
   {
-    return new ArrayList <> (m_aResources);
+    return new ArrayList <> (m_aResources.values ());
   }
 
   /**
@@ -268,5 +317,11 @@ public class JResourceDir implements IJOwned
   int countArtifacts ()
   {
     return m_aResources.size ();
+  }
+
+  @Nonnull
+  String fullChildName (@Nonnull final String sChildName)
+  {
+    return isUnnamed () ? sChildName : m_sName + '/' + sChildName;
   }
 }

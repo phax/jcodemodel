@@ -14,8 +14,10 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 # News and noteworthy
 
-* v3.3.1 - work in progress
+* v3.4.0 - work in progress
     * Added special top-level construct `JResourceDir` to represent pure resource directories ([issue #74](https://github.com/phax/jcodemodel/issues/74) from @guiguilechat)
+    * Added new class `JCodeModelException` as the base class for `JClassAlreadyExistsException` and the new class `JResourceAlreadyExistsException`
+    * Existing APIs were changed to throw `JCodeModelException` instead of `JClassAlreadyExistsException`
 * v3.3.0 - 2019-11-24
     * Added check for package names so that no invalid package names can be created ([issue #70](https://github.com/phax/jcodemodel/issues/70) from @guiguilechat)
     * Added check to avoid creating classes existing in the "java.lang" package ([issue #71](https://github.com/phax/jcodemodel/issues/71) from @guiguilechat)

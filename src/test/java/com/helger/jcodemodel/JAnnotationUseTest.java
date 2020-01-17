@@ -56,7 +56,7 @@ import com.helger.jcodemodel.writer.JCMWriter;
 public final class JAnnotationUseTest
 {
   @Test
-  public void generatesGenericParam () throws JClassAlreadyExistsException
+  public void generatesGenericParam () throws JCodeModelException
   {
     final JCodeModel codeModel = new JCodeModel ();
     final JDefinedClass testClass = codeModel._class ("Test");
@@ -68,7 +68,7 @@ public final class JAnnotationUseTest
   }
 
   @Test
-  public void generatesGenericParam2 () throws JClassAlreadyExistsException
+  public void generatesGenericParam2 () throws JCodeModelException
   {
     final JCodeModel codeModel = new JCodeModel ();
     final JDefinedClass testClass = codeModel._class ("Test");

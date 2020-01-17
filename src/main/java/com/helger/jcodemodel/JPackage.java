@@ -45,7 +45,6 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -150,16 +149,16 @@ public class JPackage implements
   private final Map <String, JDefinedClass> m_aClasses = new TreeMap <> ();
 
   /**
-   * List of resources files inside this package.
-   */
-  private final Set <AbstractJResourceFile> m_aResources = new HashSet <> ();
-
-  /**
    * All {@link AbstractJClass}s in this package keyed the upper case class
    * name. This field is non-null only on Windows, to detect "Foo" and "foo" as
    * a collision.
    */
   private final Map <String, JDefinedClass> m_aUpperCaseClassMap;
+
+  /**
+   * List of resources files inside this package.
+   */
+  private final Set <AbstractJResourceFile> m_aResources = new HashSet <> ();
 
   /**
    * Lazily created list of package annotations.
@@ -200,7 +199,7 @@ public class JPackage implements
     if (JCodeModel.isFileSystemCaseSensitive ())
       m_aUpperCaseClassMap = null;
     else
-      m_aUpperCaseClassMap = new HashMap <> ();
+      m_aUpperCaseClassMap = new TreeMap <> ();
   }
 
   @Nullable
@@ -243,24 +242,42 @@ public class JPackage implements
 
   @Nonnull
   public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sName,
-                               @Nonnull final EClassType eClassType) throws JClassAlreadyExistsException
+                               @Nonnull final String sClassName,
+                               @Nonnull final EClassType eClassType) throws JCodeModelException
   {
-    if (m_aClasses.containsKey (sName))
-      throw new JClassAlreadyExistsException (m_aClasses.get (sName));
+    // Class name unique case sensitive?
+    JDefinedClass aDC = m_aClasses.get (sClassName);
+    if (aDC != null)
+      throw new JClassAlreadyExistsException (aDC);
 
-    // XXX problems caught in the NC constructor
-    final JDefinedClass c = new JDefinedClass (this, nMods, sName, eClassType);
+    // Class name unique case insensitive?
+    final String sUpperClassName = sClassName.toUpperCase (Locale.ROOT);
+    if (m_aUpperCaseClassMap != null)
+    {
+      aDC = m_aUpperCaseClassMap.get (sUpperClassName);
+      if (aDC != null)
+        throw new JClassAlreadyExistsException (aDC);
+    }
+
+    // Okay, the class name is unique inside this package
+    // Check if a resource with the same name already exists
+    JResourceDir aRD = m_aOwner.resourceDir (m_sName.replace ('.', '/'));
+    if (aRD.hasResourceFile (sClassName + ".java"))
+      throw new JResourceAlreadyExistsException (aRD.fullChildName (sClassName + ".java"));
 
     if (m_aUpperCaseClassMap != null)
     {
-      final String sUpperName = sName.toUpperCase (Locale.ROOT);
-      final JDefinedClass dc = m_aUpperCaseClassMap.get (sUpperName);
-      if (dc != null)
-        throw new JClassAlreadyExistsException (dc);
-      m_aUpperCaseClassMap.put (sUpperName, c);
+      aRD = m_aOwner.resourceDir (m_sName.toUpperCase (Locale.ROOT).replace ('.', '/'));
+      if (aRD.hasResourceFile (sUpperClassName + ".java"))
+        throw new JResourceAlreadyExistsException (aRD.fullChildName (sUpperClassName + ".java"));
     }
-    m_aClasses.put (sName, c);
+
+    // XXX problems caught in the NC constructor
+    final JDefinedClass c = new JDefinedClass (this, nMods, sClassName, eClassType);
+    if (m_aUpperCaseClassMap != null)
+      m_aUpperCaseClassMap.put (sUpperClassName, c);
+    m_aClasses.put (sClassName, c);
+
     return c;
   }
 
@@ -275,6 +292,15 @@ public class JPackage implements
   public JDefinedClass _getClass (@Nullable final String sName)
   {
     return m_aClasses.get (sName);
+  }
+
+  @Nullable
+  JDefinedClass getClassResource (@Nonnull final String sClassName)
+  {
+    JDefinedClass aDC = m_aClasses.get (sClassName);
+    if (aDC == null && m_aUpperCaseClassMap != null)
+      aDC = m_aUpperCaseClassMap.get (sClassName.toUpperCase (Locale.ROOT));
+    return aDC;
   }
 
   /**

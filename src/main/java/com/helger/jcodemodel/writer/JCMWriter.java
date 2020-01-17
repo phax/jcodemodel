@@ -303,9 +303,9 @@ public class JCMWriter
   @Nonnull
   private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter aSrcWriter,
                                                   @Nonnull final JPackage aPackage,
-                                                  @Nonnull final String sClassName) throws IOException
+                                                  @Nonnull final String sClassFilename) throws IOException
   {
-    final SourcePrintWriter aWriter = aSrcWriter.openSource (aPackage, sClassName + ".java");
+    final SourcePrintWriter aWriter = aSrcWriter.openSource (aPackage, sClassFilename);
     final JFormatter ret = new JFormatter (aWriter, m_sIndentString);
     // Add all classes to not be imported (may be empty)
     ret.addDontImportClasses (m_aCM.getAllDontImportClasses ());
@@ -326,7 +326,7 @@ public class JCMWriter
         continue;
       }
 
-      try (final JFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, c.name ()))
+      try (final JFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, c.name () + ".java"))
       {
         f.writeClassFull (c);
       }
@@ -337,7 +337,7 @@ public class JCMWriter
     final JDocComment aJavaDoc = aPackage.javadoc ();
     if (!aAnnotations.isEmpty () || !aJavaDoc.isEmpty ())
     {
-      try (final IJFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, "package-info"))
+      try (final IJFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, "package-info.java"))
       {
         if (!aJavaDoc.isEmpty ())
           f.generable (aJavaDoc);

@@ -45,11 +45,12 @@ import javax.annotation.Nonnull;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
- * Indicates that the class is already created.
+ * Indicates that the class is already created.<br>
+ * Up to and including v3.3.0 this was directly derived from Exception
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public class JClassAlreadyExistsException extends Exception
+public class JClassAlreadyExistsException extends JCodeModelException
 {
   private final AbstractJClass m_aExisting;
 

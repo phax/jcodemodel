@@ -86,7 +86,7 @@ public final class JCodeModelTest
   }
 
   @Test
-  public void testCODEMODEL24 () throws JClassAlreadyExistsException
+  public void testCODEMODEL24 () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass jClass = cm._class ("dummy", EClassType.INTERFACE);
@@ -95,7 +95,7 @@ public final class JCodeModelTest
   }
 
   @Test
-  public void testEmptyNarrowed () throws JClassAlreadyExistsException
+  public void testEmptyNarrowed () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass jClass = cm._class ("EmptyNarrowed", EClassType.INTERFACE);

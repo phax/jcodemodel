@@ -61,8 +61,7 @@ public final class Issue74FuncTest
   {
     final JCodeModel cm = new JCodeModel ();
     cm.resourceDir ("META-INF/services/")
-      .addResourceFile (new JTextFile ("Interface1", StandardCharsets.UTF_8))
-      .setContents ("Testing\n");
+      .addResourceFile (JTextFile.createFully ("Interface1", StandardCharsets.UTF_8, "Testing\n"));
     cm.resourceDir ("META-INF/services/")
       .addResourceFile (new JTextFile ("Interface2", StandardCharsets.UTF_8))
       .setContents ("Testing again\n");

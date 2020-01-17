@@ -40,36 +40,33 @@
  */
 package com.helger.jcodemodel;
 
-import org.junit.Test;
+import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
- * {@link JSwitch} tests.
+ * Indicates that the class is already created.
  *
  * @author Philip Helger
+ * @since 3.4.0
  */
-public final class JSwitchTest
+public class JResourceAlreadyExistsException extends JCodeModelException
 {
-  @Test
-  public void testGenerate () throws JCodeModelException
+  private final String m_sFilename;
+
+  public JResourceAlreadyExistsException (@Nonnull final String sFilename)
   {
-    final JCodeModel cm = new JCodeModel ();
+    JCValueEnforcer.notEmpty (sFilename, "Filename");
+    m_sFilename = sFilename;
+  }
 
-    final JDefinedClass c2 = cm._package ("myPackage")._class ("SwitchTest");
-
-    final JDefinedClass jEnumClass = c2._enum ("MyEnum");
-    final JEnumConstant ca = jEnumClass.enumConstant ("A");
-    final JEnumConstant cb = jEnumClass.enumConstant ("B");
-    jEnumClass.enumConstant ("C");
-
-    final JMethod m = c2.method (0, cm.VOID, "dummy");
-    final JVar p = m.param (jEnumClass, "enumParam");
-    final JSwitch s = m.body ()._switch (p);
-    s._case (ca).body ()._break ();
-    s._case (cb).body ()._break ();
-    s._default ().body ()._break ();
-
-    CodeModelTestsHelper.parseCodeModel (cm);
+  /**
+   * @return The existing filename that already exists as a resource. Neither
+   *         <code>null</code> nor empty.
+   */
+  @Nonnull
+  public String getExistingFilename ()
+  {
+    return m_sFilename;
   }
 }
