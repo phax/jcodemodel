@@ -76,33 +76,30 @@ class DecidedErrorTypesModelsAdapter
   static int toJMod (final Collection <Modifier> modifierCollection)
   {
     int modifiers = 0;
-    for (final Modifier modifier : modifierCollection)
+    for (final Modifier eModifier : modifierCollection)
     {
-      switch (modifier)
+      switch (eModifier)
       {
-        case ABSTRACT:
-          modifiers |= JMod.ABSTRACT;
-          break;
-        case FINAL:
-          modifiers |= JMod.FINAL;
-          break;
-        case NATIVE:
-          modifiers |= JMod.NATIVE;
-          break;
-        case PRIVATE:
-          modifiers |= JMod.PRIVATE;
+        case PUBLIC:
+          modifiers |= JMod.PUBLIC;
           break;
         case PROTECTED:
           modifiers |= JMod.PROTECTED;
           break;
-        case PUBLIC:
-          modifiers |= JMod.PUBLIC;
+        case PRIVATE:
+          modifiers |= JMod.PRIVATE;
+          break;
+        case ABSTRACT:
+          modifiers |= JMod.ABSTRACT;
+          break;
+        case DEFAULT:
+          modifiers |= JMod.DEFAULT;
           break;
         case STATIC:
           modifiers |= JMod.STATIC;
           break;
-        case SYNCHRONIZED:
-          modifiers |= JMod.SYNCHRONIZED;
+        case FINAL:
+          modifiers |= JMod.FINAL;
           break;
         case TRANSIENT:
           modifiers |= JMod.TRANSIENT;
@@ -110,11 +107,17 @@ class DecidedErrorTypesModelsAdapter
         case VOLATILE:
           modifiers |= JMod.VOLATILE;
           break;
+        case SYNCHRONIZED:
+          modifiers |= JMod.SYNCHRONIZED;
+          break;
+        case NATIVE:
+          modifiers |= JMod.NATIVE;
+          break;
         case STRICTFP:
           modifiers |= JMod.STRICTFP;
           break;
         default:
-          LOGGER.log (Level.WARNING, "Skpping unsupported modifier: {0}", modifier);
+          LOGGER.log (Level.WARNING, "Skpping unsupported modifier: {0}", eModifier);
       }
     }
     return modifiers;
@@ -165,27 +168,29 @@ class DecidedErrorTypesModelsAdapter
       jclass.hide ();
       return jclass;
     }
-    else
-      if (enclosingElement instanceof TypeElement)
+
+    if (enclosingElement instanceof TypeElement)
+    {
+      // Recursive call
+      final JDefinedClass enclosingClass = getClass ((TypeElement) enclosingElement);
+      for (final JDefinedClass innerClass : enclosingClass.classes ())
       {
-        final JDefinedClass enclosingClass = getClass ((TypeElement) enclosingElement);
-        for (final JDefinedClass innerClass : enclosingClass.classes ())
-        {
-          final String fullName = innerClass.fullName ();
-          if (fullName != null && fullName.equals (element.getQualifiedName ().toString ()))
-          {
-            return innerClass;
-          }
-        }
-        throw new CodeModelBuildingException ("Can't define inner class " +
-                                              element.getQualifiedName () +
-                                              ": enclosing class " +
-                                              enclosingClass.fullName () +
-                                              " already defined",
-                                              new JClassAlreadyExistsException (enclosingClass));
+        final String fullName = innerClass.fullName ();
+        if (fullName != null && fullName.equals (element.getQualifiedName ().toString ()))
+          return innerClass;
       }
-      else
-        throw new IllegalStateException ("Enclosing element should be package or class");
+      throw new CodeModelBuildingException ("Can't define inner class " +
+                                            element.getQualifiedName () +
+                                            ": enclosing class " +
+                                            enclosingClass.fullName () +
+                                            " already defined",
+                                            new JClassAlreadyExistsException (enclosingClass));
+    }
+
+    throw new IllegalStateException ("Enclosing element should be package or class but is a " +
+                                     enclosingElement.getClass ().getName () +
+                                     " - " +
+                                     enclosingElement);
   }
 
   private JDefinedClass _defineClass (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
