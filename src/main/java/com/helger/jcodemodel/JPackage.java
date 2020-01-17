@@ -49,6 +49,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -253,7 +254,7 @@ public class JPackage implements
 
     if (m_aUpperCaseClassMap != null)
     {
-      final String sUpperName = sName.toUpperCase ();
+      final String sUpperName = sName.toUpperCase (Locale.ROOT);
       final JDefinedClass dc = m_aUpperCaseClassMap.get (sUpperName);
       if (dc != null)
         throw new JClassAlreadyExistsException (dc);
@@ -385,7 +386,7 @@ public class JPackage implements
     // this happens when someone is trying to remove a non generated class
     m_aClasses.remove (aClass.name ());
     if (m_aUpperCaseClassMap != null)
-      m_aUpperCaseClassMap.remove (aClass.name ().toUpperCase ());
+      m_aUpperCaseClassMap.remove (aClass.name ().toUpperCase (Locale.ROOT));
   }
 
   /**
