@@ -25,11 +25,21 @@ public final class JResourceDirTest
   }
 
   @Test (expected = IllegalArgumentException.class)
-  public void testDoubleSlash ()
+  public void testAbsolutePath2 ()
   {
     final JCodeModel cm = new JCodeModel ();
-    // this should fail because of empty "in-between" directory
+    // this should fail
+    cm.resourceDir ("\\usr");
+  }
+
+  public void testMultiSeparator ()
+  {
+    final JCodeModel cm = new JCodeModel ();
+    // works because of internal unification
     cm.resourceDir ("usr//bla");
+    cm.resourceDir ("usr////////////////////////////////////////////////////bla");
+    cm.resourceDir ("usr//bla///////////////////////////////////////");
+    cm.resourceDir ("usr//\\\\\\\\\\\\\\\\\\\\\\///\\\\\\\\bla\\\\\\\\\\\\/////");
   }
 
   @Test (expected = JResourceAlreadyExistsException.class)

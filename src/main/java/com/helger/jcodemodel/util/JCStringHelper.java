@@ -250,6 +250,46 @@ public final class JCStringHelper
   }
 
   /**
+   * Just calls <code>replaceAll</code> as long as there are still replacements
+   * found
+   *
+   * @param sInputString
+   *        The input string where the text should be replace. If this parameter
+   *        is <code>null</code> or empty, no replacement is done.
+   * @param sSearchText
+   *        The string to be replaced. May neither be <code>null</code> nor
+   *        empty.
+   * @param sReplacementText
+   *        The string with the replacement. May not be <code>null</code> but
+   *        may be empty.
+   * @return The input string as is, if the input string is empty or if the
+   *         string to be replaced is not contained.
+   */
+  @Nullable
+  public static String replaceAllRepeatedly (@Nullable final String sInputString,
+                                             @Nonnull final String sSearchText,
+                                             @Nonnull final String sReplacementText)
+  {
+    JCValueEnforcer.notEmpty (sSearchText, "SearchText");
+    JCValueEnforcer.notNull (sReplacementText, "ReplacementText");
+    JCValueEnforcer.isFalse (sReplacementText.contains (sSearchText),
+                             "Loop detection: replacementText must not contain searchText");
+
+    // Is input string empty?
+    if (hasNoText (sInputString))
+      return sInputString;
+
+    String sRet = sInputString;
+    String sLastLiteral;
+    do
+    {
+      sLastLiteral = sRet;
+      sRet = sRet.replace (sSearchText, sReplacementText);
+    } while (!sLastLiteral.equals (sRet));
+    return sRet;
+  }
+
+  /**
    * Get the first character of the passed character sequence
    *
    * @param aCS

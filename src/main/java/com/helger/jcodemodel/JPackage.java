@@ -72,6 +72,7 @@ public class JPackage implements
                       IJAnnotatable,
                       IJDocCommentable
 {
+  public static final char SEPARATOR = '.';
   public static final Pattern VALID_PACKAGE_NAME_ANYCASE = Pattern.compile ("[A-Za-z_][A-Za-z0-9_]*");
   public static final Pattern VALID_PACKAGE_NAME_LOWERCASE = Pattern.compile ("[a-z_][a-z0-9_]*");
   private static final AtomicBoolean FORCE_PACKAGE_NAME_LOWERCASE = new AtomicBoolean (false);
@@ -188,7 +189,7 @@ public class JPackage implements
     // An empty package name is okay
     if (sName.length () > 0)
     {
-      final String [] aParts = JCStringHelper.getExplodedArray ('.', sName);
+      final String [] aParts = JCStringHelper.getExplodedArray (SEPARATOR, sName);
       for (final String sPart : aParts)
         if (isForbiddenPackageNamePart (sPart))
           throw new IllegalArgumentException ("Part '" + sPart + "' of the package name '" + sName + "' is invalid");
@@ -218,7 +219,7 @@ public class JPackage implements
     if (isUnnamed ())
       return null;
 
-    final int idx = m_sName.lastIndexOf ('.');
+    final int idx = m_sName.lastIndexOf (SEPARATOR);
     if (idx < 0)
       return m_aOwner.rootPackage ();
     return m_aOwner._package (m_sName.substring (0, idx));
@@ -261,13 +262,13 @@ public class JPackage implements
 
     // Okay, the class name is unique inside this package
     // Check if a resource with the same name already exists
-    JResourceDir aRD = m_aOwner.resourceDir (m_sName.replace ('.', '/'));
+    JResourceDir aRD = m_aOwner.resourceDir (m_sName.replace (SEPARATOR, JResourceDir.SEPARATOR));
     if (aRD.hasResourceFile (sClassName + ".java"))
       throw new JResourceAlreadyExistsException (aRD.fullChildName (sClassName + ".java"));
 
     if (m_aUpperCaseClassMap != null)
     {
-      aRD = m_aOwner.resourceDir (m_sName.toUpperCase (Locale.ROOT).replace ('.', '/'));
+      aRD = m_aOwner.resourceDir (m_sName.toUpperCase (Locale.ROOT).replace (SEPARATOR, JResourceDir.SEPARATOR));
       if (aRD.hasResourceFile (sUpperClassName + ".java"))
         throw new JResourceAlreadyExistsException (aRD.fullChildName (sUpperClassName + ".java"));
     }
@@ -427,13 +428,14 @@ public class JPackage implements
   @Nonnull
   public AbstractJClass ref (@Nonnull final String sClassLocalName) throws ClassNotFoundException
   {
-    JCValueEnforcer.isTrue (sClassLocalName.indexOf ('.') < 0, () -> "JClass name contains '.': " + sClassLocalName);
+    JCValueEnforcer.isTrue (sClassLocalName.indexOf (SEPARATOR) < 0,
+                            () -> "JClass name contains '.': " + sClassLocalName);
 
     String sFQCN;
     if (isUnnamed ())
       sFQCN = "";
     else
-      sFQCN = m_sName + '.';
+      sFQCN = m_sName + SEPARATOR;
     sFQCN += sClassLocalName;
 
     return m_aOwner.ref (Class.forName (sFQCN));
@@ -451,7 +453,7 @@ public class JPackage implements
   {
     if (isUnnamed ())
       return owner ()._package (sSubPackageName);
-    return owner ()._package (m_sName + '.' + sSubPackageName);
+    return owner ()._package (m_sName + SEPARATOR + sSubPackageName);
   }
 
   /**
@@ -545,7 +547,7 @@ public class JPackage implements
   {
     if (isUnnamed ())
       return aDir;
-    return new File (aDir, m_sName.replace ('.', File.separatorChar));
+    return new File (aDir, m_sName.replace (SEPARATOR, File.separatorChar));
   }
 
   public void declare (@Nonnull final IJFormatter f)

@@ -65,6 +65,8 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
 public class JResourceDir implements IJOwned
 {
   public static final char SEPARATOR = JCFilenameHelper.UNIX_SEPARATOR;
+  public static final String SEPARATOR_STR = Character.toString (SEPARATOR);
+  private static final String SEPARATOR_TWICE = SEPARATOR_STR + SEPARATOR_STR;
 
   /**
    * Check if the resource directory name part is valid or not.
@@ -128,10 +130,12 @@ public class JResourceDir implements IJOwned
     {
       // Convert "\" to "/"
       String sCleanPath = JCFilenameHelper.getPathUsingUnixSeparator (sName);
+      // Replace all double separators with a single one
+      sCleanPath = JCStringHelper.replaceAllRepeatedly (sCleanPath, SEPARATOR_TWICE, SEPARATOR_STR);
       // Ensure last part is not a "/"
       sCleanPath = JCFilenameHelper.ensurePathEndingWithoutSeparator (sCleanPath);
 
-      if (sCleanPath.startsWith ("/"))
+      if (sCleanPath.startsWith (SEPARATOR_STR))
         throw new IllegalArgumentException ("A resource directory may not be an absolute path: '" + sName + "'");
 
       final String [] aParts = JCStringHelper.getExplodedArray (SEPARATOR, sCleanPath);
@@ -186,7 +190,7 @@ public class JResourceDir implements IJOwned
     if (isUnnamed ())
       return null;
 
-    final int idx = m_sName.lastIndexOf ('/');
+    final int idx = m_sName.lastIndexOf (SEPARATOR);
     if (idx < 0)
       return m_aOwner.rootResourceDir ();
     return m_aOwner.resourceDir (m_sName.substring (0, idx));
@@ -229,7 +233,8 @@ public class JResourceDir implements IJOwned
       bIsPotentiallyJavaSrcFile = sName.endsWith (".java");
     if (bIsPotentiallyJavaSrcFile)
     {
-      final JPackage aPackage = owner ()._package (m_sName.replace ('/', '.'));
+      final JPackage aPackage = owner ()._package (m_sName.replace (SEPARATOR, JPackage.SEPARATOR));
+      // Cut trailing ".java"
       final JDefinedClass aDC = aPackage.getClassResource (sName.substring (0, sName.length () - 5));
       if (aDC != null)
         throw new JClassAlreadyExistsException (aDC);
@@ -289,7 +294,7 @@ public class JResourceDir implements IJOwned
   {
     if (isUnnamed ())
       return owner ().resourceDir (sSubDirName);
-    return owner ().resourceDir (m_sName + '/' + sSubDirName);
+    return owner ().resourceDir (m_sName + SEPARATOR + sSubDirName);
   }
 
   /**
@@ -322,6 +327,6 @@ public class JResourceDir implements IJOwned
   @Nonnull
   String fullChildName (@Nonnull final String sChildName)
   {
-    return isUnnamed () ? sChildName : m_sName + '/' + sChildName;
+    return isUnnamed () ? sChildName : m_sName + SEPARATOR + sChildName;
   }
 }
