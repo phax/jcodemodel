@@ -117,7 +117,7 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 
     // No package present - use name based analysis
     final String sFullName = fullName ();
-    final int i = sFullName.lastIndexOf ('.');
+    final int i = sFullName.lastIndexOf (JPackage.SEPARATOR);
     if (i >= 0)
       return owner ()._package (sFullName.substring (0, i));
     return owner ().rootPackage ();

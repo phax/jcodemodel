@@ -79,7 +79,7 @@ public final class JNullType extends AbstractJClass
   @Nonnull
   public JPackage _package ()
   {
-    return owner ()._package ("");
+    return owner ().rootPackage ();
   }
 
   @Override

@@ -259,7 +259,7 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
     if (aExpected == aActual || aExpected.isAssignableFrom (aActual))
       return; // no problem
 
-    if (aExpected == JCodeModel.boxToPrimitive.get (aActual))
+    if (aExpected == JCodeModel.s_aBoxToPrimitive.get (aActual))
       return; // no problem
 
     throw new IllegalArgumentException ("Expected " + aExpected + " but found " + aActual);

@@ -125,12 +125,13 @@ public class JCodeModel implements Serializable
    * to its boxed type (such as <tt>Integer.class</tt>). It's an unmodifiable
    * map.
    */
-  public static final Map <Class <?>, Class <?>> primitiveToBox;
+  static final Map <Class <?>, Class <?>> s_aPrimitiveToBox;
 
   /**
-   * The reverse look up for {@link #primitiveToBox}. It's an unmodifiable map.
+   * The reverse look up for {@link #s_aPrimitiveToBox}. It's an unmodifiable
+   * map.
    */
-  public static final Map <Class <?>, Class <?>> boxToPrimitive;
+  static final Map <Class <?>, Class <?>> s_aBoxToPrimitive;
 
   static
   {
@@ -151,8 +152,8 @@ public class JCodeModel implements Serializable
     for (final Map.Entry <Class <?>, Class <?>> e : m1.entrySet ())
       m2.put (e.getValue (), e.getKey ());
 
-    boxToPrimitive = Collections.unmodifiableMap (m1);
-    primitiveToBox = Collections.unmodifiableMap (m2);
+    s_aBoxToPrimitive = Collections.unmodifiableMap (m1);
+    s_aPrimitiveToBox = Collections.unmodifiableMap (m2);
   }
 
   /** The packages that this JCodeWriter contains. */
@@ -305,7 +306,7 @@ public class JCodeModel implements Serializable
                                @Nonnull final String sFullyQualifiedClassName,
                                @Nonnull final EClassType eClassType) throws JCodeModelException
   {
-    final int nIdx = sFullyQualifiedClassName.lastIndexOf ('.');
+    final int nIdx = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIdx < 0)
       return rootPackage ()._class (nMods, sFullyQualifiedClassName, eClassType);
     return _package (sFullyQualifiedClassName.substring (0, nIdx))._class (nMods,
@@ -497,7 +498,7 @@ public class JCodeModel implements Serializable
   @Nullable
   public JDefinedClass _getClass (@Nonnull final String sFullyQualifiedClassName)
   {
-    final int nIndex = sFullyQualifiedClassName.lastIndexOf ('.');
+    final int nIndex = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIndex < 0)
       return rootPackage ()._getClass (sFullyQualifiedClassName);
     return _package (sFullyQualifiedClassName.substring (0,

@@ -112,12 +112,12 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
 
     // this type is array
     if (name.indexOf ('[') != -1)
-      return owner ()._package ("");
+      return owner ().rootPackage ();
 
     // other normal case
-    final int idx = name.lastIndexOf ('.');
+    final int idx = name.lastIndexOf (JPackage.SEPARATOR);
     if (idx < 0)
-      return owner ()._package ("");
+      return owner ().rootPackage ();
     return owner ()._package (name.substring (0, idx));
   }
 
@@ -179,7 +179,7 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
     // Resolve only once
     if (!m_bResolvedPrimitive)
     {
-      final Class <?> v = JCodeModel.boxToPrimitive.get (m_aClass);
+      final Class <?> v = JCodeModel.s_aBoxToPrimitive.get (m_aClass);
       if (v != null)
         m_aPrimitiveType = AbstractJType.parse (owner (), v.getName ());
       else
