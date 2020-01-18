@@ -60,8 +60,10 @@ public final class JCNameUtilities
     JCValueEnforcer.notNull (aClass, "Class");
 
     final StringBuilder name = new StringBuilder ();
+
     // Package name
-    name.append (aClass.getPackage ().getName ()).append ('.');
+    if (aClass.getPackage () != null)
+      name.append (aClass.getPackage ().getName ()).append ('.');
 
     // Get all enclosing classes
     Class <?> klaus = aClass;
