@@ -62,7 +62,9 @@ public final class JCNameUtilities
     final StringBuilder name = new StringBuilder ();
 
     // Package name
-    if (aClass.getPackage () != null)
+    // null on Java 8
+    // Empty name on Java 11
+    if (aClass.getPackage () != null && aClass.getPackage ().getName ().length () > 0)
       name.append (aClass.getPackage ().getName ()).append ('.');
 
     // Get all enclosing classes
