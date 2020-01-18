@@ -224,9 +224,9 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
                                  @Nonnull final String sName,
                                  @Nonnull final EClassType eClassType) throws JCodeModelException
   {
-    String sRealName;
+    final String sRealName;
     if (JCodeModel.isFileSystemCaseSensitive ())
-      sRealName = sName.toUpperCase (Locale.US);
+      sRealName = sName.toUpperCase (Locale.ROOT);
     else
       sRealName = sName;
 
