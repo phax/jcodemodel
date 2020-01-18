@@ -51,12 +51,16 @@ public final class JResourceDirTest
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("File1", StandardCharsets.UTF_8, "bla"));
   }
 
-  public void testResNameCollisionCaseInSensitive () throws JCodeModelException
+  public void testResNameCollisionCaseInsensitive () throws JCodeModelException
   {
+    final JCodeModel cm = new JCodeModel ();
+    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("myFile", StandardCharsets.UTF_8, "bla"));
     if (JCodeModel.isFileSystemCaseSensitive ())
     {
-      final JCodeModel cm = new JCodeModel ();
-      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("myFile", StandardCharsets.UTF_8, "bla"));
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("MYFILE", StandardCharsets.UTF_8, "bla"));
+    }
+    else
+    {
       try
       {
         // Same upper case name in same folder - error
@@ -77,6 +81,29 @@ public final class JResourceDirTest
     cm._package ("my")._class (JMod.PUBLIC, "Name");
     // this should fail
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("Name.java", StandardCharsets.UTF_8, "bla"));
+  }
+
+  public void testClassNameCollisionCaseInsensitive () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    cm._package ("my")._class (JMod.PUBLIC, "Name");
+    if (JCodeModel.isFileSystemCaseSensitive ())
+    {
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("NAme.jaVA", StandardCharsets.UTF_8, "bla"));
+    }
+    else
+    {
+      try
+      {
+        // this should fail
+        cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("NAme.jaVA", StandardCharsets.UTF_8, "bla"));
+        fail ();
+      }
+      catch (final JResourceAlreadyExistsException ex)
+      {
+        // expected
+      }
+    }
   }
 
   @Test (expected = JResourceAlreadyExistsException.class)
