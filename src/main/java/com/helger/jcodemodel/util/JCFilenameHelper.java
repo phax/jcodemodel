@@ -146,6 +146,29 @@ public final class JCFilenameHelper
   private JCFilenameHelper ()
   {}
 
+  public static boolean isFileSystemCaseSensitive ()
+  {
+    try
+    {
+      // let the system property override, in case the user really
+      // wants to override.
+      if (System.getProperty ("com.sun.codemodel.FileSystemCaseSensitive") != null)
+        return true;
+
+      // Add special override to differentiate if Sun implementation is also in
+      // scope
+      if (System.getProperty ("com.helger.jcodemodel.FileSystemCaseSensitive") != null)
+        return true;
+    }
+    catch (final Exception e)
+    {
+      // Fall through
+    }
+
+    // on Unix, it's case sensitive.
+    return File.separatorChar == '/';
+  }
+
   /**
    * Returns the index of the last extension separator character, which is a
    * dot.

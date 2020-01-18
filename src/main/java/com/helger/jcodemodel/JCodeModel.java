@@ -64,6 +64,7 @@ import javax.lang.model.util.Elements;
 import com.helger.jcodemodel.meta.CodeModelBuildingException;
 import com.helger.jcodemodel.meta.ErrorTypeFound;
 import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
+import com.helger.jcodemodel.util.JCFilenameHelper;
 import com.helger.jcodemodel.util.JCSecureLoader;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
@@ -103,34 +104,11 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  */
 public class JCodeModel implements Serializable
 {
-  protected static boolean checkIfFileSystemIsCaseSensitive ()
-  {
-    try
-    {
-      // let the system property override, in case the user really
-      // wants to override.
-      if (System.getProperty ("com.sun.codemodel.FileSystemCaseSensitive") != null)
-        return true;
-
-      // Add special override to differentiate if Sun implementation is also in
-      // scope
-      if (System.getProperty ("com.helger.jcodemodel.FileSystemCaseSensitive") != null)
-        return true;
-    }
-    catch (final Exception e)
-    {
-      // Fall through
-    }
-
-    // on Unix, it's case sensitive.
-    return File.separatorChar == '/';
-  }
-
   /**
    * If the flag is true, we will consider two classes "Foo" and "foo" as a
    * collision.
    */
-  private static final boolean s_bIsCaseSensitiveFileSystem = checkIfFileSystemIsCaseSensitive ();
+  private static final boolean s_bIsCaseSensitiveFileSystem = JCFilenameHelper.isFileSystemCaseSensitive ();
 
   /**
    * @return <code>true</code> if the file system is case sensitive (*x) or
