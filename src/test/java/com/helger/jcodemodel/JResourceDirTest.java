@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
@@ -429,5 +430,19 @@ public final class JResourceDirTest
     {
       // expected
     }
+  }
+
+  @Test
+  public void testNoCollisionDotInDir () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.LINUX);
+    final JResourceDir rd = cm.resourceDir ("my").subDir ("dir.has.Dots.java");
+    assertNotNull (rd);
+    assertEquals ("my/dir.has.Dots.java", rd.name ());
+
+    // A dot can never be part of the package name
+    final JDefinedClass dc = cm._package ("my.dir.has")._class ("Dots");
+    assertNotNull (dc);
+    assertEquals ("my.dir.has.Dots", dc.fullName ());
   }
 }

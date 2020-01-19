@@ -88,12 +88,15 @@ public class JResourceDir implements IJOwned
    * Constructor
    *
    * @param aOwner
-   *        The code writer being used to create this package
+   *        The code writer being used to create this package. May not be
+   *        <code>null</code>.
    * @param aParentDir
    *        The parent directory. May only be <code>null</code> for the target
    *        root resource directory. In that case the name must be "".
    * @param sName
-   *        Name of directory. May not be <code>null</code> but empty.
+   *        Name of directory. May not be <code>null</code> but empty. No
+   *        absolute paths are allowed and only Linux forward slashes may be
+   *        used as path separators.
    * @throws IllegalArgumentException
    *         If each part of the package name is not a valid filename part.
    */
