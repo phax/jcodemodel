@@ -41,7 +41,6 @@
 package com.helger.jcodemodel.meta;
 
 import java.lang.reflect.Field;
-import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -173,8 +172,7 @@ class Annotator
                               {
                                 Logger.getLogger (Annotator.class.getName ())
                                       .log (Level.WARNING,
-                                            "Not processing annotation argument: {0}: {1}",
-                                            new Object [] { name, value });
+                                            "Not processing annotation argument: " + name + ": " + value);
                               }
                             }
                             else
@@ -348,8 +346,10 @@ class Annotator
                                                             {
                                                               Logger.getLogger (Annotator.class.getName ())
                                                                     .log (Level.WARNING,
-                                                                          "Not processing annotation argument: {0}: {1}",
-                                                                          new Object [] { name, list });
+                                                                          "Not processing annotation argument: " +
+                                                                                         name +
+                                                                                         ": " +
+                                                                                         list);
                                                             }
                                                           }
                                                           else
@@ -368,25 +368,31 @@ class Annotator
                                                             }
                                                             else
                                                             {
-                                                              throw new IllegalStateException (MessageFormat.format ("Unknown annotation array argument: {0}: {1} ({2})",
-                                                                                                                     name,
-                                                                                                                     element,
-                                                                                                                     element.getClass ()));
+                                                              throw new IllegalStateException ("Unknown annotation array argument: " +
+                                                                                               name +
+                                                                                               ": " +
+                                                                                               element +
+                                                                                               " (" +
+                                                                                               element.getClass () +
+                                                                                               ")");
                                                             }
                                   }
                                 }
                                 else
-                                  throw new IllegalStateException (MessageFormat.format ("Unknown annotation argument: {0}: {1} ({2})",
-                                                                                         name,
-                                                                                         value,
-                                                                                         value.getClass ()));
+                                  throw new IllegalStateException ("Unknown annotation argument: " +
+                                                                   name +
+                                                                   ": " +
+                                                                   value +
+                                                                   " (" +
+                                                                   value.getClass () +
+                                                                   ")");
     }
 
     private Enum <?> _actualEnumConstantValue (final VariableElement variableElement) throws ClassNotFoundException
     {
       final TypeElement enumClassElement = (TypeElement) variableElement.getEnclosingElement ();
       final Class <?> enumClass = Class.forName (enumClassElement.getQualifiedName ().toString ());
-      Field enumConstantField;
+      final Field enumConstantField;
       try
       {
         enumConstantField = enumClass.getField (variableElement.getSimpleName ().toString ());
@@ -403,15 +409,15 @@ class Annotator
       {
         throw new IllegalStateException ("Unable to load enum constant: " +
                                          enumClassElement.getQualifiedName ().toString () +
-                                         "" +
                                          "." +
                                          variableElement.getSimpleName ().toString (),
                                          ex);
       }
-      Enum <?> enumValue;
+
       try
       {
-        enumValue = (Enum <?>) enumConstantField.get (null);
+        final Enum <?> enumValue = (Enum <?>) enumConstantField.get (null);
+        return enumValue;
       }
       catch (final IllegalArgumentException ex)
       {
@@ -429,7 +435,6 @@ class Annotator
                                          variableElement.getSimpleName ().toString (),
                                          ex);
       }
-      return enumValue;
     }
 
   }

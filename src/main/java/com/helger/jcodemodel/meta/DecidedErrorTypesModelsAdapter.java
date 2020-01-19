@@ -120,7 +120,7 @@ class DecidedErrorTypesModelsAdapter
           modifiers |= JMod.STRICTFP;
           break;
         default:
-          LOGGER.log (Level.WARNING, "Skpping unsupported modifier: {0}", eModifier);
+          LOGGER.log (Level.WARNING, "Skpping unsupported modifier: " + eModifier);
       }
     }
     return modifiers;
