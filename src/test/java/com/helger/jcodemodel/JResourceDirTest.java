@@ -1,5 +1,6 @@
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
 import java.nio.charset.StandardCharsets;
@@ -7,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 
 import com.helger.jcodemodel.fmt.JTextFile;
+import com.helger.jcodemodel.util.EFileSystemConvention;
 
 /**
  * Test class for class {@link JResourceDir}.
@@ -16,102 +18,227 @@ import com.helger.jcodemodel.fmt.JTextFile;
  */
 public final class JResourceDirTest
 {
-  @Test (expected = IllegalArgumentException.class)
-  public void testAbsolutePath ()
+  public void testAbsolutePath () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
-    // this should fail
-    cm.resourceDir ("/usr");
+    try
+    {
+      // this should fail
+      cm.resourceDir ("/usr");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {
+      // expected
+    }
+
+    try
+    {
+      // this should fail
+      cm.resourceDir ("\\usr");
+      fail ();
+    }
+    catch (final IllegalArgumentException ex)
+    {
+      // expected
+    }
   }
 
-  @Test (expected = IllegalArgumentException.class)
-  public void testAbsolutePath2 ()
+  public void testMultipleSeparator () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
-    // this should fail
-    cm.resourceDir ("\\usr");
-  }
-
-  public void testMultiSeparator ()
-  {
-    final JCodeModel cm = new JCodeModel ();
-    // works because of internal unification
+    // works because of internal unifications
     cm.resourceDir ("usr//bla");
     cm.resourceDir ("usr////////////////////////////////////////////////////bla");
     cm.resourceDir ("usr//bla///////////////////////////////////////");
     cm.resourceDir ("usr//\\\\\\\\\\\\\\\\\\\\\\///\\\\\\\\bla\\\\\\\\\\\\/////");
   }
 
-  @Test (expected = JResourceAlreadyExistsException.class)
-  public void testResNameCollision () throws JCodeModelException
+  public void testDirectVsSubDir () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
+    final JResourceDir rd = cm.resourceDir ("a/b");
+    final JResourceDir rd2 = cm.resourceDir ("a").subDir ("b");
+    assertSame (rd, rd2);
+    final JResourceDir rd3 = cm.resourceDir ("a").subDir ("b/c");
+    assertSame (rd2, rd3.parent ());
+  }
+
+  public void testFilenameFilenameCollisionLinux () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.LINUX);
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("File1", StandardCharsets.UTF_8, "bla"));
-    // Same name in same folder - error
+    try
+    {
+      // Same name in same folder - error
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("File1", StandardCharsets.UTF_8, "bla"));
+      fail ();
+    }
+    catch (final JResourceAlreadyExistsException ex)
+    {
+      // expected
+    }
+    // Different casing is okay
+    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("file1", StandardCharsets.UTF_8, "bla"));
+  }
+
+  public void testFilenameFilenameCollisionWindows () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("File1", StandardCharsets.UTF_8, "bla"));
-  }
-
-  public void testResNameCollisionCaseInsensitive () throws JCodeModelException
-  {
-    final JCodeModel cm = new JCodeModel ();
-    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("myFile", StandardCharsets.UTF_8, "bla"));
-    if (JCodeModel.isFileSystemCaseSensitive ())
+    try
     {
-      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("MYFILE", StandardCharsets.UTF_8, "bla"));
+      // Same name in same folder - error
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("File1", StandardCharsets.UTF_8, "bla"));
+      fail ();
     }
-    else
+    catch (final JResourceAlreadyExistsException ex)
     {
-      try
-      {
-        // Same upper case name in same folder - error
-        cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("MYFILE", StandardCharsets.UTF_8, "bla"));
-        fail ();
-      }
-      catch (final JResourceAlreadyExistsException ex)
-      {
-        // expected
-      }
+      // expected
+    }
+    try
+    {
+      // Different casing is still an error
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("file1", StandardCharsets.UTF_8, "bla"));
+      fail ();
+    }
+    catch (final JResourceAlreadyExistsException ex)
+    {
+      // expected
     }
   }
 
-  @Test (expected = JClassAlreadyExistsException.class)
-  public void testClassNameCollision1 () throws JCodeModelException
+  @Test
+  public void testFilenameDirNameCollisionLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
-    cm._package ("my")._class (JMod.PUBLIC, "Name");
-    // this should fail
-    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("Name.java", StandardCharsets.UTF_8, "bla"));
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.LINUX);
+    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("name", StandardCharsets.UTF_8, "bla"));
+    try
+    {
+      // should fail
+      cm.resourceDir ("my").subDir ("name");
+      fail ();
+    }
+    catch (final JResourceAlreadyExistsException ex)
+    {
+      // expected
+    }
+    // Different case should work
+    cm.resourceDir ("my").subDir ("Name");
   }
 
-  public void testClassNameCollisionCaseInsensitive () throws JCodeModelException
+  @Test
+  public void testFilenameDirNameCollisionWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
-    cm._package ("my")._class (JMod.PUBLIC, "Name");
-    if (JCodeModel.isFileSystemCaseSensitive ())
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.WINDOWS);
+    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("name", StandardCharsets.UTF_8, "bla"));
+    try
     {
+      // should fail
+      cm.resourceDir ("my").subDir ("name");
+      fail ();
+    }
+    catch (final JResourceAlreadyExistsException ex)
+    {
+      // expected
+    }
+    try
+    {
+      // Different case does not help
+      cm.resourceDir ("my").subDir ("Name");
+      fail ();
+    }
+    catch (final JResourceAlreadyExistsException ex)
+    {
+      // expected
+    }
+  }
+
+  public void testClassNameFilenameCollisionLinux () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.LINUX);
+    cm._package ("my")._class (JMod.PUBLIC, "Name");
+    try
+    {
+      // this should fail
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("Name.java", StandardCharsets.UTF_8, "bla"));
+      fail ();
+    }
+    catch (final JClassAlreadyExistsException ex)
+    {
+      // expected
+    }
+    // Adding a different case is totally fine
+    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("NAme.jaVA", StandardCharsets.UTF_8, "bla"));
+  }
+
+  public void testClassNameFileameCollisionWindows () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.WINDOWS);
+    cm._package ("my")._class (JMod.PUBLIC, "Name");
+    try
+    {
+      // this should fail
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("Name.java", StandardCharsets.UTF_8, "bla"));
+      fail ();
+    }
+    catch (final JClassAlreadyExistsException ex)
+    {
+      // expected
+    }
+    try
+    {
+      // Adding a different case doesn't help either
       cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("NAme.jaVA", StandardCharsets.UTF_8, "bla"));
+      fail ();
     }
-    else
+    catch (final JClassAlreadyExistsException ex)
     {
-      try
-      {
-        // this should fail
-        cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("NAme.jaVA", StandardCharsets.UTF_8, "bla"));
-        fail ();
-      }
-      catch (final JResourceAlreadyExistsException ex)
-      {
-        // expected
-      }
+      // expected
     }
   }
 
-  @Test (expected = JResourceAlreadyExistsException.class)
-  public void testClassNameCollision2 () throws JCodeModelException
+  public void testDirNameFilenameCollisionLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
-    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("Name.java", StandardCharsets.UTF_8, "bla"));
-    // should fail
-    cm._package ("my")._class (JMod.PUBLIC, "Name");
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.LINUX);
+    cm.resourceDir ("my").subDir ("name");
+    try
+    {
+      // should fail
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("name", StandardCharsets.UTF_8, "bla"));
+      fail ();
+    }
+    catch (final JResourceAlreadyExistsException ex)
+    {
+      // expected
+    }
+    // Different case should work
+    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("Name", StandardCharsets.UTF_8, "bla"));
+  }
+
+  public void testDirNameFilenameCollisionWindows () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.WINDOWS);
+    cm.resourceDir ("my").subDir ("name");
+    try
+    {
+      // should fail
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("name", StandardCharsets.UTF_8, "bla"));
+      fail ();
+    }
+    catch (final JResourceAlreadyExistsException ex)
+    {
+      // expected
+    }
+    try
+    {
+      // Different case doesn't help
+      cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("Name", StandardCharsets.UTF_8, "bla"));
+      fail ();
+    }
+    catch (final JResourceAlreadyExistsException ex)
+    {
+      // expected
+    }
   }
 }

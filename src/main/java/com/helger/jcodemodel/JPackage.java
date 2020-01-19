@@ -197,7 +197,7 @@ public class JPackage implements
 
     m_aOwner = aOwner;
     m_sName = sName;
-    if (JCodeModel.isFileSystemCaseSensitive ())
+    if (aOwner.getFileSystemConvention ().isCaseSensistive ())
       m_aUpperCaseClassMap = null;
     else
       m_aUpperCaseClassMap = new TreeMap <> ();
@@ -311,7 +311,7 @@ public class JPackage implements
    *        Resource file to add
    * @return Parameter resource file
    * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
-   *             v3.3.1
+   *             v3.4.0
    */
   @Nonnull
   @Deprecated
@@ -329,7 +329,7 @@ public class JPackage implements
    *        Filename to check
    * @return <code>true</code> if contained
    * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
-   *             v3.3.1
+   *             v3.4.0
    */
   @Deprecated
   public boolean hasResourceFile (@Nullable final String sName)
@@ -344,7 +344,7 @@ public class JPackage implements
    * Iterates all resource files in this package.
    *
    * @return Iterator
-   * @deprecated Use {@link #resourceFiles()} instead. Deprecated since v3.3.1
+   * @deprecated Use {@link #resourceFiles()} instead. Deprecated since v3.4.0
    */
   @Deprecated
   @Nonnull
@@ -359,7 +359,7 @@ public class JPackage implements
    * @return Iterator
    * @since 3.2.0
    * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
-   *             v3.3.1
+   *             v3.4.0
    */
   @Deprecated
   @Nonnull
@@ -371,7 +371,7 @@ public class JPackage implements
   /**
    * @return A copy of all contained resource files. Never <code>null</code>.
    * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
-   *             v3.3.1
+   *             v3.4.0
    */
   @Deprecated
   @Nonnull

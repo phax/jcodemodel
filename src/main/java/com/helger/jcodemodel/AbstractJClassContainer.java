@@ -80,9 +80,8 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   private final String m_sName;
 
   /**
-   * Nested classes as a map from name to JDefinedClass. The name is all
-   * capitalized in a case sensitive file system (
-   * {@link JCodeModel#isFileSystemCaseSensitive()}) to avoid conflicts. Lazily
+   * Nested classes as a map from name to a defined class. The name is all
+   * capitalized in a case sensitive file system to avoid conflicts. Lazily
    * created to save footprint.
    */
   protected Map <String, CLASSTYPE> m_aClasses;
@@ -225,10 +224,10 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
                                  @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     final String sRealName;
-    if (JCodeModel.isFileSystemCaseSensitive ())
-      sRealName = sName.toUpperCase (Locale.ROOT);
-    else
+    if (owner ().getFileSystemConvention ().isCaseSensistive ())
       sRealName = sName;
+    else
+      sRealName = sName.toUpperCase (Locale.ROOT);
 
     // Existing class?
     if (m_aClasses != null)

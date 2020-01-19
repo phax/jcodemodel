@@ -64,8 +64,11 @@ import javax.lang.model.util.Elements;
 import com.helger.jcodemodel.meta.CodeModelBuildingException;
 import com.helger.jcodemodel.meta.ErrorTypeFound;
 import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
+import com.helger.jcodemodel.util.EFileSystemConvention;
+import com.helger.jcodemodel.util.IFileSystemConvention;
 import com.helger.jcodemodel.util.JCFilenameHelper;
 import com.helger.jcodemodel.util.JCSecureLoader;
+import com.helger.jcodemodel.util.JCStringHelper;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.FileCodeWriter;
@@ -104,20 +107,20 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
  */
 public class JCodeModel implements Serializable
 {
-  /**
-   * If the flag is true, we will consider two classes "Foo" and "foo" as a
-   * collision.
-   */
-  private static final boolean s_bIsCaseSensitiveFileSystem = JCFilenameHelper.isFileSystemCaseSensitive ();
+  private static final String SEPARATOR_TWICE = JResourceDir.SEPARATOR_STR + JResourceDir.SEPARATOR_STR;
 
   /**
-   * @return <code>true</code> if the file system is case sensitive (*x) or
-   *         <code>false</code> if not (e.g. Windows).
+   * @return <code>true</code> if the default file system is case sensitive (*x)
+   *         or <code>false</code> if not (e.g. Windows).
    * @since 3.0.0
+   * @deprecated Use
+   *             <code>getFileSystemConvention().isFileSystemCaseSensitive()</code>
+   *             on a per-instance level instead
    */
+  @Deprecated
   public static boolean isFileSystemCaseSensitive ()
   {
-    return s_bIsCaseSensitiveFileSystem;
+    return EFileSystemConvention.DEFAULT.isCaseSensistive ();
   }
 
   /**
@@ -155,6 +158,8 @@ public class JCodeModel implements Serializable
     s_aBoxToPrimitive = Collections.unmodifiableMap (m1);
     s_aPrimitiveToBox = Collections.unmodifiableMap (m2);
   }
+
+  private IFileSystemConvention m_aFSConvention = EFileSystemConvention.DEFAULT;
 
   /** The packages that this JCodeWriter contains. */
   private final Map <String, JPackage> m_aPackages = new HashMap <> ();
@@ -195,6 +200,38 @@ public class JCodeModel implements Serializable
 
   public JCodeModel ()
   {}
+
+  /**
+   * @return The file system convention to be used. Never <code>null</code>.
+   * @since 3.4.0
+   */
+  @Nonnull
+  public final IFileSystemConvention getFileSystemConvention ()
+  {
+    return m_aFSConvention;
+  }
+
+  /**
+   * Set the target file system convention to be used. This method MUST be
+   * called BEFORE the first package or resource directory is created. Later
+   * calls result in an exception.
+   *
+   * @param aFSConvention
+   *        The file system convention to be used. May not be <code>null</code>.
+   * @return this for chaining
+   * @throws JCodeModelException
+   *         if a package or a resource directory is already present.
+   * @since 3.4.0
+   */
+  @Nonnull
+  public final JCodeModel setFileSystemConvention (@Nonnull final IFileSystemConvention aFSConvention) throws JCodeModelException
+  {
+    JCValueEnforcer.notNull (aFSConvention, "FSConvention");
+    if (!m_aPackages.isEmpty () || !m_aResourceDirs.isEmpty ())
+      throw new JCodeModelException ("The FileSystem convention cannot be changed if a package or a resource directory already exists.");
+    m_aFSConvention = aFSConvention;
+    return this;
+  }
 
   /**
    * Add a package to the list of packages to be generated
@@ -247,29 +284,77 @@ public class JCodeModel implements Serializable
    *        Name of the resource directory. Use "" to indicate the root
    *        directory.
    * @return Newly generated resource directory. Never <code>null</code>.
+   * @throws JCodeModelException
+   *         If the resource directory could not be created because another
    * @see #rootResourceDir()
-   * @since 3.3.1
+   * @since v3.4.0
    */
   @Nonnull
-  public JResourceDir resourceDir (@Nonnull final String sName)
+  public JResourceDir resourceDir (@Nonnull final String sName) throws JCodeModelException
   {
-    return m_aResourceDirs.computeIfAbsent (sName, k -> new JResourceDir (k, this));
+    JCValueEnforcer.notNull (sName, "Name");
+
+    // 1. unify name
+
+    // Convert "\" to "/"
+    String sCleanPath = JCFilenameHelper.getPathUsingUnixSeparator (sName);
+    // Replace all double separators with a single one
+    sCleanPath = JCStringHelper.replaceAllRepeatedly (sCleanPath, SEPARATOR_TWICE, JResourceDir.SEPARATOR_STR);
+    // Ensure last part is not a "/"
+    sCleanPath = JCFilenameHelper.ensurePathEndingWithoutSeparator (sCleanPath);
+
+    // 2. consistency checks
+
+    if (sCleanPath.startsWith (JResourceDir.SEPARATOR_STR))
+      throw new IllegalArgumentException ("A resource directory may not be an absolute path: '" + sName + "'");
+
+    // 3. ensure root is present
+    final JResourceDir aRootDir = m_aResourceDirs.computeIfAbsent ("", k -> JResourceDir.root (this));
+
+    // 4. traverse tree
+    JResourceDir aParentDir = aRootDir;
+    String sDirName = "";
+    JResourceDir aCur = aRootDir;
+    for (final String sPart : JCStringHelper.getExplodedArray (JResourceDir.SEPARATOR, sCleanPath))
+    {
+      if (sDirName.length () > 0)
+        sDirName += JResourceDir.SEPARATOR;
+      sDirName += sPart;
+
+      // Check if directory has a file with the name
+      if (aParentDir.hasResourceFileFS (sPart))
+        throw new JResourceAlreadyExistsException (aParentDir.fullChildName (sPart));
+
+      // Get main subdir
+      final JResourceDir aFinalParentDir = aParentDir;
+      aCur = m_aResourceDirs.computeIfAbsent (sDirName, k -> new JResourceDir (this, aFinalParentDir, k));
+      aParentDir = aCur;
+    }
+
+    return aCur;
   }
 
   /**
    * @return The root resource directory. Never <code>null</code>. This is a
    *         shortcut for <code>resourceDir ("")</code>.
-   * @since 3.3.1
+   * @since v3.4.0
    */
   @Nonnull
   public JResourceDir rootResourceDir ()
   {
-    return resourceDir ("");
+    try
+    {
+      return resourceDir ("");
+    }
+    catch (final JCodeModelException ex)
+    {
+      throw new IllegalStateException ("This is indeed unexpected", ex);
+    }
   }
 
   /**
    * @return an iterator that walks the packages defined using this code writer.
-   * @since 3.3.1
+   * @since v3.4.0
    */
   @Nonnull
   public Iterator <JResourceDir> resourceDirs ()
@@ -280,7 +365,7 @@ public class JCodeModel implements Serializable
   /**
    * @return a list with all packages. The list is mutable. Never
    *         <code>null</code>.
-   * @since 3.3.1
+   * @since v3.4.0
    */
   @Nonnull
   public List <JResourceDir> getAllResourceDirs ()

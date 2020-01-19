@@ -66,36 +66,18 @@ public class JResourceDir implements IJOwned
 {
   public static final char SEPARATOR = JCFilenameHelper.UNIX_SEPARATOR;
   public static final String SEPARATOR_STR = Character.toString (SEPARATOR);
-  private static final String SEPARATOR_TWICE = SEPARATOR_STR + SEPARATOR_STR;
+
+  private final JCodeModel m_aOwner;
 
   /**
-   * Check if the resource directory name part is valid or not.
-   *
-   * @param sName
-   *        The name part to check
-   * @return <code>true</code> if it is invalid, <code>false</code> if it is
-   *         valid
+   * The optional parent directory.
    */
-  public static boolean isForbiddenDirectoryNamePart (@Nonnull final String sName)
-  {
-    // Empty is not allowed
-    if (sName == null || sName.length () == 0)
-      return true;
-
-    // Java keywords are now allowed
-    if (!JCFilenameHelper.isValidFilename (sName))
-      return true;
-
-    // not forbidden -> allowed
-    return false;
-  }
+  private final JResourceDir m_aParentDir;
 
   /**
    * Name of the package. May be the empty string for the root package.
    */
   private final String m_sName;
-
-  private final JCodeModel m_aOwner;
 
   /**
    * Map of resources files inside this package.
@@ -111,47 +93,42 @@ public class JResourceDir implements IJOwned
   /**
    * Constructor
    *
-   * @param sName
-   *        Name of directory. May not be <code>null</code> but empty.
    * @param aOwner
    *        The code writer being used to create this package
+   * @param aParentDir
+   *        The parent directory. May only be <code>null</code> for the target
+   *        root resource directory. In that case the name must be "".
+   * @param sName
+   *        Name of directory. May not be <code>null</code> but empty.
    * @throws IllegalArgumentException
    *         If each part of the package name is not a valid filename part.
    */
-  protected JResourceDir (@Nonnull final String sName, @Nonnull final JCodeModel aOwner)
+  protected JResourceDir (@Nonnull final JCodeModel aOwner,
+                          @Nullable final JResourceDir aParentDir,
+                          @Nonnull final String sName)
   {
     JCValueEnforcer.notNull (sName, "Name");
     JCValueEnforcer.notNull (aOwner, "CodeModel");
+    if (aParentDir == null)
+      JCValueEnforcer.isTrue (sName.length () == 0, "If no parent directory is provided, the name must be empty");
+    if (sName.length () == 0)
+      JCValueEnforcer.isNull (aParentDir, "If no name is provided, the parent directory must be null");
 
     m_aOwner = aOwner;
+    m_aParentDir = aParentDir;
+    m_sName = sName;
 
     // An empty directory name is okay
     if (sName.length () > 0)
-    {
-      // Convert "\" to "/"
-      String sCleanPath = JCFilenameHelper.getPathUsingUnixSeparator (sName);
-      // Replace all double separators with a single one
-      sCleanPath = JCStringHelper.replaceAllRepeatedly (sCleanPath, SEPARATOR_TWICE, SEPARATOR_STR);
-      // Ensure last part is not a "/"
-      sCleanPath = JCFilenameHelper.ensurePathEndingWithoutSeparator (sCleanPath);
-
-      if (sCleanPath.startsWith (SEPARATOR_STR))
-        throw new IllegalArgumentException ("A resource directory may not be an absolute path: '" + sName + "'");
-
-      final String [] aParts = JCStringHelper.getExplodedArray (SEPARATOR, sCleanPath);
-      for (final String sPart : aParts)
-        if (isForbiddenDirectoryNamePart (sPart))
-          throw new IllegalArgumentException ("Part '" +
-                                              sPart +
-                                              "' of the resource directory name '" +
+      for (final String sPart : JCStringHelper.getExplodedArray (JResourceDir.SEPARATOR, sName))
+        if (!aOwner.getFileSystemConvention ().isValidDirectoryName (sPart))
+          throw new IllegalArgumentException ("Resource directory name '" +
                                               sName +
-                                              "' is invalid");
-      m_sName = sCleanPath;
-    }
-    else
-      m_sName = "";
+                                              "' contains the the invalid part '" +
+                                              sPart +
+                                              "' according to the current file system conventions");
 
-    if (JCodeModel.isFileSystemCaseSensitive ())
+    if (m_aOwner.getFileSystemConvention ().isCaseSensistive ())
       m_aUpperCaseResources = null;
     else
       m_aUpperCaseResources = new TreeMap <> ();
@@ -187,13 +164,7 @@ public class JResourceDir implements IJOwned
   @Nullable
   public JResourceDir parent ()
   {
-    if (isUnnamed ())
-      return null;
-
-    final int idx = m_sName.lastIndexOf (SEPARATOR);
-    if (idx < 0)
-      return m_aOwner.rootResourceDir ();
-    return m_aOwner.resourceDir (m_sName.substring (0, idx));
+    return m_aParentDir;
   }
 
   /**
@@ -214,6 +185,12 @@ public class JResourceDir implements IJOwned
 
     // Check uniqueness (case sensitive)
     final String sName = aResFile.name ();
+
+    if (!m_aOwner.getFileSystemConvention ().isValidFilename (sName))
+      throw new IllegalArgumentException ("Resource filename '" +
+                                          sName +
+                                          "' is invalid according to the current file system conventions");
+
     if (m_aResources.containsKey (sName))
       throw new JResourceAlreadyExistsException (fullChildName (sName));
 
@@ -249,17 +226,34 @@ public class JResourceDir implements IJOwned
   }
 
   /**
-   * Checks if a resource of the given name exists.
+   * Checks if a resource of the given name exists. This method does not
+   * consider file system conventions.
    *
    * @param sName
-   *        Filename to check
+   *        Filename to check. May be <code>null</code>.
    * @return <code>true</code> if contained
    */
   public boolean hasResourceFile (@Nullable final String sName)
   {
-    if (m_aResources.containsKey (sName))
-      return true;
-    return false;
+    return m_aResources.containsKey (sName);
+  }
+
+  /**
+   * Checks if a resource of the given name exists. This method does consider
+   * file system conventions.
+   *
+   * @param sName
+   *        Filename to check. May be <code>null</code>.
+   * @return <code>true</code> if contained
+   */
+  public boolean hasResourceFileFS (@Nullable final String sName)
+  {
+    if (sName == null)
+      return false;
+
+    if (m_aUpperCaseResources != null)
+      return m_aUpperCaseResources.containsKey (sName.toUpperCase (Locale.ROOT));
+    return m_aResources.containsKey (sName);
   }
 
   /**
@@ -288,13 +282,16 @@ public class JResourceDir implements IJOwned
    * @param sSubDirName
    *        Name of the sub-directory
    * @return New sub-directory
+   * @throws JCodeModelException
+   *         In case a resource file with the specified name is already present
    */
   @Nonnull
-  public JResourceDir subDir (@Nonnull final String sSubDirName)
+  public JResourceDir subDir (@Nonnull final String sSubDirName) throws JCodeModelException
   {
-    if (isUnnamed ())
-      return owner ().resourceDir (sSubDirName);
-    return owner ().resourceDir (m_sName + SEPARATOR + sSubDirName);
+    if (hasResourceFileFS (sSubDirName))
+      throw new JResourceAlreadyExistsException (fullChildName (sSubDirName));
+
+    return owner ().resourceDir (isUnnamed () ? sSubDirName : m_sName + SEPARATOR + sSubDirName);
   }
 
   /**
@@ -313,9 +310,7 @@ public class JResourceDir implements IJOwned
   @Nonnull
   File toPath (@Nonnull final File aDir)
   {
-    if (isUnnamed ())
-      return aDir;
-    return new File (aDir, m_sName);
+    return isUnnamed () ? aDir : new File (aDir, m_sName);
   }
 
   @Nonnegative
@@ -328,5 +323,11 @@ public class JResourceDir implements IJOwned
   String fullChildName (@Nonnull final String sChildName)
   {
     return isUnnamed () ? sChildName : m_sName + SEPARATOR + sChildName;
+  }
+
+  @Nonnull
+  static JResourceDir root (@Nonnull final JCodeModel aOwner)
+  {
+    return new JResourceDir (aOwner, null, "");
   }
 }
