@@ -75,6 +75,10 @@ public class JPackage implements
   public static final char SEPARATOR = '.';
   public static final Pattern VALID_PACKAGE_NAME_ANYCASE = Pattern.compile ("[A-Za-z_][A-Za-z0-9_]*");
   public static final Pattern VALID_PACKAGE_NAME_LOWERCASE = Pattern.compile ("[a-z_][a-z0-9_]*");
+  /**
+   * By default package names are not forced to lowercase. <br>
+   * TODO v4: remove option and change to true
+   */
   private static final AtomicBoolean FORCE_PACKAGE_NAME_LOWERCASE = new AtomicBoolean (false);
 
   /**
@@ -152,6 +156,7 @@ public class JPackage implements
   /**
    * List of resources files inside this package.
    */
+  @ChangeInV4
   private final Set <AbstractJResourceFile> m_aResources = new HashSet <> ();
 
   /**
@@ -295,6 +300,7 @@ public class JPackage implements
    */
   @Nonnull
   @Deprecated
+  @ChangeInV4
   public AbstractJResourceFile addResourceFile (@Nonnull final AbstractJResourceFile rsrc)
   {
     JCValueEnforcer.notNull (rsrc, "ResourceFile");
@@ -312,6 +318,7 @@ public class JPackage implements
    *             v3.4.0
    */
   @Deprecated
+  @ChangeInV4
   public boolean hasResourceFile (@Nullable final String sName)
   {
     for (final AbstractJResourceFile r : m_aResources)
@@ -328,6 +335,7 @@ public class JPackage implements
    */
   @Deprecated
   @Nonnull
+  @ChangeInV4
   public Iterator <AbstractJResourceFile> propertyFiles ()
   {
     return resourceFiles ();
@@ -343,6 +351,7 @@ public class JPackage implements
    */
   @Deprecated
   @Nonnull
+  @ChangeInV4
   public Iterator <AbstractJResourceFile> resourceFiles ()
   {
     return m_aResources.iterator ();
@@ -355,6 +364,7 @@ public class JPackage implements
    */
   @Deprecated
   @Nonnull
+  @ChangeInV4
   public List <AbstractJResourceFile> getAllResourceFiles ()
   {
     return new ArrayList <> (m_aResources);

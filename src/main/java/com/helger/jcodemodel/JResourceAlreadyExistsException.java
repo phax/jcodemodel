@@ -50,6 +50,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  * @author Philip Helger
  * @since 3.4.0
  */
+@ChangeInV4 ("moved to exceptions package")
 public class JResourceAlreadyExistsException extends JCodeModelException
 {
   private final String m_sFilename;

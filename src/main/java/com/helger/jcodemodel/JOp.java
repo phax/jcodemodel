@@ -109,6 +109,7 @@ public final class JOp
    */
   @Deprecated
   @Nonnull
+  @ChangeInV4
   public static JOpUnaryTight incr (@Nonnull final IJExpression aExpr)
   {
     return postincr (aExpr);
@@ -150,6 +151,7 @@ public final class JOp
    */
   @Deprecated
   @Nonnull
+  @ChangeInV4
   public static JOpUnaryTight decr (@Nonnull final IJExpression aExpr)
   {
     return postdecr (aExpr);

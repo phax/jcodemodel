@@ -469,6 +469,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   @Nullable
   @Deprecated
+  @ChangeInV4
   public JVar listVarParam ()
   {
     return varParam ();

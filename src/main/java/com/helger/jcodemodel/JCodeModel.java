@@ -116,9 +116,10 @@ public class JCodeModel implements Serializable
    * @since 3.0.0
    * @deprecated Use
    *             <code>getFileSystemConvention().isFileSystemCaseSensitive()</code>
-   *             on a per-instance level instead
+   *             on a per-instance level instead. Will be removed in v4
    */
   @Deprecated
+  @ChangeInV4
   public static boolean isFileSystemCaseSensitive ()
   {
     return EFileSystemConvention.DEFAULT.isCaseSensistive ();
@@ -189,12 +190,17 @@ public class JCodeModel implements Serializable
    */
   private AbstractJClass m_aWildcard;
 
-  /** The charset used for building the output - null means system default */
+  /**
+   * The charset used for building the output - null means system default. TODO
+   * remove in v4
+   */
   @Deprecated
+  @ChangeInV4
   private Charset m_aBuildingCharset;
 
   /** The newline string to be used. Defaults to system default */
   @Deprecated
+  @ChangeInV4
   private String m_sBuildingNewLine = JCMWriter.getDefaultNewLine ();
 
   private final Set <AbstractJClass> m_aDontImportClasses = new HashSet <> ();
@@ -649,6 +655,7 @@ public class JCodeModel implements Serializable
    */
   @Nullable
   @Deprecated
+  @ChangeInV4
   public Charset getBuildingCharset ()
   {
     return m_aBuildingCharset;
@@ -666,6 +673,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   @Deprecated
+  @ChangeInV4
   public JCodeModel setBuildingCharset (@Nullable final Charset aCharset)
   {
     m_aBuildingCharset = aCharset;
@@ -678,6 +686,7 @@ public class JCodeModel implements Serializable
    *             configuration flexibility.
    */
   @Deprecated
+  @ChangeInV4
   public String getBuildingNewLine ()
   {
     return m_sBuildingNewLine;
@@ -695,6 +704,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   @Deprecated
+  @ChangeInV4
   public JCodeModel setBuildingNewLine (@Nonnull final String sNewLine)
   {
     JCValueEnforcer.notEmpty (sNewLine, "NewLine");
@@ -717,6 +727,7 @@ public class JCodeModel implements Serializable
    *             configuration flexibility.
    */
   @Deprecated
+  @ChangeInV4
   public void build (@Nonnull final File aDestDir, @Nullable final PrintStream aStatusPS) throws IOException
   {
     build (aDestDir, aDestDir, aStatusPS);
@@ -739,6 +750,7 @@ public class JCodeModel implements Serializable
    *             configuration flexibility.
    */
   @Deprecated
+  @ChangeInV4
   public void build (@Nonnull final File aSrcDir,
                      @Nonnull final File aResourceDir,
                      @Nullable final PrintStream aStatusPS) throws IOException
@@ -764,6 +776,7 @@ public class JCodeModel implements Serializable
    *             configuration flexibility.
    */
   @Deprecated
+  @ChangeInV4
   public void build (@Nonnull final File aDestDir) throws IOException
   {
     build (aDestDir, System.out);
@@ -782,6 +795,7 @@ public class JCodeModel implements Serializable
    *             configuration flexibility.
    */
   @Deprecated
+  @ChangeInV4
   public void build (@Nonnull final File aSrcDir, @Nonnull final File aResourceDir) throws IOException
   {
     build (aSrcDir, aResourceDir, System.out);
@@ -798,6 +812,7 @@ public class JCodeModel implements Serializable
    *             configuration flexibility.
    */
   @Deprecated
+  @ChangeInV4
   public void build (@Nonnull final AbstractCodeWriter aWriter) throws IOException
   {
     build (aWriter, aWriter);
@@ -816,6 +831,7 @@ public class JCodeModel implements Serializable
    *             configuration flexibility.
    */
   @Deprecated
+  @ChangeInV4
   public void build (@Nonnull final AbstractCodeWriter aSource,
                      @Nonnull final AbstractCodeWriter aResource) throws IOException
   {

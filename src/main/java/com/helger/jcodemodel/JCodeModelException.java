@@ -49,6 +49,7 @@ import javax.annotation.Nullable;
  * @author Philip Helger
  * @since 3.4.0
  */
+@ChangeInV4 ("moved to exceptions package")
 public class JCodeModelException extends Exception
 {
   protected JCodeModelException ()

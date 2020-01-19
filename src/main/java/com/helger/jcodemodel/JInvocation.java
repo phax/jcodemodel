@@ -102,6 +102,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Name of method to invoke
    */
   @Deprecated
+  @ChangeInV4
   protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final String sName)
   {
     // Not possible to determine an owner :(
@@ -109,6 +110,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   }
 
   @Deprecated
+  @ChangeInV4
   protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final JMethod aMethod)
   {
     this (aMethod.owner (), aObject, aMethod);
@@ -123,6 +125,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Method name to be invoked
    */
   @Deprecated
+  @ChangeInV4
   protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final String sMethodName)
   {
     this (aType.owner (), aType, sMethodName);
@@ -137,6 +140,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Method to be invoked
    */
   @Deprecated
+  @ChangeInV4
   protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final JMethod aMethod)
   {
     this (aType.owner (), aType, aMethod);
@@ -338,6 +342,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    */
   @Nonnull
   @Deprecated
+  @ChangeInV4
   public IJExpression [] listArgs ()
   {
     return m_aArgs.toArray (new IJExpression [m_aArgs.size ()]);

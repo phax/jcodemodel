@@ -94,6 +94,7 @@ public class JLambdaMethodRef implements IJExpression
    *             instead.
    */
   @Deprecated
+  @ChangeInV4
   public JLambdaMethodRef (@Nonnull final AbstractJType aType)
   {
     this (aType, "new");
@@ -258,6 +259,7 @@ public class JLambdaMethodRef implements IJExpression
    */
   @Deprecated
   @Nullable
+  @ChangeInV4
   public JInvocation invocation ()
   {
     return m_aLhsExpr instanceof JInvocation ? (JInvocation) m_aLhsExpr : null;

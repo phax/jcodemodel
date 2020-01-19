@@ -247,7 +247,7 @@ public final class JExpr
   /**
    * Create a fully qualified reference to an enum constant in the form
    * <code>class.enumentry</code>
-   * 
+   *
    * @param aType
    *        Class/type to use. May not be <code>null</code>.
    * @param sName
@@ -306,6 +306,7 @@ public final class JExpr
    */
   @Nonnull
   @Deprecated
+  @ChangeInV4
   public static IJExpression dotclass (@Nonnull final AbstractJClass aClass)
   {
     return dotClass (aClass);
