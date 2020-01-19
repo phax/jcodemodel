@@ -42,6 +42,7 @@ package com.helger.jcodemodel.fmt;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.annotation.Nonnull;
@@ -71,6 +72,19 @@ public class JPropertyFile extends AbstractJResourceFile
   public void add (@Nonnull final String sKey, @Nonnull final String sValue)
   {
     m_aProps.put (sKey, sValue);
+  }
+
+  /**
+   * Adds 0-n key/value pairs into the property file. If you call this method
+   * twice with the same key, the old one is overridden by the new one.
+   *
+   * @param aValues
+   *        Properties to be added. May not be <code>null</code>.
+   * @since 3.4.0
+   */
+  public void addAll (@Nonnull final Map <? super String, ? super String> aValues)
+  {
+    m_aProps.putAll (aValues);
   }
 
   @Override
