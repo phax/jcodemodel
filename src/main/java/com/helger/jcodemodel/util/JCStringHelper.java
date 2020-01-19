@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel.util;
 
+import java.util.Locale;
+
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -320,5 +322,12 @@ public final class JCStringHelper
       if (JCArrayHelper.contains (aChars, getLastChar (aCS)))
         return true;
     return false;
+  }
+
+  public static boolean endsWithCaseInsensitive (@Nullable final String sSrc, @Nullable final String sExpectedEnd)
+  {
+    return hasText (sSrc) &&
+           hasText (sExpectedEnd) &&
+           sSrc.toUpperCase (Locale.ROOT).endsWith (sExpectedEnd.toUpperCase (Locale.ROOT));
   }
 }

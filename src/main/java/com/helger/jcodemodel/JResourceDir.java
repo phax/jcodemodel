@@ -44,7 +44,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -53,6 +52,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
+import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.JCFilenameHelper;
 import com.helger.jcodemodel.util.JCStringHelper;
 import com.helger.jcodemodel.util.JCValueEnforcer;
@@ -82,13 +82,7 @@ public class JResourceDir implements IJOwned
   /**
    * Map of resources files inside this package.
    */
-  private final Map <String, AbstractJResourceFile> m_aResources = new TreeMap <> ();
-
-  /**
-   * Map of upper case resource names, if the underlying file system is not case
-   * sensitive (e.g. Windows).
-   */
-  private final Map <String, AbstractJResourceFile> m_aUpperCaseResources;
+  private final Map <FSName, AbstractJResourceFile> m_aResources = new TreeMap <> ();
 
   /**
    * Constructor
@@ -127,11 +121,6 @@ public class JResourceDir implements IJOwned
                                               "' contains the the invalid part '" +
                                               sPart +
                                               "' according to the current file system conventions");
-
-    if (m_aOwner.getFileSystemConvention ().isCaseSensistive ())
-      m_aUpperCaseResources = null;
-    else
-      m_aUpperCaseResources = new TreeMap <> ();
   }
 
   /**
@@ -167,6 +156,14 @@ public class JResourceDir implements IJOwned
     return m_aParentDir;
   }
 
+  @Nonnull
+  private FSName _createFSName (@Nonnull final String sName)
+  {
+    if (m_aOwner.getFileSystemConvention ().isCaseSensistive ())
+      return FSName.createCaseSensitive (sName);
+    return FSName.createCaseInsensitive (sName);
+  }
+
   /**
    * Adds a new resource file to this package.
    *
@@ -183,7 +180,6 @@ public class JResourceDir implements IJOwned
   {
     JCValueEnforcer.notNull (aResFile, "ResourceFile");
 
-    // Check uniqueness (case sensitive)
     final String sName = aResFile.name ();
 
     if (!m_aOwner.getFileSystemConvention ().isValidFilename (sName))
@@ -191,36 +187,27 @@ public class JResourceDir implements IJOwned
                                           sName +
                                           "' is invalid according to the current file system conventions");
 
-    if (m_aResources.containsKey (sName))
+    // Check if a sub directory already exists with the same name
+    if (m_aOwner.containsResourceDir (fullChildName (sName)))
       throw new JResourceAlreadyExistsException (fullChildName (sName));
 
-    // Check uniqueness (case insensitive)
-    final String sUpperName = sName.toUpperCase (Locale.ROOT);
-    if (m_aUpperCaseResources != null)
-    {
-      if (m_aUpperCaseResources.containsKey (sUpperName))
-        throw new JResourceAlreadyExistsException (fullChildName (sName));
-    }
+    // Check filename uniqueness
+    final FSName aKey = _createFSName (sName);
+    if (m_aResources.containsKey (aKey))
+      throw new JResourceAlreadyExistsException (fullChildName (sName));
 
     // Check if a Java class with the same name already exists
-    final boolean bIsPotentiallyJavaSrcFile;
-    if (m_aUpperCaseResources != null)
-      bIsPotentiallyJavaSrcFile = sUpperName.endsWith (".JAVA");
-    else
-      bIsPotentiallyJavaSrcFile = sName.endsWith (".java");
-    if (bIsPotentiallyJavaSrcFile)
+    if (JCStringHelper.endsWithCaseInsensitive (sName, ".java"))
     {
       final JPackage aPackage = owner ()._package (m_sName.replace (SEPARATOR, JPackage.SEPARATOR));
       // Cut trailing ".java"
-      final JDefinedClass aDC = aPackage.getClassResource (sName.substring (0, sName.length () - 5));
+      final JDefinedClass aDC = aPackage._getClass (sName.substring (0, sName.length () - 5));
       if (aDC != null)
         throw new JClassAlreadyExistsException (aDC);
     }
 
     // All checks good - add to map
-    m_aResources.put (sName, aResFile);
-    if (m_aUpperCaseResources != null)
-      m_aUpperCaseResources.put (sUpperName, aResFile);
+    m_aResources.put (aKey, aResFile);
 
     return aResFile;
   }
@@ -235,25 +222,8 @@ public class JResourceDir implements IJOwned
    */
   public boolean hasResourceFile (@Nullable final String sName)
   {
-    return m_aResources.containsKey (sName);
-  }
-
-  /**
-   * Checks if a resource of the given name exists. This method does consider
-   * file system conventions.
-   *
-   * @param sName
-   *        Filename to check. May be <code>null</code>.
-   * @return <code>true</code> if contained
-   */
-  public boolean hasResourceFileFS (@Nullable final String sName)
-  {
-    if (sName == null)
-      return false;
-
-    if (m_aUpperCaseResources != null)
-      return m_aUpperCaseResources.containsKey (sName.toUpperCase (Locale.ROOT));
-    return m_aResources.containsKey (sName);
+    final FSName aKey = _createFSName (sName);
+    return m_aResources.containsKey (aKey);
   }
 
   /**
@@ -288,7 +258,8 @@ public class JResourceDir implements IJOwned
   @Nonnull
   public JResourceDir subDir (@Nonnull final String sSubDirName) throws JCodeModelException
   {
-    if (hasResourceFileFS (sSubDirName))
+    // Check if a file with the same name already exists
+    if (hasResourceFile (sSubDirName))
       throw new JResourceAlreadyExistsException (fullChildName (sSubDirName));
 
     return owner ().resourceDir (isUnnamed () ? sSubDirName : m_sName + SEPARATOR + sSubDirName);

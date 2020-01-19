@@ -64,6 +64,7 @@ import javax.lang.model.util.Elements;
 import com.helger.jcodemodel.meta.CodeModelBuildingException;
 import com.helger.jcodemodel.meta.ErrorTypeFound;
 import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
+import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.EFileSystemConvention;
 import com.helger.jcodemodel.util.IFileSystemConvention;
 import com.helger.jcodemodel.util.JCFilenameHelper;
@@ -165,7 +166,7 @@ public class JCodeModel implements Serializable
   private final Map <String, JPackage> m_aPackages = new HashMap <> ();
 
   /** The resource directories that this JCodeWriter contains. */
-  private final Map <String, JResourceDir> m_aResourceDirs = new HashMap <> ();
+  private final Map <FSName, JResourceDir> m_aResourceDirs = new HashMap <> ();
 
   /** All JReferencedClasses are pooled here. */
   private final Map <Class <?>, JReferencedClass> m_aRefClasses = new HashMap <> ();
@@ -276,6 +277,26 @@ public class JCodeModel implements Serializable
     return new ArrayList <> (m_aPackages.values ());
   }
 
+  @Nonnull
+  private static String _unifyPath (@Nonnull final String sName)
+  {
+    // Convert "\" to "/"
+    String sCleanPath = JCFilenameHelper.getPathUsingUnixSeparator (sName);
+    // Replace all double separators with a single one
+    sCleanPath = JCStringHelper.replaceAllRepeatedly (sCleanPath, SEPARATOR_TWICE, JResourceDir.SEPARATOR_STR);
+    // Ensure last part is not a "/"
+    sCleanPath = JCFilenameHelper.ensurePathEndingWithoutSeparator (sCleanPath);
+    return sCleanPath;
+  }
+
+  @Nonnull
+  private FSName _createFSName (@Nonnull final String sName)
+  {
+    if (m_aFSConvention.isCaseSensistive ())
+      return FSName.createCaseSensitive (sName);
+    return FSName.createCaseInsensitive (sName);
+  }
+
   /**
    * Add a {@link JResourceDir} directory to the list of resource directories to
    * be generated
@@ -295,21 +316,14 @@ public class JCodeModel implements Serializable
     JCValueEnforcer.notNull (sName, "Name");
 
     // 1. unify name
-
-    // Convert "\" to "/"
-    String sCleanPath = JCFilenameHelper.getPathUsingUnixSeparator (sName);
-    // Replace all double separators with a single one
-    sCleanPath = JCStringHelper.replaceAllRepeatedly (sCleanPath, SEPARATOR_TWICE, JResourceDir.SEPARATOR_STR);
-    // Ensure last part is not a "/"
-    sCleanPath = JCFilenameHelper.ensurePathEndingWithoutSeparator (sCleanPath);
+    final String sCleanPath = _unifyPath (sName);
 
     // 2. consistency checks
-
     if (sCleanPath.startsWith (JResourceDir.SEPARATOR_STR))
       throw new IllegalArgumentException ("A resource directory may not be an absolute path: '" + sName + "'");
 
     // 3. ensure root is present
-    final JResourceDir aRootDir = m_aResourceDirs.computeIfAbsent ("", k -> JResourceDir.root (this));
+    final JResourceDir aRootDir = m_aResourceDirs.computeIfAbsent (_createFSName (""), k -> JResourceDir.root (this));
 
     // 4. traverse tree
     JResourceDir aParentDir = aRootDir;
@@ -322,12 +336,13 @@ public class JCodeModel implements Serializable
       sDirName += sPart;
 
       // Check if directory has a file with the name
-      if (aParentDir.hasResourceFileFS (sPart))
+      if (aParentDir.hasResourceFile (sPart))
         throw new JResourceAlreadyExistsException (aParentDir.fullChildName (sPart));
 
       // Get main subdir
       final JResourceDir aFinalParentDir = aParentDir;
-      aCur = m_aResourceDirs.computeIfAbsent (sDirName, k -> new JResourceDir (this, aFinalParentDir, k));
+      aCur = m_aResourceDirs.computeIfAbsent (_createFSName (sDirName),
+                                              k -> new JResourceDir (this, aFinalParentDir, k.getName ()));
       aParentDir = aCur;
     }
 
@@ -350,6 +365,16 @@ public class JCodeModel implements Serializable
     {
       throw new IllegalStateException ("This is indeed unexpected", ex);
     }
+  }
+
+  public boolean containsResourceDir (@Nullable final String sAbsolutePath)
+  {
+    if (sAbsolutePath == null)
+      return false;
+    // 1. unify name
+    final String sCleanPath = _unifyPath (sAbsolutePath);
+    // 2. check existance
+    return m_aResourceDirs.containsKey (_createFSName (sCleanPath));
   }
 
   /**

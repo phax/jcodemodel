@@ -48,7 +48,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -59,6 +58,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
+import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.JCStringHelper;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
@@ -147,14 +147,7 @@ public class JPackage implements
   /**
    * List of classes contained within this package keyed by their name.
    */
-  private final Map <String, JDefinedClass> m_aClasses = new TreeMap <> ();
-
-  /**
-   * All {@link AbstractJClass}s in this package keyed the upper case class
-   * name. This field is non-null only on Windows, to detect "Foo" and "foo" as
-   * a collision.
-   */
-  private final Map <String, JDefinedClass> m_aUpperCaseClassMap;
+  private final Map <FSName, JDefinedClass> m_aClasses = new TreeMap <> ();
 
   /**
    * List of resources files inside this package.
@@ -197,10 +190,6 @@ public class JPackage implements
 
     m_aOwner = aOwner;
     m_sName = sName;
-    if (aOwner.getFileSystemConvention ().isCaseSensistive ())
-      m_aUpperCaseClassMap = null;
-    else
-      m_aUpperCaseClassMap = new TreeMap <> ();
   }
 
   @Nullable
@@ -242,44 +231,36 @@ public class JPackage implements
   }
 
   @Nonnull
+  private FSName _createFSName (@Nonnull final String sName)
+  {
+    if (m_aOwner.getFileSystemConvention ().isCaseSensistive ())
+      return FSName.createCaseSensitive (sName);
+    return FSName.createCaseInsensitive (sName);
+  }
+
+  @Nonnull
   public JDefinedClass _class (final int nMods,
                                @Nonnull final String sClassName,
                                @Nonnull final EClassType eClassType) throws JCodeModelException
   {
+    final FSName aKey = _createFSName (sClassName);
+
     // Class name unique case sensitive?
-    JDefinedClass aDC = m_aClasses.get (sClassName);
+    JDefinedClass aDC = m_aClasses.get (aKey);
     if (aDC != null)
       throw new JClassAlreadyExistsException (aDC);
 
-    // Class name unique case insensitive?
-    final String sUpperClassName = sClassName.toUpperCase (Locale.ROOT);
-    if (m_aUpperCaseClassMap != null)
-    {
-      aDC = m_aUpperCaseClassMap.get (sUpperClassName);
-      if (aDC != null)
-        throw new JClassAlreadyExistsException (aDC);
-    }
-
     // Okay, the class name is unique inside this package
     // Check if a resource with the same name already exists
-    JResourceDir aRD = m_aOwner.resourceDir (m_sName.replace (SEPARATOR, JResourceDir.SEPARATOR));
+    final JResourceDir aRD = m_aOwner.resourceDir (m_sName.replace (SEPARATOR, JResourceDir.SEPARATOR));
     if (aRD.hasResourceFile (sClassName + ".java"))
       throw new JResourceAlreadyExistsException (aRD.fullChildName (sClassName + ".java"));
 
-    if (m_aUpperCaseClassMap != null)
-    {
-      aRD = m_aOwner.resourceDir (m_sName.toUpperCase (Locale.ROOT).replace (SEPARATOR, JResourceDir.SEPARATOR));
-      if (aRD.hasResourceFile (sUpperClassName + ".java"))
-        throw new JResourceAlreadyExistsException (aRD.fullChildName (sUpperClassName + ".java"));
-    }
-
     // XXX problems caught in the NC constructor
-    final JDefinedClass c = new JDefinedClass (this, nMods, sClassName, eClassType);
-    if (m_aUpperCaseClassMap != null)
-      m_aUpperCaseClassMap.put (sUpperClassName, c);
-    m_aClasses.put (sClassName, c);
+    aDC = new JDefinedClass (this, nMods, sClassName, eClassType);
+    m_aClasses.put (aKey, aDC);
 
-    return c;
+    return aDC;
   }
 
   /**
@@ -292,16 +273,8 @@ public class JPackage implements
   @Nullable
   public JDefinedClass _getClass (@Nullable final String sName)
   {
-    return m_aClasses.get (sName);
-  }
-
-  @Nullable
-  JDefinedClass getClassResource (@Nonnull final String sClassName)
-  {
-    JDefinedClass aDC = m_aClasses.get (sClassName);
-    if (aDC == null && m_aUpperCaseClassMap != null)
-      aDC = m_aUpperCaseClassMap.get (sClassName.toUpperCase (Locale.ROOT));
-    return aDC;
+    final FSName aKey = _createFSName (sName);
+    return m_aClasses.get (aKey);
   }
 
   /**
@@ -411,9 +384,8 @@ public class JPackage implements
 
     // note that c may not be a member of classes.
     // this happens when someone is trying to remove a non generated class
-    m_aClasses.remove (aClass.name ());
-    if (m_aUpperCaseClassMap != null)
-      m_aUpperCaseClassMap.remove (aClass.name ().toUpperCase (Locale.ROOT));
+    final FSName aKey = _createFSName (aClass.name ());
+    m_aClasses.remove (aKey);
   }
 
   /**
@@ -431,13 +403,7 @@ public class JPackage implements
     JCValueEnforcer.isTrue (sClassLocalName.indexOf (SEPARATOR) < 0,
                             () -> "JClass name contains '.': " + sClassLocalName);
 
-    String sFQCN;
-    if (isUnnamed ())
-      sFQCN = "";
-    else
-      sFQCN = m_sName + SEPARATOR;
-    sFQCN += sClassLocalName;
-
+    final String sFQCN = isUnnamed () ? sClassLocalName : m_sName + SEPARATOR + sClassLocalName;
     return m_aOwner.ref (Class.forName (sFQCN));
   }
 
@@ -451,9 +417,7 @@ public class JPackage implements
   @Nonnull
   public JPackage subPackage (@Nonnull final String sSubPackageName)
   {
-    if (isUnnamed ())
-      return owner ()._package (sSubPackageName);
-    return owner ()._package (m_sName + SEPARATOR + sSubPackageName);
+    return owner ()._package (isUnnamed () ? sSubPackageName : m_sName + SEPARATOR + sSubPackageName);
   }
 
   /**
@@ -474,9 +438,10 @@ public class JPackage implements
    */
   public boolean isDefined (@Nullable final String sClassLocalName)
   {
-    for (final JDefinedClass clazz : m_aClasses.values ())
-      if (clazz.name ().equals (sClassLocalName))
-        return true;
+    if (sClassLocalName != null)
+      for (final JDefinedClass clazz : m_aClasses.values ())
+        if (clazz.name ().equals (sClassLocalName))
+          return true;
     return false;
   }
 
