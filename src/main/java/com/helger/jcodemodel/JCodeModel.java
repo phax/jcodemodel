@@ -64,8 +64,8 @@ import javax.lang.model.util.Elements;
 import com.helger.jcodemodel.meta.CodeModelBuildingException;
 import com.helger.jcodemodel.meta.ErrorTypeFound;
 import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
-import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.EFileSystemConvention;
+import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.IFileSystemConvention;
 import com.helger.jcodemodel.util.JCFilenameHelper;
 import com.helger.jcodemodel.util.JCSecureLoader;
@@ -373,7 +373,7 @@ public class JCodeModel implements Serializable
       return false;
     // 1. unify name
     final String sCleanPath = _unifyPath (sAbsolutePath);
-    // 2. check existance
+    // 2. check existence
     return m_aResourceDirs.containsKey (_createFSName (sCleanPath));
   }
 

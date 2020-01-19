@@ -245,18 +245,25 @@ public class JPackage implements
   {
     final FSName aKey = _createFSName (sClassName);
 
-    // Class name unique case sensitive?
+    // Is the class name unique in this package?
     JDefinedClass aDC = m_aClasses.get (aKey);
     if (aDC != null)
       throw new JClassAlreadyExistsException (aDC);
 
-    // Okay, the class name is unique inside this package
-    // Check if a resource with the same name already exists
-    final JResourceDir aRD = m_aOwner.resourceDir (m_sName.replace (SEPARATOR, JResourceDir.SEPARATOR));
-    if (aRD.hasResourceFile (sClassName + ".java"))
-      throw new JResourceAlreadyExistsException (aRD.fullChildName (sClassName + ".java"));
+    final String sResDirName = m_sName.replace (SEPARATOR, JResourceDir.SEPARATOR);
+    final JResourceDir aRD = m_aOwner.resourceDir (sResDirName);
 
-    // XXX problems caught in the NC constructor
+    // Check if a resource file with the same name already exists
+    final String sClassFilename = sClassName + ".java";
+    if (aRD.hasResourceFile (sClassFilename))
+      throw new JResourceAlreadyExistsException (aRD.fullChildName (sClassFilename));
+
+    // CHeck if a sub-directory with the same name already exists (mind the "."
+    // in filename - don't convert to '/' :D)
+    if (m_aOwner.containsResourceDir (aRD.fullChildName (sClassFilename)))
+      throw new JResourceAlreadyExistsException (aRD.fullChildName (sClassFilename));
+
+    // Create a new class
     aDC = new JDefinedClass (this, nMods, sClassName, eClassType);
     m_aClasses.put (aKey, aDC);
 

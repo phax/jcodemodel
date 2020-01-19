@@ -164,6 +164,12 @@ public class JResourceDir implements IJOwned
     return FSName.createCaseInsensitive (sName);
   }
 
+  @Nonnull
+  private JPackage _getMatchingPackage ()
+  {
+    return owner ()._package (m_sName.replace (SEPARATOR, JPackage.SEPARATOR));
+  }
+
   /**
    * Adds a new resource file to this package.
    *
@@ -199,9 +205,8 @@ public class JResourceDir implements IJOwned
     // Check if a Java class with the same name already exists
     if (JCStringHelper.endsWithCaseInsensitive (sName, ".java"))
     {
-      final JPackage aPackage = owner ()._package (m_sName.replace (SEPARATOR, JPackage.SEPARATOR));
       // Cut trailing ".java"
-      final JDefinedClass aDC = aPackage._getClass (sName.substring (0, sName.length () - 5));
+      final JDefinedClass aDC = _getMatchingPackage ()._getClass (sName.substring (0, sName.length () - 5));
       if (aDC != null)
         throw new JClassAlreadyExistsException (aDC);
     }
@@ -261,6 +266,15 @@ public class JResourceDir implements IJOwned
     // Check if a file with the same name already exists
     if (hasResourceFile (sSubDirName))
       throw new JResourceAlreadyExistsException (fullChildName (sSubDirName));
+
+    // Check if a Java class with the same name already exists
+    if (JCStringHelper.endsWithCaseInsensitive (sSubDirName, ".java"))
+    {
+      // Cut trailing ".java"
+      final JDefinedClass aDC = _getMatchingPackage ()._getClass (sSubDirName.substring (0, sSubDirName.length () - 5));
+      if (aDC != null)
+        throw new JClassAlreadyExistsException (aDC);
+    }
 
     return owner ().resourceDir (isUnnamed () ? sSubDirName : m_sName + SEPARATOR + sSubDirName);
   }
