@@ -46,6 +46,7 @@ package com.helger.jcodemodel;
  *
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
+@ChangeInV4 ("move to exceptions package")
 public class JErrorClassUsedException extends UnsupportedOperationException
 {
   JErrorClassUsedException (final String sMessage)

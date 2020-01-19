@@ -52,6 +52,7 @@ import javax.annotation.Nonnull;
  *
  * @author Philip Helger
  */
+@ChangeInV4 ("Moved to writer package")
 public final class SourcePrintWriter extends FilterWriter
 {
   private final String m_sNewLine;

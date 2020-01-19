@@ -51,7 +51,7 @@ import java.lang.annotation.RetentionPolicy;
  */
 @Retention (RetentionPolicy.CLASS)
 @Documented
-@ChangeInV4
+@ChangeInV4 ("remove myself in v4 :D")
 public @interface ChangeInV4
 {
   String value() default "";

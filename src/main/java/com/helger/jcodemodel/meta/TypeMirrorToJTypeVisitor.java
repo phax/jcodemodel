@@ -77,10 +77,10 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
                                    final ErrorTypePolicy errorTypePolicy,
                                    final TypeEnvironment environment)
   {
-    this.m_aCodeModel = codeModel;
-    this.m_aModelsAdapter = modelsAdapter;
-    this.m_aErrorTypePolicy = errorTypePolicy;
-    this.m_aEnvironment = environment;
+    m_aCodeModel = codeModel;
+    m_aModelsAdapter = modelsAdapter;
+    m_aErrorTypePolicy = errorTypePolicy;
+    m_aEnvironment = environment;
   }
 
   @Override
@@ -187,9 +187,8 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
       return jCodeModelClass.narrow (jArguments);
     }
     if (m_aErrorTypePolicy.action () == ErrorTypePolicy.EAction.CREATE_ERROR_TYPE)
-      return m_aCodeModel.errorClass (typeName +
-                                    " in annotated source code",
-                                    typeName.equals ("<any>") ? null : typeName);
+      return m_aCodeModel.errorClass (typeName + " in annotated source code",
+                                      typeName.equals ("<any>") ? null : typeName);
     try
     {
       throw new ErrorTypeFound (typeName + " in annotated source code");
@@ -227,7 +226,8 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
       final TypeMirror extendsBoundMirror = t.getExtendsBound ();
       if (extendsBoundMirror != null)
       {
-        final AbstractJClass extendsBound = (AbstractJClass) m_aModelsAdapter.toJType (extendsBoundMirror, m_aEnvironment);
+        final AbstractJClass extendsBound = (AbstractJClass) m_aModelsAdapter.toJType (extendsBoundMirror,
+                                                                                       m_aEnvironment);
         return extendsBound.wildcard (EWildcardBoundMode.EXTENDS);
       }
       final TypeMirror superBoundMirror = t.getSuperBound ();

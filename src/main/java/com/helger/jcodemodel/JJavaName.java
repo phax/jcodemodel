@@ -144,7 +144,9 @@ public final class JJavaName
    *
    * @param sStr
    *        Source string. May not be <code>null</code>.
-   * @return <code>true</code> if the string is a valid Java identifier
+   * @return <code>true</code> if the string is a valid Java identifier,
+   *         <code>false</code> if this is a reserved keyword or if it contains
+   *         invalid characters.
    */
   public static boolean isJavaIdentifier (@Nonnull final String sStr)
   {
@@ -170,6 +172,7 @@ public final class JJavaName
    *        Source string to check
    * @return <code>true</code> if it is a valid fully qualified class name
    */
+  @Deprecated
   public static boolean isFullyQualifiedClassName (final String sName)
   {
     return isJavaPackageName (sName);
@@ -182,6 +185,7 @@ public final class JJavaName
    *        Source string to check
    * @return <code>true</code> if it is a valid Java package name
    */
+  @Deprecated
   public static boolean isJavaPackageName (final String sName)
   {
     String s = sName;

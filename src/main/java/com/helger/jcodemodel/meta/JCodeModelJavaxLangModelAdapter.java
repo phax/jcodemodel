@@ -62,8 +62,8 @@ public class JCodeModelJavaxLangModelAdapter
    */
   public JCodeModelJavaxLangModelAdapter (@Nonnull final JCodeModel codeModel, @Nonnull final Elements elementUtils)
   {
-    this.m_aCodeModel = codeModel;
-    this.m_aElementUtils = elementUtils;
+    m_aCodeModel = codeModel;
+    m_aElementUtils = elementUtils;
   }
 
   /**

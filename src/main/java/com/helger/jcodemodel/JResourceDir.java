@@ -134,7 +134,9 @@ public class JResourceDir implements IJOwned
   }
 
   /**
-   * Get the name of this resource directory
+   * Get the name of this resource directory. This name is never an absolute
+   * path. This name never ends with a slash. This name always uses the forward
+   * slash (/) as a separator and never the Windows backslash.
    *
    * @return The name of this resource directory, or the empty string if this is
    *         the root directory. For example, this method returns strings like
@@ -147,8 +149,8 @@ public class JResourceDir implements IJOwned
   }
 
   /**
-   * @return the parent package, or <code>null</code> if this class is the root
-   *         package.
+   * @return the parent resource directory, or <code>null</code> if this is the
+   *         root resource directory.
    */
   @Nullable
   public JResourceDir parent ()

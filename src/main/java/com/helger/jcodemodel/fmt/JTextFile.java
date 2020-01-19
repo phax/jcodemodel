@@ -50,6 +50,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
 
+import com.helger.jcodemodel.ChangeInV4;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
@@ -89,10 +90,11 @@ public class JTextFile extends AbstractJResourceFile
 
   /**
    * Set the contents to be written. Overwrites a previous content.
-   * 
+   *
    * @param sContents
    *        The contents to be used. May be <code>null</code>.
    */
+  @ChangeInV4 ("return this")
   public void setContents (@Nullable final String sContents)
   {
     m_sContents = sContents;

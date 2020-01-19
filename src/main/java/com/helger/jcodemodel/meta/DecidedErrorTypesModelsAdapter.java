@@ -144,19 +144,20 @@ class DecidedErrorTypesModelsAdapter
     }
   }
 
+  private final JCodeModel m_aCodeModel;
   private final Elements m_aElementUtils;
   private final ErrorTypePolicy m_aErrorTypePolicy;
-  private final JCodeModel m_aCodeModel;
 
   DecidedErrorTypesModelsAdapter (final JCodeModel codeModel,
                                   final Elements elementUtils,
                                   final ErrorTypePolicy errorTypePolicy)
   {
+    m_aCodeModel = codeModel;
     m_aElementUtils = elementUtils;
     m_aErrorTypePolicy = errorTypePolicy;
-    m_aCodeModel = codeModel;
   }
 
+  @Nonnull
   public JDefinedClass getClass (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
   {
     final Element enclosingElement = element.getEnclosingElement ();
@@ -197,6 +198,7 @@ class DecidedErrorTypesModelsAdapter
                                      enclosingElement);
   }
 
+  @Nonnull
   private JDefinedClass _defineClass (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
   {
     final Element enclosingElement = element.getEnclosingElement ();
@@ -210,6 +212,7 @@ class DecidedErrorTypesModelsAdapter
     return getClass (element);
   }
 
+  @Nonnull
   private JDefinedClass _defineTopLevelClass (final TypeElement element,
                                               final TypeEnvironment environment) throws CodeModelBuildingException,
                                                                                  ErrorTypeFound
@@ -310,6 +313,7 @@ class DecidedErrorTypesModelsAdapter
                                      enclosingClass);
   }
 
+  @Nonnull
   AbstractJClass ref (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
   {
     try
@@ -324,8 +328,8 @@ class DecidedErrorTypesModelsAdapter
     }
   }
 
-  AbstractJType toJType (final TypeMirror type, final TypeEnvironment environment) throws CodeModelBuildingException,
-                                                                                   ErrorTypeFound
+  AbstractJType toJType (@Nonnull final TypeMirror type,
+                         final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
   {
     try
     {
