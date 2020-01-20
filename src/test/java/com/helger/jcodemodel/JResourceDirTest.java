@@ -447,7 +447,7 @@ public final class JResourceDirTest
   }
 
   @Test
-  public void testIntermediateDirAsFile () throws JCodeModelException
+  public void testCollisionIntermediateDirNameFilenameLinux () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.LINUX);
     cm.resourceDir ("a/b/c");
@@ -459,14 +459,41 @@ public final class JResourceDirTest
     }
     catch (final JCodeModelException jcme)
     {
-      // pass
+      // expected
     }
     // Using a different case works
     cm.resourceDir ("a").addResourceFile (JTextFile.createFully ("B", StandardCharsets.UTF_8, "bla"));
   }
 
   @Test
-  public void testIntermediateDirAsClass () throws JCodeModelException
+  public void testCollisionIntermediateDirNameFilenameWindows () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.WINDOWS);
+    cm.resourceDir ("a/b/c");
+    try
+    {
+      // should fail
+      cm.resourceDir ("a").addResourceFile (JTextFile.createFully ("b", StandardCharsets.UTF_8, "bla"));
+      fail ();
+    }
+    catch (final JCodeModelException jcme)
+    {
+      // expected
+    }
+    try
+    {
+      // Using a different case doesn't help us
+      cm.resourceDir ("a").addResourceFile (JTextFile.createFully ("B", StandardCharsets.UTF_8, "bla"));
+      fail ();
+    }
+    catch (final JCodeModelException jcme)
+    {
+      // expected
+    }
+  }
+
+  @Test
+  public void testCollisionIntermediateDirNameClassNameLinux () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.LINUX);
     cm.resourceDir ("a/B.java/c");
@@ -478,9 +505,36 @@ public final class JResourceDirTest
     }
     catch (final JCodeModelException jcme)
     {
-      // pass
+      // expected
     }
     // Using a different case works
     cm._package ("a")._class ("b");
+  }
+
+  @Test
+  public void testCollisionIntermediateDirNameClassNameWindows () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ().setFileSystemConvention (EFileSystemConvention.WINDOWS);
+    cm.resourceDir ("a/B.java/c");
+    try
+    {
+      // should fail
+      cm._package ("a")._class ("B");
+      fail ();
+    }
+    catch (final JCodeModelException jcme)
+    {
+      // expected
+    }
+    try
+    {
+      // Using a different case doesn't help us here
+      cm._package ("a")._class ("b");
+      fail ();
+    }
+    catch (final JCodeModelException jcme)
+    {
+      // expected
+    }
   }
 }
