@@ -44,11 +44,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
+import com.helger.jcodemodel.exceptions.JCaseSensitivityChangeException;
+import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.util.EFileSystemConvention;
+import com.helger.jcodemodel.util.IFileSystemConvention;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -132,5 +139,71 @@ public final class JCodeModelTest
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Byte.class), "obj");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Long.class), "obj");
     CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testChangePlatform() throws JCodeModelException {
+    JCodeModel cm = JCodeModel.createUnified();
+
+    cm._class(JMod.PUBLIC, "my.Precious");
+    try {
+      // should fail, the package "my" is translated to a dir.
+      cm.setFileSystemConvention(EFileSystemConvention.WINDOWS);
+      Assert.fail();
+    } catch (JCaseSensitivityChangeException jcsce) {
+      // correct
+    }
+
+    cm = JCodeModel.createUnified();
+    cm.resourceDir("my").addResourceFile(JTextFile.createFully("File1", StandardCharsets.UTF_8, "bla"));
+    try {
+      // should fail, because the windows FS is not case sensitive.
+      cm.setFileSystemConvention(EFileSystemConvention.WINDOWS);
+      Assert.fail();
+    } catch (JCaseSensitivityChangeException jcsce) {
+      // correct
+    }
+
+    // should pass, accept any resource name
+    cm.setFileSystemConvention(new IFileSystemConvention() {
+
+      @Override
+      public boolean isValidFilename(String sPath) {
+        return true;
+      }
+
+      @Override
+      public boolean isValidDirectoryName(String sPath) {
+        return true;
+      }
+
+      @Override
+      public boolean isCaseSensistive() {
+        return true;
+      }
+    });
+    try {
+      // should fail, existing dir "my" and file "File1" are not accepted.
+      cm.setFileSystemConvention(new IFileSystemConvention() {
+
+        @Override
+        public boolean isValidFilename(String sPath) {
+          return false;
+        }
+
+        @Override
+        public boolean isValidDirectoryName(String sPath) {
+          return false;
+        }
+
+        @Override
+        public boolean isCaseSensistive() {
+          return true;
+        }
+      });
+      Assert.fail();
+    } catch (JInvalidFileNameException ifne) {
+      // correct
+    }
   }
 }
