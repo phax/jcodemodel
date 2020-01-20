@@ -161,7 +161,7 @@ public class JCodeModel implements Serializable
     s_aPrimitiveToBox = Collections.unmodifiableMap (m2);
   }
 
-  private IFileSystemConvention m_aFSConvention = EFileSystemConvention.DEFAULT;
+  private IFileSystemConvention m_aFSConvention;
 
   /** The packages that this JCodeWriter contains. */
   private final Map <String, JPackage> m_aPackages = new HashMap <> ();
@@ -205,8 +205,26 @@ public class JCodeModel implements Serializable
 
   private final Set <AbstractJClass> m_aDontImportClasses = new HashSet <> ();
 
+  /**
+   * Default constructor using the system default file system convention.
+   */
   public JCodeModel ()
-  {}
+  {
+    this (EFileSystemConvention.DEFAULT);
+  }
+
+  /**
+   * Constructor with parameter
+   *
+   * @param aFSConvention
+   *        The file system convention to be used. May not be <code>null</code>.
+   * @since v3.4.0
+   */
+  public JCodeModel (@Nonnull final IFileSystemConvention aFSConvention)
+  {
+    JCValueEnforcer.notNull (aFSConvention, "FSConvention");
+    m_aFSConvention = aFSConvention;
+  }
 
   /**
    * @return The file system convention to be used. Never <code>null</code>.

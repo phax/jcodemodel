@@ -71,7 +71,6 @@ import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -351,40 +350,6 @@ public final class CodeModelTestsHelper
     catch (final IOException ex)
     {
       throw new UncheckedIOException (ex);
-    }
-  }
-
-  /**
-   * @return A new {@link JCodeModel} configured for Linux. Never
-   *         <code>null</code>.
-   */
-  @Nonnull
-  public static JCodeModel linuxCM ()
-  {
-    try
-    {
-      return new JCodeModel ().setFileSystemConvention (EFileSystemConvention.LINUX);
-    }
-    catch (final JCodeModelException ex)
-    {
-      throw new UnsupportedOperationException (ex);
-    }
-  }
-
-  /**
-   * @return A new {@link JCodeModel} configured for Linux. Never
-   *         <code>null</code>.
-   */
-  @Nonnull
-  public static JCodeModel windowsCM ()
-  {
-    try
-    {
-      return new JCodeModel ().setFileSystemConvention (EFileSystemConvention.WINDOWS);
-    }
-    catch (final JCodeModelException ex)
-    {
-      throw new UnsupportedOperationException (ex);
     }
   }
 }
