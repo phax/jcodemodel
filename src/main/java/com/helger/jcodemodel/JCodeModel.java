@@ -231,15 +231,17 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Set the target file system convention to be used. This method MUST be
+   * Set the target file system convention to be used. This method is better
    * called BEFORE the first package or resource directory is created. Later
-   * calls result in an exception.
+   * calls result in an exception, if the new convention tries to change case
+   * sensitivy or prevent the creation of resources names that are already used.
    *
    * @param aFSConvention
-   *        The file system convention to be used. May not be <code>null</code>.
+   *          The file system convention to be used. May not be
+   *          <code>null</code>.
    * @return this for chaining
    * @throws JCodeModelException
-   *         if a package or a resource directory is already present.
+   *           if a package or a resource directory is already present.
    * @see IFileSystemConvention
    * @since 3.4.0
    */
@@ -249,8 +251,29 @@ public class JCodeModel implements Serializable
   {
     IFileSystemConvention old = m_aFSConvention;
     JCValueEnforcer.notNull (aFSConvention, "FSConvention");
-    if (!m_aPackages.isEmpty () || !m_aResourceDirs.isEmpty ()) {
-      throw new JCodeModelException ("The FileSystem convention cannot be changed if a package or a resource directory already exists.");
+    if (!m_aResourceDirs.isEmpty()) {
+      // test null in case we set the platform from the constructor
+      if (m_aFSConvention != null && m_aFSConvention.isCaseSensistive() != aFSConvention.isCaseSensistive()) {
+        throw new JCodeModelException ("The FileSystem convention cannot be changed case sensitivity if a package or a resource directory already exists.");
+      }
+      for (FSName name : m_aResourceDirs.keySet()) {
+        String sName = name.getName();
+
+        // copy from JresourceDir. should be mutualized ?
+
+        // An empty directory name is okay
+        if (sName.length() > 0) {
+          for (final String sPart : JCStringHelper.getExplodedArray(JResourceDir.SEPARATOR, sName)) {
+            if (!aFSConvention.isValidDirectoryName(sPart)) {
+              throw new IllegalArgumentException("Resource directory name '" + sName
+                  + "' contains the the invalid part '" + sPart + "' according to the current file system conventions");
+            }
+          }
+        }
+      }
+
+      // nothing to do with packages, file names convention is not relevant to
+      // them.
     }
     m_aFSConvention = aFSConvention;
     return old;
