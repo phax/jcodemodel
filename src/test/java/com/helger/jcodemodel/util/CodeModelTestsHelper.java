@@ -71,6 +71,7 @@ import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -86,262 +87,275 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
  */
 public final class CodeModelTestsHelper
 {
-  public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
+	public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
 
-  @Nonnull
-  private static IJFormatter _createFormatter (@Nonnull final StringWriter aWriter)
-  {
-    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()),
-                           JCMWriter.DEFAULT_INDENT_STRING);
-  }
+	@Nonnull
+	private static IJFormatter _createFormatter (@Nonnull final StringWriter aWriter)
+	{
+		return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()),
+				JCMWriter.DEFAULT_INDENT_STRING);
+	}
 
-  /** Hidden constructor. */
-  private CodeModelTestsHelper ()
-  {}
+	/** Hidden constructor. */
+	private CodeModelTestsHelper ()
+	{}
 
-  /**
-   * Prints an expression into a string.
-   *
-   * @param aGenerable
-   *        expression to print into a string.
-   * @return Expression formatted as a string.
-   */
-  @Nonnull
-  public static String toString (@Nonnull final IJExpression aGenerable)
-  {
-    JCValueEnforcer.notNull (aGenerable, "Generable");
+	/**
+	 * Prints an expression into a string.
+	 *
+	 * @param aGenerable
+	 *        expression to print into a string.
+	 * @return Expression formatted as a string.
+	 */
+	@Nonnull
+	public static String toString (@Nonnull final IJExpression aGenerable)
+	{
+		JCValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
-    {
-      aGenerable.generate (aFormatter);
-      return aSW.toString ();
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
-  }
+		try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+		{
+			aGenerable.generate (aFormatter);
+			return aSW.toString ();
+		}
+		catch (final IOException ex)
+		{
+			throw new UncheckedIOException (ex);
+		}
+	}
 
-  /**
-   * Prints a declaration into a string.
-   *
-   * @param aDeclaration
-   *        declaration to print into a string.
-   * @return Declaration formatted as a string.
-   */
-  @Nonnull
-  public static String toString (@Nonnull final IJDeclaration aDeclaration)
-  {
-    JCValueEnforcer.notNull (aDeclaration, "Declaration");
+	/**
+	 * Prints a declaration into a string.
+	 *
+	 * @param aDeclaration
+	 *        declaration to print into a string.
+	 * @return Declaration formatted as a string.
+	 */
+	@Nonnull
+	public static String toString (@Nonnull final IJDeclaration aDeclaration)
+	{
+		JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
-    {
-      aDeclaration.declare (aFormatter);
-      return aSW.toString ();
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
-  }
+		try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+		{
+			aDeclaration.declare (aFormatter);
+			return aSW.toString ();
+		}
+		catch (final IOException ex)
+		{
+			throw new UncheckedIOException (ex);
+		}
+	}
 
-  /**
-   * Prints a statement into a string.
-   *
-   * @param aStatement
-   *        declaration to print into a string.
-   * @return Declaration formatted as a string.
-   */
-  @Nonnull
-  public static String toString (@Nonnull final IJStatement aStatement)
-  {
-    JCValueEnforcer.notNull (aStatement, "Statement");
+	/**
+	 * Prints a statement into a string.
+	 *
+	 * @param aStatement
+	 *        declaration to print into a string.
+	 * @return Declaration formatted as a string.
+	 */
+	@Nonnull
+	public static String toString (@Nonnull final IJStatement aStatement)
+	{
+		JCValueEnforcer.notNull (aStatement, "Statement");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
-    {
-      aStatement.state (aFormatter);
-      return aSW.toString ();
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
-  }
+		try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+		{
+			aStatement.state (aFormatter);
+			return aSW.toString ();
+		}
+		catch (final IOException ex)
+		{
+			throw new UncheckedIOException (ex);
+		}
+	}
 
-  @Nonnull
-  public static String declare (@Nonnull final IJDeclaration aDeclaration)
-  {
-    JCValueEnforcer.notNull (aDeclaration, "Declaration");
+	@Nonnull
+	public static String declare (@Nonnull final IJDeclaration aDeclaration)
+	{
+		JCValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
-    {
-      aDeclaration.declare (aFormatter);
-      return aSW.toString ();
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
-  }
+		try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+		{
+			aDeclaration.declare (aFormatter);
+			return aSW.toString ();
+		}
+		catch (final IOException ex)
+		{
+			throw new UncheckedIOException (ex);
+		}
+	}
 
-  @Nonnull
-  public static String generate (@Nonnull final IJGenerable aGenerable)
-  {
-    JCValueEnforcer.notNull (aGenerable, "Generable");
+	@Nonnull
+	public static String generate (@Nonnull final IJGenerable aGenerable)
+	{
+		JCValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
-    {
-      aGenerable.generate (aFormatter);
-      return aSW.toString ();
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
-  }
+		try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+		{
+			aGenerable.generate (aFormatter);
+			return aSW.toString ();
+		}
+		catch (final IOException ex)
+		{
+			throw new UncheckedIOException (ex);
+		}
+	}
 
-  /**
-   * Get the content of the code model as a byte array in
-   * {@link #DEFAULT_ENCODING}
-   *
-   * @param cm
-   *        Source code model
-   * @return The byte array
-   */
-  @Nonnull
-  public static byte [] getAllBytes (@Nonnull final JCodeModel cm)
-  {
-    try (final ByteArrayOutputStream aBAOS = new ByteArrayOutputStream ())
-    {
-      new JCMWriter (cm).build (new OutputStreamCodeWriter (aBAOS, DEFAULT_ENCODING));
-      return aBAOS.toByteArray ();
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
-  }
+	/**
+	 * Get the content of the code model as a byte array in
+	 * {@link #DEFAULT_ENCODING}
+	 *
+	 * @param cm
+	 *        Source code model
+	 * @return The byte array
+	 */
+	@Nonnull
+	public static byte [] getAllBytes (@Nonnull final JCodeModel cm)
+	{
+		try (final ByteArrayOutputStream aBAOS = new ByteArrayOutputStream ())
+		{
+			new JCMWriter (cm).build (new OutputStreamCodeWriter (aBAOS, DEFAULT_ENCODING));
+			return aBAOS.toByteArray ();
+		}
+		catch (final IOException ex)
+		{
+			throw new UncheckedIOException (ex);
+		}
+	}
 
-  @Nonnull
-  private static CompilationUnit _parseWithJavaParser (final byte [] aBytes,
-                                                       @Nonnull final String sDirName,
-                                                       final String sFilename) throws IOException
-  {
-    if (false)
-      System.out.println (new String (aBytes, DEFAULT_ENCODING));
+	@Nonnull
+	private static CompilationUnit _parseWithJavaParser (final byte [] aBytes,
+			@Nonnull final String sDirName,
+			final String sFilename) throws IOException
+	{
+		if (false) {
+			System.out.println (new String (aBytes, DEFAULT_ENCODING));
+		}
 
-    System.out.println ("Parsing " +
-                        JCStringHelper.replaceAll (sDirName, '/', '.') +
-                        (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
+		System.out.println ("Parsing " +
+				JCStringHelper.replaceAll (sDirName, '/', '.') +
+				(sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
 
-    try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
-    {
-      // Parse what was written
-      final ParseResult <CompilationUnit> ret = new JavaParser ().parse (bis, DEFAULT_ENCODING);
-      return ret.getResult ().get ();
-    }
-  }
+		try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
+		{
+			// Parse what was written
+			final ParseResult <CompilationUnit> ret = new JavaParser ().parse (bis, DEFAULT_ENCODING);
+			return ret.getResult ().get ();
+		}
+	}
 
-  @Nonnull
-  private static org.eclipse.jdt.core.dom.CompilationUnit _parseWithJDT (final String sUnitName, final char [] aCode)
-  {
-    final ASTParser parser = ASTParser.newParser (AST.JLS13);
-    parser.setResolveBindings (true);
-    parser.setStatementsRecovery (true);
-    parser.setBindingsRecovery (true);
-    parser.setKind (ASTParser.K_COMPILATION_UNIT);
-    parser.setSource (aCode);
-    parser.setUnitName (sUnitName);
-    final Map <String, String> aOptions = new HashMap <> ();
-    aOptions.put (CompilerOptions.OPTION_Source, "1.8");
-    parser.setCompilerOptions (aOptions);
+	@Nonnull
+	private static org.eclipse.jdt.core.dom.CompilationUnit _parseWithJDT (final String sUnitName, final char [] aCode)
+	{
+		final ASTParser parser = ASTParser.newParser (AST.JLS13);
+		parser.setResolveBindings (true);
+		parser.setStatementsRecovery (true);
+		parser.setBindingsRecovery (true);
+		parser.setKind (ASTParser.K_COMPILATION_UNIT);
+		parser.setSource (aCode);
+		parser.setUnitName (sUnitName);
+		final Map <String, String> aOptions = new HashMap <> ();
+		aOptions.put (CompilerOptions.OPTION_Source, "1.8");
+		parser.setCompilerOptions (aOptions);
 
-    final IProgressMonitor aPM = null;
-    final org.eclipse.jdt.core.dom.CompilationUnit astRoot = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST (aPM);
-    if (astRoot == null)
-      throw new IllegalStateException ("Failed to compile:\n" + new String (aCode));
-    if (false)
-      System.out.println (astRoot.toString ());
-    final IProblem [] aProblems = astRoot.getProblems ();
-    if (aProblems != null && aProblems.length > 0)
-      throw new IllegalStateException ("Compilation problems " + Arrays.toString (aProblems));
-    return astRoot;
-  }
+		final IProgressMonitor aPM = null;
+		final org.eclipse.jdt.core.dom.CompilationUnit astRoot = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST (aPM);
+		if (astRoot == null) {
+			throw new IllegalStateException ("Failed to compile:\n" + new String (aCode));
+		}
+		if (false) {
+			System.out.println (astRoot.toString ());
+		}
+		final IProblem [] aProblems = astRoot.getProblems ();
+		if (aProblems != null && aProblems.length > 0) {
+			throw new IllegalStateException ("Compilation problems " + Arrays.toString (aProblems));
+		}
+		return astRoot;
+	}
 
-  public static void parseCodeModel (@Nonnull final JCodeModel cm)
-  {
-    try
-    {
-      new JCMWriter (cm).build (new AbstractCodeWriter (DEFAULT_ENCODING, "\n")
-      {
-        @Override
-        public OutputStream openBinary (final String sDirName, final String sFilename) throws IOException
-        {
-          return new ByteArrayOutputStream ()
-          {
-            @Override
-            public void close () throws IOException
-            {
-              super.close ();
+	public static void parseCodeModel (@Nonnull final JCodeModel cm)
+	{
+		try
+		{
+			new JCMWriter (cm).build (new AbstractCodeWriter (DEFAULT_ENCODING, "\n")
+			{
+				@Override
+				public OutputStream openBinary (final String sDirName, final String sFilename) throws IOException
+				{
+					return new ByteArrayOutputStream ()
+					{
+						@Override
+						public void close () throws IOException
+						{
+							super.close ();
 
-              final byte [] aBytes = toByteArray ();
+							final byte [] aBytes = toByteArray ();
 
-              // Get result as bytes and parse
-              _parseWithJavaParser (aBytes, sDirName, sFilename);
-              _parseWithJDT (sFilename, new String (aBytes, DEFAULT_ENCODING).toCharArray ());
-            }
-          };
-        }
+							// Get result as bytes and parse
+							_parseWithJavaParser (aBytes, sDirName, sFilename);
+							_parseWithJDT (sFilename, new String (aBytes, DEFAULT_ENCODING).toCharArray ());
+						}
+					};
+				}
 
-        @Override
-        public void close () throws IOException
-        {}
-      });
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
-  }
+				@Override
+				public void close () throws IOException
+				{}
+			});
+		}
+		catch (final IOException ex)
+		{
+			throw new UncheckedIOException (ex);
+		}
+	}
 
-  @Nonnegative
-  private static int _count (final Iterator <?> x)
-  {
-    int ret = 0;
-    while (x.hasNext ())
-    {
-      x.next ();
-      ret++;
-    }
-    return ret;
-  }
+	@Nonnegative
+	private static int _count (final Iterator <?> x)
+	{
+		int ret = 0;
+		while (x.hasNext ())
+		{
+			x.next ();
+			ret++;
+		}
+		return ret;
+	}
 
-  @Nonnull
-  public static CompilationUnit parseAndGetSingleClassCodeModel (@Nonnull final JCodeModel cm)
-  {
-    assert cm != null;
-    assert _count (cm.packages ()) == 1;
-    assert cm.packages ().next ().classes ().size () == 1;
-    final byte [] aBytes = getAllBytes (cm);
-    try
-    {
-      return _parseWithJavaParser (aBytes, null, "full-jcodemodel");
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
-  }
+	@Nonnull
+	public static CompilationUnit parseAndGetSingleClassCodeModel (@Nonnull final JCodeModel cm)
+	{
+		assert cm != null;
+		assert _count (cm.packages ()) == 1;
+		assert cm.packages ().next ().classes ().size () == 1;
+		final byte [] aBytes = getAllBytes (cm);
+		try
+		{
+			return _parseWithJavaParser (aBytes, null, "full-jcodemodel");
+		}
+		catch (final IOException ex)
+		{
+			throw new UncheckedIOException (ex);
+		}
+	}
 
-  public static void printCodeModel (@Nonnull final JCodeModel cm)
-  {
-    try
-    {
-      new JCMWriter (cm).build (new SingleStreamCodeWriter (System.out));
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
-  }
+	public static void printCodeModel (@Nonnull final JCodeModel cm)
+	{
+		try
+		{
+			new JCMWriter (cm).build (new SingleStreamCodeWriter (System.out));
+		}
+		catch (final IOException ex)
+		{
+			throw new UncheckedIOException (ex);
+		}
+	}
+
+	/** create a {@link JCodeModel} for platform linux */
+	public static JCodeModel linuxCM() {
+		try {
+			return new JCodeModel().setFileSystemConvention(EFileSystemConvention.LINUX);
+		} catch (JCodeModelException e) {
+			throw new UnsupportedOperationException("catch this", e);
+		}
+	}
 }
