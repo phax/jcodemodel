@@ -58,16 +58,10 @@ import com.helger.jcodemodel.ChangeInV4;
 @Immutable
 public final class JCFilenameHelper
 {
-  /** The file extension separation character. */
-  public static final char EXTENSION_SEPARATOR = '.';
-
-  /** The replacement character used for illegal file name characters. */
-  public static final char ILLEGAL_FILENAME_CHAR_REPLACEMENT = '_';
-
-  /** Special name of the current path */
+  /** Special name of the current path. Unix and Windows */
   public static final String PATH_CURRENT = ".";
 
-  /** Special name of the parent path */
+  /** Special name of the parent path. Unix and Windows */
   public static final String PATH_PARENT = "..";
 
   /** The Unix path separator character. */
@@ -93,53 +87,43 @@ public final class JCFilenameHelper
   /** The prefix to identify local UNC paths on Windows based systems */
   public static final String WINDOWS_UNC_PREFIX_LOCAL2 = "\\\\?\\";
 
-  /** The prefix used for Unix hidden files */
-  public static final char HIDDEN_FILE_PREFIX = '.';
-
-  public static final boolean IS_WINDOWS = System.getProperty ("os.name").toLowerCase (Locale.US).contains ("windows");
-
   /**
    * Illegal characters in Windows file names.<br>
    * see http://en.wikipedia.org/wiki/Filename
    */
-  private static final char [] ILLEGAL_CHARACTERS_WINDOWS = { 0, '<', '>', '?', '*', ':', '|', '"' };
-  private static final char [] ILLEGAL_CHARACTERS_OTHERS = { 0, '<', '>', '?', '*', '|', '"' };
+  private static final char [] WINDOWS_ILLEGAL_CHARACTERS = { 0, '<', '>', '?', '*', ':', '|', '"' };
+  /** Modern Linux accept all chars. Test e.g. with <code>touch "*"</code> */
+  private static final char [] UNIX_ILLEGAL_CHARACTERS = { 0 };
 
   /**
    * see http://www.w3.org/TR/widgets/#zip-relative <br>
    * see http://forum.java.sun.com/thread.jspa?threadID=544334&tstart=165<br>
    * see http://en.wikipedia.org/wiki/Filename
    */
-  private static final String [] ILLEGAL_PREFIXES = { "CLOCK$",
-                                                      "CON",
-                                                      "PRN",
-                                                      "AUX",
-                                                      "NUL",
-                                                      "COM2",
-                                                      "COM3",
-                                                      "COM4",
-                                                      "COM5",
-                                                      "COM6",
-                                                      "COM7",
-                                                      "COM8",
-                                                      "COM9",
-                                                      "LPT1",
-                                                      "LPT2",
-                                                      "LPT3",
-                                                      "LPT4",
-                                                      "LPT5",
-                                                      "LPT6",
-                                                      "LPT7",
-                                                      "LPT8",
-                                                      "LPT9" };
+  private static final String [] WINDOWS_ILLEGAL_PREFIXES = { "CLOCK$",
+                                                              "CON",
+                                                              "PRN",
+                                                              "AUX",
+                                                              "NUL",
+                                                              "COM2",
+                                                              "COM3",
+                                                              "COM4",
+                                                              "COM5",
+                                                              "COM6",
+                                                              "COM7",
+                                                              "COM8",
+                                                              "COM9",
+                                                              "LPT1",
+                                                              "LPT2",
+                                                              "LPT3",
+                                                              "LPT4",
+                                                              "LPT5",
+                                                              "LPT6",
+                                                              "LPT7",
+                                                              "LPT8",
+                                                              "LPT9" };
 
-  private static final char [] ILLEGAL_SUFFIXES = new char [] { '.', ' ', '\t' };
-
-  static
-  {
-    if (!isSecureFilenameCharacter (ILLEGAL_FILENAME_CHAR_REPLACEMENT))
-      throw new IllegalStateException ("The illegal filename replacement character must be a valid ASCII character!");
-  }
+  private static final char [] WINDOWS_ILLEGAL_SUFFIXES = new char [] { '.', ' ', '\t' };
 
   private JCFilenameHelper ()
   {}
@@ -230,7 +214,7 @@ public final class JCFilenameHelper
       return false;
 
     // Check if file name contains any of the illegal characters
-    for (final char cIllegal : ILLEGAL_CHARACTERS_OTHERS)
+    for (final char cIllegal : UNIX_ILLEGAL_CHARACTERS)
       if (sFilename.indexOf (cIllegal) != -1)
         return false;
 
@@ -263,16 +247,16 @@ public final class JCFilenameHelper
       return false;
 
     // check for illegal last characters
-    if (JCStringHelper.endsWithAny (sFilename, ILLEGAL_SUFFIXES))
+    if (JCStringHelper.endsWithAny (sFilename, WINDOWS_ILLEGAL_SUFFIXES))
       return false;
 
     // Check if file name contains any of the illegal characters
-    for (final char cIllegal : ILLEGAL_CHARACTERS_WINDOWS)
+    for (final char cIllegal : WINDOWS_ILLEGAL_CHARACTERS)
       if (sFilename.indexOf (cIllegal) != -1)
         return false;
 
     // check prefixes directly
-    for (final String sIllegalPrefix : ILLEGAL_PREFIXES)
+    for (final String sIllegalPrefix : WINDOWS_ILLEGAL_PREFIXES)
       if (sFilename.equalsIgnoreCase (sIllegalPrefix))
         return false;
 
@@ -280,7 +264,7 @@ public final class JCFilenameHelper
     // Note: we can use the default locale, since all fixed names are pure ANSI
     // names
     final String sUCFilename = sFilename.toUpperCase (Locale.ROOT);
-    for (final String sIllegalPrefix : ILLEGAL_PREFIXES)
+    for (final String sIllegalPrefix : WINDOWS_ILLEGAL_PREFIXES)
       if (sUCFilename.startsWith (sIllegalPrefix + "."))
         return false;
 
