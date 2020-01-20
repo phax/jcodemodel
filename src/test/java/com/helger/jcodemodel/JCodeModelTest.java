@@ -59,7 +59,7 @@ public final class JCodeModelTest
   @Test
   public void testParseArray () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     assertNotNull (cm.parseType ("java.util.ArrayList<java.lang.String[]>[]"));
     assertNotNull (cm.parseType ("java.util.ArrayList<java.util.ArrayList<java.util.ArrayList<java.lang.String[]>[]>[]>[]"));
     assertNotNull (cm.parseType ("java.util.Comparator<? super java.lang.CharSequence[]>[]"));
@@ -68,27 +68,27 @@ public final class JCodeModelTest
   @Test
   public void testIssue28 () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     final JDefinedClass aEnumClass = cm._package ("com.helger.issue28")._enum ("DummyEnum");
     cm._package ("com.helger.issue28.other")
-      ._class ("Class")
-      .constructor (JMod.PUBLIC)
-      .body ()
-      .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
+    ._class ("Class")
+    .constructor (JMod.PUBLIC)
+    .body ()
+    .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 
   @Test
   public void testRefClass ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     assertSame (cm.INT, cm._ref (int.class));
   }
 
   @Test
   public void testCODEMODEL24 () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     final JDefinedClass jClass = cm._class ("dummy", EClassType.INTERFACE);
     assertEquals ("dummy", jClass.name ());
     assertEquals (EClassType.INTERFACE, jClass.getClassType ());
@@ -97,7 +97,7 @@ public final class JCodeModelTest
   @Test
   public void testEmptyNarrowed () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     final JDefinedClass jClass = cm._class ("EmptyNarrowed", EClassType.INTERFACE);
     final AbstractJClass hashMap = cm.ref (java.util.HashMap.class).narrowEmpty ();
     jClass.field (JMod.PRIVATE, cm.ref (Map.class).narrow (String.class), "strMap", JExpr._new (hashMap));
@@ -107,7 +107,7 @@ public final class JCodeModelTest
   @Test
   public void testIssue71 () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     final JDefinedClass aOtherByteClass = cm._package ("com.helger.issue71")._class ("Byte");
     final JDefinedClass aFooClass = cm._package ("com.helger.issue71")._class ("Foo");
     final JDefinedClass aClass2 = cm._package ("com.helger.issue71.second")._class ("Class2");
@@ -121,7 +121,7 @@ public final class JCodeModelTest
   @Test
   public void testIssue71v2 () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     final JDefinedClass cl = cm._package ("jcodemodel")._class ("MyClass");
     final JDefinedClass clo = cl._class (JMod.PUBLIC | JMod.STATIC, "Object");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Object.class), "obj");

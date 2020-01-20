@@ -113,7 +113,7 @@ public final class AnnotationUseFuncTest
   @Test
   public void testMain () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     final JDefinedClass cls = cm._class ("Test");
     // JMethod m =
     cls.method (JMod.PUBLIC, cm.VOID, "foo");

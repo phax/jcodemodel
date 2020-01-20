@@ -63,20 +63,20 @@ public final class Issue30FuncTest
   @Test
   public void test () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
 
     final JPackage aPkg1 = cm._package ("id.myapp");
     final JDefinedClass aClass_R = aPkg1._class ("R");
     final JDefinedClass aClass_id = aClass_R._class (JMod.PUBLIC | JMod.STATIC, "id");
     final JFieldVar aFieldItem = aClass_id.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
-                                                  cm.INT,
-                                                  "myItem",
-                                                  JExpr.lit (1));
+        cm.INT,
+        "myItem",
+        JExpr.lit (1));
     final JDefinedClass aClass_menu = aClass_R._class (JMod.PUBLIC | JMod.STATIC, "menu");
     final JFieldVar aFieldMenu = aClass_menu.field (JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
-                                                    cm.INT,
-                                                    "myMenu",
-                                                    JExpr.lit (2));
+        cm.INT,
+        "myMenu",
+        JExpr.lit (2));
 
     final JPackage aPkg2 = cm._package ("demo");
     final JDefinedClass aClassAct = aPkg2._class ("HelloAndroidActivity_");
@@ -91,7 +91,7 @@ public final class Issue30FuncTest
   @Test
   public void testRegression1 () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
 
     final JPackage aPkg1 = cm._package ("id.myapp.activity");
 
@@ -112,7 +112,7 @@ public final class Issue30FuncTest
   @Test
   public void testRegression1VerySpecialCase () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
 
     final JPackage aPkg1 = cm._package ("id.myapp.activity");
 
