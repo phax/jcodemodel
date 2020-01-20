@@ -211,6 +211,7 @@ public class JCodeModel implements Serializable
   /**
    * @return The file system convention to be used. Never <code>null</code>.
    * @since 3.4.0
+   * @see IFileSystemConvention
    */
   @Nonnull
   public final IFileSystemConvention getFileSystemConvention ()
@@ -228,6 +229,7 @@ public class JCodeModel implements Serializable
    * @return this for chaining
    * @throws JCodeModelException
    *         if a package or a resource directory is already present.
+   * @see IFileSystemConvention
    * @since 3.4.0
    */
   @Nonnull
