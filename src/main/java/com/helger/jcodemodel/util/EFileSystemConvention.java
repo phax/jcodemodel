@@ -54,8 +54,8 @@ import javax.annotation.Nullable;
  */
 public enum EFileSystemConvention implements IFileSystemConvention
 {
-  LINUX (true, JCFilenameHelper::isValidLinuxFilename),
-  WINDOWS (false, JCFilenameHelper::isValidWindowsFilename);
+  LINUX (true, JCFilenameHelper::isValidLinuxFilename, JCFilenameHelper::isValidLinuxFilename),
+  WINDOWS (false, JCFilenameHelper::isValidWindowsFilename, JCFilenameHelper::isValidWindowsFilename);
 
   /**
    * The default file system convention follows the known rules.
@@ -63,12 +63,16 @@ public enum EFileSystemConvention implements IFileSystemConvention
   public static final EFileSystemConvention DEFAULT = JCFilenameHelper.isFileSystemCaseSensitive () ? LINUX : WINDOWS;
 
   private final boolean m_bIsCaseSensitive;
-  private final Predicate <String> m_aCheck;
+  private final Predicate <String> m_aDirNameCheck;
+  private final Predicate <String> m_aFilenameCheck;
 
-  private EFileSystemConvention (final boolean bCaseSensitive, @Nonnull final Predicate <String> aCheck)
+  private EFileSystemConvention (final boolean bCaseSensitive,
+                                 @Nonnull final Predicate <String> aDirNameCheck,
+                                 @Nonnull final Predicate <String> aFilenameCheck)
   {
     m_bIsCaseSensitive = bCaseSensitive;
-    m_aCheck = aCheck;
+    m_aDirNameCheck = aDirNameCheck;
+    m_aFilenameCheck = aFilenameCheck;
   }
 
   public boolean isCaseSensistive ()
@@ -78,11 +82,11 @@ public enum EFileSystemConvention implements IFileSystemConvention
 
   public boolean isValidDirectoryName (@Nullable final String sPath)
   {
-    return m_aCheck.test (sPath);
+    return m_aDirNameCheck.test (sPath);
   }
 
   public boolean isValidFilename (@Nullable final String sPath)
   {
-    return m_aCheck.test (sPath);
+    return m_aFilenameCheck.test (sPath);
   }
 }
