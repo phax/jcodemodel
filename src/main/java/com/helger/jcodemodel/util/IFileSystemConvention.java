@@ -54,19 +54,20 @@ import com.helger.jcodemodel.writer.JCMWriter;
  * names. It therefore needs to enforce constraints, to warn the user when it
  * tries to create a file whose name is invalid for the targeted platform.
  * </p>
- *
  * <p>
  * The target file system is set at the creation of the JCM, with by default the
  * local platform specs: If I am coding on windows, by default I need to respect
- * windows' naming specs, and if on linux, linux' naming specs.<br />
- *
+ * windows' naming specs, and if on linux, linux' naming specs.
+ * </p>
+ * <p>
  * It's important that I can change the target platform because, the files may
  * be written into a jar file, or on a FTP server, instead of local platform
- * files, or in memory.<br />
- *
+ * files, or in memory.
+ * </p>
+ * <p>
  * It's unlikely to need to change the target after the creation of the first
  * class, and can lead to errors - hence throw an unsupportedoperationException
- * when changing the target of theJCM after class/dir is already created.
+ * when changing the target of theJCM after class/directory is already created.
  * </p>
  *
  * @author guiguilechat
@@ -75,33 +76,33 @@ import com.helger.jcodemodel.writer.JCMWriter;
  */
 public interface IFileSystemConvention
 {
-	/**
-	 * @return <code>true</code> if the represented file system is case sensitive
-	 *         (e.g. Linux), <code>false</code> if it case insensitive (e.g.
-	 *         Windows)
-	 */
-	boolean isCaseSensistive ();
+  /**
+   * @return <code>true</code> if the represented file system is case sensitive
+   *         (e.g. Linux), <code>false</code> if it case insensitive (e.g.
+   *         Windows)
+   */
+  boolean isCaseSensistive ();
 
-	/**
-	 * Check if the passed name is valid for a directory according to the
-	 * underlying specifications. The names passed in to this method may not
-	 * contain a path separator.
-	 *
-	 * @param sPath
-	 *        The directory name to check.
-	 * @return <code>true</code> if the directory name is valid,
-	 *         <code>false</code> if not
-	 */
-	boolean isValidDirectoryName (@Nullable String sPath);
+  /**
+   * Check if the passed name is valid for a directory according to the
+   * underlying specifications. The names passed in to this method may not
+   * contain a path separator.
+   *
+   * @param sPath
+   *        The directory name to check.
+   * @return <code>true</code> if the directory name is valid,
+   *         <code>false</code> if not
+   */
+  boolean isValidDirectoryName (@Nullable String sPath);
 
-	/**
-	 * Check if the passed name is valid for a file according to the underlying
-	 * specifications.
-	 *
-	 * @param sPath
-	 *        The filename to check.
-	 * @return <code>true</code> if the filename is valid, <code>false</code> if
-	 *         not
-	 */
-	boolean isValidFilename (@Nullable String sPath);
+  /**
+   * Check if the passed name is valid for a file according to the underlying
+   * specifications.
+   *
+   * @param sPath
+   *        The filename to check.
+   * @return <code>true</code> if the filename is valid, <code>false</code> if
+   *         not
+   */
+  boolean isValidFilename (@Nullable String sPath);
 }
