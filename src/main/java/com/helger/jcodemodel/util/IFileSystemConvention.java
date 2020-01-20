@@ -42,8 +42,33 @@ package com.helger.jcodemodel.util;
 
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.writer.JCMWriter;
+
 /**
- * This abstract interface defines the rules
+ * <p>
+ * JCodeModel is used to create a model of the code. This model is then exported
+ * from the java representation into files with
+ * {@link JCMWriter#build(com.helger.jcodemodel.writer.AbstractCodeWriter, com.helger.jcodemodel.writer.AbstractCodeWriter)}.
+ * In order to export the model as files (both .java class definitions, and
+ * resources), it needs to be sure the targeted environment can accept the files
+ * names. It therefore needs to enforce constraints, to warn the user when it
+ * tries to create a file whose name is invalid for the targeted platform.
+ * </p>
+ * <p>
+ * The target file system is set at the creation of the JCM, with by default the
+ * local platform specs: If I am coding on windows, by default I need to respect
+ * windows' naming specs, and if on linux, linux' naming specs.
+ * </p>
+ * <p>
+ * It's important that I can change the target platform because, the files may
+ * be written into a jar file, or on a FTP server, instead of local platform
+ * files, or in memory.
+ * </p>
+ * <p>
+ * It's unlikely to need to change the target after the creation of the first
+ * class, and can lead to errors - hence throw an unsupportedoperationException
+ * when changing the target of theJCM after class/directory is already created.
+ * </p>
  *
  * @author guiguilechat
  * @author Philip Helger
