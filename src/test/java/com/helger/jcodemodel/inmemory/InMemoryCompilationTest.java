@@ -36,7 +36,7 @@ public class InMemoryCompilationTest {
     JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, "my.Clazz");
     JMethod toStringMeth = definedClass.method(JMod.PUBLIC, codeModel.ref(String.class), "toString");
     toStringMeth.body()._return(JExpr.lit(toStringVal));
-    DynamicClassLoader loader = DynamicClassLoader.generate(codeModel);
+    DynamicClassLoader loader = MemoryCodeWriter.from(codeModel).compile();
     Class<?> foundClass = loader.findClass(definedClass.fullName());
     Assert.assertEquals(toStringVal, foundClass.getConstructor().newInstance().toString());
   }
@@ -58,12 +58,12 @@ public class InMemoryCompilationTest {
     JCodeModel codeModel = new JCodeModel(EFileSystemConvention.LINUX);
     codeModel.resourceDir(fileDir)
     .addResourceFile(JTextFile.createFully(fileName, StandardCharsets.UTF_8, toStringVal));
-    MapCodeWriter codeWriter = new MapCodeWriter();
+    MemoryCodeWriter codeWriter = new MemoryCodeWriter();
     new JCMWriter(codeModel).build(codeWriter);
     String inMemoryString = codeWriter.getBinaries().get(fileFullName).toString();
     // check that in memory value is correct
     Assert.assertEquals(toStringVal, inMemoryString);
-    DynamicClassLoader dynCL = DynamicClassLoader.generate(codeWriter.getBinaries().entrySet());
+    DynamicClassLoader dynCL = codeWriter.compile();
     InputStream inCLInpuStream = dynCL.getResourceAsStream(fileFullName);
     Assert.assertNotNull(inCLInpuStream);
     String inCLString = new BufferedReader(new InputStreamReader(inCLInpuStream)).readLine();
