@@ -12,12 +12,8 @@ import com.helger.jcodemodel.util.IFileSystemConvention;
  * @author glelouet
  *
  */
+@SuppressWarnings("serial")
 public class JCaseSensitivityChangeException extends JCodeModelException {
-
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
 
   public JCaseSensitivityChangeException() {
     super(

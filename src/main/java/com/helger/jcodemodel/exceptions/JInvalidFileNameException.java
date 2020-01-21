@@ -31,13 +31,8 @@ import com.helger.jcodemodel.JCodeModelException;
  * @author glelouet
  *
  */
+@SuppressWarnings("serial")
 public class JInvalidFileNameException extends JCodeModelException {
-
-  /**
-   *
-   */
-  private static final long serialVersionUID = 1L;
-
 
   /**
    * create an exception, from an invalid relative part in a file name
@@ -51,10 +46,26 @@ public class JInvalidFileNameException extends JCodeModelException {
   }
 
   /** full name of the file that failed, or null */
-  public final String fullName;
+  private final String fullName;
+
+  /**
+   *
+   * @return the {@link #fullName}
+   */
+  public String getFullName() {
+    return fullName;
+  }
 
   /** partial name of the file that failed, or null. */
-  public final String partName;
+  private final String partName;
+
+  /**
+   *
+   * @return the {@link #partName}
+   */
+  public String getPartName() {
+    return partName;
+  }
 
   /**
    * create an exception, from an invalid relative part and or the invalid
