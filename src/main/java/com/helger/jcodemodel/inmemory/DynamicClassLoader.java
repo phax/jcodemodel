@@ -25,11 +25,13 @@ import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.writer.JCMWriter;
 
 /**
- * class loader that allows dynamic classes.
+ * class loader that allows dynamic classes and resources.
  *
  * <p>
- * add class models using {@link #withCode(JCodeModel)} , then you can use it as
- * a normal classloader, eg {@link ClassLoader.#loadClass(String)}
+ * add class models using {@link #setCode(CompiledCodeJavaFile)} , add resources
+ * using {@link #addResources(Map)} ; then you can use it as a normal
+ * classloader, eg {@link ClassLoader.#loadClass(String)} or
+ * {@link ClassLoader.#getResource(String)}
  * </p>
  *
  */
@@ -39,18 +41,39 @@ public class DynamicClassLoader extends ClassLoader {
 
   private Map<String, ByteArrayOutputStream> customResources = new HashMap<>();
 
+  /**
+   * create a class loader with its parent.
+   *
+   * @param parent
+   *          the classloader to fall back when a resource or class definition
+   *          can't be found.
+   */
   public DynamicClassLoader(ClassLoader parent) {
     super(parent);
   }
 
+  /** set the bytecode for a given class */
   public void setCode(CompiledCodeJavaFile cc) {
     customCompiledCode.put(cc.getName(), cc);
   }
 
+  /**
+   * get the bytecode for a given class name.
+   *
+   * @param fullClassName
+   *          the full name of the class, including its package, eg
+   *          java.lang.String
+   * @return the existing compiledCode for that class, or null.
+   */
   public CompiledCodeJavaFile getCode(String fullClassName) {
     return customCompiledCode.get(fullClassName);
   }
 
+  /**
+   * add a map of path-> resource
+   *
+   * @param resources
+   */
   public void addResources(Map<String, ByteArrayOutputStream> resources) {
     customResources.putAll(resources);
   }
@@ -66,7 +89,12 @@ public class DynamicClassLoader extends ClassLoader {
     return defineClass(name, byteCode, 0, byteCode.length);
   }
 
-  URLStreamHandler handler = new URLStreamHandler() {
+  /**
+   * internal url handler that generates url to load inside its own resources,
+   * if exists. It overloads the openConnection to provide an input stream if a
+   * corresponding bytearray is found for the resource.
+   */
+  private final URLStreamHandler handler = new URLStreamHandler() {
 
     @Override
     protected URLConnection openConnection(URL u) throws IOException {
@@ -111,6 +139,10 @@ public class DynamicClassLoader extends ClassLoader {
   // static methods to produce the code in a dynamicclassloader
   ////
 
+  /**
+   * creates a dynamic class loaders that delegates unknown resources and
+   * classes to the classloader of the javacompiler.
+   */
   protected static DynamicClassLoader dynCL() {
     return new DynamicClassLoader(JavaCompiler.class.getClassLoader());
   }
