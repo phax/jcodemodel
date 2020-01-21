@@ -15,6 +15,11 @@ import com.helger.jcodemodel.util.EFileSystemConvention;
 
 public class InMemoryCompilationTest {
 
+  /**
+   * create a new class in JCM that has toString() return a fixed value. check
+   * if getting that class for the in-memory compiler allows to create a clas
+   * with such a toString() value.
+   */
   @Test
   public void testSimpleClassCreation()
       throws JCodeModelException, ClassNotFoundException, InstantiationException, IllegalAccessException,
@@ -22,7 +27,7 @@ public class InMemoryCompilationTest {
     JCodeModel codeModel = new JCodeModel(EFileSystemConvention.LINUX);
     JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, "my.Clazz");
     JMethod toStringMeth = definedClass.method(JMod.PUBLIC, codeModel.ref(String.class), "toString");
-    String toStringVal = "1337";
+    String toStringVal = "TEST_VALUE";
     toStringMeth.body()._return(JExpr.lit(toStringVal));
     DynamicClassLoader loader = DynamicClassLoader.generate(codeModel);
     Class<?> foundClass = loader.findClass(definedClass.fullName());
