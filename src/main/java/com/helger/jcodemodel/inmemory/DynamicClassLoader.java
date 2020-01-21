@@ -3,6 +3,7 @@ package com.helger.jcodemodel.inmemory;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -65,27 +66,37 @@ public class DynamicClassLoader extends ClassLoader {
     return defineClass(name, byteCode, 0, byteCode.length);
   }
 
+  URLStreamHandler handler = new URLStreamHandler() {
+
+    @Override
+    protected URLConnection openConnection(URL u) throws IOException {
+      return new URLConnection(u) {
+
+        ByteArrayOutputStream baos = customResources.get(u.getFile());
+
+        @Override
+        public void connect() throws IOException {
+          if (baos == null) {
+            throw new FileNotFoundException(u.getFile());
+          }
+        }
+
+        @Override
+        public InputStream getInputStream() throws IOException {
+          if (baos == null) {
+            throw new FileNotFoundException(u.getFile());
+          }
+          return new ByteArrayInputStream(baos.toByteArray());
+        }
+      };
+    }
+
+  };
+
   @Override
   protected URL findResource(String name) {
     ByteArrayOutputStream baos = customResources.get(name);
     if (baos != null) {
-      URLStreamHandler handler = new URLStreamHandler() {
-
-        @Override
-        protected URLConnection openConnection(URL u) throws IOException {
-          return new URLConnection(u) {
-
-            @Override
-            public void connect() throws IOException {
-            }
-
-            @Override
-            public InputStream getInputStream() throws IOException {
-              return new ByteArrayInputStream(baos.toByteArray());
-            }
-          };
-        }
-      };
       try {
         return new URL("memory", null, 0, name, handler);
       } catch (MalformedURLException e) {
