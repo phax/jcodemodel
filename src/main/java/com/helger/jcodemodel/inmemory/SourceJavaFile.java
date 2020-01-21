@@ -11,10 +11,10 @@ import javax.tools.SimpleJavaFileObject;
  *
  * @author glelouet
  */
-public class SourceCode extends SimpleJavaFileObject {
+public class SourceJavaFile extends SimpleJavaFileObject {
 
   /** create a {@link SimpleJavaFileObject} based on a .java file */
-  public SourceCode(String fileName, String contents) throws Exception {
+  public SourceJavaFile(String fileName, String contents) throws Exception {
     super(URI.create("string:///" + fileName), Kind.SOURCE);
     this.contents = contents;
   }

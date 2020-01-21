@@ -150,16 +150,16 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager<JavaFileMa
   @Override
   public JavaFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling)
       throws IOException {
-    if (!cl.customCompiledCode.containsKey(className)) {
-      CompiledCode cc;
+    CompiledCodeJavaFile ret = cl.getCode(className);
+    if (ret == null) {
       try {
-        cc = new CompiledCode(className);
-        cl.setCode(cc);
+        ret = new CompiledCodeJavaFile(className);
+        cl.setCode(ret);
       } catch (Exception e) {
         throw new UnsupportedOperationException("while creating code for " + className, e);
       }
     }
-    return cl.customCompiledCode.get(className);
+    return ret;
   }
 
   @Override

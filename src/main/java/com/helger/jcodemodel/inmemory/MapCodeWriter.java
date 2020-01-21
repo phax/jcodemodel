@@ -12,7 +12,8 @@ import java.util.Map;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 
 /**
- * received code and store it in maps of binary data.
+ * An {@see AbstractCodeWriter} that stores the files created in an internal
+ * map, in order to use them later instead of using files.
  * <p>
  * This is used in a {@link JCodeModel.#build(CodeWriter)} to store the code
  * built. THEN use the {@link #getBinaries()} to retrieve a map of the binaries

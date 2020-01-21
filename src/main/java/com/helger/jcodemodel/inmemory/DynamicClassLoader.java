@@ -1,8 +1,14 @@
 package com.helger.jcodemodel.inmemory;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,24 +34,30 @@ import com.helger.jcodemodel.writer.JCMWriter;
  */
 public class DynamicClassLoader extends ClassLoader {
 
-  public Map<String, CompiledCode> customCompiledCode = new HashMap<>();
+  private Map<String, CompiledCodeJavaFile> customCompiledCode = new HashMap<>();
+
+  private Map<String, ByteArrayOutputStream> customResources = new HashMap<>();
 
   public DynamicClassLoader(ClassLoader parent) {
     super(parent);
   }
 
-  public void setCode(CompiledCode cc) {
+  public void setCode(CompiledCodeJavaFile cc) {
     customCompiledCode.put(cc.getName(), cc);
   }
 
-  public DynamicClassLoader withCode(JCodeModel cm) {
-    generate(cm, this);
-    return this;
+  public CompiledCodeJavaFile getCode(String fullClassName) {
+    return customCompiledCode.get(fullClassName);
   }
+
+  public void addResources(Map<String, ByteArrayOutputStream> resources) {
+    customResources.putAll(resources);
+  }
+
 
   @Override
   protected Class<?> findClass(String name) throws ClassNotFoundException {
-    CompiledCode cc = customCompiledCode.get(name);
+    CompiledCodeJavaFile cc = customCompiledCode.get(name);
     if (cc == null) {
       return super.findClass(name);
     }
@@ -53,17 +65,56 @@ public class DynamicClassLoader extends ClassLoader {
     return defineClass(name, byteCode, 0, byteCode.length);
   }
 
+  @Override
+  protected URL findResource(String name) {
+    ByteArrayOutputStream baos = customResources.get(name);
+    if (baos != null) {
+      URLStreamHandler handler = new URLStreamHandler() {
+
+        @Override
+        protected URLConnection openConnection(URL u) throws IOException {
+          return new URLConnection(u) {
+
+            @Override
+            public void connect() throws IOException {
+            }
+
+            @Override
+            public InputStream getInputStream() throws IOException {
+              return new ByteArrayInputStream(baos.toByteArray());
+            }
+          };
+        }
+      };
+      try {
+        return new URL("memory", null, 0, name, handler);
+      } catch (MalformedURLException e) {
+        throw new UnsupportedOperationException("catch this", e);
+      }
+    } else {
+      return super.findResource(name);
+    }
+  }
+
+  ////
+  // static methods to produce the code in a dynamicclassloader
+  ////
+
+  protected static DynamicClassLoader dynCL() {
+    return new DynamicClassLoader(JavaCompiler.class.getClassLoader());
+  }
+
   /**
-   * generate bytecode in a classloader from a {@link JCodeModel}. This allows
+   * generate bytecode in a class loader from a {@link JCodeModel}. This allows
    * to use, with reflection, the classes defined in the codemodel by loading
-   * them from the classloader.
+   * them from the class loader.
    *
    * @param <T>
    *          the subtype of DynamicClassLoader
    * @param cm
    *          the codemodel to load
    * @param cl
-   *          the classloader to add the definitions into
+   *          the dynamic class loader to add the definitions into
    * @return cl
    */
   public static <T extends DynamicClassLoader> T generate(JCodeModel cm, T cl) {
@@ -73,37 +124,71 @@ public class DynamicClassLoader extends ClassLoader {
     } catch (IOException e) {
       throw new UnsupportedOperationException("catch this exception", e);
     }
-    ArrayList<JavaFileObject> compilationUnits = new ArrayList<>();
-    for (Entry<String, ByteArrayOutputStream> e : codeWriter.getBinaries().entrySet()) {
-      try {
-        compilationUnits.add(new SourceCode(e.getKey(), e.getValue().toString()));
-        String className = e.getKey().replaceAll("/", ".").replace(".java", "");
-        CompiledCode cc = new CompiledCode(className);
-        cl.setCode(cc);
-      } catch (Exception e1) {
-        throw new UnsupportedOperationException("catch this exception", e1);
-      }
-    }
-    try {
-      ForwardingJavaFileManager<JavaFileManager> fileManager = new ClassLoaderFileManager(
-          javac.getStandardFileManager(diagnostic -> System.err.println("file diagnostic " + diagnostic), null, null),
-          cl);
-      JavaCompiler.CompilationTask task = javac.getTask(null, fileManager,
-          diagnostic -> System.err.println(" compile diagnostic " + diagnostic), null, null, compilationUnits);
-      task.call();
-    } catch (Exception e1) {
-      throw new UnsupportedOperationException("catch this exception", e1);
-    }
-    return cl;
+    return generate(codeWriter.getBinaries().entrySet(), cl);
   }
-
-  private static JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
 
   /**
    * shortcut for {@link #generate(JCodeModel, DynamicClassLoader)} with a
    * correct classloader
    */
   public static DynamicClassLoader generate(JCodeModel cm) {
-    return generate(cm, new DynamicClassLoader(JavaCompiler.class.getClassLoader()));
+    return generate(cm, dynCL());
   }
+
+  /**
+   * generate bytecode in a class loader from an iterable over source files.
+   * This allows to use, with reflection, the classes defined by their sources,
+   * by loading them from the class loader.
+   *
+   * @param <T>
+   *          the subtype of DynamicClassLoader
+   * @param sourceFiles
+   *          the source files to load
+   * @param cl
+   *          the dynamic class loader to add the definitions into
+   * @return cl
+   */
+  public static <T extends DynamicClassLoader> T generate(Iterable<Entry<String, ByteArrayOutputStream>> sourceFiles,
+      T cl) {
+    ArrayList<JavaFileObject> compilationUnits = new ArrayList<>();
+    HashMap<String, ByteArrayOutputStream> nonJava = new HashMap<>();
+    for (Entry<String, ByteArrayOutputStream> e : sourceFiles) {
+      if (e.getKey().endsWith(".java")) {
+        try {
+          compilationUnits.add(new SourceJavaFile(e.getKey(), e.getValue().toString()));
+          String className = e.getKey().replaceAll("/", ".").replace(".java", "");
+          CompiledCodeJavaFile cc = new CompiledCodeJavaFile(className);
+          cl.setCode(cc);
+        } catch (Exception e1) {
+          throw new UnsupportedOperationException("catch this exception", e1);
+        }
+      } else {
+        nonJava.put(e.getKey(), e.getValue());
+      }
+    }
+    if (!compilationUnits.isEmpty()) {
+      try {
+        ForwardingJavaFileManager<JavaFileManager> fileManager = new ClassLoaderFileManager(
+            javac.getStandardFileManager(diagnostic -> System.err.println("file diagnostic " + diagnostic), null, null),
+            cl);
+        JavaCompiler.CompilationTask task = javac.getTask(null, fileManager,
+            diagnostic -> System.err.println(" compile diagnostic " + diagnostic), null, null, compilationUnits);
+        task.call();
+      } catch (Exception e1) {
+        throw new UnsupportedOperationException("catch this exception", e1);
+      }
+    }
+    cl.addResources(nonJava);
+    return cl;
+  }
+
+  /**
+   * shortcut for {@link #generate(Iterable, DynamicClassLoader)} with a correct
+   * class loader
+   */
+  public static DynamicClassLoader generate(Iterable<Entry<String, ByteArrayOutputStream>> sourceFiles) {
+    return generate(sourceFiles, dynCL());
+  }
+
+  private static final JavaCompiler javac = ToolProvider.getSystemJavaCompiler();
 }

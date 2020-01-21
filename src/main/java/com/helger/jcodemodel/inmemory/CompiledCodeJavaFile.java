@@ -16,11 +16,11 @@ import javax.tools.SimpleJavaFileObject;
  * @author trung
  *
  */
-public class CompiledCode extends SimpleJavaFileObject {
+public class CompiledCodeJavaFile extends SimpleJavaFileObject {
   private ByteArrayOutputStream baos = new ByteArrayOutputStream();
   private String className;
 
-  public CompiledCode(String className) throws Exception {
+  public CompiledCodeJavaFile(String className) throws Exception {
     super(new URI(className), Kind.CLASS);
     this.className = className;
   }
