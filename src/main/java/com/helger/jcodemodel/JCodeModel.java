@@ -44,8 +44,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -64,6 +66,7 @@ import javax.lang.model.util.Elements;
 import com.helger.jcodemodel.meta.CodeModelBuildingException;
 import com.helger.jcodemodel.meta.ErrorTypeFound;
 import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
+import com.helger.jcodemodel.preprocess.AJCodePreprocessor;
 import com.helger.jcodemodel.util.EFileSystemConvention;
 import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.IFileSystemConvention;
@@ -154,8 +157,9 @@ public class JCodeModel implements Serializable
     m1.put (Void.class, Void.TYPE);
 
     // Swap keys and values
-    for (final Map.Entry <Class <?>, Class <?>> e : m1.entrySet ())
+    for (final Map.Entry <Class <?>, Class <?>> e : m1.entrySet ()) {
       m2.put (e.getValue (), e.getKey ());
+    }
 
     s_aBoxToPrimitive = Collections.unmodifiableMap (m1);
     s_aPrimitiveToBox = Collections.unmodifiableMap (m2);
@@ -234,8 +238,9 @@ public class JCodeModel implements Serializable
   public final JCodeModel setFileSystemConvention (@Nonnull final IFileSystemConvention aFSConvention) throws JCodeModelException
   {
     JCValueEnforcer.notNull (aFSConvention, "FSConvention");
-    if (!m_aPackages.isEmpty () || !m_aResourceDirs.isEmpty ())
+    if (!m_aPackages.isEmpty () || !m_aResourceDirs.isEmpty ()) {
       throw new JCodeModelException ("The FileSystem convention cannot be changed if a package or a resource directory already exists.");
+    }
     m_aFSConvention = aFSConvention;
     return this;
   }
@@ -298,8 +303,9 @@ public class JCodeModel implements Serializable
   @Nonnull
   private FSName _createFSName (@Nonnull final String sName)
   {
-    if (m_aFSConvention.isCaseSensistive ())
+    if (m_aFSConvention.isCaseSensistive ()) {
       return FSName.createCaseSensitive (sName);
+    }
     return FSName.createCaseInsensitive (sName);
   }
 
@@ -325,8 +331,9 @@ public class JCodeModel implements Serializable
     final String sCleanPath = _unifyPath (sName);
 
     // 2. consistency checks
-    if (sCleanPath.startsWith (JResourceDir.SEPARATOR_STR))
+    if (sCleanPath.startsWith (JResourceDir.SEPARATOR_STR)) {
       throw new IllegalArgumentException ("A resource directory may not be an absolute path: '" + sName + "'");
+    }
 
     // 3. ensure root is present
     final JResourceDir aRootDir = m_aResourceDirs.computeIfAbsent (_createFSName (""), k -> JResourceDir.root (this));
@@ -337,18 +344,20 @@ public class JCodeModel implements Serializable
     JResourceDir aCur = aRootDir;
     for (final String sPart : JCStringHelper.getExplodedArray (JResourceDir.SEPARATOR, sCleanPath))
     {
-      if (sDirName.length () > 0)
+      if (sDirName.length () > 0) {
         sDirName += JResourceDir.SEPARATOR;
+      }
       sDirName += sPart;
 
       // Check if directory has a file with the name
-      if (aParentDir.hasResourceFile (sPart))
+      if (aParentDir.hasResourceFile (sPart)) {
         throw new JResourceAlreadyExistsException (aParentDir.fullChildName (sPart));
+      }
 
       // Get main subdir
       final JResourceDir aFinalParentDir = aParentDir;
       aCur = m_aResourceDirs.computeIfAbsent (_createFSName (sDirName),
-                                              k -> new JResourceDir (this, aFinalParentDir, k.getName ()));
+          k -> new JResourceDir (this, aFinalParentDir, k.getName ()));
       aParentDir = aCur;
     }
 
@@ -375,8 +384,9 @@ public class JCodeModel implements Serializable
 
   public boolean containsResourceDir (@Nullable final String sAbsolutePath)
   {
-    if (sAbsolutePath == null)
+    if (sAbsolutePath == null) {
       return false;
+    }
     // 1. unify name
     final String sCleanPath = _unifyPath (sAbsolutePath);
     // 2. check existence
@@ -419,16 +429,17 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+      @Nonnull final String sFullyQualifiedClassName,
+      @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     final int nIdx = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
-    if (nIdx < 0)
+    if (nIdx < 0) {
       return rootPackage ()._class (nMods, sFullyQualifiedClassName, eClassType);
+    }
     return _package (sFullyQualifiedClassName.substring (0, nIdx))._class (nMods,
-                                                                           sFullyQualifiedClassName.substring (nIdx +
-                                                                                                               1),
-                                                                           eClassType);
+        sFullyQualifiedClassName.substring (nIdx +
+            1),
+        eClassType);
   }
 
   /**
@@ -459,7 +470,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sFullyQualifiedClassName) throws JCodeModelException
+      @Nonnull final String sFullyQualifiedClassName) throws JCodeModelException
   {
     return _class (nMods, sFullyQualifiedClassName, EClassType.CLASS);
   }
@@ -477,7 +488,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+      @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
   }
@@ -597,9 +608,11 @@ public class JCodeModel implements Serializable
   public boolean buildsErrorTypeRefs ()
   {
     // avoid concurrent modification exception
-    for (final JPackage aPackage : getAllPackages ())
-      if (aPackage.buildsErrorTypeRefs ())
+    for (final JPackage aPackage : getAllPackages ()) {
+      if (aPackage.buildsErrorTypeRefs ()) {
         return true;
+      }
+    }
     return false;
   }
 
@@ -615,10 +628,11 @@ public class JCodeModel implements Serializable
   public JDefinedClass _getClass (@Nonnull final String sFullyQualifiedClassName)
   {
     final int nIndex = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
-    if (nIndex < 0)
+    if (nIndex < 0) {
       return rootPackage ()._getClass (sFullyQualifiedClassName);
+    }
     return _package (sFullyQualifiedClassName.substring (0,
-                                                         nIndex))._getClass (sFullyQualifiedClassName.substring (nIndex + 1));
+        nIndex))._getClass (sFullyQualifiedClassName.substring (nIndex + 1));
   }
 
   /**
@@ -752,8 +766,8 @@ public class JCodeModel implements Serializable
   @Deprecated
   @ChangeInV4
   public void build (@Nonnull final File aSrcDir,
-                     @Nonnull final File aResourceDir,
-                     @Nullable final PrintStream aStatusPS) throws IOException
+      @Nonnull final File aResourceDir,
+      @Nullable final PrintStream aStatusPS) throws IOException
   {
     AbstractCodeWriter res = new FileCodeWriter (aResourceDir, m_aBuildingCharset, m_sBuildingNewLine);
     AbstractCodeWriter src = new FileCodeWriter (aSrcDir, m_aBuildingCharset, m_sBuildingNewLine);
@@ -833,7 +847,7 @@ public class JCodeModel implements Serializable
   @Deprecated
   @ChangeInV4
   public void build (@Nonnull final AbstractCodeWriter aSource,
-                     @Nonnull final AbstractCodeWriter aResource) throws IOException
+      @Nonnull final AbstractCodeWriter aResource) throws IOException
   {
     new JCMWriter (this).setCharset (m_aBuildingCharset).setNewLine (m_sBuildingNewLine).build (aSource, aResource);
   }
@@ -847,10 +861,12 @@ public class JCodeModel implements Serializable
   {
     int r = 0;
     // avoid concurrent modification exception
-    for (final JPackage aItem : new ArrayList <> (m_aPackages.values ()))
+    for (final JPackage aItem : new ArrayList <> (m_aPackages.values ())) {
       r += aItem.countArtifacts ();
-    for (final JResourceDir aItem : new ArrayList <> (m_aResourceDirs.values ()))
+    }
+    for (final JResourceDir aItem : new ArrayList <> (m_aResourceDirs.values ())) {
       r += aItem.countArtifacts ();
+    }
     return r;
   }
 
@@ -921,7 +937,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public JDefinedClass ref (@Nonnull final TypeElement aElement,
-                            @Nonnull final Elements aElementUtils) throws ErrorTypeFound, CodeModelBuildingException
+      @Nonnull final Elements aElementUtils) throws ErrorTypeFound, CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClass (aElement);
@@ -958,7 +974,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement,
-                                          @Nonnull final Elements aElementUtils) throws CodeModelBuildingException
+      @Nonnull final Elements aElementUtils) throws CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClassWithErrorTypes (aElement);
@@ -976,8 +992,9 @@ public class JCodeModel implements Serializable
   @Nonnull
   public AbstractJType _ref (@Nonnull final Class <?> aClass)
   {
-    if (aClass.isPrimitive ())
+    if (aClass.isPrimitive ()) {
       return AbstractJType.parse (this, aClass.getName ());
+    }
     return ref (aClass);
   }
 
@@ -1118,16 +1135,17 @@ public class JCodeModel implements Serializable
 
         // not supported
         throw new IllegalArgumentException ("only extends/super can follow ?, but found " +
-                                            m_sTypeName.substring (m_nIdx));
+            m_sTypeName.substring (m_nIdx));
       }
 
       while (m_nIdx < m_sTypeName.length ())
       {
         final char ch = m_sTypeName.charAt (m_nIdx);
-        if (Character.isJavaIdentifierStart (ch) || Character.isJavaIdentifierPart (ch) || ch == '.')
+        if (Character.isJavaIdentifierStart (ch) || Character.isJavaIdentifierPart (ch) || ch == '.') {
           m_nIdx++;
-        else
+        } else {
           break;
+        }
       }
 
       final AbstractJClass aClazz = ref (m_sTypeName.substring (nStart, m_nIdx));
@@ -1149,8 +1167,9 @@ public class JCodeModel implements Serializable
 
       final char ch = m_sTypeName.charAt (m_nIdx);
 
-      if (ch == '<')
+      if (ch == '<') {
         return _parseSuffix (_parseArguments (aClazz));
+      }
 
       if (ch == '[')
       {
@@ -1170,8 +1189,9 @@ public class JCodeModel implements Serializable
      */
     private void _skipWs ()
     {
-      while (Character.isWhitespace (m_sTypeName.charAt (m_nIdx)) && m_nIdx < m_sTypeName.length ())
+      while (Character.isWhitespace (m_sTypeName.charAt (m_nIdx)) && m_nIdx < m_sTypeName.length ()) {
         m_nIdx++;
+      }
     }
 
     /**
@@ -1190,14 +1210,17 @@ public class JCodeModel implements Serializable
       while (true)
       {
         args.add (parseTypeName ());
-        if (m_nIdx == m_sTypeName.length ())
+        if (m_nIdx == m_sTypeName.length ()) {
           throw new IllegalArgumentException ("Missing '>' in " + m_sTypeName);
+        }
         final char ch = m_sTypeName.charAt (m_nIdx);
-        if (ch == '>')
+        if (ch == '>') {
           return aRawType.narrow (args);
+        }
 
-        if (ch != ',')
+        if (ch != ',') {
           throw new IllegalArgumentException (m_sTypeName);
+        }
         m_nIdx++;
       }
     }
@@ -1241,5 +1264,26 @@ public class JCodeModel implements Serializable
   public Set <AbstractJClass> getAllDontImportClasses ()
   {
     return new HashSet <> (m_aDontImportClasses);
+  }
+
+  private final HashMap<Class<? extends AJCodePreprocessor>, AJCodePreprocessor> m_preprocessors = new HashMap<>();
+
+  public <T extends AJCodePreprocessor> T processor(Class<T> processorClass) {
+    @SuppressWarnings("unchecked")
+    T ret = (T) m_preprocessors.get(processorClass);
+    if (ret == null) {
+      try {
+        ret = processorClass.getConstructor().newInstance();
+        m_preprocessors.put(processorClass, ret);
+      } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
+          | NoSuchMethodException | SecurityException e) {
+        throw new UnsupportedOperationException("catch this", e);
+      }
+    }
+    return ret;
+  }
+
+  public Collection<AJCodePreprocessor> getProcessors() {
+    return Collections.unmodifiableCollection(m_preprocessors.values());
   }
 }
