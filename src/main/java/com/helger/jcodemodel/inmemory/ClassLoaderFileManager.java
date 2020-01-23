@@ -1,6 +1,5 @@
 package com.helger.jcodemodel.inmemory;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,223 +42,255 @@ import javax.tools.StandardLocation;
  * </p>
  *
  */
-public class ClassLoaderFileManager extends ForwardingJavaFileManager<JavaFileManager> {
+public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileManager>
+{
 
-  public ClassLoaderFileManager(JavaFileManager fileManager, DynamicClassLoader cl) {
-    super(fileManager);
+  public ClassLoaderFileManager (JavaFileManager fileManager, DynamicClassLoader cl)
+  {
+    super (fileManager);
     this.cl = cl;
   }
 
   DynamicClassLoader cl;
 
   @Override
-  public ClassLoader getClassLoader(Location location) {
+  public ClassLoader getClassLoader (Location location)
+  {
     return cl;
   }
 
   @Override
-  public boolean hasLocation(Location location) {
-    return super.hasLocation(location);
+  public boolean hasLocation (Location location)
+  {
+    return super.hasLocation (location);
   }
 
   @Override
-  public Iterable<JavaFileObject> list(Location location, String packageName, Set<Kind> kinds, boolean recurse)
-      throws IOException {
-    if (location == StandardLocation.PLATFORM_CLASS_PATH || packageName.startsWith("java")) {
+  public Iterable <JavaFileObject> list (Location location, String packageName, Set <Kind> kinds, boolean recurse)
+      throws IOException
+  {
+    if (location == StandardLocation.PLATFORM_CLASS_PATH || packageName.startsWith ("java"))
       // let standard manager handle
-      return super.list(location, packageName, kinds, recurse);
-    } else if (location == StandardLocation.CLASS_PATH && kinds.contains(JavaFileObject.Kind.CLASS)) {
+      return super.list (location, packageName, kinds, recurse);
+    else if (location == StandardLocation.CLASS_PATH && kinds.contains (JavaFileObject.Kind.CLASS))
       // app specific classes are here
-      return find(packageName);
-    }
-    return Collections.emptyList();
+      return find (packageName);
+    return Collections.emptyList ();
   }
 
   public static final String CLASS_FILE_EXTENSION = ".class";
 
-  public List<JavaFileObject> find(String packageName) throws IOException {
-    String javaPackageName = packageName.replaceAll("\\.", "/");
-    List<JavaFileObject> result = new ArrayList<>();
-    Enumeration<URL> urlEnumeration = cl.getResources(javaPackageName);
-    while (urlEnumeration.hasMoreElements()) { // one URL for each jar on the
+  public List <JavaFileObject> find (String packageName) throws IOException
+  {
+    String javaPackageName = packageName.replaceAll ("\\.", "/");
+    List <JavaFileObject> result = new ArrayList <> ();
+    Enumeration <URL> urlEnumeration = cl.getResources (javaPackageName);
+    while (urlEnumeration.hasMoreElements ())
+    { // one URL for each jar on the
       // classpath that has the given
       // package
-      URL packageFolderURL = urlEnumeration.nextElement();
-      result.addAll(listUnder(packageName, packageFolderURL));
+      URL packageFolderURL = urlEnumeration.nextElement ();
+      result.addAll (listUnder (packageName, packageFolderURL));
     }
 
     return result;
   }
 
-  private Collection<JavaFileObject> listUnder(String packageName, URL packageFolderURL) {
-    File directory = new File(packageFolderURL.getFile());
-    if (directory.isDirectory()) { // browse local .class files - useful for
+  private Collection <JavaFileObject> listUnder (String packageName, URL packageFolderURL)
+  {
+    File directory = new File (packageFolderURL.getFile ());
+    if (directory.isDirectory ())
       // local execution
-      return processDir(packageName, directory);
-    } else { // browse a jar file
-      return processJar(packageFolderURL);
-    } // maybe there can be something else for more involved class loaders
+      return processDir (packageName, directory);
+    else return processJar (packageFolderURL);
   }
 
-  private List<JavaFileObject> processJar(URL packageFolderURL) {
-    List<JavaFileObject> result = new ArrayList<>();
-    try {
-      String jarUri = packageFolderURL.toExternalForm().split("!")[0];
+  private List <JavaFileObject> processJar (URL packageFolderURL)
+  {
+    List <JavaFileObject> result = new ArrayList <> ();
+    try
+    {
+      String jarUri = packageFolderURL.toExternalForm ().split ("!")[0];
 
-      JarURLConnection jarConn = (JarURLConnection) packageFolderURL.openConnection();
-      String rootEntryName = jarConn.getEntryName();
-      int rootEnd = rootEntryName.length() + 1;
+      JarURLConnection jarConn = (JarURLConnection) packageFolderURL.openConnection ();
+      String rootEntryName = jarConn.getEntryName ();
+      int rootEnd = rootEntryName.length () + 1;
 
-      Enumeration<JarEntry> entryEnum = jarConn.getJarFile().entries();
-      while (entryEnum.hasMoreElements()) {
-        JarEntry jarEntry = entryEnum.nextElement();
-        String name = jarEntry.getName();
-        if (name.startsWith(rootEntryName) && name.indexOf('/', rootEnd) == -1 && name.endsWith(CLASS_FILE_EXTENSION)) {
-          URI uri = URI.create(jarUri + "!/" + name);
-          String binaryName = name.replaceAll("/", ".");
-          binaryName = binaryName.replaceAll(CLASS_FILE_EXTENSION + "$", "");
+      Enumeration <JarEntry> entryEnum = jarConn.getJarFile ().entries ();
+      while (entryEnum.hasMoreElements ())
+      {
+        JarEntry jarEntry = entryEnum.nextElement ();
+        String name = jarEntry.getName ();
+        if (name.startsWith (rootEntryName) && name.indexOf ('/', rootEnd) == -1
+            && name.endsWith (CLASS_FILE_EXTENSION))
+        {
+          URI uri = URI.create (jarUri + "!/" + name);
+          String binaryName = name.replaceAll ("/", ".");
+          binaryName = binaryName.replaceAll (CLASS_FILE_EXTENSION + "$", "");
 
-          result.add(new CustomJavaFileObject(binaryName, uri));
+          result.add (new CustomJavaFileObject (binaryName, uri));
         }
       }
-    } catch (Exception e) {
-      throw new RuntimeException("Wasn't able to open " + packageFolderURL + " as a jar file", e);
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException ("Wasn't able to open " + packageFolderURL + " as a jar file", e);
     }
     return result;
   }
 
-  private List<JavaFileObject> processDir(String packageName, File directory) {
-    List<JavaFileObject> result = new ArrayList<>();
+  private List <JavaFileObject> processDir (String packageName, File directory)
+  {
+    List <JavaFileObject> result = new ArrayList <> ();
 
-    File[] childFiles = directory.listFiles();
-    for (File childFile : childFiles) {
-      if (childFile.isFile()) {
+    File[] childFiles = directory.listFiles ();
+    for (File childFile : childFiles)
+      if (childFile.isFile ())
         // We only want the .class files.
-        if (childFile.getName().endsWith(CLASS_FILE_EXTENSION)) {
-          String binaryName = packageName + "." + childFile.getName();
-          binaryName = binaryName.replaceAll(CLASS_FILE_EXTENSION + "$", "");
+        if (childFile.getName ().endsWith (CLASS_FILE_EXTENSION))
+        {
+          String binaryName = packageName + "." + childFile.getName ();
+          binaryName = binaryName.replaceAll (CLASS_FILE_EXTENSION + "$", "");
 
-          result.add(new CustomJavaFileObject(binaryName, childFile.toURI()));
+          result.add (new CustomJavaFileObject (binaryName, childFile.toURI ()));
         }
-      }
-    }
 
     return result;
   }
 
   @Override
-  public JavaFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling)
-      throws IOException {
-    CompiledCodeJavaFile ret = cl.getCode(className);
-    if (ret == null) {
-      try {
-        ret = new CompiledCodeJavaFile(className);
-        cl.setCode(ret);
-      } catch (Exception e) {
-        throw new UnsupportedOperationException("while creating code for " + className, e);
-      }
+  public JavaFileObject getJavaFileForOutput (Location location, String className, Kind kind, FileObject sibling)
+      throws IOException
+  {
+    CompiledCodeJavaFile ret = cl.getCode (className);
+    if (ret == null)
+      try
+    {
+        ret = new CompiledCodeJavaFile (className);
+        cl.setCode (ret);
+    }
+    catch (Exception e)
+    {
+      throw new UnsupportedOperationException ("while creating code for " + className, e);
     }
     return ret;
   }
 
   @Override
-  public String inferBinaryName(Location location, JavaFileObject file) {
-    if (file instanceof CustomJavaFileObject) {
-      return ((CustomJavaFileObject) file).binaryName();
-    } else {
+  public String inferBinaryName (Location location, JavaFileObject file)
+  {
+    if (file instanceof CustomJavaFileObject)
+      return ((CustomJavaFileObject) file).binaryName ();
+    else
       // if it's not CustomJavaFileObject, then it's coming from standard file
       // manager - let it handle the file
-      return super.inferBinaryName(location, file);
-    }
+      return super.inferBinaryName (location, file);
   }
 
   /**
    * @author atamur
    * @since 15-Oct-2009
    */
-  private static class CustomJavaFileObject implements JavaFileObject {
+  private static class CustomJavaFileObject implements JavaFileObject
+  {
     private final String binaryName;
     private final URI uri;
     private final String name;
 
-    public CustomJavaFileObject(String binaryName, URI uri) {
+    public CustomJavaFileObject (String binaryName, URI uri)
+    {
       this.uri = uri;
       this.binaryName = binaryName;
-      name = uri.getPath() == null ? uri.getSchemeSpecificPart() : uri.getPath();
+      name = uri.getPath () == null ? uri.getSchemeSpecificPart () : uri.getPath ();
     }
 
     @Override
-    public URI toUri() {
+    public URI toUri ()
+    {
       return uri;
     }
 
     @Override
-    public InputStream openInputStream() throws IOException {
-      return uri.toURL().openStream(); // easy way to handle any URI!
+    public InputStream openInputStream () throws IOException
+    {
+      return uri.toURL ().openStream (); // easy way to handle any URI!
     }
 
     @Override
-    public OutputStream openOutputStream() throws IOException {
-      throw new UnsupportedOperationException();
+    public OutputStream openOutputStream () throws IOException
+    {
+      throw new UnsupportedOperationException ();
     }
 
     @Override
-    public String getName() {
+    public String getName ()
+    {
       return name;
     }
 
     @Override
-    public Reader openReader(boolean ignoreEncodingErrors) throws IOException {
-      throw new UnsupportedOperationException();
+    public Reader openReader (boolean ignoreEncodingErrors) throws IOException
+    {
+      throw new UnsupportedOperationException ();
     }
 
     @Override
-    public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
-      throw new UnsupportedOperationException();
+    public CharSequence getCharContent (boolean ignoreEncodingErrors) throws IOException
+    {
+      throw new UnsupportedOperationException ();
     }
 
     @Override
-    public Writer openWriter() throws IOException {
-      throw new UnsupportedOperationException();
+    public Writer openWriter () throws IOException
+    {
+      throw new UnsupportedOperationException ();
     }
 
     @Override
-    public long getLastModified() {
+    public long getLastModified ()
+    {
       return 0;
     }
 
     @Override
-    public boolean delete() {
-      throw new UnsupportedOperationException();
+    public boolean delete ()
+    {
+      throw new UnsupportedOperationException ();
     }
 
     @Override
-    public Kind getKind() {
+    public Kind getKind ()
+    {
       return Kind.CLASS;
     }
 
     @Override // copied from SImpleJavaFileManager
-    public boolean isNameCompatible(String simpleName, Kind kind) {
+    public boolean isNameCompatible (String simpleName, Kind kind)
+    {
       String baseName = simpleName + kind.extension;
-      return kind.equals(getKind()) && (baseName.equals(getName()) || getName().endsWith("/" + baseName));
+      return kind.equals (getKind ()) && (baseName.equals (getName ()) || getName ().endsWith ("/" + baseName));
     }
 
     @Override
-    public NestingKind getNestingKind() {
-      throw new UnsupportedOperationException();
+    public NestingKind getNestingKind ()
+    {
+      throw new UnsupportedOperationException ();
     }
 
     @Override
-    public Modifier getAccessLevel() {
-      throw new UnsupportedOperationException();
+    public Modifier getAccessLevel ()
+    {
+      throw new UnsupportedOperationException ();
     }
 
-    public String binaryName() {
+    public String binaryName ()
+    {
       return binaryName;
     }
 
     @Override
-    public String toString() {
+    public String toString ()
+    {
       return "CustomJavaFileObject{" + "uri=" + uri + '}';
     }
   }

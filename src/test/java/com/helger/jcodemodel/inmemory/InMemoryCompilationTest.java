@@ -20,7 +20,8 @@ import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.util.EFileSystemConvention;
 import com.helger.jcodemodel.writer.JCMWriter;
 
-public class InMemoryCompilationTest {
+public class InMemoryCompilationTest
+{
 
   /**
    * create a new class in JCM that has toString() return a fixed value. check
@@ -28,17 +29,18 @@ public class InMemoryCompilationTest {
    * with such a toString() value.
    */
   @Test
-  public void testSimpleClassCreation()
+  public void testSimpleClassCreation ()
       throws JCodeModelException, ClassNotFoundException, InstantiationException, IllegalAccessException,
-      IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+      IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException
+  {
     String toStringVal = "TEST_VALUE";
-    JCodeModel codeModel = new JCodeModel(EFileSystemConvention.LINUX);
-    JDefinedClass definedClass = codeModel._class(JMod.PUBLIC, "my.Clazz");
-    JMethod toStringMeth = definedClass.method(JMod.PUBLIC, codeModel.ref(String.class), "toString");
-    toStringMeth.body()._return(JExpr.lit(toStringVal));
-    DynamicClassLoader loader = MemoryCodeWriter.from(codeModel).compile();
-    Class<?> foundClass = loader.findClass(definedClass.fullName());
-    Assert.assertEquals(toStringVal, foundClass.getConstructor().newInstance().toString());
+    JCodeModel codeModel = new JCodeModel (EFileSystemConvention.LINUX);
+    JDefinedClass definedClass = codeModel._class (JMod.PUBLIC, "my.Clazz");
+    JMethod toStringMeth = definedClass.method (JMod.PUBLIC, codeModel.ref (String.class), "toString");
+    toStringMeth.body ()._return (JExpr.lit (toStringVal));
+    DynamicClassLoader loader = MemoryCodeWriter.from (codeModel).compile ();
+    Class <?> foundClass = loader.findClass (definedClass.fullName ());
+    Assert.assertEquals (toStringVal, foundClass.getConstructor ().newInstance ().toString ());
   }
 
   /**
@@ -50,24 +52,25 @@ public class InMemoryCompilationTest {
    * @throws IOException
    */
   @Test
-  public void testSimpleResourceCreation() throws JCodeModelException, IOException {
+  public void testSimpleResourceCreation () throws JCodeModelException, IOException
+  {
     String toStringVal = "TEST_VALUE";
     String fileDir = "my/test";
     String fileName = "File.txt";
     String fileFullName = fileDir + "/" + fileName;
-    JCodeModel codeModel = new JCodeModel(EFileSystemConvention.LINUX);
-    codeModel.resourceDir(fileDir)
-    .addResourceFile(JTextFile.createFully(fileName, StandardCharsets.UTF_8, toStringVal));
-    MemoryCodeWriter codeWriter = new MemoryCodeWriter();
-    new JCMWriter(codeModel).build(codeWriter);
-    String inMemoryString = codeWriter.getBinaries().get(fileFullName).toString();
+    JCodeModel codeModel = new JCodeModel (EFileSystemConvention.LINUX);
+    codeModel.resourceDir (fileDir)
+    .addResourceFile (JTextFile.createFully (fileName, StandardCharsets.UTF_8, toStringVal));
+    MemoryCodeWriter codeWriter = new MemoryCodeWriter ();
+    new JCMWriter (codeModel).build (codeWriter);
+    String inMemoryString = codeWriter.getBinaries ().get (fileFullName).toString ();
     // check that in memory value is correct
-    Assert.assertEquals(toStringVal, inMemoryString);
-    DynamicClassLoader dynCL = codeWriter.compile();
-    InputStream inCLInpuStream = dynCL.getResourceAsStream(fileFullName);
-    Assert.assertNotNull(inCLInpuStream);
-    String inCLString = new BufferedReader(new InputStreamReader(inCLInpuStream)).readLine();
-    Assert.assertEquals(toStringVal, inCLString);
+    Assert.assertEquals (toStringVal, inMemoryString);
+    DynamicClassLoader dynCL = codeWriter.compile ();
+    InputStream inCLInpuStream = dynCL.getResourceAsStream (fileFullName);
+    Assert.assertNotNull (inCLInpuStream);
+    String inCLString = new BufferedReader (new InputStreamReader (inCLInpuStream)).readLine ();
+    Assert.assertEquals (toStringVal, inCLString);
   }
 
 }

@@ -11,18 +11,21 @@ import javax.tools.SimpleJavaFileObject;
  *
  * @author glelouet
  */
-public class SourceJavaFile extends SimpleJavaFileObject {
+public class SourceJavaFile extends SimpleJavaFileObject
+{
 
   /** create a {@link SimpleJavaFileObject} based on a .java file */
-  public SourceJavaFile(String fileName, String contents) throws Exception {
-    super(URI.create("string:///" + fileName), Kind.SOURCE);
+  public SourceJavaFile (String fileName, String contents) throws Exception
+  {
+    super (URI.create ("string:///" + fileName), Kind.SOURCE);
     this.contents = contents;
   }
 
   private final String contents;
 
   @Override
-  public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
+  public CharSequence getCharContent (boolean ignoreEncodingErrors) throws IOException
+  {
     return contents;
   }
 }
