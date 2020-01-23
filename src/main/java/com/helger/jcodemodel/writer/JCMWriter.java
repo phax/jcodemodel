@@ -61,7 +61,7 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JResourceDir;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
-import com.helger.jcodemodel.preprocess.AJCodePreprocessor;
+import com.helger.jcodemodel.preprocess.AbstractJCodePreprocessor;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
@@ -95,9 +95,8 @@ public class JCMWriter
       }
 
       // Fall back
-      if (ret == null || ret.length () == 0) {
+      if (ret == null || ret.length () == 0)
         ret = s_sDefaultNewLine = "\n";
-      }
     }
     return ret;
   }
@@ -215,7 +214,8 @@ public class JCMWriter
    *         on IO error if non-null, progress indication will be sent to this
    *         stream.
    */
-  public void build (@Nonnull final File aSrcDir,
+  public void build (
+      @Nonnull final File aSrcDir,
       @Nonnull final File aResourceDir,
       @Nullable final IProgressTracker aStatusPT) throws IOException
   {
@@ -280,23 +280,21 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final AbstractCodeWriter aSourceWriter,
-      @Nonnull final AbstractCodeWriter aResourceWriter) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter aSourceWriter, @Nonnull final AbstractCodeWriter aResourceWriter)
+      throws IOException
   {
-    preprocess();
+    preprocess ();
     try
     {
       // Copy to avoid concurrent modification exception
       final List <JPackage> aPackages = m_aCM.getAllPackages ();
-      for (final JPackage aPackage : aPackages) {
+      for (final JPackage aPackage : aPackages)
         buildPackage (aSourceWriter, aResourceWriter, aPackage);
-      }
 
       // Write resources only
       final List <JResourceDir> aResourceDirs = m_aCM.getAllResourceDirs ();
-      for (final JResourceDir aResourceDir : aResourceDirs) {
+      for (final JResourceDir aResourceDir : aResourceDirs)
         buildResourceDir (aResourceWriter, aResourceDir);
-      }
     }
     finally
     {
@@ -305,26 +303,26 @@ public class JCMWriter
     }
   }
 
-  private void preprocess() {
-    if (m_aCM.getProcessors().isEmpty()) {
+  private void preprocess ()
+  {
+    if (m_aCM.getProcessors ().isEmpty ())
       return;
-    }
     int passes = 0;
     boolean modif = false;
-    do {
+    do
+    {
       modif = false;
-      for (AJCodePreprocessor processor : m_aCM.getProcessors()) {
-        if (processor.apply(m_aCM, passes == 0)) {
+      for (AbstractJCodePreprocessor processor : m_aCM.getProcessors ())
+        if (processor.apply (m_aCM, passes == 0))
           modif = true;
-        }
-      }
       passes++;
     } while (modif);
     // log processors applied with number of passes.
   }
 
   @Nonnull
-  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter aSrcWriter,
+  private JFormatter _createJavaSourceFileWriter (
+      @Nonnull final AbstractCodeWriter aSrcWriter,
       @Nonnull final JPackage aPackage,
       @Nonnull final String sClassFilename) throws IOException
   {
@@ -335,8 +333,9 @@ public class JCMWriter
     return ret;
   }
 
-  @SuppressWarnings ("deprecation")
-  public void buildPackage (@Nonnull final AbstractCodeWriter aSrcWriter,
+  @SuppressWarnings("deprecation")
+  public void buildPackage (
+      @Nonnull final AbstractCodeWriter aSrcWriter,
       @Nonnull final AbstractCodeWriter aResWriter,
       @Nonnull final JPackage aPackage) throws IOException
   {
@@ -344,10 +343,8 @@ public class JCMWriter
     for (final JDefinedClass c : aPackage.classes ())
     {
       if (c.isHidden ())
-      {
         // don't generate this file
         continue;
-      }
 
       try (final JFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, c.name () + ".java"))
       {
@@ -359,21 +356,17 @@ public class JCMWriter
     final Collection <JAnnotationUse> aAnnotations = aPackage.annotations ();
     final JDocComment aJavaDoc = aPackage.javadoc ();
     if (!aAnnotations.isEmpty () || !aJavaDoc.isEmpty ())
-    {
       try (final IJFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, "package-info.java"))
       {
-        if (!aJavaDoc.isEmpty ()) {
+        if (!aJavaDoc.isEmpty ())
           f.generable (aJavaDoc);
-        }
 
         // TODO: think about importing
-        for (final JAnnotationUse a : aAnnotations) {
+        for (final JAnnotationUse a : aAnnotations)
           f.generable (a).newline ();
-        }
 
         f.declaration (aPackage);
       }
-    }
 
     // write resources
     for (final AbstractJResourceFile rsrc : aPackage.getAllResourceFiles ())
@@ -387,17 +380,15 @@ public class JCMWriter
     }
   }
 
-  public void buildResourceDir (@Nonnull final AbstractCodeWriter aResWriter,
-      @Nonnull final JResourceDir aResourceDir) throws IOException
+  public void buildResourceDir (@Nonnull final AbstractCodeWriter aResWriter, @Nonnull final JResourceDir aResourceDir)
+      throws IOException
   {
     // write resources
     for (final AbstractJResourceFile rsrc : aResourceDir.getAllResourceFiles ())
-    {
       try (final OutputStream os = aResWriter.openBinary (aResourceDir.name (), rsrc.name ());
           final OutputStream bos = new BufferedOutputStream (os))
       {
         rsrc.build (bos);
       }
-    }
   }
 }

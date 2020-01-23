@@ -33,17 +33,19 @@ import com.helger.jcodemodel.JCodeModel;
  * @author glelouet
  *
  */
-public abstract class AJCodePreprocessor {
+public abstract class AbstractJCodePreprocessor
+{
 
   /**
    *
-   * @param jcm the {@link JCodeModel} we want to apply the processor onto.
+   * @param jcm
+   *        the {@link JCodeModel} we want to apply the processor onto.
    * @param firstPass
-   *          true when the processor has not bee applied to the jcm already.
-   *          Typically that means them odifications the processor wanted to do
-   *          have already been applied, by itself.
+   *        true when the processor has not bee applied to the jcm already.
+   *        Typically that means them odifications the processor wanted to do
+   *        have already been applied, by itself.
    * @return true if the application of the processor modified the jcm.
    */
-  public abstract boolean apply(JCodeModel jcm, boolean firstPass);
+  public abstract boolean apply (JCodeModel jcm, boolean firstPass);
 
 }

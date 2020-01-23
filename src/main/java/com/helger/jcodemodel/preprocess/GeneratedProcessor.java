@@ -20,27 +20,24 @@ import com.helger.jcodemodel.JPackage;
  * @author glelouet
  *
  */
-public class GeneratedProcessor extends AJCodePreprocessor {
+public class GeneratedProcessor extends AbstractJCodePreprocessor
+{
 
   @Override
-  public boolean apply(JCodeModel jcm, boolean firstPass) {
-    if (generator == null) {
+  public boolean apply (JCodeModel jcm, boolean firstPass)
+  {
+    if (generator == null)
       return false;
-    }
-    String annotationValue = generator.getName();
+    String annotationValue = generator.getName ();
     String annotationDate = null;
-    if (addDate) {
-      annotationDate=DateTimeFormatter.ISO_DATE_TIME.format(LocalDateTime.now());
-    }
-    AbstractJClass generatedRef = jcm.ref(Generated.class);
+    if (addDate)
+      annotationDate = DateTimeFormatter.ISO_DATE_TIME.format (LocalDateTime.now ());
+    AbstractJClass generatedRef = jcm.ref (Generated.class);
     boolean modification = false;
-    for (JPackage pck : jcm.getAllPackages()) {
-      for (JDefinedClass cl : pck.classes()) {
-        if (applyClass(cl, annotationValue, annotationDate, comments, generatedRef)) {
+    for (JPackage pck : jcm.getAllPackages ())
+      for (JDefinedClass cl : pck.classes ())
+        if (applyClass (cl, annotationValue, annotationDate, comments, generatedRef))
           modification = true;
-        }
-      }
-    }
     return modification;
   }
 
@@ -48,34 +45,38 @@ public class GeneratedProcessor extends AJCodePreprocessor {
    * process a class
    *
    * @param cl
-   *          the generated class to process
+   *        the generated class to process
    * @param annotationValue
-   *          the generator used, required.
+   *        the generator used, required.
    * @param annotationDate
-   *          current date in the ISO-8601 format, optional.
+   *        current date in the ISO-8601 format, optional.
    * @param annotationComments
-   *          the comment to add, optional.
+   *        the comment to add, optional.
    * @return true if the application did change the code model.
    */
-  protected boolean applyClass(JDefinedClass cl, String annotationValue, String annotationDate,
-      String annotationComments, AbstractJClass generatedRef) {
-    for (JAnnotationUse ann : cl.annotations()) {
-      AbstractJClass annClass = ann.getAnnotationClass();
-      if (annClass.equals(generatedRef)) {
+  protected boolean applyClass (
+      JDefinedClass cl,
+      String annotationValue,
+      String annotationDate,
+      String annotationComments,
+      AbstractJClass generatedRef)
+  {
+    for (JAnnotationUse ann : cl.annotations ())
+    {
+      AbstractJClass annClass = ann.getAnnotationClass ();
+      if (annClass.equals (generatedRef))
         return false;
-      }
     }
-    JAnnotationUse annotation = cl.annotate(generatedRef);
-    if (annotationDate == null && annotationComments == null) {
-      annotation.param(annotationValue);
-    } else {
-      annotation.param("value", annotationValue);
-      if (annotationDate != null) {
-        annotation.param("date", annotationDate);
-      }
-      if (annotationComments != null) {
-        annotation.param("comments", annotationComments);
-      }
+    JAnnotationUse annotation = cl.annotate (generatedRef);
+    if (annotationDate == null && annotationComments == null)
+      annotation.param (annotationValue);
+    else
+    {
+      annotation.param ("value", annotationValue);
+      if (annotationDate != null)
+        annotation.param ("date", annotationDate);
+      if (annotationComments != null)
+        annotation.param ("comments", annotationComments);
     }
     return true;
   }
@@ -86,25 +87,27 @@ public class GeneratedProcessor extends AJCodePreprocessor {
    * set the comment of the generated annotation.
    *
    * @param comment
-   *          the comment to be added, can be nul.
+   *        the comment to be added, can be nul.
    * @return this.
    */
-  public GeneratedProcessor withComment(String comment) {
+  public GeneratedProcessor withComment (String comment)
+  {
     comments = comment;
     return this;
   }
 
-  private Class<?> generator = null;
+  private Class <?> generator = null;
 
   /**
    * set the object that generated the code.
    *
    * @param generator
-   *          the class that generated the code. If none set, or null, the
-   *          generator is disabled.
+   *        the class that generated the code. If none set, or null, the
+   *        generator is disabled.
    * @return this.
    */
-  public GeneratedProcessor withGenerator(Class<?> generator) {
+  public GeneratedProcessor withGenerator (Class <?> generator)
+  {
     this.generator = generator;
     return this;
   }
@@ -115,10 +118,11 @@ public class GeneratedProcessor extends AJCodePreprocessor {
    * set to add the date in the annotation(default is true)
    *
    * @param addDate
-   *          the new value
+   *        the new value
    * @return this
    */
-  public GeneratedProcessor withAddDate(boolean addDate) {
+  public GeneratedProcessor withAddDate (boolean addDate)
+  {
     this.addDate = addDate;
     return this;
   }

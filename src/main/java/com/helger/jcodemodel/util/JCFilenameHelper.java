@@ -65,10 +65,10 @@ public final class JCFilenameHelper
   public static final char ILLEGAL_FILENAME_CHAR_REPLACEMENT = '_';
 
   /** Special name of the current path */
-  public static final String UNIX_PATH_CURRENT = ".";
+  public static final String PATH_CURRENT = ".";
 
   /** Special name of the parent path */
-  public static final String UNIX_PATH_PARENT = "..";
+  public static final String PATH_PARENT = "..";
 
   /** The Unix path separator character. */
   public static final char UNIX_SEPARATOR = '/';
@@ -102,14 +102,15 @@ public final class JCFilenameHelper
    * Illegal characters in Windows file names.<br>
    * see http://en.wikipedia.org/wiki/Filename
    */
-  private static final char [] WINDOWS_ILLEGAL_CHARACTERS = { 0, '<', '>', '?', '*', ':', '|', '"' };
+  private static final char [] ILLEGAL_CHARACTERS_WINDOWS = { 0, '<', '>', '?', '*', ':', '|', '"' };
+  private static final char [] ILLEGAL_CHARACTERS_OTHERS = { 0, '<', '>', '?', '*', '|', '"' };
 
   /**
    * see http://www.w3.org/TR/widgets/#zip-relative <br>
    * see http://forum.java.sun.com/thread.jspa?threadID=544334&tstart=165<br>
    * see http://en.wikipedia.org/wiki/Filename
    */
-  private static final String [] WINDOWS_ILLEGAL_PREFIXES = { "CLOCK$",
+  private static final String [] ILLEGAL_PREFIXES = { "CLOCK$",
                                                       "CON",
                                                       "PRN",
                                                       "AUX",
@@ -132,7 +133,7 @@ public final class JCFilenameHelper
                                                       "LPT8",
                                                       "LPT9" };
 
-  private static final char [] WINDOWS_ILLEGAL_SUFFIXES = new char [] { '.', ' ', '\t' };
+  private static final char [] ILLEGAL_SUFFIXES = new char [] { '.', ' ', '\t' };
 
   static
   {
@@ -225,7 +226,7 @@ public final class JCFilenameHelper
       return false;
 
     // Check for reserved directories
-    if (UNIX_PATH_CURRENT.equals (sFilename) || UNIX_PATH_PARENT.equals (sFilename))
+    if (PATH_CURRENT.equals (sFilename) || PATH_PARENT.equals (sFilename))
       return false;
 
     return true;
@@ -253,20 +254,20 @@ public final class JCFilenameHelper
       return false;
 
     // Check for reserved directories
-    if (UNIX_PATH_CURRENT.equals (sFilename) || UNIX_PATH_PARENT.equals (sFilename))
+    if (PATH_CURRENT.equals (sFilename) || PATH_PARENT.equals (sFilename))
       return false;
 
     // check for illegal last characters
-    if (JCStringHelper.endsWithAny (sFilename, WINDOWS_ILLEGAL_SUFFIXES))
+    if (JCStringHelper.endsWithAny (sFilename, ILLEGAL_SUFFIXES))
       return false;
 
     // Check if file name contains any of the illegal characters
-    for (final char cIllegal : WINDOWS_ILLEGAL_CHARACTERS)
+    for (final char cIllegal : ILLEGAL_CHARACTERS_WINDOWS)
       if (sFilename.indexOf (cIllegal) != -1)
         return false;
 
     // check prefixes directly
-    for (final String sIllegalPrefix : WINDOWS_ILLEGAL_PREFIXES)
+    for (final String sIllegalPrefix : ILLEGAL_PREFIXES)
       if (sFilename.equalsIgnoreCase (sIllegalPrefix))
         return false;
 
@@ -274,7 +275,7 @@ public final class JCFilenameHelper
     // Note: we can use the default locale, since all fixed names are pure ANSI
     // names
     final String sUCFilename = sFilename.toUpperCase (Locale.ROOT);
-    for (final String sIllegalPrefix : WINDOWS_ILLEGAL_PREFIXES)
+    for (final String sIllegalPrefix : ILLEGAL_PREFIXES)
       if (sUCFilename.startsWith (sIllegalPrefix + "."))
         return false;
 
