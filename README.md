@@ -135,8 +135,19 @@ Add the following to your pom.xml to use this artifact:
 </dependency>
 ```
 
+## Contribution
+
+Pull requests must follow my personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md)
+
+### Eclipse
+
+For eclipse, a formatter xml and a cleanup xml are present in the meta/formatter/eclipse/ directory. You can load them from the "project properties > java code style" settings. Check "Enable project specific settings", then load them.
+
+NOTE : you also need to change the save actions to make them meet the clean up actions. Save actions are done even when they are not present in the clean up.
+
+
+
 ---
 
-My personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md) |
 On Twitter: <a href="https://twitter.com/philiphelger">@philiphelger</a> |
 Kindly supported by [YourKit Java Profiler](https://www.yourkit.com)

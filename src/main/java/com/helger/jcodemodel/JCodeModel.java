@@ -251,11 +251,13 @@ public class JCodeModel implements Serializable
    * @since 3.4.0
    */
   @Nonnull
-  public final JCodeModel setFileSystemConvention (@Nonnull final IFileSystemConvention aFSConvention) throws JCodeModelException
+  public final JCodeModel setFileSystemConvention (@Nonnull final IFileSystemConvention aFSConvention)
+      throws JCodeModelException
   {
     JCValueEnforcer.notNull (aFSConvention, "FSConvention");
     if (!m_aPackages.isEmpty () || !m_aResourceDirs.isEmpty ())
-      throw new JCodeModelException ("The FileSystem convention cannot be changed if a package or a resource directory already exists.");
+      throw new JCodeModelException (
+          "The FileSystem convention cannot be changed if a package or a resource directory already exists.");
     m_aFSConvention = aFSConvention;
     return this;
   }
@@ -368,7 +370,7 @@ public class JCodeModel implements Serializable
       // Get main subdir
       final JResourceDir aFinalParentDir = aParentDir;
       aCur = m_aResourceDirs.computeIfAbsent (_createFSName (sDirName),
-                                              k -> new JResourceDir (this, aFinalParentDir, k.getName ()));
+          k -> new JResourceDir (this, aFinalParentDir, k.getName ()));
       aParentDir = aCur;
     }
 
@@ -438,17 +440,16 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+  public JDefinedClass _class (
+      final int nMods,
+      @Nonnull final String sFullyQualifiedClassName,
+      @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     final int nIdx = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIdx < 0)
       return rootPackage ()._class (nMods, sFullyQualifiedClassName, eClassType);
     return _package (sFullyQualifiedClassName.substring (0, nIdx))._class (nMods,
-                                                                           sFullyQualifiedClassName.substring (nIdx +
-                                                                                                               1),
-                                                                           eClassType);
+        sFullyQualifiedClassName.substring (nIdx + 1), eClassType);
   }
 
   /**
@@ -478,8 +479,8 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sFullyQualifiedClassName) throws JCodeModelException
+  public JDefinedClass _class (final int nMods, @Nonnull final String sFullyQualifiedClassName)
+      throws JCodeModelException
   {
     return _class (nMods, sFullyQualifiedClassName, EClassType.CLASS);
   }
@@ -496,8 +497,8 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName, @Nonnull final EClassType eClassType)
+      throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
   }
@@ -637,8 +638,8 @@ public class JCodeModel implements Serializable
     final int nIndex = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIndex < 0)
       return rootPackage ()._getClass (sFullyQualifiedClassName);
-    return _package (sFullyQualifiedClassName.substring (0,
-                                                         nIndex))._getClass (sFullyQualifiedClassName.substring (nIndex + 1));
+    return _package (sFullyQualifiedClassName.substring (0, nIndex))
+        ._getClass (sFullyQualifiedClassName.substring (nIndex + 1));
   }
 
   /**
@@ -771,9 +772,10 @@ public class JCodeModel implements Serializable
    */
   @Deprecated
   @ChangeInV4
-  public void build (@Nonnull final File aSrcDir,
-                     @Nonnull final File aResourceDir,
-                     @Nullable final PrintStream aStatusPS) throws IOException
+  public void build (
+      @Nonnull final File aSrcDir,
+      @Nonnull final File aResourceDir,
+      @Nullable final PrintStream aStatusPS) throws IOException
   {
     AbstractCodeWriter res = new FileCodeWriter (aResourceDir, m_aBuildingCharset, m_sBuildingNewLine);
     AbstractCodeWriter src = new FileCodeWriter (aSrcDir, m_aBuildingCharset, m_sBuildingNewLine);
@@ -852,8 +854,8 @@ public class JCodeModel implements Serializable
    */
   @Deprecated
   @ChangeInV4
-  public void build (@Nonnull final AbstractCodeWriter aSource,
-                     @Nonnull final AbstractCodeWriter aResource) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter aSource, @Nonnull final AbstractCodeWriter aResource)
+      throws IOException
   {
     new JCMWriter (this).setCharset (m_aBuildingCharset).setNewLine (m_sBuildingNewLine).build (aSource, aResource);
   }
@@ -892,10 +894,8 @@ public class JCodeModel implements Serializable
     if (aRefClass == null)
     {
       if (aClazz.isPrimitive ())
-      {
         // Cannot return BYTE etc. because the return type does not match
         throw new IllegalArgumentException (aClazz + " is a primitive");
-      }
 
       if (aClazz.isArray ())
       {
@@ -940,8 +940,8 @@ public class JCodeModel implements Serializable
    * @see #refWithErrorTypes(TypeElement,Elements)
    */
   @Nonnull
-  public JDefinedClass ref (@Nonnull final TypeElement aElement,
-                            @Nonnull final Elements aElementUtils) throws ErrorTypeFound, CodeModelBuildingException
+  public JDefinedClass ref (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils)
+      throws ErrorTypeFound, CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClass (aElement);
@@ -977,8 +977,8 @@ public class JCodeModel implements Serializable
    * @see #buildsErrorTypeRefs()
    */
   @Nonnull
-  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement,
-                                          @Nonnull final Elements aElementUtils) throws CodeModelBuildingException
+  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils)
+      throws CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClassWithErrorTypes (aElement);
@@ -1049,10 +1049,8 @@ public class JCodeModel implements Serializable
   public AbstractJClass wildcard ()
   {
     if (m_aWildcard == null)
-    {
       // "Hack" if base class is "Object" it is omitted
       m_aWildcard = ref (Object.class).wildcardExtends ();
-    }
     return m_aWildcard;
   }
 
@@ -1072,10 +1070,8 @@ public class JCodeModel implements Serializable
   {
     // array
     if (sName.endsWith ("[]"))
-    {
       // Simply remove trailing "[]"
       return parseType (sName.substring (0, sName.length () - 2)).array ();
-    }
 
     // try primitive type
     try
@@ -1137,8 +1133,8 @@ public class JCodeModel implements Serializable
         }
 
         // not supported
-        throw new IllegalArgumentException ("only extends/super can follow ?, but found " +
-                                            m_sTypeName.substring (m_nIdx));
+        throw new IllegalArgumentException (
+            "only extends/super can follow ?, but found " + m_sTypeName.substring (m_nIdx));
       }
 
       while (m_nIdx < m_sTypeName.length ())
@@ -1162,10 +1158,8 @@ public class JCodeModel implements Serializable
     private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass aClazz)
     {
       if (m_nIdx == m_sTypeName.length ())
-      {
         // hit EOL
         return aClazz;
-      }
 
       final char ch = m_sTypeName.charAt (m_nIdx);
 
