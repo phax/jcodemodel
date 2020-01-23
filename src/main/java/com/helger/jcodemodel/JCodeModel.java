@@ -212,15 +212,20 @@ public class JCodeModel implements Serializable
    */
   public JCodeModel ()
   {
-    try
-    {
-      setFileSystemConvention (EFileSystemConvention.DEFAULT);
-    }
-    catch (JCodeModelException e)
-    {
-      // should not happen
-      throw new UnsupportedOperationException ("catch this", e);
-    }
+    this (EFileSystemConvention.DEFAULT);
+  }
+
+  /**
+   * Constructor with parameter
+   *
+   * @param aFSConvention
+   *        The file system convention to be used. May not be <code>null</code>.
+   * @since v3.4.0
+   */
+  public JCodeModel (@Nonnull final IFileSystemConvention aFSConvention)
+  {
+    JCValueEnforcer.notNull (aFSConvention, "FSConvention");
+    m_aFSConvention = aFSConvention;
   }
 
   /**
@@ -494,10 +499,9 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (
-      final int nMods,
-      @Nonnull final String sFullyQualifiedClassName,
-      @Nonnull final EClassType eClassType) throws JCodeModelException
+  public JDefinedClass _class (final int nMods,
+                               @Nonnull final String sFullyQualifiedClassName,
+                               @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     final int nIdx = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIdx < 0)
