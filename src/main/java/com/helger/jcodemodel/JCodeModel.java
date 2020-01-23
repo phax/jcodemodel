@@ -61,8 +61,8 @@ import javax.annotation.concurrent.NotThreadSafe;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
-import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
 import com.helger.jcodemodel.exceptions.JCaseSensitivityChangeException;
+import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
 import com.helger.jcodemodel.meta.CodeModelBuildingException;
 import com.helger.jcodemodel.meta.ErrorTypeFound;
 import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
@@ -156,9 +156,8 @@ public class JCodeModel implements Serializable
     m1.put (Void.class, Void.TYPE);
 
     // Swap keys and values
-    for (final Map.Entry <Class <?>, Class <?>> e : m1.entrySet ()) {
+    for (final Map.Entry <Class <?>, Class <?>> e : m1.entrySet ())
       m2.put (e.getValue (), e.getKey ());
-    }
 
     s_aBoxToPrimitive = Collections.unmodifiableMap (m1);
     s_aPrimitiveToBox = Collections.unmodifiableMap (m2);
@@ -211,13 +210,16 @@ public class JCodeModel implements Serializable
   /**
    * Default constructor using the system default file system convention.
    */
-  public JCodeModel()
+  public JCodeModel ()
   {
-    try {
-      setFileSystemConvention(EFileSystemConvention.DEFAULT);
-    } catch (JCodeModelException e) {
+    try
+    {
+      setFileSystemConvention (EFileSystemConvention.DEFAULT);
+    }
+    catch (JCodeModelException e)
+    {
       // should not happen
-      throw new UnsupportedOperationException("catch this", e);
+      throw new UnsupportedOperationException ("catch this", e);
     }
   }
 
@@ -239,44 +241,41 @@ public class JCodeModel implements Serializable
    * sensitivy or prevent the creation of resources names that are already used.
    *
    * @param aFSConvention
-   *          The file system convention to be used. May not be
-   *          <code>null</code>.
+   *        The file system convention to be used. May not be
+   *        <code>null</code>.
    * @return this for chaining
    * @throws JCaseSensitivityChangeException
-   *           if the new convention has different case sensitivity
+   *         if the new convention has different case sensitivity
    * @throws JInvalidFileNameException
-   *           if the new convention does not allow some file previously
-   *           created.
+   *         if the new convention does not allow some file previously
+   *         created.
    * @see IFileSystemConvention
    * @since 3.4.0
    */
   @Nonnull
-  public final IFileSystemConvention setFileSystemConvention(@Nonnull final IFileSystemConvention aFSConvention)
+  public final IFileSystemConvention setFileSystemConvention (@Nonnull final IFileSystemConvention aFSConvention)
       throws JCaseSensitivityChangeException, JInvalidFileNameException
   {
-    JCValueEnforcer.notNull(aFSConvention, "FSConvention");
-    if (aFSConvention == m_aFSConvention) {
+    JCValueEnforcer.notNull (aFSConvention, "FSConvention");
+    if (aFSConvention == m_aFSConvention)
       return m_aFSConvention;
-    }
     IFileSystemConvention old = m_aFSConvention;
-    if (!m_aResourceDirs.isEmpty()) {
+    if (!m_aResourceDirs.isEmpty ())
+    {
       // test null in case we set the platform from the constructor
-      if (m_aFSConvention != null && m_aFSConvention.isCaseSensistive() != aFSConvention.isCaseSensistive()) {
-        throw new JCaseSensitivityChangeException();
-      }
-      for (FSName name : m_aResourceDirs.keySet()) {
-        String sName = name.getName();
+      if (m_aFSConvention != null && m_aFSConvention.isCaseSensistive () != aFSConvention.isCaseSensistive ())
+        throw new JCaseSensitivityChangeException ();
+      for (FSName name : m_aResourceDirs.keySet ())
+      {
+        String sName = name.getName ();
 
         // copy from JresourceDir. should be mutualized ?
 
         // An empty directory name is okay
-        if (sName.length() > 0) {
-          for (final String sPart : JCStringHelper.getExplodedArray(JResourceDir.SEPARATOR, sName)) {
-            if (!aFSConvention.isValidDirectoryName(sPart)) {
-              throw new JInvalidFileNameException(sName, sPart);
-            }
-          }
-        }
+        if (sName.length () > 0)
+          for (final String sPart : JCStringHelper.getExplodedArray (JResourceDir.SEPARATOR, sName))
+            if (!aFSConvention.isValidDirectoryName (sPart))
+              throw new JInvalidFileNameException (sName, sPart);
       }
 
       // nothing to do with packages, file names convention is not relevant to
@@ -287,21 +286,25 @@ public class JCodeModel implements Serializable
   }
 
   @Nonnull
-  public final JCodeModel withFileSystemConvention(@Nonnull final IFileSystemConvention aFSConvention)
-      throws JCodeModelException {
-    setFileSystemConvention(aFSConvention);
+  public final JCodeModel withFileSystemConvention (@Nonnull final IFileSystemConvention aFSConvention)
+      throws JCodeModelException
+  {
+    setFileSystemConvention (aFSConvention);
     return this;
   }
 
-  public static JCodeModel createUnified() {
-    try {
-      return new JCodeModel().withFileSystemConvention(EFileSystemConvention.LINUX);
-    } catch (JCodeModelException e) {
+  public static JCodeModel createUnified ()
+  {
+    try
+    {
+      return new JCodeModel ().withFileSystemConvention (EFileSystemConvention.LINUX);
+    }
+    catch (JCodeModelException e)
+    {
       // should not happen
-      throw new UnsupportedOperationException("catch this", e);
+      throw new UnsupportedOperationException ("catch this", e);
     }
   }
-
 
   /**
    * Add a package to the list of packages to be generated
@@ -361,9 +364,8 @@ public class JCodeModel implements Serializable
   @Nonnull
   private FSName _createFSName (@Nonnull final String sName)
   {
-    if (m_aFSConvention.isCaseSensistive ()) {
+    if (m_aFSConvention.isCaseSensistive ())
       return FSName.createCaseSensitive (sName);
-    }
     return FSName.createCaseInsensitive (sName);
   }
 
@@ -372,19 +374,19 @@ public class JCodeModel implements Serializable
    * be generated
    *
    * @param sName
-   *          Name of the resource directory. Use "" to indicate the root
-   *          directory.
+   *        Name of the resource directory. Use "" to indicate the root
+   *        directory.
    * @return Newly generated resource directory. Never <code>null</code>.
    * @throws JInvalidFileNameException
-   *           if the name is invalid for current platform.
+   *         if the name is invalid for current platform.
    * @throws JResourceAlreadyExistsException
-   *           If the resource directory could not be created because another
-   *           file or class already has this name.
+   *         If the resource directory could not be created because another
+   *         file or class already has this name.
    * @see #rootResourceDir()
    * @since v3.4.0
    */
   @Nonnull
-  public JResourceDir resourceDir(@Nonnull final String sName)
+  public JResourceDir resourceDir (@Nonnull final String sName)
       throws JResourceAlreadyExistsException, JInvalidFileNameException
   {
     JCValueEnforcer.notNull (sName, "Name");
@@ -393,9 +395,8 @@ public class JCodeModel implements Serializable
     final String sCleanPath = _unifyPath (sName);
 
     // 2. consistency checks
-    if (sCleanPath.startsWith (JResourceDir.SEPARATOR_STR)) {
+    if (sCleanPath.startsWith (JResourceDir.SEPARATOR_STR))
       throw new IllegalArgumentException ("A resource directory may not be an absolute path: '" + sName + "'");
-    }
 
     // 3. ensure root is present
     final JResourceDir aRootDir = m_aResourceDirs.computeIfAbsent (_createFSName (""), k -> JResourceDir.root (this));
@@ -406,24 +407,23 @@ public class JCodeModel implements Serializable
     JResourceDir aCur = aRootDir;
     for (final String sPart : JCStringHelper.getExplodedArray (JResourceDir.SEPARATOR, sCleanPath))
     {
-      if (sDirName.length () > 0) {
+      if (sDirName.length () > 0)
         sDirName += JResourceDir.SEPARATOR;
-      }
       sDirName += sPart;
 
       // Check if directory has a file with the name
-      if (aParentDir.hasResourceFile (sPart)) {
+      if (aParentDir.hasResourceFile (sPart))
         throw new JResourceAlreadyExistsException (aParentDir.fullChildName (sPart));
-      }
 
       // Get main subdir
       final JResourceDir aFinalParentDir = aParentDir;
-      FSName curName = _createFSName(sDirName);
+      FSName curName = _createFSName (sDirName);
       // cannot use computeifAbsent because exception thrown.
-      aCur = m_aResourceDirs.get(curName);
-      if (aCur == null) {
-        aCur = new JResourceDir(this, aFinalParentDir, curName.getName());
-        m_aResourceDirs.put(curName, aCur);
+      aCur = m_aResourceDirs.get (curName);
+      if (aCur == null)
+      {
+        aCur = new JResourceDir (this, aFinalParentDir, curName.getName ());
+        m_aResourceDirs.put (curName, aCur);
       }
       aParentDir = aCur;
     }
@@ -451,9 +451,8 @@ public class JCodeModel implements Serializable
 
   public boolean containsResourceDir (@Nullable final String sAbsolutePath)
   {
-    if (sAbsolutePath == null) {
+    if (sAbsolutePath == null)
       return false;
-    }
     // 1. unify name
     final String sCleanPath = _unifyPath (sAbsolutePath);
     // 2. check existence
@@ -495,18 +494,16 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int nMods,
+  public JDefinedClass _class (
+      final int nMods,
       @Nonnull final String sFullyQualifiedClassName,
       @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     final int nIdx = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
-    if (nIdx < 0) {
+    if (nIdx < 0)
       return rootPackage ()._class (nMods, sFullyQualifiedClassName, eClassType);
-    }
     return _package (sFullyQualifiedClassName.substring (0, nIdx))._class (nMods,
-        sFullyQualifiedClassName.substring (nIdx +
-            1),
-        eClassType);
+        sFullyQualifiedClassName.substring (nIdx + 1), eClassType);
   }
 
   /**
@@ -536,8 +533,8 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int nMods,
-      @Nonnull final String sFullyQualifiedClassName) throws JCodeModelException
+  public JDefinedClass _class (final int nMods, @Nonnull final String sFullyQualifiedClassName)
+      throws JCodeModelException
   {
     return _class (nMods, sFullyQualifiedClassName, EClassType.CLASS);
   }
@@ -554,8 +551,8 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName,
-      @Nonnull final EClassType eClassType) throws JCodeModelException
+  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName, @Nonnull final EClassType eClassType)
+      throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
   }
@@ -675,11 +672,9 @@ public class JCodeModel implements Serializable
   public boolean buildsErrorTypeRefs ()
   {
     // avoid concurrent modification exception
-    for (final JPackage aPackage : getAllPackages ()) {
-      if (aPackage.buildsErrorTypeRefs ()) {
+    for (final JPackage aPackage : getAllPackages ())
+      if (aPackage.buildsErrorTypeRefs ())
         return true;
-      }
-    }
     return false;
   }
 
@@ -695,11 +690,10 @@ public class JCodeModel implements Serializable
   public JDefinedClass _getClass (@Nonnull final String sFullyQualifiedClassName)
   {
     final int nIndex = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
-    if (nIndex < 0) {
+    if (nIndex < 0)
       return rootPackage ()._getClass (sFullyQualifiedClassName);
-    }
-    return _package (sFullyQualifiedClassName.substring (0,
-        nIndex))._getClass (sFullyQualifiedClassName.substring (nIndex + 1));
+    return _package (sFullyQualifiedClassName.substring (0, nIndex))
+        ._getClass (sFullyQualifiedClassName.substring (nIndex + 1));
   }
 
   /**
@@ -832,7 +826,8 @@ public class JCodeModel implements Serializable
    */
   @Deprecated
   @ChangeInV4
-  public void build (@Nonnull final File aSrcDir,
+  public void build (
+      @Nonnull final File aSrcDir,
       @Nonnull final File aResourceDir,
       @Nullable final PrintStream aStatusPS) throws IOException
   {
@@ -913,8 +908,8 @@ public class JCodeModel implements Serializable
    */
   @Deprecated
   @ChangeInV4
-  public void build (@Nonnull final AbstractCodeWriter aSource,
-      @Nonnull final AbstractCodeWriter aResource) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter aSource, @Nonnull final AbstractCodeWriter aResource)
+      throws IOException
   {
     new JCMWriter (this).setCharset (m_aBuildingCharset).setNewLine (m_sBuildingNewLine).build (aSource, aResource);
   }
@@ -928,12 +923,10 @@ public class JCodeModel implements Serializable
   {
     int r = 0;
     // avoid concurrent modification exception
-    for (final JPackage aItem : new ArrayList <> (m_aPackages.values ())) {
+    for (final JPackage aItem : new ArrayList <> (m_aPackages.values ()))
       r += aItem.countArtifacts ();
-    }
-    for (final JResourceDir aItem : new ArrayList <> (m_aResourceDirs.values ())) {
+    for (final JResourceDir aItem : new ArrayList <> (m_aResourceDirs.values ()))
       r += aItem.countArtifacts ();
-    }
     return r;
   }
 
@@ -955,10 +948,8 @@ public class JCodeModel implements Serializable
     if (aRefClass == null)
     {
       if (aClazz.isPrimitive ())
-      {
         // Cannot return BYTE etc. because the return type does not match
         throw new IllegalArgumentException (aClazz + " is a primitive");
-      }
 
       if (aClazz.isArray ())
       {
@@ -1003,8 +994,8 @@ public class JCodeModel implements Serializable
    * @see #refWithErrorTypes(TypeElement,Elements)
    */
   @Nonnull
-  public JDefinedClass ref (@Nonnull final TypeElement aElement,
-      @Nonnull final Elements aElementUtils) throws ErrorTypeFound, CodeModelBuildingException
+  public JDefinedClass ref (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils)
+      throws ErrorTypeFound, CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClass (aElement);
@@ -1040,8 +1031,8 @@ public class JCodeModel implements Serializable
    * @see #buildsErrorTypeRefs()
    */
   @Nonnull
-  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement,
-      @Nonnull final Elements aElementUtils) throws CodeModelBuildingException
+  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils)
+      throws CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClassWithErrorTypes (aElement);
@@ -1059,9 +1050,8 @@ public class JCodeModel implements Serializable
   @Nonnull
   public AbstractJType _ref (@Nonnull final Class <?> aClass)
   {
-    if (aClass.isPrimitive ()) {
+    if (aClass.isPrimitive ())
       return AbstractJType.parse (this, aClass.getName ());
-    }
     return ref (aClass);
   }
 
@@ -1113,10 +1103,8 @@ public class JCodeModel implements Serializable
   public AbstractJClass wildcard ()
   {
     if (m_aWildcard == null)
-    {
       // "Hack" if base class is "Object" it is omitted
       m_aWildcard = ref (Object.class).wildcardExtends ();
-    }
     return m_aWildcard;
   }
 
@@ -1136,10 +1124,8 @@ public class JCodeModel implements Serializable
   {
     // array
     if (sName.endsWith ("[]"))
-    {
       // Simply remove trailing "[]"
       return parseType (sName.substring (0, sName.length () - 2)).array ();
-    }
 
     // try primitive type
     try
@@ -1201,18 +1187,17 @@ public class JCodeModel implements Serializable
         }
 
         // not supported
-        throw new IllegalArgumentException ("only extends/super can follow ?, but found " +
-            m_sTypeName.substring (m_nIdx));
+        throw new IllegalArgumentException (
+            "only extends/super can follow ?, but found " + m_sTypeName.substring (m_nIdx));
       }
 
       while (m_nIdx < m_sTypeName.length ())
       {
         final char ch = m_sTypeName.charAt (m_nIdx);
-        if (Character.isJavaIdentifierStart (ch) || Character.isJavaIdentifierPart (ch) || ch == '.') {
+        if (Character.isJavaIdentifierStart (ch) || Character.isJavaIdentifierPart (ch) || ch == '.')
           m_nIdx++;
-        } else {
+        else
           break;
-        }
       }
 
       final AbstractJClass aClazz = ref (m_sTypeName.substring (nStart, m_nIdx));
@@ -1227,16 +1212,13 @@ public class JCodeModel implements Serializable
     private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass aClazz)
     {
       if (m_nIdx == m_sTypeName.length ())
-      {
         // hit EOL
         return aClazz;
-      }
 
       final char ch = m_sTypeName.charAt (m_nIdx);
 
-      if (ch == '<') {
+      if (ch == '<')
         return _parseSuffix (_parseArguments (aClazz));
-      }
 
       if (ch == '[')
       {
@@ -1256,9 +1238,8 @@ public class JCodeModel implements Serializable
      */
     private void _skipWs ()
     {
-      while (Character.isWhitespace (m_sTypeName.charAt (m_nIdx)) && m_nIdx < m_sTypeName.length ()) {
+      while (Character.isWhitespace (m_sTypeName.charAt (m_nIdx)) && m_nIdx < m_sTypeName.length ())
         m_nIdx++;
-      }
     }
 
     /**
@@ -1277,17 +1258,14 @@ public class JCodeModel implements Serializable
       while (true)
       {
         args.add (parseTypeName ());
-        if (m_nIdx == m_sTypeName.length ()) {
+        if (m_nIdx == m_sTypeName.length ())
           throw new IllegalArgumentException ("Missing '>' in " + m_sTypeName);
-        }
         final char ch = m_sTypeName.charAt (m_nIdx);
-        if (ch == '>') {
+        if (ch == '>')
           return aRawType.narrow (args);
-        }
 
-        if (ch != ',') {
+        if (ch != ',')
           throw new IllegalArgumentException (m_sTypeName);
-        }
         m_nIdx++;
       }
     }

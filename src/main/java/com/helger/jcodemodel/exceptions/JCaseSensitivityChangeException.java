@@ -13,10 +13,12 @@ import com.helger.jcodemodel.util.IFileSystemConvention;
  *
  */
 @SuppressWarnings("serial")
-public class JCaseSensitivityChangeException extends JCodeModelException {
+public class JCaseSensitivityChangeException extends JCodeModelException
+{
 
-  public JCaseSensitivityChangeException() {
-    super(
+  public JCaseSensitivityChangeException ()
+  {
+    super (
         "The FileSystem convention cannot be changed for one with a different case sensitivity if a package or a resource directory already exists.");
   }
 

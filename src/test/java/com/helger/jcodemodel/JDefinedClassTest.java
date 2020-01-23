@@ -71,16 +71,16 @@ public final class JDefinedClassTest
      *
      * class MyClass
      * {
-     *   private String myField;
+     * private String myField;
      *
-     *   {
-     *     this.myField = "myValue";
-     *   }
+     * {
+     * this.myField = "myValue";
+     * }
      * }
      * </pre>
      */
 
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass c = cm._package ("myPackage")._class (0, "MyClass");
     c.headerComment ().add ("Line 1\nLine 2\nLine 3");
     final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");
@@ -97,7 +97,7 @@ public final class JDefinedClassTest
   @Test
   public void testCallSuper () throws Exception
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     // Base class
     final JDefinedClass c1 = cm._package ("myPackage")._class (0, "BaseClass");

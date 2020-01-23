@@ -89,43 +89,37 @@ public class JResourceDir implements IJOwned
    * Constructor
    *
    * @param aOwner
-   *          The code writer being used to create this package. May not be
-   *          <code>null</code>.
+   *        The code writer being used to create this package. May not be
+   *        <code>null</code>.
    * @param aParentDir
-   *          The parent directory. May only be <code>null</code> for the target
-   *          root resource directory. In that case the name must be "".
+   *        The parent directory. May only be <code>null</code> for the target
+   *        root resource directory. In that case the name must be "".
    * @param sName
-   *          Name of directory. May not be <code>null</code> but empty. No
-   *          absolute paths are allowed and only Linux forward slashes may be
-   *          used as path separators.
+   *        Name of directory. May not be <code>null</code> but empty. No
+   *        absolute paths are allowed and only Linux forward slashes may be
+   *        used as path separators.
    * @throws JInvalidFileNameException
-   *           If a part of the package name is not a valid filename part.
+   *         If a part of the package name is not a valid filename part.
    */
-  protected JResourceDir (@Nonnull final JCodeModel aOwner,
-      @Nullable final JResourceDir aParentDir,
+  protected JResourceDir (@Nonnull final JCodeModel aOwner, @Nullable final JResourceDir aParentDir,
       @Nonnull final String sName) throws JInvalidFileNameException
   {
     JCValueEnforcer.notNull (sName, "Name");
     JCValueEnforcer.notNull (aOwner, "CodeModel");
-    if (aParentDir == null) {
+    if (aParentDir == null)
       JCValueEnforcer.isTrue (sName.length () == 0, "If no parent directory is provided, the name must be empty");
-    }
-    if (sName.length () == 0) {
+    if (sName.length () == 0)
       JCValueEnforcer.isNull (aParentDir, "If no name is provided, the parent directory must be null");
-    }
 
     m_aOwner = aOwner;
     m_aParentDir = aParentDir;
     m_sName = sName;
 
     // An empty directory name is okay
-    if (sName.length () > 0) {
-      for (final String sPart : JCStringHelper.getExplodedArray (JResourceDir.SEPARATOR, sName)) {
-        if (!aOwner.getFileSystemConvention ().isValidDirectoryName (sPart)) {
-          throw new JInvalidFileNameException(sName, sPart);
-        }
-      }
-    }
+    if (sName.length () > 0)
+      for (final String sPart : JCStringHelper.getExplodedArray (JResourceDir.SEPARATOR, sName))
+        if (!aOwner.getFileSystemConvention ().isValidDirectoryName (sPart))
+          throw new JInvalidFileNameException (sName, sPart);
   }
 
   /**
@@ -167,9 +161,8 @@ public class JResourceDir implements IJOwned
   @Nonnull
   private FSName _createFSName (@Nonnull final String sName)
   {
-    if (m_aOwner.getFileSystemConvention ().isCaseSensistive ()) {
+    if (m_aOwner.getFileSystemConvention ().isCaseSensistive ())
       return FSName.createCaseSensitive (sName);
-    }
     return FSName.createCaseInsensitive (sName);
   }
 
@@ -197,31 +190,26 @@ public class JResourceDir implements IJOwned
 
     final String sName = aResFile.name ();
 
-    if (!m_aOwner.getFileSystemConvention ().isValidFilename (sName)) {
-      throw new IllegalArgumentException ("Resource filename '" +
-          sName +
-          "' is invalid according to the current file system conventions");
-    }
+    if (!m_aOwner.getFileSystemConvention ().isValidFilename (sName))
+      throw new IllegalArgumentException (
+          "Resource filename '" + sName + "' is invalid according to the current file system conventions");
 
     // Check if a sub directory already exists with the same name
-    if (m_aOwner.containsResourceDir (fullChildName (sName))) {
+    if (m_aOwner.containsResourceDir (fullChildName (sName)))
       throw new JResourceAlreadyExistsException (fullChildName (sName));
-    }
 
     // Check filename uniqueness
     final FSName aKey = _createFSName (sName);
-    if (m_aResources.containsKey (aKey)) {
+    if (m_aResources.containsKey (aKey))
       throw new JResourceAlreadyExistsException (fullChildName (sName));
-    }
 
     // Check if a Java class with the same name already exists
     if (JCStringHelper.endsWithCaseInsensitive (sName, ".java"))
     {
       // Cut trailing ".java"
       final JDefinedClass aDC = _getMatchingPackage ()._getClass (sName.substring (0, sName.length () - 5));
-      if (aDC != null) {
+      if (aDC != null)
         throw new JClassAlreadyExistsException (aDC);
-      }
     }
 
     // All checks good - add to map
@@ -277,18 +265,16 @@ public class JResourceDir implements IJOwned
   public JResourceDir subDir (@Nonnull final String sSubDirName) throws JCodeModelException
   {
     // Check if a file with the same name already exists
-    if (hasResourceFile (sSubDirName)) {
+    if (hasResourceFile (sSubDirName))
       throw new JResourceAlreadyExistsException (fullChildName (sSubDirName));
-    }
 
     // Check if a Java class with the same name already exists
     if (JCStringHelper.endsWithCaseInsensitive (sSubDirName, ".java"))
     {
       // Cut trailing ".java"
       final JDefinedClass aDC = _getMatchingPackage ()._getClass (sSubDirName.substring (0, sSubDirName.length () - 5));
-      if (aDC != null) {
+      if (aDC != null)
         throw new JClassAlreadyExistsException (aDC);
-      }
     }
 
     return owner ().resourceDir (isUnnamed () ? sSubDirName : m_sName + SEPARATOR + sSubDirName);
@@ -328,11 +314,14 @@ public class JResourceDir implements IJOwned
   @Nonnull
   static JResourceDir root (@Nonnull final JCodeModel aOwner)
   {
-    try {
-      return new JResourceDir(aOwner, null, "");
-    } catch (JInvalidFileNameException e) {
+    try
+    {
+      return new JResourceDir (aOwner, null, "");
+    }
+    catch (JInvalidFileNameException e)
+    {
       // should not happen
-      throw new UnsupportedOperationException("catch this", e);
+      throw new UnsupportedOperationException ("catch this", e);
     }
   }
 }

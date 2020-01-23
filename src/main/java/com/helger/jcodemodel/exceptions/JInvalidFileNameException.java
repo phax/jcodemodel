@@ -32,15 +32,17 @@ import com.helger.jcodemodel.JCodeModelException;
  *
  */
 @SuppressWarnings("serial")
-public class JInvalidFileNameException extends JCodeModelException {
+public class JInvalidFileNameException extends JCodeModelException
+{
 
   /**
    * create an exception, from an invalid relative part in a file name
    *
    * @param part
    */
-  public JInvalidFileNameException(String part) {
-    super("invalid file name : " + part);
+  public JInvalidFileNameException (String part)
+  {
+    super ("invalid file name : " + part);
     fullName = null;
     partName = part;
   }
@@ -52,7 +54,8 @@ public class JInvalidFileNameException extends JCodeModelException {
    *
    * @return the {@link #fullName}
    */
-  public String getFullName() {
+  public String getFullName ()
+  {
     return fullName;
   }
 
@@ -63,7 +66,8 @@ public class JInvalidFileNameException extends JCodeModelException {
    *
    * @return the {@link #partName}
    */
-  public String getPartName() {
+  public String getPartName ()
+  {
     return partName;
   }
 
@@ -71,8 +75,9 @@ public class JInvalidFileNameException extends JCodeModelException {
    * create an exception, from an invalid relative part and or the invalid
    * global file name
    */
-  public JInvalidFileNameException(String fullName, String part) {
-    super("Resource name '" + fullName + "' contains the the invalid part '" + part
+  public JInvalidFileNameException (String fullName, String part)
+  {
+    super ("Resource name '" + fullName + "' contains the the invalid part '" + part
         + "' according to the current file system conventions");
     this.fullName = fullName;
     partName = part;

@@ -54,7 +54,7 @@ public final class JFieldRefTest
   @Test
   public void testBasic () throws Exception
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JDefinedClass cls = cm._class (JMod.FINAL, "Test");
     final JFieldVar f1 = cls.field (JMod.PRIVATE, cm.ref (Integer.class), "field");

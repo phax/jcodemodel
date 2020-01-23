@@ -56,16 +56,15 @@ public final class JPackageTest
   public void testGetParent () throws Exception
   {
     // Create JCodeModel
-    final JCodeModel aCM = JCodeModel.createUnified();
+    final JCodeModel aCM = JCodeModel.createUnified ();
 
     // Reflect into class
     final AbstractJClass wClass = aCM.ref (JExpr.class);
 
     // Walk up to the root package
     JPackage wCurrentPackage = wClass._package ();
-    while (wCurrentPackage.parent () != null) {
+    while (wCurrentPackage.parent () != null)
       wCurrentPackage = wCurrentPackage.parent ();
-    }
 
     assertNotNull (wCurrentPackage);
     assertNull (wCurrentPackage.parent ());
@@ -74,7 +73,7 @@ public final class JPackageTest
   @Test
   public void testInvalidNamesAnyCase ()
   {
-    final JCodeModel aCM = JCodeModel.createUnified();
+    final JCodeModel aCM = JCodeModel.createUnified ();
 
     assertFalse (JPackage.isForcePackageNameLowercase ());
 
@@ -85,7 +84,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not contain empty parts
     try
@@ -94,7 +94,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not contain empty parts
     try
@@ -103,7 +104,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not contain empty parts
     try
@@ -112,7 +114,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not contain empty parts
     try
@@ -121,7 +124,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not contain empty parts
     try
@@ -130,7 +134,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not start with a number
     try
@@ -139,7 +144,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not be a keyword
     try
@@ -148,7 +154,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not be a keyword
     try
@@ -157,7 +164,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not be a keyword
     try
@@ -166,7 +174,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not contain special chars
     try
@@ -175,7 +184,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not contain special chars
     try
@@ -184,7 +194,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // May not contain special chars
     try
@@ -193,7 +204,8 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {}
+    {
+    }
 
     // Allow for uppercase stuff
     aCM._package ("Org.PUB.blaFooBar.baZ");
@@ -202,7 +214,7 @@ public final class JPackageTest
   @Test
   public void testInvalidNamesLowerCase ()
   {
-    final JCodeModel aCM = JCodeModel.createUnified();
+    final JCodeModel aCM = JCodeModel.createUnified ();
 
     assertFalse (JPackage.isForcePackageNameLowercase ());
     try
@@ -217,7 +229,8 @@ public final class JPackageTest
         fail ();
       }
       catch (final IllegalArgumentException ex)
-      {}
+      {
+      }
 
       // May not contain an upper case char
       try
@@ -226,7 +239,8 @@ public final class JPackageTest
         fail ();
       }
       catch (final IllegalArgumentException ex)
-      {}
+      {
+      }
 
       // May not contain an upper case char
       try
@@ -235,7 +249,8 @@ public final class JPackageTest
         fail ();
       }
       catch (final IllegalArgumentException ex)
-      {}
+      {
+      }
     }
     finally
     {
