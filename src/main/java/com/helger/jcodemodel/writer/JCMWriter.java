@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -62,6 +63,7 @@ import com.helger.jcodemodel.JResourceDir;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.preprocess.AbstractJCodePreprocessor;
+import com.helger.jcodemodel.preprocess.PreprocessException;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
@@ -312,9 +314,20 @@ public class JCMWriter
     do
     {
       modif = false;
+      List <PreprocessException> caughtExceptions = new ArrayList <> ();
       for (AbstractJCodePreprocessor processor : m_aCM.getProcessors ())
-        if (processor.apply (m_aCM, passes == 0))
-          modif = true;
+        try
+      {
+          if (processor.apply (m_aCM, passes == 0))
+            modif = true;
+      }
+      catch (PreprocessException ex)
+      {
+        caughtExceptions.add (ex);
+      }
+      if (!caughtExceptions.isEmpty ())
+        // TODO throw a correct exception
+        throw new UnsupportedOperationException ("exceptions caught on pass "+passes+" : "+caughtExceptions);
       passes++;
     } while (modif);
     // log processors applied with number of passes.

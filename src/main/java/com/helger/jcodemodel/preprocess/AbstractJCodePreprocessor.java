@@ -46,6 +46,6 @@ public abstract class AbstractJCodePreprocessor
    *        have already been applied, by itself.
    * @return true if the application of the processor modified the jcm.
    */
-  public abstract boolean apply (JCodeModel jcm, boolean firstPass);
+  public abstract boolean apply (JCodeModel jcm, boolean firstPass) throws PreprocessException;
 
 }
