@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.preprocess;
+package com.helger.jcodemodel.preprocessors;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

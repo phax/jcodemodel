@@ -66,7 +66,7 @@ import javax.lang.model.util.Elements;
 import com.helger.jcodemodel.meta.CodeModelBuildingException;
 import com.helger.jcodemodel.meta.ErrorTypeFound;
 import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
-import com.helger.jcodemodel.preprocess.AbstractJCodePreprocessor;
+import com.helger.jcodemodel.preprocessors.AbstractJCodePreprocessor;
 import com.helger.jcodemodel.util.EFileSystemConvention;
 import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.IFileSystemConvention;

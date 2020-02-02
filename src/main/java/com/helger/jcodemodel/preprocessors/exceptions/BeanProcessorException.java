@@ -1,6 +1,6 @@
-package com.helger.jcodemodel.preprocess.exceptions;
+package com.helger.jcodemodel.preprocessors.exceptions;
 
-import com.helger.jcodemodel.preprocess.PreprocessException;
+import com.helger.jcodemodel.preprocessors.PreprocessException;
 
 @SuppressWarnings("serial")
 public class BeanProcessorException extends PreprocessException

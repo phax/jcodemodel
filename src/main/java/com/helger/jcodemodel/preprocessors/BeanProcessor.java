@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.preprocess;
+package com.helger.jcodemodel.preprocessors;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JVar;
-import com.helger.jcodemodel.preprocess.exceptions.BeanProcessorException;
+import com.helger.jcodemodel.preprocessors.exceptions.BeanProcessorException;
 
 public class BeanProcessor extends AbstractJCodePreprocessor
 {

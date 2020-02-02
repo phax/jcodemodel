@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.preprocess;
+package com.helger.jcodemodel.preprocessors;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,9 @@ import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.preprocessors.AuthorProcessor;
+import com.helger.jcodemodel.preprocessors.BeanProcessor;
+import com.helger.jcodemodel.preprocessors.GeneratedProcessor;
 import com.helger.jcodemodel.util.EFileSystemConvention;
 import com.helger.jcodemodel.writer.JCMWriter;
 

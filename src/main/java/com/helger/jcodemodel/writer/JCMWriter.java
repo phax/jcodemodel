@@ -62,8 +62,8 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JResourceDir;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
-import com.helger.jcodemodel.preprocess.AbstractJCodePreprocessor;
-import com.helger.jcodemodel.preprocess.PreprocessException;
+import com.helger.jcodemodel.preprocessors.AbstractJCodePreprocessor;
+import com.helger.jcodemodel.preprocessors.PreprocessException;
 import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 

@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.preprocess;
+package com.helger.jcodemodel.preprocessors;
 
 import java.io.IOException;
 
@@ -9,6 +9,7 @@ import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JDocComment;
+import com.helger.jcodemodel.preprocessors.AuthorProcessor;
 import com.helger.jcodemodel.util.EFileSystemConvention;
 
 public class AuthorPreprocessorTest {
