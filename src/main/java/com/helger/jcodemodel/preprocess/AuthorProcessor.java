@@ -54,9 +54,10 @@ public class AuthorProcessor extends AbstractJCodePreprocessor
   protected boolean applyClass (JDefinedClass cl)
   {
     Set <String> classAuthors = new LinkedHashSet <> ();
-    for (Object subpart : cl.javadoc ().getTag (JDocComment.TAG_AUTHOR))
-      if (subpart instanceof String)
-        addAuthors (classAuthors, (String) subpart);
+    if (cl.javadoc ().getTag (JDocComment.TAG_AUTHOR) != null)
+      for (Object subpart : cl.javadoc ().getTag (JDocComment.TAG_AUTHOR))
+        if (subpart instanceof String)
+          addAuthors (classAuthors, (String) subpart);
     for (Object javadocPart : cl.javadoc ())
       if (javadocPart instanceof String)
       {

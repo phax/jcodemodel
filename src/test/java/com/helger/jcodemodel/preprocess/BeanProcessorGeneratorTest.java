@@ -62,7 +62,7 @@ public class BeanProcessorGeneratorTest
     JFieldVar field2 = cl.field (JMod.PRIVATE | JMod.FINAL, cm.ref (String.class), "field2");
     BeanProcessor test = cm.processor (BeanProcessor.class);
     test.add (field1, field2);
-    File out = new File ("target/testBean/");
+    File out = new File ("target/BeanProcessorGeneratorTest/");
     out.mkdirs ();
     new JCMWriter (cm).build (out);
   }
