@@ -17,7 +17,7 @@ import com.helger.jcodemodel.JPackage;
  * "John Theauthor" is already present, and "john theauthor" is to be added,
  * both will be present as authors.
  *
- * @author gleleout
+ * @author glelouet
  *
  */
 public class AuthorProcessor extends AbstractJCodePreprocessor
