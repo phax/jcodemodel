@@ -91,8 +91,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   private static IJFormatter _createFormatter (@Nonnull final StringWriter aWriter)
   {
-    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()),
-                           JCMWriter.DEFAULT_INDENT_STRING);
+    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()), JCMWriter.DEFAULT_INDENT_STRING);
   }
 
   /** Hidden constructor. */
@@ -234,6 +233,7 @@ public final class CodeModelTestsHelper
 
     System.out.println ("Parsing " +
                         JCStringHelper.replaceAll (sDirName, '/', '.') +
+                        (sDirName.length () > 0 ? "." : "") +
                         (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
 
     try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))

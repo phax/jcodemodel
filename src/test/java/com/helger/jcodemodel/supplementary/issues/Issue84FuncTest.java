@@ -38,51 +38,37 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.supplementary.issues;
 
-import javax.annotation.Nonnull;
+import java.util.List;
+
+import org.junit.Test;
+
+import com.helger.jcodemodel.JAnonymousClass;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
- * Anonymous class quick hack.
+ * Test for https://github.com/phax/jcodemodel/issues/84
  *
- * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Philip Helger
  */
-public class JAnonymousClass extends JDefinedClass
+public final class Issue84FuncTest
 {
-  /**
-   * Base interface/class from which this anonymous class is built.
-   */
-  private final AbstractJClass m_aBaseClass;
-
-  protected JAnonymousClass (@Nonnull final AbstractJClass aBaseClass)
+  @Test
+  public void testIssue () throws Exception
   {
-    super (aBaseClass.owner (), 0, null);
-    m_aBaseClass = aBaseClass;
-  }
+    final JCodeModel cm = new JCodeModel ();
 
-  /**
-   * @return The base class to be used.
-   */
-  @Nonnull
-  public AbstractJClass base ()
-  {
-    return m_aBaseClass;
-  }
+    final JDefinedClass outerClass = cm._class ("test.Outer");
+    final JDefinedClass innerClass = outerClass._class ("Inner");
 
-  @Override
-  @Nonnull
-  public String fullName ()
-  {
-    // TODO I think this is incorrect! Some "$1" or the like is missing
-    return m_aBaseClass.fullName ();
-  }
+    final JDefinedClass testClass = cm._class ("test.Test");
+    final JAnonymousClass anonymousClass = cm.anonymousClass (cm.ref (List.class).narrow (innerClass));
+    testClass.field (0, cm.ref (List.class).narrow (innerClass), "field", JExpr._new (anonymousClass));
 
-  @Override
-  public void generate (final IJFormatter f)
-  {
-    if (true)
-      m_aBaseClass.generate (f);
-    else
-      f.type (m_aBaseClass);
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }
