@@ -137,8 +137,28 @@ Add the following to your pom.xml to use this artifact:
 * v2.6.4 - 2014-04-10
 * 2013-09-23: Changes from https://github.com/UnquietCode/JCodeModel have been incorporated.
 
+## Contribution
+
+Pull requests must follow my personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md)
+
+### Tabs vs spaces
+
+This project uses double-space for indentation. If you want to use tabs, you can ask git to modify the files when commiting them and when pulling them. For this, from your project directory : 
+
+ - edit the file .git/info/attributes to make it contain `*.java filter=tabspace` . This will tell git to apply the script tabspace on the *.java files
+ - run `git config filter.tabspace.clean 'expand --tabs=2 --initial'` to ask git to replace tabs with two spaces on commit of *.java files.
+ - run `git config filter.tabspace.smudge 'unexpand --tabs=2 --first-only'` to request git to replace double spaces with two tabs on checking a *.java file out.
+
+
+### Eclipse
+
+For eclipse, a formatter xml and a cleanup xml are present in the meta/formatter/eclipse/ directory. You can load them from the "project properties > java code style" settings. Check "Enable project specific settings", then load them.
+
+NOTE : you also need to change the save actions to make them meet the clean up actions. Save actions are done even when they are not present in the clean up.
+
+
+
 ---
 
-My personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md) |
 On Twitter: <a href="https://twitter.com/philiphelger">@philiphelger</a> |
 Kindly supported by [YourKit Java Profiler](https://www.yourkit.com)

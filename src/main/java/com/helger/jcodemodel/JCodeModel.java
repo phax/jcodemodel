@@ -422,6 +422,8 @@ public class JCodeModel implements Serializable
 
       // Get main subdir
       final JResourceDir aFinalParentDir = aParentDir;
+//      aCur = m_aResourceDirs.computeIfAbsent (_createFSName (sDirName),
+//          k -> new JResourceDir (this, aFinalParentDir, k.getName ()));
       FSName curName = _createFSName (sDirName);
       // cannot use computeifAbsent because exception thrown.
       aCur = m_aResourceDirs.get (curName);
@@ -499,9 +501,10 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+  public JDefinedClass _class (
+      final int nMods,
+      @Nonnull final String sFullyQualifiedClassName,
+      @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     final int nIdx = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIdx < 0)
