@@ -12,9 +12,21 @@ this would be very tricky.
 
 A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. is available.
 
+## Maven usage
+
+Add the following to your pom.xml to use this artifact:
+
+```xml
+<dependency>
+  <groupId>com.helger</groupId>
+  <artifactId>jcodemodel</artifactId>
+  <version>3.4.0</version>
+</dependency>
+```
+
 # News and noteworthy
 
-* v3.4.0 - work in progress
+* v3.4.0 - 2020-05-25
     * Added special top-level construct `JResourceDir` to represent pure resource directories ([issue #74](https://github.com/phax/jcodemodel/issues/74) from @guiguilechat)
     * Added new class `JCodeModelException` as the base class for `JClassAlreadyExistsException` and the new class `JResourceAlreadyExistsException`
     * Existing APIs were changed to throw `JCodeModelException` instead of `JClassAlreadyExistsException`
@@ -124,18 +136,6 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
     * API extensions
 * v2.6.4 - 2014-04-10
 * 2013-09-23: Changes from https://github.com/UnquietCode/JCodeModel have been incorporated.
-
-## Maven usage
-
-Add the following to your pom.xml to use this artifact:
-
-```xml
-<dependency>
-  <groupId>com.helger</groupId>
-  <artifactId>jcodemodel</artifactId>
-  <version>3.3.0</version>
-</dependency>
-```
 
 ---
 
