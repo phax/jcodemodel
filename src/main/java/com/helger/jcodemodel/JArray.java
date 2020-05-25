@@ -106,11 +106,17 @@ public class JArray implements IJExpression
   }
 
   @Nonnull
-  public List <IJExpression> exprs ()
+  public List <IJExpression> exprsMutable ()
   {
     if (m_aExprs == null)
       m_aExprs = new ArrayList <> ();
-    return Collections.unmodifiableList (m_aExprs);
+    return m_aExprs;
+  }
+
+  @Nonnull
+  public List <IJExpression> exprs ()
+  {
+    return Collections.unmodifiableList (exprsMutable ());
   }
 
   public boolean hasExprs ()
@@ -158,9 +164,7 @@ public class JArray implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JArray rhs = (JArray) o;
-    return isEqual (m_aType.fullName (), rhs.m_aType.fullName ()) &&
-           isEqual (m_aSize, rhs.m_aSize) &&
-           isEqual (m_aExprs, rhs.m_aExprs);
+    return isEqual (m_aType.fullName (), rhs.m_aType.fullName ()) && isEqual (m_aSize, rhs.m_aSize) && isEqual (m_aExprs, rhs.m_aExprs);
   }
 
   @Override

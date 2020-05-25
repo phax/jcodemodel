@@ -65,12 +65,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
 /**
  * A Java package.
  */
-public class JPackage implements
-                      IJDeclaration,
-                      IJGenerable,
-                      IJClassContainer <JDefinedClass>,
-                      IJAnnotatable,
-                      IJDocCommentable
+public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <JDefinedClass>, IJAnnotatable, IJDocCommentable
 {
   public static final char SEPARATOR = '.';
   public static final Pattern VALID_PACKAGE_NAME_ANYCASE = Pattern.compile ("[A-Za-z_][A-Za-z0-9_]*");
@@ -417,8 +412,7 @@ public class JPackage implements
   @Nonnull
   public AbstractJClass ref (@Nonnull final String sClassLocalName) throws ClassNotFoundException
   {
-    JCValueEnforcer.isTrue (sClassLocalName.indexOf (SEPARATOR) < 0,
-                            () -> "JClass name contains '.': " + sClassLocalName);
+    JCValueEnforcer.isTrue (sClassLocalName.indexOf (SEPARATOR) < 0, () -> "JClass name contains '.': " + sClassLocalName);
 
     final String sFQCN = isUnnamed () ? sClassLocalName : m_sName + SEPARATOR + sClassLocalName;
     return m_aOwner.ref (Class.forName (sFQCN));
@@ -514,11 +508,17 @@ public class JPackage implements
   }
 
   @Nonnull
-  public Collection <JAnnotationUse> annotations ()
+  public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
-    return Collections.unmodifiableList (m_aAnnotations);
+    return m_aAnnotations;
+  }
+
+  @Nonnull
+  public Collection <JAnnotationUse> annotations ()
+  {
+    return Collections.unmodifiableList (annotationsMutable ());
   }
 
   /**

@@ -51,6 +51,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.JCFilenameHelper;
@@ -97,12 +98,11 @@ public class JResourceDir implements IJOwned
    *        Name of directory. May not be <code>null</code> but empty. No
    *        absolute paths are allowed and only Linux forward slashes may be
    *        used as path separators.
-   * @throws IllegalArgumentException
-   *         If each part of the package name is not a valid filename part.
+   * @throws JInvalidFileNameException
+   *         If a part of the package name is not a valid filename part.
    */
-  protected JResourceDir (@Nonnull final JCodeModel aOwner,
-                          @Nullable final JResourceDir aParentDir,
-                          @Nonnull final String sName)
+  protected JResourceDir (@Nonnull final JCodeModel aOwner, @Nullable final JResourceDir aParentDir,
+      @Nonnull final String sName) throws JInvalidFileNameException
   {
     JCValueEnforcer.notNull (sName, "Name");
     JCValueEnforcer.notNull (aOwner, "CodeModel");
@@ -119,17 +119,14 @@ public class JResourceDir implements IJOwned
     if (sName.length () > 0)
       for (final String sPart : JCStringHelper.getExplodedArray (JResourceDir.SEPARATOR, sName))
         if (!aOwner.getFileSystemConvention ().isValidDirectoryName (sPart))
-          throw new IllegalArgumentException ("Resource directory name '" +
-                                              sName +
-                                              "' contains the the invalid part '" +
-                                              sPart +
-                                              "' according to the current file system conventions");
+          throw new JInvalidFileNameException (sName, sPart);
   }
 
   /**
    * @return the code model root object being used to create this resource
    *         directory.
    */
+  @Override
   @Nonnull
   public final JCodeModel owner ()
   {
@@ -194,9 +191,8 @@ public class JResourceDir implements IJOwned
     final String sName = aResFile.name ();
 
     if (!m_aOwner.getFileSystemConvention ().isValidFilename (sName))
-      throw new IllegalArgumentException ("Resource filename '" +
-                                          sName +
-                                          "' is invalid according to the current file system conventions");
+      throw new IllegalArgumentException (
+          "Resource filename '" + sName + "' is invalid according to the current file system conventions");
 
     // Check if a sub directory already exists with the same name
     if (m_aOwner.containsResourceDir (fullChildName (sName)))
@@ -318,6 +314,14 @@ public class JResourceDir implements IJOwned
   @Nonnull
   static JResourceDir root (@Nonnull final JCodeModel aOwner)
   {
-    return new JResourceDir (aOwner, null, "");
+    try
+    {
+      return new JResourceDir (aOwner, null, "");
+    }
+    catch (JInvalidFileNameException e)
+    {
+      // should not happen
+      throw new UnsupportedOperationException ("catch this", e);
+    }
   }
 }

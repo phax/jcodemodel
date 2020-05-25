@@ -135,13 +135,23 @@ public class JBlock implements IJGenerable, IJStatement
   }
 
   /**
+   * @return The contained list of {@link IJStatement}s and
+   *         {@link IJDeclaration} in this block.
+   */
+  @Nonnull
+  public List <IJObject> contentsMutable ()
+  {
+    return m_aContentList;
+  }
+
+  /**
    * @return a read-only view of {@link IJStatement}s and {@link IJDeclaration}
    *         in this block.
    */
   @Nonnull
   public List <IJObject> getContents ()
   {
-    return Collections.unmodifiableList (m_aContentList);
+    return Collections.unmodifiableList (contentsMutable ());
   }
 
   @Nonnull
@@ -212,8 +222,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnegative
   public int pos (@Nonnegative final int nNewPos)
   {
-    JCValueEnforcer.isTrue (nNewPos >= 0 && nNewPos <= m_aContentList.size (),
-                            () -> "Illegal position provided: " + nNewPos);
+    JCValueEnforcer.isTrue (nNewPos >= 0 && nNewPos <= m_aContentList.size (), () -> "Illegal position provided: " + nNewPos);
 
     final int nOldPos = m_nPos;
     m_nPos = nNewPos;
@@ -305,10 +314,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JVar}
    */
   @Nonnull
-  public JVar decl (final int nMods,
-                    @Nonnull final AbstractJType aType,
-                    @Nonnull final String sName,
-                    @Nullable final IJExpression aInit)
+  public JVar decl (final int nMods, @Nonnull final AbstractJType aType, @Nonnull final String sName, @Nullable final IJExpression aInit)
   {
     final JVar v = new JVar (JMods.forVar (nMods), aType, sName, aInit);
     internalInsert (v);
@@ -605,9 +611,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JConditional} statement
    */
   @Nonnull
-  public JConditional _if (@Nonnull final IJExpression aTestExpr,
-                           @Nonnull final IJStatement aThen,
-                           @Nonnull final IJStatement aElse)
+  public JConditional _if (@Nonnull final IJExpression aTestExpr, @Nonnull final IJStatement aThen, @Nonnull final IJStatement aElse)
   {
     final JConditional aCond = new JConditional (aTestExpr);
     aCond._then ().add (aThen);
@@ -850,9 +854,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
   @Nonnull
-  public JForEach forEach (@Nonnull final AbstractJType aVarType,
-                           @Nonnull final String sName,
-                           @Nonnull final IJExpression aCollection)
+  public JForEach forEach (@Nonnull final AbstractJType aVarType, @Nonnull final String sName, @Nonnull final IJExpression aCollection)
   {
     return forEach (0, aVarType, sName, aCollection);
   }

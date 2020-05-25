@@ -38,49 +38,36 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.supplementary.issues;
+
+import java.util.List;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.JAnonymousClass;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
- * @author Kohsuke Kawaguchi
+ * Test for https://github.com/phax/jcodemodel/issues/84
+ *
+ * @author Philip Helger
  */
-public final class JavadocFuncTest
+public final class Issue84FuncTest
 {
   @Test
-  public void testOnPackage () throws Exception
+  public void testIssue () throws Exception
   {
-    final JCodeModel cm = JCodeModel.createUnified();
-    final JPackage pkg = cm._package ("foo");
-    final JDocComment aComment = pkg.javadoc ();
-    aComment.add ("Package description");
-    aComment.addTag ("since").add ("1.0");
-    aComment.addAuthor ().add ("JCodeModel unit test");
-    aComment.addDeprecated ().add ("Just for testing");
+    final JCodeModel cm = new JCodeModel ();
 
-    CodeModelTestsHelper.parseCodeModel (cm);
-  }
+    final JDefinedClass outerClass = cm._class ("test.Outer");
+    final JDefinedClass innerClass = outerClass._class ("Inner");
 
-  @Test
-  public void testOnClass () throws Exception
-  {
-    final JCodeModel cm = JCodeModel.createUnified();
-    final JPackage pkg = cm._package ("foo");
-
-    final JDefinedClass cls = pkg._class (JMod.PUBLIC | JMod.FINAL, "Dummy");
-    cls.javadoc ().add ("Class comment");
-    cls.javadoc ().addAuthor ().add ("JavadocFuncTest");
-
-    final JMethod method = cls.method (JMod.PUBLIC | JMod.STATIC, String.class, "getPlusX");
-    final JVar aParam = method.param (String.class, "any");
-    method.body ()._return (aParam.plus ("X"));
-    method.javadoc ().add ("Description");
-    method.javadoc ().addParam (aParam).add ("Input value");
-    method.javadoc ().addReturn ().add ("Input value plus \"X\".");
-    method.javadoc ().addThrows (NullPointerException.class).add ("If input is null");
-    method.javadoc ().addTag ("since").add ("JCodeModel 2.8.5");
+    final JDefinedClass testClass = cm._class ("test.Test");
+    final JAnonymousClass anonymousClass = cm.anonymousClass (cm.ref (List.class).narrow (innerClass));
+    testClass.field (0, cm.ref (List.class).narrow (innerClass), "field", JExpr._new (anonymousClass));
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }

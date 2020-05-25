@@ -128,7 +128,7 @@ public final class AbstractJTypeTest
   @Test
   public void testIsAssignableFromSmoke ()
   {
-    final JCodeModel codeModel = new JCodeModel ();
+    final JCodeModel codeModel = JCodeModel.createUnified();
     final AbstractJClass _Object = codeModel.ref (Object.class);
     final AbstractJClass _Integer = codeModel.ref (Integer.class);
     final AbstractJClass _List = codeModel.ref (List.class);
@@ -158,13 +158,13 @@ public final class AbstractJTypeTest
 
     // List<? super List<List<List>>> list1 = (List<List<? super List>>)list2
     _assertIsNotAssignable (_List.narrow (_List.narrow (_List.narrow (_List)).wildcardSuper ()),
-                            _List.narrow (_List.narrow (_List.wildcardSuper ())));
+        _List.narrow (_List.narrow (_List.wildcardSuper ())));
   }
 
   @Test
   public void testIsAssignableFromRandomized ()
   {
-    final JCodeModel codeModel = new JCodeModel ();
+    final JCodeModel codeModel = JCodeModel.createUnified();
     final AbstractJClass _Object = codeModel.ref (Object.class);
     final AbstractJClass _Integer = codeModel.ref (Integer.class);
     final AbstractJClass _List = codeModel.ref (List.class);
@@ -200,13 +200,13 @@ public final class AbstractJTypeTest
           _assertIsNotAssignable (_List.narrow (assignment.m_aVariable), _List.narrow (assignment.m_aValue));
         }
         _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcardExtends ()),
-                             _List.narrow (assignment.m_aValue));
+            _List.narrow (assignment.m_aValue));
         _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcardExtends ()),
-                             _List.narrow (assignment.m_aValue.wildcardExtends ()));
+            _List.narrow (assignment.m_aValue.wildcardExtends ()));
         _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()),
-                             _List.narrow (assignment.m_aVariable));
+            _List.narrow (assignment.m_aVariable));
         _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()),
-                             _List.narrow (assignment.m_aVariable.wildcardSuper ()));
+            _List.narrow (assignment.m_aVariable.wildcardSuper ()));
       }
     }
   }
@@ -214,7 +214,7 @@ public final class AbstractJTypeTest
   @Test
   public void testNarrowSimple ()
   {
-    final JCodeModel codeModel = new JCodeModel ();
+    final JCodeModel codeModel = JCodeModel.createUnified();
     final AbstractJClass aList = codeModel.ref (List.class);
     final JNarrowedClass cls = aList.narrow (aList.narrow (codeModel.ref (Integer.class)));
     assertEquals ("List<List<Integer>>", cls.name ());

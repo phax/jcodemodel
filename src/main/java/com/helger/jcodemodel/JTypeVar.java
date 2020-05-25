@@ -116,9 +116,20 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    * @return this
    */
   @Nonnull
+  public List <AbstractJClass> boundsMutable ()
+  {
+    return m_aBounds;
+  }
+
+  /**
+   * Return all bounds of this type-parameter.
+   *
+   * @return this
+   */
+  @Nonnull
   public Collection <? extends AbstractJClass> bounds ()
   {
-    return Collections.unmodifiableList (new ArrayList <> (m_aBounds));
+    return Collections.unmodifiableList (boundsMutable ());
   }
 
   /**

@@ -55,6 +55,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.compiler.IProblem;
@@ -91,8 +92,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   private static IJFormatter _createFormatter (@Nonnull final StringWriter aWriter)
   {
-    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()),
-                           JCMWriter.DEFAULT_INDENT_STRING);
+    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()), JCMWriter.DEFAULT_INDENT_STRING);
   }
 
   /** Hidden constructor. */
@@ -224,7 +224,7 @@ public final class CodeModelTestsHelper
 
   @Nonnull
   private static CompilationUnit _parseWithJavaParser (final byte [] aBytes,
-                                                       @Nonnull final String sDirName,
+                                                       @Nullable final String sDirName,
                                                        final String sFilename) throws IOException
   {
     if (false)
@@ -232,8 +232,10 @@ public final class CodeModelTestsHelper
       System.out.println (new String (aBytes, DEFAULT_ENCODING));
     }
 
+    final String sRealDirName = sDirName == null ? "" : sDirName;
     System.out.println ("Parsing " +
-                        JCStringHelper.replaceAll (sDirName, '/', '.') +
+                        JCStringHelper.replaceAll (sRealDirName, '/', '.') +
+                        (sRealDirName.length () > 0 ? "." : "") +
                         (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
 
     try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))

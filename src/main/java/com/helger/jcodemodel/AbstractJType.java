@@ -289,15 +289,16 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     return isAssignableFrom (aThat, true);
   }
 
-  protected boolean isAssignableFrom (@Nonnull final AbstractJType aThat,
-                                      final boolean bAllowsRawTypeUnchekedConversion)
+  protected boolean isAssignableFrom (
+      @Nonnull final AbstractJType aThat,
+      final boolean bAllowsRawTypeUnchekedConversion)
   {
     if (isError () || aThat.isError ())
       return false;
-    if (this.equals (aThat))
+    if (equals (aThat))
       return true;
 
-    if (this.isReference () && aThat.isReference ())
+    if (isReference () && aThat.isReference ())
     {
       final AbstractJClass thisClass = (AbstractJClass) this;
       final AbstractJClass thatClass = (AbstractJClass) aThat;
@@ -311,8 +312,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
         return true;
 
       // Array covariance: i. e. Object[] array1 = (Integer[])array2
-      if (this.isArray () && aThat.isArray ())
-        return this.elementType ().isAssignableFrom (aThat.elementType (), false);
+      if (isArray () && aThat.isArray ())
+        return elementType ().isAssignableFrom (aThat.elementType (), false);
 
       if (thisClass.erasure ().equals (thatClass.erasure ()))
       {

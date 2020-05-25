@@ -42,7 +42,6 @@ package com.helger.jcodemodel;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -417,7 +416,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    */
   @SuppressWarnings ({ "unchecked", "rawtypes" })
   @Nonnull
-  public Collection <JAnnotationUse> annotations ()
+  public List <JAnnotationUse> annotations ()
   {
     // FIXME this invocation is invalid if the caller isn't adding annotations
     // into an array so this potentially type-unsafe conversion would be
@@ -426,9 +425,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   }
 
   @Nonnull
-  public Collection <AbstractJAnnotationValue> getAllAnnotations ()
+  public List <AbstractJAnnotationValue> annotationsMutable ()
   {
-    return Collections.unmodifiableList (m_aValues);
+    return m_aValues;
+  }
+
+  @Nonnull
+  public List <AbstractJAnnotationValue> getAllAnnotations ()
+  {
+    return Collections.unmodifiableList (annotationsMutable ());
   }
 
   @Nonnegative

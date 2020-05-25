@@ -12,14 +12,28 @@ this would be very tricky.
 
 A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. is available.
 
+## Maven usage
+
+Add the following to your pom.xml to use this artifact:
+
+```xml
+<dependency>
+  <groupId>com.helger</groupId>
+  <artifactId>jcodemodel</artifactId>
+  <version>3.4.0</version>
+</dependency>
+```
+
 # News and noteworthy
 
-* v3.4.0 - work in progress
+* v3.4.0 - 2020-05-25
     * Added special top-level construct `JResourceDir` to represent pure resource directories ([issue #74](https://github.com/phax/jcodemodel/issues/74) from @guiguilechat)
     * Added new class `JCodeModelException` as the base class for `JClassAlreadyExistsException` and the new class `JResourceAlreadyExistsException`
     * Existing APIs were changed to throw `JCodeModelException` instead of `JClassAlreadyExistsException`
     * `JCNameUtilities.getFullName` works with classes in the default package
     * Extended `JCodeModel` with `(get|set)FileSystemConvention` to make the creation more flexible ([also issue #74](https://github.com/phax/jcodemodel/issues/74) from @guiguilechat)
+    * Added mutable overloads to methods that only return an unmodifiable collection ([issue #86](https://github.com/phax/jcodemodel/issues/86))
+    * Fixed an issue with generating generics from anonymous classes ([issue #84](https://github.com/phax/jcodemodel/issues/84))
 * v3.3.0 - 2019-11-24
     * Added check for package names so that no invalid package names can be created ([issue #70](https://github.com/phax/jcodemodel/issues/70) from @guiguilechat)
     * Added check to avoid creating classes existing in the "java.lang" package ([issue #71](https://github.com/phax/jcodemodel/issues/71) from @guiguilechat)
@@ -122,18 +136,6 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
     * API extensions
 * v2.6.4 - 2014-04-10
 * 2013-09-23: Changes from https://github.com/UnquietCode/JCodeModel have been incorporated.
-
-## Maven usage
-
-Add the following to your pom.xml to use this artifact:
-
-```xml
-<dependency>
-  <groupId>com.helger</groupId>
-  <artifactId>jcodemodel</artifactId>
-  <version>3.3.0</version>
-</dependency>
-```
 
 ## Contribution
 

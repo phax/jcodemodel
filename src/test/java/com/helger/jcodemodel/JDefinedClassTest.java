@@ -71,16 +71,16 @@ public final class JDefinedClassTest
      *
      * class MyClass
      * {
-     *   private String myField;
+     * private String myField;
      *
-     *   {
-     *     this.myField = "myValue";
-     *   }
+     * {
+     * this.myField = "myValue";
+     * }
      * }
      * </pre>
      */
 
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass c = cm._package ("myPackage")._class (0, "MyClass");
     c.headerComment ().add ("Line 1\nLine 2\nLine 3");
     final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");
@@ -90,21 +90,21 @@ public final class JDefinedClassTest
     final TypeDeclaration <?> typeDeclaration = aCU.getTypes ().get (0);
     final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
     final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
-                                                                                                   .get (1);
+        .get (1);
     assertNotNull (initializerDeclaration);
   }
 
   @Test
   public void testCallSuper () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     // Base class
     final JDefinedClass c1 = cm._package ("myPackage")._class (0, "BaseClass");
     final JMethod con1 = c1.constructor (JMod.PUBLIC);
     final JVar p1 = con1.param (JMod.FINAL, cm.ref (String.class), "str");
     con1.body ()
-        .add (new JFieldRef (cm.ref (System.class), "out").invoke ("println").arg (JExpr.lit ("Got ").plus (p1)));
+    .add (new JFieldRef (cm.ref (System.class), "out").invoke ("println").arg (JExpr.lit ("Got ").plus (p1)));
 
     // Derived class
     final JDefinedClass c2 = cm._package ("myPackage")._class (0, "DerivedClass");

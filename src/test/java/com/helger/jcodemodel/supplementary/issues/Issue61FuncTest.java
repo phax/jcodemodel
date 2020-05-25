@@ -64,7 +64,7 @@ public class Issue61FuncTest
   @Test
   public void testIssue () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     final Charset ascii = StandardCharsets.US_ASCII;
     final JTextFile res = cm.rootResourceDir ().addResourceFile (new JTextFile ("example.txt", ascii));
 
@@ -72,7 +72,7 @@ public class Issue61FuncTest
 
     final ByteArrayOutputStream resOut = new ByteArrayOutputStream ();
     new JCMWriter (cm).build (new SingleStreamCodeWriter (new ByteArrayOutputStream ()),
-                              new SingleStreamCodeWriter (resOut));
+        new SingleStreamCodeWriter (resOut));
     final String txtRes = ascii.decode (ByteBuffer.wrap (resOut.toByteArray ())).toString ();
     assertTrue (txtRes.contains ("Testing"));
   }

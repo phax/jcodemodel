@@ -59,7 +59,7 @@ public final class Issue58FuncTest
   @Test
   public void testIssue () throws Exception
   {
-    final JCodeModel generator = new JCodeModel ();
+    final JCodeModel generator = JCodeModel.createUnified();
     final JDefinedClass aClass = generator._class ("test.Test");
     final JMethod aMethod = aClass.method (0, generator.VOID, "name");
     aMethod.param (generator.ref ("test.UnknownClass"), "p");
