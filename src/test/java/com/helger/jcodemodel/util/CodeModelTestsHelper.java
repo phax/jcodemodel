@@ -233,7 +233,7 @@ public final class CodeModelTestsHelper
 
     System.out.println ("Parsing " +
                         JCStringHelper.replaceAll (sDirName, '/', '.') +
-                        (sDirName.length () > 0 ? "." : "") +
+                        (JCStringHelper.hasText (sDirName) ? "." : "") +
                         (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
 
     try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
