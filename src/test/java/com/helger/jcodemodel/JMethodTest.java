@@ -55,7 +55,7 @@ public final class JMethodTest
   @Test
   public void testBasic () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified();
     final JDefinedClass cls = cm._class ("Test");
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
     final JVar foo = m.param (String.class, "foo");

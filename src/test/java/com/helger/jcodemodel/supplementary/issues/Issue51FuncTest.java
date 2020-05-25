@@ -62,7 +62,7 @@ public final class Issue51FuncTest
   @Test
   public void testDefaultMethod () throws Exception
   {
-    final JCodeModel generator = new JCodeModel ();
+    final JCodeModel generator = JCodeModel.createUnified();
 
     final JDefinedClass aInterface = generator._package ("issue51")._class ("Test");
     JMethod m = aInterface.method (JMod.PUBLIC, generator.ref (URI.class), "noURI");

@@ -60,7 +60,7 @@ public final class JLambdaMethodRefTest
   @Test
   public void testStaticMethodRef_Name ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JLambdaMethodRef aLambda = cm.ref (Object.class).methodRef ("toString");
     assertEquals ("java.lang.Object::toString", CodeModelTestsHelper.toString (aLambda));
@@ -74,7 +74,7 @@ public final class JLambdaMethodRefTest
   @Test
   public void testStaticMethodRef_JMethod () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
     final JMethod m = cl.method (JMod.PUBLIC | JMod.STATIC, cm.ref (String.class), "myToString");
     final JVar p = m.param (Object.class, "obj");
@@ -101,7 +101,7 @@ public final class JLambdaMethodRefTest
   @Test
   public void testStaticMethodRef_New () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
 
     final JLambdaMethodRef aLambda = JLambdaMethodRef.createForNew (cl);
@@ -116,7 +116,7 @@ public final class JLambdaMethodRefTest
   @Test
   public void testInstanceMethodRef_Name ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JBlock aBlock = new JBlock ();
     final JVar aVar = aBlock.decl (cm._ref (Object.class), "aObj");
 
@@ -132,7 +132,7 @@ public final class JLambdaMethodRefTest
   @Test
   public void testInstanceMethodRef_JMethod () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaTest");
     final JMethod m = cl.method (JMod.PUBLIC, cm.ref (String.class), "myToString");
     final JVar p = m.param (Object.class, "obj");
@@ -153,7 +153,7 @@ public final class JLambdaMethodRefTest
   @Test
   public void testInvocationMethodRef_Name () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaInvocationMethodRefName");
 
     final JLambdaMethodRef lambdaMethod = new JLambdaMethodRef (cm.ref ("test.Person"), "getFirstName");
@@ -169,7 +169,7 @@ public final class JLambdaMethodRefTest
   @Test
   public void testInvocationMethodRef_JMethod () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cl = cm._class ("com.helger.test.LambdaInvocationMethodRefJMethod");
 
     final JMethod m = cl.method (JMod.PUBLIC, cm.ref (String.class), "myToString");

@@ -78,7 +78,7 @@ public final class JLambdaTest
   @Test
   public void testExpressionBasicType ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
@@ -99,7 +99,7 @@ public final class JLambdaTest
   @Test
   public void testExpressionBasicType2 ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam1 = aLambda.addParam (cm.INT, "x");
@@ -111,38 +111,29 @@ public final class JLambdaTest
   @Test
   public void testStatementBasicType ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
     aLambda.body ()._return (aParam.plus (1));
     assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF,
-                  CodeModelTestsHelper.toString (aLambda));
+        CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test
   public void testIssue62 ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JVar holder = new JVar (JMods.forVar (0), cm.ref (Object.class), "a", null);
     final JLambda aLambda = new JLambda ();
     final JLambdaParam arr = aLambda.addParam ("arr");
     final JBlock setBody = aLambda.body ().synchronizedBlock (holder).body ();
     setBody.add (JExpr.invoke (cm, holder, "entrySet").invoke ("retainAll").arg (arr.invoke ("entrySet")));
-    assertEquals ("arr -> {" +
-                  CRLF +
-                  "    synchronized (a)" +
-                  CRLF +
-                  "    {" +
-                  CRLF +
-                  "        a.entrySet().retainAll(arr.entrySet());" +
-                  CRLF +
-                  "    }" +
-                  CRLF +
-                  "}" +
-                  CRLF,
-                  CodeModelTestsHelper.toString (aLambda));
+    assertEquals (
+        "arr -> {" + CRLF + "    synchronized (a)" + CRLF + "    {" + CRLF
+        + "        a.entrySet().retainAll(arr.entrySet());" + CRLF + "    }" + CRLF + "}" + CRLF,
+        CodeModelTestsHelper.toString (aLambda));
   }
 
   String method1 ()
@@ -153,7 +144,7 @@ public final class JLambdaTest
   @Test
   public void testFullClass () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cl = cm._package ("test.lambda")._class ("LambdaTest");
 
     final JMethod m1 = cl.method (JMod.PUBLIC | JMod.STATIC, cm.ref (String.class), "method1");

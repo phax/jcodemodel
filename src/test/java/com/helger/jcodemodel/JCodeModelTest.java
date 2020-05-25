@@ -44,11 +44,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import com.helger.jcodemodel.exceptions.JCaseSensitivityChangeException;
+import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
+import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.util.EFileSystemConvention;
+import com.helger.jcodemodel.util.IFileSystemConvention;
 
 /**
  * @author Kohsuke Kawaguchi
@@ -59,36 +66,34 @@ public final class JCodeModelTest
   @Test
   public void testParseArray () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     assertNotNull (cm.parseType ("java.util.ArrayList<java.lang.String[]>[]"));
-    assertNotNull (cm.parseType ("java.util.ArrayList<java.util.ArrayList<java.util.ArrayList<java.lang.String[]>[]>[]>[]"));
+    assertNotNull (
+        cm.parseType ("java.util.ArrayList<java.util.ArrayList<java.util.ArrayList<java.lang.String[]>[]>[]>[]"));
     assertNotNull (cm.parseType ("java.util.Comparator<? super java.lang.CharSequence[]>[]"));
   }
 
   @Test
   public void testIssue28 () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass aEnumClass = cm._package ("com.helger.issue28")._enum ("DummyEnum");
-    cm._package ("com.helger.issue28.other")
-      ._class ("Class")
-      .constructor (JMod.PUBLIC)
-      .body ()
-      .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
+    cm._package ("com.helger.issue28.other")._class ("Class").constructor (JMod.PUBLIC).body ()
+    .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 
   @Test
   public void testRefClass ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     assertSame (cm.INT, cm._ref (int.class));
   }
 
   @Test
   public void testCODEMODEL24 () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass jClass = cm._class ("dummy", EClassType.INTERFACE);
     assertEquals ("dummy", jClass.name ());
     assertEquals (EClassType.INTERFACE, jClass.getClassType ());
@@ -97,7 +102,7 @@ public final class JCodeModelTest
   @Test
   public void testEmptyNarrowed () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass jClass = cm._class ("EmptyNarrowed", EClassType.INTERFACE);
     final AbstractJClass hashMap = cm.ref (java.util.HashMap.class).narrowEmpty ();
     jClass.field (JMod.PRIVATE, cm.ref (Map.class).narrow (String.class), "strMap", JExpr._new (hashMap));
@@ -107,7 +112,7 @@ public final class JCodeModelTest
   @Test
   public void testIssue71 () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass aOtherByteClass = cm._package ("com.helger.issue71")._class ("Byte");
     final JDefinedClass aFooClass = cm._package ("com.helger.issue71")._class ("Foo");
     final JDefinedClass aClass2 = cm._package ("com.helger.issue71.second")._class ("Class2");
@@ -121,7 +126,7 @@ public final class JCodeModelTest
   @Test
   public void testIssue71v2 () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cl = cm._package ("jcodemodel")._class ("MyClass");
     final JDefinedClass clo = cl._class (JMod.PUBLIC | JMod.STATIC, "Object");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Object.class), "obj");
@@ -132,5 +137,89 @@ public final class JCodeModelTest
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Byte.class), "obj");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Long.class), "obj");
     CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testChangePlatform () throws JCodeModelException
+  {
+    JCodeModel cm = JCodeModel.createUnified ();
+
+    cm._class (JMod.PUBLIC, "my.Precious");
+    try
+    {
+      // should fail, the package "my" is translated to a dir.
+      cm.setFileSystemConvention (EFileSystemConvention.WINDOWS);
+      Assert.fail ();
+    }
+    catch (JCaseSensitivityChangeException jcsce)
+    {
+      // correct
+    }
+
+    cm = JCodeModel.createUnified ();
+    cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("File1", StandardCharsets.UTF_8, "bla"));
+    try
+    {
+      // should fail, because the windows FS is not case sensitive.
+      cm.setFileSystemConvention (EFileSystemConvention.WINDOWS);
+      Assert.fail ();
+    }
+    catch (JCaseSensitivityChangeException jcsce)
+    {
+      // correct
+    }
+
+    // should pass, accept any resource name
+    cm.setFileSystemConvention (new IFileSystemConvention ()
+    {
+
+      @Override
+      public boolean isValidFilename (String sPath)
+      {
+        return true;
+      }
+
+      @Override
+      public boolean isValidDirectoryName (String sPath)
+      {
+        return true;
+      }
+
+      @Override
+      public boolean isCaseSensistive ()
+      {
+        return true;
+      }
+    });
+    try
+    {
+      // should fail, existing dir "my" and file "File1" are not accepted.
+      cm.setFileSystemConvention (new IFileSystemConvention ()
+      {
+
+        @Override
+        public boolean isValidFilename (String sPath)
+        {
+          return false;
+        }
+
+        @Override
+        public boolean isValidDirectoryName (String sPath)
+        {
+          return false;
+        }
+
+        @Override
+        public boolean isCaseSensistive ()
+        {
+          return true;
+        }
+      });
+      Assert.fail ();
+    }
+    catch (JInvalidFileNameException ifne)
+    {
+      // correct
+    }
   }
 }

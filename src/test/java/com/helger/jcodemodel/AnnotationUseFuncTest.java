@@ -88,22 +88,22 @@ public final class AnnotationUseFuncTest
    * &#064;AnnotationUseTest.XmlElement (ns = &quot;##default&quot;, value = &quot;foobar&quot;)
    * public class Test
    * {
-   *   &#064;Retention (name = &quot;book&quot;,
-   *               targetNamespace = 5,
-   *               names = { &quot;Bob&quot;, &quot;Rob&quot;, &quot;Ted&quot; },
-   *               namesno = { 4, 5, 6 },
-   *               values = { @Target (type = java.lang.Integer.class), &#64;Target (type = java.lang.Float.class) },
-   *               foo = @Target (junk = 7))
-   *   private double y;
+   * &#064;Retention (name = &quot;book&quot;,
+   * targetNamespace = 5,
+   * names = { &quot;Bob&quot;, &quot;Rob&quot;, &quot;Ted&quot; },
+   * namesno = { 4, 5, 6 },
+   * values = { @Target (type = java.lang.Integer.class), &#64;Target (type = java.lang.Float.class) },
+   * foo = @Target (junk = 7))
+   * private double y;
    *
-   *   public void foo ()
-   *   {}
+   * public void foo ()
+   * {}
    *
-   *   public enum Iamenum
-   *   {
-   *     GOOD,
-   *     BAD;
-   *   }
+   * public enum Iamenum
+   * {
+   * GOOD,
+   * BAD;
+   * }
    * }
    * </pre>
    *
@@ -113,7 +113,7 @@ public final class AnnotationUseFuncTest
   @Test
   public void testMain () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cls = cm._class ("Test");
     // JMethod m =
     cls.method (JMod.PUBLIC, cm.VOID, "foo");
@@ -152,7 +152,7 @@ public final class AnnotationUseFuncTest
 
     // Shortcut
     // Ambiguous on OpenJDK6 - explicit array needed
-    aUse.paramArray ("namesno", new int [] { 4, 5, 6 });
+    aUse.paramArray ("namesno", 4, 5, 6);
 
     final JAnnotationArrayMember arrayMember2 = aUse.paramArray ("values");
     // adding an annotation as a member value pair
