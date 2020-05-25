@@ -84,7 +84,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * Set of exceptions that this method may throw. A set instance lazily
    * created.
    */
-  private Set <AbstractJClass> m_aThrows;
+  private final Set <AbstractJClass> m_aThrows = new TreeSet <> (ClassNameComparator.getInstance ());
 
   /**
    * JBlock of statements that makes up the body this method
@@ -162,11 +162,15 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Nonnull
+  public Set <AbstractJClass> throwsMutable ()
+  {
+    return m_aThrows;
+  }
+
+  @Nonnull
   public Collection <AbstractJClass> getThrows ()
   {
-    if (m_aThrows == null)
-      return Collections.emptySet ();
-    return Collections.unmodifiableSet (m_aThrows);
+    return Collections.unmodifiableSet (throwsMutable ());
   }
 
   /**
@@ -179,8 +183,6 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JMethod _throws (@Nonnull final AbstractJClass aException)
   {
-    if (m_aThrows == null)
-      m_aThrows = new TreeSet <> (ClassNameComparator.getInstance ());
     m_aThrows.add (aException);
     return this;
   }
@@ -194,12 +196,23 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Returns the list of variable of this method.
    *
+   * @return List of parameters of this method. This list is modifiable.
+   */
+  @Nonnull
+  public List <JVar> paramsMutable ()
+  {
+    return m_aParams;
+  }
+
+  /**
+   * Returns the list of variable of this method.
+   *
    * @return List of parameters of this method. This list is not modifiable.
    */
   @Nonnull
   public List <JVar> params ()
   {
-    return Collections.unmodifiableList (m_aParams);
+    return Collections.unmodifiableList (paramsMutable ());
   }
 
   @Nonnull
@@ -391,11 +404,17 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Nonnull
-  public Collection <JAnnotationUse> annotations ()
+  public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
       return Collections.emptyList ();
-    return Collections.unmodifiableList (m_aAnnotations);
+    return m_aAnnotations;
+  }
+
+  @Nonnull
+  public Collection <JAnnotationUse> annotations ()
+  {
+    return Collections.unmodifiableList (annotationsMutable ());
   }
 
   public String name ()
@@ -573,14 +592,11 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       }
       for (final JAnnotationUse annotation : m_aVarParam.annotations ())
         f.generable (annotation).print (' ');
-      f.generable (m_aVarParam.mods ())
-       .generable (m_aVarParam.type ().elementType ())
-       .print ("... ")
-       .id (m_aVarParam.name ());
+      f.generable (m_aVarParam.mods ()).generable (m_aVarParam.type ().elementType ()).print ("... ").id (m_aVarParam.name ());
     }
 
     f.outdent ().print (')');
-    if (m_aThrows != null && !m_aThrows.isEmpty ())
+    if (!m_aThrows.isEmpty ())
     {
       f.newline ().indent ().print ("throws").generable (m_aThrows).newline ().outdent ();
     }

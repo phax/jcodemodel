@@ -45,7 +45,6 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -222,11 +221,17 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   }
 
   @Nonnull
-  public Collection <JAnnotationUse> annotations ()
+  public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
-    return Collections.unmodifiableList (m_aAnnotations);
+    return m_aAnnotations;
+  }
+
+  @Nonnull
+  public List <JAnnotationUse> annotations ()
+  {
+    return Collections.unmodifiableList (annotationsMutable ());
   }
 
   protected boolean isAnnotated ()

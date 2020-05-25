@@ -100,13 +100,23 @@ public class JLambda implements IJExpression
   }
 
   /**
+   * @return An modifiable list with all parameters present. Never
+   *         <code>null</code>.
+   */
+  @Nonnull
+  public List <JLambdaParam> paramsMutable ()
+  {
+    return m_aParams;
+  }
+
+  /**
    * @return An unmodifiable list with all parameters present. Never
    *         <code>null</code>.
    */
   @Nonnull
   public List <JLambdaParam> params ()
   {
-    return Collections.unmodifiableList (m_aParams);
+    return Collections.unmodifiableList (paramsMutable ());
   }
 
   @Nonnegative
@@ -157,8 +167,7 @@ public class JLambda implements IJExpression
     f.print (" -> ");
 
     // Print body
-    final boolean bBraces = m_aBodyStatement.size () != 1 ||
-                            !(m_aBodyStatement.getContents ().get (0) instanceof IJExpression);
+    final boolean bBraces = m_aBodyStatement.size () != 1 || !(m_aBodyStatement.getContents ().get (0) instanceof IJExpression);
     m_aBodyStatement.bracesRequired (bBraces);
     f.statement (m_aBodyStatement);
   }

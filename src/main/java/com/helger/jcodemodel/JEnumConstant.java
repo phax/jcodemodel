@@ -194,15 +194,18 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
     return annotate (m_aType.owner ().ref (aClazz));
   }
 
-  /**
-   * {@link IJAnnotatable#annotations()}
-   */
   @Nonnull
-  public Collection <JAnnotationUse> annotations ()
+  public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
-    return Collections.unmodifiableList (m_aAnnotations);
+    return m_aAnnotations;
+  }
+
+  @Nonnull
+  public Collection <JAnnotationUse> annotations ()
+  {
+    return Collections.unmodifiableList (annotationsMutable ());
   }
 
   public void declare (@Nonnull final IJFormatter f)
