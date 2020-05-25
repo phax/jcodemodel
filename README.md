@@ -20,7 +20,8 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
     * Existing APIs were changed to throw `JCodeModelException` instead of `JClassAlreadyExistsException`
     * `JCNameUtilities.getFullName` works with classes in the default package
     * Extended `JCodeModel` with `(get|set)FileSystemConvention` to make the creation more flexible ([also issue #74](https://github.com/phax/jcodemodel/issues/74) from @guiguilechat)
-    * Added mutable overloads to methods that only return an unmodifiable collection([issue #86](https://github.com/phax/jcodemodel/issues/86))
+    * Added mutable overloads to methods that only return an unmodifiable collection ([issue #86](https://github.com/phax/jcodemodel/issues/86))
+    * Fixed an issue with generating generics from anonymous classes ([issue #84](https://github.com/phax/jcodemodel/issues/84))
 * v3.3.0 - 2019-11-24
     * Added check for package names so that no invalid package names can be created ([issue #70](https://github.com/phax/jcodemodel/issues/70) from @guiguilechat)
     * Added check to avoid creating classes existing in the "java.lang" package ([issue #71](https://github.com/phax/jcodemodel/issues/71) from @guiguilechat)
