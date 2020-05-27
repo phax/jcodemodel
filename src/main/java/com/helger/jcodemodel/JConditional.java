@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * If statement, with optional else clause
@@ -72,7 +72,7 @@ public class JConditional implements IJStatement
    */
   public JConditional (@Nonnull final IJExpression aTestExpr)
   {
-    JCValueEnforcer.notNull (aTestExpr, "Test expression");
+    ValueEnforcer.notNull (aTestExpr, "Test expression");
     m_aTestExpr = aTestExpr;
   }
 

@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Indicates that the class is already created.
@@ -57,7 +57,7 @@ public class JResourceAlreadyExistsException extends JCodeModelException
 
   public JResourceAlreadyExistsException (@Nonnull final String sFilename)
   {
-    JCValueEnforcer.notEmpty (sFilename, "Filename");
+    ValueEnforcer.notEmpty (sFilename, "Filename");
     m_sFilename = sFilename;
   }
 

@@ -40,10 +40,11 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
+
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * A special atom for int values
@@ -75,7 +76,7 @@ public class JAtomInt implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtomInt rhs = (JAtomInt) o;
-    return isEqual (m_nValue, rhs.m_nValue);
+    return EqualsHelper.equals (m_nValue, rhs.m_nValue);
   }
 
   @Override

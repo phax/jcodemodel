@@ -46,7 +46,7 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Represents a resource file in the application-specific file format.
@@ -57,7 +57,7 @@ public abstract class AbstractJResourceFile
 
   protected AbstractJResourceFile (@Nonnull final String sName)
   {
-    JCValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name");
     m_sName = sName;
   }
 

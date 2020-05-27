@@ -52,7 +52,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Represents an annotation on a program element.
@@ -79,7 +79,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
 
   public JAnnotationUse (@Nonnull final AbstractJClass aAnnotationClass)
   {
-    m_aAnnotationClass = JCValueEnforcer.notNull (aAnnotationClass, "AnnotationClass");
+    m_aAnnotationClass = ValueEnforcer.notNull (aAnnotationClass, "AnnotationClass");
   }
 
   @Nonnull
@@ -199,8 +199,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   @Nonnull
   private JAnnotationUse _addValue (@Nonnull final String sName, @Nonnull final AbstractJAnnotationValue aAnnotationValue)
   {
-    JCValueEnforcer.notEmpty (sName, "Name");
-    JCValueEnforcer.notNull (aAnnotationValue, "AnnotationValue");
+    ValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notNull (aAnnotationValue, "AnnotationValue");
 
     // Use ordered map to keep the code generation the same on any JVM.
     // Lazily created.

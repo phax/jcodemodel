@@ -47,6 +47,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.ChangeInV4;
 
 /**
@@ -185,8 +186,7 @@ public final class JCFilenameHelper
   @Nullable
   public static String getPathUsingUnixSeparator (@Nullable final String sAbsoluteFilename)
   {
-    return sAbsoluteFilename == null ? null
-                                     : JCStringHelper.replaceAll (sAbsoluteFilename, WINDOWS_SEPARATOR, UNIX_SEPARATOR);
+    return sAbsoluteFilename == null ? null : StringHelper.replaceAll (sAbsoluteFilename, WINDOWS_SEPARATOR, UNIX_SEPARATOR);
   }
 
   /**
@@ -202,7 +202,7 @@ public final class JCFilenameHelper
   public static boolean isValidLinuxFilename (@Nullable final String sFilename)
   {
     // empty not allowed
-    if (JCStringHelper.hasNoText (sFilename))
+    if (StringHelper.hasNoText (sFilename))
       return false;
 
     // path separator chars are not allowed in filenames!
@@ -235,7 +235,7 @@ public final class JCFilenameHelper
   public static boolean isValidWindowsFilename (@Nullable final String sFilename)
   {
     // empty not allowed
-    if (JCStringHelper.hasNoText (sFilename))
+    if (StringHelper.hasNoText (sFilename))
       return false;
 
     // path separator chars are not allowed in filenames!
@@ -247,7 +247,7 @@ public final class JCFilenameHelper
       return false;
 
     // check for illegal last characters
-    if (JCStringHelper.endsWithAny (sFilename, WINDOWS_ILLEGAL_SUFFIXES))
+    if (StringHelper.endsWithAny (sFilename, WINDOWS_ILLEGAL_SUFFIXES))
       return false;
 
     // Check if file name contains any of the illegal characters
@@ -310,7 +310,7 @@ public final class JCFilenameHelper
    */
   public static boolean startsWithPathSeparatorChar (@Nullable final CharSequence s)
   {
-    return isPathSeparatorChar (JCStringHelper.getFirstChar (s));
+    return isPathSeparatorChar (StringHelper.getFirstChar (s));
   }
 
   /**
@@ -325,7 +325,7 @@ public final class JCFilenameHelper
    */
   public static boolean endsWithPathSeparatorChar (@Nullable final CharSequence s)
   {
-    return isPathSeparatorChar (JCStringHelper.getLastChar (s));
+    return isPathSeparatorChar (StringHelper.getLastChar (s));
   }
 
   /**

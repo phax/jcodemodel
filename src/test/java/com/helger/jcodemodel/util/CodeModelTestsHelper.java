@@ -66,6 +66,8 @@ import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
@@ -109,7 +111,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String toString (@Nonnull final IJExpression aGenerable)
   {
-    JCValueEnforcer.notNull (aGenerable, "Generable");
+    ValueEnforcer.notNull (aGenerable, "Generable");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -132,7 +134,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String toString (@Nonnull final IJDeclaration aDeclaration)
   {
-    JCValueEnforcer.notNull (aDeclaration, "Declaration");
+    ValueEnforcer.notNull (aDeclaration, "Declaration");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -155,7 +157,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String toString (@Nonnull final IJStatement aStatement)
   {
-    JCValueEnforcer.notNull (aStatement, "Statement");
+    ValueEnforcer.notNull (aStatement, "Statement");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -171,7 +173,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String declare (@Nonnull final IJDeclaration aDeclaration)
   {
-    JCValueEnforcer.notNull (aDeclaration, "Declaration");
+    ValueEnforcer.notNull (aDeclaration, "Declaration");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -187,7 +189,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String generate (@Nonnull final IJGenerable aGenerable)
   {
-    JCValueEnforcer.notNull (aGenerable, "Generable");
+    ValueEnforcer.notNull (aGenerable, "Generable");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -234,7 +236,7 @@ public final class CodeModelTestsHelper
 
     final String sRealDirName = sDirName == null ? "" : sDirName;
     System.out.println ("Parsing " +
-                        JCStringHelper.replaceAll (sRealDirName, '/', '.') +
+                        StringHelper.replaceAll (sRealDirName, '/', '.') +
                         (sRealDirName.length () > 0 ? "." : "") +
                         (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
 

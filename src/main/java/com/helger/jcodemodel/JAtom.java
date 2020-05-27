@@ -40,12 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * JAtoms: Simple code components that merely generate themselves.
@@ -56,7 +56,7 @@ public class JAtom implements IJExpression
 
   protected JAtom (@Nonnull final String sWhat)
   {
-    JCValueEnforcer.notNull (sWhat, "What");
+    ValueEnforcer.notNull (sWhat, "What");
     m_sWhat = sWhat;
   }
 
@@ -83,7 +83,7 @@ public class JAtom implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtom rhs = (JAtom) o;
-    return isEqual (m_sWhat, rhs.m_sWhat);
+    return EqualsHelper.equals (m_sWhat, rhs.m_sWhat);
   }
 
   @Override

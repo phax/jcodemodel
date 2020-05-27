@@ -45,6 +45,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.helger.commons.ValueEnforcer;
+
 /**
  * @author Ben Fagin
  * @version 2013-04-01
@@ -57,7 +59,7 @@ public final class JCNameUtilities
   @Nonnull
   public static String getFullName (@Nonnull final Class <?> aClass)
   {
-    JCValueEnforcer.notNull (aClass, "Class");
+    ValueEnforcer.notNull (aClass, "Class");
 
     final StringBuilder name = new StringBuilder ();
 

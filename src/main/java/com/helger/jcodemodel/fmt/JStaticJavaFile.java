@@ -57,11 +57,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.util.JCSecureLoader;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Statically generated Java soruce file.
@@ -107,10 +107,10 @@ public class JStaticJavaFile extends AbstractJResourceFile
                           @Nullable final Function <String, String> aFilter)
   {
     super (sClassName + ".java");
-    m_aPkg = JCValueEnforcer.notNull (aPkg, "Package");
+    m_aPkg = ValueEnforcer.notNull (aPkg, "Package");
     m_aClazz = new JStaticClass ();
-    m_sClassName = JCValueEnforcer.notEmpty (sClassName, "ClassName");
-    m_aSource = JCValueEnforcer.notNull (aSource, "Source");
+    m_sClassName = ValueEnforcer.notEmpty (sClassName, "ClassName");
+    m_aSource = ValueEnforcer.notNull (aSource, "Source");
     m_aFilter = aFilter;
   }
 

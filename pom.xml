@@ -127,13 +127,28 @@
       <url>https://github.com/sviperll</url>
     </contributor>
   </contributors>
+  
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>ph-commons-parent-pom</artifactId>
+        <version>9.4.4</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <!-- We need jsr305 and not annotations because SuppressFBWarnings is contained! -->
     <dependency>
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
-      <version>3.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>ph-commons</artifactId>    
     </dependency>
     
     <dependency>

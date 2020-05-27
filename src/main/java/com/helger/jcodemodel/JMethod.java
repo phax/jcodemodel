@@ -52,8 +52,8 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.util.ClassNameComparator;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Java method.
@@ -130,9 +130,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
                      @Nonnull final AbstractJType aReturnType,
                      @Nonnull final String sName)
   {
-    JCValueEnforcer.notNull (aOwningClass, "OwningClass");
-    JCValueEnforcer.notNull (aReturnType, "ReturnType");
-    JCValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notNull (aOwningClass, "OwningClass");
+    ValueEnforcer.notNull (aReturnType, "ReturnType");
+    ValueEnforcer.notEmpty (sName, "Name");
     m_aMods = JMods.forMethod (nMods);
     m_aReturnType = aReturnType;
     m_sName = sName;
@@ -149,7 +149,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   protected JMethod (final int nMods, @Nonnull final JDefinedClass aClass)
   {
-    JCValueEnforcer.notNull (aClass, "Class");
+    ValueEnforcer.notNull (aClass, "Class");
     m_aMods = JMods.forMethod (nMods);
     m_aReturnType = null;
     m_sName = aClass.name ();
@@ -338,7 +338,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JVar varParam (final int nMods, @Nonnull final AbstractJType aType, @Nonnull final String sName)
   {
-    JCValueEnforcer.isFalse (hasVarArgs (),
+    ValueEnforcer.isFalse (hasVarArgs (),
                              "Cannot have two varargs in a method,\n" +
                                             "Check if varParam method of JMethod is" +
                                             " invoked more than once");
@@ -430,7 +430,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public void name (@Nonnull final String sName)
   {
-    JCValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notEmpty (sName, "Name");
     m_sName = sName;
   }
 

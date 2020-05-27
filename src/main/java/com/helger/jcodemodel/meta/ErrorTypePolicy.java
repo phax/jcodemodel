@@ -47,7 +47,7 @@ package com.helger.jcodemodel.meta;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Defines policy to use with error-types.
@@ -89,7 +89,7 @@ public class ErrorTypePolicy
    */
   public ErrorTypePolicy (@Nonnull final EAction aAction, final boolean tryBind)
   {
-    m_eAction = JCValueEnforcer.notNull (aAction, "Action");
+    m_eAction = ValueEnforcer.notNull (aAction, "Action");
     m_bTryBind = tryBind;
   }
 

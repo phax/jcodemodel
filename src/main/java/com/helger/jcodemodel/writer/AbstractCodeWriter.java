@@ -51,9 +51,9 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.SourcePrintWriter;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
 /**
@@ -71,7 +71,7 @@ public abstract class AbstractCodeWriter implements Closeable
 
   protected AbstractCodeWriter (@Nullable final Charset aEncoding, @Nonnull final String sNewLine)
   {
-    JCValueEnforcer.notNull (sNewLine, "NewLine");
+    ValueEnforcer.notNull (sNewLine, "NewLine");
 
     m_aEncoding = aEncoding;
     m_sNewLine = sNewLine;

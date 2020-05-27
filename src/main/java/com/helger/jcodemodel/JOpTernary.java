@@ -40,12 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
 
 public class JOpTernary implements IJExpression
 {
@@ -61,11 +61,11 @@ public class JOpTernary implements IJExpression
                         @Nonnull final String sOperator2,
                         @Nonnull final IJExpression aExpr3)
   {
-    m_aExpr1 = JCValueEnforcer.notNull (aExpr1, "Expr1");
-    m_sOperator1 = JCValueEnforcer.notNull (sOperator1, "Operator1");
-    m_aExpr2 = JCValueEnforcer.notNull (aExpr2, "Expr2");
-    m_sOperator2 = JCValueEnforcer.notNull (sOperator2, "Operator2");
-    m_aExpr3 = JCValueEnforcer.notNull (aExpr3, "Expr3");
+    m_aExpr1 = ValueEnforcer.notNull (aExpr1, "Expr1");
+    m_sOperator1 = ValueEnforcer.notNull (sOperator1, "Operator1");
+    m_aExpr2 = ValueEnforcer.notNull (aExpr2, "Expr2");
+    m_sOperator2 = ValueEnforcer.notNull (sOperator2, "Operator2");
+    m_aExpr3 = ValueEnforcer.notNull (aExpr3, "Expr3");
   }
 
   @Nonnull
@@ -100,13 +100,7 @@ public class JOpTernary implements IJExpression
 
   public void generate (@Nonnull final IJFormatter f)
   {
-    f.print ('(')
-     .generable (m_aExpr1)
-     .print (m_sOperator1)
-     .generable (m_aExpr2)
-     .print (m_sOperator2)
-     .generable (m_aExpr3)
-     .print (')');
+    f.print ('(').generable (m_aExpr1).print (m_sOperator1).generable (m_aExpr2).print (m_sOperator2).generable (m_aExpr3).print (')');
   }
 
   @Override
@@ -117,11 +111,11 @@ public class JOpTernary implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JOpTernary rhs = (JOpTernary) o;
-    return isEqual (m_aExpr1, rhs.m_aExpr1) &&
-           isEqual (m_sOperator1, rhs.m_sOperator1) &&
-           isEqual (m_aExpr2, rhs.m_aExpr2) &&
-           isEqual (m_sOperator2, rhs.m_sOperator2) &&
-           isEqual (m_aExpr3, rhs.m_aExpr3);
+    return EqualsHelper.equals (m_aExpr1, rhs.m_aExpr1) &&
+           EqualsHelper.equals (m_sOperator1, rhs.m_sOperator1) &&
+           EqualsHelper.equals (m_aExpr2, rhs.m_aExpr2) &&
+           EqualsHelper.equals (m_sOperator2, rhs.m_sOperator2) &&
+           EqualsHelper.equals (m_aExpr3, rhs.m_aExpr3);
   }
 
   @Override

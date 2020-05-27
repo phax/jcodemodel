@@ -46,7 +46,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Represents a wildcard type like "? extends Foo" or "? super Foo".
@@ -67,7 +67,7 @@ public class JTypeWildcard extends AbstractJClass
   protected JTypeWildcard (@Nonnull final AbstractJClass aBoundClass, @Nonnull final EWildcardBoundMode eBoundMode)
   {
     super (aBoundClass.owner ());
-    JCValueEnforcer.notNull (eBoundMode, "BoundMode");
+    ValueEnforcer.notNull (eBoundMode, "BoundMode");
     m_aBoundClass = aBoundClass;
     m_eBoundMode = eBoundMode;
   }

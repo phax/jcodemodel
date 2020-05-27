@@ -54,8 +54,8 @@ import java.util.TreeSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.util.ClassNameComparator;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.writer.JFormatter;
 
 /**
@@ -206,7 +206,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
 
     if (sName != null)
     {
-      JCValueEnforcer.notEmpty (sName, "Name");
+      ValueEnforcer.notEmpty (sName, "Name");
 
       if (!Character.isJavaIdentifierStart (sName.charAt (0)))
       {
@@ -254,7 +254,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @Nonnull
   public JDefinedClass _extends (@Nonnull final AbstractJClass aSuperClass)
   {
-    JCValueEnforcer.notNull (aSuperClass, "SuperClass");
+    ValueEnforcer.notNull (aSuperClass, "SuperClass");
     if (isInterface ())
     {
       if (aSuperClass.isInterface ())
@@ -397,7 +397,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
                           @Nonnull final String sName,
                           @Nullable final IJExpression aInit)
   {
-    JCValueEnforcer.isFalse (m_aFields.containsKey (sName), () -> "trying to create the same field twice: " + sName);
+    ValueEnforcer.isFalse (m_aFields.containsKey (sName), () -> "trying to create the same field twice: " + sName);
 
     final JFieldVar f = new JFieldVar (this, JMods.forField (nMods), aType, sName, aInit);
     m_aFields.put (sName, f);

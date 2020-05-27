@@ -40,10 +40,11 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
+
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * A special atom for double values
@@ -88,7 +89,7 @@ public class JAtomDouble implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtomDouble rhs = (JAtomDouble) o;
-    return isEqual (m_dWhat, rhs.m_dWhat);
+    return EqualsHelper.equals (m_dWhat, rhs.m_dWhat);
   }
 
   @Override

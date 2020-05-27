@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Modifier groups.
@@ -95,7 +95,7 @@ public class JMods implements IJGenerable
 
   private static void _check (final int nMods, final int nLegal, final String sWhat)
   {
-    JCValueEnforcer.isFalse ((nMods & ~nLegal) != 0,
+    ValueEnforcer.isFalse ((nMods & ~nLegal) != 0,
                              () -> "Illegal modifiers for " + sWhat + ": " + new JMods (nMods).toString ());
     /* ## check for illegal combinations too */
   }

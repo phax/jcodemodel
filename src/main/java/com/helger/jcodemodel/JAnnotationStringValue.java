@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Captures the value of the annotation.
@@ -67,8 +67,8 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
 
   public JAnnotationStringValue (@Nonnull final IJExpression aValue, @Nonnull final Object aNativeValue)
   {
-    m_aValue = JCValueEnforcer.notNull (aValue, "Value");
-    m_aNativeValue = JCValueEnforcer.notNull (aNativeValue, "NativeValue");
+    m_aValue = ValueEnforcer.notNull (aValue, "Value");
+    m_aNativeValue = ValueEnforcer.notNull (aNativeValue, "NativeValue");
   }
 
   @Nonnull

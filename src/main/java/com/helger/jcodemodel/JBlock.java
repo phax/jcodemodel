@@ -48,7 +48,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * A block of Java code, which may contain statements and local declarations.
@@ -163,8 +163,8 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnull
   protected final <T extends IJObject> T internalInsertAt (final int nIndex, @Nonnull final T aStatementOrDeclaration)
   {
-    JCValueEnforcer.isGE0 (nIndex, "Index");
-    JCValueEnforcer.notNull (aStatementOrDeclaration, "StatementOrDeclaration");
+    ValueEnforcer.isGE0 (nIndex, "Index");
+    ValueEnforcer.notNull (aStatementOrDeclaration, "StatementOrDeclaration");
 
     m_aContentList.add (nIndex, aStatementOrDeclaration);
     m_nPos++;
@@ -222,7 +222,7 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnegative
   public int pos (@Nonnegative final int nNewPos)
   {
-    JCValueEnforcer.isTrue (nNewPos >= 0 && nNewPos <= m_aContentList.size (), () -> "Illegal position provided: " + nNewPos);
+    ValueEnforcer.isTrue (nNewPos >= 0 && nNewPos <= m_aContentList.size (), () -> "Illegal position provided: " + nNewPos);
 
     final int nOldPos = m_nPos;
     m_nPos = nNewPos;

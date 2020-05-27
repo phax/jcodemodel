@@ -40,10 +40,11 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
+
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * Assignment statements, which are also expressions.
@@ -77,9 +78,7 @@ public class JAssignment implements IJExpressionStatement
    * @param sOperator
    *        additional operator
    */
-  protected JAssignment (@Nonnull final IJAssignmentTarget lhs,
-                         @Nonnull final IJExpression rhs,
-                         @Nonnull final String sOperator)
+  protected JAssignment (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs, @Nonnull final String sOperator)
   {
     m_aLhs = lhs;
     m_aRhs = rhs;
@@ -134,7 +133,9 @@ public class JAssignment implements IJExpressionStatement
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAssignment rhs = (JAssignment) o;
-    return isEqual (m_aLhs, rhs.m_aLhs) && isEqual (m_aRhs, rhs.m_aRhs) && isEqual (m_sOperator, rhs.m_sOperator);
+    return EqualsHelper.equals (m_aLhs, rhs.m_aLhs) &&
+           EqualsHelper.equals (m_aRhs, rhs.m_aRhs) &&
+           EqualsHelper.equals (m_sOperator, rhs.m_sOperator);
   }
 
   @Override

@@ -50,8 +50,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.ChangeInV4;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Simple text file.
@@ -66,7 +66,7 @@ public class JTextFile extends AbstractJResourceFile
   public JTextFile (@Nonnull final String sName, @Nonnull final Charset aEncoding)
   {
     super (sName);
-    m_aEncoding = JCValueEnforcer.notNull (aEncoding, "Encoding");
+    m_aEncoding = ValueEnforcer.notNull (aEncoding, "Encoding");
   }
 
   /**

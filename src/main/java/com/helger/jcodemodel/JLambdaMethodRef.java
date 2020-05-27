@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * This is a single Java 8 lambda method reference expression.
@@ -71,8 +71,8 @@ public class JLambdaMethodRef implements IJExpression
    */
   public JLambdaMethodRef (@Nonnull final JMethod aMethod)
   {
-    JCValueEnforcer.notNull (aMethod, "Method");
-    JCValueEnforcer.isTrue (aMethod.mods ().isStatic (),
+    ValueEnforcer.notNull (aMethod, "Method");
+    ValueEnforcer.isTrue (aMethod.mods ().isStatic (),
                             "Only static methods can be used with this constructor. Use the constructor with JVar for instance methods.");
 
     m_bStatic = true;
@@ -112,8 +112,8 @@ public class JLambdaMethodRef implements IJExpression
    */
   public JLambdaMethodRef (@Nonnull final AbstractJType aType, @Nonnull final String sMethod)
   {
-    JCValueEnforcer.notNull (aType, "Type");
-    JCValueEnforcer.notEmpty (sMethod, "Method");
+    ValueEnforcer.notNull (aType, "Type");
+    ValueEnforcer.notEmpty (sMethod, "Method");
 
     m_bStatic = true;
     m_aType = aType;
@@ -135,8 +135,8 @@ public class JLambdaMethodRef implements IJExpression
    */
   public JLambdaMethodRef (@Nonnull final JVar aVar, @Nonnull final String sMethod)
   {
-    JCValueEnforcer.notNull (aVar, "Var");
-    JCValueEnforcer.notEmpty (sMethod, "Method");
+    ValueEnforcer.notNull (aVar, "Var");
+    ValueEnforcer.notEmpty (sMethod, "Method");
 
     m_bStatic = false;
     m_aType = aVar.type ();
@@ -157,9 +157,9 @@ public class JLambdaMethodRef implements IJExpression
    */
   public JLambdaMethodRef (@Nonnull final JVar aVar, @Nonnull final JMethod aMethod)
   {
-    JCValueEnforcer.notNull (aVar, "Var");
-    JCValueEnforcer.notNull (aMethod, "Method");
-    JCValueEnforcer.isFalse (aMethod.mods ().isStatic (),
+    ValueEnforcer.notNull (aVar, "Var");
+    ValueEnforcer.notNull (aMethod, "Method");
+    ValueEnforcer.isFalse (aMethod.mods ().isStatic (),
                              "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
 
     m_bStatic = false;
@@ -184,8 +184,8 @@ public class JLambdaMethodRef implements IJExpression
    */
   public JLambdaMethodRef (@Nonnull final IJExpression aLhsExpr, @Nonnull final String sMethod)
   {
-    JCValueEnforcer.notNull (aLhsExpr, "Invocation");
-    JCValueEnforcer.notEmpty (sMethod, "Method");
+    ValueEnforcer.notNull (aLhsExpr, "Invocation");
+    ValueEnforcer.notEmpty (sMethod, "Method");
 
     m_bStatic = false;
     m_aType = null;
@@ -208,9 +208,9 @@ public class JLambdaMethodRef implements IJExpression
    */
   public JLambdaMethodRef (@Nonnull final IJExpression aLhsExpr, @Nonnull final JMethod aMethod)
   {
-    JCValueEnforcer.notNull (aLhsExpr, "Invocation");
-    JCValueEnforcer.notNull (aMethod, "Method");
-    JCValueEnforcer.isFalse (aMethod.mods ().isStatic (),
+    ValueEnforcer.notNull (aLhsExpr, "Invocation");
+    ValueEnforcer.notNull (aMethod, "Method");
+    ValueEnforcer.isFalse (aMethod.mods ().isStatic (),
                              "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
 
     m_bStatic = false;

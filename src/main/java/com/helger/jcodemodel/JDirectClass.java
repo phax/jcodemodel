@@ -47,7 +47,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCHashCodeGenerator;
+import com.helger.commons.hashcode.HashCodeGenerator;
 
 /**
  * A special {@link AbstractJClass} that represents an unknown class (except its
@@ -146,8 +146,7 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 
   @Override
   @Nonnull
-  protected AbstractJClass substituteParams (final JTypeVar [] aVariables,
-                                             final List <? extends AbstractJClass> aBindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] aVariables, final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }
@@ -175,6 +174,6 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   @Override
   public int hashCode ()
   {
-    return JCHashCodeGenerator.getHashCode (this, m_sFullName);
+    return new HashCodeGenerator (this).append (m_sFullName).getHashCode ();
   }
 }

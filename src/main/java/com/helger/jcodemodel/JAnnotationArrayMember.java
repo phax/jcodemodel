@@ -48,7 +48,7 @@ import java.util.List;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Represents an arrays as annotation members
@@ -65,7 +65,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
 
   public JAnnotationArrayMember (@Nonnull final JCodeModel aOwner)
   {
-    JCValueEnforcer.notNull (aOwner, "Owner");
+    ValueEnforcer.notNull (aOwner, "Owner");
     m_aOwner = aOwner;
   }
 

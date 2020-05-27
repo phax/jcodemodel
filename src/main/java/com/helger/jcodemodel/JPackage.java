@@ -57,10 +57,10 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.util.FSName;
-import com.helger.jcodemodel.util.JCStringHelper;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * A Java package.
@@ -176,13 +176,13 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
    */
   protected JPackage (@Nonnull final String sName, @Nonnull final JCodeModel aOwner)
   {
-    JCValueEnforcer.notNull (sName, "Name");
-    JCValueEnforcer.notNull (aOwner, "CodeModel");
+    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (aOwner, "CodeModel");
 
     // An empty package name is okay
     if (sName.length () > 0)
     {
-      final String [] aParts = JCStringHelper.getExplodedArray (SEPARATOR, sName);
+      final String [] aParts = StringHelper.getExplodedArray (SEPARATOR, sName);
       for (final String sPart : aParts)
         if (isForbiddenPackageNamePart (sPart))
           throw new IllegalArgumentException ("Part '" + sPart + "' of the package name '" + sName + "' is invalid");
@@ -298,7 +298,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   @ChangeInV4
   public AbstractJResourceFile addResourceFile (@Nonnull final AbstractJResourceFile rsrc)
   {
-    JCValueEnforcer.notNull (rsrc, "ResourceFile");
+    ValueEnforcer.notNull (rsrc, "ResourceFile");
     m_aResources.add (rsrc);
     return rsrc;
   }
@@ -387,7 +387,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
    */
   public void remove (@Nonnull final AbstractJClass aClass)
   {
-    JCValueEnforcer.isTrue (aClass._package () == this,
+    ValueEnforcer.isTrue (aClass._package () == this,
                             () -> "the specified class (" +
                                   aClass.fullName () +
                                   ") is not a member of this package (" +
@@ -412,7 +412,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   @Nonnull
   public AbstractJClass ref (@Nonnull final String sClassLocalName) throws ClassNotFoundException
   {
-    JCValueEnforcer.isTrue (sClassLocalName.indexOf (SEPARATOR) < 0, () -> "JClass name contains '.': " + sClassLocalName);
+    ValueEnforcer.isTrue (sClassLocalName.indexOf (SEPARATOR) < 0, () -> "JClass name contains '.': " + sClassLocalName);
 
     final String sFQCN = isUnnamed () ? sClassLocalName : m_sName + SEPARATOR + sClassLocalName;
     return m_aOwner.ref (Class.forName (sFQCN));
@@ -491,7 +491,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass aClazz)
   {
-    JCValueEnforcer.isFalse (isUnnamed (), "the root package cannot be annotated");
+    ValueEnforcer.isFalse (isUnnamed (), "the root package cannot be annotated");
 
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();

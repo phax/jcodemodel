@@ -40,10 +40,11 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
+
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * A special atom for long values
@@ -77,7 +78,7 @@ public class JAtomLong implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtomLong rhs = (JAtomLong) o;
-    return isEqual (m_nValue, rhs.m_nValue);
+    return EqualsHelper.equals (m_nValue, rhs.m_nValue);
   }
 
   @Override

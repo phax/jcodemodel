@@ -53,6 +53,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJFormatter;
@@ -65,7 +66,6 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.util.ClassNameComparator;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.util.NullWriter;
 
 /**
@@ -409,8 +409,8 @@ public class JFormatter implements IJFormatter
    */
   public JFormatter (@Nonnull final SourcePrintWriter aPW, @Nonnull final String sIndentString)
   {
-    JCValueEnforcer.notNull (aPW, "PrintWriter");
-    JCValueEnforcer.notNull (sIndentString, "IndentString");
+    ValueEnforcer.notNull (aPW, "PrintWriter");
+    ValueEnforcer.notNull (sIndentString, "IndentString");
 
     m_aPW = aPW;
     m_sIndentString = sIndentString;

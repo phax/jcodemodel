@@ -44,6 +44,10 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.hashcode.HashCodeGenerator;
+import com.helger.commons.hashcode.IHashCodeGenerator;
+
 /**
  * Utility class to represent case sensitive or case insensitive keys for file
  * and directory names.
@@ -56,7 +60,7 @@ public final class FSName implements Comparable <FSName>
   private final String m_sName;
   private final String m_sKey;
   // status vars
-  private int m_nHashCode = JCHashCodeGenerator.ILLEGAL_HASHCODE;
+  private int m_nHashCode = IHashCodeGenerator.ILLEGAL_HASHCODE;
 
   private FSName (@Nonnull final String sName, @Nonnull final String sKey)
   {
@@ -85,8 +89,8 @@ public final class FSName implements Comparable <FSName>
   public int hashCode ()
   {
     int ret = m_nHashCode;
-    if (ret == JCHashCodeGenerator.ILLEGAL_HASHCODE)
-      ret = m_nHashCode = new JCHashCodeGenerator (this).append (m_sKey).getHashCode ();
+    if (ret == IHashCodeGenerator.ILLEGAL_HASHCODE)
+      ret = m_nHashCode = new HashCodeGenerator (this).append (m_sKey).getHashCode ();
     return ret;
   }
 
@@ -98,14 +102,14 @@ public final class FSName implements Comparable <FSName>
   @Nonnull
   public static FSName createCaseSensitive (@Nonnull final String sName)
   {
-    JCValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name");
     return new FSName (sName, sName);
   }
 
   @Nonnull
   public static FSName createCaseInsensitive (@Nonnull final String sName)
   {
-    JCValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name");
     // Unify key to upper case
     return new FSName (sName, sName.toUpperCase (Locale.ROOT));
   }

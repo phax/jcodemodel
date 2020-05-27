@@ -40,10 +40,11 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
+
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * A special atom for float values
@@ -89,7 +90,7 @@ public class JAtomFloat implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JAtomFloat rhs = (JAtomFloat) o;
-    return isEqual (m_fWhat, rhs.m_fWhat);
+    return EqualsHelper.equals (m_fWhat, rhs.m_fWhat);
   }
 
   @Override

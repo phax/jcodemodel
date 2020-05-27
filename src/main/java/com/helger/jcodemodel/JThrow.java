@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * JThrow statement
@@ -62,7 +62,7 @@ public class JThrow implements IJStatement
    */
   public JThrow (@Nonnull final IJExpression aExpr)
   {
-    JCValueEnforcer.notNull (aExpr, "Expr");
+    ValueEnforcer.notNull (aExpr, "Expr");
     m_aExpr = aExpr;
   }
 

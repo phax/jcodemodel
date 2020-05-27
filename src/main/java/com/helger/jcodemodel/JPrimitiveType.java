@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Java built-in primitive types. Instances of this class can be obtained as
@@ -65,9 +65,9 @@ public class JPrimitiveType extends AbstractJType
                             @Nonnull final Class <?> aWrapper,
                             final boolean bUseValueOf)
   {
-    JCValueEnforcer.notNull (aOwner, "Owner");
-    JCValueEnforcer.notNull (sTypeName, "TypeName");
-    JCValueEnforcer.notNull (aWrapper, "Wrapper");
+    ValueEnforcer.notNull (aOwner, "Owner");
+    ValueEnforcer.notNull (sTypeName, "TypeName");
+    ValueEnforcer.notNull (aWrapper, "Wrapper");
     m_aOwner = aOwner;
     m_sTypeName = sTypeName;
     m_aWrapperClass = aOwner.ref (aWrapper);

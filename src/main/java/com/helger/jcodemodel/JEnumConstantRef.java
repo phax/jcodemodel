@@ -40,12 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * Enum Constant reference. When used as an {@link IJExpression}, this object
@@ -67,8 +67,8 @@ public class JEnumConstantRef implements IJExpression
 
   protected JEnumConstantRef (@Nonnull final AbstractJClass aType, @Nonnull final String sName)
   {
-    JCValueEnforcer.notNull (aType, "Type");
-    JCValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (aType, "Type");
+    ValueEnforcer.notNull (sName, "Name");
     m_aType = aType;
     m_sName = sName;
   }
@@ -112,7 +112,7 @@ public class JEnumConstantRef implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JEnumConstantRef rhs = (JEnumConstantRef) o;
-    return isEqual (m_aType.fullName (), rhs.m_aType.fullName ()) && isEqual (m_sName, rhs.m_sName);
+    return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) && EqualsHelper.equals (m_sName, rhs.m_sName);
   }
 
   @Override

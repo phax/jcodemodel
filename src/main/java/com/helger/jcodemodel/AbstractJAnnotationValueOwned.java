@@ -42,8 +42,8 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.util.JCNameUtilities;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Things that can be values of an annotation element and have an owning code
@@ -59,7 +59,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
 
     protected JEnumConstantExpr (@Nonnull final Enum <?> aEnumConstant)
     {
-      m_aEnumConstant = JCValueEnforcer.notNull (aEnumConstant, "EnumConstant");
+      m_aEnumConstant = ValueEnforcer.notNull (aEnumConstant, "EnumConstant");
     }
 
     public void generate (@Nonnull final IJFormatter f)
@@ -74,7 +74,7 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
 
     protected FullClassNameExpr (@Nonnull final Class <?> aClass)
     {
-      m_aClass = JCValueEnforcer.notNull (aClass, "Class");
+      m_aClass = ValueEnforcer.notNull (aClass, "Class");
     }
 
     public void generate (@Nonnull final IJFormatter f)

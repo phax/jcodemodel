@@ -48,7 +48,7 @@ import java.util.zip.ZipOutputStream;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCStringHelper;
+import com.helger.commons.string.StringHelper;
 
 /**
  * Writes all the files into a zip file.
@@ -94,7 +94,7 @@ public class ZipCodeWriter extends AbstractCodeWriter
   public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
   {
     final String sFullName;
-    if (JCStringHelper.hasText (sDirName))
+    if (StringHelper.hasText (sDirName))
       sFullName = sDirName + '/' + sFilename;
     else
       sFullName = sFilename;

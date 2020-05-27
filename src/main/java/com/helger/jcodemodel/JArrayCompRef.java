@@ -40,12 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * array component reference.
@@ -72,8 +72,8 @@ public class JArrayCompRef implements IJAssignmentTarget
    */
   protected JArrayCompRef (@Nonnull final IJExpression aArray, @Nonnull final IJExpression aIndex)
   {
-    JCValueEnforcer.notNull (aArray, "Array");
-    JCValueEnforcer.notNull (aIndex, "Index");
+    ValueEnforcer.notNull (aArray, "Array");
+    ValueEnforcer.notNull (aIndex, "Index");
     m_aArray = aArray;
     m_aIndex = aIndex;
   }
@@ -103,7 +103,7 @@ public class JArrayCompRef implements IJAssignmentTarget
     if (o == null || getClass () != o.getClass ())
       return false;
     final JArrayCompRef rhs = (JArrayCompRef) o;
-    return isEqual (m_aArray, rhs.m_aArray) && isEqual (m_aIndex, rhs.m_aIndex);
+    return EqualsHelper.equals (m_aArray, rhs.m_aArray) && EqualsHelper.equals (m_aIndex, rhs.m_aIndex);
   }
 
   @Override
