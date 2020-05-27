@@ -53,7 +53,6 @@ import javax.annotation.Nullable;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.JPackage;
-import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
 /**

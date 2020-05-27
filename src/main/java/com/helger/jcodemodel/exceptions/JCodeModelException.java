@@ -38,19 +38,29 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.exceptions;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * This exception purely indicates, that the {@link JErrorClass} is used which
- * is never intended.
+ * Base class for all code model related exception.
  *
- * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
+ * @author Philip Helger
+ * @since 3.4.0
  */
-@ChangeInV4 ("move to exceptions package")
-public class JErrorClassUsedException extends UnsupportedOperationException
+public class JCodeModelException extends Exception
 {
-  JErrorClassUsedException (final String sMessage)
+  protected JCodeModelException ()
+  {}
+
+  public JCodeModelException (@Nonnull final String sMsg)
   {
-    super (sMessage);
+    super (sMsg);
+  }
+
+  public JCodeModelException (@Nonnull final String sMsg, @Nullable final Throwable aCause)
+  {
+    super (sMsg, aCause);
   }
 }

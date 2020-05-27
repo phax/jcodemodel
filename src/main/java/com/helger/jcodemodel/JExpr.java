@@ -207,9 +207,7 @@ public final class JExpr
   }
 
   @Nonnull
-  public static JInvocation invoke (@Nullable final JCodeModel aOwner,
-                                    @Nullable final IJExpression aLhs,
-                                    @Nonnull final String sMethod)
+  public static JInvocation invoke (@Nullable final JCodeModel aOwner, @Nullable final IJExpression aLhs, @Nonnull final String sMethod)
   {
     return new JInvocation (aOwner, aLhs, sMethod);
   }
@@ -301,17 +299,7 @@ public final class JExpr
    * @param aClass
    *        The class to use ".class" of
    * @return The ".class" expression
-   * @deprecated Use the {@link #dotClass(AbstractJType)} - simply correct
-   *             camel-casing
    */
-  @Nonnull
-  @Deprecated
-  @ChangeInV4
-  public static IJExpression dotclass (@Nonnull final AbstractJClass aClass)
-  {
-    return dotClass (aClass);
-  }
-
   @Nonnull
   public static IJExpression dotClass (@Nonnull final AbstractJType aClass)
   {

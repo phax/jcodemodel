@@ -26,6 +26,9 @@ Add the following to your pom.xml to use this artifact:
 
 # News and noteworthy
 
+* v4.0.0 - work in progress
+    * Added `ph-commons` as a dependency for common stuff
+    * Moved all exceptions to `exceptions` package
 * v3.4.0 - 2020-05-25
     * Added special top-level construct `JResourceDir` to represent pure resource directories ([issue #74](https://github.com/phax/jcodemodel/issues/74) from @guiguilechat)
     * Added new class `JCodeModelException` as the base class for `JClassAlreadyExistsException` and the new class `JResourceAlreadyExistsException`

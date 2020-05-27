@@ -73,7 +73,7 @@ public class JLambdaMethodRef implements IJExpression
   {
     ValueEnforcer.notNull (aMethod, "Method");
     ValueEnforcer.isTrue (aMethod.mods ().isStatic (),
-                            "Only static methods can be used with this constructor. Use the constructor with JVar for instance methods.");
+                          "Only static methods can be used with this constructor. Use the constructor with JVar for instance methods.");
 
     m_bStatic = true;
     m_aType = aMethod.owningClass ();
@@ -81,23 +81,6 @@ public class JLambdaMethodRef implements IJExpression
     m_aLhsExpr = null;
     m_aMethod = aMethod;
     m_sMethodName = null;
-  }
-
-  /**
-   * Constructor for a static constructor method reference
-   * (<code>type::new</code>).
-   *
-   * @param aType
-   *        Type to reference the constructor from. May not be <code>null</code>
-   *        .
-   * @deprecated Use the factory method {@link #createForNew(AbstractJType)}
-   *             instead.
-   */
-  @Deprecated
-  @ChangeInV4
-  public JLambdaMethodRef (@Nonnull final AbstractJType aType)
-  {
-    this (aType, "new");
   }
 
   /**
@@ -160,7 +143,7 @@ public class JLambdaMethodRef implements IJExpression
     ValueEnforcer.notNull (aVar, "Var");
     ValueEnforcer.notNull (aMethod, "Method");
     ValueEnforcer.isFalse (aMethod.mods ().isStatic (),
-                             "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
+                           "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
 
     m_bStatic = false;
     m_aType = aVar.type ();
@@ -211,7 +194,7 @@ public class JLambdaMethodRef implements IJExpression
     ValueEnforcer.notNull (aLhsExpr, "Invocation");
     ValueEnforcer.notNull (aMethod, "Method");
     ValueEnforcer.isFalse (aMethod.mods ().isStatic (),
-                             "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
+                           "Only instance methods can be used with this constructor. Use the constructor with JMethod only for static methods.");
 
     m_bStatic = false;
     m_aType = aMethod.owningClass ();
@@ -248,21 +231,6 @@ public class JLambdaMethodRef implements IJExpression
   public JVar var ()
   {
     return m_aVar;
-  }
-
-  /**
-   * Note: v3.3.0 changed the return type to be {@link IJExpression}
-   *
-   * @return The invocation reference. May be <code>null</code> if this is a
-   *         static or variable reference.
-   * @deprecated Use {@link #lhsExpr()} instead
-   */
-  @Deprecated
-  @Nullable
-  @ChangeInV4
-  public JInvocation invocation ()
-  {
-    return m_aLhsExpr instanceof JInvocation ? (JInvocation) m_aLhsExpr : null;
   }
 
   /**

@@ -48,7 +48,6 @@ import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.helger.commons.string.StringHelper;
-import com.helger.jcodemodel.ChangeInV4;
 
 /**
  * All kind of file name handling stuff. This class gives you platform
@@ -129,32 +128,8 @@ public final class JCFilenameHelper
   private JCFilenameHelper ()
   {}
 
-  @ChangeInV4
   static boolean isFileSystemCaseSensitive ()
   {
-    try
-    {
-      // let the system property override, in case the user really
-      // wants to override.
-      if (System.getProperty ("com.sun.codemodel.FileSystemCaseSensitive") != null)
-      {
-        System.err.println ("Dear JCodeModel user: the currently defined system property 'com.sun.codemodel.FileSystemCaseSensitive' will not be evaluated in the upcoming v4. Use JCodeMode.setFileSystemConvention instead.");
-        return true;
-      }
-
-      // Add special override to differentiate if Sun implementation is also in
-      // scope
-      if (System.getProperty ("com.helger.jcodemodel.FileSystemCaseSensitive") != null)
-      {
-        System.err.println ("Dear JCodeModel user: the currently defined system property 'com.helger.jcodemodel.FileSystemCaseSensitive' will not be evaluated in the upcoming v4. Use JCodeMode.setFileSystemConvention instead.");
-        return true;
-      }
-    }
-    catch (final Exception e)
-    {
-      // Fall through
-    }
-
     // on Unix, it's case sensitive.
     return File.separatorChar == '/';
   }

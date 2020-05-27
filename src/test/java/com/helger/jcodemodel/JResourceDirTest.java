@@ -49,6 +49,9 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.exceptions.JResourceAlreadyExistsException;
 import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.util.EFileSystemConvention;
 

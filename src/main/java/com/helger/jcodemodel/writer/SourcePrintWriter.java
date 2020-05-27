@@ -38,30 +38,91 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.writer;
+
+import java.io.FilterWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
- * Base class for all code model related exception.
+ * A special version of {@link java.io.PrintWriter} that has a customizable new
+ * line string.
  *
  * @author Philip Helger
- * @since 3.4.0
  */
-@ChangeInV4 ("moved to exceptions package")
-public class JCodeModelException extends Exception
+public final class SourcePrintWriter extends FilterWriter
 {
-  protected JCodeModelException ()
-  {}
+  private final String m_sNewLine;
 
-  public JCodeModelException (@Nonnull final String sMsg)
+  public SourcePrintWriter (@Nonnull final Writer aWrappedWriter, @Nonnull final String sNewLine)
   {
-    super (sMsg);
+    super (aWrappedWriter);
+    m_sNewLine = sNewLine;
   }
 
-  public JCodeModelException (@Nonnull final String sMsg, @Nullable final Throwable aCause)
+  private void _handleException (@Nonnull final IOException ex, @Nonnull final String sSource)
   {
-    super (sMsg, aCause);
+    System.err.println ("Error on Writer: " + sSource);
+    ex.printStackTrace ();
+  }
+
+  private void _write (final char c)
+  {
+    try
+    {
+      super.write (c);
+    }
+    catch (final IOException ex)
+    {
+      _handleException (ex, "write char");
+    }
+  }
+
+  private void _write (@Nonnull final String sStr)
+  {
+    try
+    {
+      super.write (sStr, 0, sStr.length ());
+    }
+    catch (final IOException ex)
+    {
+      _handleException (ex, "write String");
+    }
+  }
+
+  public void print (final char c)
+  {
+    _write (c);
+  }
+
+  public void print (@Nonnull final String sStr)
+  {
+    _write (sStr);
+  }
+
+  public void println ()
+  {
+    _write (m_sNewLine);
+  }
+
+  public void println (final String sStr)
+  {
+    _write (sStr);
+    _write (m_sNewLine);
+  }
+
+  @Override
+  public void close ()
+  {
+    try
+    {
+      super.close ();
+    }
+    catch (final IOException ex)
+    {
+      _handleException (ex, "close");
+    }
   }
 }

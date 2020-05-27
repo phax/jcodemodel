@@ -60,7 +60,6 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JDocComment;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JResourceDir;
-import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
@@ -278,15 +277,14 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final AbstractCodeWriter aSourceWriter,
-                     @Nonnull final AbstractCodeWriter aResourceWriter) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter aSourceWriter, @Nonnull final AbstractCodeWriter aResourceWriter) throws IOException
   {
     try
     {
       // Copy to avoid concurrent modification exception
       final List <JPackage> aPackages = m_aCM.getAllPackages ();
       for (final JPackage aPackage : aPackages)
-        buildPackage (aSourceWriter, aResourceWriter, aPackage);
+        buildPackage (aSourceWriter, aPackage);
 
       // Write resources only
       final List <JResourceDir> aResourceDirs = m_aCM.getAllResourceDirs ();
@@ -312,10 +310,7 @@ public class JCMWriter
     return ret;
   }
 
-  @SuppressWarnings ("deprecation")
-  public void buildPackage (@Nonnull final AbstractCodeWriter aSrcWriter,
-                            @Nonnull final AbstractCodeWriter aResWriter,
-                            @Nonnull final JPackage aPackage) throws IOException
+  public void buildPackage (@Nonnull final AbstractCodeWriter aSrcWriter, @Nonnull final JPackage aPackage) throws IOException
   {
     // write classes
     for (final JDefinedClass c : aPackage.classes ())
@@ -349,21 +344,9 @@ public class JCMWriter
         f.declaration (aPackage);
       }
     }
-
-    // write resources
-    for (final AbstractJResourceFile rsrc : aPackage.getAllResourceFiles ())
-    {
-      final AbstractCodeWriter cw = rsrc.isResource () ? aResWriter : aSrcWriter;
-      try (final OutputStream os = cw.openBinary (aPackage, rsrc.name ());
-           final OutputStream bos = new BufferedOutputStream (os))
-      {
-        rsrc.build (bos);
-      }
-    }
   }
 
-  public void buildResourceDir (@Nonnull final AbstractCodeWriter aResWriter,
-                                @Nonnull final JResourceDir aResourceDir) throws IOException
+  public void buildResourceDir (@Nonnull final AbstractCodeWriter aResWriter, @Nonnull final JResourceDir aResourceDir) throws IOException
   {
     // write resources
     for (final AbstractJResourceFile rsrc : aResourceDir.getAllResourceFiles ())

@@ -45,11 +45,8 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
@@ -59,7 +56,9 @@ import javax.annotation.Nullable;
 
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.string.StringHelper;
-import com.helger.jcodemodel.fmt.AbstractJResourceFile;
+import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.exceptions.JResourceAlreadyExistsException;
 import com.helger.jcodemodel.util.FSName;
 
 /**
@@ -147,12 +146,6 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
    * List of classes contained within this package keyed by their name.
    */
   private final Map <FSName, JDefinedClass> m_aClasses = new TreeMap <> ();
-
-  /**
-   * List of resources files inside this package.
-   */
-  @ChangeInV4
-  private final Set <AbstractJResourceFile> m_aResources = new HashSet <> ();
 
   /**
    * Lazily created list of package annotations.
@@ -284,87 +277,6 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
     return m_aClasses.get (aKey);
   }
 
-  /**
-   * Adds a new resource file to this package.
-   *
-   * @param rsrc
-   *        Resource file to add
-   * @return Parameter resource file
-   * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
-   *             v3.4.0
-   */
-  @Nonnull
-  @Deprecated
-  @ChangeInV4
-  public AbstractJResourceFile addResourceFile (@Nonnull final AbstractJResourceFile rsrc)
-  {
-    ValueEnforcer.notNull (rsrc, "ResourceFile");
-    m_aResources.add (rsrc);
-    return rsrc;
-  }
-
-  /**
-   * Checks if a resource of the given name exists.
-   *
-   * @param sName
-   *        Filename to check
-   * @return <code>true</code> if contained
-   * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
-   *             v3.4.0
-   */
-  @Deprecated
-  @ChangeInV4
-  public boolean hasResourceFile (@Nullable final String sName)
-  {
-    for (final AbstractJResourceFile r : m_aResources)
-      if (r.name ().equals (sName))
-        return true;
-    return false;
-  }
-
-  /**
-   * Iterates all resource files in this package.
-   *
-   * @return Iterator
-   * @deprecated Use {@link #resourceFiles()} instead. Deprecated since v3.4.0
-   */
-  @Deprecated
-  @Nonnull
-  @ChangeInV4
-  public Iterator <AbstractJResourceFile> propertyFiles ()
-  {
-    return resourceFiles ();
-  }
-
-  /**
-   * Iterates all resource files in this package.
-   *
-   * @return Iterator
-   * @since 3.2.0
-   * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
-   *             v3.4.0
-   */
-  @Deprecated
-  @Nonnull
-  @ChangeInV4
-  public Iterator <AbstractJResourceFile> resourceFiles ()
-  {
-    return m_aResources.iterator ();
-  }
-
-  /**
-   * @return A copy of all contained resource files. Never <code>null</code>.
-   * @deprecated Use the API from {@link JResourceDir} instead. Deprecated since
-   *             v3.4.0
-   */
-  @Deprecated
-  @Nonnull
-  @ChangeInV4
-  public List <AbstractJResourceFile> getAllResourceFiles ()
-  {
-    return new ArrayList <> (m_aResources);
-  }
-
   @Nonnull
   public JDocComment javadoc ()
   {
@@ -388,11 +300,11 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   public void remove (@Nonnull final AbstractJClass aClass)
   {
     ValueEnforcer.isTrue (aClass._package () == this,
-                            () -> "the specified class (" +
-                                  aClass.fullName () +
-                                  ") is not a member of this package (" +
-                                  name () +
-                                  "), or it is a referenced class");
+                          () -> "the specified class (" +
+                                aClass.fullName () +
+                                ") is not a member of this package (" +
+                                name () +
+                                "), or it is a referenced class");
 
     // note that c may not be a member of classes.
     // this happens when someone is trying to remove a non generated class
@@ -578,8 +490,6 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
       // package-info
       ret++;
     }
-
-    ret += m_aResources.size ();
 
     return ret;
   }

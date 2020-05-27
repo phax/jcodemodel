@@ -46,6 +46,8 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.exceptions.JErrorClassUsedException;
+
 /**
  * A special {@link AbstractJClass} that represents an error class.
  * <p>

@@ -38,92 +38,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
-
-import java.io.FilterWriter;
-import java.io.IOException;
-import java.io.Writer;
+package com.helger.jcodemodel.exceptions;
 
 import javax.annotation.Nonnull;
 
+import com.helger.commons.ValueEnforcer;
+
 /**
- * A special version of {@link java.io.PrintWriter} that has a customizable new
- * line string.
+ * Indicates that the class is already created.
  *
  * @author Philip Helger
+ * @since 3.4.0
  */
-@ChangeInV4 ("Moved to writer package")
-public final class SourcePrintWriter extends FilterWriter
+public class JResourceAlreadyExistsException extends JCodeModelException
 {
-  private final String m_sNewLine;
+  private final String m_sFilename;
 
-  public SourcePrintWriter (@Nonnull final Writer aWrappedWriter, @Nonnull final String sNewLine)
+  public JResourceAlreadyExistsException (@Nonnull final String sFilename)
   {
-    super (aWrappedWriter);
-    m_sNewLine = sNewLine;
+    ValueEnforcer.notEmpty (sFilename, "Filename");
+    m_sFilename = sFilename;
   }
 
-  private void _handleException (@Nonnull final IOException ex, @Nonnull final String sSource)
+  /**
+   * @return The existing filename that already exists as a resource. Neither
+   *         <code>null</code> nor empty.
+   */
+  @Nonnull
+  public String getExistingFilename ()
   {
-    System.err.println ("Error on Writer: " + sSource);
-    ex.printStackTrace ();
-  }
-
-  private void _write (final char c)
-  {
-    try
-    {
-      super.write (c);
-    }
-    catch (final IOException ex)
-    {
-      _handleException (ex, "write char");
-    }
-  }
-
-  private void _write (@Nonnull final String sStr)
-  {
-    try
-    {
-      super.write (sStr, 0, sStr.length ());
-    }
-    catch (final IOException ex)
-    {
-      _handleException (ex, "write String");
-    }
-  }
-
-  public void print (final char c)
-  {
-    _write (c);
-  }
-
-  public void print (@Nonnull final String sStr)
-  {
-    _write (sStr);
-  }
-
-  public void println ()
-  {
-    _write (m_sNewLine);
-  }
-
-  public void println (final String sStr)
-  {
-    _write (sStr);
-    _write (m_sNewLine);
-  }
-
-  @Override
-  public void close ()
-  {
-    try
-    {
-      super.close ();
-    }
-    catch (final IOException ex)
-    {
-      _handleException (ex, "close");
-    }
+    return m_sFilename;
   }
 }

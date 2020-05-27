@@ -45,6 +45,8 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.system.EOperatingSystem;
+
 /**
  * Default implementation of {@link IFileSystemConvention}
  *
@@ -60,7 +62,7 @@ public enum EFileSystemConvention implements IFileSystemConvention
   /**
    * The default file system convention follows the known rules.
    */
-  public static final EFileSystemConvention DEFAULT = JCFilenameHelper.isFileSystemCaseSensitive () ? LINUX : WINDOWS;
+  public static final EFileSystemConvention DEFAULT = EOperatingSystem.getCurrentOS ().isWindowsBased () ? WINDOWS : LINUX;
 
   private final boolean m_bIsCaseSensitive;
   private final Predicate <String> m_aDirNameCheck;

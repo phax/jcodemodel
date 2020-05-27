@@ -91,60 +91,6 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    */
   private List <JTypeVar> m_aTypeVariables;
 
-  /**
-   * Invokes a method on an object.
-   *
-   * @param aObject
-   *        JExpression for the object upon which the named method will be
-   *        invoked, or null if none
-   * @param sName
-   *        Name of method to invoke
-   */
-  @Deprecated
-  @ChangeInV4
-  protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final String sName)
-  {
-    // Not possible to determine an owner :(
-    this (null, aObject, sName);
-  }
-
-  @Deprecated
-  @ChangeInV4
-  protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final JMethod aMethod)
-  {
-    this (aMethod.owner (), aObject, aMethod);
-  }
-
-  /**
-   * Invokes a static method on a class.
-   *
-   * @param aType
-   *        Parent type
-   * @param sMethodName
-   *        Method name to be invoked
-   */
-  @Deprecated
-  @ChangeInV4
-  protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final String sMethodName)
-  {
-    this (aType.owner (), aType, sMethodName);
-  }
-
-  /**
-   * Invokes a static method on a class.
-   *
-   * @param aType
-   *        Parent type
-   * @param aMethod
-   *        Method to be invoked
-   */
-  @Deprecated
-  @ChangeInV4
-  protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final JMethod aMethod)
-  {
-    this (aType.owner (), aType, aMethod);
-  }
-
   protected JInvocation (@Nullable final JCodeModel aOwner, @Nullable final IJGenerable aObject, @Nonnull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
@@ -327,20 +273,6 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   public JInvocation argThis ()
   {
     return arg (JExpr._this ());
-  }
-
-  /**
-   * Returns all arguments of the invocation.
-   *
-   * @return If there's no arguments, an empty array will be returned.
-   * @deprecated Use {@link #args()} instead
-   */
-  @Nonnull
-  @Deprecated
-  @ChangeInV4
-  public IJExpression [] listArgs ()
-  {
-    return m_aArgs.toArray (new IJExpression [m_aArgs.size ()]);
   }
 
   /**

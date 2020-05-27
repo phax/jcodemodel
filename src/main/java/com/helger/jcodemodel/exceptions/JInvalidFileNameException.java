@@ -2,8 +2,6 @@ package com.helger.jcodemodel.exceptions;
 
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.JCodeModelException;
-
 /**
  * <p>
  * Exception thrown when trying to create a new resource (folder, file or class

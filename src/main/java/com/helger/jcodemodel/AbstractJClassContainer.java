@@ -49,6 +49,9 @@ import java.util.TreeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
+
 /**
  * A generated Java class/interface/enum/annotation<br>
  * This class models a declaration, and since a declaration can be always used

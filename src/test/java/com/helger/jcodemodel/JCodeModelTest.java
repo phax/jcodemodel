@@ -51,6 +51,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.helger.jcodemodel.exceptions.JCaseSensitivityChangeException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
 import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;

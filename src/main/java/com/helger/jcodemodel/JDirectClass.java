@@ -60,13 +60,6 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 {
   private final String m_sFullName;
 
-  @Deprecated
-  @ChangeInV4
-  protected JDirectClass (@Nonnull final JCodeModel aOwner, @Nonnull final String sFullName)
-  {
-    this (aOwner, null, EClassType.CLASS, sFullName);
-  }
-
   @Nonnull
   private static String _getName (@Nonnull final String sFullName)
   {

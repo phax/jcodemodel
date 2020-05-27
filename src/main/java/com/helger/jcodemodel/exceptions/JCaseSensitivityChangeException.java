@@ -1,7 +1,6 @@
 package com.helger.jcodemodel.exceptions;
 
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.util.IFileSystemConvention;
 
 /**

@@ -40,11 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -65,7 +61,9 @@ import com.helger.commons.ValueEnforcer;
 import com.helger.commons.io.file.FilenameHelper;
 import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.exceptions.JCaseSensitivityChangeException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
+import com.helger.jcodemodel.exceptions.JResourceAlreadyExistsException;
 import com.helger.jcodemodel.meta.CodeModelBuildingException;
 import com.helger.jcodemodel.meta.ErrorTypeFound;
 import com.helger.jcodemodel.meta.JCodeModelJavaxLangModelAdapter;
@@ -73,10 +71,6 @@ import com.helger.jcodemodel.util.EFileSystemConvention;
 import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.IFileSystemConvention;
 import com.helger.jcodemodel.util.JCSecureLoader;
-import com.helger.jcodemodel.writer.AbstractCodeWriter;
-import com.helger.jcodemodel.writer.FileCodeWriter;
-import com.helger.jcodemodel.writer.JCMWriter;
-import com.helger.jcodemodel.writer.ProgressCodeWriter;
 
 /**
  * Root of the code DOM.
@@ -111,21 +105,6 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter;
 public class JCodeModel implements Serializable
 {
   private static final String SEPARATOR_TWICE = JResourceDir.SEPARATOR_STR + JResourceDir.SEPARATOR_STR;
-
-  /**
-   * @return <code>true</code> if the default file system is case sensitive (*x)
-   *         or <code>false</code> if not (e.g. Windows).
-   * @since 3.0.0
-   * @deprecated Use
-   *             <code>getFileSystemConvention().isFileSystemCaseSensitive()</code>
-   *             on a per-instance level instead. Will be removed in v4
-   */
-  @Deprecated
-  @ChangeInV4
-  public static boolean isFileSystemCaseSensitive ()
-  {
-    return EFileSystemConvention.DEFAULT.isCaseSensistive ();
-  }
 
   /**
    * Conversion from primitive type {@link Class} (such as {@link Integer#TYPE})
@@ -191,19 +170,6 @@ public class JCodeModel implements Serializable
    * Cached for {@link #wildcard()}.
    */
   private AbstractJClass m_aWildcard;
-
-  /**
-   * The charset used for building the output - null means system default. TODO
-   * remove in v4
-   */
-  @Deprecated
-  @ChangeInV4
-  private Charset m_aBuildingCharset;
-
-  /** The newline string to be used. Defaults to system default */
-  @Deprecated
-  @ChangeInV4
-  private String m_sBuildingNewLine = JCMWriter.getDefaultNewLine ();
 
   private final Set <AbstractJClass> m_aDontImportClasses = new HashSet <> ();
 
@@ -724,198 +690,7 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * @return The default charset used for building. <code>null</code> means
-   *         system default.
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Nullable
-  @Deprecated
-  @ChangeInV4
-  public Charset getBuildingCharset ()
-  {
-    return m_aBuildingCharset;
-  }
-
-  /**
-   * Set the charset to be used for emitting files.
-   *
-   * @param aCharset
-   *        The charset to be used. May be <code>null</code> to indicate the use
-   *        of the system default.
-   * @return this for chaining
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Nonnull
-  @Deprecated
-  @ChangeInV4
-  public JCodeModel setBuildingCharset (@Nullable final Charset aCharset)
-  {
-    m_aBuildingCharset = aCharset;
-    return this;
-  }
-
-  /**
-   * @return The newline string to be used. Defaults to system default
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Deprecated
-  @ChangeInV4
-  public String getBuildingNewLine ()
-  {
-    return m_sBuildingNewLine;
-  }
-
-  /**
-   * Set the new line string to be used for emitting source files.
-   *
-   * @param sNewLine
-   *        The new line string to be used. May neither be <code>null</code> nor
-   *        empty.
-   * @return this for chaining
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Nonnull
-  @Deprecated
-  @ChangeInV4
-  public JCodeModel setBuildingNewLine (@Nonnull final String sNewLine)
-  {
-    ValueEnforcer.notEmpty (sNewLine, "NewLine");
-    m_sBuildingNewLine = sNewLine;
-    return this;
-  }
-
-  /**
-   * Generates Java source code. A convenience method for
-   * <code>build(destDir,destDir,status)</code>.
-   *
-   * @param aDestDir
-   *        source files and resources are generated into this directory.
-   * @param aStatusPS
-   *        if non-<code>null</code>, progress indication will be sent to this
-   *        stream.
-   * @throws IOException
-   *         on IO error
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Deprecated
-  @ChangeInV4
-  public void build (@Nonnull final File aDestDir, @Nullable final PrintStream aStatusPS) throws IOException
-  {
-    build (aDestDir, aDestDir, aStatusPS);
-  }
-
-  /**
-   * Generates Java source code. A convenience method that calls
-   * {@link #build(AbstractCodeWriter,AbstractCodeWriter)}.
-   *
-   * @param aSrcDir
-   *        Java source files are generated into this directory.
-   * @param aResourceDir
-   *        Other resource files are generated into this directory.
-   * @param aStatusPS
-   *        Progress stream. May be <code>null</code>.
-   * @throws IOException
-   *         on IO error if non-null, progress indication will be sent to this
-   *         stream.
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Deprecated
-  @ChangeInV4
-  public void build (@Nonnull final File aSrcDir,
-                     @Nonnull final File aResourceDir,
-                     @Nullable final PrintStream aStatusPS) throws IOException
-  {
-    AbstractCodeWriter res = new FileCodeWriter (aResourceDir, m_aBuildingCharset, m_sBuildingNewLine);
-    AbstractCodeWriter src = new FileCodeWriter (aSrcDir, m_aBuildingCharset, m_sBuildingNewLine);
-    if (aStatusPS != null)
-    {
-      src = new ProgressCodeWriter (src, aStatusPS::println);
-      res = new ProgressCodeWriter (res, aStatusPS::println);
-    }
-    build (src, res);
-  }
-
-  /**
-   * A convenience method for <code>build(destDir,System.out)</code>.
-   *
-   * @param aDestDir
-   *        source files and resources are generated into this directory.
-   * @throws IOException
-   *         on IO error
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Deprecated
-  @ChangeInV4
-  public void build (@Nonnull final File aDestDir) throws IOException
-  {
-    build (aDestDir, System.out);
-  }
-
-  /**
-   * A convenience method for <code>build(srcDir,resourceDir,System.out)</code>.
-   *
-   * @param aSrcDir
-   *        Java source files are generated into this directory.
-   * @param aResourceDir
-   *        Other resource files are generated into this directory.
-   * @throws IOException
-   *         on IO error
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Deprecated
-  @ChangeInV4
-  public void build (@Nonnull final File aSrcDir, @Nonnull final File aResourceDir) throws IOException
-  {
-    build (aSrcDir, aResourceDir, System.out);
-  }
-
-  /**
-   * A convenience method for <code>build(out,out)</code>.
-   *
-   * @param aWriter
-   *        Source code and resource writer
-   * @throws IOException
-   *         on IO error
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Deprecated
-  @ChangeInV4
-  public void build (@Nonnull final AbstractCodeWriter aWriter) throws IOException
-  {
-    build (aWriter, aWriter);
-  }
-
-  /**
-   * Generates Java source code.
-   *
-   * @param aSource
-   *        Source code writer
-   * @param aResource
-   *        Resource writer
-   * @throws IOException
-   *         on IO error
-   * @deprecated In favor of the new {@link JCMWriter} class offering more
-   *             configuration flexibility.
-   */
-  @Deprecated
-  @ChangeInV4
-  public void build (@Nonnull final AbstractCodeWriter aSource, @Nonnull final AbstractCodeWriter aResource) throws IOException
-  {
-    new JCMWriter (this).setCharset (m_aBuildingCharset).setNewLine (m_sBuildingNewLine).build (aSource, aResource);
-  }
-
-  /**
-   * @return the number of files to be generated if {@link #build} is invoked
-   *         now.
+   * @return the number of files to be generated if building would happen now.
    */
   @Nonnegative
   public int countArtifacts ()

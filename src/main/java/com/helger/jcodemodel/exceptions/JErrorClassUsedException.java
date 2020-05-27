@@ -38,36 +38,20 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.exceptions;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
+import com.helger.jcodemodel.JErrorClass;
 
 /**
- * Indicates that the class is already created.
+ * This exception purely indicates, that the {@link JErrorClass} is used which
+ * is never intended.
  *
- * @author Philip Helger
- * @since 3.4.0
+ * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
-@ChangeInV4 ("moved to exceptions package")
-public class JResourceAlreadyExistsException extends JCodeModelException
+public class JErrorClassUsedException extends UnsupportedOperationException
 {
-  private final String m_sFilename;
-
-  public JResourceAlreadyExistsException (@Nonnull final String sFilename)
+  public JErrorClassUsedException (final String sMessage)
   {
-    ValueEnforcer.notEmpty (sFilename, "Filename");
-    m_sFilename = sFilename;
-  }
-
-  /**
-   * @return The existing filename that already exists as a resource. Neither
-   *         <code>null</code> nor empty.
-   */
-  @Nonnull
-  public String getExistingFilename ()
-  {
-    return m_sFilename;
+    super (sMessage);
   }
 }

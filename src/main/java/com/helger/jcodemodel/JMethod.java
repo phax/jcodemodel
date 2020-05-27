@@ -339,9 +339,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public JVar varParam (final int nMods, @Nonnull final AbstractJType aType, @Nonnull final String sName)
   {
     ValueEnforcer.isFalse (hasVarArgs (),
-                             "Cannot have two varargs in a method,\n" +
-                                            "Check if varParam method of JMethod is" +
-                                            " invoked more than once");
+                           "Cannot have two varargs in a method,\n" + "Check if varParam method of JMethod is" + " invoked more than once");
 
     m_aVarParam = new JVar (JMods.forVar (nMods), aType.array (), sName, null);
     return m_aVarParam;
@@ -478,20 +476,6 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public JVar [] listParams ()
   {
     return m_aParams.toArray (new JVar [m_aParams.size ()]);
-  }
-
-  /**
-   * Returns the variable parameter
-   *
-   * @return If there's no parameter, null will be returned.
-   * @deprecated Use {@link #varParam()} instead.
-   */
-  @Nullable
-  @Deprecated
-  @ChangeInV4
-  public JVar listVarParam ()
-  {
-    return varParam ();
   }
 
   /**

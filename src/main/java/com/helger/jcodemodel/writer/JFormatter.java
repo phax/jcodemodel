@@ -64,7 +64,6 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JNarrowedClass;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JVar;
-import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.NullWriter;
 

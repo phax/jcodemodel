@@ -64,16 +64,15 @@ public class Issue61FuncTest
   @Test
   public void testIssue () throws Exception
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final Charset ascii = StandardCharsets.US_ASCII;
-    final JTextFile res = cm.rootResourceDir ().addResourceFile (new JTextFile ("example.txt", ascii));
+    cm.rootResourceDir ().addResourceFile (new JTextFile ("example.txt", ascii).contents ("Testing"));
 
-    res.setContents ("Testing");
-
-    final ByteArrayOutputStream resOut = new ByteArrayOutputStream ();
-    new JCMWriter (cm).build (new SingleStreamCodeWriter (new ByteArrayOutputStream ()),
-        new SingleStreamCodeWriter (resOut));
-    final String txtRes = ascii.decode (ByteBuffer.wrap (resOut.toByteArray ())).toString ();
-    assertTrue (txtRes.contains ("Testing"));
+    try (final ByteArrayOutputStream resOut = new ByteArrayOutputStream ())
+    {
+      new JCMWriter (cm).build (new SingleStreamCodeWriter (new ByteArrayOutputStream ()), new SingleStreamCodeWriter (resOut));
+      final String txtRes = ascii.decode (ByteBuffer.wrap (resOut.toByteArray ())).toString ();
+      assertTrue (txtRes.contains ("Testing"));
+    }
   }
 }

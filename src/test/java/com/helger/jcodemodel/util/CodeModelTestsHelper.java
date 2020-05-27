@@ -74,12 +74,12 @@ import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.JFormatter;
 import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.writer.SourcePrintWriter;
 
 /**
  * Various utilities for codemodel tests.

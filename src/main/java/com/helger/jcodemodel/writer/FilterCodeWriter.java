@@ -46,7 +46,6 @@ import java.io.OutputStream;
 import javax.annotation.Nonnull;
 
 import com.helger.jcodemodel.JPackage;
-import com.helger.jcodemodel.SourcePrintWriter;
 
 /**
  * {@link AbstractCodeWriter} that delegates to another

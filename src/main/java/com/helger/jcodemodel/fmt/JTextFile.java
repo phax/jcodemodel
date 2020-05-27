@@ -51,7 +51,6 @@ import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
 
 import com.helger.commons.ValueEnforcer;
-import com.helger.jcodemodel.ChangeInV4;
 
 /**
  * Simple text file.
@@ -83,7 +82,7 @@ public class JTextFile extends AbstractJResourceFile
    * @return The content of the text file. <code>null</code> by default.
    */
   @Nullable
-  public String contents ()
+  public final String contents ()
   {
     return m_sContents;
   }
@@ -93,11 +92,13 @@ public class JTextFile extends AbstractJResourceFile
    *
    * @param sContents
    *        The contents to be used. May be <code>null</code>.
+   * @return this for chaining
    */
-  @ChangeInV4 ("return this")
-  public void setContents (@Nullable final String sContents)
+  @Nonnull
+  public final JTextFile contents (@Nullable final String sContents)
   {
     m_sContents = sContents;
+    return this;
   }
 
   @Override
@@ -119,12 +120,8 @@ public class JTextFile extends AbstractJResourceFile
   }
 
   @Nonnull
-  public static JTextFile createFully (@Nonnull final String sName,
-                                       @Nonnull final Charset aEncoding,
-                                       @Nullable final String sContents)
+  public static JTextFile createFully (@Nonnull final String sName, @Nonnull final Charset aEncoding, @Nullable final String sContents)
   {
-    final JTextFile ret = new JTextFile (sName, aEncoding);
-    ret.setContents (sContents);
-    return ret;
+    return new JTextFile (sName, aEncoding).contents (sContents);
   }
 }
