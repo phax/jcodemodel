@@ -2,11 +2,16 @@ package com.helger.jcodemodel.util;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.helger.commons.hashcode.HashCodeGenerator;
 
+@Immutable
 public class JCHashCodeGenerator
 {
+  private JCHashCodeGenerator ()
+  {}
+
   /**
    * Static helper method to create the hashcode of an object with a single
    * invocation. This method must be used by objects that directly derive from
