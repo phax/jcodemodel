@@ -69,17 +69,15 @@ class ClassFiller
   private final JCodeModel m_aCodeModel;
   private final DecidedErrorTypesModelsAdapter m_aModelsAdapter;
 
-  ClassFiller (final JCodeModel codeModel,
-               final DecidedErrorTypesModelsAdapter modelsAdapter,
-               final JDefinedClass newClass)
+  ClassFiller (final JCodeModel codeModel, final DecidedErrorTypesModelsAdapter modelsAdapter, final JDefinedClass newClass)
   {
     m_aCodeModel = codeModel;
     m_aModelsAdapter = modelsAdapter;
     m_aNewClass = newClass;
   }
 
-  void fillClass (@Nonnull final TypeElement element,
-                  @Nonnull final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
+  void fillClass (@Nonnull final TypeElement element, @Nonnull final TypeEnvironment environment) throws CodeModelBuildingException,
+                                                                                                  ErrorTypeFound
   {
     m_aNewClass.hide ();
     final Annotator classAnnotator = new Annotator (m_aModelsAdapter, m_aNewClass, environment);
@@ -104,8 +102,7 @@ class ClassFiller
     }
     for (final Element enclosedElement : element.getEnclosedElements ())
     {
-      if (enclosedElement.getKind ().equals (ElementKind.INTERFACE) ||
-          enclosedElement.getKind ().equals (ElementKind.CLASS))
+      if (enclosedElement.getKind ().equals (ElementKind.INTERFACE) || enclosedElement.getKind ().equals (ElementKind.CLASS))
       {
         final TypeElement innerClassElement = (TypeElement) enclosedElement;
         m_aModelsAdapter.defineInnerClass (m_aNewClass, innerClassElement, environment.enclosed ());
@@ -151,9 +148,7 @@ class ClassFiller
             }
             else
             {
-              param = method.param (DecidedErrorTypesModelsAdapter.toJMod (variable.getModifiers ()),
-                                    parameterType,
-                                    parameterName);
+              param = method.param (DecidedErrorTypesModelsAdapter.toJMod (variable.getModifiers ()), parameterType, parameterName);
             }
             final Annotator parametorAnnotator = new Annotator (m_aModelsAdapter, param, methodEnvironment);
             parametorAnnotator.annotate (variable.getAnnotationMirrors ());

@@ -94,10 +94,14 @@ public final class JInvocationTest
     minvoke.body ().add (JExpr.invokeThis (m1).narrow (String.class).arg ("jippie"));
     minvoke.body ().add (JExpr.invoke (m1).arg ("jippie"));
     minvoke.body ()
-    .add (JExpr.invokeThis (m2).narrow (String.class).narrow (cls).narrow (cm.ref (List.class).narrow (Long.class))
-        .arg ("jippie").arg (JExpr._this ()).arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
-    minvoke.body ().add (JExpr.invoke (m2).arg ("jippie").arg (JExpr._this ())
-        .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
+           .add (JExpr.invokeThis (m2)
+                      .narrow (String.class)
+                      .narrow (cls)
+                      .narrow (cm.ref (List.class).narrow (Long.class))
+                      .arg ("jippie")
+                      .arg (JExpr._this ())
+                      .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
+    minvoke.body ().add (JExpr.invoke (m2).arg ("jippie").arg (JExpr._this ()).arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }

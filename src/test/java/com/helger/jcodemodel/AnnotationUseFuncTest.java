@@ -89,22 +89,22 @@ public final class AnnotationUseFuncTest
    * &#064;AnnotationUseTest.XmlElement (ns = &quot;##default&quot;, value = &quot;foobar&quot;)
    * public class Test
    * {
-   * &#064;Retention (name = &quot;book&quot;,
-   * targetNamespace = 5,
-   * names = { &quot;Bob&quot;, &quot;Rob&quot;, &quot;Ted&quot; },
-   * namesno = { 4, 5, 6 },
-   * values = { @Target (type = java.lang.Integer.class), &#64;Target (type = java.lang.Float.class) },
-   * foo = @Target (junk = 7))
-   * private double y;
+   *   &#064;Retention (name = &quot;book&quot;,
+   *               targetNamespace = 5,
+   *               names = { &quot;Bob&quot;, &quot;Rob&quot;, &quot;Ted&quot; },
+   *               namesno = { 4, 5, 6 },
+   *               values = { @Target (type = java.lang.Integer.class), &#64;Target (type = java.lang.Float.class) },
+   *               foo = @Target (junk = 7))
+   *   private double y;
    *
-   * public void foo ()
-   * {}
+   *   public void foo ()
+   *   {}
    *
-   * public enum Iamenum
-   * {
-   * GOOD,
-   * BAD;
-   * }
+   *   public enum Iamenum
+   *   {
+   *     GOOD,
+   *     BAD;
+   *   }
    * }
    * </pre>
    *

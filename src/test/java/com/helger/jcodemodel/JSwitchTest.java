@@ -55,7 +55,7 @@ public final class JSwitchTest
   @Test
   public void testGenerate () throws JCodeModelException
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JDefinedClass c2 = cm._package ("myPackage")._class ("SwitchTest");
 

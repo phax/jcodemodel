@@ -89,8 +89,7 @@ public final class JDefinedClassTest
     final CompilationUnit aCU = CodeModelTestsHelper.parseAndGetSingleClassCodeModel (cm);
     final TypeDeclaration <?> typeDeclaration = aCU.getTypes ().get (0);
     final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
-    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
-        .get (1);
+    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ().get (1);
     assertNotNull (initializerDeclaration);
   }
 
@@ -103,8 +102,7 @@ public final class JDefinedClassTest
     final JDefinedClass c1 = cm._package ("myPackage")._class (0, "BaseClass");
     final JMethod con1 = c1.constructor (JMod.PUBLIC);
     final JVar p1 = con1.param (JMod.FINAL, cm.ref (String.class), "str");
-    con1.body ()
-    .add (new JFieldRef (cm.ref (System.class), "out").invoke ("println").arg (JExpr.lit ("Got ").plus (p1)));
+    con1.body ().add (new JFieldRef (cm.ref (System.class), "out").invoke ("println").arg (JExpr.lit ("Got ").plus (p1)));
 
     // Derived class
     final JDefinedClass c2 = cm._package ("myPackage")._class (0, "DerivedClass");

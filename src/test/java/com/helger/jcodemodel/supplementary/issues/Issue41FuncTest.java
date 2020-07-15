@@ -64,7 +64,7 @@ public final class Issue41FuncTest
   @Test
   public void testSwitchInnerEnum () throws Exception
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JDefinedClass c2 = cm._package ("issue41")._class ("Issue41Test");
 
@@ -86,7 +86,7 @@ public final class Issue41FuncTest
   @Test
   public void testSwitchInt () throws Exception
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JDefinedClass c2 = cm._package ("issue41")._class ("Issue41Test2");
 
@@ -113,7 +113,7 @@ public final class Issue41FuncTest
     aMap.put (Integer.valueOf (2), "Two");
     aMap.put (Integer.valueOf (3), "Three");
 
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JDefinedClass c2 = cm._package ("issue41")._class ("Issue41Test3");
     final JDefinedClass jEnumClass = c2._enum ("MyEnum");

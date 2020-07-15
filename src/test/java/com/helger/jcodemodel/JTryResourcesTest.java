@@ -63,48 +63,44 @@ public final class JTryResourcesTest
   @Test
   public void testWith1 ()
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JTryBlock aTB = new JTryBlock ();
 
-    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class),
-        "os",
-        cm.ref (ByteArrayOutputStream.class)._new ());
+    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class), "os", cm.ref (ByteArrayOutputStream.class)._new ());
     aTB.tryResources ().add (aTR1);
     aTB.body ().add (aTR1.var ().invoke ("read"));
     assertEquals ("try(final java.io.OutputStream os = new java.io.ByteArrayOutputStream()) {" +
-        CRLF +
-        "    os.read();" +
-        CRLF +
-        "}" +
-        CRLF,
-        CodeModelTestsHelper.toString (aTB));
+                  CRLF +
+                  "    os.read();" +
+                  CRLF +
+                  "}" +
+                  CRLF,
+                  CodeModelTestsHelper.toString (aTB));
   }
 
   @Test
   public void testWith2 ()
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JTryBlock aTB = new JTryBlock ();
 
-    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class),
-        "os",
-        cm.ref (ByteArrayOutputStream.class)._new ());
+    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class), "os", cm.ref (ByteArrayOutputStream.class)._new ());
     aTB.tryResources ().add (aTR1);
     final JTryResource aTR2 = new JTryResource (cm.ref (BufferedOutputStream.class),
-        "bos",
-        cm.ref (BufferedOutputStream.class)._new ().arg (aTR1.var ()));
+                                                "bos",
+                                                cm.ref (BufferedOutputStream.class)._new ().arg (aTR1.var ()));
     aTB.tryResources ().add (aTR2);
     aTB.body ().add (aTR2.var ().invoke ("readLine"));
     assertEquals ("try(final java.io.OutputStream os = new java.io.ByteArrayOutputStream();" +
-        CRLF +
-        "final java.io.BufferedOutputStream bos = new java.io.BufferedOutputStream(os)) {" +
-        CRLF +
-        "    bos.readLine();" +
-        CRLF +
-        "}" +
-        CRLF,
-        CodeModelTestsHelper.toString (aTB));
+                  CRLF +
+                  "final java.io.BufferedOutputStream bos = new java.io.BufferedOutputStream(os)) {" +
+                  CRLF +
+                  "    bos.readLine();" +
+                  CRLF +
+                  "}" +
+                  CRLF,
+                  CodeModelTestsHelper.toString (aTB));
   }
 }

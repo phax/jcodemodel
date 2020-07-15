@@ -92,10 +92,7 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
     if (sPkgName.length () > 0)
       sPkgName += '/';
 
-    m_aPS.println ("-----------------------------------" +
-                   sPkgName +
-                   sFilename +
-                   "-----------------------------------");
+    m_aPS.println ("-----------------------------------" + sPkgName + sFilename + "-----------------------------------");
 
     return new FilterOutputStream (m_aPS)
     {

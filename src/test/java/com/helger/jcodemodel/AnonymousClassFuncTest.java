@@ -56,7 +56,7 @@ public final class AnonymousClassFuncTest
   @Test
   public void testBasic () throws Exception
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cls = cm._class ("Test");
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
 

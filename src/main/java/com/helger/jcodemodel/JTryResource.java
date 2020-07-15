@@ -53,9 +53,7 @@ public class JTryResource implements IJGenerable
 {
   private final JVar m_aVar;
 
-  public JTryResource (@Nonnull final AbstractJType aType,
-                       @Nonnull final String sName,
-                       @Nonnull final IJExpression aInitExpr)
+  public JTryResource (@Nonnull final AbstractJType aType, @Nonnull final String sName, @Nonnull final IJExpression aInitExpr)
   {
     this (JMod.FINAL, aType, sName, aInitExpr);
   }

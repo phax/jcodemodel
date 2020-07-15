@@ -289,9 +289,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     return isAssignableFrom (aThat, true);
   }
 
-  protected boolean isAssignableFrom (
-      @Nonnull final AbstractJType aThat,
-      final boolean bAllowsRawTypeUnchekedConversion)
+  protected boolean isAssignableFrom (@Nonnull final AbstractJType aThat, final boolean bAllowsRawTypeUnchekedConversion)
   {
     if (isError () || aThat.isError ())
       return false;

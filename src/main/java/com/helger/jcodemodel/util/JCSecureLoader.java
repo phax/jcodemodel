@@ -61,8 +61,7 @@ public final class JCSecureLoader
     {
       return Thread.currentThread ().getContextClassLoader ();
     }
-    return AccessController.doPrivileged ((PrivilegedAction <ClassLoader>) () -> Thread.currentThread ()
-                                                                                       .getContextClassLoader ());
+    return AccessController.doPrivileged ((PrivilegedAction <ClassLoader>) () -> Thread.currentThread ().getContextClassLoader ());
   }
 
   public static ClassLoader getClassClassLoader (final Class <?> c)

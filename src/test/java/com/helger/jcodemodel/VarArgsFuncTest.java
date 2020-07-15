@@ -69,7 +69,7 @@ public final class VarArgsFuncTest
   @Test
   public void testBasic () throws Exception
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cls = cm._class ("Test");
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
     m.param (String.class, "param1");
@@ -101,7 +101,7 @@ public final class VarArgsFuncTest
     final JMethod main = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "main");
     main.param (stringArray, "args");
     main.body ()
-    .directStatement ("new Test().foo(new String(\"Param1\"),new Integer(5),null,new String(\"Param3\"),new String(\"Param4\"));");
+        .directStatement ("new Test().foo(new String(\"Param1\"),new Integer(5),null,new String(\"Param3\"),new String(\"Param4\"));");
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }

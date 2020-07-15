@@ -69,8 +69,7 @@ public final class JCodeModelTest
   {
     final JCodeModel cm = JCodeModel.createUnified ();
     assertNotNull (cm.parseType ("java.util.ArrayList<java.lang.String[]>[]"));
-    assertNotNull (
-        cm.parseType ("java.util.ArrayList<java.util.ArrayList<java.util.ArrayList<java.lang.String[]>[]>[]>[]"));
+    assertNotNull (cm.parseType ("java.util.ArrayList<java.util.ArrayList<java.util.ArrayList<java.lang.String[]>[]>[]>[]"));
     assertNotNull (cm.parseType ("java.util.Comparator<? super java.lang.CharSequence[]>[]"));
   }
 
@@ -79,8 +78,11 @@ public final class JCodeModelTest
   {
     final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass aEnumClass = cm._package ("com.helger.issue28")._enum ("DummyEnum");
-    cm._package ("com.helger.issue28.other")._class ("Class").constructor (JMod.PUBLIC).body ()
-    .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
+    cm._package ("com.helger.issue28.other")
+      ._class ("Class")
+      .constructor (JMod.PUBLIC)
+      .body ()
+      .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 

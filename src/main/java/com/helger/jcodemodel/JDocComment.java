@@ -104,7 +104,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * Change whether multi line comments or single line comments should be emitted.
+   * Change whether multi line comments or single line comments should be
+   * emitted.
    *
    * @param bSingleLineMode
    *        <code>true</code> to enable single line mode, <code>false</code> for
@@ -119,8 +120,9 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * @return <code>true</code> if single line mode is enabled, <code>false</code>
-   *         if multi line mode is enabled. Multi line mode is the default.
+   * @return <code>true</code> if single line mode is enabled,
+   *         <code>false</code> if multi line mode is enabled. Multi line mode
+   *         is the default.
    */
   public boolean isSingleLineMode ()
   {
@@ -366,9 +368,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    * @return Map with the key/value pairs
    */
   @Nonnull
-  public Map <String, String> addXdoclet (@Nonnull final String sName,
-                                          @Nonnull final String sAttribute,
-                                          @Nullable final String sValue)
+  public Map <String, String> addXdoclet (@Nonnull final String sName, @Nonnull final String sAttribute, @Nullable final String sValue)
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (sAttribute, "Attribute");

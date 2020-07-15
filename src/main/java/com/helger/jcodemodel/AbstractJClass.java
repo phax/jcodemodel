@@ -423,8 +423,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables,
-                                                      @Nonnull List <? extends AbstractJClass> aBindings);
+  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables, @Nonnull List <? extends AbstractJClass> aBindings);
 
   /**
    * Get all inner classes of this class.

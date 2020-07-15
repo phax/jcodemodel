@@ -117,8 +117,7 @@ public final class JLambdaTest
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
     aLambda.body ()._return (aParam.plus (1));
-    assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF,
-        CodeModelTestsHelper.toString (aLambda));
+    assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF, CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test
@@ -131,10 +130,19 @@ public final class JLambdaTest
     final JLambdaParam arr = aLambda.addParam ("arr");
     final JBlock setBody = aLambda.body ().synchronizedBlock (holder).body ();
     setBody.add (JExpr.invoke (cm, holder, "entrySet").invoke ("retainAll").arg (arr.invoke ("entrySet")));
-    assertEquals (
-        "arr -> {" + CRLF + "    synchronized (a)" + CRLF + "    {" + CRLF
-        + "        a.entrySet().retainAll(arr.entrySet());" + CRLF + "    }" + CRLF + "}" + CRLF,
-        CodeModelTestsHelper.toString (aLambda));
+    assertEquals ("arr -> {" +
+                  CRLF +
+                  "    synchronized (a)" +
+                  CRLF +
+                  "    {" +
+                  CRLF +
+                  "        a.entrySet().retainAll(arr.entrySet());" +
+                  CRLF +
+                  "    }" +
+                  CRLF +
+                  "}" +
+                  CRLF,
+                  CodeModelTestsHelper.toString (aLambda));
   }
 
   String method1 ()

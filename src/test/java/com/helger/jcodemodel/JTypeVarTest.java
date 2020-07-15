@@ -59,7 +59,7 @@ public final class JTypeVarTest
   @Test
   public void testBasic () throws JCodeModelException
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cls = cm._class ("Test");
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
     final JTypeVar tv = m.generify ("T");
@@ -68,6 +68,6 @@ public final class JTypeVarTest
 
     assertEquals ("T extends java.lang.Comparable<T> & java.io.Serializable", CodeModelTestsHelper.toString (tv));
     assertEquals ("public<T extends java.lang.Comparable<T> & java.io.Serializable> void foo() {\n" + "}\n",
-        CodeModelTestsHelper.toString (m).replace ("\r", ""));
+                  CodeModelTestsHelper.toString (m).replace ("\r", ""));
   }
 }

@@ -84,8 +84,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not contain empty parts
     try
@@ -94,8 +93,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not contain empty parts
     try
@@ -104,8 +102,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not contain empty parts
     try
@@ -114,8 +111,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not contain empty parts
     try
@@ -124,8 +120,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not contain empty parts
     try
@@ -134,8 +129,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not start with a number
     try
@@ -144,8 +138,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not be a keyword
     try
@@ -154,8 +147,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not be a keyword
     try
@@ -164,8 +156,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not be a keyword
     try
@@ -174,8 +165,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not contain special chars
     try
@@ -184,8 +174,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not contain special chars
     try
@@ -194,8 +183,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // May not contain special chars
     try
@@ -204,8 +192,7 @@ public final class JPackageTest
       fail ();
     }
     catch (final IllegalArgumentException ex)
-    {
-    }
+    {}
 
     // Allow for uppercase stuff
     aCM._package ("Org.PUB.blaFooBar.baZ");
@@ -229,8 +216,7 @@ public final class JPackageTest
         fail ();
       }
       catch (final IllegalArgumentException ex)
-      {
-      }
+      {}
 
       // May not contain an upper case char
       try
@@ -239,8 +225,7 @@ public final class JPackageTest
         fail ();
       }
       catch (final IllegalArgumentException ex)
-      {
-      }
+      {}
 
       // May not contain an upper case char
       try
@@ -249,8 +234,7 @@ public final class JPackageTest
         fail ();
       }
       catch (final IllegalArgumentException ex)
-      {
-      }
+      {}
     }
     finally
     {

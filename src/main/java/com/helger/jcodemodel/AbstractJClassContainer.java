@@ -61,8 +61,7 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
  * @param <CLASSTYPE>
  *        Implementation type
  */
-public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends
-                                              AbstractJClass implements
+public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends AbstractJClass implements
                                               IJClassContainer <CLASSTYPE>
 {
   /**
@@ -217,9 +216,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   }
 
   @Nonnull
-  protected abstract CLASSTYPE createInnerClass (final int nMods,
-                                                 @Nonnull final EClassType eClassType,
-                                                 @Nonnull final String sName);
+  protected abstract CLASSTYPE createInnerClass (final int nMods, @Nonnull final EClassType eClassType, @Nonnull final String sName);
 
   @Nonnull
   public final CLASSTYPE _class (final int nMods,

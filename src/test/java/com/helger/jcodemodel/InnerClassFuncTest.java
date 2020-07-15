@@ -53,7 +53,7 @@ public final class InnerClassFuncTest
   @Test
   public void innerClassesAreImported () throws Exception
   {
-    final JCodeModel cm = JCodeModel.createUnified();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass aClass = cm._class ("org.test.DaTestClass");
     final JDefinedClass daInner1 = aClass._class ("Inner");
     final JDefinedClass daInnerInner = daInner1._class ("InnerInner");
