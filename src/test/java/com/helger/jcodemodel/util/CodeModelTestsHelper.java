@@ -62,6 +62,8 @@ import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
@@ -90,6 +92,7 @@ import com.helger.jcodemodel.writer.SourcePrintWriter;
 public final class CodeModelTestsHelper
 {
   public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
+  private static final Logger LOGGER = LoggerFactory.getLogger (CodeModelTestsHelper.class);
 
   @Nonnull
   private static IJFormatter _createFormatter (@Nonnull final StringWriter aWriter)
@@ -231,14 +234,15 @@ public final class CodeModelTestsHelper
   {
     if (false)
     {
-      System.out.println (new String (aBytes, DEFAULT_ENCODING));
+      LOGGER.info (new String (aBytes, DEFAULT_ENCODING));
     }
 
     final String sRealDirName = sDirName == null ? "" : sDirName;
-    System.out.println ("Parsing " +
-                        StringHelper.replaceAll (sRealDirName, '/', '.') +
-                        (sRealDirName.length () > 0 ? "." : "") +
-                        (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
+    LOGGER.info ("Parsing " +
+                 StringHelper.replaceAll (sRealDirName, '/', '.') +
+                 (sRealDirName.length () > 0 ? "." : "") +
+                 (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename) +
+                 " with JavaParser");
 
     try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
     {
@@ -251,6 +255,8 @@ public final class CodeModelTestsHelper
   @Nonnull
   private static org.eclipse.jdt.core.dom.CompilationUnit _parseWithJDT (final String sUnitName, final char [] aCode)
   {
+    LOGGER.info ("Parsing " + sUnitName + " with Eclipse JDT");
+
     final ASTParser parser = ASTParser.newParser (AST.JLS14);
     parser.setResolveBindings (true);
     parser.setStatementsRecovery (true);
@@ -265,18 +271,15 @@ public final class CodeModelTestsHelper
     final IProgressMonitor aPM = null;
     final org.eclipse.jdt.core.dom.CompilationUnit astRoot = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST (aPM);
     if (astRoot == null)
-    {
       throw new IllegalStateException ("Failed to compile:\n" + new String (aCode));
-    }
+
     if (false)
-    {
-      System.out.println (astRoot.toString ());
-    }
+      LOGGER.info (astRoot.toString ());
+
     final IProblem [] aProblems = astRoot.getProblems ();
     if (aProblems != null && aProblems.length > 0)
-    {
       throw new IllegalStateException ("Compilation problems " + Arrays.toString (aProblems));
-    }
+
     return astRoot;
   }
 

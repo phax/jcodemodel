@@ -67,7 +67,6 @@ public final class Issue86FuncTest
     ca.arg (cm.ref (String.class).dotclass ());
     jEnumClass.enumConstant ("C").arg (JExpr._null ());
 
-    CodeModelTestsHelper.printCodeModel (cm);
     CodeModelTestsHelper.parseCodeModel (cm);
   }
 }
