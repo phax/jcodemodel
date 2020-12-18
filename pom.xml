@@ -164,13 +164,13 @@
     <dependency>
       <groupId>com.github.javaparser</groupId>
       <artifactId>javaparser-core</artifactId>
-      <version>3.17.0</version>
+      <version>3.18.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jdt</groupId>
       <artifactId>org.eclipse.jdt.core</artifactId>
-      <version>3.23.0</version>
+      <version>3.24.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
