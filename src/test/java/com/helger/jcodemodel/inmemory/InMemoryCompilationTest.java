@@ -34,12 +34,15 @@ public class InMemoryCompilationTest
   public void testSimpleClassCreation () throws Exception
   {
     final String toStringVal = "TEST_VALUE";
-    final JCodeModel codeModel = new JCodeModel (EFileSystemConvention.LINUX);
-    final JDefinedClass definedClass = codeModel._class (JMod.PUBLIC, "my.Clazz");
-    final JMethod toStringMeth = definedClass.method (JMod.PUBLIC, codeModel.ref (String.class), "toString");
-    toStringMeth.body ()._return (JExpr.lit (toStringVal));
-    final DynamicClassLoader loader = MemoryCodeWriter.from (codeModel).compile ();
-    final Class <?> foundClass = loader.findClass (definedClass.fullName ());
+    final JCodeModel cm = new JCodeModel ();
+
+    final JDefinedClass jClass = cm._class (JMod.PUBLIC, "my.Clazz");
+    final JMethod jMethodToString = jClass.method (JMod.PUBLIC, cm.ref (String.class), "toString");
+    jMethodToString.annotate (Override.class);
+    jMethodToString.body ()._return (JExpr.lit (toStringVal));
+
+    final DynamicClassLoader loader = MemoryCodeWriter.from (cm).compile ();
+    final Class <?> foundClass = loader.findClass (jClass.fullName ());
     assertEquals (toStringVal, foundClass.getConstructor ().newInstance ().toString ());
   }
 

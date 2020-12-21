@@ -1,7 +1,5 @@
 package com.helger.jcodemodel.inmemory;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 
 /**
  * class loader that allows dynamic classes and resources.
@@ -26,7 +26,39 @@ import javax.annotation.Nonnull;
 public class DynamicClassLoader extends ClassLoader
 {
   private final Map <String, CompiledCodeJavaFile> m_aCustomCompiledCode = new HashMap <> ();
-  private final Map <String, ByteArrayOutputStream> m_aCustomResources = new HashMap <> ();
+  private final Map <String, NonBlockingByteArrayOutputStream> m_aCustomResources = new HashMap <> ();
+
+  /**
+   * internal url handler that generates url to load inside its own resources,
+   * if exists. It overloads the openConnection to provide an input stream if a
+   * corresponding bytearray is found for the resource.
+   */
+  private final URLStreamHandler m_aURLStreamHandler = new URLStreamHandler ()
+  {
+    @Override
+    protected URLConnection openConnection (final URL u) throws IOException
+    {
+      return new URLConnection (u)
+      {
+        final NonBlockingByteArrayOutputStream aBAOS = m_aCustomResources.get (u.getFile ());
+
+        @Override
+        public void connect () throws IOException
+        {
+          if (aBAOS == null)
+            throw new FileNotFoundException (u.getFile ());
+        }
+
+        @Override
+        public InputStream getInputStream () throws IOException
+        {
+          if (aBAOS == null)
+            throw new FileNotFoundException (u.getFile ());
+          return aBAOS.getAsInputStream ();
+        }
+      };
+    }
+  };
 
   /**
    * create a class loader with its parent.
@@ -70,68 +102,38 @@ public class DynamicClassLoader extends ClassLoader
    * @param resources
    *        all resources to add
    */
-  public void addResources (final Map <String, ByteArrayOutputStream> resources)
+  public void addResources (final Map <String, NonBlockingByteArrayOutputStream> resources)
   {
     m_aCustomResources.putAll (resources);
   }
 
   @Override
-  protected Class <?> findClass (final String name) throws ClassNotFoundException
+  protected Class <?> findClass (final String sName) throws ClassNotFoundException
   {
-    final CompiledCodeJavaFile cc = m_aCustomCompiledCode.get (name);
-    if (cc == null)
-      return super.findClass (name);
-    final byte [] byteCode = cc.getByteCode ();
-    return defineClass (name, byteCode, 0, byteCode.length);
+    final CompiledCodeJavaFile cc = m_aCustomCompiledCode.get (sName);
+    if (cc != null)
+    {
+      final byte [] aByteCode = cc.getByteCode ();
+      return defineClass (sName, aByteCode, 0, aByteCode.length);
+    }
+
+    return super.findClass (sName);
   }
 
-  /**
-   * internal url handler that generates url to load inside its own resources,
-   * if exists. It overloads the openConnection to provide an input stream if a
-   * corresponding bytearray is found for the resource.
-   */
-  private final URLStreamHandler handler = new URLStreamHandler ()
-  {
-    @Override
-    protected URLConnection openConnection (final URL u) throws IOException
-    {
-      return new URLConnection (u)
-      {
-        final ByteArrayOutputStream aBAOS = m_aCustomResources.get (u.getFile ());
-
-        @Override
-        public void connect () throws IOException
-        {
-          if (aBAOS == null)
-            throw new FileNotFoundException (u.getFile ());
-        }
-
-        @Override
-        public InputStream getInputStream () throws IOException
-        {
-          if (aBAOS == null)
-            throw new FileNotFoundException (u.getFile ());
-          return new ByteArrayInputStream (aBAOS.toByteArray ());
-        }
-      };
-    }
-  };
-
   @Override
-  protected URL findResource (final String name)
+  protected URL findResource (final String sName)
   {
-    final ByteArrayOutputStream baos = m_aCustomResources.get (name);
-    if (baos != null)
+    final NonBlockingByteArrayOutputStream aBAOS = m_aCustomResources.get (sName);
+    if (aBAOS != null)
       try
       {
-        return new URL ("memory", null, 0, name, handler);
+        return new URL ("memory", null, 0, sName, m_aURLStreamHandler);
       }
       catch (final MalformedURLException e)
       {
         throw new UnsupportedOperationException ("catch this", e);
       }
 
-    return super.findResource (name);
+    return super.findResource (sName);
   }
-
 }
