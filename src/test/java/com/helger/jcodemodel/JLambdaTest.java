@@ -46,6 +46,7 @@ import java.util.function.Supplier;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 import com.helger.jcodemodel.writer.JCMWriter;
 
@@ -78,7 +79,7 @@ public final class JLambdaTest
   @Test
   public void testExpressionBasicType ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
@@ -99,7 +100,7 @@ public final class JLambdaTest
   @Test
   public void testExpressionBasicType2 ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam1 = aLambda.addParam (cm.INT, "x");
@@ -111,19 +112,18 @@ public final class JLambdaTest
   @Test
   public void testStatementBasicType ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
     aLambda.body ()._return (aParam.plus (1));
-    assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF,
-                  CodeModelTestsHelper.toString (aLambda));
+    assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF, CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test
   public void testIssue62 ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JVar holder = new JVar (JMods.forVar (0), cm.ref (Object.class), "a", null);
     final JLambda aLambda = new JLambda ();
@@ -153,7 +153,7 @@ public final class JLambdaTest
   @Test
   public void testFullClass () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cl = cm._package ("test.lambda")._class ("LambdaTest");
 
     final JMethod m1 = cl.method (JMod.PUBLIC | JMod.STATIC, cm.ref (String.class), "method1");

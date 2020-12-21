@@ -40,12 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
 
 public class JOpBinary implements IJExpression
 {
@@ -53,13 +53,11 @@ public class JOpBinary implements IJExpression
   private final String m_sOperator;
   private final IJGenerable m_aRight;
 
-  protected JOpBinary (@Nonnull final IJExpression aLeft,
-                       @Nonnull final String sOperator,
-                       @Nonnull final IJGenerable aRight)
+  protected JOpBinary (@Nonnull final IJExpression aLeft, @Nonnull final String sOperator, @Nonnull final IJGenerable aRight)
   {
-    m_aLeft = JCValueEnforcer.notNull (aLeft, "Left");
-    m_sOperator = JCValueEnforcer.notNull (sOperator, "Operator");
-    m_aRight = JCValueEnforcer.notNull (aRight, "Right");
+    m_aLeft = ValueEnforcer.notNull (aLeft, "Left");
+    m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
+    m_aRight = ValueEnforcer.notNull (aRight, "Right");
   }
 
   @Nonnull
@@ -93,7 +91,9 @@ public class JOpBinary implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JOpBinary rhs = (JOpBinary) o;
-    return isEqual (m_aLeft, rhs.m_aLeft) && isEqual (m_sOperator, rhs.m_sOperator) && isEqual (m_aRight, rhs.m_aRight);
+    return EqualsHelper.equals (m_aLeft, rhs.m_aLeft) &&
+           EqualsHelper.equals (m_sOperator, rhs.m_sOperator) &&
+           EqualsHelper.equals (m_aRight, rhs.m_aRight);
   }
 
   @Override

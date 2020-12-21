@@ -55,7 +55,6 @@ public final class JCNameUtilitiesTest
   {
     public static class Inner2
     {}
-
   }
 
   @Test

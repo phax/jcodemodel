@@ -64,7 +64,7 @@ public final class Issue31FuncTest
   @Test
   public void test () throws Exception
   {
-    final JCodeModel generator = new JCodeModel ();
+    final JCodeModel generator = JCodeModel.createUnified ();
 
     final AbstractJClass jtype = generator.ref (String.class);
     final AbstractJClass aspect = generator.directClass (ValueHolderInstanceImpl.class.getSimpleName ());

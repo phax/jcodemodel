@@ -61,12 +61,12 @@ import javax.lang.model.util.Elements;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
-import com.helger.jcodemodel.JClassAlreadyExistsException;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JCodeModelException;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
@@ -148,9 +148,7 @@ class DecidedErrorTypesModelsAdapter
   private final Elements m_aElementUtils;
   private final ErrorTypePolicy m_aErrorTypePolicy;
 
-  DecidedErrorTypesModelsAdapter (final JCodeModel codeModel,
-                                  final Elements elementUtils,
-                                  final ErrorTypePolicy errorTypePolicy)
+  DecidedErrorTypesModelsAdapter (final JCodeModel codeModel, final Elements elementUtils, final ErrorTypePolicy errorTypePolicy)
   {
     m_aCodeModel = codeModel;
     m_aElementUtils = elementUtils;
@@ -214,8 +212,7 @@ class DecidedErrorTypesModelsAdapter
 
   @Nonnull
   private JDefinedClass _defineTopLevelClass (final TypeElement element,
-                                              final TypeEnvironment environment) throws CodeModelBuildingException,
-                                                                                 ErrorTypeFound
+                                              final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
   {
     final EClassType classType = _toClassType (element.getKind ());
     int modifiers = toJMod (element.getModifiers ());
@@ -328,8 +325,8 @@ class DecidedErrorTypesModelsAdapter
     }
   }
 
-  AbstractJType toJType (@Nonnull final TypeMirror type,
-                         final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
+  AbstractJType toJType (@Nonnull final TypeMirror type, final TypeEnvironment environment) throws CodeModelBuildingException,
+                                                                                            ErrorTypeFound
   {
     try
     {

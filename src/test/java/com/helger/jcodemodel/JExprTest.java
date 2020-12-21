@@ -57,20 +57,16 @@ public final class JExprTest
   @Test
   public void testLitDouble ()
   {
-    assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_POSITIVE_INFINITY,
-                  CodeModelTestsHelper.toString (JExpr.lit (Double.POSITIVE_INFINITY)));
-    assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_NEGATIVE_INFINITY,
-                  CodeModelTestsHelper.toString (JExpr.lit (Double.NEGATIVE_INFINITY)));
+    assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_POSITIVE_INFINITY, CodeModelTestsHelper.toString (JExpr.lit (Double.POSITIVE_INFINITY)));
+    assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_NEGATIVE_INFINITY, CodeModelTestsHelper.toString (JExpr.lit (Double.NEGATIVE_INFINITY)));
     assertEquals (JAtomDouble.JAVA_LANG_DOUBLE_NAN, CodeModelTestsHelper.toString (JExpr.lit (Double.NaN)));
   }
 
   @Test
   public void testLitFloat ()
   {
-    assertEquals (JAtomFloat.JAVA_LANG_FLOAT_POSITIVE_INFINITY,
-                  CodeModelTestsHelper.toString (JExpr.lit (Float.POSITIVE_INFINITY)));
-    assertEquals (JAtomFloat.JAVA_LANG_FLOAT_NEGATIVE_INFINITY,
-                  CodeModelTestsHelper.toString (JExpr.lit (Float.NEGATIVE_INFINITY)));
+    assertEquals (JAtomFloat.JAVA_LANG_FLOAT_POSITIVE_INFINITY, CodeModelTestsHelper.toString (JExpr.lit (Float.POSITIVE_INFINITY)));
+    assertEquals (JAtomFloat.JAVA_LANG_FLOAT_NEGATIVE_INFINITY, CodeModelTestsHelper.toString (JExpr.lit (Float.NEGATIVE_INFINITY)));
     assertEquals (JAtomFloat.JAVA_LANG_FLOAT_NAN, CodeModelTestsHelper.toString (JExpr.lit (Float.NaN)));
   }
 

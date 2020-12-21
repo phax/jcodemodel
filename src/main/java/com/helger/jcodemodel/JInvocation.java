@@ -40,8 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,8 +47,9 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCHashCodeGenerator;
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 
 /**
  * {@link JMethod} invocation
@@ -92,66 +91,10 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    */
   private List <JTypeVar> m_aTypeVariables;
 
-  /**
-   * Invokes a method on an object.
-   *
-   * @param aObject
-   *        JExpression for the object upon which the named method will be
-   *        invoked, or null if none
-   * @param sName
-   *        Name of method to invoke
-   */
-  @Deprecated
-  @ChangeInV4
-  protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final String sName)
+  protected JInvocation (@Nullable final JCodeModel aOwner, @Nullable final IJGenerable aObject, @Nonnull final String sName)
   {
-    // Not possible to determine an owner :(
-    this (null, aObject, sName);
-  }
-
-  @Deprecated
-  @ChangeInV4
-  protected JInvocation (@Nullable final IJExpression aObject, @Nonnull final JMethod aMethod)
-  {
-    this (aMethod.owner (), aObject, aMethod);
-  }
-
-  /**
-   * Invokes a static method on a class.
-   *
-   * @param aType
-   *        Parent type
-   * @param sMethodName
-   *        Method name to be invoked
-   */
-  @Deprecated
-  @ChangeInV4
-  protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final String sMethodName)
-  {
-    this (aType.owner (), aType, sMethodName);
-  }
-
-  /**
-   * Invokes a static method on a class.
-   *
-   * @param aType
-   *        Parent type
-   * @param aMethod
-   *        Method to be invoked
-   */
-  @Deprecated
-  @ChangeInV4
-  protected JInvocation (@Nonnull final AbstractJClass aType, @Nonnull final JMethod aMethod)
-  {
-    this (aType.owner (), aType, aMethod);
-  }
-
-  protected JInvocation (@Nullable final JCodeModel aOwner,
-                         @Nullable final IJGenerable aObject,
-                         @Nonnull final String sName)
-  {
-    JCValueEnforcer.notNull (sName, "Name");
-    JCValueEnforcer.isFalse (sName.indexOf ('.') >= 0, () -> "method name contains '.': " + sName);
+    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.isFalse (sName.indexOf ('.') >= 0, () -> "method name contains '.': " + sName);
     m_aOwner = aOwner;
     m_aObject = aObject;
     m_sMethodName = sName;
@@ -160,12 +103,10 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     m_aConstructorType = null;
   }
 
-  protected JInvocation (@Nonnull final JCodeModel aOwner,
-                         @Nullable final IJGenerable aObject,
-                         @Nonnull final JMethod aMethod)
+  protected JInvocation (@Nonnull final JCodeModel aOwner, @Nullable final IJGenerable aObject, @Nonnull final JMethod aMethod)
   {
-    JCValueEnforcer.notNull (aOwner, "Owner");
-    JCValueEnforcer.notNull (aMethod, "Method");
+    ValueEnforcer.notNull (aOwner, "Owner");
+    ValueEnforcer.notNull (aMethod, "Method");
     m_aOwner = aOwner;
     m_aObject = aObject;
     m_sMethodName = null;
@@ -184,7 +125,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    */
   protected JInvocation (@Nonnull final AbstractJType aConstructorType)
   {
-    JCValueEnforcer.notNull (aConstructorType, "ConstructorType");
+    ValueEnforcer.notNull (aConstructorType, "ConstructorType");
     m_aOwner = aConstructorType.owner ();
     m_aObject = null;
     m_sMethodName = null;
@@ -214,7 +155,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   @Nonnull
   public JInvocation arg (@Nonnull final IJExpression aArg)
   {
-    JCValueEnforcer.notNull (aArg, "Argument");
+    ValueEnforcer.notNull (aArg, "Argument");
     m_aArgs.add (aArg);
     return this;
   }
@@ -332,20 +273,6 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   public JInvocation argThis ()
   {
     return arg (JExpr._this ());
-  }
-
-  /**
-   * Returns all arguments of the invocation.
-   *
-   * @return If there's no arguments, an empty array will be returned.
-   * @deprecated Use {@link #args()} instead
-   */
-  @Nonnull
-  @Deprecated
-  @ChangeInV4
-  public IJExpression [] listArgs ()
-  {
-    return m_aArgs.toArray (new IJExpression [m_aArgs.size ()]);
   }
 
   /**
@@ -522,11 +449,11 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     if (o == null || getClass () != o.getClass ())
       return false;
     final JInvocation rhs = (JInvocation) o;
-    if (!(isEqual (m_aObject, rhs.m_aObject) &&
-          isEqual (m_bIsConstructor, rhs.m_bIsConstructor) &&
-          (m_bIsConstructor || isEqual (_methodName (), rhs._methodName ())) &&
-          isEqual (m_aArgs, rhs.m_aArgs) &&
-          isEqual (_typeFullName (), rhs._typeFullName ())))
+    if (!(EqualsHelper.equals (m_aObject, rhs.m_aObject) &&
+          EqualsHelper.equals (m_bIsConstructor, rhs.m_bIsConstructor) &&
+          (m_bIsConstructor || EqualsHelper.equals (_methodName (), rhs._methodName ())) &&
+          EqualsHelper.equals (m_aArgs, rhs.m_aArgs) &&
+          EqualsHelper.equals (_typeFullName (), rhs._typeFullName ())))
     {
       return false;
     }
@@ -538,7 +465,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
       return false;
     for (int i = 0; i < m_aTypeVariables.size (); i++)
     {
-      if (!isEqual (m_aTypeVariables.get (i).fullName (), rhs.m_aTypeVariables.get (i).fullName ()))
+      if (!EqualsHelper.equals (m_aTypeVariables.get (i).fullName (), rhs.m_aTypeVariables.get (i).fullName ()))
         return false;
     }
     return true;
@@ -547,7 +474,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   @Override
   public int hashCode ()
   {
-    JCHashCodeGenerator aHCGen = new JCHashCodeGenerator (this).append (m_aObject).append (m_bIsConstructor);
+    HashCodeGenerator aHCGen = new HashCodeGenerator (this).append (m_aObject).append (m_bIsConstructor);
     if (!m_bIsConstructor)
       aHCGen = aHCGen.append (_methodName ());
     aHCGen = aHCGen.append (m_aArgs).append (_typeFullName ());

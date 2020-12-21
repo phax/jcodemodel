@@ -65,17 +65,14 @@ public final class Issue53FuncTest
   @Test
   public void testIssue () throws Exception
   {
-    final JCodeModel generator = new JCodeModel ();
+    final JCodeModel generator = JCodeModel.createUnified ();
 
     final JDefinedClass aInterface = generator._package ("issue53")._interface ("ITest");
     final JLambdaMethodRef methodLambda = new JLambdaMethodRef (generator.ref (String.class), "toString");
 
     JMethod method = aInterface.method (JMod.DEFAULT, generator.ref (Supplier.class).narrowAny (), "description");
     {
-      final JLambda lambda = JLambda.simple (JExpr._this ()
-                                                  .invoke ("getValueProvider")
-                                                  .invoke ("andThen")
-                                                  .arg (methodLambda));
+      final JLambda lambda = JLambda.simple (JExpr._this ().invoke ("getValueProvider").invoke ("andThen").arg (methodLambda));
       method.body ()._return (lambda);
     }
 
@@ -89,12 +86,10 @@ public final class Issue53FuncTest
 
     method = aInterface.method (JMod.DEFAULT, generator.VOID, "description3");
     {
-      final JVar l1 = method.body ().decl (generator.ref (Supplier.class).narrowAny (),
-                                           "x1",
-                                           JLambda.simple (JExpr._this ()
-                                                                .invoke ("getValueProvider")
-                                                                .invoke ("andThen")
-                                                                .arg (methodLambda)));
+      final JVar l1 = method.body ()
+                            .decl (generator.ref (Supplier.class).narrowAny (),
+                                   "x1",
+                                   JLambda.simple (JExpr._this ().invoke ("getValueProvider").invoke ("andThen").arg (methodLambda)));
 
       final JLambda lambda = new JLambda ();
       final JLambdaParam aParam = lambda.addParam ("xx");

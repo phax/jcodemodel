@@ -55,28 +55,33 @@ import java.util.Map;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.JFormatter;
 import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
+import com.helger.jcodemodel.writer.SourcePrintWriter;
 
 /**
  * Various utilities for codemodel tests.
@@ -87,12 +92,12 @@ import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 public final class CodeModelTestsHelper
 {
   public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
+  private static final Logger LOGGER = LoggerFactory.getLogger (CodeModelTestsHelper.class);
 
   @Nonnull
   private static IJFormatter _createFormatter (@Nonnull final StringWriter aWriter)
   {
-    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()),
-                           JCMWriter.DEFAULT_INDENT_STRING);
+    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()), JCMWriter.DEFAULT_INDENT_STRING);
   }
 
   /** Hidden constructor. */
@@ -109,7 +114,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String toString (@Nonnull final IJExpression aGenerable)
   {
-    JCValueEnforcer.notNull (aGenerable, "Generable");
+    ValueEnforcer.notNull (aGenerable, "Generable");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -132,7 +137,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String toString (@Nonnull final IJDeclaration aDeclaration)
   {
-    JCValueEnforcer.notNull (aDeclaration, "Declaration");
+    ValueEnforcer.notNull (aDeclaration, "Declaration");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -155,7 +160,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String toString (@Nonnull final IJStatement aStatement)
   {
-    JCValueEnforcer.notNull (aStatement, "Statement");
+    ValueEnforcer.notNull (aStatement, "Statement");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -171,7 +176,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String declare (@Nonnull final IJDeclaration aDeclaration)
   {
-    JCValueEnforcer.notNull (aDeclaration, "Declaration");
+    ValueEnforcer.notNull (aDeclaration, "Declaration");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -187,7 +192,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static String generate (@Nonnull final IJGenerable aGenerable)
   {
-    JCValueEnforcer.notNull (aGenerable, "Generable");
+    ValueEnforcer.notNull (aGenerable, "Generable");
 
     try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
@@ -224,17 +229,20 @@ public final class CodeModelTestsHelper
 
   @Nonnull
   private static CompilationUnit _parseWithJavaParser (final byte [] aBytes,
-                                                       @Nonnull final String sDirName,
+                                                       @Nullable final String sDirName,
                                                        final String sFilename) throws IOException
   {
     if (false)
     {
-      System.out.println (new String (aBytes, DEFAULT_ENCODING));
+      LOGGER.info (new String (aBytes, DEFAULT_ENCODING));
     }
 
-    System.out.println ("Parsing " +
-                        JCStringHelper.replaceAll (sDirName, '/', '.') +
-                        (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename));
+    final String sRealDirName = sDirName == null ? "" : sDirName;
+    LOGGER.info ("Parsing " +
+                 StringHelper.replaceAll (sRealDirName, '/', '.') +
+                 (sRealDirName.length () > 0 ? "." : "") +
+                 (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename) +
+                 " with JavaParser");
 
     try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
     {
@@ -247,7 +255,9 @@ public final class CodeModelTestsHelper
   @Nonnull
   private static org.eclipse.jdt.core.dom.CompilationUnit _parseWithJDT (final String sUnitName, final char [] aCode)
   {
-    final ASTParser parser = ASTParser.newParser (AST.JLS13);
+    LOGGER.info ("Parsing " + sUnitName + " with Eclipse JDT");
+
+    final ASTParser parser = ASTParser.newParser (AST.JLS15);
     parser.setResolveBindings (true);
     parser.setStatementsRecovery (true);
     parser.setBindingsRecovery (true);
@@ -261,18 +271,15 @@ public final class CodeModelTestsHelper
     final IProgressMonitor aPM = null;
     final org.eclipse.jdt.core.dom.CompilationUnit astRoot = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST (aPM);
     if (astRoot == null)
-    {
       throw new IllegalStateException ("Failed to compile:\n" + new String (aCode));
-    }
+
     if (false)
-    {
-      System.out.println (astRoot.toString ());
-    }
+      LOGGER.info (astRoot.toString ());
+
     final IProblem [] aProblems = astRoot.getProblems ();
     if (aProblems != null && aProblems.length > 0)
-    {
       throw new IllegalStateException ("Compilation problems " + Arrays.toString (aProblems));
-    }
+
     return astRoot;
   }
 

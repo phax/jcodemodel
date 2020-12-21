@@ -38,19 +38,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.supplementary.issues;
+
+import org.junit.Test;
+
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JEnumConstant;
+import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
- * This exception purely indicates, that the {@link JErrorClass} is used which
- * is never intended.
+ * Test for https://github.com/phax/jcodemodel/issues/86
  *
- * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
+ * @author Philip Helger
  */
-@ChangeInV4 ("move to exceptions package")
-public class JErrorClassUsedException extends UnsupportedOperationException
+public final class Issue86FuncTest
 {
-  JErrorClassUsedException (final String sMessage)
+  @Test
+  public void testIssue () throws Exception
   {
-    super (sMessage);
+    final JCodeModel cm = new JCodeModel ();
+
+    final JDefinedClass c2 = cm._package ("issue86")._class ("Issue86Test");
+
+    final JDefinedClass jEnumClass = c2._enum ("MyEnum");
+    final JEnumConstant ca = jEnumClass.enumConstant ("A");
+    ca.arg (cm.ref (String.class).dotclass ());
+    jEnumClass.enumConstant ("C").arg (JExpr._null ());
+
+    CodeModelTestsHelper.parseCodeModel (cm);
   }
 }

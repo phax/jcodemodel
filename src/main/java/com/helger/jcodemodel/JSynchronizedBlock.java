@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Synchronized block within a method statement
@@ -62,7 +62,7 @@ public class JSynchronizedBlock implements IJStatement
 
   public final void expr (@Nonnull final IJExpression aExpression)
   {
-    JCValueEnforcer.notNull (aExpression, "expression");
+    ValueEnforcer.notNull (aExpression, "expression");
     m_aExpression = aExpression;
   }
 

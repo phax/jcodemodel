@@ -59,7 +59,7 @@ public final class JInvocationTest
   @Test
   public void testWithGenerics () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cls = cm._class ("TestInvocation");
     final JTypeVar tc = cls.generify ("IMPL");
 
@@ -101,11 +101,7 @@ public final class JInvocationTest
                       .arg ("jippie")
                       .arg (JExpr._this ())
                       .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
-    minvoke.body ()
-           .add (JExpr.invoke (m2)
-                      .arg ("jippie")
-                      .arg (JExpr._this ())
-                      .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
+    minvoke.body ().add (JExpr.invoke (m2).arg ("jippie").arg (JExpr._this ()).arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }
@@ -113,7 +109,7 @@ public final class JInvocationTest
   @Test
   public void testChainedInvoke () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cls = cm._class ("TestInvocation2");
 
     final JMethod m1 = cls.method (JMod.PUBLIC, cls, "foo1");

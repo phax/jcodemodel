@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Modifier groups.
@@ -53,13 +53,7 @@ public class JMods implements IJGenerable
   // mask
   //
   private static final int VAR = JMod.FINAL;
-  private static final int FIELD = JMod.PUBLIC |
-                                   JMod.PRIVATE |
-                                   JMod.PROTECTED |
-                                   JMod.STATIC |
-                                   JMod.FINAL |
-                                   JMod.TRANSIENT |
-                                   JMod.VOLATILE;
+  private static final int FIELD = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED | JMod.STATIC | JMod.FINAL | JMod.TRANSIENT | JMod.VOLATILE;
   private static final int METHOD = JMod.PUBLIC |
                                     JMod.PRIVATE |
                                     JMod.PROTECTED |
@@ -69,12 +63,7 @@ public class JMods implements IJGenerable
                                     JMod.NATIVE |
                                     JMod.SYNCHRONIZED |
                                     JMod.DEFAULT;
-  private static final int CLASS = JMod.PUBLIC |
-                                   JMod.PRIVATE |
-                                   JMod.PROTECTED |
-                                   JMod.STATIC |
-                                   JMod.FINAL |
-                                   JMod.ABSTRACT;
+  private static final int CLASS = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED | JMod.STATIC | JMod.FINAL | JMod.ABSTRACT;
   private static final int INTERFACE = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED;
 
   /** bit-packed representation of modifiers. */
@@ -95,8 +84,7 @@ public class JMods implements IJGenerable
 
   private static void _check (final int nMods, final int nLegal, final String sWhat)
   {
-    JCValueEnforcer.isFalse ((nMods & ~nLegal) != 0,
-                             () -> "Illegal modifiers for " + sWhat + ": " + new JMods (nMods).toString ());
+    ValueEnforcer.isFalse ((nMods & ~nLegal) != 0, () -> "Illegal modifiers for " + sWhat + ": " + new JMods (nMods).toString ());
     /* ## check for illegal combinations too */
   }
 

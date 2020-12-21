@@ -270,17 +270,14 @@ public class TypedAnnotationWriter <A extends Annotation, W extends IJAnnotation
    */
   private W _createProxy ()
   {
-    return (W) Proxy.newProxyInstance (JCSecureLoader.getClassClassLoader (m_aWriterType),
-                                       new Class [] { m_aWriterType },
-                                       this);
+    return (W) Proxy.newProxyInstance (JCSecureLoader.getClassClassLoader (m_aWriterType), new Class [] { m_aWriterType }, this);
   }
 
   /**
    * Creates a new typed annotation writer.
    */
   @Nonnull
-  static <W extends IJAnnotationWriter <?>> W create (@Nonnull final Class <W> aWriterType,
-                                                      @Nonnull final IJAnnotatable aAnnotatable)
+  static <W extends IJAnnotationWriter <?>> W create (@Nonnull final Class <W> aWriterType, @Nonnull final IJAnnotatable aAnnotatable)
   {
     final Class <? extends Annotation> a = _findAnnotationType (aWriterType);
     return (W) new TypedAnnotationWriter (a, aWriterType, aAnnotatable.annotate (a))._createProxy ();

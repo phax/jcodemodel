@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * While statement
@@ -67,7 +67,7 @@ public class JWhileLoop implements IJStatement
    */
   public JWhileLoop (@Nonnull final IJExpression aTestExpr)
   {
-    JCValueEnforcer.notNull (aTestExpr, "TestExpr");
+    ValueEnforcer.notNull (aTestExpr, "TestExpr");
     m_aTextExpr = aTestExpr;
   }
 

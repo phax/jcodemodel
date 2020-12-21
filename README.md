@@ -12,14 +12,31 @@ this would be very tricky.
 
 A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. is available.
 
+## Maven usage
+
+Add the following to your pom.xml to use this artifact:
+
+```xml
+<dependency>
+  <groupId>com.helger</groupId>
+  <artifactId>jcodemodel</artifactId>
+  <version>3.4.0</version>
+</dependency>
+```
+
 # News and noteworthy
 
-* v3.4.0 - work in progress
+* v4.0.0 - work in progress
+    * Added `ph-commons` as a dependency for common stuff
+    * Moved all exceptions to `exceptions` package
+* v3.4.0 - 2020-05-25
     * Added special top-level construct `JResourceDir` to represent pure resource directories ([issue #74](https://github.com/phax/jcodemodel/issues/74) from @guiguilechat)
     * Added new class `JCodeModelException` as the base class for `JClassAlreadyExistsException` and the new class `JResourceAlreadyExistsException`
     * Existing APIs were changed to throw `JCodeModelException` instead of `JClassAlreadyExistsException`
     * `JCNameUtilities.getFullName` works with classes in the default package
     * Extended `JCodeModel` with `(get|set)FileSystemConvention` to make the creation more flexible ([also issue #74](https://github.com/phax/jcodemodel/issues/74) from @guiguilechat)
+    * Added mutable overloads to methods that only return an unmodifiable collection ([issue #86](https://github.com/phax/jcodemodel/issues/86))
+    * Fixed an issue with generating generics from anonymous classes ([issue #84](https://github.com/phax/jcodemodel/issues/84))
 * v3.3.0 - 2019-11-24
     * Added check for package names so that no invalid package names can be created ([issue #70](https://github.com/phax/jcodemodel/issues/70) from @guiguilechat)
     * Added check to avoid creating classes existing in the "java.lang" package ([issue #71](https://github.com/phax/jcodemodel/issues/71) from @guiguilechat)
@@ -123,20 +140,28 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 * v2.6.4 - 2014-04-10
 * 2013-09-23: Changes from https://github.com/UnquietCode/JCodeModel have been incorporated.
 
-## Maven usage
+## Contribution
 
-Add the following to your pom.xml to use this artifact:
+Pull requests must follow my personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md)
 
-```xml
-<dependency>
-  <groupId>com.helger</groupId>
-  <artifactId>jcodemodel</artifactId>
-  <version>3.3.0</version>
-</dependency>
-```
+### Tabs vs spaces
+
+This project uses double-space for indentation. If you want to use tabs, you can ask git to modify the files when commiting them and when pulling them. For this, from your project directory : 
+
+ - edit the file .git/info/attributes to make it contain `*.java filter=tabspace` . This will tell git to apply the script tabspace on the *.java files
+ - run `git config filter.tabspace.clean 'expand --tabs=2 --initial'` to ask git to replace tabs with two spaces on commit of *.java files.
+ - run `git config filter.tabspace.smudge 'unexpand --tabs=2 --first-only'` to request git to replace double spaces with two tabs on checking a *.java file out.
+
+
+### Eclipse
+
+For eclipse, a formatter xml and a cleanup xml are present in the meta/formatter/eclipse/ directory. You can load them from the "project properties > java code style" settings. Check "Enable project specific settings", then load them.
+
+NOTE : you also need to change the save actions to make them meet the clean up actions. Save actions are done even when they are not present in the clean up.
+
+
 
 ---
 
-My personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md) |
 On Twitter: <a href="https://twitter.com/philiphelger">@philiphelger</a> |
 Kindly supported by [YourKit Java Profiler](https://www.yourkit.com)

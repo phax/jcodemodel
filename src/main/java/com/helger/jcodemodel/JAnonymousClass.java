@@ -80,6 +80,9 @@ public class JAnonymousClass extends JDefinedClass
   @Override
   public void generate (final IJFormatter f)
   {
-    f.type (m_aBaseClass);
+    if (true)
+      m_aBaseClass.generate (f);
+    else
+      f.type (m_aBaseClass);
   }
 }

@@ -51,11 +51,15 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.io.file.FilenameHelper;
+import com.helger.commons.string.StringHelper;
+import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
+import com.helger.jcodemodel.exceptions.JResourceAlreadyExistsException;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.util.FSName;
-import com.helger.jcodemodel.util.JCFilenameHelper;
-import com.helger.jcodemodel.util.JCStringHelper;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * A Java resource directory - complementary to a {@link JPackage}.
@@ -64,7 +68,7 @@ import com.helger.jcodemodel.util.JCValueEnforcer;
  */
 public class JResourceDir implements IJOwned
 {
-  public static final char SEPARATOR = JCFilenameHelper.UNIX_SEPARATOR;
+  public static final char SEPARATOR = FilenameHelper.UNIX_SEPARATOR;
   public static final String SEPARATOR_STR = Character.toString (SEPARATOR);
 
   private final JCodeModel m_aOwner;
@@ -97,19 +101,19 @@ public class JResourceDir implements IJOwned
    *        Name of directory. May not be <code>null</code> but empty. No
    *        absolute paths are allowed and only Linux forward slashes may be
    *        used as path separators.
-   * @throws IllegalArgumentException
-   *         If each part of the package name is not a valid filename part.
+   * @throws JInvalidFileNameException
+   *         If a part of the package name is not a valid filename part.
    */
   protected JResourceDir (@Nonnull final JCodeModel aOwner,
                           @Nullable final JResourceDir aParentDir,
-                          @Nonnull final String sName)
+                          @Nonnull final String sName) throws JInvalidFileNameException
   {
-    JCValueEnforcer.notNull (sName, "Name");
-    JCValueEnforcer.notNull (aOwner, "CodeModel");
+    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (aOwner, "CodeModel");
     if (aParentDir == null)
-      JCValueEnforcer.isTrue (sName.length () == 0, "If no parent directory is provided, the name must be empty");
+      ValueEnforcer.isTrue (sName.length () == 0, "If no parent directory is provided, the name must be empty");
     if (sName.length () == 0)
-      JCValueEnforcer.isNull (aParentDir, "If no name is provided, the parent directory must be null");
+      ValueEnforcer.isNull (aParentDir, "If no name is provided, the parent directory must be null");
 
     m_aOwner = aOwner;
     m_aParentDir = aParentDir;
@@ -117,19 +121,16 @@ public class JResourceDir implements IJOwned
 
     // An empty directory name is okay
     if (sName.length () > 0)
-      for (final String sPart : JCStringHelper.getExplodedArray (JResourceDir.SEPARATOR, sName))
+      for (final String sPart : StringHelper.getExplodedArray (JResourceDir.SEPARATOR, sName))
         if (!aOwner.getFileSystemConvention ().isValidDirectoryName (sPart))
-          throw new IllegalArgumentException ("Resource directory name '" +
-                                              sName +
-                                              "' contains the the invalid part '" +
-                                              sPart +
-                                              "' according to the current file system conventions");
+          throw new JInvalidFileNameException (sName, sPart);
   }
 
   /**
    * @return the code model root object being used to create this resource
    *         directory.
    */
+  @Override
   @Nonnull
   public final JCodeModel owner ()
   {
@@ -189,14 +190,12 @@ public class JResourceDir implements IJOwned
   @Nonnull
   public <T extends AbstractJResourceFile> T addResourceFile (@Nonnull final T aResFile) throws JCodeModelException
   {
-    JCValueEnforcer.notNull (aResFile, "ResourceFile");
+    ValueEnforcer.notNull (aResFile, "ResourceFile");
 
     final String sName = aResFile.name ();
 
     if (!m_aOwner.getFileSystemConvention ().isValidFilename (sName))
-      throw new IllegalArgumentException ("Resource filename '" +
-                                          sName +
-                                          "' is invalid according to the current file system conventions");
+      throw new IllegalArgumentException ("Resource filename '" + sName + "' is invalid according to the current file system conventions");
 
     // Check if a sub directory already exists with the same name
     if (m_aOwner.containsResourceDir (fullChildName (sName)))
@@ -208,7 +207,7 @@ public class JResourceDir implements IJOwned
       throw new JResourceAlreadyExistsException (fullChildName (sName));
 
     // Check if a Java class with the same name already exists
-    if (JCStringHelper.endsWithCaseInsensitive (sName, ".java"))
+    if (StringHelper.endsWithIgnoreCase (sName, ".java"))
     {
       // Cut trailing ".java"
       final JDefinedClass aDC = _getMatchingPackage ()._getClass (sName.substring (0, sName.length () - 5));
@@ -273,7 +272,7 @@ public class JResourceDir implements IJOwned
       throw new JResourceAlreadyExistsException (fullChildName (sSubDirName));
 
     // Check if a Java class with the same name already exists
-    if (JCStringHelper.endsWithCaseInsensitive (sSubDirName, ".java"))
+    if (StringHelper.endsWithIgnoreCase (sSubDirName, ".java"))
     {
       // Cut trailing ".java"
       final JDefinedClass aDC = _getMatchingPackage ()._getClass (sSubDirName.substring (0, sSubDirName.length () - 5));
@@ -318,6 +317,14 @@ public class JResourceDir implements IJOwned
   @Nonnull
   static JResourceDir root (@Nonnull final JCodeModel aOwner)
   {
-    return new JResourceDir (aOwner, null, "");
+    try
+    {
+      return new JResourceDir (aOwner, null, "");
+    }
+    catch (final JInvalidFileNameException e)
+    {
+      // should not happen
+      throw new UnsupportedOperationException ("catch this", e);
+    }
   }
 }

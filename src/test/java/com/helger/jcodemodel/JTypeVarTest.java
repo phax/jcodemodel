@@ -46,6 +46,7 @@ import java.io.Serializable;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
@@ -58,7 +59,7 @@ public final class JTypeVarTest
   @Test
   public void testBasic () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cls = cm._class ("Test");
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
     final JTypeVar tv = m.generify ("T");

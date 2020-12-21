@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * This class represents a single direct statement. A direct statement is a
@@ -68,7 +68,7 @@ public final class JDirectStatement implements IJStatement
 
   public void source (@Nonnull final String sSource)
   {
-    JCValueEnforcer.notNull (sSource, "Source");
+    ValueEnforcer.notNull (sSource, "Source");
     m_sSource = sSource;
   }
 

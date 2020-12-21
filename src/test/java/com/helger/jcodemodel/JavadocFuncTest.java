@@ -52,7 +52,7 @@ public final class JavadocFuncTest
   @Test
   public void testOnPackage () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JPackage pkg = cm._package ("foo");
     final JDocComment aComment = pkg.javadoc ();
     aComment.add ("Package description");
@@ -66,7 +66,7 @@ public final class JavadocFuncTest
   @Test
   public void testOnClass () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JPackage pkg = cm._package ("foo");
 
     final JDefinedClass cls = pkg._class (JMod.PUBLIC | JMod.FINAL, "Dummy");

@@ -53,6 +53,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJFormatter;
@@ -63,9 +64,7 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JNarrowedClass;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JVar;
-import com.helger.jcodemodel.SourcePrintWriter;
 import com.helger.jcodemodel.util.ClassNameComparator;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.util.NullWriter;
 
 /**
@@ -409,8 +408,8 @@ public class JFormatter implements IJFormatter
    */
   public JFormatter (@Nonnull final SourcePrintWriter aPW, @Nonnull final String sIndentString)
   {
-    JCValueEnforcer.notNull (aPW, "PrintWriter");
-    JCValueEnforcer.notNull (sIndentString, "IndentString");
+    ValueEnforcer.notNull (aPW, "PrintWriter");
+    ValueEnforcer.notNull (sIndentString, "IndentString");
 
     m_aPW = aPW;
     m_sIndentString = sIndentString;
@@ -571,8 +570,7 @@ public class JFormatter implements IJFormatter
         if (!aType.isError ())
         {
           final String sShortName = aType.name ();
-          m_aCollectedReferences.computeIfAbsent (sShortName, k -> new NameUsage (sShortName))
-                                .addReferencedType (aType);
+          m_aCollectedReferences.computeIfAbsent (sShortName, k -> new NameUsage (sShortName)).addReferencedType (aType);
         }
         break;
       case PRINTING:
@@ -696,15 +694,10 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  private boolean _collectCausesNoAmbiguities (@Nonnull final AbstractJClass aReference,
-                                               @Nonnull final JDefinedClass aClassToBeWritten)
+  private boolean _collectCausesNoAmbiguities (@Nonnull final AbstractJClass aReference, @Nonnull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
-      System.out.println ("_collectCausesNoAmbiguities(" +
-                          aReference.fullName () +
-                          ", " +
-                          aClassToBeWritten.fullName () +
-                          ")");
+      System.out.println ("_collectCausesNoAmbiguities(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
 
     final NameUsage aUsages = m_aCollectedReferences.get (aReference.name ());
     if (aUsages == null)
@@ -723,15 +716,10 @@ public class JFormatter implements IJFormatter
    * @return <code>true</code> if an import statement can be used to shorten
    *         references to referenced class
    */
-  private boolean _collectShouldBeImported (@Nonnull final AbstractJClass aReference,
-                                            @Nonnull final JDefinedClass aClassToBeWritten)
+  private boolean _collectShouldBeImported (@Nonnull final AbstractJClass aReference, @Nonnull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
-      System.out.println ("_collectShouldBeImported(" +
-                          aReference.fullName () +
-                          ", " +
-                          aClassToBeWritten.fullName () +
-                          ")");
+      System.out.println ("_collectShouldBeImported(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
 
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)
@@ -789,8 +777,7 @@ public class JFormatter implements IJFormatter
     final AbstractJClass aOuter = aReference.outer ();
     if (aOuter != null)
     {
-      if (_collectCausesNoAmbiguities (aOuter, aClassToBeWritten) &&
-          _collectShouldBeImported (aOuter, aClassToBeWritten))
+      if (_collectCausesNoAmbiguities (aOuter, aClassToBeWritten) && _collectShouldBeImported (aOuter, aClassToBeWritten))
       {
         m_aImportedClasses.add (aOuter);
       }
@@ -825,15 +812,10 @@ public class JFormatter implements IJFormatter
    *        {@link AbstractJClass} that is the current class being processed
    * @return true if an import statement should be suppressed, false otherwise
    */
-  private boolean _printIsImplicitlyImported (@Nonnull final AbstractJClass aReference,
-                                              @Nonnull final AbstractJClass aClassToBeWrittem)
+  private boolean _printIsImplicitlyImported (@Nonnull final AbstractJClass aReference, @Nonnull final AbstractJClass aClassToBeWrittem)
   {
     if (m_bDebugImport)
-      System.out.println ("_printIsImplicitlyImported(" +
-                          aReference.fullName () +
-                          ", " +
-                          aClassToBeWrittem.fullName () +
-                          ")");
+      System.out.println ("_printIsImplicitlyImported(" + aReference.fullName () + ", " + aClassToBeWrittem.fullName () + ")");
 
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)

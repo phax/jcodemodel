@@ -38,30 +38,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.exceptions;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+
+import com.helger.commons.ValueEnforcer;
 
 /**
- * Base class for all code model related exception.
+ * Indicates that the class is already created.
  *
  * @author Philip Helger
  * @since 3.4.0
  */
-@ChangeInV4 ("moved to exceptions package")
-public class JCodeModelException extends Exception
+public class JResourceAlreadyExistsException extends JCodeModelException
 {
-  protected JCodeModelException ()
-  {}
+  private final String m_sFilename;
 
-  public JCodeModelException (@Nonnull final String sMsg)
+  public JResourceAlreadyExistsException (@Nonnull final String sFilename)
   {
-    super (sMsg);
+    ValueEnforcer.notEmpty (sFilename, "Filename");
+    m_sFilename = sFilename;
   }
 
-  public JCodeModelException (@Nonnull final String sMsg, @Nullable final Throwable aCause)
+  /**
+   * @return The existing filename that already exists as a resource. Neither
+   *         <code>null</code> nor empty.
+   */
+  @Nonnull
+  public String getExistingFilename ()
   {
-    super (sMsg, aCause);
+    return m_sFilename;
   }
 }

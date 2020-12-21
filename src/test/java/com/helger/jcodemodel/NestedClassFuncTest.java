@@ -52,7 +52,7 @@ public final class NestedClassFuncTest
   @Test
   public void testBasic () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass c = cm._package ("foo")._class (0, "Foo");
     c._extends (cm.ref (MockInnerClass.class));
     CodeModelTestsHelper.parseCodeModel (cm);

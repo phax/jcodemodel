@@ -63,13 +63,11 @@ public final class JTryResourcesTest
   @Test
   public void testWith1 ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JTryBlock aTB = new JTryBlock ();
 
-    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class),
-                                                "os",
-                                                cm.ref (ByteArrayOutputStream.class)._new ());
+    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class), "os", cm.ref (ByteArrayOutputStream.class)._new ());
     aTB.tryResources ().add (aTR1);
     aTB.body ().add (aTR1.var ().invoke ("read"));
     assertEquals ("try(final java.io.OutputStream os = new java.io.ByteArrayOutputStream()) {" +
@@ -84,13 +82,11 @@ public final class JTryResourcesTest
   @Test
   public void testWith2 ()
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JTryBlock aTB = new JTryBlock ();
 
-    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class),
-                                                "os",
-                                                cm.ref (ByteArrayOutputStream.class)._new ());
+    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class), "os", cm.ref (ByteArrayOutputStream.class)._new ());
     aTB.tryResources ().add (aTR1);
     final JTryResource aTR2 = new JTryResource (cm.ref (BufferedOutputStream.class),
                                                 "bos",

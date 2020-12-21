@@ -46,10 +46,9 @@ import java.io.Serializable;
 
 import javax.annotation.Nonnull;
 
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.JPackage;
-import com.helger.jcodemodel.SourcePrintWriter;
-import com.helger.jcodemodel.util.JCStringHelper;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Filter CodeWriter that writes a progress message to the specified
@@ -70,13 +69,13 @@ public class ProgressCodeWriter extends FilterCodeWriter
   public ProgressCodeWriter (@Nonnull final AbstractCodeWriter output, @Nonnull final IProgressTracker progress)
   {
     super (output);
-    JCValueEnforcer.notNull (progress, "Progress");
+    ValueEnforcer.notNull (progress, "Progress");
     m_aPT = progress;
   }
 
   protected void report (@Nonnull final String sDirName, @Nonnull final String sFilename)
   {
-    if (JCStringHelper.hasNoText (sDirName))
+    if (StringHelper.hasNoText (sDirName))
       m_aPT.println (sFilename);
     else
       m_aPT.println (sDirName + '/' + sFilename);
@@ -90,8 +89,7 @@ public class ProgressCodeWriter extends FilterCodeWriter
   }
 
   @Override
-  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage,
-                                       @Nonnull final String sFilename) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage, @Nonnull final String sFilename) throws IOException
   {
     report (toDirName (aPackage), sFilename);
     return super.openSource (aPackage, sFilename);

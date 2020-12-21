@@ -48,6 +48,7 @@ import java.lang.annotation.Target;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
@@ -113,7 +114,7 @@ public final class AnnotationUseFuncTest
   @Test
   public void testMain () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cls = cm._class ("Test");
     // JMethod m =
     cls.method (JMod.PUBLIC, cm.VOID, "foo");
@@ -152,7 +153,7 @@ public final class AnnotationUseFuncTest
 
     // Shortcut
     // Ambiguous on OpenJDK6 - explicit array needed
-    aUse.paramArray ("namesno", new int [] { 4, 5, 6 });
+    aUse.paramArray ("namesno", 4, 5, 6);
 
     final JAnnotationArrayMember arrayMember2 = aUse.paramArray ("values");
     // adding an annotation as a member value pair

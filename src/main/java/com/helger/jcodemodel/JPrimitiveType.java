@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Java built-in primitive types. Instances of this class can be obtained as
@@ -53,8 +53,8 @@ public class JPrimitiveType extends AbstractJType
   private final JCodeModel m_aOwner;
   private final String m_sTypeName;
   /**
-   * Corresponding wrapper class. For example, this would be "java.lang.Short" for
-   * short.
+   * Corresponding wrapper class. For example, this would be "java.lang.Short"
+   * for short.
    */
   private final AbstractJClass m_aWrapperClass;
   private JArrayClass m_aArrayClass;
@@ -65,9 +65,9 @@ public class JPrimitiveType extends AbstractJType
                             @Nonnull final Class <?> aWrapper,
                             final boolean bUseValueOf)
   {
-    JCValueEnforcer.notNull (aOwner, "Owner");
-    JCValueEnforcer.notNull (sTypeName, "TypeName");
-    JCValueEnforcer.notNull (aWrapper, "Wrapper");
+    ValueEnforcer.notNull (aOwner, "Owner");
+    ValueEnforcer.notNull (sTypeName, "TypeName");
+    ValueEnforcer.notNull (aWrapper, "Wrapper");
     m_aOwner = aOwner;
     m_sTypeName = sTypeName;
     m_aWrapperClass = aOwner.ref (aWrapper);
@@ -136,8 +136,8 @@ public class JPrimitiveType extends AbstractJType
   /**
    * Wraps an expression of this type to the corresponding wrapper class. For
    * example, if this class represents "float", this method will return the
-   * expression <code>new Float(x)</code> or <code>Float.valueOf(x)</code> for the
-   * parameter <code>x</code>.<br>
+   * expression <code>new Float(x)</code> or <code>Float.valueOf(x)</code> for
+   * the parameter <code>x</code>.<br>
    * For void type it throws an {@link IllegalStateException} because this would
    * lead to corrupt code!
    *
@@ -183,8 +183,8 @@ public class JPrimitiveType extends AbstractJType
    * @return <code>true</code> if <code>valueOf</code> should be used in
    *         {@link #wrap(IJExpression)}, <code>false</code> if
    *         <code>new X(y)</code> should be used there. Note:
-   *         <code>valueOf</code> is faster in execution since it uses potentially
-   *         built in caches of the objects.
+   *         <code>valueOf</code> is faster in execution since it uses
+   *         potentially built in caches of the objects.
    */
   public boolean useValueOf ()
   {

@@ -54,8 +54,8 @@ import java.util.TreeSet;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.util.ClassNameComparator;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.writer.JFormatter;
 
 /**
@@ -69,10 +69,7 @@ import com.helger.jcodemodel.writer.JFormatter;
  * {@link #method(int, AbstractJType, String)} and
  * {@link #field(int, AbstractJType, String)}.
  */
-public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> implements
-                           IJGenerifiable,
-                           IJAnnotatable,
-                           IJDocCommentable
+public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> implements IJGenerifiable, IJAnnotatable, IJDocCommentable
 {
   /**
    * The optional header that is emitted prior to the package (Issue #47)
@@ -209,7 +206,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
 
     if (sName != null)
     {
-      JCValueEnforcer.notEmpty (sName, "Name");
+      ValueEnforcer.notEmpty (sName, "Name");
 
       if (!Character.isJavaIdentifierStart (sName.charAt (0)))
       {
@@ -257,7 +254,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @Nonnull
   public JDefinedClass _extends (@Nonnull final AbstractJClass aSuperClass)
   {
-    JCValueEnforcer.notNull (aSuperClass, "SuperClass");
+    ValueEnforcer.notNull (aSuperClass, "SuperClass");
     if (isInterface ())
     {
       if (aSuperClass.isInterface ())
@@ -400,7 +397,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
                           @Nonnull final String sName,
                           @Nullable final IJExpression aInit)
   {
-    JCValueEnforcer.isFalse (m_aFields.containsKey (sName), () -> "trying to create the same field twice: " + sName);
+    ValueEnforcer.isFalse (m_aFields.containsKey (sName), () -> "trying to create the same field twice: " + sName);
 
     final JFieldVar f = new JFieldVar (this, JMods.forField (nMods), aType, sName, aInit);
     m_aFields.put (sName, f);
@@ -414,6 +411,17 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
+   * Returns all the fields declared in this class.
+   *
+   * @return always non-null.
+   */
+  @Nonnull
+  public Map <String, JFieldVar> fieldsMutable ()
+  {
+    return m_aFields;
+  }
+
+  /**
    * Returns all the fields declared in this class. The returned {@link Map} is
    * a read-only live view.
    *
@@ -422,7 +430,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @Nonnull
   public Map <String, JFieldVar> fields ()
   {
-    return Collections.unmodifiableMap (m_aFields);
+    return Collections.unmodifiableMap (fieldsMutable ());
   }
 
   /**
@@ -450,9 +458,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     return sName != null && m_aFields.containsKey (sName);
   }
 
-  void internalRenameField (@Nonnull final String sOldName,
-                            @Nonnull final String sNewName,
-                            @Nonnull final JFieldVar aField)
+  void internalRenameField (@Nonnull final String sOldName, @Nonnull final String sNewName, @Nonnull final JFieldVar aField)
   {
     if (m_aFields.remove (sOldName) == null)
       throw new IllegalArgumentException ("Failed to remove field with name '" +
@@ -774,8 +780,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   @Override
-  protected AbstractJClass substituteParams (final JTypeVar [] aVariables,
-                                             final List <? extends AbstractJClass> aBindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] aVariables, final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }
@@ -797,28 +802,35 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   @Nonnull
-  public Collection <JAnnotationUse> annotations ()
+  public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
-    return Collections.unmodifiableCollection (m_aAnnotations);
+    return m_aAnnotations;
+  }
+
+  @Nonnull
+  public Collection <JAnnotationUse> annotations ()
+  {
+    return Collections.unmodifiableList (annotationsMutable ());
   }
 
   @Nullable
   public JAnnotationUse getAnnotation (final Class <?> aAnnotationClass)
   {
-    for (final JAnnotationUse jannotation : m_aAnnotations)
-    {
-      final AbstractJClass jannotationClass = jannotation.getAnnotationClass ();
-      if (!jannotationClass.isError ())
+    if (m_aAnnotations != null)
+      for (final JAnnotationUse jannotation : m_aAnnotations)
       {
-        final String sQualifiedName = jannotationClass.fullName ();
-        if (sQualifiedName != null && sQualifiedName.equals (aAnnotationClass.getName ()))
+        final AbstractJClass jannotationClass = jannotation.getAnnotationClass ();
+        if (!jannotationClass.isError ())
         {
-          return jannotation;
+          final String sQualifiedName = jannotationClass.fullName ();
+          if (sQualifiedName != null && sQualifiedName.equals (aAnnotationClass.getName ()))
+          {
+            return jannotation;
+          }
         }
       }
-    }
     return null;
   }
 

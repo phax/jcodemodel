@@ -105,22 +105,6 @@ public final class JOp
    * @param aExpr
    *        expression
    * @return <code><em>aExpr</em>++</code>
-   * @deprecated Use {@link #postincr(IJExpression)} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ChangeInV4
-  public static JOpUnaryTight incr (@Nonnull final IJExpression aExpr)
-  {
-    return postincr (aExpr);
-  }
-
-  /**
-   * Post increment
-   *
-   * @param aExpr
-   *        expression
-   * @return <code><em>aExpr</em>++</code>
    */
   @Nonnull
   public static JOpUnaryTight postincr (@Nonnull final IJExpression aExpr)
@@ -139,22 +123,6 @@ public final class JOp
   public static JOpUnaryTight preincr (@Nonnull final IJExpression aExpr)
   {
     return new JOpUnaryTight ("++", aExpr);
-  }
-
-  /**
-   * Post decrement
-   *
-   * @param aExpr
-   *        expression
-   * @return <code><em>aExpr</em>--</code>
-   * @deprecated Use {@link #postdecr(IJExpression)} instead
-   */
-  @Deprecated
-  @Nonnull
-  @ChangeInV4
-  public static JOpUnaryTight decr (@Nonnull final IJExpression aExpr)
-  {
-    return postdecr (aExpr);
   }
 
   /**

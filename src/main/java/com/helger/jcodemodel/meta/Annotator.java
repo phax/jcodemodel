@@ -108,9 +108,7 @@ class Annotator
       m_aAnnotationUse = annotationUse;
     }
 
-    void addArguments (final AnnotationMirror annotation) throws CodeModelBuildingException,
-                                                          IllegalStateException,
-                                                          ErrorTypeFound
+    void addArguments (final AnnotationMirror annotation) throws CodeModelBuildingException, IllegalStateException, ErrorTypeFound
     {
       final Map <? extends ExecutableElement, ? extends AnnotationValue> annotationArguments = m_aModelsAdapter.getElementValuesWithDefaults (annotation);
       for (final Map.Entry <? extends ExecutableElement, ? extends AnnotationValue> annotationValueAssignment : annotationArguments.entrySet ())
@@ -121,9 +119,8 @@ class Annotator
       }
     }
 
-    private void _addArgument (final String name, final Object value) throws IllegalStateException,
-                                                                      CodeModelBuildingException,
-                                                                      ErrorTypeFound
+    private void _addArgument (final String name,
+                               final Object value) throws IllegalStateException, CodeModelBuildingException, ErrorTypeFound
     {
       if (value instanceof String)
         m_aAnnotationUse.param (name, (String) value);
@@ -157,9 +154,7 @@ class Annotator
                         else
                           if (value instanceof DeclaredType)
                           {
-                            m_aAnnotationUse.param (name,
-                                                    m_aModelsAdapter.toJType ((DeclaredType) value,
-                                                                              m_aTypeEnvironment));
+                            m_aAnnotationUse.param (name, m_aModelsAdapter.toJType ((DeclaredType) value, m_aTypeEnvironment));
                           }
                           else
                             if (value instanceof VariableElement)
@@ -171,8 +166,7 @@ class Annotator
                               catch (final ClassNotFoundException ex)
                               {
                                 Logger.getLogger (Annotator.class.getName ())
-                                      .log (Level.WARNING,
-                                            "Not processing annotation argument: " + name + ": " + value);
+                                      .log (Level.WARNING, "Not processing annotation argument: " + name + ": " + value);
                               }
                             }
                             else
@@ -181,8 +175,7 @@ class Annotator
                                 final AnnotationMirror annotation = (AnnotationMirror) value;
                                 final AbstractJClass annotationClass = (AbstractJClass) m_aModelsAdapter.toJType (annotation.getAnnotationType (),
                                                                                                                   m_aTypeEnvironment);
-                                final JAnnotationUse annotationParam = m_aAnnotationUse.annotationParam (name,
-                                                                                                         annotationClass);
+                                final JAnnotationUse annotationParam = m_aAnnotationUse.annotationParam (name, annotationClass);
                                 final ArgumentAdder adder = new ArgumentAdder (annotationParam);
                                 adder.addArguments (annotation);
                               }
@@ -346,10 +339,7 @@ class Annotator
                                                             {
                                                               Logger.getLogger (Annotator.class.getName ())
                                                                     .log (Level.WARNING,
-                                                                          "Not processing annotation argument: " +
-                                                                                         name +
-                                                                                         ": " +
-                                                                                         list);
+                                                                          "Not processing annotation argument: " + name + ": " + list);
                                                             }
                                                           }
                                                           else

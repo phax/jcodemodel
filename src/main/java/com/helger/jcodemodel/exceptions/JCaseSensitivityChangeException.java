@@ -38,36 +38,22 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.exceptions;
 
-import javax.annotation.Nonnull;
-
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.util.IFileSystemConvention;
 
 /**
- * Indicates that the class is already created.
+ * Exception thrown when trying to replace the existing
+ * {@link IFileSystemConvention} of a {@link JCodeModel} by another one with a
+ * different case sensitivity
  *
- * @author Philip Helger
- * @since 3.4.0
+ * @author glelouet
  */
-@ChangeInV4 ("moved to exceptions package")
-public class JResourceAlreadyExistsException extends JCodeModelException
+public class JCaseSensitivityChangeException extends JCodeModelException
 {
-  private final String m_sFilename;
-
-  public JResourceAlreadyExistsException (@Nonnull final String sFilename)
+  public JCaseSensitivityChangeException ()
   {
-    JCValueEnforcer.notEmpty (sFilename, "Filename");
-    m_sFilename = sFilename;
-  }
-
-  /**
-   * @return The existing filename that already exists as a resource. Neither
-   *         <code>null</code> nor empty.
-   */
-  @Nonnull
-  public String getExistingFilename ()
-  {
-    return m_sFilename;
+    super ("The FileSystem convention cannot be changed for one with a different case sensitivity if a package or a resource directory already exists.");
   }
 }

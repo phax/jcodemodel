@@ -46,7 +46,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * JavaDoc comment.
@@ -94,7 +94,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
   protected JDocComment (@Nonnull final JCodeModel owner)
   {
-    m_aOwner = JCValueEnforcer.notNull (owner, "Owner");
+    m_aOwner = ValueEnforcer.notNull (owner, "Owner");
   }
 
   @Nonnull
@@ -104,7 +104,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * Change whether multi line comments or single line comments should be emitted.
+   * Change whether multi line comments or single line comments should be
+   * emitted.
    *
    * @param bSingleLineMode
    *        <code>true</code> to enable single line mode, <code>false</code> for
@@ -119,8 +120,9 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * @return <code>true</code> if single line mode is enabled, <code>false</code>
-   *         if multi line mode is enabled. Multi line mode is the default.
+   * @return <code>true</code> if single line mode is enabled,
+   *         <code>false</code> if multi line mode is enabled. Multi line mode
+   *         is the default.
    */
   public boolean isSingleLineMode ()
   {
@@ -269,7 +271,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   @Nonnull
   public JCommentPart addTag (@Nonnull final String sName)
   {
-    JCValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notEmpty (sName, "Name");
     return m_aAtTags.computeIfAbsent (sName, k -> new JCommentPart ());
   }
 
@@ -330,7 +332,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   @Nonnull
   public Map <String, String> addXdoclet (@Nonnull final String sName)
   {
-    JCValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sName, "Name");
     return m_aAtXdoclets.computeIfAbsent (sName, k -> new LinkedHashMap <> ());
   }
 
@@ -346,8 +348,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   @Nonnull
   public Map <String, String> addXdoclet (@Nonnull final String sName, @Nonnull final Map <String, String> aAttributes)
   {
-    JCValueEnforcer.notNull (sName, "Name");
-    JCValueEnforcer.notNull (aAttributes, "Attributes");
+    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (aAttributes, "Attributes");
     final Map <String, String> p = addXdoclet (sName);
     p.putAll (aAttributes);
     return p;
@@ -366,12 +368,10 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    * @return Map with the key/value pairs
    */
   @Nonnull
-  public Map <String, String> addXdoclet (@Nonnull final String sName,
-                                          @Nonnull final String sAttribute,
-                                          @Nullable final String sValue)
+  public Map <String, String> addXdoclet (@Nonnull final String sName, @Nonnull final String sAttribute, @Nullable final String sValue)
   {
-    JCValueEnforcer.notNull (sName, "Name");
-    JCValueEnforcer.notNull (sAttribute, "Attribute");
+    ValueEnforcer.notNull (sName, "Name");
+    ValueEnforcer.notNull (sAttribute, "Attribute");
     final Map <String, String> p = addXdoclet (sName);
     p.put (sAttribute, sValue);
     return p;

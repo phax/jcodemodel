@@ -40,12 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
 
 public class JOpUnary implements IJExpression
 {
@@ -55,7 +55,7 @@ public class JOpUnary implements IJExpression
 
   /**
    * Constructor for operator before expression
-   * 
+   *
    * @param sOperator
    *        operator
    * @param aExpr
@@ -63,14 +63,14 @@ public class JOpUnary implements IJExpression
    */
   protected JOpUnary (@Nonnull final String sOperator, @Nonnull final IJExpression aExpr)
   {
-    m_sOperator = JCValueEnforcer.notNull (sOperator, "Operator");
-    m_aExpr = JCValueEnforcer.notNull (aExpr, "Expression");
+    m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
+    m_aExpr = ValueEnforcer.notNull (aExpr, "Expression");
     m_bOperatorComesFirst = true;
   }
 
   /**
    * Constructor for expression before operator
-   * 
+   *
    * @param aExpr
    *        expression
    * @param sOperator
@@ -78,8 +78,8 @@ public class JOpUnary implements IJExpression
    */
   protected JOpUnary (@Nonnull final IJExpression aExpr, @Nonnull final String sOperator)
   {
-    m_sOperator = JCValueEnforcer.notNull (sOperator, "Operator");
-    m_aExpr = JCValueEnforcer.notNull (aExpr, "Expression");
+    m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
+    m_aExpr = ValueEnforcer.notNull (aExpr, "Expression");
     m_bOperatorComesFirst = false;
   }
 
@@ -120,9 +120,9 @@ public class JOpUnary implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JOpUnary rhs = (JOpUnary) o;
-    return isEqual (m_sOperator, rhs.m_sOperator) &&
-           isEqual (m_aExpr, rhs.m_aExpr) &&
-           isEqual (m_bOperatorComesFirst, rhs.m_bOperatorComesFirst);
+    return EqualsHelper.equals (m_sOperator, rhs.m_sOperator) &&
+           EqualsHelper.equals (m_aExpr, rhs.m_aExpr) &&
+           EqualsHelper.equals (m_bOperatorComesFirst, rhs.m_bOperatorComesFirst);
   }
 
   @Override

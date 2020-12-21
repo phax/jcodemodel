@@ -51,7 +51,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCStringHelper;
+import com.helger.commons.string.StringHelper;
 
 /**
  * Writes all the source files under the specified file folder.
@@ -94,9 +94,7 @@ public class FileCodeWriter extends AbstractCodeWriter
     this (aTargetDir, DEFAULT_MARK_READ_ONLY, aEncoding, sNewLine);
   }
 
-  public FileCodeWriter (@Nonnull final File aTargetDir,
-                         final boolean bMarkReadOnly,
-                         @Nullable final Charset aEncoding) throws IOException
+  public FileCodeWriter (@Nonnull final File aTargetDir, final boolean bMarkReadOnly, @Nullable final Charset aEncoding) throws IOException
   {
     this (aTargetDir, bMarkReadOnly, aEncoding, JCMWriter.getDefaultNewLine ());
   }
@@ -124,7 +122,7 @@ public class FileCodeWriter extends AbstractCodeWriter
   protected File getFile (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
   {
     final File aDir;
-    if (JCStringHelper.hasNoText (sDirName))
+    if (StringHelper.hasNoText (sDirName))
       aDir = m_aTargetDir;
     else
       aDir = new File (m_aTargetDir, sDirName);

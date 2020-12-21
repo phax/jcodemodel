@@ -46,7 +46,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.jcodemodel.JPackage;
-import com.helger.jcodemodel.SourcePrintWriter;
 
 /**
  * Writes all the source files under the specified file folder and inserts a

@@ -49,6 +49,9 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.exceptions.JResourceAlreadyExistsException;
 import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.util.EFileSystemConvention;
 
@@ -63,7 +66,7 @@ public final class JResourceDirTest
   @Test
   public void testAbsolutePath () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     try
     {
       // this should fail
@@ -90,7 +93,7 @@ public final class JResourceDirTest
   @Test
   public void testMultipleSeparator () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     // works because of internal unifications
     cm.resourceDir ("usr//bla");
     cm.resourceDir ("usr////////////////////////////////////////////////////bla");
@@ -101,7 +104,7 @@ public final class JResourceDirTest
   @Test
   public void testDirectVsSubDir () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JResourceDir rd = cm.resourceDir ("a/b");
     assertNotNull (rd);
     final JResourceDir rd2 = cm.resourceDir ("a").subDir ("b");
@@ -113,7 +116,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionFilenameFilenameLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.LINUX);
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("File1", StandardCharsets.UTF_8, "bla"));
     try
     {
@@ -132,7 +135,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionFilenameFilenameWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.WINDOWS);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("File1", StandardCharsets.UTF_8, "bla"));
     try
     {
@@ -159,7 +162,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionFilenameDirNameLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.LINUX);
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("name", StandardCharsets.UTF_8, "bla"));
     try
     {
@@ -178,7 +181,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionFilenameDirNameWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.WINDOWS);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("name", StandardCharsets.UTF_8, "bla"));
     try
     {
@@ -205,7 +208,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionFilenameClassNameLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.LINUX);
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("Name.java", StandardCharsets.UTF_8, "bla"));
     try
     {
@@ -224,7 +227,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionFilenameClassNameWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.WINDOWS);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm.resourceDir ("my").addResourceFile (JTextFile.createFully ("Name.java", StandardCharsets.UTF_8, "bla"));
     try
     {
@@ -251,7 +254,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionClassNameFilenameLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.LINUX);
     cm._package ("my")._class (JMod.PUBLIC, "Name");
     try
     {
@@ -270,7 +273,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionClassNameFilenameWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.WINDOWS);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm._package ("my")._class (JMod.PUBLIC, "Name");
     try
     {
@@ -297,7 +300,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionClassNameDirNameLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.LINUX);
     cm._package ("my")._class (JMod.PUBLIC, "Name");
     try
     {
@@ -316,7 +319,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionClassNameDirNameWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.WINDOWS);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm._package ("my")._class (JMod.PUBLIC, "Name");
     try
     {
@@ -343,7 +346,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionDirNameFilenameLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.LINUX);
     cm.resourceDir ("my").subDir ("name");
     try
     {
@@ -362,7 +365,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionDirNameFilenameWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.WINDOWS);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm.resourceDir ("my").subDir ("name");
     try
     {
@@ -389,7 +392,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionDirNameClassNameLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.LINUX);
     cm.resourceDir ("my").subDir ("Name.java");
     try
     {
@@ -408,7 +411,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionDirNameClassNameWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.WINDOWS);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm.resourceDir ("my").subDir ("Name.java");
     try
     {
@@ -435,7 +438,7 @@ public final class JResourceDirTest
   @Test
   public void testNoCollisionDotInDir () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JResourceDir rd = cm.resourceDir ("my").subDir ("dir.has.Dots.java");
     assertNotNull (rd);
     assertEquals ("my/dir.has.Dots.java", rd.name ());
@@ -449,7 +452,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionIntermediateDirNameFilenameLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ();
     cm.resourceDir ("a/b/c");
     try
     {
@@ -468,7 +471,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionIntermediateDirNameFilenameWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.WINDOWS);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm.resourceDir ("a/b/c");
     try
     {
@@ -495,7 +498,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionIntermediateDirNameClassNameLinux () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.LINUX);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.LINUX);
     cm.resourceDir ("a/B.java/c");
     try
     {
@@ -514,7 +517,7 @@ public final class JResourceDirTest
   @Test
   public void testCollisionIntermediateDirNameClassNameWindows () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel (EFileSystemConvention.WINDOWS);
+    final JCodeModel cm = JCodeModel.createUnified ().withFileSystemConvention (EFileSystemConvention.WINDOWS);
     cm.resourceDir ("a/B.java/c");
     try
     {

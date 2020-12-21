@@ -79,9 +79,7 @@ public class JStaticFile extends AbstractJResourceFile
    *        <code>false</code> if this is a Java source file. <code>true</code>
    *        if this is other resource files.
    */
-  public JStaticFile (@Nonnull final ClassLoader aClassLoader,
-                      @Nonnull final String sResourceName,
-                      final boolean bIsResource)
+  public JStaticFile (@Nonnull final ClassLoader aClassLoader, @Nonnull final String sResourceName, final boolean bIsResource)
   {
     super (sResourceName.substring (sResourceName.lastIndexOf ('/') + 1));
     m_aClassLoader = aClassLoader;

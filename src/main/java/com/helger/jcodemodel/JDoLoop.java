@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Do loops
@@ -67,7 +67,7 @@ public class JDoLoop implements IJStatement
    */
   public JDoLoop (@Nonnull final IJExpression aTest)
   {
-    m_aTest = JCValueEnforcer.notNull (aTest, "Test");
+    m_aTest = ValueEnforcer.notNull (aTest, "Test");
   }
 
   @Nonnull

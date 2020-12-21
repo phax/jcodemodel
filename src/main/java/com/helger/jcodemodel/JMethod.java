@@ -52,8 +52,8 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.util.ClassNameComparator;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 
 /**
  * Java method.
@@ -84,7 +84,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * Set of exceptions that this method may throw. A set instance lazily
    * created.
    */
-  private Set <AbstractJClass> m_aThrows;
+  private final Set <AbstractJClass> m_aThrows = new TreeSet <> (ClassNameComparator.getInstance ());
 
   /**
    * JBlock of statements that makes up the body this method
@@ -130,9 +130,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
                      @Nonnull final AbstractJType aReturnType,
                      @Nonnull final String sName)
   {
-    JCValueEnforcer.notNull (aOwningClass, "OwningClass");
-    JCValueEnforcer.notNull (aReturnType, "ReturnType");
-    JCValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notNull (aOwningClass, "OwningClass");
+    ValueEnforcer.notNull (aReturnType, "ReturnType");
+    ValueEnforcer.notEmpty (sName, "Name");
     m_aMods = JMods.forMethod (nMods);
     m_aReturnType = aReturnType;
     m_sName = sName;
@@ -149,7 +149,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   protected JMethod (final int nMods, @Nonnull final JDefinedClass aClass)
   {
-    JCValueEnforcer.notNull (aClass, "Class");
+    ValueEnforcer.notNull (aClass, "Class");
     m_aMods = JMods.forMethod (nMods);
     m_aReturnType = null;
     m_sName = aClass.name ();
@@ -162,11 +162,15 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Nonnull
+  public Set <AbstractJClass> throwsMutable ()
+  {
+    return m_aThrows;
+  }
+
+  @Nonnull
   public Collection <AbstractJClass> getThrows ()
   {
-    if (m_aThrows == null)
-      return Collections.emptySet ();
-    return Collections.unmodifiableSet (m_aThrows);
+    return Collections.unmodifiableSet (throwsMutable ());
   }
 
   /**
@@ -179,8 +183,6 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JMethod _throws (@Nonnull final AbstractJClass aException)
   {
-    if (m_aThrows == null)
-      m_aThrows = new TreeSet <> (ClassNameComparator.getInstance ());
     m_aThrows.add (aException);
     return this;
   }
@@ -194,12 +196,23 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /**
    * Returns the list of variable of this method.
    *
+   * @return List of parameters of this method. This list is modifiable.
+   */
+  @Nonnull
+  public List <JVar> paramsMutable ()
+  {
+    return m_aParams;
+  }
+
+  /**
+   * Returns the list of variable of this method.
+   *
    * @return List of parameters of this method. This list is not modifiable.
    */
   @Nonnull
   public List <JVar> params ()
   {
-    return Collections.unmodifiableList (m_aParams);
+    return Collections.unmodifiableList (paramsMutable ());
   }
 
   @Nonnull
@@ -325,10 +338,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Nonnull
   public JVar varParam (final int nMods, @Nonnull final AbstractJType aType, @Nonnull final String sName)
   {
-    JCValueEnforcer.isFalse (hasVarArgs (),
-                             "Cannot have two varargs in a method,\n" +
-                                            "Check if varParam method of JMethod is" +
-                                            " invoked more than once");
+    ValueEnforcer.isFalse (hasVarArgs (),
+                           "Cannot have two varargs in a method,\n" + "Check if varParam method of JMethod is" + " invoked more than once");
 
     m_aVarParam = new JVar (JMods.forVar (nMods), aType.array (), sName, null);
     return m_aVarParam;
@@ -391,11 +402,17 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Nonnull
-  public Collection <JAnnotationUse> annotations ()
+  public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
       return Collections.emptyList ();
-    return Collections.unmodifiableList (m_aAnnotations);
+    return m_aAnnotations;
+  }
+
+  @Nonnull
+  public Collection <JAnnotationUse> annotations ()
+  {
+    return Collections.unmodifiableList (annotationsMutable ());
   }
 
   public String name ()
@@ -411,7 +428,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    */
   public void name (@Nonnull final String sName)
   {
-    JCValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notEmpty (sName, "Name");
     m_sName = sName;
   }
 
@@ -459,20 +476,6 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public JVar [] listParams ()
   {
     return m_aParams.toArray (new JVar [m_aParams.size ()]);
-  }
-
-  /**
-   * Returns the variable parameter
-   *
-   * @return If there's no parameter, null will be returned.
-   * @deprecated Use {@link #varParam()} instead.
-   */
-  @Nullable
-  @Deprecated
-  @ChangeInV4
-  public JVar listVarParam ()
-  {
-    return varParam ();
   }
 
   /**
@@ -573,14 +576,11 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       }
       for (final JAnnotationUse annotation : m_aVarParam.annotations ())
         f.generable (annotation).print (' ');
-      f.generable (m_aVarParam.mods ())
-       .generable (m_aVarParam.type ().elementType ())
-       .print ("... ")
-       .id (m_aVarParam.name ());
+      f.generable (m_aVarParam.mods ()).generable (m_aVarParam.type ().elementType ()).print ("... ").id (m_aVarParam.name ());
     }
 
     f.outdent ().print (')');
-    if (m_aThrows != null && !m_aThrows.isEmpty ())
+    if (!m_aThrows.isEmpty ())
     {
       f.newline ().indent ().print ("throws").generable (m_aThrows).newline ().outdent ();
     }

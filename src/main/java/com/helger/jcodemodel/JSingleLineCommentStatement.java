@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * This class represents a special single-comment "statement"! This is not an
@@ -86,7 +86,7 @@ public class JSingleLineCommentStatement implements IJStatement
    */
   public final void comment (@Nonnull final String sComment)
   {
-    JCValueEnforcer.notNull (sComment, "Comment");
+    ValueEnforcer.notNull (sComment, "Comment");
     m_sComment = sComment;
   }
 

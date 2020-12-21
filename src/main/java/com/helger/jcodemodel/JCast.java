@@ -40,10 +40,11 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
+
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * A cast operation.
@@ -99,7 +100,7 @@ public class JCast implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JCast rhs = (JCast) o;
-    return isEqual (m_aType.fullName (), rhs.m_aType.fullName ()) && isEqual (m_aObject, rhs.m_aObject);
+    return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) && EqualsHelper.equals (m_aObject, rhs.m_aObject);
   }
 
   @Override

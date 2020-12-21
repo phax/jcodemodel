@@ -44,7 +44,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -53,7 +52,7 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Represents an annotation on a program element.
@@ -76,11 +75,11 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   /**
    * Map of member aValues.
    */
-  private Map <String, AbstractJAnnotationValue> m_aMemberValues;
+  private final Map <String, AbstractJAnnotationValue> m_aMemberValues = new LinkedHashMap <> ();
 
   public JAnnotationUse (@Nonnull final AbstractJClass aAnnotationClass)
   {
-    m_aAnnotationClass = JCValueEnforcer.notNull (aAnnotationClass, "AnnotationClass");
+    m_aAnnotationClass = ValueEnforcer.notNull (aAnnotationClass, "AnnotationClass");
   }
 
   @Nonnull
@@ -96,20 +95,26 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
+  public Map <String, AbstractJAnnotationValue> annotationMembersMutable ()
+  {
+    return m_aMemberValues;
+  }
+
+  @Nonnull
   public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
-    return m_aMemberValues == null ? new HashMap <> () : Collections.unmodifiableMap (m_aMemberValues);
+    return Collections.unmodifiableMap (annotationMembersMutable ());
   }
 
   public boolean hasAnnotationMembers ()
   {
-    return m_aMemberValues != null && !m_aMemberValues.isEmpty ();
+    return !m_aMemberValues.isEmpty ();
   }
 
   @Nullable
   public AbstractJAnnotationValue getParam (@Nullable final String sName)
   {
-    return m_aMemberValues == null ? null : m_aMemberValues.get (sName);
+    return m_aMemberValues.get (sName);
   }
 
   @SuppressWarnings ("unchecked")
@@ -192,16 +197,13 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @Nonnull
-  private JAnnotationUse _addValue (@Nonnull final String sName,
-                                    @Nonnull final AbstractJAnnotationValue aAnnotationValue)
+  private JAnnotationUse _addValue (@Nonnull final String sName, @Nonnull final AbstractJAnnotationValue aAnnotationValue)
   {
-    JCValueEnforcer.notEmpty (sName, "Name");
-    JCValueEnforcer.notNull (aAnnotationValue, "AnnotationValue");
+    ValueEnforcer.notEmpty (sName, "Name");
+    ValueEnforcer.notNull (aAnnotationValue, "AnnotationValue");
 
     // Use ordered map to keep the code generation the same on any JVM.
     // Lazily created.
-    if (m_aMemberValues == null)
-      m_aMemberValues = new LinkedHashMap <> ();
     m_aMemberValues.put (sName, aAnnotationValue);
 
     return this;
@@ -769,8 +771,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    */
   @Nonnull
-  public JAnnotationUse annotationParam (@Nonnull final String sName,
-                                         @Nonnull final Class <? extends Annotation> aValue)
+  public JAnnotationUse annotationParam (@Nonnull final String sName, @Nonnull final Class <? extends Annotation> aValue)
   {
     return annotationParam (sName, owner ().ref (aValue));
   }
@@ -808,7 +809,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   public void generate (final IJFormatter f)
   {
     f.print ('@').generable (m_aAnnotationClass);
-    if (m_aMemberValues != null && !m_aMemberValues.isEmpty ())
+    if (!m_aMemberValues.isEmpty ())
     {
       f.print ('(');
       if (isDefaultOnly ())

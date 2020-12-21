@@ -38,37 +38,29 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.exceptions;
 
 import javax.annotation.Nonnull;
-
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import javax.annotation.Nullable;
 
 /**
- * Indicates that the class is already created.<br>
- * Up to and including v3.3.0 this was directly derived from Exception
+ * Base class for all code model related exception.
  *
- * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
+ * @author Philip Helger
+ * @since 3.4.0
  */
-@ChangeInV4 ("moved to exceptions package")
-public class JClassAlreadyExistsException extends JCodeModelException
+public class JCodeModelException extends Exception
 {
-  private final AbstractJClass m_aExisting;
+  protected JCodeModelException ()
+  {}
 
-  public JClassAlreadyExistsException (@Nonnull final AbstractJClass aExisting)
+  public JCodeModelException (@Nonnull final String sMsg)
   {
-    JCValueEnforcer.notNull (aExisting, "ExistingClass");
-    m_aExisting = aExisting;
+    super (sMsg);
   }
 
-  /**
-   * Gets a reference to the existing {@link JDefinedClass}.
-   *
-   * @return This method always return non-null valid object.
-   */
-  @Nonnull
-  public AbstractJClass getExistingClass ()
+  public JCodeModelException (@Nonnull final String sMsg, @Nullable final Throwable aCause)
   {
-    return m_aExisting;
+    super (sMsg, aCause);
   }
 }

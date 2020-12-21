@@ -40,7 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import java.lang.annotation.Annotation;
@@ -51,7 +50,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * Enum Constant. When used as an {@link IJExpression}, this object represents a
@@ -88,8 +88,8 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
 
   protected JEnumConstant (@Nonnull final AbstractJClass aType, @Nonnull final String sName)
   {
-    m_aType = JCValueEnforcer.notNull (aType, "Type");
-    m_sName = JCValueEnforcer.notNull (sName, "Name");
+    m_aType = ValueEnforcer.notNull (aType, "Type");
+    m_sName = ValueEnforcer.notNull (sName, "Name");
   }
 
   @Nonnull
@@ -117,7 +117,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
   @Nonnull
   public JEnumConstant arg (@Nonnull final IJExpression aArg)
   {
-    JCValueEnforcer.notNull (aArg, "Arg");
+    ValueEnforcer.notNull (aArg, "Arg");
     if (m_aArgs == null)
       m_aArgs = new ArrayList <> ();
     m_aArgs.add (aArg);
@@ -194,15 +194,18 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
     return annotate (m_aType.owner ().ref (aClazz));
   }
 
-  /**
-   * {@link IJAnnotatable#annotations()}
-   */
   @Nonnull
-  public Collection <JAnnotationUse> annotations ()
+  public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
-    return Collections.unmodifiableList (m_aAnnotations);
+    return m_aAnnotations;
+  }
+
+  @Nonnull
+  public Collection <JAnnotationUse> annotations ()
+  {
+    return Collections.unmodifiableList (annotationsMutable ());
   }
 
   public void declare (@Nonnull final IJFormatter f)
@@ -230,7 +233,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
     if (o == null || getClass () != o.getClass ())
       return false;
     final JEnumConstant rhs = (JEnumConstant) o;
-    return isEqual (m_aType.fullName (), rhs.m_aType.fullName ()) && isEqual (m_sName, rhs.m_sName);
+    return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) && EqualsHelper.equals (m_sName, rhs.m_sName);
   }
 
   @Override

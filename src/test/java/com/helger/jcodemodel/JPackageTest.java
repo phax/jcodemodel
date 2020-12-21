@@ -56,7 +56,7 @@ public final class JPackageTest
   public void testGetParent () throws Exception
   {
     // Create JCodeModel
-    final JCodeModel aCM = new JCodeModel ();
+    final JCodeModel aCM = JCodeModel.createUnified ();
 
     // Reflect into class
     final AbstractJClass wClass = aCM.ref (JExpr.class);
@@ -73,7 +73,7 @@ public final class JPackageTest
   @Test
   public void testInvalidNamesAnyCase ()
   {
-    final JCodeModel aCM = new JCodeModel ();
+    final JCodeModel aCM = JCodeModel.createUnified ();
 
     assertFalse (JPackage.isForcePackageNameLowercase ());
 
@@ -201,7 +201,7 @@ public final class JPackageTest
   @Test
   public void testInvalidNamesLowerCase ()
   {
-    final JCodeModel aCM = new JCodeModel ();
+    final JCodeModel aCM = JCodeModel.createUnified ();
 
     assertFalse (JPackage.isForcePackageNameLowercase ());
     try

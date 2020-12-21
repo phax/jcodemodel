@@ -51,9 +51,8 @@ import java.nio.charset.Charset;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.JPackage;
-import com.helger.jcodemodel.SourcePrintWriter;
-import com.helger.jcodemodel.util.JCValueEnforcer;
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
 /**
@@ -71,7 +70,7 @@ public abstract class AbstractCodeWriter implements Closeable
 
   protected AbstractCodeWriter (@Nullable final Charset aEncoding, @Nonnull final String sNewLine)
   {
-    JCValueEnforcer.notNull (sNewLine, "NewLine");
+    ValueEnforcer.notNull (sNewLine, "NewLine");
 
     m_aEncoding = aEncoding;
     m_sNewLine = sNewLine;
@@ -140,8 +139,7 @@ public abstract class AbstractCodeWriter implements Closeable
    *         On IO error
    */
   @Nonnull
-  public final OutputStream openBinary (@Nonnull final JPackage aPackage,
-                                        @Nonnull final String sFilename) throws IOException
+  public final OutputStream openBinary (@Nonnull final JPackage aPackage, @Nonnull final String sFilename) throws IOException
   {
     return openBinary (toDirName (aPackage), sFilename);
   }
@@ -162,12 +160,10 @@ public abstract class AbstractCodeWriter implements Closeable
    *         On IO error
    */
   @Nonnull
-  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage,
-                                       @Nonnull final String sFilename) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage, @Nonnull final String sFilename) throws IOException
   {
     final OutputStream aOS = openBinary (aPackage, sFilename);
-    final OutputStreamWriter aOSW = m_aEncoding != null ? new OutputStreamWriter (aOS, m_aEncoding)
-                                                        : new OutputStreamWriter (aOS);
+    final OutputStreamWriter aOSW = m_aEncoding != null ? new OutputStreamWriter (aOS, m_aEncoding) : new OutputStreamWriter (aOS);
 
     // create writer
     Writer aWriter;

@@ -40,19 +40,17 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
-import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
-
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.hashcode.HashCodeGenerator;
 
 /**
  * Variables and fields.
@@ -101,7 +99,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
                @Nonnull final String sName,
                @Nullable final IJExpression aInitExpr)
   {
-    JCValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
+    ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_aMods = aMods;
     m_aType = aType;
     m_sName = sName;
@@ -150,7 +148,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    */
   public void name (@Nonnull final String sName)
   {
-    JCValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
+    ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_sName = sName;
   }
 
@@ -185,7 +183,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   @Nonnull
   public AbstractJType type (@Nonnull final AbstractJType aNewType)
   {
-    JCValueEnforcer.notNull (aNewType, "NewType");
+    ValueEnforcer.notNull (aNewType, "NewType");
     final AbstractJType aOldType = m_aType;
     m_aType = aNewType;
     return aOldType;
@@ -222,11 +220,17 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   }
 
   @Nonnull
-  public Collection <JAnnotationUse> annotations ()
+  public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
-    return Collections.unmodifiableList (m_aAnnotations);
+    return m_aAnnotations;
+  }
+
+  @Nonnull
+  public List <JAnnotationUse> annotations ()
+  {
+    return Collections.unmodifiableList (annotationsMutable ());
   }
 
   protected boolean isAnnotated ()
@@ -271,12 +275,12 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
     if (o == null || getClass () != o.getClass ())
       return false;
     final JVar rhs = (JVar) o;
-    return isEqual (m_sName, rhs.m_sName);
+    return EqualsHelper.equals (m_sName, rhs.m_sName);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, m_sName);
+    return new HashCodeGenerator (this).append (m_sName).getHashCode ();
   }
 }

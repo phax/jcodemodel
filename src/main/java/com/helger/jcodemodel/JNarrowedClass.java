@@ -49,7 +49,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Represents X&lt;Y&gt;. TODO: consider separating the decl and the use.
@@ -80,8 +80,8 @@ public class JNarrowedClass extends AbstractJClass
   public JNarrowedClass (@Nonnull final AbstractJClass aBasis, @Nonnull final List <? extends AbstractJClass> aArgs)
   {
     super (aBasis.owner ());
-    JCValueEnforcer.isFalse (aBasis instanceof JNarrowedClass, () -> "aBasis may not be a narrowed class: " + aBasis);
-    JCValueEnforcer.notNull (aArgs, "NarrowingClasses");
+    ValueEnforcer.isFalse (aBasis instanceof JNarrowedClass, () -> "aBasis may not be a narrowed class: " + aBasis);
+    ValueEnforcer.notNull (aArgs, "NarrowingClasses");
     m_aBasis = aBasis;
     m_aArgs = aArgs;
   }
@@ -106,7 +106,7 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public JNarrowedClass narrow (@Nonnull final AbstractJClass aClazz)
   {
-    JCValueEnforcer.notNull (aClazz, "NarrowingClass");
+    ValueEnforcer.notNull (aClazz, "NarrowingClass");
 
     final List <AbstractJClass> newArgs = new ArrayList <> (m_aArgs);
     newArgs.add (aClazz);
@@ -116,7 +116,7 @@ public class JNarrowedClass extends AbstractJClass
   @Override
   public JNarrowedClass narrow (@Nonnull final AbstractJClass... aClazz)
   {
-    JCValueEnforcer.notNull (aClazz, "NarrowingClass");
+    ValueEnforcer.notNull (aClazz, "NarrowingClass");
 
     final List <AbstractJClass> newArgs = new ArrayList <> (m_aArgs);
     for (final AbstractJClass aClass : aClazz)

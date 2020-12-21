@@ -57,7 +57,7 @@ public final class JDirectClassTest
   @Test
   public void testBasic () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final JDirectClass rClassId = cm.directClass ("id.aa.R")._class ("id");
     assertEquals ("id", rClassId.name ());
@@ -84,7 +84,7 @@ public final class JDirectClassTest
   @Test
   public void testGenerics () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     final AbstractJClass aNarrowedClass = (AbstractJClass) cm.parseType ("com.test.GenericFragmentArguments<S,P>");
     assertTrue (aNarrowedClass instanceof JNarrowedClass);

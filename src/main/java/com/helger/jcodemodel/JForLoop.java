@@ -47,14 +47,14 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * For statement
  */
 public class JForLoop implements IJStatement
 {
-  private final List <Object> m_aInitExprs = new ArrayList <> ();
+  private final List <IJObject> m_aInitExprs = new ArrayList <> ();
   private IJExpression m_aTestExpr;
   private final List <IJExpression> m_aUpdateExprs = new ArrayList <> ();
   private JBlock m_aBody;
@@ -74,9 +74,7 @@ public class JForLoop implements IJStatement
   }
 
   @Nonnull
-  public JVar init (@Nonnull final AbstractJType aType,
-                    @Nonnull final String sVarName,
-                    @Nullable final IJExpression aInitExpr)
+  public JVar init (@Nonnull final AbstractJType aType, @Nonnull final String sVarName, @Nullable final IJExpression aInitExpr)
   {
     return init (JMod.NONE, aType, sVarName, aInitExpr);
   }
@@ -91,9 +89,18 @@ public class JForLoop implements IJStatement
    * @return List of {@link IJExpression} or {@link JVar}
    */
   @Nonnull
-  public List <Object> inits ()
+  public List <IJObject> initsMutable ()
   {
-    return Collections.unmodifiableList (m_aInitExprs);
+    return m_aInitExprs;
+  }
+
+  /**
+   * @return List of {@link IJExpression} or {@link JVar}
+   */
+  @Nonnull
+  public List <IJObject> inits ()
+  {
+    return Collections.unmodifiableList (initsMutable ());
   }
 
   public void test (@Nullable final IJExpression aTestExpr)
@@ -109,14 +116,20 @@ public class JForLoop implements IJStatement
 
   public void update (@Nonnull final IJExpression aUpdate)
   {
-    JCValueEnforcer.notNull (aUpdate, "Update");
+    ValueEnforcer.notNull (aUpdate, "Update");
     m_aUpdateExprs.add (aUpdate);
+  }
+
+  @Nonnull
+  public List <IJExpression> updatesMutable ()
+  {
+    return m_aUpdateExprs;
   }
 
   @Nonnull
   public List <IJExpression> updates ()
   {
-    return Collections.unmodifiableList (m_aUpdateExprs);
+    return Collections.unmodifiableList (updatesMutable ());
   }
 
   @Nonnull

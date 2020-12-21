@@ -40,13 +40,13 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * Field Reference
@@ -139,8 +139,8 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
                      @Nullable final JVar aVar,
                      final boolean bExplicitThis)
   {
-    JCValueEnforcer.isTrue (sName == null || sName.indexOf ('.') < 0, () -> "Field name contains '.': " + sName);
-    JCValueEnforcer.isFalse (sName == null && aVar == null, "name or var must be present");
+    ValueEnforcer.isTrue (sName == null || sName.indexOf ('.') < 0, () -> "Field name contains '.': " + sName);
+    ValueEnforcer.isFalse (sName == null && aVar == null, "name or var must be present");
     m_aOwner = aOwner;
     m_aObject = aObject;
     m_sName = sName;
@@ -214,9 +214,9 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
     if (o == null || getClass () != o.getClass ())
       return false;
     final JFieldRef rhs = (JFieldRef) o;
-    return isEqual (m_aObject, rhs.m_aObject) &&
-           isEqual (name (), rhs.name ()) &&
-           isEqual (m_bExplicitThis, rhs.m_bExplicitThis);
+    return EqualsHelper.equals (m_aObject, rhs.m_aObject) &&
+           EqualsHelper.equals (name (), rhs.name ()) &&
+           EqualsHelper.equals (m_bExplicitThis, rhs.m_bExplicitThis);
   }
 
   @Override

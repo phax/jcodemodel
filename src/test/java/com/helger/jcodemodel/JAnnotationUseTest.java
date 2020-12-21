@@ -45,6 +45,7 @@ import java.lang.annotation.Inherited;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 import com.helger.jcodemodel.writer.JCMWriter;
 
@@ -58,38 +59,31 @@ public final class JAnnotationUseTest
   @Test
   public void generatesGenericParam () throws JCodeModelException
   {
-    final JCodeModel codeModel = new JCodeModel ();
+    final JCodeModel codeModel = JCodeModel.createUnified ();
     final JDefinedClass testClass = codeModel._class ("Test");
     final JAnnotationUse suppressWarningAnnotation = testClass.annotate (SuppressWarnings.class);
     suppressWarningAnnotation.param (JAnnotationUse.SPECIAL_KEY_VALUE, "unused");
 
-    Assert.assertEquals ("@java.lang.SuppressWarnings(\"unused\")",
-                         CodeModelTestsHelper.generate (suppressWarningAnnotation));
+    Assert.assertEquals ("@java.lang.SuppressWarnings(\"unused\")", CodeModelTestsHelper.generate (suppressWarningAnnotation));
   }
 
   @Test
   public void generatesGenericParam2 () throws JCodeModelException
   {
-    final JCodeModel codeModel = new JCodeModel ();
+    final JCodeModel codeModel = JCodeModel.createUnified ();
     final JDefinedClass testClass = codeModel._class ("Test");
     final JAnnotationUse suppressWarningAnnotation = testClass.annotate (SuppressWarnings.class);
     suppressWarningAnnotation.paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, "unused", "deprecation");
 
     final String sCRLF = JCMWriter.getDefaultNewLine ();
-    Assert.assertEquals ("@java.lang.SuppressWarnings({" +
-                         sCRLF +
-                         "    \"unused\"," +
-                         sCRLF +
-                         "    \"deprecation\"" +
-                         sCRLF +
-                         "})",
+    Assert.assertEquals ("@java.lang.SuppressWarnings({" + sCRLF + "    \"unused\"," + sCRLF + "    \"deprecation\"" + sCRLF + "})",
                          CodeModelTestsHelper.generate (suppressWarningAnnotation));
   }
 
   @Test
   public void testOnMethodAndField () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass cls = cm._class ("Test");
     final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
     m.annotate (Deprecated.class);
@@ -103,7 +97,7 @@ public final class JAnnotationUseTest
   @Test
   public void testPackageAnnotation () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
     cm._package ("foo").annotate (Inherited.class);
     CodeModelTestsHelper.parseCodeModel (cm);
   }

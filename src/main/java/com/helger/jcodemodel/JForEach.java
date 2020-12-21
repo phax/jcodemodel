@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import javax.annotation.Nonnull;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * ForEach Statement This will generate the code for statement based on the new
@@ -64,10 +64,10 @@ public class JForEach implements IJStatement
                    @Nonnull final String sVarName,
                    @Nonnull final IJExpression aCollection)
   {
-    JCValueEnforcer.notNull (aMods, "Mods");
-    JCValueEnforcer.notNull (aVarType, "VarType");
-    JCValueEnforcer.notNull (sVarName, "VarName");
-    JCValueEnforcer.notNull (aCollection, "Collection");
+    ValueEnforcer.notNull (aMods, "Mods");
+    ValueEnforcer.notNull (aVarType, "VarType");
+    ValueEnforcer.notNull (sVarName, "VarName");
+    ValueEnforcer.notNull (aCollection, "Collection");
 
     m_aMods = aMods;
     m_aType = aVarType;

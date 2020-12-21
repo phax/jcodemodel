@@ -49,7 +49,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Type variable used to declare generics.
@@ -65,7 +65,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   protected JTypeVar (@Nonnull final JCodeModel aOwner, @Nonnull final String sName)
   {
     super (aOwner);
-    m_sName = JCValueEnforcer.notEmpty (sName, "Name");
+    m_sName = ValueEnforcer.notEmpty (sName, "Name");
   }
 
   @Override
@@ -105,7 +105,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Nonnull
   public JTypeVar bound (@Nonnull final AbstractJClass aBound)
   {
-    JCValueEnforcer.notNull (aBound, "Bound");
+    ValueEnforcer.notNull (aBound, "Bound");
     m_aBounds.add (aBound);
     return this;
   }
@@ -116,9 +116,20 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    * @return this
    */
   @Nonnull
+  public List <AbstractJClass> boundsMutable ()
+  {
+    return m_aBounds;
+  }
+
+  /**
+   * Return all bounds of this type-parameter.
+   *
+   * @return this
+   */
+  @Nonnull
   public Collection <? extends AbstractJClass> bounds ()
   {
-    return Collections.unmodifiableList (new ArrayList <> (m_aBounds));
+    return Collections.unmodifiableList (boundsMutable ());
   }
 
   /**
@@ -131,7 +142,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   @Nonnull
   public JTypeVar boundLike (@Nonnull final JTypeVar aSourceTypeParameter)
   {
-    JCValueEnforcer.notNull (aSourceTypeParameter, "sourceTypeParameter");
+    ValueEnforcer.notNull (aSourceTypeParameter, "sourceTypeParameter");
 
     for (final AbstractJClass bound : aSourceTypeParameter.bounds ())
       bound (bound);

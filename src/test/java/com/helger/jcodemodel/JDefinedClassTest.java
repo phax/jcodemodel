@@ -48,6 +48,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
@@ -58,7 +59,62 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
 public final class JDefinedClassTest
 {
   @Test
-  public void generatesInstanceInit () throws Exception
+  public void testSimpleClassWithGetterAndSetter () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass jClass = cm._package ("org.example")._class ("MyFirstClass");
+    final JFieldVar jField = jClass.field (JMod.PRIVATE, String.class, "text");
+
+    // getter
+    final JMethod jGet = jClass.method (JMod.PUBLIC, String.class, "getText");
+    jGet.body ()._return (jField);
+
+    // setter
+    final JMethod jSet = jClass.method (JMod.PUBLIC, cm.VOID, "setText");
+    final JVar jParam = jSet.param (String.class, "text");
+    jSet.body ().assign (JExpr._this ().ref (jField), jParam);
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testSimpleClassWithCtorGetterAndSetter () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass jClass = cm._package ("org.example")._class ("MySecondClass");
+    jClass.javadoc ().add ("This is my second class comment");
+    jClass.javadoc ().addAuthor ().add ("JCodeModel authors");
+
+    final JFieldVar jField = jClass.field (JMod.PRIVATE, String.class, "text");
+
+    // Empty constructor
+    JMethod jCtor = jClass.constructor (JMod.PUBLIC);
+    jCtor.javadoc ().add ("This is a no-argument constructor");
+
+    // Constructor with Parameter
+    jCtor = jClass.constructor (JMod.PUBLIC);
+    JVar jParam = jCtor.param (String.class, "text");
+    jCtor.body ().assign (JExpr._this ().ref (jField), jParam);
+    jCtor.javadoc ().add ("This is the constructor with a parameter");
+    jCtor.javadoc ().addParam (jParam).add ("The new text to be set");
+
+    // getter
+    final JMethod jGet = jClass.method (JMod.PUBLIC, String.class, "getText");
+    jGet.body ()._return (jField);
+    jGet.javadoc ().add ("This is a getter");
+    jGet.javadoc ().addReturn ().add ("The text value");
+
+    // setter
+    final JMethod jSet = jClass.method (JMod.PUBLIC, cm.VOID, "setText");
+    jParam = jSet.param (String.class, "text");
+    jSet.body ().assign (JExpr._this ().ref (jField), jParam);
+    jSet.javadoc ().add ("This is a setter");
+    jSet.javadoc ().addParam (jParam).add ("The new text to be set");
+
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testGeneratesInstanceInit () throws Exception
   {
     /**
      * <pre>
@@ -71,11 +127,11 @@ public final class JDefinedClassTest
      *
      * class MyClass
      * {
-     *   private String myField;
+     * private String myField;
      *
-     *   {
-     *     this.myField = "myValue";
-     *   }
+     * {
+     * this.myField = "myValue";
+     * }
      * }
      * </pre>
      */
@@ -89,22 +145,20 @@ public final class JDefinedClassTest
     final CompilationUnit aCU = CodeModelTestsHelper.parseAndGetSingleClassCodeModel (cm);
     final TypeDeclaration <?> typeDeclaration = aCU.getTypes ().get (0);
     final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
-    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
-                                                                                                   .get (1);
+    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ().get (1);
     assertNotNull (initializerDeclaration);
   }
 
   @Test
   public void testCallSuper () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
     // Base class
     final JDefinedClass c1 = cm._package ("myPackage")._class (0, "BaseClass");
     final JMethod con1 = c1.constructor (JMod.PUBLIC);
     final JVar p1 = con1.param (JMod.FINAL, cm.ref (String.class), "str");
-    con1.body ()
-        .add (new JFieldRef (cm.ref (System.class), "out").invoke ("println").arg (JExpr.lit ("Got ").plus (p1)));
+    con1.body ().add (new JFieldRef (cm.ref (System.class), "out").invoke ("println").arg (JExpr.lit ("Got ").plus (p1)));
 
     // Derived class
     final JDefinedClass c2 = cm._package ("myPackage")._class (0, "DerivedClass");

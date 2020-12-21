@@ -40,13 +40,13 @@
  */
 package com.helger.jcodemodel;
 
-import static com.helger.jcodemodel.util.JCEqualsHelper.isEqual;
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
+import com.helger.commons.equals.EqualsHelper;
 
 /**
  * A field that can have a {@link JDocComment} associated with it
@@ -81,7 +81,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
                        @Nullable final IJExpression aInit)
   {
     super (aMods, aType, sName, aInit);
-    m_aOwnerClass = JCValueEnforcer.notNull (aOwnerClass, "OwnerClass");
+    m_aOwnerClass = ValueEnforcer.notNull (aOwnerClass, "OwnerClass");
   }
 
   /**
@@ -97,8 +97,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
   public void name (@Nonnull final String sNewName)
   {
     // make sure that the new name is available
-    JCValueEnforcer.isFalse (m_aOwnerClass.containsField (sNewName),
-                             () -> "Field name '" + sNewName + "' is already in use");
+    ValueEnforcer.isFalse (m_aOwnerClass.containsField (sNewName), () -> "Field name '" + sNewName + "' is already in use");
 
     final String sOldName = name ();
     super.name (sNewName);
@@ -147,7 +146,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
     if (!super.equals (o))
       return false;
     final JFieldVar rhs = (JFieldVar) o;
-    return isEqual (m_aOwnerClass, rhs.m_aOwnerClass);
+    return EqualsHelper.equals (m_aOwnerClass, rhs.m_aOwnerClass);
   }
 
   @Override

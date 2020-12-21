@@ -135,13 +135,10 @@ public class JCodeModelJavaxLangModelAdapter
    *         already exists.
    */
   @Nonnull
-  public JDefinedClass getClass (@Nonnull final TypeElement element,
-                                 @Nonnull final ErrorTypePolicy policy) throws ErrorTypeFound,
-                                                                        CodeModelBuildingException
+  public JDefinedClass getClass (@Nonnull final TypeElement element, @Nonnull final ErrorTypePolicy policy) throws ErrorTypeFound,
+                                                                                                            CodeModelBuildingException
   {
-    final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (m_aCodeModel,
-                                                                                                 m_aElementUtils,
-                                                                                                 policy);
+    final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (m_aCodeModel, m_aElementUtils, policy);
     return errorTypeDecision.getClass (element);
   }
 }

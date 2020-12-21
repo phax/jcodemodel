@@ -50,7 +50,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.helger.jcodemodel.util.JCValueEnforcer;
+import com.helger.commons.ValueEnforcer;
 
 /**
  * Represents a Java reference type, such as a class, an interface, an enum, an
@@ -71,7 +71,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   protected AbstractJClass (@Nonnull final JCodeModel aOwner)
   {
-    m_aOwner = JCValueEnforcer.notNull (aOwner, "Owner");
+    m_aOwner = ValueEnforcer.notNull (aOwner, "Owner");
   }
 
   /**
@@ -423,8 +423,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables,
-                                                      @Nonnull List <? extends AbstractJClass> aBindings);
+  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables, @Nonnull List <? extends AbstractJClass> aBindings);
 
   /**
    * Get all inner classes of this class.

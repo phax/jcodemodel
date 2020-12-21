@@ -59,15 +59,12 @@ public final class Issue74FuncTest
   @Test
   public void testIssue () throws Exception
   {
-    final JCodeModel cm = new JCodeModel ();
+    final JCodeModel cm = JCodeModel.createUnified ();
+    cm.resourceDir ("META-INF/services/").addResourceFile (JTextFile.createFully ("Interface1", StandardCharsets.UTF_8, "Testing\n"));
     cm.resourceDir ("META-INF/services/")
-      .addResourceFile (JTextFile.createFully ("Interface1", StandardCharsets.UTF_8, "Testing\n"));
-    cm.resourceDir ("META-INF/services/")
-      .addResourceFile (new JTextFile ("Interface2", StandardCharsets.UTF_8))
-      .setContents ("Testing again\n");
+      .addResourceFile (new JTextFile ("Interface2", StandardCharsets.UTF_8).contents ("Testing again\n"));
     cm.resourceDir ("META-INF/services/another/and/so/on/and/so/forth")
-      .addResourceFile (new JTextFile ("Interface3", StandardCharsets.UTF_8))
-      .setContents ("Testing 3\n");
+      .addResourceFile (new JTextFile ("Interface3", StandardCharsets.UTF_8).contents ("Testing 3\n"));
 
     new JCMWriter (cm).build (new SingleStreamCodeWriter (System.out), new SingleStreamCodeWriter (System.out));
   }

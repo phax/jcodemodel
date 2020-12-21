@@ -49,6 +49,9 @@ import java.util.TreeMap;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
+
 /**
  * A generated Java class/interface/enum/annotation<br>
  * This class models a declaration, and since a declaration can be always used
@@ -58,8 +61,7 @@ import javax.annotation.Nullable;
  * @param <CLASSTYPE>
  *        Implementation type
  */
-public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends
-                                              AbstractJClass implements
+public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends AbstractJClass implements
                                               IJClassContainer <CLASSTYPE>
 {
   /**
@@ -214,9 +216,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   }
 
   @Nonnull
-  protected abstract CLASSTYPE createInnerClass (final int nMods,
-                                                 @Nonnull final EClassType eClassType,
-                                                 @Nonnull final String sName);
+  protected abstract CLASSTYPE createInnerClass (final int nMods, @Nonnull final EClassType eClassType, @Nonnull final String sName);
 
   @Nonnull
   public final CLASSTYPE _class (final int nMods,

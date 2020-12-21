@@ -40,14 +40,13 @@
  */
 package com.helger.jcodemodel.util;
 
-import java.io.File;
 import java.util.Locale;
 
-import javax.annotation.CheckReturnValue;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import com.helger.jcodemodel.ChangeInV4;
+import com.helger.commons.io.file.FilenameHelper;
+import com.helger.commons.string.StringHelper;
 
 /**
  * All kind of file name handling stuff. This class gives you platform
@@ -58,35 +57,6 @@ import com.helger.jcodemodel.ChangeInV4;
 @Immutable
 public final class JCFilenameHelper
 {
-  /** Special name of the current path. Unix and Windows */
-  public static final String PATH_CURRENT = ".";
-
-  /** Special name of the parent path. Unix and Windows */
-  public static final String PATH_PARENT = "..";
-
-  /** The Unix path separator character. */
-  public static final char UNIX_SEPARATOR = '/';
-
-  /** The Unix path separator string. */
-  public static final String UNIX_SEPARATOR_STR = Character.toString (UNIX_SEPARATOR);
-
-  /** The Windows separator character. */
-  public static final char WINDOWS_SEPARATOR = '\\';
-
-  /** The Windows separator string. */
-  public static final String WINDOWS_SEPARATOR_STR = Character.toString (WINDOWS_SEPARATOR);
-
-  /** The prefix to identify UNC paths on Unix based systems */
-  public static final String UNIX_UNC_PREFIX = "//";
-
-  /** The prefix to identify UNC paths on Windows based systems */
-  public static final String WINDOWS_UNC_PREFIX = "\\\\";
-
-  /** The prefix to identify local UNC paths on Windows based systems */
-  public static final String WINDOWS_UNC_PREFIX_LOCAL1 = "\\\\.\\";
-  /** The prefix to identify local UNC paths on Windows based systems */
-  public static final String WINDOWS_UNC_PREFIX_LOCAL2 = "\\\\?\\";
-
   /**
    * Illegal characters in Windows file names.<br>
    * see http://en.wikipedia.org/wiki/Filename
@@ -128,67 +98,6 @@ public final class JCFilenameHelper
   private JCFilenameHelper ()
   {}
 
-  @ChangeInV4
-  static boolean isFileSystemCaseSensitive ()
-  {
-    try
-    {
-      // let the system property override, in case the user really
-      // wants to override.
-      if (System.getProperty ("com.sun.codemodel.FileSystemCaseSensitive") != null)
-      {
-        System.err.println ("Dear JCodeModel user: the currently defined system property 'com.sun.codemodel.FileSystemCaseSensitive' will not be evaluated in the upcoming v4. Use JCodeMode.setFileSystemConvention instead.");
-        return true;
-      }
-
-      // Add special override to differentiate if Sun implementation is also in
-      // scope
-      if (System.getProperty ("com.helger.jcodemodel.FileSystemCaseSensitive") != null)
-      {
-        System.err.println ("Dear JCodeModel user: the currently defined system property 'com.helger.jcodemodel.FileSystemCaseSensitive' will not be evaluated in the upcoming v4. Use JCodeMode.setFileSystemConvention instead.");
-        return true;
-      }
-    }
-    catch (final Exception e)
-    {
-      // Fall through
-    }
-
-    // on Unix, it's case sensitive.
-    return File.separatorChar == '/';
-  }
-
-  /**
-   * Ensure that the path (not the absolute path!) of the passed file is using
-   * the Unix style separator "/" instead of the Operating System dependent one.
-   *
-   * @param aFile
-   *        The file to use. May be <code>null</code>
-   * @return <code>null</code> if the passed file is <code>null</code>.
-   * @see #getPathUsingUnixSeparator(String)
-   */
-  @Nullable
-  public static String getPathUsingUnixSeparator (@Nullable final File aFile)
-  {
-    return aFile == null ? null : getPathUsingUnixSeparator (aFile.getPath ());
-  }
-
-  /**
-   * Ensure that the passed path is using the Unix style separator "/" instead
-   * of the Operating System dependent one.
-   *
-   * @param sAbsoluteFilename
-   *        The file name to use. May be <code>null</code>
-   * @return <code>null</code> if the passed path is <code>null</code>.
-   * @see #getPathUsingUnixSeparator(File)
-   */
-  @Nullable
-  public static String getPathUsingUnixSeparator (@Nullable final String sAbsoluteFilename)
-  {
-    return sAbsoluteFilename == null ? null
-                                     : JCStringHelper.replaceAll (sAbsoluteFilename, WINDOWS_SEPARATOR, UNIX_SEPARATOR);
-  }
-
   /**
    * Check if the passed file name is valid. It checks for illegal characters
    * within a filename. This method fits only for filenames on one level.
@@ -202,15 +111,15 @@ public final class JCFilenameHelper
   public static boolean isValidLinuxFilename (@Nullable final String sFilename)
   {
     // empty not allowed
-    if (JCStringHelper.hasNoText (sFilename))
+    if (StringHelper.hasNoText (sFilename))
       return false;
 
     // path separator chars are not allowed in filenames!
-    if (containsPathSeparatorChar (sFilename))
+    if (FilenameHelper.containsPathSeparatorChar (sFilename))
       return false;
 
     // Check for reserved directories
-    if (PATH_CURRENT.equals (sFilename) || PATH_PARENT.equals (sFilename))
+    if (FilenameHelper.PATH_CURRENT.equals (sFilename) || FilenameHelper.PATH_PARENT.equals (sFilename))
       return false;
 
     // Check if file name contains any of the illegal characters
@@ -235,19 +144,19 @@ public final class JCFilenameHelper
   public static boolean isValidWindowsFilename (@Nullable final String sFilename)
   {
     // empty not allowed
-    if (JCStringHelper.hasNoText (sFilename))
+    if (StringHelper.hasNoText (sFilename))
       return false;
 
     // path separator chars are not allowed in filenames!
-    if (containsPathSeparatorChar (sFilename))
+    if (FilenameHelper.containsPathSeparatorChar (sFilename))
       return false;
 
     // Check for reserved directories
-    if (PATH_CURRENT.equals (sFilename) || PATH_PARENT.equals (sFilename))
+    if (FilenameHelper.PATH_CURRENT.equals (sFilename) || FilenameHelper.PATH_PARENT.equals (sFilename))
       return false;
 
     // check for illegal last characters
-    if (JCStringHelper.endsWithAny (sFilename, WINDOWS_ILLEGAL_SUFFIXES))
+    if (StringHelper.endsWithAny (sFilename, WINDOWS_ILLEGAL_SUFFIXES))
       return false;
 
     // Check if file name contains any of the illegal characters
@@ -269,140 +178,5 @@ public final class JCFilenameHelper
         return false;
 
     return true;
-  }
-
-  /**
-   * Check if the passed character is secure to be used in filenames. Therefore
-   * it must be &ge; 0x20 and &lt; 0x80.
-   *
-   * @param c
-   *        The character to check
-   * @return <code>true</code> if it is valid, <code>false</code> if not
-   */
-  public static boolean isSecureFilenameCharacter (final char c)
-  {
-    return c >= 0x20 && c < 0x80;
-  }
-
-  /**
-   * Check if the passed character is a path separation character. This method
-   * handles both Windows- and Unix-style path separation characters.
-   *
-   * @param c
-   *        The character to check.
-   * @return <code>true</code> if the character is a path separation character,
-   *         <code>false</code> otherwise.
-   */
-  public static boolean isPathSeparatorChar (final char c)
-  {
-    return c == UNIX_SEPARATOR || c == WINDOWS_SEPARATOR;
-  }
-
-  /**
-   * Check if the passed character sequence starts with a path separation
-   * character.
-   *
-   * @param s
-   *        The character sequence to check. May be <code>null</code> or empty.
-   * @return <code>true</code> if the character sequences starts with a Windows-
-   *         or Unix-style path character.
-   * @see #isPathSeparatorChar(char)
-   */
-  public static boolean startsWithPathSeparatorChar (@Nullable final CharSequence s)
-  {
-    return isPathSeparatorChar (JCStringHelper.getFirstChar (s));
-  }
-
-  /**
-   * Check if the passed character sequence ends with a path separation
-   * character.
-   *
-   * @param s
-   *        The character sequence to check. May be <code>null</code> or empty.
-   * @return <code>true</code> if the character sequences ends with a Windows-
-   *         or Unix-style path character.
-   * @see #isPathSeparatorChar(char)
-   */
-  public static boolean endsWithPathSeparatorChar (@Nullable final CharSequence s)
-  {
-    return isPathSeparatorChar (JCStringHelper.getLastChar (s));
-  }
-
-  /**
-   * Check if the passed String contains at least one path separator char
-   * (either Windows or Unix style).
-   *
-   * @param s
-   *        The string to check. May be <code>null</code>.
-   * @return <code>true</code> if the passed string is not <code>null</code> and
-   *         contains at least one separator.
-   */
-  public static boolean containsPathSeparatorChar (@Nullable final String s)
-  {
-    // This is a tick faster than iterating the s.toCharArray() chars
-    return s != null && (s.indexOf (UNIX_SEPARATOR) >= 0 || s.indexOf (WINDOWS_SEPARATOR) >= 0);
-  }
-
-  /**
-   * Ensure that the passed path starts with a directory separator character. If
-   * the passed path starts with either {@value #WINDOWS_SEPARATOR} or
-   * {@value #UNIX_SEPARATOR} no changes are performed.
-   *
-   * @param sPath
-   *        The path to be checked.
-   * @return The path that is ensured to start with the directory separator of
-   *         the current operating system.
-   * @see #startsWithPathSeparatorChar(CharSequence)
-   */
-  @Nullable
-  @CheckReturnValue
-  public static String ensurePathStartingWithSeparator (@Nullable final String sPath)
-  {
-    if (sPath == null)
-      return null;
-    return startsWithPathSeparatorChar (sPath) ? sPath : File.separator + sPath;
-  }
-
-  /**
-   * Ensure that the passed path does NOT end with a directory separator
-   * character. Any number of trailing {@value #WINDOWS_SEPARATOR} or
-   * {@value #UNIX_SEPARATOR} are removed.
-   *
-   * @param sPath
-   *        The path to be checked.
-   * @return The path that is ensured to NOT end with the directory separator.
-   * @see #endsWithPathSeparatorChar(CharSequence)
-   */
-  @Nullable
-  @CheckReturnValue
-  public static String ensurePathEndingWithoutSeparator (@Nullable final String sPath)
-  {
-    if (sPath == null)
-      return null;
-
-    String sRet = sPath;
-    while (endsWithPathSeparatorChar (sRet))
-      sRet = sRet.substring (0, sRet.length () - 1);
-    return sRet;
-  }
-
-  /**
-   * Ensure that the passed path ends with a directory separator character. If
-   * the passed path ends with either {@value #WINDOWS_SEPARATOR} or
-   * {@value #UNIX_SEPARATOR} no changes are performed.
-   *
-   * @param sPath
-   *        The path to be checked.
-   * @return The path that is ensured to end with the directory separator of the
-   *         current operating system.
-   * @see #endsWithPathSeparatorChar(CharSequence)
-   */
-  @Nullable
-  @CheckReturnValue
-  public static String ensurePathEndingWithSeparator (@Nullable final String sPath)
-  {
-    if (sPath == null)
-      return null;
-    return endsWithPathSeparatorChar (sPath) ? sPath : sPath + File.separator;
   }
 }

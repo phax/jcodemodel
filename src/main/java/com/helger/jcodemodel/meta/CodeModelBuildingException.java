@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel.meta;
 
-import com.helger.jcodemodel.JCodeModelException;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
