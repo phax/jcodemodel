@@ -65,43 +65,65 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 public final class VarArgsFuncTest
 {
-
   @Test
   public void testBasic () throws Exception
   {
     final JCodeModel cm = JCodeModel.createUnified ();
-    final JDefinedClass cls = cm._class ("Test");
-    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
+    final JDefinedClass cls = cm._package ("org.example")._class ("TestVarArgs");
+    final JMethod m = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "foo");
     m.param (String.class, "param1");
     m.param (Integer.class, "param2");
-    m.varParam (Object.class, "param3");
+    final JVar jParam3 = m.varParam (Object.class, "param3");
 
     // checking for param after varParam it behaves ok
-    // JVar[] var1 = m.varParam(Float.class, "param4");
-    final AbstractJClass string = cm.ref (String.class);
-    final AbstractJClass stringArray = string.array ();
-    // JVar param5 =
-    m.param (String.class, "param5");
+    m.param (String.class, "param4");
 
     final JForLoop forloop = m.body ()._for ();
-
     final JVar jcount = forloop.init (cm.INT, "count", JExpr.lit (0));
-
-    forloop.test (jcount.lt (JExpr.direct ("param3.length")));
+    forloop.test (jcount.lt (jParam3.ref ("length")));
     forloop.update (jcount.incr ());
-
-    final JFieldRef out = cm.ref (System.class).staticRef ("out");
 
     final JVar typearray = m.varParam ();
     assertNotNull (typearray);
 
     // JInvocation invocation =
-    forloop.body ().add (JExpr.invoke (out, "println").arg (JExpr.direct ("param3[count]")));
+    forloop.body ().add (cm.ref (System.class).staticRef ("out").invoke ("println").arg (jParam3.component (jcount)));
 
     final JMethod main = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "main");
-    main.param (stringArray, "args");
+    main.param (String [].class, "args");
     main.body ()
         .directStatement ("new Test().foo(new String(\"Param1\"),new Integer(5),null,new String(\"Param3\"),new String(\"Param4\"));");
+
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testExample () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass cls = cm._package ("org.example")._class ("TestVarArgs");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
+    m.param (String.class, "param1");
+    m.param (Integer.class, "param2");
+    // That is the VarArg param
+    final JVar jParam3 = m.varParam (String.class, "param3");
+
+    final JForLoop forloop = m.body ()._for ();
+    final JVar jcount = forloop.init (cm.INT, "count", JExpr.lit (0));
+    forloop.test (jcount.lt (jParam3.ref ("length")));
+    forloop.update (jcount.incr ());
+
+    forloop.body ().add (cm.ref (System.class).staticRef ("out").invoke ("println").arg (jParam3.component (jcount)));
+
+    final JMethod main = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "main");
+    main.param (String [].class, "args");
+    main.body ()
+        .add (cls._new ()
+                 .invoke (m)
+                 .arg ("Param1")
+                 .arg (cm.ref (Integer.class).staticInvoke ("valueOf").arg (5))
+                 .arg ("Param 3a")
+                 .arg ("Param 3b"));
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }

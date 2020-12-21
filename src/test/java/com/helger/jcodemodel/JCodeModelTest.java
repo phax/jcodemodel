@@ -154,7 +154,7 @@ public final class JCodeModelTest
       cm.setFileSystemConvention (EFileSystemConvention.WINDOWS);
       Assert.fail ();
     }
-    catch (JCaseSensitivityChangeException jcsce)
+    catch (final JCaseSensitivityChangeException jcsce)
     {
       // correct
     }
@@ -167,7 +167,7 @@ public final class JCodeModelTest
       cm.setFileSystemConvention (EFileSystemConvention.WINDOWS);
       Assert.fail ();
     }
-    catch (JCaseSensitivityChangeException jcsce)
+    catch (final JCaseSensitivityChangeException jcsce)
     {
       // correct
     }
@@ -177,13 +177,13 @@ public final class JCodeModelTest
     {
 
       @Override
-      public boolean isValidFilename (String sPath)
+      public boolean isValidFilename (final String sPath)
       {
         return true;
       }
 
       @Override
-      public boolean isValidDirectoryName (String sPath)
+      public boolean isValidDirectoryName (final String sPath)
       {
         return true;
       }
@@ -199,15 +199,14 @@ public final class JCodeModelTest
       // should fail, existing dir "my" and file "File1" are not accepted.
       cm.setFileSystemConvention (new IFileSystemConvention ()
       {
-
         @Override
-        public boolean isValidFilename (String sPath)
+        public boolean isValidFilename (final String sPath)
         {
           return false;
         }
 
         @Override
-        public boolean isValidDirectoryName (String sPath)
+        public boolean isValidDirectoryName (final String sPath)
         {
           return false;
         }
@@ -220,7 +219,7 @@ public final class JCodeModelTest
       });
       Assert.fail ();
     }
-    catch (JInvalidFileNameException ifne)
+    catch (final JInvalidFileNameException ifne)
     {
       // correct
     }

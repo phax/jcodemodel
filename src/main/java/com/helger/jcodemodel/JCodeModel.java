@@ -270,7 +270,7 @@ public class JCodeModel implements Serializable
     catch (final JCodeModelException e)
     {
       // should not happen
-      throw new UnsupportedOperationException ("catch this", e);
+      throw new UnsupportedOperationException ("This is the famous 'should never occur' error", e);
     }
   }
 
