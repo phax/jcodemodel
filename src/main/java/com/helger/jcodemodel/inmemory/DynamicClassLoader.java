@@ -12,23 +12,21 @@ import java.net.URLStreamHandler;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 /**
  * class loader that allows dynamic classes and resources.
- *
  * <p>
  * add class models using {@link #setCode(CompiledCodeJavaFile)} , add resources
- * using {@link #addResources(Map)} ; then you can use it as a normal
- * classloader, eg {@link ClassLoader.#loadClass(String)} or
- * {@link ClassLoader.#getResource(String)}
+ * using {@link #addResources(Map)}; then you can use it as a normal
+ * classloader, eg {@link ClassLoader#loadClass(String)} or
+ * {@link ClassLoader#getResource(String)}
  * </p>
- *
  */
 public class DynamicClassLoader extends ClassLoader
 {
-
-  private Map <String, CompiledCodeJavaFile> customCompiledCode = new HashMap <> ();
-
-  private Map <String, ByteArrayOutputStream> customResources = new HashMap <> ();
+  private final Map <String, CompiledCodeJavaFile> m_aCustomCompiledCode = new HashMap <> ();
+  private final Map <String, ByteArrayOutputStream> m_aCustomResources = new HashMap <> ();
 
   /**
    * create a class loader with its parent.
@@ -37,15 +35,20 @@ public class DynamicClassLoader extends ClassLoader
    *        the classloader to fall back when a resource or class definition
    *        can't be found.
    */
-  public DynamicClassLoader (ClassLoader parent)
+  public DynamicClassLoader (final ClassLoader parent)
   {
     super (parent);
   }
 
-  /** set the bytecode for a given class */
-  public void setCode (CompiledCodeJavaFile cc)
+  /**
+   * set the bytecode for a given class
+   *
+   * @param cc
+   *        the compiled java code file
+   */
+  public void setCode (@Nonnull final CompiledCodeJavaFile cc)
   {
-    customCompiledCode.put (cc.getName (), cc);
+    m_aCustomCompiledCode.put (cc.getName (), cc);
   }
 
   /**
@@ -56,28 +59,29 @@ public class DynamicClassLoader extends ClassLoader
    *        java.lang.String
    * @return the existing compiledCode for that class, or null.
    */
-  public CompiledCodeJavaFile getCode (String fullClassName)
+  public CompiledCodeJavaFile getCode (final String fullClassName)
   {
-    return customCompiledCode.get (fullClassName);
+    return m_aCustomCompiledCode.get (fullClassName);
   }
 
   /**
    * add a map of path-> resource
    *
    * @param resources
+   *        all resources to add
    */
-  public void addResources (Map <String, ByteArrayOutputStream> resources)
+  public void addResources (final Map <String, ByteArrayOutputStream> resources)
   {
-    customResources.putAll (resources);
+    m_aCustomResources.putAll (resources);
   }
 
   @Override
-  protected Class <?> findClass (String name) throws ClassNotFoundException
+  protected Class <?> findClass (final String name) throws ClassNotFoundException
   {
-    CompiledCodeJavaFile cc = customCompiledCode.get (name);
+    final CompiledCodeJavaFile cc = m_aCustomCompiledCode.get (name);
     if (cc == null)
       return super.findClass (name);
-    byte[] byteCode = cc.getByteCode ();
+    final byte [] byteCode = cc.getByteCode ();
     return defineClass (name, byteCode, 0, byteCode.length);
   }
 
@@ -88,49 +92,46 @@ public class DynamicClassLoader extends ClassLoader
    */
   private final URLStreamHandler handler = new URLStreamHandler ()
   {
-
     @Override
-    protected URLConnection openConnection (URL u) throws IOException
+    protected URLConnection openConnection (final URL u) throws IOException
     {
       return new URLConnection (u)
       {
-
-        ByteArrayOutputStream baos = customResources.get (u.getFile ());
+        final ByteArrayOutputStream aBAOS = m_aCustomResources.get (u.getFile ());
 
         @Override
         public void connect () throws IOException
         {
-          if (baos == null)
+          if (aBAOS == null)
             throw new FileNotFoundException (u.getFile ());
         }
 
         @Override
         public InputStream getInputStream () throws IOException
         {
-          if (baos == null)
+          if (aBAOS == null)
             throw new FileNotFoundException (u.getFile ());
-          return new ByteArrayInputStream (baos.toByteArray ());
+          return new ByteArrayInputStream (aBAOS.toByteArray ());
         }
       };
     }
-
   };
 
   @Override
-  protected URL findResource (String name)
+  protected URL findResource (final String name)
   {
-    ByteArrayOutputStream baos = customResources.get (name);
+    final ByteArrayOutputStream baos = m_aCustomResources.get (name);
     if (baos != null)
       try
-    {
+      {
         return new URL ("memory", null, 0, name, handler);
-    }
-    catch (MalformedURLException e)
-    {
-      throw new UnsupportedOperationException ("catch this", e);
-    }
-    else
-      return super.findResource (name);
+      }
+      catch (final MalformedURLException e)
+      {
+        throw new UnsupportedOperationException ("catch this", e);
+      }
+
+    return super.findResource (name);
   }
 
 }

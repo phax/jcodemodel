@@ -26,10 +26,12 @@ import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 import javax.tools.StandardLocation;
 
+import com.helger.commons.annotation.UnsupportedOperation;
+
 /**
  * java file manager that also checks and writes inside a given
  * {@link DynamicClassLoader}. This is used during compilation of a
- * {@link com.sun.codemodel.JCodeModel} specification.
+ * {@link com.helger.jcodemodel.JCodeModel} specification.
  * <p>
  * basically must overwrite the
  * {@link #list(javax.tools.JavaFileManager.Location, String, Set, boolean)}
@@ -37,94 +39,93 @@ import javax.tools.StandardLocation;
  * </p>
  * <p>
  * most of the code comes from
- *
  * http://atamur.blogspot.fr/2009/10/using-built-in-javacompiler-with-custom.html
  * </p>
- *
  */
 public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileManager>
 {
+  private final DynamicClassLoader m_aCL;
 
-  public ClassLoaderFileManager (JavaFileManager fileManager, DynamicClassLoader cl)
+  public ClassLoaderFileManager (final JavaFileManager aFileManager, final DynamicClassLoader cl)
   {
-    super (fileManager);
-    this.cl = cl;
-  }
-
-  DynamicClassLoader cl;
-
-  @Override
-  public ClassLoader getClassLoader (Location location)
-  {
-    return cl;
+    super (aFileManager);
+    this.m_aCL = cl;
   }
 
   @Override
-  public boolean hasLocation (Location location)
+  public ClassLoader getClassLoader (final Location location)
+  {
+    return m_aCL;
+  }
+
+  @Override
+  public boolean hasLocation (final Location location)
   {
     return super.hasLocation (location);
   }
 
   @Override
-  public Iterable <JavaFileObject> list (Location location, String packageName, Set <Kind> kinds, boolean recurse)
-      throws IOException
+  public Iterable <JavaFileObject> list (final Location location,
+                                         final String packageName,
+                                         final Set <Kind> kinds,
+                                         final boolean recurse) throws IOException
   {
     if (location == StandardLocation.PLATFORM_CLASS_PATH || packageName.startsWith ("java"))
       // let standard manager handle
       return super.list (location, packageName, kinds, recurse);
-    else if (location == StandardLocation.CLASS_PATH && kinds.contains (JavaFileObject.Kind.CLASS))
-      // app specific classes are here
-      return find (packageName);
+    else
+      if (location == StandardLocation.CLASS_PATH && kinds.contains (JavaFileObject.Kind.CLASS))
+        // app specific classes are here
+        return find (packageName);
     return Collections.emptyList ();
   }
 
   public static final String CLASS_FILE_EXTENSION = ".class";
 
-  public List <JavaFileObject> find (String packageName) throws IOException
+  public List <JavaFileObject> find (final String packageName) throws IOException
   {
-    String javaPackageName = packageName.replaceAll ("\\.", "/");
-    List <JavaFileObject> result = new ArrayList <> ();
-    Enumeration <URL> urlEnumeration = cl.getResources (javaPackageName);
+    final String javaPackageName = packageName.replaceAll ("\\.", "/");
+    final List <JavaFileObject> result = new ArrayList <> ();
+    final Enumeration <URL> urlEnumeration = m_aCL.getResources (javaPackageName);
     while (urlEnumeration.hasMoreElements ())
     { // one URL for each jar on the
       // classpath that has the given
       // package
-      URL packageFolderURL = urlEnumeration.nextElement ();
+      final URL packageFolderURL = urlEnumeration.nextElement ();
       result.addAll (listUnder (packageName, packageFolderURL));
     }
 
     return result;
   }
 
-  private Collection <JavaFileObject> listUnder (String packageName, URL packageFolderURL)
+  private Collection <JavaFileObject> listUnder (final String packageName, final URL packageFolderURL)
   {
-    File directory = new File (packageFolderURL.getFile ());
+    final File directory = new File (packageFolderURL.getFile ());
     if (directory.isDirectory ())
       // local execution
       return processDir (packageName, directory);
-    else return processJar (packageFolderURL);
+    return processJar (packageFolderURL);
   }
 
-  private List <JavaFileObject> processJar (URL packageFolderURL)
+  private List <JavaFileObject> processJar (final URL packageFolderURL)
   {
-    List <JavaFileObject> result = new ArrayList <> ();
+    final List <JavaFileObject> result = new ArrayList <> ();
     try
     {
-      String jarUri = packageFolderURL.toExternalForm ().split ("!")[0];
+      final String jarUri = packageFolderURL.toExternalForm ().split ("!")[0];
 
-      JarURLConnection jarConn = (JarURLConnection) packageFolderURL.openConnection ();
-      String rootEntryName = jarConn.getEntryName ();
-      int rootEnd = rootEntryName.length () + 1;
+      final JarURLConnection jarConn = (JarURLConnection) packageFolderURL.openConnection ();
+      final String rootEntryName = jarConn.getEntryName ();
+      final int rootEnd = rootEntryName.length () + 1;
 
-      Enumeration <JarEntry> entryEnum = jarConn.getJarFile ().entries ();
+      final Enumeration <JarEntry> entryEnum = jarConn.getJarFile ().entries ();
       while (entryEnum.hasMoreElements ())
       {
-        JarEntry jarEntry = entryEnum.nextElement ();
-        String name = jarEntry.getName ();
-        if (name.startsWith (rootEntryName) && name.indexOf ('/', rootEnd) == -1
-            && name.endsWith (CLASS_FILE_EXTENSION))
+        final JarEntry jarEntry = entryEnum.nextElement ();
+        final String name = jarEntry.getName ();
+        if (name.startsWith (rootEntryName) && name.indexOf ('/', rootEnd) == -1 && name.endsWith (CLASS_FILE_EXTENSION))
         {
-          URI uri = URI.create (jarUri + "!/" + name);
+          final URI uri = URI.create (jarUri + "!/" + name);
           String binaryName = name.replaceAll ("/", ".");
           binaryName = binaryName.replaceAll (CLASS_FILE_EXTENSION + "$", "");
 
@@ -132,19 +133,19 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
         }
       }
     }
-    catch (Exception e)
+    catch (final Exception e)
     {
       throw new RuntimeException ("Wasn't able to open " + packageFolderURL + " as a jar file", e);
     }
     return result;
   }
 
-  private List <JavaFileObject> processDir (String packageName, File directory)
+  private List <JavaFileObject> processDir (final String packageName, final File directory)
   {
-    List <JavaFileObject> result = new ArrayList <> ();
+    final List <JavaFileObject> result = new ArrayList <> ();
 
-    File[] childFiles = directory.listFiles ();
-    for (File childFile : childFiles)
+    final File [] childFiles = directory.listFiles ();
+    for (final File childFile : childFiles)
       if (childFile.isFile ())
         // We only want the .class files.
         if (childFile.getName ().endsWith (CLASS_FILE_EXTENSION))
@@ -159,32 +160,34 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
   }
 
   @Override
-  public JavaFileObject getJavaFileForOutput (Location location, String className, Kind kind, FileObject sibling)
-      throws IOException
+  public JavaFileObject getJavaFileForOutput (final Location location,
+                                              final String className,
+                                              final Kind kind,
+                                              final FileObject sibling) throws IOException
   {
-    CompiledCodeJavaFile ret = cl.getCode (className);
+    CompiledCodeJavaFile ret = m_aCL.getCode (className);
     if (ret == null)
       try
-    {
+      {
         ret = new CompiledCodeJavaFile (className);
-        cl.setCode (ret);
-    }
-    catch (Exception e)
-    {
-      throw new UnsupportedOperationException ("while creating code for " + className, e);
-    }
+        m_aCL.setCode (ret);
+      }
+      catch (final Exception e)
+      {
+        throw new UnsupportedOperationException ("while creating code for " + className, e);
+      }
     return ret;
   }
 
   @Override
-  public String inferBinaryName (Location location, JavaFileObject file)
+  public String inferBinaryName (final Location location, final JavaFileObject file)
   {
     if (file instanceof CustomJavaFileObject)
       return ((CustomJavaFileObject) file).binaryName ();
-    else
-      // if it's not CustomJavaFileObject, then it's coming from standard file
-      // manager - let it handle the file
-      return super.inferBinaryName (location, file);
+
+    // if it's not CustomJavaFileObject, then it's coming from standard file
+    // manager - let it handle the file
+    return super.inferBinaryName (location, file);
   }
 
   /**
@@ -193,30 +196,32 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
    */
   private static class CustomJavaFileObject implements JavaFileObject
   {
-    private final String binaryName;
-    private final URI uri;
-    private final String name;
+    private final String m_sBinaryName;
+    private final URI m_sURI;
+    private final String m_sName;
 
-    public CustomJavaFileObject (String binaryName, URI uri)
+    public CustomJavaFileObject (final String binaryName, final URI uri)
     {
-      this.uri = uri;
-      this.binaryName = binaryName;
-      name = uri.getPath () == null ? uri.getSchemeSpecificPart () : uri.getPath ();
+      m_sBinaryName = binaryName;
+      m_sURI = uri;
+      m_sName = uri.getPath () == null ? uri.getSchemeSpecificPart () : uri.getPath ();
     }
 
     @Override
     public URI toUri ()
     {
-      return uri;
+      return m_sURI;
     }
 
     @Override
     public InputStream openInputStream () throws IOException
     {
-      return uri.toURL ().openStream (); // easy way to handle any URI!
+      // easy way to handle any URI!
+      return m_sURI.toURL ().openStream ();
     }
 
     @Override
+    @UnsupportedOperation
     public OutputStream openOutputStream () throws IOException
     {
       throw new UnsupportedOperationException ();
@@ -225,22 +230,25 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
     @Override
     public String getName ()
     {
-      return name;
+      return m_sName;
     }
 
     @Override
-    public Reader openReader (boolean ignoreEncodingErrors) throws IOException
+    @UnsupportedOperation
+    public Reader openReader (final boolean ignoreEncodingErrors) throws IOException
     {
       throw new UnsupportedOperationException ();
     }
 
     @Override
-    public CharSequence getCharContent (boolean ignoreEncodingErrors) throws IOException
+    @UnsupportedOperation
+    public CharSequence getCharContent (final boolean ignoreEncodingErrors) throws IOException
     {
       throw new UnsupportedOperationException ();
     }
 
     @Override
+    @UnsupportedOperation
     public Writer openWriter () throws IOException
     {
       throw new UnsupportedOperationException ();
@@ -253,6 +261,7 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
     }
 
     @Override
+    @UnsupportedOperation
     public boolean delete ()
     {
       throw new UnsupportedOperationException ();
@@ -265,9 +274,9 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
     }
 
     @Override // copied from SImpleJavaFileManager
-    public boolean isNameCompatible (String simpleName, Kind kind)
+    public boolean isNameCompatible (final String simpleName, final Kind kind)
     {
-      String baseName = simpleName + kind.extension;
+      final String baseName = simpleName + kind.extension;
       return kind.equals (getKind ()) && (baseName.equals (getName ()) || getName ().endsWith ("/" + baseName));
     }
 
@@ -285,14 +294,13 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
 
     public String binaryName ()
     {
-      return binaryName;
+      return m_sBinaryName;
     }
 
     @Override
     public String toString ()
     {
-      return "CustomJavaFileObject{" + "uri=" + uri + '}';
+      return "CustomJavaFileObject{" + "uri=" + m_sURI + '}';
     }
   }
-
 }

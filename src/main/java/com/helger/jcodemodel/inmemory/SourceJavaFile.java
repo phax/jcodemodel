@@ -13,19 +13,25 @@ import javax.tools.SimpleJavaFileObject;
  */
 public class SourceJavaFile extends SimpleJavaFileObject
 {
+  private final String m_sContent;
 
-  /** create a {@link SimpleJavaFileObject} based on a .java file */
-  public SourceJavaFile (String fileName, String contents) throws Exception
+  /**
+   * create a {@link SimpleJavaFileObject} based on a .java file
+   *
+   * @param sFilename
+   *        Filename
+   * @param sContent
+   *        Content of the Java file
+   */
+  public SourceJavaFile (final String sFilename, final String sContent)
   {
-    super (URI.create ("string:///" + fileName), Kind.SOURCE);
-    this.contents = contents;
+    super (URI.create ("string:///" + sFilename), Kind.SOURCE);
+    this.m_sContent = sContent;
   }
 
-  private final String contents;
-
   @Override
-  public CharSequence getCharContent (boolean ignoreEncodingErrors) throws IOException
+  public CharSequence getCharContent (final boolean ignoreEncodingErrors) throws IOException
   {
-    return contents;
+    return m_sContent;
   }
 }

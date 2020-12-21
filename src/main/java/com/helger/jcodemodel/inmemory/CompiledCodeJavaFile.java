@@ -1,11 +1,12 @@
 package com.helger.jcodemodel.inmemory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 
 import javax.tools.SimpleJavaFileObject;
+
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 
 /**
  * represents java file object that is produced by the javac compiler. Holds the
@@ -14,32 +15,31 @@ import javax.tools.SimpleJavaFileObject;
  *
  * @author glelouet
  * @author trung
- *
  */
 public class CompiledCodeJavaFile extends SimpleJavaFileObject
 {
-  private ByteArrayOutputStream baos = new ByteArrayOutputStream ();
-  private String className;
+  private final NonBlockingByteArrayOutputStream m_aBAOS = new NonBlockingByteArrayOutputStream ();
+  private final String m_sClassName;
 
-  public CompiledCodeJavaFile (String className) throws Exception
+  public CompiledCodeJavaFile (final String className) throws Exception
   {
     super (new URI (className), Kind.CLASS);
-    this.className = className;
+    m_sClassName = className;
   }
 
   public String getClassName ()
   {
-    return className;
+    return m_sClassName;
   }
 
   @Override
   public OutputStream openOutputStream () throws IOException
   {
-    return baos;
+    return m_aBAOS;
   }
 
-  public byte[] getByteCode ()
+  public byte [] getByteCode ()
   {
-    return baos.toByteArray ();
+    return m_aBAOS.toByteArray ();
   }
 }
