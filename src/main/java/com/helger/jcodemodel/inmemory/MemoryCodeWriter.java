@@ -64,11 +64,12 @@ public class MemoryCodeWriter extends AbstractCodeWriter
   @Override
   public OutputStream openBinary (final String sDirName, final String sFilename) throws IOException
   {
-    final String fullname = sDirName + "/" + sFilename;
+    final String sFullname = sDirName + "/" + sFilename;
 
-    return m_aBinaries.computeIfAbsent (fullname, k -> new NonBlockingByteArrayOutputStream ());
+    return m_aBinaries.computeIfAbsent (sFullname, k -> new NonBlockingByteArrayOutputStream ());
   }
 
+  @Nonnull
   public <T extends DynamicClassLoader> T compile (@Nonnull final T aDynamicClassLoader)
   {
     final List <JavaFileObject> aCompilationUnits = new ArrayList <> ();
@@ -97,7 +98,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
       try
       {
         final ForwardingJavaFileManager <JavaFileManager> aFileManager = new ClassLoaderFileManager (JAVAC.getStandardFileManager (x -> System.err.println ("file diagnostic " +
-                                                                                                                                                                     x),
+                                                                                                                                                            x),
                                                                                                                                    null,
                                                                                                                                    null),
                                                                                                      aDynamicClassLoader);
@@ -132,6 +133,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
    *
    * @return The classloader used
    */
+  @Nonnull
   public DynamicClassLoader compile ()
   {
     return compile (dynCL ());

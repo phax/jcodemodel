@@ -26,7 +26,7 @@ public class SourceJavaFile extends SimpleJavaFileObject
   public SourceJavaFile (final String sFilename, final String sContent)
   {
     super (URI.create ("string:///" + sFilename), Kind.SOURCE);
-    this.m_sContent = sContent;
+    m_sContent = sContent;
   }
 
   @Override

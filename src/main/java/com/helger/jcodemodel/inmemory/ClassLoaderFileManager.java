@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
 
+import javax.annotation.Nonnull;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
 import javax.tools.FileObject;
@@ -44,12 +45,14 @@ import com.helger.commons.annotation.UnsupportedOperation;
  */
 public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileManager>
 {
+  public static final String CLASS_FILE_EXTENSION = JavaFileObject.Kind.CLASS.extension;
+
   private final DynamicClassLoader m_aCL;
 
   public ClassLoaderFileManager (final JavaFileManager aFileManager, final DynamicClassLoader cl)
   {
     super (aFileManager);
-    this.m_aCL = cl;
+    m_aCL = cl;
   }
 
   @Override
@@ -66,23 +69,22 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
 
   @Override
   public Iterable <JavaFileObject> list (final Location location,
-                                         final String packageName,
-                                         final Set <Kind> kinds,
+                                         @Nonnull final String packageName,
+                                         @Nonnull final Set <Kind> kinds,
                                          final boolean recurse) throws IOException
   {
     if (location == StandardLocation.PLATFORM_CLASS_PATH || packageName.startsWith ("java"))
       // let standard manager handle
       return super.list (location, packageName, kinds, recurse);
-    else
-      if (location == StandardLocation.CLASS_PATH && kinds.contains (JavaFileObject.Kind.CLASS))
-        // app specific classes are here
-        return find (packageName);
+
+    if (location == StandardLocation.CLASS_PATH && kinds.contains (JavaFileObject.Kind.CLASS))
+      // app specific classes are here
+      return find (packageName);
+
     return Collections.emptyList ();
   }
 
-  public static final String CLASS_FILE_EXTENSION = ".class";
-
-  public List <JavaFileObject> find (final String packageName) throws IOException
+  public List <JavaFileObject> find (@Nonnull final String packageName) throws IOException
   {
     final String javaPackageName = packageName.replaceAll ("\\.", "/");
     final List <JavaFileObject> result = new ArrayList <> ();
@@ -140,7 +142,8 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
     return result;
   }
 
-  private List <JavaFileObject> processDir (final String packageName, final File directory)
+  @Nonnull
+  private List <JavaFileObject> processDir (@Nonnull final String packageName, @Nonnull final File directory)
   {
     final List <JavaFileObject> result = new ArrayList <> ();
 
