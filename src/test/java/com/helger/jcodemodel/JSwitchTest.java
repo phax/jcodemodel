@@ -56,16 +56,15 @@ public final class JSwitchTest
   public void testGenerate () throws JCodeModelException
   {
     final JCodeModel cm = JCodeModel.createUnified ();
+    final JDefinedClass jClass = cm._package ("org.example")._class ("SwitchTest");
 
-    final JDefinedClass c2 = cm._package ("myPackage")._class ("SwitchTest");
-
-    final JDefinedClass jEnumClass = c2._enum ("MyEnum");
+    final JDefinedClass jEnumClass = jClass._enum ("MyEnum");
     final JEnumConstant ca = jEnumClass.enumConstant ("A");
     final JEnumConstant cb = jEnumClass.enumConstant ("B");
     jEnumClass.enumConstant ("C");
 
-    final JMethod m = c2.method (0, cm.VOID, "dummy");
-    final JVar p = m.param (jEnumClass, "enumParam");
+    final JMethod m = jClass.method (JMod.PUBLIC, cm.VOID, "dummy");
+    final JVar p = m.param (JMod.FINAL, jEnumClass, "enumParam");
     final JSwitch s = m.body ()._switch (p);
     s._case (ca).body ()._break ();
     s._case (cb).body ()._break ();

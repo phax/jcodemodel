@@ -48,6 +48,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.InitializerDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
@@ -58,7 +59,62 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
 public final class JDefinedClassTest
 {
   @Test
-  public void generatesInstanceInit () throws Exception
+  public void testSimpleClassWithGetterAndSetter () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass jClass = cm._package ("org.example")._class ("MyFirstClass");
+    final JFieldVar jField = jClass.field (JMod.PRIVATE, String.class, "text");
+
+    // getter
+    final JMethod jGet = jClass.method (JMod.PUBLIC, String.class, "getText");
+    jGet.body ()._return (jField);
+
+    // setter
+    final JMethod jSet = jClass.method (JMod.PUBLIC, cm.VOID, "setText");
+    final JVar jParam = jSet.param (String.class, "text");
+    jSet.body ().assign (JExpr._this ().ref (jField), jParam);
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testSimpleClassWithCtorGetterAndSetter () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass jClass = cm._package ("org.example")._class ("MySecondClass");
+    jClass.javadoc ().add ("This is my second class comment");
+    jClass.javadoc ().addAuthor ().add ("JCodeModel authors");
+
+    final JFieldVar jField = jClass.field (JMod.PRIVATE, String.class, "text");
+
+    // Empty constructor
+    JMethod jCtor = jClass.constructor (JMod.PUBLIC);
+    jCtor.javadoc ().add ("This is a no-argument constructor");
+
+    // Constructor with Parameter
+    jCtor = jClass.constructor (JMod.PUBLIC);
+    JVar jParam = jCtor.param (String.class, "text");
+    jCtor.body ().assign (JExpr._this ().ref (jField), jParam);
+    jCtor.javadoc ().add ("This is the constructor with a parameter");
+    jCtor.javadoc ().addParam (jParam).add ("The new text to be set");
+
+    // getter
+    final JMethod jGet = jClass.method (JMod.PUBLIC, String.class, "getText");
+    jGet.body ()._return (jField);
+    jGet.javadoc ().add ("This is a getter");
+    jGet.javadoc ().addReturn ().add ("The text value");
+
+    // setter
+    final JMethod jSet = jClass.method (JMod.PUBLIC, cm.VOID, "setText");
+    jParam = jSet.param (String.class, "text");
+    jSet.body ().assign (JExpr._this ().ref (jField), jParam);
+    jSet.javadoc ().add ("This is a setter");
+    jSet.javadoc ().addParam (jParam).add ("The new text to be set");
+
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  @Test
+  public void testGeneratesInstanceInit () throws Exception
   {
     /**
      * <pre>
@@ -80,7 +136,7 @@ public final class JDefinedClassTest
      * </pre>
      */
 
-    final JCodeModel cm = JCodeModel.createUnified ();
+    final JCodeModel cm = new JCodeModel ();
     final JDefinedClass c = cm._package ("myPackage")._class (0, "MyClass");
     c.headerComment ().add ("Line 1\nLine 2\nLine 3");
     final JFieldVar myField = c.field (JMod.PRIVATE, String.class, "myField");

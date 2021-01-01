@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -57,25 +58,20 @@ public final class ForEachFuncTest
   public void testBasic () throws Exception
   {
     final JCodeModel cm = JCodeModel.createUnified ();
-    final JDefinedClass cls = cm._class ("Test");
+    final JDefinedClass cls = cm._package ("org.example")._class ("TestForEach");
 
-    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
-    m.body ().decl (cm.INT, "getCount");
+    final JMethod m = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "foo");
 
-    // This is not exactly right because we need to
-    // support generics
-    final AbstractJClass arrayListclass = cm.ref (ArrayList.class);
-    final JVar $list = m.body ().decl (arrayListclass, "alist", JExpr._new (arrayListclass));
+    final AbstractJClass jClassList = cm.ref (List.class).narrow (Integer.class);
+    final JVar jVarList = m.body ().decl (JMod.FINAL, jClassList, "alist", cm.ref (ArrayList.class).narrowEmpty ()._new ());
+    m.body ().add (jVarList.invoke ("add").arg (1));
+    m.body ().add (jVarList.invoke ("add").arg (2));
 
-    final AbstractJClass $integerclass = cm.ref (Integer.class);
-    final JForEach foreach = m.body ().forEach ($integerclass, "count", $list);
-    final JVar $count1 = foreach.var ();
-    foreach.body ().assign (JExpr.ref ("getCount"), JExpr.lit (10));
+    // The main for-each
+    final JForEach foreach = m.body ().forEach (JMod.FINAL, cm.ref (Integer.class), "count", jVarList);
 
     // printing out the variable
-    final JFieldRef out1 = cm.ref (System.class).staticRef ("out");
-    // JInvocation invocation =
-    foreach.body ().add (JExpr.invoke (out1, "println").arg ($count1));
+    foreach.body ().add (cm.ref (System.class).staticRef ("out").invoke ("println").arg (foreach.var ()));
 
     CodeModelTestsHelper.parseCodeModel (cm);
   }
