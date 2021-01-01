@@ -398,13 +398,12 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
                            !m_aAtXdoclets.isEmpty ();
     if (!isEmpty () || bHasAt)
     {
-      final boolean bIsJavaDoc = true;
       final String sIndent = m_bIsSingleLineMode ? "// " : " * ";
       final String sIndentLarge = sIndent + "    ";
 
       // Start comment
       if (!m_bIsSingleLineMode)
-        f.print (bIsJavaDoc ? "/**" : "/*").newline ();
+        f.print (true ? "/**" : "/*").newline ();
 
       // Print all simple text elements
       format (f, sIndent);
