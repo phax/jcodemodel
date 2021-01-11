@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.inmemory;
+package com.helger.jcodemodel.compile;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

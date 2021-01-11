@@ -77,8 +77,8 @@ import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.inmemory.DynamicClassLoader;
-import com.helger.jcodemodel.inmemory.MemoryCodeWriter;
+import com.helger.jcodemodel.compile.DynamicClassLoader;
+import com.helger.jcodemodel.compile.MemoryCodeWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.JFormatter;
@@ -286,6 +286,13 @@ public final class CodeModelTestsHelper
     return astRoot;
   }
 
+  /**
+   * Parse the created java code using the javaparser library and with Eclipse
+   * JDT. This just checks the syntax, but not the dependencies
+   *
+   * @param cm
+   *        The code model to be parsed. May not be null.
+   */
   public static void parseCodeModel (@Nonnull final JCodeModel cm)
   {
     try
@@ -322,13 +329,6 @@ public final class CodeModelTestsHelper
     }
   }
 
-  public static void compileCodeModel (@Nonnull final JCodeModel cm)
-  {
-    // Compile using javax.tools
-    final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
-    assertNotNull (aLoader);
-  }
-
   @Nonnull
   public static CompilationUnit parseAndGetSingleClassCodeModel (@Nonnull final JCodeModel cm)
   {
@@ -344,6 +344,19 @@ public final class CodeModelTestsHelper
     {
       throw new UncheckedIOException (ex);
     }
+  }
+
+  /**
+   * Compile the generated classes using the javax.tools javac compiler
+   *
+   * @param cm
+   *        The code model to compile. May not be <code>null</code>.
+   */
+  public static void compileCodeModel (@Nonnull final JCodeModel cm)
+  {
+    // Compile using javax.tools
+    final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
+    assertNotNull (aLoader);
   }
 
   public static void printCodeModel (@Nonnull final JCodeModel cm)

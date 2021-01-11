@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.inmemory;
+package com.helger.jcodemodel.compile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

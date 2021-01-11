@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.inmemory;
+package com.helger.jcodemodel.compile;
 
 import java.io.IOException;
 import java.net.URI;
