@@ -73,7 +73,9 @@ public final class JDefinedClassTest
     final JMethod jSet = jClass.method (JMod.PUBLIC, cm.VOID, "setText");
     final JVar jParam = jSet.param (String.class, "text");
     jSet.body ().assign (JExpr._this ().ref (jField), jParam);
+
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -111,6 +113,7 @@ public final class JDefinedClassTest
     jSet.javadoc ().addParam (jParam).add ("The new text to be set");
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -165,6 +168,8 @@ public final class JDefinedClassTest
     c2._extends (c1);
     final JMethod con2 = c2.constructor (JMod.PUBLIC);
     con2.body ().add (JExpr.invokeSuper ().arg ("Test"));
+
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

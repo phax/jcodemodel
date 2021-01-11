@@ -170,5 +170,6 @@ public final class AnnotationUseFuncTest
     myuse.param ("value-value");
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

@@ -64,20 +64,23 @@ public final class Issue31FuncTest
   @Test
   public void test () throws Exception
   {
-    final JCodeModel generator = JCodeModel.createUnified ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
-    final AbstractJClass jtype = generator.ref (String.class);
-    final AbstractJClass aspect = generator.directClass (ValueHolderInstanceImpl.class.getSimpleName ());
-    final AbstractJClass abstractFieldClass = generator.ref (MockFieldInstanceImpl.class).narrow (jtype);
-    final JAnonymousClass basefield = generator.anonymousClass (abstractFieldClass);
+    final AbstractJClass jtype = cm.ref (String.class);
+    final AbstractJClass aspect = cm.directClass (ValueHolderInstanceImpl.class.getSimpleName ());
+    final AbstractJClass abstractFieldClass = cm.ref (MockFieldInstanceImpl.class).narrow (jtype);
+    final JAnonymousClass basefield = cm.anonymousClass (abstractFieldClass);
     final JFieldVar apectfield = basefield.field (JMod.PRIVATE, aspect, "valueHolder");
-    final JMethod initfield = basefield.method (JMod.PROTECTED, generator.VOID, "initialize");
+    final JMethod initfield = basefield.method (JMod.PROTECTED, cm.VOID, "initialize");
     initfield.body ().assign (apectfield, JExpr._new (aspect).arg (jtype.dotclass ()).arg (JExpr._null ()));
 
-    final JDefinedClass cls = generator._class (JMod.PUBLIC, "TestClass1Impl");
-    final JMethod m = cls.method (JMod.PUBLIC, generator.VOID, "foo");
+    final JDefinedClass cls = cm._class (JMod.PUBLIC, "TestClass1Impl");
+    final JMethod m = cls.method (JMod.PUBLIC, cm.VOID, "foo");
     m.body ().decl (abstractFieldClass, "_testField", JExpr._new (basefield));
 
-    CodeModelTestsHelper.parseCodeModel (generator);
+    CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't do
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

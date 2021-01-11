@@ -79,6 +79,9 @@ public final class JDirectClassTest
     aMethodSelected.body ()._if (JExpr.ref ("itemId_").eq (myItem));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't work
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -98,5 +101,8 @@ public final class JDirectClassTest
     cm._class ("UsingClass").method (JMod.PUBLIC, cm.VOID, "test").body ().add (JExpr._new (aNarrowedClass));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't work
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

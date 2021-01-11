@@ -74,5 +74,6 @@ public final class ForEachFuncTest
     foreach.body ().add (cm.ref (System.class).staticRef ("out").invoke ("println").arg (foreach.var ()));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

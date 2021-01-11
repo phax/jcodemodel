@@ -3,21 +3,28 @@ package com.helger.jcodemodel.inmemory;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.helger.commons.collection.impl.CommonsArrayList;
+import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
+import com.helger.commons.state.ESuccess;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -37,6 +44,7 @@ import com.helger.jcodemodel.writer.JCMWriter;
  */
 public class MemoryCodeWriter extends AbstractCodeWriter
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (MemoryCodeWriter.class);
   private static final JavaCompiler JAVAC = ToolProvider.getSystemJavaCompiler ();
 
   private final Map <String, NonBlockingByteArrayOutputStream> m_aBinaries = new HashMap <> ();
@@ -53,7 +61,9 @@ public class MemoryCodeWriter extends AbstractCodeWriter
   }
 
   /**
-   * @return an unmodifiable map of the internal binaries.
+   * @return an unmodifiable map of the internal binaries. It's a map from
+   *         filename to the payload. Don't modify the payload, as it is not
+   *         copied!
    */
   @Nonnull
   public Map <String, NonBlockingByteArrayOutputStream> getBinaries ()
@@ -66,13 +76,23 @@ public class MemoryCodeWriter extends AbstractCodeWriter
   {
     final String sFullname = sDirName + "/" + sFilename;
 
+    if (LOGGER.isDebugEnabled ())
+      LOGGER.debug ("MemoryCodeWriter.openBinary (" + sFullname + ")");
+
     return m_aBinaries.computeIfAbsent (sFullname, k -> new NonBlockingByteArrayOutputStream ());
   }
 
+  /**
+   * Compiling the contained java sources.
+   *
+   * @param aDynamicClassLoader
+   *        The dynamic class loader to use. May not be <code>null</code>.
+   * @return {@link ESuccess#SUCCESS} if if worked, <code>false</code> if not.
+   */
   @Nonnull
-  public <T extends DynamicClassLoader> T compile (@Nonnull final T aDynamicClassLoader)
+  public ESuccess compile (@Nonnull final DynamicClassLoader aDynamicClassLoader)
   {
-    final List <JavaFileObject> aCompilationUnits = new ArrayList <> ();
+    final ICommonsList <JavaFileObject> aCompilationUnits = new CommonsArrayList <> ();
 
     final Map <String, NonBlockingByteArrayOutputStream> aNonJava = new HashMap <> ();
 
@@ -97,46 +117,58 @@ public class MemoryCodeWriter extends AbstractCodeWriter
     if (!aCompilationUnits.isEmpty ())
       try
       {
-        final ForwardingJavaFileManager <JavaFileManager> aFileManager = new ClassLoaderFileManager (JAVAC.getStandardFileManager (x -> System.err.println ("file diagnostic " +
-                                                                                                                                                            x),
+        LOGGER.info ("Compiling: " + aCompilationUnits.getAllMapped (FileObject::getName));
+        final ForwardingJavaFileManager <JavaFileManager> aFileManager = new ClassLoaderFileManager (JAVAC.getStandardFileManager (x -> LOGGER.error ("file diagnostic " +
+                                                                                                                                                      x),
                                                                                                                                    null,
-                                                                                                                                   null),
+                                                                                                                                   StandardCharsets.UTF_8),
                                                                                                      aDynamicClassLoader);
         final JavaCompiler.CompilationTask task = JAVAC.getTask (null,
                                                                  aFileManager,
-                                                                 x -> System.err.println (" compile diagnostic " + x),
+                                                                 x -> LOGGER.info (" compile diagnostic " + x),
                                                                  null,
                                                                  null,
                                                                  aCompilationUnits);
-        task.call ();
+        if (!task.call ().booleanValue ())
+        {
+          LOGGER.error ("Error compiling: " + aCompilationUnits.getAllMapped (FileObject::getName));
+          return ESuccess.FAILURE;
+        }
       }
       catch (final Exception e1)
       {
         throw new UnsupportedOperationException ("catch this exception", e1);
       }
     aDynamicClassLoader.addResources (aNonJava);
-    return aDynamicClassLoader;
+    return ESuccess.SUCCESS;
   }
 
   /**
-   * creates a dynamic class loaders that delegates unknown resources and
+   * Creates a dynamic class loaders that delegates unknown resources and
    * classes to the classloader of the this class.
+   *
+   * @return An instance of {@link DynamicClassLoader} using this class' class
+   *         loader.
    */
-  protected static DynamicClassLoader dynCL ()
+  @Nonnull
+  public static DynamicClassLoader dynCL ()
   {
     return new DynamicClassLoader (JavaCompiler.class.getClassLoader ());
   }
 
   /**
-   * shortcut for {@link #compile(DynamicClassLoader)} with a correct class
-   * loader
+   * Shortcut for {@link #compile(DynamicClassLoader)} with a correct class
+   * loader.
    *
-   * @return The classloader used
+   * @return <code>null</code> if compiling didn't work. The
+   *         non-<code>null</code> class loader otherwise.
+   * @see #compile(DynamicClassLoader) for an alternative version
    */
-  @Nonnull
+  @Nullable
   public DynamicClassLoader compile ()
   {
-    return compile (dynCL ());
+    final DynamicClassLoader aDCL = dynCL ();
+    return compile (aDCL).isSuccess () ? aDCL : null;
   }
 
   @Nonnull

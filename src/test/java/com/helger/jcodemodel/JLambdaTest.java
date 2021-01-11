@@ -161,6 +161,8 @@ public final class JLambdaTest
 
     final JMethod m2 = cl.method (JMod.PUBLIC, cm.VOID, "method2");
     m2.body ().decl (JMod.FINAL, cm.ref (Supplier.class).narrow (String.class), "var1", new JLambdaMethodRef (m1));
+
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

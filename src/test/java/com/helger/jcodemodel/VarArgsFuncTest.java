@@ -95,6 +95,8 @@ public final class VarArgsFuncTest
         .directStatement ("new Test().foo(new String(\"Param1\"),new Integer(5),null,new String(\"Param3\"),new String(\"Param4\"));");
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -126,5 +128,6 @@ public final class VarArgsFuncTest
                  .arg ("Param 3b"));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

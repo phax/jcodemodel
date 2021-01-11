@@ -59,12 +59,13 @@ public final class Issue34FuncTest
   @Test
   public void testDefaultMethod () throws Exception
   {
-    final JCodeModel generator = JCodeModel.createUnified ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
-    final JDefinedClass aInterface = generator._package ("issue34")._interface ("IDefaultMethod");
-    final JMethod m = aInterface.method (JMod.DEFAULT, generator.ref (String.class), "testWithDefault");
+    final JDefinedClass aInterface = cm._package ("issue34")._interface ("IDefaultMethod");
+    final JMethod m = aInterface.method (JMod.DEFAULT, cm.ref (String.class), "testWithDefault");
     m.body ()._return (JExpr.lit ("foo"));
 
-    CodeModelTestsHelper.parseCodeModel (generator);
+    CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

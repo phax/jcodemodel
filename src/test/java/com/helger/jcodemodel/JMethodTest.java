@@ -65,5 +65,6 @@ public final class JMethodTest
     Assert.assertSame (foo, m.params ().get (0));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

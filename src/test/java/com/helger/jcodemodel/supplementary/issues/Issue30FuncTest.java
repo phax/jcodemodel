@@ -80,6 +80,9 @@ public final class Issue30FuncTest
     aMethodSelected.body ()._if (JExpr.ref ("itemId_").eq (aFieldItem.fieldRef ()));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't work
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -101,6 +104,9 @@ public final class Issue30FuncTest
     constructorBody.decl (cm.INT, "myInt2", myRId.staticRef ("otherId"));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't work
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -123,5 +129,8 @@ public final class Issue30FuncTest
     constructorBody.decl (cm.INT, "myInt2", myRId.staticRef ("otherId"));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't work
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

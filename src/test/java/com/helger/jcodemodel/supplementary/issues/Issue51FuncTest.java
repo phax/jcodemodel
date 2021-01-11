@@ -62,17 +62,21 @@ public final class Issue51FuncTest
   @Test
   public void testDefaultMethod () throws Exception
   {
-    final JCodeModel generator = JCodeModel.createUnified ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
-    final JDefinedClass aInterface = generator._package ("issue51")._class ("Test");
-    JMethod m = aInterface.method (JMod.PUBLIC, generator.ref (URI.class), "noURI");
+    final JDefinedClass aInterface = cm._package ("issue51")._class ("Test");
+    JMethod m = aInterface.method (JMod.PUBLIC, cm.ref (URI.class), "noURI");
     m.body ()._return (JExpr._null ());
 
-    m = aInterface.method (JMod.PUBLIC, generator.ref (URL.class), "noURL");
+    m = aInterface.method (JMod.PUBLIC, cm.ref (URL.class), "noURL");
     m.body ()._return (JExpr._null ());
 
-    CodeModelTestsHelper.parseCodeModel (generator);
-    generator.addDontImportClass (URI.class);
-    CodeModelTestsHelper.parseCodeModel (generator);
+    CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
+
+    cm.addDontImportClass (URI.class);
+
+    CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

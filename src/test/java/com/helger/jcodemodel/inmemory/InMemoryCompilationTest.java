@@ -41,7 +41,9 @@ public final class InMemoryCompilationTest
     jMethodToString.body ()._return (JExpr.lit (toStringVal));
 
     final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
+    assertNotNull (aLoader);
     final Class <?> aFoundClass = aLoader.findClass (jClass.fullName ());
+    assertNotNull (aFoundClass);
     assertEquals (toStringVal, aFoundClass.getConstructor ().newInstance ().toString ());
   }
 
@@ -59,7 +61,9 @@ public final class InMemoryCompilationTest
     for (int i = 1; i < 3; ++i)
     {
       final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
+      assertNotNull (aLoader);
       final Class <?> aFoundClass = aLoader.findClass (jClass.fullName ());
+      assertNotNull (aFoundClass);
       assertEquals (toStringVal, aFoundClass.getConstructor ().newInstance ().toString ());
     }
   }
@@ -75,33 +79,35 @@ public final class InMemoryCompilationTest
   @Test
   public void testSimpleResourceCreation () throws Exception
   {
-    final String toStringVal = "TEST_VALUE";
-    final String fileDir = "my/test";
-    final String fileName = "File.txt";
-    final String fileFullName = fileDir + "/" + fileName;
+    final String sContent = "TEST_VALUE";
+    final String sDir = "my/test";
+    final String sFilename = "File.txt";
+    final String sFullFilename = sDir + "/" + sFilename;
+
     final JCodeModel cm = new JCodeModel ();
-    cm.resourceDir (fileDir).addResourceFile (JTextFile.createFully (fileName, StandardCharsets.UTF_8, toStringVal));
+    cm.resourceDir (sDir).addResourceFile (JTextFile.createFully (sFilename, StandardCharsets.UTF_8, sContent));
 
     final MemoryCodeWriter aCodeWriter = new MemoryCodeWriter ();
     new JCMWriter (cm).setCharset (StandardCharsets.UTF_8).build (aCodeWriter);
 
     // check that in memory value is correct
-    final String inMemoryString = aCodeWriter.getBinaries ().get (fileFullName).getAsString (StandardCharsets.UTF_8);
-    assertEquals (toStringVal, inMemoryString);
+    final String inMemoryString = aCodeWriter.getBinaries ().get (sFullFilename).getAsString (StandardCharsets.UTF_8);
+    assertEquals (sContent, inMemoryString);
 
     // Check to read again
-    final String inMemoryString2 = aCodeWriter.getBinaries ().get (fileFullName).getAsString (StandardCharsets.UTF_8);
+    final String inMemoryString2 = aCodeWriter.getBinaries ().get (sFullFilename).getAsString (StandardCharsets.UTF_8);
     assertNotSame (inMemoryString, inMemoryString2);
     assertEquals (inMemoryString, inMemoryString2);
 
-    final DynamicClassLoader dynCL = aCodeWriter.compile ();
-    try (final InputStream inCLInpuStream = dynCL.getResourceAsStream (fileFullName))
+    final DynamicClassLoader aLoader = aCodeWriter.compile ();
+    assertNotNull (aLoader);
+    try (final InputStream inCLInpuStream = aLoader.getResourceAsStream (sFullFilename))
     {
       assertNotNull (inCLInpuStream);
       try (final BufferedReader r = new BufferedReader (new InputStreamReader (inCLInpuStream)))
       {
         final String inCLString = r.readLine ();
-        assertEquals (toStringVal, inCLString);
+        assertEquals (sContent, inCLString);
       }
     }
   }

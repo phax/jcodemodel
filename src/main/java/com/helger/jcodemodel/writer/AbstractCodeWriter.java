@@ -155,7 +155,7 @@ public abstract class AbstractCodeWriter implements Closeable
    * @param sFilename
    *        File name without the path. Something like "Foo.java" or
    *        "Bar.properties"
-   * @return Writer to write to
+   * @return Writer to write to. Never <code>null</code>. Caller must close it.
    * @throws IOException
    *         On IO error
    */

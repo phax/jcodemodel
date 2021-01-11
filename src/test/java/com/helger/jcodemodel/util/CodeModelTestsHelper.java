@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel.util;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -50,10 +52,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
@@ -69,6 +69,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.collection.IteratorHelper;
 import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
@@ -76,6 +77,8 @@ import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.IJGenerable;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.inmemory.DynamicClassLoader;
+import com.helger.jcodemodel.inmemory.MemoryCodeWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.JFormatter;
@@ -319,23 +322,18 @@ public final class CodeModelTestsHelper
     }
   }
 
-  @Nonnegative
-  private static int _count (final Iterator <?> x)
+  public static void compileCodeModel (@Nonnull final JCodeModel cm)
   {
-    int ret = 0;
-    while (x.hasNext ())
-    {
-      x.next ();
-      ret++;
-    }
-    return ret;
+    // Compile using javax.tools
+    final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
+    assertNotNull (aLoader);
   }
 
   @Nonnull
   public static CompilationUnit parseAndGetSingleClassCodeModel (@Nonnull final JCodeModel cm)
   {
     assert cm != null;
-    assert _count (cm.packages ()) == 1;
+    assert IteratorHelper.getSize (cm.packages ()) == 1;
     assert cm.packages ().next ().classes ().size () == 1;
     final byte [] aBytes = getAllBytes (cm);
     try

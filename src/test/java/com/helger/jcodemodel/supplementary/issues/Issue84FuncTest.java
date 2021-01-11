@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel.supplementary.issues;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -66,9 +67,10 @@ public final class Issue84FuncTest
     final JDefinedClass innerClass = outerClass._class ("Inner");
 
     final JDefinedClass testClass = cm._class ("test.Test");
-    final JAnonymousClass anonymousClass = cm.anonymousClass (cm.ref (List.class).narrow (innerClass));
+    final JAnonymousClass anonymousClass = cm.anonymousClass (cm.ref (ArrayList.class).narrow (innerClass));
     testClass.field (0, cm.ref (List.class).narrow (innerClass), "field", JExpr._new (anonymousClass));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

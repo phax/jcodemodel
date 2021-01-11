@@ -65,18 +65,19 @@ public final class Issue53FuncTest
   @Test
   public void testIssue () throws Exception
   {
-    final JCodeModel generator = JCodeModel.createUnified ();
+    final JCodeModel cm = JCodeModel.createUnified ();
 
-    final JDefinedClass aInterface = generator._package ("issue53")._interface ("ITest");
-    final JLambdaMethodRef methodLambda = new JLambdaMethodRef (generator.ref (String.class), "toString");
+    final JDefinedClass aInterface = cm._package ("issue53")._interface ("ITest");
 
-    JMethod method = aInterface.method (JMod.DEFAULT, generator.ref (Supplier.class).narrowAny (), "description");
+    final JLambdaMethodRef methodLambda = new JLambdaMethodRef (cm.ref (String.class), "toString");
+
+    JMethod method = aInterface.method (JMod.DEFAULT, cm.ref (Supplier.class).narrowAny (), "description");
     {
       final JLambda lambda = JLambda.simple (JExpr._this ().invoke ("getValueProvider").invoke ("andThen").arg (methodLambda));
       method.body ()._return (lambda);
     }
 
-    method = aInterface.method (JMod.DEFAULT, generator.ref (Supplier.class).narrow (String.class), "description2");
+    method = aInterface.method (JMod.DEFAULT, cm.ref (Supplier.class).narrow (String.class), "description2");
     {
       final JLambda lambda = new JLambda ();
       final JLambdaParam aParam = lambda.addParam ("xx");
@@ -84,20 +85,23 @@ public final class Issue53FuncTest
       method.body ()._return (lambda);
     }
 
-    method = aInterface.method (JMod.DEFAULT, generator.VOID, "description3");
+    method = aInterface.method (JMod.DEFAULT, cm.VOID, "description3");
     {
       final JVar l1 = method.body ()
-                            .decl (generator.ref (Supplier.class).narrowAny (),
+                            .decl (cm.ref (Supplier.class).narrowAny (),
                                    "x1",
                                    JLambda.simple (JExpr._this ().invoke ("getValueProvider").invoke ("andThen").arg (methodLambda)));
 
       final JLambda lambda = new JLambda ();
       final JLambdaParam aParam = lambda.addParam ("xx");
       lambda.body ().lambdaExpr (aParam.invoke ("getValueProvider").invoke ("andThen").arg (methodLambda));
-      method.body ().decl (generator.ref (Object.class), "x2", lambda);
+      method.body ().decl (cm.ref (Object.class), "x2", lambda);
       method.body ().add (l1.invoke ("get"));
     }
 
-    CodeModelTestsHelper.parseCodeModel (generator);
+    CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't work
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

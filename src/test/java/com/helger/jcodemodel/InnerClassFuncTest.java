@@ -82,5 +82,7 @@ public final class InnerClassFuncTest
     otherClass.method (JMod.PUBLIC, aClass, "getOuter");
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

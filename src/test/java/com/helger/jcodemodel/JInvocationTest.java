@@ -104,6 +104,7 @@ public final class JInvocationTest
     minvoke.body ().add (JExpr.invoke (m2).arg ("jippie").arg (JExpr._this ()).arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -122,5 +123,6 @@ public final class JInvocationTest
     minvoke.body ().add (JExpr.invoke (m1).invoke (m2));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

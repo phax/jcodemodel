@@ -92,6 +92,7 @@ public final class JAnnotationUseTest
     field.annotate (Deprecated.class);
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -100,5 +101,6 @@ public final class JAnnotationUseTest
     final JCodeModel cm = JCodeModel.createUnified ();
     cm._package ("foo").annotate (Inherited.class);
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

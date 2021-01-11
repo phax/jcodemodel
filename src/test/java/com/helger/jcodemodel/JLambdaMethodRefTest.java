@@ -164,7 +164,11 @@ public final class JLambdaMethodRefTest
 
     final JMethod con = cl.constructor (JMod.PUBLIC);
     con.body ().decl (cm.ref (Object.class), "any", aLambda);
+
     CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't work
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -184,6 +188,10 @@ public final class JLambdaMethodRefTest
 
     final JMethod con = cl.constructor (JMod.PUBLIC);
     con.body ().decl (cm.ref (Object.class), "any", aLambda);
+
     CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't work
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

@@ -51,6 +51,7 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.WillCloseWhenClosed;
 import javax.annotation.concurrent.NotThreadSafe;
 
 import com.helger.commons.ValueEnforcer;
@@ -209,7 +210,7 @@ public class JFormatter implements IJFormatter
     }
   }
 
-  private static enum EMode
+  private enum EMode
   {
     /**
      * Collect all the type names and identifiers. In this mode we don't
@@ -401,12 +402,12 @@ public class JFormatter implements IJFormatter
    *
    * @param aPW
    *        {@link PrintWriter} to {@link IJFormatter} to use. May not be
-   *        <code>null</code>.
+   *        <code>null</code>. Is closed when this object is closed.
    * @param sIndentString
    *        Incremental indentation string, similar to tab value. May not be
    *        <code>null</code>.
    */
-  public JFormatter (@Nonnull final SourcePrintWriter aPW, @Nonnull final String sIndentString)
+  public JFormatter (@Nonnull @WillCloseWhenClosed final SourcePrintWriter aPW, @Nonnull final String sIndentString)
   {
     ValueEnforcer.notNull (aPW, "PrintWriter");
     ValueEnforcer.notNull (sIndentString, "IndentString");
@@ -415,9 +416,12 @@ public class JFormatter implements IJFormatter
     m_sIndentString = sIndentString;
   }
 
-  public void setDebugImports (final boolean bDebug)
+  /**
+   * Closes this formatter.
+   */
+  public void close ()
   {
-    m_bDebugImport = bDebug;
+    m_aPW.close ();
   }
 
   public boolean isDebugImports ()
@@ -425,12 +429,9 @@ public class JFormatter implements IJFormatter
     return m_bDebugImport;
   }
 
-  /**
-   * Closes this formatter.
-   */
-  public void close ()
+  public void setDebugImports (final boolean bDebug)
   {
-    m_aPW.close ();
+    m_bDebugImport = bDebug;
   }
 
   public boolean isPrinting ()
@@ -628,7 +629,7 @@ public class JFormatter implements IJFormatter
         // see if there is a type name that collides with this id
         // not a type, but we need to create a place holder to
         // see if there might be a collision with a type
-        m_aCollectedReferences.computeIfAbsent (sID, k -> new NameUsage (k)).setVariableName ();
+        m_aCollectedReferences.computeIfAbsent (sID, NameUsage::new).setVariableName ();
         break;
       case PRINTING:
         print (sID);

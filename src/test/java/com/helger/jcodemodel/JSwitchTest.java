@@ -71,5 +71,6 @@ public final class JSwitchTest
     s._default ().body ()._break ();
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

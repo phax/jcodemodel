@@ -49,15 +49,19 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
  */
 public final class NestedClassFuncTest
 {
+  public static class MockInnerClass
+  {}
+
   @Test
   public void testBasic () throws Exception
   {
     final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass c = cm._package ("foo")._class (0, "Foo");
     c._extends (cm.ref (MockInnerClass.class));
-    CodeModelTestsHelper.parseCodeModel (cm);
-  }
 
-  public static class MockInnerClass
-  {}
+    CodeModelTestsHelper.parseCodeModel (cm);
+    // Won't work
+    if (false)
+      CodeModelTestsHelper.compileCodeModel (cm);
+  }
 }

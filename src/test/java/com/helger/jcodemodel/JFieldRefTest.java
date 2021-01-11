@@ -66,5 +66,6 @@ public final class JFieldRefTest
     m.body ().add (JExpr.refthis (f2).assign ("Call"));
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

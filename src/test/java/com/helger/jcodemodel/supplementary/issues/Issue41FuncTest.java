@@ -81,6 +81,7 @@ public final class Issue41FuncTest
     s._default ().body ()._break ();
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -103,6 +104,7 @@ public final class Issue41FuncTest
     s._default ().body ()._return (JExpr._null ());
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -126,7 +128,9 @@ public final class Issue41FuncTest
       final JEnumConstant ec = jEnumClass.enumConstant (aEntry.getValue ());
       s._case (JExpr.lit (aEntry.getKey ().intValue ())).body ()._return (ec);
     }
+    s._default ().body ()._return (JExpr._null ());
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

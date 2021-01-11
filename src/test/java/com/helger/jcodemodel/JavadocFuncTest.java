@@ -61,6 +61,7 @@ public final class JavadocFuncTest
     aComment.addDeprecated ().add ("Just for testing");
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -83,5 +84,6 @@ public final class JavadocFuncTest
     method.javadoc ().addTag ("since").add ("JCodeModel 2.8.5");
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }

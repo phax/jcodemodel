@@ -77,13 +77,17 @@ public final class JCodeModelTest
   public void testIssue28 () throws Exception
   {
     final JCodeModel cm = JCodeModel.createUnified ();
+
     final JDefinedClass aEnumClass = cm._package ("com.helger.issue28")._enum ("DummyEnum");
+    aEnumClass.enumConstant ("CONSTANT");
+
     cm._package ("com.helger.issue28.other")
       ._class ("Class")
       .constructor (JMod.PUBLIC)
       .body ()
       .add (JExpr.enumConstantRef (aEnumClass, "CONSTANT").invoke ("toString"));
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -106,10 +110,12 @@ public final class JCodeModelTest
   public void testEmptyNarrowed () throws JCodeModelException
   {
     final JCodeModel cm = JCodeModel.createUnified ();
-    final JDefinedClass jClass = cm._class ("EmptyNarrowed", EClassType.INTERFACE);
+    final JDefinedClass jClass = cm._class ("EmptyNarrowed", EClassType.CLASS);
     final AbstractJClass hashMap = cm.ref (java.util.HashMap.class).narrowEmpty ();
-    jClass.field (JMod.PRIVATE, cm.ref (Map.class).narrow (String.class), "strMap", JExpr._new (hashMap));
+    jClass.field (JMod.PRIVATE, cm.ref (Map.class).narrow (String.class).narrow (String.class), "strMap", JExpr._new (hashMap));
+
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -123,7 +129,9 @@ public final class JCodeModelTest
     aClass2.method (JMod.PUBLIC, aOtherByteClass, "testByte").body ()._return (JExpr._null ());
     // Whereas the Foo class may be imported
     aClass2.method (JMod.PUBLIC, aFooClass, "testFoo").body ()._return (JExpr._null ());
+
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test
@@ -139,7 +147,9 @@ public final class JCodeModelTest
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cln, "obj");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Byte.class), "obj");
     cl.method (JMod.PUBLIC, cm.VOID, "call").param (cm.ref (Long.class), "obj");
+
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 
   @Test

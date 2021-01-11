@@ -71,5 +71,6 @@ public final class AnonymousClassFuncTest
     assertEquals ("java.util.Iterator<java.lang.Double>", c.binaryName ());
 
     CodeModelTestsHelper.parseCodeModel (cm);
+    CodeModelTestsHelper.compileCodeModel (cm);
   }
 }
