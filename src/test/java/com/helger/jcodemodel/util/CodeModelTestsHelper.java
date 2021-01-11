@@ -55,7 +55,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.compiler.IProblem;
@@ -231,21 +230,14 @@ public final class CodeModelTestsHelper
   }
 
   @Nonnull
-  private static CompilationUnit _parseWithJavaParser (final byte [] aBytes,
-                                                       @Nullable final String sDirName,
-                                                       final String sFilename) throws IOException
+  private static CompilationUnit _parseWithJavaParser (final String sUnitName, final byte [] aBytes) throws IOException
   {
     if (false)
     {
       LOGGER.info (new String (aBytes, DEFAULT_ENCODING));
     }
 
-    final String sRealDirName = sDirName == null ? "" : sDirName;
-    LOGGER.info ("Parsing " +
-                 StringHelper.replaceAll (sRealDirName, '/', '.') +
-                 (sRealDirName.length () > 0 ? "." : "") +
-                 (sFilename.endsWith (".java") ? sFilename.substring (0, sFilename.length () - 5) : sFilename) +
-                 " with JavaParser");
+    LOGGER.info ("Parsing '" + sUnitName + "' with JavaParser");
 
     try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
     {
@@ -258,7 +250,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   private static org.eclipse.jdt.core.dom.CompilationUnit _parseWithJDT (final String sUnitName, final char [] aCode)
   {
-    LOGGER.info ("Parsing " + sUnitName + " with Eclipse JDT");
+    LOGGER.info ("Parsing '" + sUnitName + "' with Eclipse JDT");
 
     final ASTParser parser = ASTParser.newParser (AST.JLS15);
     parser.setResolveBindings (true);
@@ -311,9 +303,14 @@ public final class CodeModelTestsHelper
 
               final byte [] aBytes = toByteArray ();
 
+              final String sRealDirName = sDirName == null ? "" : sDirName;
+              final String sUnitName = StringHelper.replaceAll (sRealDirName, '/', '.') +
+                                       (sRealDirName.length () > 0 ? "." : "") +
+                                       sFilename;
+
               // Get result as bytes and parse
-              _parseWithJavaParser (aBytes, sDirName, sFilename);
-              _parseWithJDT (sFilename, new String (aBytes, DEFAULT_ENCODING).toCharArray ());
+              _parseWithJavaParser (sUnitName, aBytes);
+              _parseWithJDT (sUnitName, new String (aBytes, DEFAULT_ENCODING).toCharArray ());
             }
           };
         }
@@ -338,7 +335,7 @@ public final class CodeModelTestsHelper
     final byte [] aBytes = getAllBytes (cm);
     try
     {
-      return _parseWithJavaParser (aBytes, null, "full-jcodemodel");
+      return _parseWithJavaParser ("full-jcodemodel", aBytes);
     }
     catch (final IOException ex)
     {

@@ -40,7 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import java.lang.annotation.Inherited;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -99,7 +102,12 @@ public final class JAnnotationUseTest
   public void testPackageAnnotation () throws Exception
   {
     final JCodeModel cm = JCodeModel.createUnified ();
-    cm._package ("foo").annotate (Inherited.class);
+
+    final JDefinedClass cl = cm._package ("com.bla")._annotationTypeDeclaration ("Generated");
+    cl.annotate (Retention.class).param (RetentionPolicy.SOURCE);
+    cl.annotate (Target.class).param (ElementType.PACKAGE);
+    cm._package ("foo").annotate (cl);
+
     CodeModelTestsHelper.parseCodeModel (cm);
     CodeModelTestsHelper.compileCodeModel (cm);
   }

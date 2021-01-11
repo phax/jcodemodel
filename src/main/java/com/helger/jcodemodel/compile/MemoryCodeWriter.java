@@ -79,7 +79,18 @@ public class MemoryCodeWriter extends AbstractCodeWriter
     if (LOGGER.isDebugEnabled ())
       LOGGER.debug ("MemoryCodeWriter.openBinary (" + sFullname + ")");
 
-    return m_aBinaries.computeIfAbsent (sFullname, k -> new NonBlockingByteArrayOutputStream ());
+    NonBlockingByteArrayOutputStream aBAOS = m_aBinaries.get (sFullname);
+    if (aBAOS == null)
+    {
+      aBAOS = new NonBlockingByteArrayOutputStream ();
+      m_aBinaries.put (sFullname, aBAOS);
+    }
+    else
+    {
+      LOGGER.warn ("The filename '" + sFullname + "' is contained more than once. Expect compilation errors.");
+    }
+
+    return aBAOS;
   }
 
   /**
