@@ -68,9 +68,9 @@ public enum EFileSystemConvention implements IFileSystemConvention
   private final Predicate <String> m_aDirNameCheck;
   private final Predicate <String> m_aFilenameCheck;
 
-  private EFileSystemConvention (final boolean bCaseSensitive,
-                                 @Nonnull final Predicate <String> aDirNameCheck,
-                                 @Nonnull final Predicate <String> aFilenameCheck)
+  EFileSystemConvention (final boolean bCaseSensitive,
+                         @Nonnull final Predicate <String> aDirNameCheck,
+                         @Nonnull final Predicate <String> aFilenameCheck)
   {
     m_bIsCaseSensitive = bCaseSensitive;
     m_aDirNameCheck = aDirNameCheck;
