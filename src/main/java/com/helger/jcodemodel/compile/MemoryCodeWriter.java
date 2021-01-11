@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.tools.DiagnosticListener;
 import javax.tools.FileObject;
 import javax.tools.ForwardingJavaFileManager;
 import javax.tools.JavaCompiler;
@@ -47,6 +48,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
   private static final Logger LOGGER = LoggerFactory.getLogger (MemoryCodeWriter.class);
   private static final JavaCompiler JAVAC = ToolProvider.getSystemJavaCompiler ();
 
+  private DiagnosticListener <? super JavaFileObject> m_aDL;
   private final Map <String, NonBlockingByteArrayOutputStream> m_aBinaries = new HashMap <> ();
 
   public MemoryCodeWriter ()
@@ -58,6 +60,30 @@ public class MemoryCodeWriter extends AbstractCodeWriter
   public void close () throws IOException
   {
     // nothing.
+  }
+
+  /**
+   * @return The current diagnostic listener. May be <code>null</code>.
+   */
+  @Nullable
+  public final DiagnosticListener <? super JavaFileObject> getDiagnosticListener ()
+  {
+    return m_aDL;
+  }
+
+  /**
+   * Set an optional listener that it is invoked in case of compilation errors.
+   * By default errors are only logged.
+   *
+   * @param aDL
+   *        The listener to call. May be <code>null</code>.
+   * @return this for chaining
+   */
+  @Nonnull
+  public final MemoryCodeWriter setDiagnosticListener (@Nullable final DiagnosticListener <? super JavaFileObject> aDL)
+  {
+    m_aDL = aDL;
+    return this;
   }
 
   /**
@@ -129,17 +155,18 @@ public class MemoryCodeWriter extends AbstractCodeWriter
       try
       {
         LOGGER.info ("Compiling: " + aCompilationUnits.getAllMapped (FileObject::getName));
-        final ForwardingJavaFileManager <JavaFileManager> aFileManager = new ClassLoaderFileManager (JAVAC.getStandardFileManager (x -> LOGGER.error ("file diagnostic " +
-                                                                                                                                                      x),
+
+        final DiagnosticListener <? super JavaFileObject> aLoggingDL = x -> LOGGER.error (x.toString ());
+        final DiagnosticListener <? super JavaFileObject> aRealDL = m_aDL != null ? x -> {
+          aLoggingDL.report (x);
+          m_aDL.report (x);
+        } : aLoggingDL;
+
+        final ForwardingJavaFileManager <JavaFileManager> aFileManager = new ClassLoaderFileManager (JAVAC.getStandardFileManager (aRealDL,
                                                                                                                                    null,
                                                                                                                                    StandardCharsets.UTF_8),
                                                                                                      aDynamicClassLoader);
-        final JavaCompiler.CompilationTask task = JAVAC.getTask (null,
-                                                                 aFileManager,
-                                                                 x -> LOGGER.info (" compile diagnostic " + x),
-                                                                 null,
-                                                                 null,
-                                                                 aCompilationUnits);
+        final JavaCompiler.CompilationTask task = JAVAC.getTask (null, aFileManager, aRealDL, null, null, aCompilationUnits);
         if (!task.call ().booleanValue ())
         {
           LOGGER.error ("Error compiling: " + aCompilationUnits.getAllMapped (FileObject::getName));

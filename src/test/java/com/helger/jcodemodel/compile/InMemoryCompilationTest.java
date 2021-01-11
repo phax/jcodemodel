@@ -3,11 +3,17 @@ package com.helger.jcodemodel.compile;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.tools.Diagnostic;
+import javax.tools.JavaFileObject;
 
 import org.junit.Test;
 
@@ -110,5 +116,22 @@ public final class InMemoryCompilationTest
         assertEquals (sContent, inCLString);
       }
     }
+  }
+
+  @Test
+  public void testCompileError () throws Exception
+  {
+    final JCodeModel cm = new JCodeModel ();
+
+    final JDefinedClass jClass = cm._class (JMod.PUBLIC, "com.example.TestError");
+    final JMethod jMethodToString = jClass.method (JMod.PUBLIC, cm.ref (String.class), "toString");
+    jMethodToString.annotate (Override.class);
+    // Type error
+    jMethodToString.body ()._return (JExpr.lit (42));
+
+    final List <Diagnostic <? extends JavaFileObject>> aErrors = new ArrayList <> ();
+    final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).setDiagnosticListener (aErrors::add).compile ();
+    assertNull (aLoader);
+    assertEquals (1, aErrors.size ());
   }
 }
