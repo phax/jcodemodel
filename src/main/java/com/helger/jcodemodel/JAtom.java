@@ -45,12 +45,14 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import javax.annotation.Nonnull;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.annotation.ReturnsMutableCopy;
 import com.helger.commons.equals.EqualsHelper;
+import com.helger.commons.lang.ICloneable;
 
 /**
  * JAtoms: Simple code components that merely generate themselves.
  */
-public class JAtom implements IJExpression
+public class JAtom implements IJExpression, ICloneable <JAtom>
 {
   private final String m_sWhat;
 
@@ -73,6 +75,13 @@ public class JAtom implements IJExpression
   public void generate (@Nonnull final IJFormatter f)
   {
     f.print (m_sWhat);
+  }
+
+  @Nonnull
+  @ReturnsMutableCopy
+  public JAtom getClone ()
+  {
+    return new JAtom (m_sWhat);
   }
 
   @Override
