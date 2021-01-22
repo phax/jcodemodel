@@ -223,7 +223,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public final IFileSystemConvention setFileSystemConvention (@Nonnull final IFileSystemConvention aFSConvention) throws JCaseSensitivityChangeException,
-                                                                                                                  JInvalidFileNameException
+  JInvalidFileNameException
   {
     ValueEnforcer.notNull (aFSConvention, "FSConvention");
     if (aFSConvention == m_aFSConvention)
@@ -464,15 +464,15 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+      @Nonnull final String sFullyQualifiedClassName,
+      @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     final int nIdx = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIdx < 0)
       return rootPackage ()._class (nMods, sFullyQualifiedClassName, eClassType);
     return _package (sFullyQualifiedClassName.substring (0, nIdx))._class (nMods,
-                                                                           sFullyQualifiedClassName.substring (nIdx + 1),
-                                                                           eClassType);
+        sFullyQualifiedClassName.substring (nIdx + 1),
+        eClassType);
   }
 
   /**
@@ -520,7 +520,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+      @Nonnull final EClassType eClassType) throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
   }
@@ -769,7 +769,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public JDefinedClass ref (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils) throws ErrorTypeFound,
-                                                                                                        CodeModelBuildingException
+  CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClass (aElement);
@@ -806,7 +806,7 @@ public class JCodeModel implements Serializable
    */
   @Nonnull
   public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement,
-                                          @Nonnull final Elements aElementUtils) throws CodeModelBuildingException
+      @Nonnull final Elements aElementUtils) throws CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClassWithErrorTypes (aElement);
@@ -1082,5 +1082,10 @@ public class JCodeModel implements Serializable
   public Set <AbstractJClass> getAllDontImportClasses ()
   {
     return new HashSet <> (m_aDontImportClasses);
+  }
+
+  public ModelCopy copy ()
+  {
+    return new ModelCopy (this);
   }
 }
