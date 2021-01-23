@@ -95,9 +95,9 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    *        Value to initialize this variable to
    */
   public JVar (@Nonnull final JMods aMods,
-               @Nonnull final AbstractJType aType,
-               @Nonnull final String sName,
-               @Nullable final IJExpression aInitExpr)
+      @Nonnull final AbstractJType aType,
+      @Nonnull final String sName,
+      @Nullable final IJExpression aInitExpr)
   {
     ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_aMods = aMods;
@@ -189,6 +189,11 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
     return aOldType;
   }
 
+  public List <JAnnotationUse> getAnnotations ()
+  {
+    return m_aAnnotations == null ? Collections.emptyList () : m_aAnnotations;
+  }
+
   /**
    * Adds an annotation to this variable.
    *
@@ -196,6 +201,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    *        The annotation class to annotate the field with
    * @return New {@link JAnnotationUse}
    */
+  @Override
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final AbstractJClass aClazz)
   {
@@ -213,6 +219,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    *        The annotation class to annotate the field with
    * @return New {@link JAnnotationUse}
    */
+  @Override
   @Nonnull
   public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> aClazz)
   {
@@ -227,6 +234,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
     return m_aAnnotations;
   }
 
+  @Override
   @Nonnull
   public List <JAnnotationUse> annotations ()
   {
@@ -257,11 +265,13 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
       f.print ('=').generable (m_aInitExpr);
   }
 
+  @Override
   public void declare (@Nonnull final IJFormatter f)
   {
     f.var (this).print (';').newline ();
   }
 
+  @Override
   public void generate (@Nonnull final IJFormatter f)
   {
     f.id (m_sName);
