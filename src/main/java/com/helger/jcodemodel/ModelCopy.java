@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import com.helger.jcodemodel.AbstractJAnnotationValueOwned.JEnumConstantExpr;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
@@ -19,7 +21,9 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
  * matches</li><li>
  * test the item class with getClass() and equality, and throw an exception if no class is corresponding</li><li>or
  * finally
- * assume the class if not inherited, and thus use {@link #ensureClass(Object, Class)} on the object which will throw an
+ * assume the class if not inherited, and thus use {@link #
+ * return cacheCopy (type, JTypeVarClass.class, src -> new JTypeVarClass (translate (type.getRefClass ())), null);
+ * ensureClass(Object, Class)} on the object which will throw an
  * exception if that class is later inherited.</li>
  * </p>
  *
@@ -29,19 +33,6 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
 @SuppressWarnings("serial")
 public class ModelCopy extends JCodeModel
 {
-
-  /**
-   * ensure an object is of given class o
-   *
-   * @param o
-   * @param cl
-   */
-  protected static void ensureClass (Object o, Class <?> cl)
-  {
-    if (o.getClass () != cl)
-      throw new UnsupportedOperationException (
-          "bad class, filter using instanceof. Expected " + cl + " got " + o.getClass ());
-  }
 
   private final JCodeModel from;
 
@@ -66,8 +57,55 @@ public class ModelCopy extends JCodeModel
   //
   // translate objects. Delegation through the class. The intefaces are doing delegation with instanceof or throw.
   // The classes start with he highest one implements IJObject ; non-abstract classes start with a class()== , then do
-  // the same as abstract and interfaces (series of instanceof).
+  // the same as abstract and interfaces (series of instanceof). Class that have effective code should test the
+  // existence of the object in the cache first.
   //
+
+  // caching
+
+  /**
+   * internal memory of the source model items we translated, into their copy.
+   */
+  private HashMap <IJObject, IJObject> translatedCache = new HashMap <> ();
+
+  /**
+   * if an {@link IJObject} is not copied yet, copies and store the source-copy link.
+   *
+   * @param <T>
+   *        exact type we produce
+   * @param source
+   *        the item we need to copy in this.
+   * @param expectedClass
+   *        the exact class we want.
+   * @param creator
+   *        function to create a shallow copy of the object. This method should only call a constructor, not deep copy
+   *        the source, to avoid recursive call to this method. Therefore the only restriction, is that this method does
+   *        not try to translate, directly or not, the same class we re using for T.
+   * @param deepCopy
+   *        function to actually deep copy the source into the target. Since this method is called after storing the
+   *        target in the cache, this avoids having recursive calls. Can be set to null if there is no deep copy
+   *        required.
+   * @return a new fully copied item.
+   */
+  @SuppressWarnings("unchecked")
+  protected <T extends IJObject> T cacheCopy (
+      T source,
+      Class <T> expectedClass,
+      Function <T, T> creator,
+      BiConsumer <T, T> deepCopy)
+  {
+    return (T) translatedCache.computeIfAbsent (source, o ->
+    {
+      if (o.getClass () != expectedClass)
+        throw new UnsupportedOperationException (
+            "bad class, filter using instanceof. Expected " + expectedClass + " got " + o.getClass ());
+      T ret = creator.apply (source);
+      translatedCache.put (o, ret);
+      if (deepCopy != null)
+        deepCopy.accept (source, ret);
+      return ret;
+    });
+  }
 
   //
   // translate interfaces graph
@@ -223,29 +261,21 @@ public class ModelCopy extends JCodeModel
     throw new UnsupportedOperationException ("not done " + type.getClass ());
   }
 
-  private HashMap <JDefinedClass, JDefinedClass> translatedJDefinedClass = new HashMap <> ();
-
   public JDefinedClass translate (JDefinedClass type)
   {
     if (type instanceof JAnonymousClass)
       return translate ((JAnonymousClass) type);
-    ensureClass (type, JDefinedClass.class);
-    JDefinedClass ret = translatedJDefinedClass.get (type);
-    if (ret == null)
+    return cacheCopy (type, JDefinedClass.class, cl ->
     {
       try
       {
-        ret = _class (type.mods ().getValue (), type.fullName (), type.getClassType ());
+        return _class (type.mods ().getValue (), type.fullName (), type.getClassType ());
       }
-      catch (JCodeModelException e1)
+      catch (JCodeModelException e)
       {
-        throw new UnsupportedOperationException ("catch this", e1);
+        throw new UnsupportedOperationException ("catch this", e);
       }
-      // put it in the map before building it, for recursive calls.
-      translatedJDefinedClass.put (type, ret);
-      copyClass (type, ret);
-    }
-    return ret;
+    }, this::copyClass);
   }
 
   protected void copyClass (JDefinedClass type, JDefinedClass ret)
@@ -260,78 +290,69 @@ public class ModelCopy extends JCodeModel
 
   public JAnonymousClass translate (JAnonymousClass type)
   {
-    ensureClass (type, JAnonymousClass.class);
-    JAnonymousClass ret = new JAnonymousClass (translate (type.base ()));
-    copyClass (type, ret);
-    return ret;
+    return cacheCopy (type, JAnonymousClass.class, src -> new JAnonymousClass (translate (type.base ())),
+        this::copyClass);
   }
 
   public JDirectClass translate (JDirectClass type)
   {
-    ensureClass (type, JDirectClass.class);
-    return new JDirectClass (this, translate (type.getOuter ()), type.getClassType (), type.fullName ());
+    return cacheCopy (type, JDirectClass.class,
+        src -> new JDirectClass (this, translate (type.getOuter ()), type.getClassType (), type.fullName ()), null);
   }
 
   // end AbstractJClassContainer
 
   public JArrayClass translate (JArrayClass type)
   {
-    ensureClass (type, JArrayClass.class);
-    return new JArrayClass (this, translate (type.elementType ()));
+    return cacheCopy (type, JArrayClass.class, src -> new JArrayClass (this, translate (type.elementType ())), null);
   }
 
   public JErrorClass translate (JErrorClass type)
   {
-    ensureClass (type, JErrorClass.class);
-    return new JErrorClass (this, type.getMessage ());
+    return cacheCopy (type, JErrorClass.class, src -> new JErrorClass (this, type.getMessage ()), null);
   }
 
   public JNarrowedClass translate (JNarrowedClass type)
   {
-    ensureClass (type, JNarrowedClass.class);
     List <AbstractJClass> args = new ArrayList <> ();
     for (AbstractJClass arg : type.getTypeParameters ())
       args.add (translate (arg));
-    return new JNarrowedClass (translate (type.erasure ()), args);
+    return cacheCopy (type, JNarrowedClass.class, src -> new JNarrowedClass (translate (type.erasure ()), args), null);
   }
 
   public JNullType translate (JNullType type)
   {
-    ensureClass (type, JNullType.class);
-    return new JNullType (this);
+    return cacheCopy (type, JNullType.class, src -> new JNullType (this), null);
   }
 
   public JReferencedClass translate (JReferencedClass type)
   {
-    ensureClass (type, JReferencedClass.class);
-    return new JReferencedClass (this, type.getReferencedClass ());
+    return cacheCopy (type, JReferencedClass.class, src -> new JReferencedClass (this, type.getReferencedClass ()),
+        null);
   }
 
   public JTypeVar translate (JTypeVar type)
   {
     if (type instanceof JTypeVarClass)
       return translate ((JTypeVarClass) type);
-    ensureClass (type, JTypeVar.class);
-    return new JTypeVar (this, type.name ());
+    return cacheCopy (type, JTypeVar.class, src -> new JTypeVar (this, type.name ()), null);
   }
 
   public JTypeVarClass translate (JTypeVarClass type)
   {
-    ensureClass (type, JTypeVarClass.class);
-    return new JTypeVarClass (translate (type.getRefClass ()));
+    return cacheCopy (type, JTypeVarClass.class, src -> new JTypeVarClass (translate (type.getRefClass ())), null);
   }
 
   public JTypeWildcard translate (JTypeWildcard type)
   {
-    ensureClass (type, JTypeWildcard.class);
-    return new JTypeWildcard (translate (type.bound ()), type.boundMode ());
+    return cacheCopy (type, JTypeWildcard.class,
+        src -> new JTypeWildcard (translate (type.bound ()), type.boundMode ()), null);
   }
 
   public JPrimitiveType translate (JPrimitiveType type)
   {
-    ensureClass (type, JPrimitiveType.class);
-    return new JPrimitiveType (this, type.fullName (), ((JReferencedClass) type.boxify ()).getReferencedClass (),
-        type.useValueOf ());
+    return cacheCopy (type, JPrimitiveType.class, src -> new JPrimitiveType (this, type.fullName (),
+        ((JReferencedClass) type.boxify ()).getReferencedClass (), type.useValueOf ()), null);
   }
 
   //
@@ -353,33 +374,26 @@ public class ModelCopy extends JCodeModel
 
   private JEnumConstant translate (JEnumConstant type)
   {
-    ensureClass (type, JEnumConstant.class);
-    return new JEnumConstant (translate (type.type ()), type.name ());
+    return cacheCopy (type, JEnumConstant.class, src -> new JEnumConstant (translate (type.type ()), type.name ()),
+        null);
   }
 
   private JLambdaParam translate (JLambdaParam type)
   {
-    ensureClass (type, JLambdaParam.class);
-    // TODO
-    throw new UnsupportedOperationException ("not done " + type.getClass ());
+    return cacheCopy (type, JLambdaParam.class, src -> new JLambdaParam (translate (type.type ()), type.name ()), null);
   }
-
-  private HashMap <JPackage, JPackage> translatedPackages = new HashMap <> ();
 
   public JPackage translate (JPackage pack)
   {
-    ensureClass (pack, JPackage.class);
-    return translatedPackages.computeIfAbsent (pack, o -> _package (pack.name ()));
+    return cacheCopy (pack, JPackage.class, src -> _package (pack.name ()), null);
   }
 
   protected JVar translate (JVar var)
   {
     if (var instanceof JFieldVar)
       return translate ((JFieldVar) var);
-    ensureClass (var, JVar.class);
-    JVar ret = new JVar (var.mods (), translate (var.type ()), var.name (), translate (var.init ()));
-    copyVar (var, ret);
-    return ret;
+    return cacheCopy (var, JVar.class,
+        src -> new JVar (var.mods (), translate (var.type ()), var.name (), translate (var.init ())), this::copyVar);
   }
 
   protected void copyVar (JVar var, JVar ret)
@@ -399,11 +413,13 @@ public class ModelCopy extends JCodeModel
 
   protected JFieldVar translate (JFieldVar var)
   {
-    ensureClass (var, JFieldVar.class);
-    JFieldVar ret = new JFieldVar (translate (var.owner ()), var.mods (), translate (var.type ()), var.name (),
-        translate (var.init ()));
-    copyJavadoc (var.javadoc (), ret.javadoc ());
-    return ret;
+    return cacheCopy (var, JFieldVar.class, src -> new JFieldVar (translate (var.owner ()), var.mods (), translate (var.type ()), var.name (),
+        translate (var.init ())), this::copyFieldVar);
+  }
+
+  protected void copyFieldVar (JFieldVar source, JFieldVar copy)
+  {
+    copyJavadoc (source.javadoc (), copy.javadoc ());
   }
 
   protected void copyJavadoc (JDocComment javadoc, JDocComment javadoc2)
@@ -421,7 +437,7 @@ public class ModelCopy extends JCodeModel
 
   protected JMethod translate (JMethod type)
   {
-    ensureClass (type, JMethod.class);
+    // TODO
     throw new UnsupportedOperationException ("not done " + type.getClass ());
   }
 
@@ -449,23 +465,24 @@ public class ModelCopy extends JCodeModel
 
   protected JAnnotationArrayMember translate (JAnnotationArrayMember value)
   {
-    ensureClass (value, JAnnotationArrayMember.class);
-    JAnnotationArrayMember ret = new JAnnotationArrayMember (this);
-    for (AbstractJAnnotationValue ajv : value.annotationsMutable ())
-      ret.annotationsMutable ().add (translate (ajv));
-    return ret;
+    return cacheCopy (value, JAnnotationArrayMember.class, src -> new JAnnotationArrayMember (this),
+        this::copyJAnnotationArrayMember);
+  }
+
+  protected void copyJAnnotationArrayMember (JAnnotationArrayMember s, JAnnotationArrayMember c)
+  {
+    for (AbstractJAnnotationValue ajv : s.annotationsMutable ())
+      c.annotationsMutable ().add (translate (ajv));
   }
 
   protected JAnnotationUse translate (JAnnotationUse value)
   {
-    ensureClass (value, JAnnotationUse.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + value.getClass ());
   }
 
   protected JAnnotationStringValue translate (JAnnotationStringValue value)
   {
-    ensureClass (value, JAnnotationStringValue.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + value.getClass ());
   }
@@ -474,42 +491,37 @@ public class ModelCopy extends JCodeModel
   {
     if (block instanceof JLambdaBlock)
       return translate ((JLambdaBlock) block);
-    ensureClass (block, JBlock.class);
+
     // TODO
     throw new UnsupportedOperationException ("not done " + block.getClass ());
   }
 
   protected JLambdaBlock translate (JLambdaBlock block)
   {
-    ensureClass (block, JBlock.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + block.getClass ());
   }
 
   protected JCatchBlock translate (JCatchBlock block)
   {
-    ensureClass (block, JCatchBlock.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + block.getClass ());
   }
 
   protected JDocComment translate (JDocComment comm)
   {
-    ensureClass (comm, JDocComment.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + comm.getClass ());
   }
 
   protected JMods translate (JMods mods)
   {
-    ensureClass (mods, JMods.class);
-    // TODO
-    throw new UnsupportedOperationException ("not done " + mods.getClass ());
+    // they are static.
+    return mods;
   }
 
   protected JTryResource translate (JTryResource block)
   {
-    ensureClass (block, JTryResource.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + block.getClass ());
   }
@@ -557,49 +569,42 @@ public class ModelCopy extends JCodeModel
 
   protected JArray translate (JArray expr)
   {
-    ensureClass (expr, JArray.class);
-    return JExpr.newArray (translate (expr.type ()), translate (expr.size ()));
+    return cacheCopy (expr, JArray.class, src -> JExpr.newArray (translate (expr.type ()), translate (expr.size ())),
+        null);
   }
 
   protected JAtom translate (JAtom expr)
   {
-    ensureClass (expr, JAtom.class);
-    return expr;
+    return cacheCopy (expr, JAtom.class, src -> new JAtom (expr.what ()), null);
   }
 
   protected JAtomDouble translate (JAtomDouble expr)
   {
-    ensureClass (expr, JAtomDouble.class);
-    return expr;
+    return cacheCopy (expr, JAtomDouble.class, src -> new JAtomDouble (expr.what ()), null);
   }
 
   protected JAtomFloat translate (JAtomFloat expr)
   {
-    ensureClass (expr, JAtomFloat.class);
-    return expr;
+    return cacheCopy (expr, JAtomFloat.class, src -> new JAtomFloat (expr.what ()), null);
   }
 
   protected JAtomInt translate (JAtomInt expr)
   {
-    ensureClass (expr, JAtomInt.class);
-    return expr;
+    return cacheCopy (expr, JAtomInt.class, src -> new JAtomInt (expr.what ()), null);
   }
 
   protected JAtomLong translate (JAtomLong expr)
   {
-    ensureClass (expr, JAtomLong.class);
-    return expr;
+    return cacheCopy (expr, JAtomLong.class, src -> new JAtomLong (expr.what ()), null);
   }
 
   protected JCast translate (JCast expr)
   {
-    ensureClass (expr, JCast.class);
-    return new JCast (translate (expr.type ()), translate (expr.object ()));
+    return cacheCopy (expr, JCast.class, src -> new JCast (translate (expr.type ()), translate (expr.object ())), null);
   }
 
   protected JEnumConstantExpr translate (JEnumConstantExpr expr)
   {
-    ensureClass (expr, JEnumConstantExpr.class);
     // TODO how to handle ? it requires an enclosing object.
     // return new JEnumConstantExpr (expr.getEnumConstant ());
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
@@ -607,21 +612,23 @@ public class ModelCopy extends JCodeModel
 
   protected JEnumConstantRef translate (JEnumConstantRef expr)
   {
-    ensureClass (expr, JEnumConstantRef.class);
-    return new JEnumConstantRef (translate (expr.type ()), expr.name ());
+    return cacheCopy (expr, JEnumConstantRef.class,
+        src -> new JEnumConstantRef (translate (expr.type ()), expr.name ()), null);
   }
 
   protected JLambda translate (JLambda expr)
   {
-    ensureClass (expr, JLambda.class);
-    JLambda ret = new JLambda ();
-    for (JLambdaParam param : expr.params ())
-      ret.addParam (translate (param.type ()), param.name ());
-    copyBlock (expr.body (), ret.body ());
-    return ret;
+    return cacheCopy (expr, JLambda.class, src -> new JLambda (), this::copyJLambda);
   }
 
-  protected void copyBlock (JBlock source, JBlock copy)
+  protected void copyJLambda (JLambda s, JLambda t)
+  {
+    for (JLambdaParam param : s.params ())
+      t.addParam (translate (param.type ()), param.name ());
+    copyJBlock (s.body (), t.body ());
+  }
+
+  protected void copyJBlock (JBlock source, JBlock copy)
   {
     copy.bracesRequired (source.bracesRequired ());
     copy.indentRequired (source.indentRequired ());
@@ -633,21 +640,17 @@ public class ModelCopy extends JCodeModel
 
   protected JLambdaMethodRef translate (JLambdaMethodRef expr)
   {
-    ensureClass (expr, JLambdaMethodRef.class);
-    // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
 
   protected JOpBinary translate (JOpBinary expr)
   {
-    ensureClass (expr, JOpBinary.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
 
   protected JOpTernary translate (JOpTernary expr)
   {
-    ensureClass (expr, JOpTernary.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
@@ -656,21 +659,19 @@ public class ModelCopy extends JCodeModel
   {
     if (expr instanceof JOpUnaryTight)
       return translate ((JOpUnaryTight) expr);
-    ensureClass (expr, JOpUnary.class);
+
     // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
 
   protected JOpUnaryTight translate (JOpUnaryTight expr)
   {
-    ensureClass (expr, JOpUnaryTight.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
 
   protected JStringLiteral translate (JStringLiteral expr)
   {
-    ensureClass (expr, JStringLiteral.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
@@ -690,14 +691,12 @@ public class ModelCopy extends JCodeModel
 
   protected JArrayCompRef translate (JArrayCompRef expr)
   {
-    ensureClass (expr, JArrayCompRef.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
 
   protected JFieldRef translate (JFieldRef expr)
   {
-    ensureClass (expr, JFieldRef.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
@@ -713,14 +712,12 @@ public class ModelCopy extends JCodeModel
 
   protected JAssignment translate (JAssignment expr)
   {
-    ensureClass (expr, JAssignment.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
 
   protected JInvocation translate (JInvocation expr)
   {
-    ensureClass (expr, JInvocation.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + expr.getClass ());
   }
@@ -733,112 +730,96 @@ public class ModelCopy extends JCodeModel
 
   protected JBreak translate (JBreak stt)
   {
-    ensureClass (stt, JBreak.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JCase translate (JCase stt)
   {
-    ensureClass (stt, JCase.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JConditional translate (JConditional stt)
   {
-    ensureClass (stt, JConditional.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JContinue translate (JContinue stt)
   {
-    ensureClass (stt, JBreak.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JDirectStatement translate (JDirectStatement stt)
   {
-    ensureClass (stt, JDirectStatement.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JDoLoop translate (JDoLoop stt)
   {
-    ensureClass (stt, JDoLoop.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JForEach translate (JForEach stt)
   {
-    ensureClass (stt, JForEach.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JForLoop translate (JForLoop stt)
   {
-    ensureClass (stt, JForLoop.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JLabel translate (JLabel stt)
   {
-    ensureClass (stt, JLabel.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JReturn translate (JReturn stt)
   {
-    ensureClass (stt, JReturn.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JSingleLineCommentStatement translate (JSingleLineCommentStatement stt)
   {
-    ensureClass (stt, JSingleLineCommentStatement.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JSwitch translate (JSwitch stt)
   {
-    ensureClass (stt, JSwitch.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JSynchronizedBlock translate (JSynchronizedBlock stt)
   {
-    ensureClass (stt, JSynchronizedBlock.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JThrow translate (JThrow stt)
   {
-    ensureClass (stt, JThrow.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JTryBlock translate (JTryBlock stt)
   {
-    ensureClass (stt, JTryBlock.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
 
   protected JWhileLoop translate (JWhileLoop stt)
   {
-    ensureClass (stt, JWhileLoop.class);
     // TODO
     throw new UnsupportedOperationException ("not done " + stt.getClass ());
   }
