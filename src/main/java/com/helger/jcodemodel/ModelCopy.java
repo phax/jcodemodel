@@ -516,8 +516,7 @@ public class ModelCopy extends JCodeModel
 
   protected JMods translate (JMods mods)
   {
-    // they are static.
-    return mods;
+    return cacheCopy (mods, JMods.class, src -> new JMods (mods.getValue ()), null);
   }
 
   protected JTryResource translate (JTryResource block)
