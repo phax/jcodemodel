@@ -28,8 +28,24 @@ public abstract class AModelCopyTest
 
   protected JCodeModel createCM ()
   {
-    JCodeModel ret = new JCodeModel ();
-    return ret;
+    try
+    {
+      JCodeModel ret = new JCodeModel ();
+
+      // create an interface IMyClass with method default String string(){return "yes";}
+      JDefinedClass itf = ret._class ("my.pckg.IMyClass", EClassType.INTERFACE);
+      JMethod methd = itf.method (JMod.PUBLIC | JMod.DEFAULT, ret.ref (String.class), "string");
+      methd.body ()._return (JExpr.lit ("yes"));
+
+      // create an implementation of that interface, for which toString() returns the string();
+      JDefinedClass imp = itf._package ()._class (JMod.PUBLIC, "Impl")._implements (itf);
+      imp.method (JMod.PUBLIC, ret.ref (String.class), "toString").body ()._return (JExpr.invoke (methd));
+      return ret;
+    }
+    catch (JCodeModelException e)
+    {
+      throw new UnsupportedOperationException ("catch this", e);
+    }
   }
 
   protected abstract JCodeModel copy (JCodeModel source);

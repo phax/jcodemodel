@@ -5,13 +5,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
 import com.helger.jcodemodel.AModelCopyTest;
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.StringCodeWriter;
 
 public class CopySerialTest extends AModelCopyTest
@@ -36,17 +34,7 @@ public class CopySerialTest extends AModelCopyTest
   @Override
   protected String represent (JCodeModel target)
   {
-    StringCodeWriter scw = new StringCodeWriter (StandardCharsets.UTF_8, "\n");
-    try
-    {
-      new JCMWriter (target).build (scw);
-    }
-    catch (IOException e)
-    {
-      throw new UnsupportedOperationException ("catch this", e);
-    }
-    String ret = scw.getString ();
-    return ret;
+    return StringCodeWriter.represent (target);
   }
 
   @Override
