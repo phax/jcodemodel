@@ -16,7 +16,8 @@ import com.helger.jcodemodel.JCodeModel;
 
 /**
  *
- * CodeWriter that stores outputstreams for the files. A call to toString() will then sort the files and append their
+ * CodeWriter that stores {@link OutputStream}s for the files. A call to toString() will then sort the files and append
+ * their
  * content with a leading line containing the name of the file.
  *
  * @author glelouet
@@ -60,7 +61,7 @@ public class StringCodeWriter extends AbstractCodeWriter
   }
 
   /**
-   * transofmr a {@link JCodeModel} into a {@link String} using this class.
+   * transform a {@link JCodeModel} into a {@link String} using this class.
    *
    * @param target
    *        the codemodel to export

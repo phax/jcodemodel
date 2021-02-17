@@ -40,6 +40,11 @@
  */
 package com.helger.jcodemodel;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1084,8 +1089,23 @@ public class JCodeModel implements Serializable
     return new HashSet <> (m_aDontImportClasses);
   }
 
-  public ModelCopy copy ()
+  public static JCodeModel copySerial (JCodeModel source)
   {
-    return new ModelCopy (this);
+    try
+    {
+      ByteArrayOutputStream buffer = new ByteArrayOutputStream ();
+      new ObjectOutputStream (buffer).writeObject (source);
+      ByteArrayInputStream in = new ByteArrayInputStream (buffer.toByteArray ());
+      return (JCodeModel) new ObjectInputStream (in).readObject ();
+    }
+    catch (IOException | ClassNotFoundException e)
+    {
+      throw new UnsupportedOperationException ("catch this", e);
+    }
+  }
+
+  public JCodeModel copy ()
+  {
+    return copySerial (this);
   }
 }
