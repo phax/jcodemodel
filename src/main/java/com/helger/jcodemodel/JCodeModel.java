@@ -1089,6 +1089,13 @@ public class JCodeModel implements Serializable
     return new HashSet <> (m_aDontImportClasses);
   }
 
+  /**
+   * copy a codemodel using serialization.
+   *
+   * @param source
+   *        codemodel to copy
+   * @return a deserialization of the serialization of the source.
+   */
   public static JCodeModel copySerial (JCodeModel source)
   {
     try
@@ -1104,6 +1111,11 @@ public class JCodeModel implements Serializable
     }
   }
 
+  /**
+   * create a new copy of this model
+   *
+   * @return a new object, which should have the same representation but not linked to this in any way.
+   */
   public JCodeModel copy ()
   {
     return copySerial (this);
