@@ -252,7 +252,7 @@ public final class CodeModelTestsHelper
   {
     LOGGER.info ("Parsing '" + sUnitName + "' with Eclipse JDT");
 
-    final ASTParser parser = ASTParser.newParser (AST.JLS15);
+    final ASTParser parser = ASTParser.newParser (AST.JLS16);
     parser.setResolveBindings (true);
     parser.setStatementsRecovery (true);
     parser.setBindingsRecovery (true);
