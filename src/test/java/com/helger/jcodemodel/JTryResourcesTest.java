@@ -42,12 +42,12 @@ package com.helger.jcodemodel;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
 import org.junit.Test;
 
+import com.helger.commons.io.stream.NonBlockingBufferedOutputStream;
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 import com.helger.jcodemodel.writer.JCMWriter;
 
@@ -67,10 +67,10 @@ public final class JTryResourcesTest
 
     final JTryBlock aTB = new JTryBlock ();
 
-    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class), "os", cm.ref (ByteArrayOutputStream.class)._new ());
+    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class), "os", cm.ref (NonBlockingByteArrayOutputStream.class)._new ());
     aTB.tryResources ().add (aTR1);
     aTB.body ().add (aTR1.var ().invoke ("read"));
-    assertEquals ("try(final java.io.OutputStream os = new java.io.ByteArrayOutputStream()) {" +
+    assertEquals ("try(final java.io.OutputStream os = new com.helger.commons.io.stream.NonBlockingByteArrayOutputStream()) {" +
                   CRLF +
                   "    os.read();" +
                   CRLF +
@@ -86,16 +86,16 @@ public final class JTryResourcesTest
 
     final JTryBlock aTB = new JTryBlock ();
 
-    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class), "os", cm.ref (ByteArrayOutputStream.class)._new ());
+    final JTryResource aTR1 = new JTryResource (cm.ref (OutputStream.class), "os", cm.ref (NonBlockingByteArrayOutputStream.class)._new ());
     aTB.tryResources ().add (aTR1);
-    final JTryResource aTR2 = new JTryResource (cm.ref (BufferedOutputStream.class),
+    final JTryResource aTR2 = new JTryResource (cm.ref (NonBlockingBufferedOutputStream.class),
                                                 "bos",
-                                                cm.ref (BufferedOutputStream.class)._new ().arg (aTR1.var ()));
+                                                cm.ref (NonBlockingBufferedOutputStream.class)._new ().arg (aTR1.var ()));
     aTB.tryResources ().add (aTR2);
     aTB.body ().add (aTR2.var ().invoke ("readLine"));
-    assertEquals ("try(final java.io.OutputStream os = new java.io.ByteArrayOutputStream();" +
+    assertEquals ("try(final java.io.OutputStream os = new com.helger.commons.io.stream.NonBlockingByteArrayOutputStream();" +
                   CRLF +
-                  "final java.io.BufferedOutputStream bos = new java.io.BufferedOutputStream(os)) {" +
+                  "final com.helger.commons.io.stream.NonBlockingBufferedOutputStream bos = new com.helger.commons.io.stream.NonBlockingBufferedOutputStream(os)) {" +
                   CRLF +
                   "    bos.readLine();" +
                   CRLF +

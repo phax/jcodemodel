@@ -46,6 +46,7 @@ import java.io.Serializable;
 
 import org.junit.Test;
 
+import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
@@ -68,6 +69,6 @@ public final class JTypeVarTest
 
     assertEquals ("T extends java.lang.Comparable<T> & java.io.Serializable", CodeModelTestsHelper.toString (tv));
     assertEquals ("public<T extends java.lang.Comparable<T> & java.io.Serializable> void foo() {\n" + "}\n",
-                  CodeModelTestsHelper.toString (m).replace ("\r", ""));
+                  StringHelper.removeAll (CodeModelTestsHelper.toString (m), '\r'));
   }
 }

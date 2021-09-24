@@ -45,7 +45,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 
-import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -57,6 +56,7 @@ import javax.tools.JavaFileObject;
 
 import org.junit.Test;
 
+import com.helger.commons.io.stream.NonBlockingBufferedReader;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
@@ -150,7 +150,8 @@ public final class InMemoryCompilationTest
     try (final InputStream inCLInpuStream = aLoader.getResourceAsStream (sFullFilename))
     {
       assertNotNull (inCLInpuStream);
-      try (final BufferedReader r = new BufferedReader (new InputStreamReader (inCLInpuStream)))
+      try (final NonBlockingBufferedReader r = new NonBlockingBufferedReader (new InputStreamReader (inCLInpuStream,
+                                                                                                     StandardCharsets.UTF_8)))
       {
         final String inCLString = r.readLine ();
         assertEquals (sContent, inCLString);

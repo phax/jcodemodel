@@ -42,11 +42,8 @@ package com.helger.jcodemodel.util;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -69,6 +66,9 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 import com.helger.commons.ValueEnforcer;
 import com.helger.commons.collection.IteratorHelper;
+import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
+import com.helger.commons.io.stream.NonBlockingStringWriter;
 import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
@@ -97,7 +97,7 @@ public final class CodeModelTestsHelper
   private static final Logger LOGGER = LoggerFactory.getLogger (CodeModelTestsHelper.class);
 
   @Nonnull
-  private static IJFormatter _createFormatter (@Nonnull final StringWriter aWriter)
+  private static IJFormatter _createFormatter (@Nonnull final NonBlockingStringWriter aWriter)
   {
     return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()), JCMWriter.DEFAULT_INDENT_STRING);
   }
@@ -118,10 +118,10 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aGenerable.generate (aFormatter);
-      return aSW.toString ();
+      return aSW.getAsString ();
     }
     catch (final IOException ex)
     {
@@ -141,10 +141,10 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aDeclaration.declare (aFormatter);
-      return aSW.toString ();
+      return aSW.getAsString ();
     }
     catch (final IOException ex)
     {
@@ -164,10 +164,10 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aStatement, "Statement");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aStatement.state (aFormatter);
-      return aSW.toString ();
+      return aSW.getAsString ();
     }
     catch (final IOException ex)
     {
@@ -180,10 +180,10 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aDeclaration.declare (aFormatter);
-      return aSW.toString ();
+      return aSW.getAsString ();
     }
     catch (final IOException ex)
     {
@@ -196,10 +196,10 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final StringWriter aSW = new StringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aGenerable.generate (aFormatter);
-      return aSW.toString ();
+      return aSW.getAsString ();
     }
     catch (final IOException ex)
     {
@@ -218,7 +218,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   public static byte [] getAllBytes (@Nonnull final JCodeModel cm)
   {
-    try (final ByteArrayOutputStream aBAOS = new ByteArrayOutputStream ())
+    try (final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ())
     {
       new JCMWriter (cm).build (new OutputStreamCodeWriter (aBAOS, DEFAULT_ENCODING));
       return aBAOS.toByteArray ();
@@ -230,7 +230,7 @@ public final class CodeModelTestsHelper
   }
 
   @Nonnull
-  private static CompilationUnit _parseWithJavaParser (final String sUnitName, final byte [] aBytes) throws IOException
+  private static CompilationUnit _parseWithJavaParser (final String sUnitName, final byte [] aBytes)
   {
     if (false)
     {
@@ -239,7 +239,7 @@ public final class CodeModelTestsHelper
 
     LOGGER.info ("Parsing '" + sUnitName + "' with JavaParser");
 
-    try (final ByteArrayInputStream bis = new ByteArrayInputStream (aBytes))
+    try (final NonBlockingByteArrayInputStream bis = new NonBlockingByteArrayInputStream (aBytes))
     {
       // Parse what was written
       final ParseResult <CompilationUnit> ret = new JavaParser ().parse (bis, DEFAULT_ENCODING);
@@ -294,10 +294,10 @@ public final class CodeModelTestsHelper
         @Override
         public OutputStream openBinary (final String sDirName, final String sFilename) throws IOException
         {
-          return new ByteArrayOutputStream ()
+          return new NonBlockingByteArrayOutputStream ()
           {
             @Override
-            public void close () throws IOException
+            public void close ()
             {
               super.close ();
 
@@ -333,14 +333,7 @@ public final class CodeModelTestsHelper
     assert IteratorHelper.getSize (cm.packages ()) == 1;
     assert cm.packages ().next ().classes ().size () == 1;
     final byte [] aBytes = getAllBytes (cm);
-    try
-    {
-      return _parseWithJavaParser ("full-jcodemodel", aBytes);
-    }
-    catch (final IOException ex)
-    {
-      throw new UncheckedIOException (ex);
-    }
+    return _parseWithJavaParser ("full-jcodemodel", aBytes);
   }
 
   /**

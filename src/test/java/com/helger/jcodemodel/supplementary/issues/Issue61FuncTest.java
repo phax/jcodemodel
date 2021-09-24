@@ -42,13 +42,13 @@ package com.helger.jcodemodel.supplementary.issues;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -68,9 +68,9 @@ public class Issue61FuncTest
     final Charset ascii = StandardCharsets.US_ASCII;
     cm.rootResourceDir ().addResourceFile (new JTextFile ("example.txt", ascii).contents ("Testing"));
 
-    try (final ByteArrayOutputStream resOut = new ByteArrayOutputStream ())
+    try (final NonBlockingByteArrayOutputStream resOut = new NonBlockingByteArrayOutputStream ())
     {
-      new JCMWriter (cm).build (new SingleStreamCodeWriter (new ByteArrayOutputStream ()), new SingleStreamCodeWriter (resOut));
+      new JCMWriter (cm).build (new SingleStreamCodeWriter (new NonBlockingByteArrayOutputStream ()), new SingleStreamCodeWriter (resOut));
       final String txtRes = ascii.decode (ByteBuffer.wrap (resOut.toByteArray ())).toString ();
       assertTrue (txtRes.contains ("Testing"));
     }

@@ -231,7 +231,8 @@
             </signaturesArtifact>
           </signaturesArtifacts>
           <excludes>
-            <!-- uses ByteArrayOutputStream -->
+            <exclude>**/CodeModelTestsHelper.class</exclude>
+            <exclude>**/Issue74FuncTest.class</exclude>
             <exclude>**/JCMWriter.class</exclude>
             <exclude>**/SingleStreamCodeWriter.class</exclude>
           </excludes>
