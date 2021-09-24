@@ -243,7 +243,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
     if (aDC != null)
       throw new JClassAlreadyExistsException (aDC);
 
-    final String sResDirName = m_sName.replace (SEPARATOR, JResourceDir.SEPARATOR);
+    final String sResDirName = StringHelper.replaceAll (m_sName, SEPARATOR, JResourceDir.SEPARATOR);
     final JResourceDir aRD = m_aOwner.resourceDir (sResDirName);
 
     // Check if a resource file with the same name already exists
@@ -441,7 +441,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   {
     if (isUnnamed ())
       return aDir;
-    return new File (aDir, m_sName.replace (SEPARATOR, File.separatorChar));
+    return new File (aDir, StringHelper.replaceAll (m_sName, SEPARATOR, File.separatorChar));
   }
 
   public void declare (@Nonnull final IJFormatter f)

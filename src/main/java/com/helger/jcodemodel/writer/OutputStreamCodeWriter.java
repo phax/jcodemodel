@@ -86,7 +86,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
     super (aEncoding, sNewLine);
     try
     {
-      m_aPS = aEncoding == null ? new PrintStream (aOS, false) : new PrintStream (aOS, false, aEncoding.name ());
+      m_aPS = new PrintStream (aOS, false, aEncoding == null ? Charset.defaultCharset ().name () : aEncoding.name ());
     }
     catch (final UnsupportedEncodingException ex)
     {

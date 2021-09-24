@@ -40,12 +40,13 @@
  */
 package com.helger.jcodemodel.fmt;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
+
+import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 
 /**
  * Allows the application to use OutputStream to define data that will be stored
@@ -55,7 +56,7 @@ import javax.annotation.WillNotClose;
  */
 public class JBinaryFile extends AbstractJResourceFile
 {
-  private final ByteArrayOutputStream m_aBAOS = new ByteArrayOutputStream ();
+  private final NonBlockingByteArrayOutputStream m_aBAOS = new NonBlockingByteArrayOutputStream ();
 
   public JBinaryFile (@Nonnull final String sName)
   {

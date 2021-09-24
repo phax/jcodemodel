@@ -40,8 +40,6 @@
  */
 package com.helger.jcodemodel.fmt;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,6 +47,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
@@ -56,15 +55,18 @@ import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.WillNotClose;
+import javax.tools.JavaFileObject;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.io.stream.NonBlockingBufferedReader;
+import com.helger.commons.io.stream.NonBlockingBufferedWriter;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.util.JCSecureLoader;
 
 /**
- * Statically generated Java soruce file.
+ * Statically generated Java source file.
  * <p>
  * This {@link AbstractJResourceFile} implementation will generate a Java source
  * file by copying the source code from a resource.
@@ -85,28 +87,36 @@ import com.helger.jcodemodel.util.JCSecureLoader;
  */
 public class JStaticJavaFile extends AbstractJResourceFile
 {
+  public static final String JAVA_FILE_EXTENSION = JavaFileObject.Kind.SOURCE.extension;
+
   private final JPackage m_aPkg;
   private final String m_sClassName;
   private final URL m_aSource;
   private final JStaticClass m_aClazz;
   private final Function <String, String> m_aFilter;
+  private final Charset m_aEncoding;
 
-  public JStaticJavaFile (@Nonnull final JPackage aPkg, @Nonnull final String sClassName, @Nonnull final String sResourceName)
+  public JStaticJavaFile (@Nonnull final JPackage aPkg,
+                          @Nonnull final String sClassName,
+                          @Nonnull final String sResourceName,
+                          @Nonnull final Charset aEncoding)
   {
-    this (aPkg, sClassName, JCSecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (sResourceName), null);
+    this (aPkg, sClassName, JCSecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (sResourceName), null, aEncoding);
   }
 
   public JStaticJavaFile (@Nonnull final JPackage aPkg,
                           @Nonnull final String sClassName,
                           @Nonnull final URL aSource,
-                          @Nullable final Function <String, String> aFilter)
+                          @Nullable final Function <String, String> aFilter,
+                          @Nonnull final Charset aEncoding)
   {
-    super (sClassName + ".java");
+    super (sClassName + JAVA_FILE_EXTENSION);
     m_aPkg = ValueEnforcer.notNull (aPkg, "Package");
     m_aClazz = new JStaticClass ();
     m_sClassName = ValueEnforcer.notEmpty (sClassName, "ClassName");
     m_aSource = ValueEnforcer.notNull (aSource, "Source");
     m_aFilter = aFilter;
+    m_aEncoding = ValueEnforcer.notNull (aEncoding, "Encoding");
   }
 
   /**
@@ -124,15 +134,21 @@ public class JStaticJavaFile extends AbstractJResourceFile
     return false;
   }
 
+  @Nonnull
+  public final Charset getEncoding ()
+  {
+    return m_aEncoding;
+  }
+
   @Override
   public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
   {
     final Function <String, String> aFilter = _createLineFilter ();
     int nLineNumber = 1;
 
-    try (final InputStream is = m_aSource.openStream ();
-         final BufferedReader r = new BufferedReader (new InputStreamReader (is));
-         final PrintWriter w = new PrintWriter (new BufferedWriter (new OutputStreamWriter (aOS))))
+    try (final InputStream aIS = m_aSource.openStream ();
+         final NonBlockingBufferedReader r = new NonBlockingBufferedReader (new InputStreamReader (aIS, m_aEncoding));
+         final PrintWriter w = new PrintWriter (new NonBlockingBufferedWriter (new OutputStreamWriter (aOS, m_aEncoding))))
     {
       String sLine;
       while ((sLine = r.readLine ()) != null)

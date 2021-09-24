@@ -46,6 +46,9 @@ import java.io.Writer;
 
 import javax.annotation.Nonnull;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * A special version of {@link java.io.PrintWriter} that has a customizable new
  * line string.
@@ -54,6 +57,8 @@ import javax.annotation.Nonnull;
  */
 public final class SourcePrintWriter extends FilterWriter
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (SourcePrintWriter.class);
+
   private final String m_sNewLine;
 
   public SourcePrintWriter (@Nonnull final Writer aWrappedWriter, @Nonnull final String sNewLine)
@@ -64,8 +69,7 @@ public final class SourcePrintWriter extends FilterWriter
 
   private void _handleException (@Nonnull final IOException ex, @Nonnull final String sSource)
   {
-    System.err.println ("Error on Writer: " + sSource);
-    ex.printStackTrace ();
+    LOGGER.error ("Error on Writer: " + sSource, ex);
   }
 
   private void _write (final char c)

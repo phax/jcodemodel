@@ -43,17 +43,18 @@ package com.helger.jcodemodel.fmt;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.annotation.Nonnull;
 import javax.annotation.WillNotClose;
+
+import com.helger.commons.lang.NonBlockingProperties;
 
 /**
  * A property file.
  */
 public class JPropertyFile extends AbstractJResourceFile
 {
-  private final Properties m_aProps = new Properties ();
+  private final NonBlockingProperties m_aProps = new NonBlockingProperties ();
 
   public JPropertyFile (@Nonnull final String sName)
   {
@@ -82,7 +83,7 @@ public class JPropertyFile extends AbstractJResourceFile
    *        Properties to be added. May not be <code>null</code>.
    * @since 3.4.0
    */
-  public void addAll (@Nonnull final Map <? super String, ? super String> aValues)
+  public void addAll (@Nonnull final Map <? extends String, ? extends String> aValues)
   {
     m_aProps.putAll (aValues);
   }

@@ -68,6 +68,7 @@ import javax.tools.JavaFileObject.Kind;
 import javax.tools.StandardLocation;
 
 import com.helger.commons.annotation.UnsupportedOperation;
+import com.helger.commons.string.StringHelper;
 
 /**
  * java file manager that also checks and writes inside a given
@@ -126,9 +127,9 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
 
   public List <JavaFileObject> find (@Nonnull final String packageName) throws IOException
   {
-    final String javaPackageName = packageName.replaceAll ("\\.", "/");
+    final String sJavaPackageName = StringHelper.replaceAll (packageName, '.', '/');
     final List <JavaFileObject> result = new ArrayList <> ();
-    final Enumeration <URL> urlEnumeration = m_aCL.getResources (javaPackageName);
+    final Enumeration <URL> urlEnumeration = m_aCL.getResources (sJavaPackageName);
     while (urlEnumeration.hasMoreElements ())
     { // one URL for each jar on the
       // classpath that has the given
@@ -154,7 +155,7 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
     final List <JavaFileObject> result = new ArrayList <> ();
     try
     {
-      final String jarUri = packageFolderURL.toExternalForm ().split ("!")[0];
+      final String jarUri = StringHelper.getExplodedArray ('!', packageFolderURL.toExternalForm (), 2)[0];
 
       final JarURLConnection jarConn = (JarURLConnection) packageFolderURL.openConnection ();
       final String rootEntryName = jarConn.getEntryName ();
@@ -168,8 +169,8 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
         if (name.startsWith (rootEntryName) && name.indexOf ('/', rootEnd) == -1 && name.endsWith (CLASS_FILE_EXTENSION))
         {
           final URI uri = URI.create (jarUri + "!/" + name);
-          String binaryName = name.replaceAll ("/", ".");
-          binaryName = binaryName.replaceAll (CLASS_FILE_EXTENSION + "$", "");
+          String binaryName = StringHelper.replaceAll (name, '/', '.');
+          binaryName = StringHelper.trimEnd (binaryName, CLASS_FILE_EXTENSION);
 
           result.add (new CustomJavaFileObject (binaryName, uri));
         }
@@ -194,7 +195,7 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
         if (childFile.getName ().endsWith (CLASS_FILE_EXTENSION))
         {
           String binaryName = packageName + "." + childFile.getName ();
-          binaryName = binaryName.replaceAll (CLASS_FILE_EXTENSION + "$", "");
+          binaryName = StringHelper.trimEnd (binaryName, CLASS_FILE_EXTENSION);
 
           result.add (new CustomJavaFileObject (binaryName, childFile.toURI ()));
         }

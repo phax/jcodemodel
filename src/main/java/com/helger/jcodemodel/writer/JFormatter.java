@@ -54,6 +54,9 @@ import javax.annotation.Nullable;
 import javax.annotation.WillCloseWhenClosed;
 import javax.annotation.concurrent.NotThreadSafe;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.commons.ValueEnforcer;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.IJDeclaration;
@@ -75,6 +78,8 @@ import com.helger.jcodemodel.util.NullWriter;
 @NotThreadSafe
 public class JFormatter implements IJFormatter
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (JFormatter.NameUsage.class);
+
   /**
    * Used during the optimization of class imports. List of
    * {@link AbstractJClass}es whose short name is the same.
@@ -147,7 +152,7 @@ public class JFormatter implements IJFormatter
     public boolean addReferencedType (@Nonnull final AbstractJClass aClazz)
     {
       if (false)
-        System.out.println ("Adding referenced type[" + m_sName + "]: " + aClazz.fullName ());
+        LOGGER.info ("Adding referenced type[" + m_sName + "]: " + aClazz.fullName ());
       if (m_aReferencedClasses.contains (aClazz))
         return false;
       return m_aReferencedClasses.add (aClazz);
@@ -304,7 +309,7 @@ public class JFormatter implements IJFormatter
       if (m_aDontImportClasses.contains (aRealClass))
       {
         if (m_bDebugImport)
-          System.out.println ("The class '" + aRealClass.fullName () + "' should not be imported!");
+          LOGGER.info ("The class '" + aRealClass.fullName () + "' should not be imported!");
         return false;
       }
 
@@ -312,19 +317,19 @@ public class JFormatter implements IJFormatter
       if (!m_aNames.add (sSimpleName))
       {
         if (m_bDebugImport)
-          System.out.println ("A class with local name '" + sSimpleName + "' is already in the import list.");
+          LOGGER.info ("A class with local name '" + sSimpleName + "' is already in the import list.");
         return false;
       }
 
       if (!m_aClasses.add (aRealClass))
       {
         if (m_bDebugImport)
-          System.out.println ("The class '" + aRealClass.fullName () + "' is already in the import list.");
+          LOGGER.info ("The class '" + aRealClass.fullName () + "' is already in the import list.");
         return false;
       }
 
       if (m_bDebugImport)
-        System.out.println ("Added import class '" + aClass.fullName () + "'");
+        LOGGER.info ("Added import class '" + aClass.fullName () + "'");
       return true;
     }
 
@@ -698,7 +703,7 @@ public class JFormatter implements IJFormatter
   private boolean _collectCausesNoAmbiguities (@Nonnull final AbstractJClass aReference, @Nonnull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
-      System.out.println ("_collectCausesNoAmbiguities(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
+      LOGGER.info ("_collectCausesNoAmbiguities(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
 
     final NameUsage aUsages = m_aCollectedReferences.get (aReference.name ());
     if (aUsages == null)
@@ -720,7 +725,7 @@ public class JFormatter implements IJFormatter
   private boolean _collectShouldBeImported (@Nonnull final AbstractJClass aReference, @Nonnull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
-      System.out.println ("_collectShouldBeImported(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
+      LOGGER.info ("_collectShouldBeImported(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
 
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)
@@ -769,11 +774,7 @@ public class JFormatter implements IJFormatter
                                                               @Nonnull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
-      System.out.println ("_collectImportOuterClassIfCausesNoAmbiguities(" +
-                          aReference.fullName () +
-                          ", " +
-                          aClassToBeWritten.fullName () +
-                          ")");
+      LOGGER.info ("_collectImportOuterClassIfCausesNoAmbiguities(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
 
     final AbstractJClass aOuter = aReference.outer ();
     if (aOuter != null)
@@ -816,7 +817,7 @@ public class JFormatter implements IJFormatter
   private boolean _printIsImplicitlyImported (@Nonnull final AbstractJClass aReference, @Nonnull final AbstractJClass aClassToBeWrittem)
   {
     if (m_bDebugImport)
-      System.out.println ("_printIsImplicitlyImported(" + aReference.fullName () + ", " + aClassToBeWrittem.fullName () + ")");
+      LOGGER.info ("_printIsImplicitlyImported(" + aReference.fullName () + ", " + aClassToBeWrittem.fullName () + ")");
 
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)
@@ -895,7 +896,7 @@ public class JFormatter implements IJFormatter
     declaration (aClassToBeWritten);
 
     if (m_bDebugImport)
-      System.out.println ("***Start collecting***");
+      LOGGER.info ("***Start collecting***");
 
     // the class itself that we will be generating is always accessible and must
     // be the first import
@@ -929,7 +930,7 @@ public class JFormatter implements IJFormatter
     }
 
     if (m_bDebugImport)
-      System.out.println ("***Finished collecting***");
+      LOGGER.info ("***Finished collecting***");
 
     // then print the declaration
     m_eMode = EMode.PRINTING;
@@ -960,7 +961,7 @@ public class JFormatter implements IJFormatter
         bAnyImport = true;
 
         if (m_bDebugImport)
-          System.out.println ("  import " + aImportClass.fullName ());
+          LOGGER.info ("  import " + aImportClass.fullName ());
       }
     }
 

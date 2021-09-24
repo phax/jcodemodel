@@ -173,7 +173,7 @@ public class JResourceDir implements IJOwned
   @Nonnull
   private JPackage _getMatchingPackage ()
   {
-    return owner ()._package (m_sName.replace (SEPARATOR, JPackage.SEPARATOR));
+    return owner ()._package (StringHelper.replaceAll (m_sName, SEPARATOR, JPackage.SEPARATOR));
   }
 
   /**

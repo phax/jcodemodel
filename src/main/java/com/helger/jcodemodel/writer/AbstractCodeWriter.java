@@ -40,7 +40,6 @@
  */
 package com.helger.jcodemodel.writer;
 
-import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -52,6 +51,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.helger.commons.ValueEnforcer;
+import com.helger.commons.io.stream.NonBlockingBufferedWriter;
+import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
@@ -120,7 +121,7 @@ public abstract class AbstractCodeWriter implements Closeable
   {
     // Convert package name to directory name
     // Forward slash works for Windows, Linux and ZIP files
-    return aPackage.isUnnamed () ? "" : aPackage.name ().replace ('.', '/');
+    return aPackage.isUnnamed () ? "" : StringHelper.replaceAll (aPackage.name (), '.', '/');
   }
 
   /**
@@ -163,7 +164,7 @@ public abstract class AbstractCodeWriter implements Closeable
   public SourcePrintWriter openSource (@Nonnull final JPackage aPackage, @Nonnull final String sFilename) throws IOException
   {
     final OutputStream aOS = openBinary (aPackage, sFilename);
-    final OutputStreamWriter aOSW = m_aEncoding != null ? new OutputStreamWriter (aOS, m_aEncoding) : new OutputStreamWriter (aOS);
+    final OutputStreamWriter aOSW = new OutputStreamWriter (aOS, m_aEncoding != null ? m_aEncoding : Charset.defaultCharset ());
 
     // create writer
     Writer aWriter;
@@ -177,7 +178,7 @@ public abstract class AbstractCodeWriter implements Closeable
     }
 
     // Ensure result is buffered
-    return new SourcePrintWriter (new BufferedWriter (aWriter), m_sNewLine);
+    return new SourcePrintWriter (new NonBlockingBufferedWriter (aWriter), m_sNewLine);
   }
 
   /**

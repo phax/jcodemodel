@@ -66,6 +66,7 @@ import com.helger.commons.collection.impl.CommonsArrayList;
 import com.helger.commons.collection.impl.ICommonsList;
 import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
 import com.helger.commons.state.ESuccess;
+import com.helger.commons.string.StringHelper;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -87,6 +88,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
 {
   private static final Logger LOGGER = LoggerFactory.getLogger (MemoryCodeWriter.class);
   private static final JavaCompiler JAVAC = ToolProvider.getSystemJavaCompiler ();
+  public static final String JAVA_FILE_EXTENSION = JavaFileObject.Kind.SOURCE.extension;
 
   private DiagnosticListener <? super JavaFileObject> m_aDL;
   private final Map <String, NonBlockingByteArrayOutputStream> m_aBinaries = new HashMap <> ();
@@ -174,13 +176,13 @@ public class MemoryCodeWriter extends AbstractCodeWriter
     final Map <String, NonBlockingByteArrayOutputStream> aNonJava = new HashMap <> ();
 
     for (final Entry <String, NonBlockingByteArrayOutputStream> e : getBinaries ().entrySet ())
-      if (e.getKey ().endsWith (".java"))
+      if (e.getKey ().endsWith (JAVA_FILE_EXTENSION))
         try
         {
           // Use the configured encoding
           aCompilationUnits.add (new SourceJavaFile (e.getKey (), e.getValue ().getAsString (encoding ())));
 
-          final String className = e.getKey ().replaceAll ("/", ".").replace (".java", "");
+          final String className = StringHelper.trimEnd (StringHelper.replaceAll (e.getKey (), '/', '.'), JAVA_FILE_EXTENSION);
           final CompiledCodeJavaFile cc = new CompiledCodeJavaFile (className);
           aDynamicClassLoader.setCode (cc);
         }
