@@ -369,6 +369,7 @@ public final class JExpr
 
   /**
    * @return a reference to "super", an implicit reference to the super class.
+   * @see #invokeSuper() for the invocation
    */
   @Nonnull
   public static JAtom _super ()
