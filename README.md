@@ -1,9 +1,5 @@
 # jcodemodel
 
-[![Build Status](https://travis-ci.org/phax/jcodemodel.svg?branch=master)](https://travis-ci.org/phax/jcodemodel)
-
-﻿[![Gitter chat](https://badges.gitter.im/phax/jcodemodel.svg)](https://gitter.im/phax/jcodemodel)
-
 A fork of the com.sun.codemodel 2.7-SNAPSHOT.
 The classes in this project use a different package name `com.helger.jcodemodel` to avoid conflicts 
 with other `com.sun.codemodel` instances that might be floating around in the classpath.
