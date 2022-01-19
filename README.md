@@ -1,9 +1,5 @@
 # jcodemodel
 
-[![Build Status](https://travis-ci.org/phax/jcodemodel.svg?branch=master)](https://travis-ci.org/phax/jcodemodel)
-
-﻿[![Gitter chat](https://badges.gitter.im/phax/jcodemodel.svg)](https://gitter.im/phax/jcodemodel)
-
 A fork of the com.sun.codemodel 2.7-SNAPSHOT.
 The classes in this project use a different package name `com.helger.jcodemodel` to avoid conflicts 
 with other `com.sun.codemodel` instances that might be floating around in the classpath.
@@ -20,12 +16,14 @@ Add the following to your pom.xml to use this artifact:
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.4.0</version>
+  <version>3.4.1</version>
 </dependency>
 ```
 
 # News and noteworthy
 
+* v3.4.1 - 2022-01-20
+    * Extended `JDefinedClass` API to access the contained enum constants
 * v3.4.0 - 2020-05-25
     * Added special top-level construct `JResourceDir` to represent pure resource directories ([issue #74](https://github.com/phax/jcodemodel/issues/74) from @guiguilechat)
     * Added new class `JCodeModelException` as the base class for `JClassAlreadyExistsException` and the new class `JResourceAlreadyExistsException`
@@ -136,6 +134,27 @@ Add the following to your pom.xml to use this artifact:
     * API extensions
 * v2.6.4 - 2014-04-10
 * 2013-09-23: Changes from https://github.com/UnquietCode/JCodeModel have been incorporated.
+
+## Contribution
+
+Pull requests must follow my personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md)
+
+### Tabs vs spaces
+
+This project uses double-space for indentation. If you want to use tabs, you can ask git to modify the files when commiting them and when pulling them. For this, from your project directory : 
+
+ - edit the file .git/info/attributes to make it contain `*.java filter=tabspace` . This will tell git to apply the script tabspace on the *.java files
+ - run `git config filter.tabspace.clean 'expand --tabs=2 --initial'` to ask git to replace tabs with two spaces on commit of *.java files.
+ - run `git config filter.tabspace.smudge 'unexpand --tabs=2 --first-only'` to request git to replace double spaces with two tabs on checking a *.java file out.
+
+
+### Eclipse
+
+For eclipse, a formatter xml and a cleanup xml are present in the meta/formatter/eclipse/ directory. You can load them from the "project properties > java code style" settings. Check "Enable project specific settings", then load them.
+
+NOTE : you also need to change the save actions to make them meet the clean up actions. Save actions are done even when they are not present in the clean up.
+
+
 
 ---
 
