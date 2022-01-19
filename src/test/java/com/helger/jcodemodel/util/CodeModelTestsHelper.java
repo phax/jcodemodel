@@ -249,7 +249,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   private static org.eclipse.jdt.core.dom.CompilationUnit _parseWithJDT (final String sUnitName, final char [] aCode)
   {
-    final ASTParser parser = ASTParser.newParser (AST.JLS13);
+    final ASTParser parser = ASTParser.newParser (AST.JLS16);
     parser.setResolveBindings (true);
     parser.setStatementsRecovery (true);
     parser.setBindingsRecovery (true);
