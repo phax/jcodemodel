@@ -342,6 +342,20 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
+   * @param sName
+   *        The name of the enum constant to search.
+   * @return The contained {@link JEnumConstant} or <code>null</code>.
+   * @since 3.4.1
+   */
+  @Nonnull
+  public final JEnumConstant getEnumConstantByName (@Nullable final String sName)
+  {
+    if (sName == null)
+      return null;
+    return m_aEnumConstantsByName.get (sName);
+  }
+
+  /**
    * @return A copy of the contained enum constants.
    * @since 3.4.1
    */
