@@ -341,6 +341,16 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     return m_aEnumConstantsByName.computeIfAbsent (sName, k -> new JEnumConstant (this, k));
   }
 
+  /**
+   * @return A copy of the contained enum constants.
+   * @since 3.4.1
+   */
+  @Nonnull
+  public final Map <String, JEnumConstant> getAllEnumConstantsByName ()
+  {
+    return new LinkedHashMap <> (m_aEnumConstantsByName);
+  }
+
   @Override
   public String binaryName ()
   {
