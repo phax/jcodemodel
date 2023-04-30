@@ -54,7 +54,7 @@ import com.helger.jcodemodel.AbstractJClass;
  */
 public final class ClassNameComparator implements Comparator <AbstractJClass>
 {
-  private static final ClassNameComparator s_aInstance = new ClassNameComparator ();
+  private static final ClassNameComparator INSTANCE = new ClassNameComparator ();
 
   private ClassNameComparator ()
   {}
@@ -62,7 +62,7 @@ public final class ClassNameComparator implements Comparator <AbstractJClass>
   @Nonnull
   public static ClassNameComparator getInstance ()
   {
-    return s_aInstance;
+    return INSTANCE;
   }
 
   /**

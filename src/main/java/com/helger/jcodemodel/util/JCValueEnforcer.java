@@ -55,7 +55,7 @@ import javax.annotation.concurrent.Immutable;
 @Immutable
 public final class JCValueEnforcer
 {
-  private static final AtomicBoolean s_aEnabled = new AtomicBoolean (true);
+  private static final AtomicBoolean ENABLED = new AtomicBoolean (true);
 
   private JCValueEnforcer ()
   {}
@@ -66,7 +66,7 @@ public final class JCValueEnforcer
    */
   public static boolean isEnabled ()
   {
-    return s_aEnabled.get ();
+    return ENABLED.get ();
   }
 
   /**
@@ -77,7 +77,7 @@ public final class JCValueEnforcer
    */
   public static void setEnabled (final boolean bEnabled)
   {
-    s_aEnabled.set (bEnabled);
+    ENABLED.set (bEnabled);
   }
 
   /**

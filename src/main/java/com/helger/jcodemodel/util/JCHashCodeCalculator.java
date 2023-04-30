@@ -64,7 +64,7 @@ public final class JCHashCodeCalculator
   public static final int HASHCODE_NULL = 129;
 
   @SuppressWarnings ("unused")
-  private static final JCHashCodeCalculator s_aInstance = new JCHashCodeCalculator ();
+  private static final JCHashCodeCalculator INSTANCE = new JCHashCodeCalculator ();
 
   private JCHashCodeCalculator ()
   {}
