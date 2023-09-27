@@ -179,7 +179,7 @@
     <dependency>
       <groupId>com.github.javaparser</groupId>
       <artifactId>javaparser-core</artifactId>
-      <version>3.25.2</version>
+      <version>3.25.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -197,7 +197,13 @@
         <configuration>
           <instructions>
             <Automatic-Module-Name>com.helger.jcodemodel</Automatic-Module-Name>
-            <Export-Package>com.helger.jcodemodel.*</Export-Package>
+            <Export-Package>
+              com.helger.jcodemodel.*,
+              com.helger.jcodemodel.fmt.*,
+              com.helger.jcodemodel.meta.*,
+              com.helger.jcodemodel.util.*,
+              com.helger.jcodemodel.writer.*
+            </Export-Package>
             <Import-Package>!javax.annotation.*,*</Import-Package>
           </instructions>
         </configuration>
