@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel.util;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import javax.annotation.Nonnull;
@@ -52,7 +53,7 @@ import com.helger.jcodemodel.AbstractJClass;
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
-public final class ClassNameComparator implements Comparator <AbstractJClass>
+public final class ClassNameComparator implements Comparator <AbstractJClass>, Serializable
 {
   private static final ClassNameComparator s_aInstance = new ClassNameComparator ();
 
@@ -70,6 +71,7 @@ public final class ClassNameComparator implements Comparator <AbstractJClass>
    * to packages java and javax over all others. This method is used to sort
    * generated import statements in a conventional way for readability.
    */
+  @Override
   public int compare (@Nonnull final AbstractJClass aObj1, @Nonnull final AbstractJClass aObj2)
   {
     if (aObj1.isError () && aObj2.isError ())
