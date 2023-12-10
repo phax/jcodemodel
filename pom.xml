@@ -59,7 +59,7 @@
   <licenses>
     <license>
       <name>CDDL+GPL 1.1</name>
-      <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
+      <url>https://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
@@ -67,7 +67,7 @@
   <scm>
     <connection>scm:git:https://github.com/phax/jcodemodel.git</connection>
     <developerConnection>scm:git:https://github.com/phax/jcodemodel.git</developerConnection>
-    <url>http://github.com/phax/jcodemodel</url>
+    <url>https://github.com/phax/jcodemodel</url>
     <tag>3.4</tag>
   </scm>
 
