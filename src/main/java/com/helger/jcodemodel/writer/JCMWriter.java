@@ -51,6 +51,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.WillClose;
 
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JAnnotationUse;
@@ -213,6 +214,7 @@ public class JCMWriter
    *         on IO error if non-null, progress indication will be sent to this
    *         stream.
    */
+  @SuppressWarnings ("resource")
   public void build (@Nonnull final File aSrcDir,
                      @Nonnull final File aResourceDir,
                      @Nullable final IProgressTracker aStatusPT) throws IOException
@@ -278,8 +280,8 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final AbstractCodeWriter aSourceWriter,
-                     @Nonnull final AbstractCodeWriter aResourceWriter) throws IOException
+  public void build (@Nonnull @WillClose final AbstractCodeWriter aSourceWriter,
+                     @Nonnull @WillClose final AbstractCodeWriter aResourceWriter) throws IOException
   {
     try
     {
@@ -362,8 +364,8 @@ public class JCMWriter
     }
   }
 
-  public void buildResourceDir (@Nonnull final AbstractCodeWriter aResWriter,
-                                @Nonnull final JResourceDir aResourceDir) throws IOException
+  public void buildResourceDir (@Nonnull final AbstractCodeWriter aResWriter, @Nonnull final JResourceDir aResourceDir)
+                                                                                                                        throws IOException
   {
     // write resources
     for (final AbstractJResourceFile rsrc : aResourceDir.getAllResourceFiles ())
