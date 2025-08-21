@@ -105,8 +105,8 @@ public class JResourceDir implements IJOwned, Serializable
    *         If a part of the package name is not a valid filename part.
    */
   protected JResourceDir (@Nonnull final JCodeModel aOwner,
-      @Nullable final JResourceDir aParentDir,
-      @Nonnull final String sName) throws JInvalidFileNameException
+                          @Nullable final JResourceDir aParentDir,
+                          @Nonnull final String sName) throws JInvalidFileNameException
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (aOwner, "CodeModel");
@@ -324,7 +324,7 @@ public class JResourceDir implements IJOwned, Serializable
     catch (final JInvalidFileNameException e)
     {
       // should not happen
-      throw new UnsupportedOperationException ("catch this", e);
+      throw new UnsupportedOperationException (e);
     }
   }
 }

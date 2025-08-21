@@ -221,7 +221,7 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
       }
       catch (final Exception e)
       {
-        throw new UnsupportedOperationException ("while creating code for " + className, e);
+        throw new UnsupportedOperationException (e);
       }
     return ret;
   }

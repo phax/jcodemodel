@@ -274,7 +274,7 @@ public class JCodeModel implements Serializable
     catch (final JCodeModelException e)
     {
       // should not happen
-      throw new UnsupportedOperationException ("This is the famous 'should never occur' error", e);
+      throw new UnsupportedOperationException (e);
     }
   }
 
@@ -1085,7 +1085,7 @@ public class JCodeModel implements Serializable
     }
     catch (final IOException | ClassNotFoundException e)
     {
-      throw new UnsupportedOperationException ("Failed to write code model to string", e);
+      throw new UnsupportedOperationException (e);
     }
   }
 

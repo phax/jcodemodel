@@ -57,10 +57,9 @@ import jakarta.annotation.Nonnull;
 /**
  * class loader that allows dynamic classes and resources.
  * <p>
- * add class models using {@link #setCode(CompiledCodeJavaFile)} , add resources
- * using {@link #addResources(Map)}; then you can use it as a normal
- * classloader, eg {@link ClassLoader#loadClass(String)} or
- * {@link ClassLoader#getResource(String)}
+ * add class models using {@link #setCode(CompiledCodeJavaFile)} , add resources using
+ * {@link #addResources(Map)}; then you can use it as a normal classloader, eg
+ * {@link ClassLoader#loadClass(String)} or {@link ClassLoader#getResource(String)}
  * </p>
  */
 public class DynamicClassLoader extends ClassLoader
@@ -69,9 +68,9 @@ public class DynamicClassLoader extends ClassLoader
   private final Map <String, NonBlockingByteArrayOutputStream> m_aCustomResources = new HashMap <> ();
 
   /**
-   * internal url handler that generates url to load inside its own resources,
-   * if exists. It overloads the openConnection to provide an input stream if a
-   * corresponding bytearray is found for the resource.
+   * internal url handler that generates url to load inside its own resources, if exists. It
+   * overloads the openConnection to provide an input stream if a corresponding bytearray is found
+   * for the resource.
    */
   private final URLStreamHandler m_aURLStreamHandler = new URLStreamHandler ()
   {
@@ -104,8 +103,7 @@ public class DynamicClassLoader extends ClassLoader
    * create a class loader with its parent.
    *
    * @param parent
-   *        the classloader to fall back when a resource or class definition
-   *        can't be found.
+   *        the classloader to fall back when a resource or class definition can't be found.
    */
   public DynamicClassLoader (final ClassLoader parent)
   {
@@ -127,8 +125,7 @@ public class DynamicClassLoader extends ClassLoader
    * get the bytecode for a given class name.
    *
    * @param fullClassName
-   *        the full name of the class, including its package, eg
-   *        java.lang.String
+   *        the full name of the class, including its package, eg java.lang.String
    * @return the existing compiledCode for that class, or null.
    */
   public CompiledCodeJavaFile getCode (final String fullClassName)
@@ -171,7 +168,7 @@ public class DynamicClassLoader extends ClassLoader
       }
       catch (final MalformedURLException e)
       {
-        throw new UnsupportedOperationException ("catch this", e);
+        throw new UnsupportedOperationException (e);
       }
 
     return super.findResource (sName);

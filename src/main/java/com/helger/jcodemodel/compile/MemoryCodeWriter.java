@@ -188,7 +188,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
         }
         catch (final Exception e1)
         {
-          throw new UnsupportedOperationException ("catch this exception", e1);
+          throw new UnsupportedOperationException (e1);
         }
       else
         aNonJava.put (e.getKey (), e.getValue ());
@@ -222,7 +222,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
       }
       catch (final Exception e1)
       {
-        throw new UnsupportedOperationException ("catch this exception", e1);
+        throw new UnsupportedOperationException (e1);
       }
     aDynamicClassLoader.addResources (aNonJava);
     return ESuccess.SUCCESS;
@@ -264,7 +264,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
     }
     catch (final IOException e)
     {
-      throw new UnsupportedOperationException ("catch this exception", e);
+      throw new UnsupportedOperationException (e);
     }
     return codeWriter;
   }
