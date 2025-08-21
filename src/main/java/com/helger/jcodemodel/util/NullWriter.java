@@ -43,7 +43,7 @@ package com.helger.jcodemodel.util;
 import java.io.IOException;
 import java.io.Writer;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * An implementation of {@link Writer} that discards all input :)

@@ -43,9 +43,9 @@ package com.helger.jcodemodel.writer;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import javax.annotation.Nonnull;
-
 import com.helger.jcodemodel.JPackage;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * {@link AbstractCodeWriter} that delegates to another

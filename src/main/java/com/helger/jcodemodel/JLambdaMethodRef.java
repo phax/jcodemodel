@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
-import com.helger.commons.ValueEnforcer;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * This is a single Java 8 lambda method reference expression.

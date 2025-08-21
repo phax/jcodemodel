@@ -44,10 +44,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.WillNotClose;
+import com.helger.annotation.WillNotClose;
+import com.helger.base.rt.NonBlockingProperties;
 
-import com.helger.commons.lang.NonBlockingProperties;
+import jakarta.annotation.Nonnull;
 
 /**
  * A property file.

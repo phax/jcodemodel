@@ -44,8 +44,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A part is a part of a javadoc comment, and it is a list of values.

@@ -51,20 +51,26 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.string.StringHelper;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.string.StringHelper;
+import com.helger.base.string.StringReplace;
 import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.exceptions.JResourceAlreadyExistsException;
 import com.helger.jcodemodel.util.FSName;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 /**
  * A Java package.
  */
-public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <JDefinedClass>, IJAnnotatable, IJDocCommentable
+public class JPackage implements
+                      IJDeclaration,
+                      IJGenerable,
+                      IJClassContainer <JDefinedClass>,
+                      IJAnnotatable,
+                      IJDocCommentable
 {
   public static final char SEPARATOR = '.';
   public static final Pattern VALID_PACKAGE_NAME_ANYCASE = Pattern.compile ("[A-Za-z_][A-Za-z0-9_]*");
@@ -76,10 +82,10 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   private static final AtomicBoolean FORCE_PACKAGE_NAME_LOWERCASE = new AtomicBoolean (false);
 
   /**
-   * @return <code>true</code> if only lower case package names should be
-   *         allowed, <code>false</code> if also upper case characters are
-   *         allowed. For backwards compatibility upper case characters are
-   *         allowed so this method returns <code>false</code>.
+   * @return <code>true</code> if only lower case package names should be allowed,
+   *         <code>false</code> if also upper case characters are allowed. For backwards
+   *         compatibility upper case characters are allowed so this method returns
+   *         <code>false</code>.
    * @since 3.2.5
    */
   public static boolean isForcePackageNameLowercase ()
@@ -91,8 +97,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
    * Only allow lower case package names
    *
    * @param bForcePackageNameLowercase
-   *        <code>true</code> to force lower case package names are recommended
-   *        by
+   *        <code>true</code> to force lower case package names are recommended by
    *        https://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html
    */
   public static void setForcePackageNameLowercase (final boolean bForcePackageNameLowercase)
@@ -105,8 +110,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
    *
    * @param sName
    *        The name part to check
-   * @return <code>true</code> if it is invalid, <code>false</code> if it is
-   *         valid
+   * @return <code>true</code> if it is invalid, <code>false</code> if it is valid
    */
   public static boolean isForbiddenPackageNamePart (@Nonnull final String sName)
   {
@@ -192,8 +196,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   }
 
   /**
-   * @return the parent package, or <code>null</code> if this class is the root
-   *         package.
+   * @return the parent package, or <code>null</code> if this class is the root package.
    */
   @Nullable
   public JPackage parent ()
@@ -232,9 +235,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   }
 
   @Nonnull
-  public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+  public JDefinedClass _class (final int nMods, @Nonnull final String sClassName, @Nonnull final EClassType eClassType)
+                                                                                                                        throws JCodeModelException
   {
     final FSName aKey = _createFSName (sClassName);
 
@@ -243,7 +245,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
     if (aDC != null)
       throw new JClassAlreadyExistsException (aDC);
 
-    final String sResDirName = StringHelper.replaceAll (m_sName, SEPARATOR, JResourceDir.SEPARATOR);
+    final String sResDirName = StringReplace.replaceAll (m_sName, SEPARATOR, JResourceDir.SEPARATOR);
     final JResourceDir aRD = m_aOwner.resourceDir (sResDirName);
 
     // Check if a resource file with the same name already exists
@@ -324,7 +326,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   @Nonnull
   public AbstractJClass ref (@Nonnull final String sClassLocalName) throws ClassNotFoundException
   {
-    ValueEnforcer.isTrue (sClassLocalName.indexOf (SEPARATOR) < 0, () -> "JClass name contains '.': " + sClassLocalName);
+    ValueEnforcer.isTrue (sClassLocalName.indexOf (SEPARATOR) < 0,
+                          () -> "JClass name contains '.': " + sClassLocalName);
 
     final String sFQCN = isUnnamed () ? sClassLocalName : m_sName + SEPARATOR + sClassLocalName;
     return m_aOwner.ref (Class.forName (sFQCN));
@@ -381,9 +384,8 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   /**
    * Get the name of this package
    *
-   * @return The name of this package, or the empty string if this is the null
-   *         package. For example, this method returns strings like
-   *         <code>"java.lang"</code>
+   * @return The name of this package, or the empty string if this is the null package. For example,
+   *         this method returns strings like <code>"java.lang"</code>
    */
   @Nonnull
   public String name ()
@@ -441,7 +443,7 @@ public class JPackage implements IJDeclaration, IJGenerable, IJClassContainer <J
   {
     if (isUnnamed ())
       return aDir;
-    return new File (aDir, StringHelper.replaceAll (m_sName, SEPARATOR, File.separatorChar));
+    return new File (aDir, StringReplace.replaceAll (m_sName, SEPARATOR, File.separatorChar));
   }
 
   public void declare (@Nonnull final IJFormatter f)

@@ -40,12 +40,13 @@
  */
 package com.helger.jcodemodel.meta;
 
-import javax.annotation.Nonnull;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
+
+import jakarta.annotation.Nonnull;
 
 public class JCodeModelJavaxLangModelAdapter
 {

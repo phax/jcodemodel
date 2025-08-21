@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Case statement

@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel.exceptions;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Base class for all code model related exception.

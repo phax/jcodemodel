@@ -45,10 +45,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
+import com.helger.annotation.Nonnegative;
+import com.helger.base.enforce.ValueEnforcer;
 
-import com.helger.commons.ValueEnforcer;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents an arrays as annotation members

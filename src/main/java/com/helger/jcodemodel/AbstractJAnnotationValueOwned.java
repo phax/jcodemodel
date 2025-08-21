@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.util.JCNameUtilities;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Things that can be values of an annotation element and have an owning code

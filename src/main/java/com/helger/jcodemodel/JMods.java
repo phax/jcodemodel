@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
-import com.helger.commons.ValueEnforcer;
+import jakarta.annotation.Nonnull;
 
 /**
  * Modifier groups.

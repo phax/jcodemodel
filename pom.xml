@@ -46,7 +46,7 @@
   <parent>
     <groupId>com.helger</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>1.11.5</version>
+    <version>3.0.0</version>
   </parent>
   <artifactId>jcodemodel</artifactId>
   <version>4.0.0-SNAPSHOT</version>
@@ -133,52 +133,51 @@
       <dependency>
         <groupId>com.helger.commons</groupId>
         <artifactId>ph-commons-parent-pom</artifactId>
-        <version>10.2.5</version>
+        <version>12.0.0-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.equinox.common</artifactId>
-        <version>3.8.0</version>
+        <version>3.20.100</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>3.13.0</version>
+        <version>3.33.100</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>3.13.900</version>
+        <version>3.22.200</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.jobs</artifactId>
-        <version>3.10.1100</version>
+        <version>3.15.600</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.contenttype</artifactId>
-        <version>3.7.1000</version>
+        <version>3.9.600</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.jdt</groupId>
         <artifactId>org.eclipse.jdt.core</artifactId>
-        <version>3.26.0</version>
+        <version>3.42.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
 
   <dependencies>
-    <!-- We need jsr305 and not annotations because SuppressFBWarnings is contained! -->
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
+      <groupId>com.helger.commons</groupId>
+      <artifactId>ph-base</artifactId>    
     </dependency>
     <dependency>
       <groupId>com.helger.commons</groupId>
-      <artifactId>ph-commons</artifactId>    
+      <artifactId>ph-io</artifactId>    
     </dependency>
     
     <dependency>
@@ -194,7 +193,7 @@
     <dependency>
       <groupId>com.github.javaparser</groupId>
       <artifactId>javaparser-core</artifactId>
-      <version>3.24.4</version>
+      <version>3.27.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>

@@ -42,11 +42,11 @@ package com.helger.jcodemodel.util;
 
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.hashcode.HashCodeGenerator;
+import com.helger.base.hashcode.IHashCodeGenerator;
 
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.hashcode.HashCodeGenerator;
-import com.helger.commons.hashcode.IHashCodeGenerator;
+import jakarta.annotation.Nonnull;
 
 /**
  * Utility class to represent case sensitive or case insensitive keys for file

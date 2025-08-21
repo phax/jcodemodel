@@ -47,7 +47,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnull;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.ExecutableElement;
@@ -60,6 +59,8 @@ import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.IJAnnotatable;
 import com.helger.jcodemodel.JAnnotationArrayMember;
 import com.helger.jcodemodel.JAnnotationUse;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;

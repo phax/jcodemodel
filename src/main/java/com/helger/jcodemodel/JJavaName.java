@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Utility methods that convert arbitrary strings into Java identifiers.

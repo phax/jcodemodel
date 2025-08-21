@@ -42,9 +42,9 @@ package com.helger.jcodemodel.util;
 
 import java.util.Comparator;
 
-import javax.annotation.Nonnull;
-
 import com.helger.jcodemodel.AbstractJClass;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Comparator object that sorts {@link AbstractJClass}es in the order of their

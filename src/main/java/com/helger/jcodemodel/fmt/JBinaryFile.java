@@ -43,10 +43,10 @@ package com.helger.jcodemodel.fmt;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import javax.annotation.Nonnull;
-import javax.annotation.WillNotClose;
+import com.helger.annotation.WillNotClose;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
-import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
+import jakarta.annotation.Nonnull;
 
 /**
  * Allows the application to use OutputStream to define data that will be stored

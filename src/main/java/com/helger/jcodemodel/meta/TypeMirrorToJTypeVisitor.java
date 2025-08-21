@@ -48,13 +48,15 @@ import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.ErrorType;
 import javax.lang.model.type.ExecutableType;
+import javax.lang.model.type.IntersectionType;
 import javax.lang.model.type.NoType;
 import javax.lang.model.type.NullType;
 import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVariable;
+import javax.lang.model.type.UnionType;
 import javax.lang.model.type.WildcardType;
-import javax.lang.model.util.AbstractTypeVisitor6;
+import javax.lang.model.util.AbstractTypeVisitor14;
 
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
@@ -65,7 +67,7 @@ import com.helger.jcodemodel.JDefinedClass;
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
-class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void>
+class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor14 <AbstractJType, Void>
 {
   private final ErrorTypePolicy m_aErrorTypePolicy;
   private final TypeEnvironment m_aEnvironment;
@@ -187,7 +189,8 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
       return jCodeModelClass.narrow (jArguments);
     }
     if (m_aErrorTypePolicy.action () == ErrorTypePolicy.EAction.CREATE_ERROR_TYPE)
-      return m_aCodeModel.errorClass (typeName + " in annotated source code", typeName.equals ("<any>") ? null : typeName);
+      return m_aCodeModel.errorClass (typeName + " in annotated source code",
+                                      typeName.equals ("<any>") ? null : typeName);
     try
     {
       throw new ErrorTypeFound (typeName + " in annotated source code");
@@ -225,7 +228,8 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
       final TypeMirror extendsBoundMirror = t.getExtendsBound ();
       if (extendsBoundMirror != null)
       {
-        final AbstractJClass extendsBound = (AbstractJClass) m_aModelsAdapter.toJType (extendsBoundMirror, m_aEnvironment);
+        final AbstractJClass extendsBound = (AbstractJClass) m_aModelsAdapter.toJType (extendsBoundMirror,
+                                                                                       m_aEnvironment);
         return extendsBound.wildcard (EWildcardBoundMode.EXTENDS);
       }
       final TypeMirror superBoundMirror = t.getSuperBound ();
@@ -282,5 +286,17 @@ class TypeMirrorToJTypeVisitor extends AbstractTypeVisitor6 <AbstractJType, Void
     {
       throw new RuntimeErrorTypeFound (ex);
     }
+  }
+
+  @Override
+  public AbstractJType visitIntersection (final IntersectionType t, final Void p)
+  {
+    throw new IllegalArgumentException ("IntersectionType not implemented.");
+  }
+
+  @Override
+  public AbstractJType visitUnion (final UnionType t, final Void p)
+  {
+    throw new IllegalArgumentException ("IntersectionType not implemented.");
   }
 }

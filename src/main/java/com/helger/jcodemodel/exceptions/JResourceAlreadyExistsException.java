@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel.exceptions;
 
-import javax.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
-import com.helger.commons.ValueEnforcer;
+import jakarta.annotation.Nonnull;
 
 /**
  * Indicates that the class is already created.

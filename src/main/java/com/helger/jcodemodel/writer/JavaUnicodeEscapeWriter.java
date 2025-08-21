@@ -45,9 +45,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.BitSet;
 
-import javax.annotation.Nonnull;
-
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Special {@link UnicodeEscapeWriter} with less characters to encode.

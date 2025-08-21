@@ -57,7 +57,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.jar.JarEntry;
 
-import javax.annotation.Nonnull;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
 import javax.tools.FileObject;
@@ -67,17 +66,19 @@ import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 import javax.tools.StandardLocation;
 
-import com.helger.commons.annotation.UnsupportedOperation;
-import com.helger.commons.string.StringHelper;
+import com.helger.annotation.style.UnsupportedOperation;
+import com.helger.base.string.StringHelper;
+import com.helger.base.string.StringReplace;
+
+import jakarta.annotation.Nonnull;
 
 /**
- * java file manager that also checks and writes inside a given
- * {@link DynamicClassLoader}. This is used during compilation of a
- * {@link com.helger.jcodemodel.JCodeModel} specification.
+ * java file manager that also checks and writes inside a given {@link DynamicClassLoader}. This is
+ * used during compilation of a {@link com.helger.jcodemodel.JCodeModel} specification.
  * <p>
  * basically must overwrite the
- * {@link #list(javax.tools.JavaFileManager.Location, String, Set, boolean)}
- * method to check inside the jar
+ * {@link #list(javax.tools.JavaFileManager.Location, String, Set, boolean)} method to check inside
+ * the jar
  * </p>
  * <p>
  * most of the code comes from
@@ -127,7 +128,7 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
 
   public List <JavaFileObject> find (@Nonnull final String packageName) throws IOException
   {
-    final String sJavaPackageName = StringHelper.replaceAll (packageName, '.', '/');
+    final String sJavaPackageName = StringReplace.replaceAll (packageName, '.', '/');
     final List <JavaFileObject> result = new ArrayList <> ();
     final Enumeration <URL> urlEnumeration = m_aCL.getResources (sJavaPackageName);
     while (urlEnumeration.hasMoreElements ())
@@ -166,10 +167,12 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
       {
         final JarEntry jarEntry = entryEnum.nextElement ();
         final String name = jarEntry.getName ();
-        if (name.startsWith (rootEntryName) && name.indexOf ('/', rootEnd) == -1 && name.endsWith (CLASS_FILE_EXTENSION))
+        if (name.startsWith (rootEntryName) &&
+            name.indexOf ('/', rootEnd) == -1 &&
+            name.endsWith (CLASS_FILE_EXTENSION))
         {
           final URI uri = URI.create (jarUri + "!/" + name);
-          String binaryName = StringHelper.replaceAll (name, '/', '.');
+          String binaryName = StringReplace.replaceAll (name, '/', '.');
           binaryName = StringHelper.trimEnd (binaryName, CLASS_FILE_EXTENSION);
 
           result.add (new CustomJavaFileObject (binaryName, uri));

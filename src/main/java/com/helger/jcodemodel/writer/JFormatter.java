@@ -49,15 +49,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.WillCloseWhenClosed;
-import javax.annotation.concurrent.NotThreadSafe;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.helger.commons.ValueEnforcer;
+import com.helger.annotation.WillCloseWhenClosed;
+import com.helger.annotation.concurrent.NotThreadSafe;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJFormatter;
@@ -70,6 +67,9 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.NullWriter;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * This is a utility class for managing indentation and other basic formatting

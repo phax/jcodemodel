@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Declarations that can have type variables. Something that can be made into a

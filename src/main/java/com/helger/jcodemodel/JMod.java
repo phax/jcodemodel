@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.concurrent.Immutable;
+import com.helger.annotation.concurrent.Immutable;
 
 /**
  * Modifier constants.

@@ -49,10 +49,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JAnnotationUse;
 import com.helger.jcodemodel.JCodeModel;
@@ -62,6 +59,9 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JResourceDir;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Java Code Model Writer

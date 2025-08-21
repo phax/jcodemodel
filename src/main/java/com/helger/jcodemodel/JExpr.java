@@ -40,9 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.helger.annotation.Nonnegative;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Factory methods that generate various {@link IJExpression}s.

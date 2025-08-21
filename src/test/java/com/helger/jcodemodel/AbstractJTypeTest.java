@@ -47,10 +47,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import org.junit.After;
 import org.junit.Test;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Test class for class {@link AbstractJType}

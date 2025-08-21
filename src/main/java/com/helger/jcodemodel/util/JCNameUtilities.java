@@ -43,9 +43,9 @@ package com.helger.jcodemodel.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
-import com.helger.commons.ValueEnforcer;
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Ben Fagin

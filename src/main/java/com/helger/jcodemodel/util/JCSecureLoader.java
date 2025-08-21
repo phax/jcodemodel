@@ -40,13 +40,10 @@
  */
 package com.helger.jcodemodel.util;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-
 /**
- * Class defined for safe calls of getClassLoader methods of any kind
- * (context/system/class classloader. This MUST be package private and defined
- * in every package which uses such invocations.
+ * Class defined for safe calls of getClassLoader methods of any kind (context/system/class
+ * classloader. This MUST be package private and defined in every package which uses such
+ * invocations.
  *
  * @author snajper
  */
@@ -57,40 +54,21 @@ public final class JCSecureLoader
 
   public static ClassLoader getContextClassLoader ()
   {
-    if (System.getSecurityManager () == null)
-    {
-      return Thread.currentThread ().getContextClassLoader ();
-    }
-    return AccessController.doPrivileged ((PrivilegedAction <ClassLoader>) () -> Thread.currentThread ().getContextClassLoader ());
+    return Thread.currentThread ().getContextClassLoader ();
   }
 
   public static ClassLoader getClassClassLoader (final Class <?> c)
   {
-    if (System.getSecurityManager () == null)
-    {
-      return c.getClassLoader ();
-    }
-    return AccessController.doPrivileged ((PrivilegedAction <ClassLoader>) () -> c.getClassLoader ());
+    return c.getClassLoader ();
   }
 
   public static ClassLoader getSystemClassLoader ()
   {
-    if (System.getSecurityManager () == null)
-    {
-      return ClassLoader.getSystemClassLoader ();
-    }
-    return AccessController.doPrivileged ((PrivilegedAction <ClassLoader>) () -> ClassLoader.getSystemClassLoader ());
+    return ClassLoader.getSystemClassLoader ();
   }
 
   public static void setContextClassLoader (final ClassLoader cl)
   {
-    if (System.getSecurityManager () == null)
-    {
-      Thread.currentThread ().setContextClassLoader (cl);
-    }
-    AccessController.doPrivileged ((PrivilegedAction <Object>) () -> {
-      Thread.currentThread ().setContextClassLoader (cl);
-      return null;
-    });
+    Thread.currentThread ().setContextClassLoader (cl);
   }
 }

@@ -44,20 +44,20 @@ import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.helger.jcodemodel.util.JCNameUtilities;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * References to existing classes.
  * <p>
- * Instances of this class are kept in a pool so that they are shared. There is
- * one pool for each {@link JCodeModel} object.
+ * Instances of this class are kept in a pool so that they are shared. There is one pool for each
+ * {@link JCodeModel} object.
  * <p>
  * It is impossible to cache JReferencedClass globally only because there is the
- * <code>_package()</code> method, which obtains the owner {@link JPackage}
- * object, which is scoped to JCodeModel.
+ * <code>_package()</code> method, which obtains the owner {@link JPackage} object, which is scoped
+ * to JCodeModel.
  */
 class JReferencedClass extends AbstractJClass implements IJDeclaration
 {
@@ -138,7 +138,7 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
   public Iterator <AbstractJClass> _implements ()
   {
     final Class <?> [] aInterfaces = m_aClass.getInterfaces ();
-    return new Iterator <AbstractJClass> ()
+    return new Iterator <> ()
     {
       private int m_nIdx = 0;
 

@@ -42,8 +42,8 @@ package com.helger.jcodemodel;
 
 import java.util.Iterator;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A representation of a type in codeModel. A type is always either primitive (

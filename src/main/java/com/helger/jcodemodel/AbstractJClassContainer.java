@@ -46,11 +46,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A generated Java class/interface/enum/annotation<br>

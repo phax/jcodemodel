@@ -47,19 +47,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.io.file.FilenameHelper;
-import com.helger.commons.string.StringHelper;
+import com.helger.annotation.Nonnegative;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.string.StringHelper;
+import com.helger.base.string.StringReplace;
+import com.helger.io.file.FilenameHelper;
 import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
 import com.helger.jcodemodel.exceptions.JResourceAlreadyExistsException;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.util.FSName;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A Java resource directory - complementary to a {@link JPackage}.
@@ -92,15 +93,13 @@ public class JResourceDir implements IJOwned
    * Constructor
    *
    * @param aOwner
-   *        The code writer being used to create this package. May not be
-   *        <code>null</code>.
+   *        The code writer being used to create this package. May not be <code>null</code>.
    * @param aParentDir
-   *        The parent directory. May only be <code>null</code> for the target
-   *        root resource directory. In that case the name must be "".
+   *        The parent directory. May only be <code>null</code> for the target root resource
+   *        directory. In that case the name must be "".
    * @param sName
-   *        Name of directory. May not be <code>null</code> but empty. No
-   *        absolute paths are allowed and only Linux forward slashes may be
-   *        used as path separators.
+   *        Name of directory. May not be <code>null</code> but empty. No absolute paths are allowed
+   *        and only Linux forward slashes may be used as path separators.
    * @throws JInvalidFileNameException
    *         If a part of the package name is not a valid filename part.
    */
@@ -127,8 +126,7 @@ public class JResourceDir implements IJOwned
   }
 
   /**
-   * @return the code model root object being used to create this resource
-   *         directory.
+   * @return the code model root object being used to create this resource directory.
    */
   @Override
   @Nonnull
@@ -138,13 +136,12 @@ public class JResourceDir implements IJOwned
   }
 
   /**
-   * Get the name of this resource directory. This name is never an absolute
-   * path. This name never ends with a slash. This name always uses the forward
-   * slash (/) as a separator and never the Windows backslash.
+   * Get the name of this resource directory. This name is never an absolute path. This name never
+   * ends with a slash. This name always uses the forward slash (/) as a separator and never the
+   * Windows backslash.
    *
-   * @return The name of this resource directory, or the empty string if this is
-   *         the root directory. For example, this method returns strings like
-   *         <code>"dir1/dir2/dir3"</code>
+   * @return The name of this resource directory, or the empty string if this is the root directory.
+   *         For example, this method returns strings like <code>"dir1/dir2/dir3"</code>
    */
   @Nonnull
   public final String name ()
@@ -153,8 +150,8 @@ public class JResourceDir implements IJOwned
   }
 
   /**
-   * @return the parent resource directory, or <code>null</code> if this is the
-   *         root resource directory.
+   * @return the parent resource directory, or <code>null</code> if this is the root resource
+   *         directory.
    */
   @Nullable
   public JResourceDir parent ()
@@ -173,7 +170,7 @@ public class JResourceDir implements IJOwned
   @Nonnull
   private JPackage _getMatchingPackage ()
   {
-    return owner ()._package (StringHelper.replaceAll (m_sName, SEPARATOR, JPackage.SEPARATOR));
+    return owner ()._package (StringReplace.replaceAll (m_sName, SEPARATOR, JPackage.SEPARATOR));
   }
 
   /**
@@ -195,7 +192,9 @@ public class JResourceDir implements IJOwned
     final String sName = aResFile.name ();
 
     if (!m_aOwner.getFileSystemConvention ().isValidFilename (sName))
-      throw new IllegalArgumentException ("Resource filename '" + sName + "' is invalid according to the current file system conventions");
+      throw new IllegalArgumentException ("Resource filename '" +
+                                          sName +
+                                          "' is invalid according to the current file system conventions");
 
     // Check if a sub directory already exists with the same name
     if (m_aOwner.containsResourceDir (fullChildName (sName)))
@@ -222,8 +221,8 @@ public class JResourceDir implements IJOwned
   }
 
   /**
-   * Checks if a resource of the given name exists. This method does not
-   * consider file system conventions.
+   * Checks if a resource of the given name exists. This method does not consider file system
+   * conventions.
    *
    * @param sName
    *        Filename to check. May be <code>null</code>.

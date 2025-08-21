@@ -48,10 +48,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.equals.EqualsHelper;
 
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.equals.EqualsHelper;
+import jakarta.annotation.Nonnull;
 
 /**
  * Enum Constant. When used as an {@link IJExpression}, this object represents a

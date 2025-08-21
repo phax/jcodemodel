@@ -44,10 +44,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.helger.base.hashcode.HashCodeGenerator;
 
-import com.helger.commons.hashcode.HashCodeGenerator;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A special {@link AbstractJClass} that represents an unknown class (except its

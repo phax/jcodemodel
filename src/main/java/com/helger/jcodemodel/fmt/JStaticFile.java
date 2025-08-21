@@ -44,10 +44,10 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import javax.annotation.Nonnull;
-import javax.annotation.WillNotClose;
-
+import com.helger.annotation.WillNotClose;
 import com.helger.jcodemodel.util.JCSecureLoader;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * Allows an application to copy a resource file to the output.

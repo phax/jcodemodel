@@ -50,10 +50,10 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.helger.jcodemodel.util.JCSecureLoader;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Dynamically implements the typed annotation writer interfaces.

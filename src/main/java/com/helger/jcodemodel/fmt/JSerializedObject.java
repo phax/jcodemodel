@@ -45,8 +45,9 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.WillNotClose;
+import com.helger.annotation.WillNotClose;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * A simple class that takes an object and serializes it into a file in the

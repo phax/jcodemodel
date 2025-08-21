@@ -44,8 +44,9 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
+import com.helger.annotation.Nonnegative;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * {@link Writer} that escapes characters that are unsafe as Javadoc comments.

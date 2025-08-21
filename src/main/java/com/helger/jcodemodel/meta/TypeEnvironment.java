@@ -43,10 +43,10 @@ package com.helger.jcodemodel.meta;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.helger.jcodemodel.AbstractJType;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;

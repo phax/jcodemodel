@@ -45,8 +45,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
@@ -58,6 +56,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 
+import com.helger.annotation.Nonnegative;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.EClassType;
@@ -67,6 +66,8 @@ import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;

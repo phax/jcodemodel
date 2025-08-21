@@ -47,14 +47,14 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.io.stream.NonBlockingBufferedWriter;
-import com.helger.commons.string.StringHelper;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.io.nonblocking.NonBlockingBufferedWriter;
+import com.helger.base.string.StringReplace;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Receives generated code and writes to the appropriate storage.
@@ -97,17 +97,16 @@ public abstract class AbstractCodeWriter implements Closeable
   }
 
   /**
-   * Called by CodeModel to store the specified file. The callee must allocate a
-   * storage to store the specified file.<br>
-   * The returned stream will be closed before the next file is stored. So the
-   * callee can assume that only one OutputStream is active at any given time.
+   * Called by CodeModel to store the specified file. The callee must allocate a storage to store
+   * the specified file.<br>
+   * The returned stream will be closed before the next file is stored. So the callee can assume
+   * that only one OutputStream is active at any given time.
    *
    * @param sDirName
-   *        The directory name, relative to the target directory. May not be
-   *        <code>null</code> but maybe empty.
+   *        The directory name, relative to the target directory. May not be <code>null</code> but
+   *        maybe empty.
    * @param sFilename
-   *        File name without the path. Something like "Foo.java" or
-   *        "Bar.properties"
+   *        File name without the path. Something like "Foo.java" or "Bar.properties"
    * @return OutputStream to write to
    * @throws IOException
    *         On IO error
@@ -121,50 +120,52 @@ public abstract class AbstractCodeWriter implements Closeable
   {
     // Convert package name to directory name
     // Forward slash works for Windows, Linux and ZIP files
-    return aPackage.isUnnamed () ? "" : StringHelper.replaceAll (aPackage.name (), '.', '/');
+    return aPackage.isUnnamed () ? "" : StringReplace.replaceAll (aPackage.name (), '.', '/');
   }
 
   /**
-   * Called by CodeModel to store the specified file. The callee must allocate a
-   * storage to store the specified file. <br>
-   * The returned stream will be closed before the next file is stored. So the
-   * callee can assume that only one OutputStream is active at any given time.
+   * Called by CodeModel to store the specified file. The callee must allocate a storage to store
+   * the specified file. <br>
+   * The returned stream will be closed before the next file is stored. So the callee can assume
+   * that only one OutputStream is active at any given time.
    *
    * @param aPackage
    *        The package of the file to be written.
    * @param sFilename
-   *        File name without the path. Something like "Foo.java" or
-   *        "Bar.properties"
+   *        File name without the path. Something like "Foo.java" or "Bar.properties"
    * @return OutputStream to write to
    * @throws IOException
    *         On IO error
    */
   @Nonnull
-  public final OutputStream openBinary (@Nonnull final JPackage aPackage, @Nonnull final String sFilename) throws IOException
+  public final OutputStream openBinary (@Nonnull final JPackage aPackage, @Nonnull final String sFilename)
+                                                                                                           throws IOException
   {
     return openBinary (toDirName (aPackage), sFilename);
   }
 
   /**
-   * Called by CodeModel to store the specified file. The callee must allocate a
-   * storage to store the specified file. <br>
-   * The returned stream will be closed before the next file is stored. So the
-   * callee can assume that only one OutputStream is active at any given time.
+   * Called by CodeModel to store the specified file. The callee must allocate a storage to store
+   * the specified file. <br>
+   * The returned stream will be closed before the next file is stored. So the callee can assume
+   * that only one OutputStream is active at any given time.
    *
    * @param aPackage
    *        The package of the file to be written.
    * @param sFilename
-   *        File name without the path. Something like "Foo.java" or
-   *        "Bar.properties"
+   *        File name without the path. Something like "Foo.java" or "Bar.properties"
    * @return Writer to write to. Never <code>null</code>. Caller must close it.
    * @throws IOException
    *         On IO error
    */
   @Nonnull
-  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage, @Nonnull final String sFilename) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage, @Nonnull final String sFilename)
+                                                                                                          throws IOException
   {
     final OutputStream aOS = openBinary (aPackage, sFilename);
-    final OutputStreamWriter aOSW = new OutputStreamWriter (aOS, m_aEncoding != null ? m_aEncoding : Charset.defaultCharset ());
+    final OutputStreamWriter aOSW = new OutputStreamWriter (aOS,
+                                                            m_aEncoding != null ? m_aEncoding : Charset
+                                                                                                       .defaultCharset ());
 
     // create writer
     Writer aWriter;

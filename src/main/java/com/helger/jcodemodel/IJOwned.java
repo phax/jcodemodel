@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Base interface for objects having a relation to a {@link JCodeModel}.

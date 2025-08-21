@@ -42,11 +42,11 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.equals.EqualsHelper;
 
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.equals.EqualsHelper;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A field that can have a {@link JDocComment} associated with it

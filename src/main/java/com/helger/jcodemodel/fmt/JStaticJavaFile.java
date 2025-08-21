@@ -52,18 +52,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.WillNotClose;
 import javax.tools.JavaFileObject;
 
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.io.stream.NonBlockingBufferedReader;
-import com.helger.commons.io.stream.NonBlockingBufferedWriter;
+import com.helger.annotation.WillNotClose;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.io.nonblocking.NonBlockingBufferedReader;
+import com.helger.base.io.nonblocking.NonBlockingBufferedWriter;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.util.JCSecureLoader;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Statically generated Java source file.

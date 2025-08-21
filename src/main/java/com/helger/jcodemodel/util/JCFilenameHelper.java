@@ -42,15 +42,15 @@ package com.helger.jcodemodel.util;
 
 import java.util.Locale;
 
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.Immutable;
+import com.helger.annotation.concurrent.Immutable;
+import com.helger.base.string.StringHelper;
+import com.helger.io.file.FilenameHelper;
 
-import com.helger.commons.io.file.FilenameHelper;
-import com.helger.commons.string.StringHelper;
+import jakarta.annotation.Nullable;
 
 /**
- * All kind of file name handling stuff. This class gives you platform
- * independent file name handling.
+ * All kind of file name handling stuff. This class gives you platform independent file name
+ * handling.
  *
  * @author Philip Helger
  */
@@ -93,25 +93,24 @@ public final class JCFilenameHelper
                                                               "LPT8",
                                                               "LPT9" };
 
-  private static final char [] WINDOWS_ILLEGAL_SUFFIXES = new char [] { '.', ' ', '\t' };
+  private static final char [] WINDOWS_ILLEGAL_SUFFIXES = { '.', ' ', '\t' };
 
   private JCFilenameHelper ()
   {}
 
   /**
-   * Check if the passed file name is valid. It checks for illegal characters
-   * within a filename. This method fits only for filenames on one level.
+   * Check if the passed file name is valid. It checks for illegal characters within a filename.
+   * This method fits only for filenames on one level.
    *
    * @param sFilename
    *        The filename to check. May be <code>null</code>.
-   * @return <code>false</code> if the passed filename is <code>null</code> or
-   *         empty or invalid. <code>true</code> if the filename is not empty
-   *         and valid.
+   * @return <code>false</code> if the passed filename is <code>null</code> or empty or invalid.
+   *         <code>true</code> if the filename is not empty and valid.
    */
   public static boolean isValidLinuxFilename (@Nullable final String sFilename)
   {
     // empty not allowed
-    if (StringHelper.hasNoText (sFilename))
+    if (StringHelper.isEmpty (sFilename))
       return false;
 
     // path separator chars are not allowed in filenames!
@@ -131,20 +130,19 @@ public final class JCFilenameHelper
   }
 
   /**
-   * Check if the passed file name is valid. It checks for illegal prefixes that
-   * affects compatibility to Windows, illegal characters within a filename and
-   * forbidden suffixes. This method fits only for filenames on one level.
+   * Check if the passed file name is valid. It checks for illegal prefixes that affects
+   * compatibility to Windows, illegal characters within a filename and forbidden suffixes. This
+   * method fits only for filenames on one level.
    *
    * @param sFilename
    *        The filename to check. May be <code>null</code>.
-   * @return <code>false</code> if the passed filename is <code>null</code> or
-   *         empty or invalid. <code>true</code> if the filename is not empty
-   *         and valid.
+   * @return <code>false</code> if the passed filename is <code>null</code> or empty or invalid.
+   *         <code>true</code> if the filename is not empty and valid.
    */
   public static boolean isValidWindowsFilename (@Nullable final String sFilename)
   {
     // empty not allowed
-    if (StringHelper.hasNoText (sFilename))
+    if (StringHelper.isEmpty (sFilename))
       return false;
 
     // path separator chars are not allowed in filenames!

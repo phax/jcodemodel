@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import java.lang.annotation.Annotation;
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Annotatable program elements.

@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Implementation of {@link IJGenerifiable}.

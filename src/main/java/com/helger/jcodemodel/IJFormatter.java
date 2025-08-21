@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import java.io.Closeable;
 import java.util.Collection;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Base interface for JFormatter.

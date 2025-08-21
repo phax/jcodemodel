@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel.util;
 
-import javax.annotation.Nullable;
-
 import com.helger.jcodemodel.writer.JCMWriter;
+
+import jakarta.annotation.Nullable;
 
 /**
  * <p>

@@ -44,10 +44,10 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import javax.annotation.Nonnull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * A special version of {@link java.io.PrintWriter} that has a customizable new

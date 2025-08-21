@@ -44,15 +44,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import javax.annotation.Nonnull;
-
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.string.StringHelper;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.JPackage;
 
+import jakarta.annotation.Nonnull;
+
 /**
- * Filter CodeWriter that writes a progress message to the specified
- * {@link IProgressTracker}.
+ * Filter CodeWriter that writes a progress message to the specified {@link IProgressTracker}.
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
@@ -75,7 +74,7 @@ public class ProgressCodeWriter extends FilterCodeWriter
 
   protected void report (@Nonnull final String sDirName, @Nonnull final String sFilename)
   {
-    if (StringHelper.hasNoText (sDirName))
+    if (StringHelper.isEmpty (sDirName))
       m_aPT.println (sFilename);
     else
       m_aPT.println (sDirName + '/' + sFilename);
@@ -89,7 +88,8 @@ public class ProgressCodeWriter extends FilterCodeWriter
   }
 
   @Override
-  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage, @Nonnull final String sFilename) throws IOException
+  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage, @Nonnull final String sFilename)
+                                                                                                          throws IOException
   {
     report (toDirName (aPackage), sFilename);
     return super.openSource (aPackage, sFilename);

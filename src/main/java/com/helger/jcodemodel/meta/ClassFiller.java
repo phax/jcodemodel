@@ -42,7 +42,6 @@ package com.helger.jcodemodel.meta;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -59,6 +58,8 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.JVar;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;

@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * This helps enable whether the JDefinedClass is a Class or Interface or

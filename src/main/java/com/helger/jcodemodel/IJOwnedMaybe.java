@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * Base interface for objects optionally having a relation to a

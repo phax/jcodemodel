@@ -45,8 +45,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
+import com.helger.annotation.Nonnegative;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * {@link Writer} that escapes non US-ASCII characters into Java Unicode escape

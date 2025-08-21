@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Try statement with Catch and/or Finally clause.

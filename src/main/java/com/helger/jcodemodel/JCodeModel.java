@@ -50,16 +50,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.Nonnegative;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.concurrent.NotThreadSafe;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.io.file.FilenameHelper;
-import com.helger.commons.string.StringHelper;
+import com.helger.annotation.Nonnegative;
+import com.helger.annotation.concurrent.NotThreadSafe;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.string.StringHelper;
+import com.helger.base.string.StringReplace;
+import com.helger.io.file.FilenameHelper;
 import com.helger.jcodemodel.exceptions.JCaseSensitivityChangeException;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
@@ -71,6 +70,9 @@ import com.helger.jcodemodel.util.EFileSystemConvention;
 import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.IFileSystemConvention;
 import com.helger.jcodemodel.util.JCSecureLoader;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Root of the code DOM.
@@ -88,34 +90,31 @@ import com.helger.jcodemodel.util.JCSecureLoader;
  * cm.build(new File("."));
  * </pre>
  * <p>
- * Every CodeModel node is always owned by one {@link JCodeModel} object at any
- * given time (which can be often accessed by the <tt>owner()</tt> method.) As
- * such, when you generate Java code, most of the operation works in a top-down
- * fashion. For example, you create a class from {@link JCodeModel}, which gives
- * you a {@link JDefinedClass}. Then you invoke a method on it to generate a new
- * method, which gives you {@link JMethod}, and so on. There are a few
- * exceptions to this, most notably building {@link IJExpression}s, but
- * generally you work with CodeModel in a top-down fashion. Because of this
- * design, most of the CodeModel classes aren't directly instanciable.
+ * Every CodeModel node is always owned by one {@link JCodeModel} object at any given time (which
+ * can be often accessed by the <tt>owner()</tt> method.) As such, when you generate Java code, most
+ * of the operation works in a top-down fashion. For example, you create a class from
+ * {@link JCodeModel}, which gives you a {@link JDefinedClass}. Then you invoke a method on it to
+ * generate a new method, which gives you {@link JMethod}, and so on. There are a few exceptions to
+ * this, most notably building {@link IJExpression}s, but generally you work with CodeModel in a
+ * top-down fashion. Because of this design, most of the CodeModel classes aren't directly
+ * instanciable.
  * <h2>Where to go from here?</h2>
  * <p>
- * Most of the time you'd want to populate new type definitions in a
- * {@link JCodeModel}. See {@link #_class(String, EClassType)}.
+ * Most of the time you'd want to populate new type definitions in a {@link JCodeModel}. See
+ * {@link #_class(String, EClassType)}.
  */
 public class JCodeModel implements Serializable
 {
   private static final String SEPARATOR_TWICE = JResourceDir.SEPARATOR_STR + JResourceDir.SEPARATOR_STR;
 
   /**
-   * Conversion from primitive type {@link Class} (such as {@link Integer#TYPE})
-   * to its boxed type (such as <tt>Integer.class</tt>). It's an unmodifiable
-   * map.
+   * Conversion from primitive type {@link Class} (such as {@link Integer#TYPE}) to its boxed type
+   * (such as <tt>Integer.class</tt>). It's an unmodifiable map.
    */
   static final Map <Class <?>, Class <?>> s_aPrimitiveToBox;
 
   /**
-   * The reverse look up for {@link #s_aPrimitiveToBox}. It's an unmodifiable
-   * map.
+   * The reverse look up for {@link #s_aPrimitiveToBox}. It's an unmodifiable map.
    */
   static final Map <Class <?>, Class <?>> s_aBoxToPrimitive;
 
@@ -206,10 +205,10 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Set the target file system convention to be used. This method is better
-   * called BEFORE the first package or resource directory is created. Later
-   * calls result in an exception, if the new convention tries to change case
-   * sensitivy or prevent the creation of resources names that are already used.
+   * Set the target file system convention to be used. This method is better called BEFORE the first
+   * package or resource directory is created. Later calls result in an exception, if the new
+   * convention tries to change case sensitivy or prevent the creation of resources names that are
+   * already used.
    *
    * @param aFSConvention
    *        The file system convention to be used. May not be <code>null</code>.
@@ -308,8 +307,7 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * @return a list with all packages. The list is mutable. Never
-   *         <code>null</code>.
+   * @return a list with all packages. The list is mutable. Never <code>null</code>.
    */
   @Nonnull
   public List <JPackage> getAllPackages ()
@@ -323,7 +321,7 @@ public class JCodeModel implements Serializable
     // Convert "\" to "/"
     String sCleanPath = FilenameHelper.getPathUsingUnixSeparator (sName);
     // Replace all double separators with a single one
-    sCleanPath = StringHelper.replaceAllRepeatedly (sCleanPath, SEPARATOR_TWICE, JResourceDir.SEPARATOR_STR);
+    sCleanPath = StringReplace.replaceAllRepeatedly (sCleanPath, SEPARATOR_TWICE, JResourceDir.SEPARATOR_STR);
     // Ensure last part is not a "/"
     sCleanPath = FilenameHelper.ensurePathEndingWithoutSeparator (sCleanPath);
     return sCleanPath;
@@ -338,23 +336,22 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Add a {@link JResourceDir} directory to the list of resource directories to
-   * be generated
+   * Add a {@link JResourceDir} directory to the list of resource directories to be generated
    *
    * @param sName
-   *        Name of the resource directory. Use "" to indicate the root
-   *        directory.
+   *        Name of the resource directory. Use "" to indicate the root directory.
    * @return Newly generated resource directory. Never <code>null</code>.
    * @throws JInvalidFileNameException
    *         if the name is invalid for current platform.
    * @throws JResourceAlreadyExistsException
-   *         If the resource directory could not be created because another file
-   *         or class already has this name.
+   *         If the resource directory could not be created because another file or class already
+   *         has this name.
    * @see #rootResourceDir()
    * @since v3.4.0
    */
   @Nonnull
-  public JResourceDir resourceDir (@Nonnull final String sName) throws JResourceAlreadyExistsException, JInvalidFileNameException
+  public JResourceDir resourceDir (@Nonnull final String sName) throws JResourceAlreadyExistsException,
+                                                                JInvalidFileNameException
   {
     ValueEnforcer.notNull (sName, "Name");
 
@@ -401,8 +398,8 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * @return The root resource directory. Never <code>null</code>. This is a
-   *         shortcut for <code>resourceDir ("")</code>.
+   * @return The root resource directory. Never <code>null</code>. This is a shortcut for
+   *         <code>resourceDir ("")</code>.
    * @since v3.4.0
    */
   @Nonnull
@@ -439,8 +436,7 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * @return a list with all packages. The list is mutable. Never
-   *         <code>null</code>.
+   * @return a list with all packages. The list is mutable. Never <code>null</code>.
    * @since v3.4.0
    */
   @Nonnull
@@ -471,7 +467,8 @@ public class JCodeModel implements Serializable
     if (nIdx < 0)
       return rootPackage ()._class (nMods, sFullyQualifiedClassName, eClassType);
     return _package (sFullyQualifiedClassName.substring (0, nIdx))._class (nMods,
-                                                                           sFullyQualifiedClassName.substring (nIdx + 1),
+                                                                           sFullyQualifiedClassName.substring (nIdx +
+                                                                                                               1),
                                                                            eClassType);
   }
 
@@ -502,7 +499,8 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (final int nMods, @Nonnull final String sFullyQualifiedClassName) throws JCodeModelException
+  public JDefinedClass _class (final int nMods, @Nonnull final String sFullyQualifiedClassName)
+                                                                                                throws JCodeModelException
   {
     return _class (nMods, sFullyQualifiedClassName, EClassType.CLASS);
   }
@@ -519,22 +517,20 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @Nonnull
-  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName, @Nonnull final EClassType eClassType)
+                                                                                                                     throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
   }
 
   /**
-   * Creates a dummy, unknown {@link JDirectClass} that represents a given name.
-   * <br>
-   * This method is useful when the code generation needs to include the
-   * user-specified class that may or may not exist, and only thing known about
-   * it is a class name.
+   * Creates a dummy, unknown {@link JDirectClass} that represents a given name. <br>
+   * This method is useful when the code generation needs to include the user-specified class that
+   * may or may not exist, and only thing known about it is a class name.
    *
    * @param sName
-   *        The fully qualified name of the class. When using type parameters
-   *        please use {@link #parseType(String)} instead!
+   *        The fully qualified name of the class. When using type parameters please use
+   *        {@link #parseType(String)} instead!
    * @return New {@link JDirectClass}
    */
   @Nonnull
@@ -544,17 +540,15 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Creates a dummy, unknown {@link JDirectClass} that represents a given name.
-   * <br>
-   * This method is useful when the code generation needs to include the
-   * user-specified class that may or may not exist, and only thing known about
-   * it is a class name.
+   * Creates a dummy, unknown {@link JDirectClass} that represents a given name. <br>
+   * This method is useful when the code generation needs to include the user-specified class that
+   * may or may not exist, and only thing known about it is a class name.
    *
    * @param eClassType
    *        Class type to use.
    * @param sName
-   *        The fully qualified name of the class. When using type parameters
-   *        please use {@link #parseType(String)} instead!
+   *        The fully qualified name of the class. When using type parameters please use
+   *        {@link #parseType(String)} instead!
    * @return New {@link JDirectClass}
    */
   @Nonnull
@@ -564,25 +558,22 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Creates a dummy, error {@link AbstractJClass} that can only be referenced
-   * from hidden classes.
+   * Creates a dummy, error {@link AbstractJClass} that can only be referenced from hidden classes.
    * <p>
-   * This method is useful when the code generation needs to include some error
-   * class that should never leak into actually written code.
+   * This method is useful when the code generation needs to include some error class that should
+   * never leak into actually written code.
    * <p>
-   * Error-types represents holes or place-holders that can't be filled.
-   * References to error-classes can be used in hidden class-models. Such
-   * classes should never be actually written but can be somehow used during
-   * code generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test
+   * Error-types represents holes or place-holders that can't be filled. References to error-classes
+   * can be used in hidden class-models. Such classes should never be actually written but can be
+   * somehow used during code generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test
    * if your generated Java-sources contains references to error-types.
    * <p>
-   * You should probably always check generated code with
-   * {@code JCodeModel#buildsErrorTypeRefs} method if you use any error-types.
+   * You should probably always check generated code with {@code JCodeModel#buildsErrorTypeRefs}
+   * method if you use any error-types.
    * <p>
-   * Most of error-types methods throws {@code JErrorClassUsedException}
-   * unchecked exceptions. Be careful and use {@link AbstractJType#isError()
-   * AbstractJType#isError} method to check for error-types before actually
-   * using it's methods.
+   * Most of error-types methods throws {@code JErrorClassUsedException} unchecked exceptions. Be
+   * careful and use {@link AbstractJType#isError() AbstractJType#isError} method to check for
+   * error-types before actually using it's methods.
    *
    * @param sMessage
    *        some free form text message to identify source of error
@@ -597,25 +588,22 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Creates a dummy, error {@link AbstractJClass} that can only be referenced
-   * from hidden classes.
+   * Creates a dummy, error {@link AbstractJClass} that can only be referenced from hidden classes.
    * <p>
-   * This method is useful when the code generation needs to include some error
-   * class that should never leak into actually written code.
+   * This method is useful when the code generation needs to include some error class that should
+   * never leak into actually written code.
    * <p>
-   * Error-types represents holes or place-holders that can't be filled.
-   * References to error-classes can be used in hidden class-models. Such
-   * classes should never be actually written but can be somehow used during
-   * code generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test
+   * Error-types represents holes or place-holders that can't be filled. References to error-classes
+   * can be used in hidden class-models. Such classes should never be actually written but can be
+   * somehow used during code generation. Use {@code JCodeModel#buildsErrorTypeRefs} method to test
    * if your generated Java-sources contains references to error-types.
    * <p>
-   * You should probably always check generated code with
-   * {@code JCodeModel#buildsErrorTypeRefs} method if you use any error-types.
+   * You should probably always check generated code with {@code JCodeModel#buildsErrorTypeRefs}
+   * method if you use any error-types.
    * <p>
-   * Most of error-types methods throws {@code JErrorClassUsedException}
-   * unchecked exceptions. Be careful and use {@link AbstractJType#isError()
-   * AbstractJType#isError} method to check for error-types before actually
-   * using it's methods.
+   * Most of error-types methods throws {@code JErrorClassUsedException} unchecked exceptions. Be
+   * careful and use {@link AbstractJType#isError() AbstractJType#isError} method to check for
+   * error-types before actually using it's methods.
    *
    * @param sName
    *        name of missing class if it is known
@@ -660,7 +648,9 @@ public class JCodeModel implements Serializable
     final int nIndex = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIndex < 0)
       return rootPackage ()._getClass (sFullyQualifiedClassName);
-    return _package (sFullyQualifiedClassName.substring (0, nIndex))._getClass (sFullyQualifiedClassName.substring (nIndex + 1));
+    return _package (sFullyQualifiedClassName.substring (0, nIndex))._getClass (sFullyQualifiedClassName.substring (
+                                                                                                                    nIndex +
+                                                                                                                    1));
   }
 
   /**
@@ -711,8 +701,8 @@ public class JCodeModel implements Serializable
    *
    * @param aClazz
    *        Existing class to reference
-   * @return Singleton reference to this class. Might be a
-   *         <code>JReferencedClass</code> or a {@link JArrayClass}
+   * @return Singleton reference to this class. Might be a <code>JReferencedClass</code> or a
+   *         {@link JArrayClass}
    * @see #_ref(Class) for the version that handles more cases.
    */
   @Nonnull
@@ -739,21 +729,17 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Obtains a reference to a processable class from its TypeElement
-   * description.
+   * Obtains a reference to a processable class from its TypeElement description.
    * <p>
-   * Annotation processors can get access of {@link TypeElement} objects during
-   * annotation processing. These TypeElement objects can be used with
-   * jcodemodel as a references to classes.
+   * Annotation processors can get access of {@link TypeElement} objects during annotation
+   * processing. These TypeElement objects can be used with jcodemodel as a references to classes.
    * <p>
-   * This method result-class definition can never include references to
-   * "error"-types. Error-types araise during annotation processing when
-   * something is not fully defined.
+   * This method result-class definition can never include references to "error"-types. Error-types
+   * araise during annotation processing when something is not fully defined.
    * <p>
-   * You can post-pond annotation processing for later stages of annotation
-   * processor hoping that all error-types will become defined on some
-   * annotation processing stage at last. You can catch {@link ErrorTypeFound}
-   * exception to achieve this.
+   * You can post-pond annotation processing for later stages of annotation processor hoping that
+   * all error-types will become defined on some annotation processing stage at last. You can catch
+   * {@link ErrorTypeFound} exception to achieve this.
    *
    * @param aElement
    *        Processable class to reference
@@ -768,7 +754,8 @@ public class JCodeModel implements Serializable
    * @see #refWithErrorTypes(TypeElement,Elements)
    */
   @Nonnull
-  public JDefinedClass ref (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils) throws ErrorTypeFound,
+  public JDefinedClass ref (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils)
+                                                                                                        throws ErrorTypeFound,
                                                                                                         CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
@@ -776,21 +763,17 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Obtains a reference to a processable class from its TypeElement
-   * description.
+   * Obtains a reference to a processable class from its TypeElement description.
    * <p>
-   * Annotation processors can get access of TypeElement objects during
-   * annotation processing. These TypeElement objects can be used with
-   * jcodemodel as a references to classes.
+   * Annotation processors can get access of TypeElement objects during annotation processing. These
+   * TypeElement objects can be used with jcodemodel as a references to classes.
    * <p>
-   * This method result-class definition can include references to
-   * "error"-types. Error-types araise during annotation processing when
-   * something is not fully defined.
+   * This method result-class definition can include references to "error"-types. Error-types araise
+   * during annotation processing when something is not fully defined.
    * <p>
    * Sometimes direct treatment of error-types is required. You can use
-   * {@link AbstractJType#isError()} and
-   * {@link JCodeModel#buildsErrorTypeRefs()} methods to handle error-types and
-   * to prevent error-types to leak into generated code.
+   * {@link AbstractJType#isError()} and {@link JCodeModel#buildsErrorTypeRefs()} methods to handle
+   * error-types and to prevent error-types to leak into generated code.
    *
    * @param aElement
    *        Processable class to reference
@@ -805,8 +788,8 @@ public class JCodeModel implements Serializable
    * @see #buildsErrorTypeRefs()
    */
   @Nonnull
-  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement,
-                                          @Nonnull final Elements aElementUtils) throws CodeModelBuildingException
+  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils)
+                                                                                                                      throws CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClassWithErrorTypes (aElement);
@@ -817,8 +800,8 @@ public class JCodeModel implements Serializable
    *
    * @param aClass
    *        Class to be referenced
-   * @return Might be a <code>JReferencedClass</code> or a {@link JArrayClass}
-   *         or a {@link JPrimitiveType}
+   * @return Might be a <code>JReferencedClass</code> or a {@link JArrayClass} or a
+   *         {@link JPrimitiveType}
    * @see #ref(Class)
    */
   @Nonnull
@@ -830,17 +813,14 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * Obtains a reference to an existing class from its fully-qualified class
-   * name. <br>
-   * First, this method attempts to load the class of the given name. If that
-   * fails, we assume that the class is derived straight from {@link Object},
-   * and return a {@link AbstractJClass}.
+   * Obtains a reference to an existing class from its fully-qualified class name. <br>
+   * First, this method attempts to load the class of the given name. If that fails, we assume that
+   * the class is derived straight from {@link Object}, and return a {@link AbstractJClass}.
    *
    * @param sFullyQualifiedClassName
    *        FQCN
-   * @return Singleton reference to this class. Might be a
-   *         <code>JReferencedClass</code> or a {@link JArrayClass} or a
-   *         {@link JDirectClass}
+   * @return Singleton reference to this class. Might be a <code>JReferencedClass</code> or a
+   *         {@link JArrayClass} or a {@link JDirectClass}
    */
   @Nonnull
   public AbstractJClass ref (@Nonnull final String sFullyQualifiedClassName)
@@ -870,8 +850,8 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * @return Singleton {@link AbstractJClass} representation for "?", which is
-   *         equivalent to "? extends Object".
+   * @return Singleton {@link AbstractJClass} representation for "?", which is equivalent to "?
+   *         extends Object".
    */
   @Nonnull
   public AbstractJClass wildcard ()
@@ -889,9 +869,8 @@ public class JCodeModel implements Serializable
    *
    * @param sName
    *        Type name to parse
-   * @return The internal representation of the specified name. Might be a
-   *         {@link JArrayClass}, a {@link JPrimitiveType}, a
-   *         <code>JReferencedClass</code>, a {@link JNarrowedClass}
+   * @return The internal representation of the specified name. Might be a {@link JArrayClass}, a
+   *         {@link JPrimitiveType}, a <code>JReferencedClass</code>, a {@link JNarrowedClass}
    */
   @Nonnull
   public AbstractJType parseType (@Nonnull final String sName)
@@ -927,8 +906,8 @@ public class JCodeModel implements Serializable
     }
 
     /**
-     * Parses a type name token T (which can be potentially of the form
-     * T&lt;T1,T2,...&gt;, or "? extends/super T".)
+     * Parses a type name token T (which can be potentially of the form T&lt;T1,T2,...&gt;, or "?
+     * extends/super T".)
      *
      * @return The parsed type name
      */
@@ -961,7 +940,8 @@ public class JCodeModel implements Serializable
         }
 
         // not supported
-        throw new IllegalArgumentException ("only extends/super can follow ?, but found " + m_sTypeName.substring (m_nIdx));
+        throw new IllegalArgumentException ("only extends/super can follow ?, but found " +
+                                            m_sTypeName.substring (m_nIdx));
       }
 
       while (m_nIdx < m_sTypeName.length ())
@@ -978,8 +958,7 @@ public class JCodeModel implements Serializable
     }
 
     /**
-     * Parses additional left-associative suffixes, like type arguments and
-     * array specifiers.
+     * Parses additional left-associative suffixes, like type arguments and array specifiers.
      */
     @Nonnull
     private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass aClazz)
@@ -1049,8 +1028,7 @@ public class JCodeModel implements Serializable
    *
    * @param aClass
    *        The class to use. May not be <code>null</code>.
-   * @return <code>true</code> if it was added, <code>false</code> if it was
-   *         already contained.
+   * @return <code>true</code> if it was added, <code>false</code> if it was already contained.
    * @since 3.0.0
    */
   public boolean addDontImportClass (@Nonnull final Class <?> aClass)
@@ -1063,8 +1041,7 @@ public class JCodeModel implements Serializable
    *
    * @param aClass
    *        The class to use. May not be <code>null</code>.
-   * @return <code>true</code> if it was added, <code>false</code> if it was
-   *         already contained.
+   * @return <code>true</code> if it was added, <code>false</code> if it was already contained.
    * @since 3.0.0
    */
   public boolean addDontImportClass (@Nonnull final AbstractJClass aClass)
@@ -1074,8 +1051,8 @@ public class JCodeModel implements Serializable
   }
 
   /**
-   * @return A copy all classes that should not be imported. Never
-   *         <code>null</code> but maybe empty.
+   * @return A copy all classes that should not be imported. Never <code>null</code> but maybe
+   *         empty.
    * @since 3.0.0
    */
   @Nonnull

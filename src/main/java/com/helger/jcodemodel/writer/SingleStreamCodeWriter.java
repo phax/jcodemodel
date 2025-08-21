@@ -45,7 +45,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Output all source files into a single stream with a little formatting header

@@ -51,12 +51,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
-import com.helger.commons.ValueEnforcer;
+import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.writer.JFormatter;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A generated Java class/interface/enum/....

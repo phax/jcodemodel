@@ -43,10 +43,10 @@ package com.helger.jcodemodel.fmt;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import javax.annotation.Nonnull;
-import javax.annotation.WillNotClose;
+import com.helger.annotation.WillNotClose;
+import com.helger.base.enforce.ValueEnforcer;
 
-import com.helger.commons.ValueEnforcer;
+import jakarta.annotation.Nonnull;
 
 /**
  * Represents a resource file in the application-specific file format.

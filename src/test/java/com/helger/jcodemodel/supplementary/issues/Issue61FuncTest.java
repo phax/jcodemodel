@@ -48,7 +48,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
-import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.fmt.JTextFile;
 import com.helger.jcodemodel.writer.JCMWriter;

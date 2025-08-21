@@ -51,8 +51,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;
@@ -64,12 +62,12 @@ import org.slf4j.LoggerFactory;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
-import com.helger.commons.ValueEnforcer;
-import com.helger.commons.collection.IteratorHelper;
-import com.helger.commons.io.stream.NonBlockingByteArrayInputStream;
-import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
-import com.helger.commons.io.stream.NonBlockingStringWriter;
-import com.helger.commons.string.StringHelper;
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
+import com.helger.base.io.nonblocking.NonBlockingStringWriter;
+import com.helger.base.string.StringReplace;
+import com.helger.collection.iterator.IteratorHelper;
 import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
@@ -85,6 +83,8 @@ import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 import com.helger.jcodemodel.writer.SourcePrintWriter;
 
+import jakarta.annotation.Nonnull;
+
 /**
  * Various utilities for codemodel tests.
  *
@@ -99,7 +99,8 @@ public final class CodeModelTestsHelper
   @Nonnull
   private static IJFormatter _createFormatter (@Nonnull final NonBlockingStringWriter aWriter)
   {
-    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()), JCMWriter.DEFAULT_INDENT_STRING);
+    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()),
+                           JCMWriter.DEFAULT_INDENT_STRING);
   }
 
   /** Hidden constructor. */
@@ -118,7 +119,8 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
+         final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aGenerable.generate (aFormatter);
       return aSW.getAsString ();
@@ -141,7 +143,8 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
+         final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aDeclaration.declare (aFormatter);
       return aSW.getAsString ();
@@ -164,7 +167,8 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aStatement, "Statement");
 
-    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
+         final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aStatement.state (aFormatter);
       return aSW.getAsString ();
@@ -180,7 +184,8 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aDeclaration, "Declaration");
 
-    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
+         final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aDeclaration.declare (aFormatter);
       return aSW.getAsString ();
@@ -196,7 +201,8 @@ public final class CodeModelTestsHelper
   {
     ValueEnforcer.notNull (aGenerable, "Generable");
 
-    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter (); final IJFormatter aFormatter = _createFormatter (aSW))
+    try (final NonBlockingStringWriter aSW = new NonBlockingStringWriter ();
+         final IJFormatter aFormatter = _createFormatter (aSW))
     {
       aGenerable.generate (aFormatter);
       return aSW.getAsString ();
@@ -208,8 +214,7 @@ public final class CodeModelTestsHelper
   }
 
   /**
-   * Get the content of the code model as a byte array in
-   * {@link #DEFAULT_ENCODING}
+   * Get the content of the code model as a byte array in {@link #DEFAULT_ENCODING}
    *
    * @param cm
    *        Source code model
@@ -252,7 +257,7 @@ public final class CodeModelTestsHelper
   {
     LOGGER.info ("Parsing '" + sUnitName + "' with Eclipse JDT");
 
-    final ASTParser parser = ASTParser.newParser (AST.JLS16);
+    final ASTParser parser = ASTParser.newParser (AST.JLS21);
     parser.setResolveBindings (true);
     parser.setStatementsRecovery (true);
     parser.setBindingsRecovery (true);
@@ -279,8 +284,8 @@ public final class CodeModelTestsHelper
   }
 
   /**
-   * Parse the created java code using the javaparser library and with Eclipse
-   * JDT. This just checks the syntax, but not the dependencies
+   * Parse the created java code using the javaparser library and with Eclipse JDT. This just checks
+   * the syntax, but not the dependencies
    *
    * @param cm
    *        The code model to be parsed. May not be null.
@@ -304,7 +309,7 @@ public final class CodeModelTestsHelper
               final byte [] aBytes = toByteArray ();
 
               final String sRealDirName = sDirName == null ? "" : sDirName;
-              final String sUnitName = StringHelper.replaceAll (sRealDirName, '/', '.') +
+              final String sUnitName = StringReplace.replaceAll (sRealDirName, '/', '.') +
                                        (sRealDirName.length () > 0 ? "." : "") +
                                        sFilename;
 

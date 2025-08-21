@@ -45,9 +45,9 @@
  */
 package com.helger.jcodemodel.meta;
 
-import javax.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
-import com.helger.commons.ValueEnforcer;
+import jakarta.annotation.Nonnull;
 
 /**
  * Defines policy to use with error-types.

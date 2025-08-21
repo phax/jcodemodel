@@ -42,10 +42,10 @@ package com.helger.jcodemodel.util;
 
 import java.util.function.Predicate;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.helger.base.system.EOperatingSystem;
 
-import com.helger.commons.system.EOperatingSystem;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Default implementation of {@link IFileSystemConvention}

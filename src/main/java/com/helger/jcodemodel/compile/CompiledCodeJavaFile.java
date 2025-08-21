@@ -46,7 +46,7 @@ import java.net.URI;
 
 import javax.tools.SimpleJavaFileObject;
 
-import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
 /**
  * represents java file object that is produced by the javac compiler. Holds the

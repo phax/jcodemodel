@@ -43,10 +43,10 @@ package com.helger.jcodemodel;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.helger.jcodemodel.exceptions.JErrorClassUsedException;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A special {@link AbstractJClass} that represents an error class.

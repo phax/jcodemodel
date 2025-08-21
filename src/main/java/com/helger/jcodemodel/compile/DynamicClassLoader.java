@@ -50,9 +50,9 @@ import java.net.URLStreamHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.annotation.Nonnull;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
-import com.helger.commons.io.stream.NonBlockingByteArrayOutputStream;
+import jakarta.annotation.Nonnull;
 
 /**
  * class loader that allows dynamic classes and resources.

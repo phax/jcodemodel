@@ -46,10 +46,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import com.helger.base.equals.EqualsHelper;
 
-import com.helger.commons.equals.EqualsHelper;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * array creation and initialization.

@@ -56,7 +56,7 @@ import javax.tools.JavaFileObject;
 
 import org.junit.Test;
 
-import com.helger.commons.io.stream.NonBlockingBufferedReader;
+import com.helger.base.io.nonblocking.NonBlockingBufferedReader;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;

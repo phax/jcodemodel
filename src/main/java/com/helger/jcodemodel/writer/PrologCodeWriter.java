@@ -42,10 +42,10 @@ package com.helger.jcodemodel.writer;
 
 import java.io.IOException;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import com.helger.jcodemodel.JPackage;
+
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * Writes all the source files under the specified file folder and inserts a
