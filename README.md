@@ -26,6 +26,7 @@ v4.0.0 - work in progress
 * Requires Java 17 as the minimum version
 * Using `ph-commons` as a compile dependency for common stuff
 * Moved all exceptions to `exceptions` package
+* Included [PR #96]](https://github.com/phax/jcodemodel/pull/96) from @glelouet on copying the whole JCodeModel
 
 v3.4.1 - 2022-01-20
 * Extended `JDefinedClass` to make enum constants accessible

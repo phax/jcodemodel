@@ -40,8 +40,6 @@
  */
 package com.helger.jcodemodel;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -61,6 +59,8 @@ import javax.lang.model.util.Elements;
 import com.helger.annotation.Nonnegative;
 import com.helger.annotation.concurrent.NotThreadSafe;
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.base.string.StringHelper;
 import com.helger.base.string.StringReplace;
 import com.helger.io.file.FilenameHelper;
@@ -1075,16 +1075,17 @@ public class JCodeModel implements Serializable
    */
   public static JCodeModel copySerial (final JCodeModel source)
   {
-    try
+    try (final NonBlockingByteArrayOutputStream buffer = new NonBlockingByteArrayOutputStream ())
     {
-      final ByteArrayOutputStream buffer = new ByteArrayOutputStream ();
       new ObjectOutputStream (buffer).writeObject (source);
-      final ByteArrayInputStream in = new ByteArrayInputStream (buffer.toByteArray ());
-      return (JCodeModel) new ObjectInputStream (in).readObject ();
+      try (final NonBlockingByteArrayInputStream in = buffer.getAsInputStream ())
+      {
+        return (JCodeModel) new ObjectInputStream (in).readObject ();
+      }
     }
-    catch (IOException | ClassNotFoundException e)
+    catch (final IOException | ClassNotFoundException e)
     {
-      throw new UnsupportedOperationException ("catch this", e);
+      throw new UnsupportedOperationException ("Failed to write code model to string", e);
     }
   }
 
