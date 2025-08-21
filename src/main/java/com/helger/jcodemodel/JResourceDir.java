@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -67,7 +68,7 @@ import jakarta.annotation.Nullable;
  *
  * @since 3.3.1
  */
-public class JResourceDir implements IJOwned
+public class JResourceDir implements IJOwned, Serializable
 {
   public static final char SEPARATOR = FilenameHelper.UNIX_SEPARATOR;
   public static final String SEPARATOR_STR = Character.toString (SEPARATOR);
@@ -104,8 +105,8 @@ public class JResourceDir implements IJOwned
    *         If a part of the package name is not a valid filename part.
    */
   protected JResourceDir (@Nonnull final JCodeModel aOwner,
-                          @Nullable final JResourceDir aParentDir,
-                          @Nonnull final String sName) throws JInvalidFileNameException
+      @Nullable final JResourceDir aParentDir,
+      @Nonnull final String sName) throws JInvalidFileNameException
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (aOwner, "CodeModel");

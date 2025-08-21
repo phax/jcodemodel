@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel.util;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 import com.helger.base.enforce.ValueEnforcer;
@@ -55,7 +56,7 @@ import jakarta.annotation.Nonnull;
  * @author Philip Helger
  * @since 3.4.0
  */
-public final class FSName implements Comparable <FSName>
+public final class FSName implements Comparable <FSName>, Serializable
 {
   private final String m_sName;
   private final String m_sKey;
@@ -94,6 +95,7 @@ public final class FSName implements Comparable <FSName>
     return ret;
   }
 
+  @Override
   public int compareTo (@Nonnull final FSName o)
   {
     return m_sKey.compareTo (o.m_sKey);

@@ -59,6 +59,11 @@ public class JTypeVarClass extends JTypeVar
     m_aClass = aClass;
   }
 
+  public AbstractJClass getRefClass ()
+  {
+    return m_aClass;
+  }
+
   @Override
   @Nonnull
   public String name ()
@@ -68,10 +73,8 @@ public class JTypeVarClass extends JTypeVar
     {
       final JTypeVar [] aTypeParams = ((JDefinedClass) m_aClass).typeParams ();
       if (aTypeParams.length > 0)
-      {
         // We need the type params here!
         return new JNarrowedClass (m_aClass, aTypeParams).name ();
-      }
     }
     return m_aClass.name ();
   }
@@ -82,10 +85,8 @@ public class JTypeVarClass extends JTypeVar
   {
     // This method is e.g. used for import statements
     if (m_aClass instanceof JNarrowedClass)
-    {
       // Avoid the type parameters
       return ((JNarrowedClass) m_aClass).erasure ().fullName ();
-    }
     return m_aClass.fullName ();
   }
 

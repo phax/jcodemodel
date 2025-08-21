@@ -76,6 +76,11 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
     assert !m_aClass.isArray ();
   }
 
+  public Class <?> getReferencedClass ()
+  {
+    return m_aClass;
+  }
+
   @Override
   public String name ()
   {
@@ -142,17 +147,20 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
     {
       private int m_nIdx = 0;
 
+      @Override
       public boolean hasNext ()
       {
         return m_nIdx < aInterfaces.length;
       }
 
+      @Override
       @Nonnull
       public AbstractJClass next ()
       {
         return owner ().ref (aInterfaces[m_nIdx++]);
       }
 
+      @Override
       public void remove ()
       {
         throw new UnsupportedOperationException ();
@@ -189,6 +197,7 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
     return m_aPrimitiveType;
   }
 
+  @Override
   public void declare (final IJFormatter f)
   {
     // Nothing to do here...
@@ -203,7 +212,7 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
 
   @Override
   protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
-                                             @Nonnull final List <? extends AbstractJClass> aBindings)
+      @Nonnull final List <? extends AbstractJClass> aBindings)
   {
     // TODO: does JDK 1.5 reflection provides these information?
     return this;
