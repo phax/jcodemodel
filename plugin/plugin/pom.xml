@@ -12,6 +12,10 @@
   <name>JCodeModel Maven Plugin</name>
   <dependencies>
     <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>jcodemodel</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-core</artifactId>
       <version>3.9.11</version>

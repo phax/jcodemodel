@@ -7,13 +7,19 @@
     <artifactId>jcodemodel-parent-pom</artifactId>
     <version>4.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>plugin</artifactId>
+  <artifactId>examples</artifactId>
   <packaging>pom</packaging>
-  <name>JCodeModel Plugins Pom</name>
+  <name>JCodeModel Examples Pom</name>
 
   <modules>
-    <module>generators</module>
-    <module>plugin</module>
+    <module>plugins</module>
   </modules>
-  <description>POM module for all the plugin-related modules</description>
+  <description>POM module for all the examples modules</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>jcodemodel</artifactId>
+    </dependency>
+  </dependencies>
 </project>
