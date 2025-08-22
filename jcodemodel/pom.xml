@@ -10,6 +10,15 @@
   <packaging>bundle</packaging>
   <name>JCodeModel</name>
   <url>https://github.com/phax/jcodemodel/jcodemodel</url>
+  <inceptionYear>2013</inceptionYear>
+  
+  <licenses>
+    <license>
+      <name>CDDL+GPL 1.1</name>
+      <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <dependencies>    
     <dependency>
