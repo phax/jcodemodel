@@ -19,7 +19,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
 	<description>Java code generation library parent POM</description>
 	<url>https://github.com/phax/jcodemodel</url>
 	<inceptionYear>2013</inceptionYear>
-	
+
 	<licenses>
 		<license>
 			<name>CDDL+GPL 1.1</name>
@@ -91,7 +91,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
 			<url>https://github.com/sviperll</url>
 		</contributor>
 	</contributors>
-	
+
 	<modules>
 		<module>jcodemodel</module>
 	</modules>
@@ -106,6 +106,14 @@ License file that accompanied this code. Modifications: If applicable, add the f
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<!-- sub modules-->
+			<dependency>
+				<groupId>com.helger</groupId>
+				<artifactId>jcodemodel</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- other dependencies-->
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
 				<artifactId>org.eclipse.equinox.common</artifactId>
@@ -136,13 +144,99 @@ License file that accompanied this code. Modifications: If applicable, add the f
 				<artifactId>org.eclipse.jdt.core</artifactId>
 				<version>3.42.0</version>
 			</dependency>
-			
-      <!-- sub modules-->
-      <dependency>
-        <groupId>com.helger</groupId>
-        <artifactId>jcodemodel</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+			<dependency>
+				<groupId>com.github.javaparser</groupId>
+				<artifactId>javaparser-core</artifactId>
+				<version>3.27.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- maven plugins-->
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-clean-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.5.0</version>
+				</plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.14.0</version>
+				</plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-install-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>3.1.4</version>
+				</plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.4.2</version>
+				</plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-plugin-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-plugin-plugin</artifactId>
+					<version>3.15.1</version>
+				</plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-resources-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.3.1</version>
+				</plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-source-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.3.1</version>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<goals>
+								<goal>jar-no-fork</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.5.3</version>
+				</plugin>
+
+				<!--non-maven plugins-->
+				<plugin>
+					<!-- https://mvnrepository.com/artifact/de.thetaphi/forbiddenapis-->
+					<groupId>de.thetaphi</groupId>
+					<artifactId>forbiddenapis</artifactId>
+					<version>3.9</version>
+				</plugin>
+				<plugin>
+					<!-- https://mvnrepository.com/artifact/org.apache.felix/maven-bundle-plugin-->
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>6.0.0</version>
+				</plugin>
+				<!-- https://mvnrepository.com/artifact/org.codehaus.mojo/versions-maven-plugin -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>versions-maven-plugin</artifactId>
+					<version>2.18.0</version>
+					<configuration>
+						<generateBackupPoms>false</generateBackupPoms>
+						<!-- ignore versions : 1.2.3-X 1.2.3.X -->
+						<ignoredVersions>.+\..+\..+-.+,.+\..+\..+\..+</ignoredVersions>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>
