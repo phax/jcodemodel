@@ -12,11 +12,11 @@ License file that accompanied this code. Modifications: If applicable, add the f
 		<version>3.0.0</version>
 	</parent>
 	<groupId>com.helger.jcodemodel</groupId>
-	<artifactId>meta</artifactId>
+	<artifactId>jcodemodel-parent-pom</artifactId>
 	<version>4.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>JCodeModel Meta</name>
-	<description>Java code generation library</description>
+	<name>JCodeModel Parent POM</name>
+	<description>Java code generation library parent POM</description>
 	<url>https://github.com/phax/jcodemodel</url>
 	<inceptionYear>2013</inceptionYear>
 	
@@ -144,15 +144,4 @@ License file that accompanied this code. Modifications: If applicable, add the f
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-	<dependencies>
-		<dependency>
-			<groupId>com.helger.commons</groupId>
-			<artifactId>ph-base</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.helger.commons</groupId>
-			<artifactId>ph-io</artifactId>
-		</dependency>
-	</dependencies>
 </project>

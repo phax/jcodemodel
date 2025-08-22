@@ -1,14 +1,18 @@
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.writer.StringCodeWriter;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * abstract method for a test of copying. Such a test consist in creating a source codemodel,
@@ -29,21 +33,20 @@ import com.helger.jcodemodel.writer.StringCodeWriter;
  */
 public class ModelCopyTest
 {
-
   @Test
   public void execute ()
   {
     final JCodeModel cm = createCM ();
     final JCodeModel copy = copy (cm);
-    Assert.assertEquals (represent (cm), represent (copy));
+    assertEquals (represent (cm), represent (copy));
     for (final Consumer <JCodeModel> m : modifications ())
     {
       m.accept (cm);
-      Assert.assertNotEquals (represent (cm), represent (copy));
+      assertNotEquals (represent (cm), represent (copy));
     }
     for (final Consumer <JCodeModel> m : modifications ())
       m.accept (copy);
-    Assert.assertEquals (represent (cm), represent (copy));
+    assertEquals (represent (cm), represent (copy));
   }
 
   protected JCodeModel createCM ()
@@ -68,17 +71,20 @@ public class ModelCopyTest
     }
   }
 
-  protected JCodeModel copy (final JCodeModel source)
+  @Nonnull
+  protected JCodeModel copy (@Nonnull final JCodeModel source)
   {
     return source.copy ();
   }
 
-  protected String represent (final JCodeModel target)
+  @Nonnull
+  protected String represent (@Nonnull final JCodeModel target)
   {
     return StringCodeWriter.represent (target);
   }
 
-  public Collection <Consumer <JCodeModel>> modifications ()
+  @Nonnull
+  public List <Consumer <JCodeModel>> modifications ()
   {
     return Arrays.asList (cm -> {
       try

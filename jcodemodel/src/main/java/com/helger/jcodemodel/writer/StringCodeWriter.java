@@ -1,85 +1,90 @@
 package com.helger.jcodemodel.writer;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
+import com.helger.base.enforce.ValueEnforcer;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
+import com.helger.collection.commons.CommonsArrayList;
+import com.helger.collection.commons.ICommonsList;
 import com.helger.jcodemodel.JCodeModel;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 /**
- *
- * CodeWriter that stores {@link OutputStream}s for the files. A call to toString() will then sort the files and append
- * their
- * content with a leading line containing the name of the file.
+ * CodeWriter that stores {@link OutputStream}s for the files. A call to toString() will then sort
+ * the files and append their content with a leading line containing the name of the file.
  *
  * @author glelouet
- *
  */
 public class StringCodeWriter extends AbstractCodeWriter
 {
+  private final Map <String, NonBlockingByteArrayOutputStream> m_aBinaries = new HashMap <> ();
 
-  public StringCodeWriter (Charset aEncoding, String sNewLine)
+  public StringCodeWriter (@Nullable final Charset aEncoding, @Nonnull final String sNewLine)
   {
     super (aEncoding, sNewLine);
   }
 
-  private HashMap <String, ByteArrayOutputStream> binaries = new HashMap <> ();
-
   @Override
-  public OutputStream openBinary (String sDirName, String sFilename) throws IOException
+  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
   {
-    return binaries.computeIfAbsent (sDirName + "/" + sFilename,
-        o -> new ByteArrayOutputStream ());
+    ValueEnforcer.notNull (sDirName, "DirName");
+    ValueEnforcer.notNull (sFilename, "Filename");
+
+    return m_aBinaries.computeIfAbsent (sDirName + '/' + sFilename, x -> new NonBlockingByteArrayOutputStream ());
   }
 
   @Override
-  public void close () throws IOException
+  public void close ()
   {
+    // empty
   }
 
-  public String getString ()
+  @Nonnull
+  public String getAsString ()
   {
-    ArrayList <Entry <String, ByteArrayOutputStream>> coll = new ArrayList <> (binaries.entrySet ());
-    Collections.sort (coll, Comparator.comparing (Entry::getKey));
-    return "model:" + getNewLine ()
-    + coll.stream ().map (e -> e.getKey () + getNewLine () + e.getValue ().toString (encoding ()))
-    .collect (Collectors.joining (getNewLine ()));
+    final ICommonsList <Map.Entry <String, NonBlockingByteArrayOutputStream>> coll = new CommonsArrayList <> (m_aBinaries.entrySet ());
+    coll.sort (Comparator.comparing (Entry::getKey));
+    final String sNL = getNewLine ();
+    final StringBuilder aSB = new StringBuilder ("model:");
+    for (final var e : coll)
+      aSB.append (sNL).append (e.getKey ()).append (sNL).append (e.getValue ().getAsString (encoding ()));
+    return aSB.toString ();
   }
 
   @Override
   public String toString ()
   {
-    return getString ();
+    return getAsString ();
   }
 
   /**
    * transform a {@link JCodeModel} into a {@link String} using this class.
    *
-   * @param target
+   * @param aTarget
    *        the codemodel to export
    * @return the representation fo the codemodel.
    */
-  public static String represent (JCodeModel target)
+  @Nonnull
+  public static String represent (@Nonnull final JCodeModel aTarget)
   {
-    StringCodeWriter scw = new StringCodeWriter (StandardCharsets.UTF_8, "\n");
+    final StringCodeWriter aSCW = new StringCodeWriter (StandardCharsets.UTF_8, "\n");
     try
     {
-      new JCMWriter (target).build (scw);
+      new JCMWriter (aTarget).build (aSCW);
     }
-    catch (IOException e)
+    catch (final IOException e)
     {
       throw new UnsupportedOperationException ("catch this", e);
     }
-    String ret = scw.getString ();
-    return ret;
+    return aSCW.getAsString ();
   }
-
 }
