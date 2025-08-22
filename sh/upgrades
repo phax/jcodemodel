@@ -3,11 +3,13 @@
 # checks if there exists upgrade to the version specified on the root project. Does not make any change.
 # -ntp is to have No Transfer Progress ; -pl . means "project list : ."
 
+versions="org.codehaus.mojo:versions-maven-plugin:2.18.0"
+
 reset
 echo checking plugins on root module
 echo
-mvn -ntp versions:display-plugin-updates -pl .
+mvn -ntp -Dmaven.version.ignore=".+\..+\..+-.+,.+\..+\..+\..+" $versions:display-plugin-updates -pl .
 echo
 echo checking dependencies on root module
 echo
-mvn -ntp versions:display-dependency-updates -pl .
+mvn -ntp -Dmaven.version.ignore=".+\..+\..+-.+,.+\..+\..+\..+" $versions:display-dependency-updates -pl .

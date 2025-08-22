@@ -11,6 +11,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
     <artifactId>parent-pom</artifactId>
     <version>3.0.0</version>
   </parent>
+
   <groupId>com.helger.jcodemodel</groupId>
   <artifactId>jcodemodel-parent-pom</artifactId>
   <version>4.0.0-SNAPSHOT</version>
@@ -19,7 +20,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
   <description>Java code generation library parent POM</description>
   <url>https://github.com/phax/jcodemodel</url>
   <inceptionYear>2013</inceptionYear>
-  
+
   <licenses>
     <license>
       <name>CDDL+GPL 1.1</name>
@@ -91,10 +92,9 @@ License file that accompanied this code. Modifications: If applicable, add the f
       <url>https://github.com/sviperll</url>
     </contributor>
   </contributors>
-  
+
   <modules>
     <module>jcodemodel</module>
-    <module>plugin</module>
   </modules>
 
   <dependencyManagement>
@@ -107,37 +107,6 @@ License file that accompanied this code. Modifications: If applicable, add the f
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-      <dependency>
-        <groupId>org.eclipse.platform</groupId>
-        <artifactId>org.eclipse.equinox.common</artifactId>
-        <version>3.20.100</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.platform</groupId>
-        <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>3.33.100</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.platform</groupId>
-        <artifactId>org.eclipse.core.resources</artifactId>
-        <version>3.22.200</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.platform</groupId>
-        <artifactId>org.eclipse.core.jobs</artifactId>
-        <version>3.15.600</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.platform</groupId>
-        <artifactId>org.eclipse.core.contenttype</artifactId>
-        <version>3.9.600</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.jdt</groupId>
-        <artifactId>org.eclipse.jdt.core</artifactId>
-        <version>3.42.0</version>
-      </dependency>
-      
       <!-- sub modules-->
       <dependency>
         <groupId>com.helger</groupId>
@@ -146,4 +115,16 @@ License file that accompanied this code. Modifications: If applicable, add the f
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.helger.jcodemodel</groupId>
+          <artifactId>jcodemodel-maven-plugin</artifactId>
+          <version>${project.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

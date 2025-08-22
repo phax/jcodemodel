@@ -10,8 +10,52 @@
   <packaging>bundle</packaging>
   <name>JCodeModel</name>
   <url>https://github.com/phax/jcodemodel/jcodemodel</url>
+  <inceptionYear>2013</inceptionYear>
+  
+  <licenses>
+    <license>
+      <name>CDDL+GPL 1.1</name>
+      <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
-  <dependencies>    
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.equinox.common</artifactId>
+        <version>3.20.100</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.runtime</artifactId>
+        <version>3.33.100</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.resources</artifactId>
+        <version>3.22.200</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.jobs</artifactId>
+        <version>3.15.600</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.core.contenttype</artifactId>
+        <version>3.9.600</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jdt</groupId>
+        <artifactId>org.eclipse.jdt.core</artifactId>
+        <version>3.42.0</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
     <dependency>
       <groupId>com.helger.commons</groupId>
       <artifactId>ph-base</artifactId>
@@ -20,7 +64,6 @@
       <groupId>com.helger.commons</groupId>
       <artifactId>ph-io</artifactId>
     </dependency>
-
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
