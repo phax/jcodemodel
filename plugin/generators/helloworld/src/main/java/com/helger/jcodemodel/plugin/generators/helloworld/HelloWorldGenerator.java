@@ -11,8 +11,8 @@ import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
 
 public class HelloWorldGenerator implements CodeModelBuilder {
 
-  private String className = "com.helger.tests.helloworld.Hello";
-  private String value = "world";
+  protected String className = "com.helger.tests.helloworld.Hello";
+  protected String value = "world";
 
   @Override
   public void configure(Map<String, String> params) {

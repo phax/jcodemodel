@@ -32,7 +32,7 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
-              <generator>com.helger.jcodemodel.plugin.generators.helloworld.HelloWorldGenerator</generator>
+              <generator>com.helger.jcodemodel.plugin.generators.helloworld.HelloWorldGenerator2</generator>
               <outputDir>src/generated/java2</outputDir>
               <params>
                 <name>com.helger.tests.helloworld.Hello2</name>

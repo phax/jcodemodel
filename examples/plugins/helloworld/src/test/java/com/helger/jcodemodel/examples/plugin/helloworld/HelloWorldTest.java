@@ -18,7 +18,7 @@ public class HelloWorldTest {
     Assert.assertTrue("missing file " + filejava.getAbsolutePath(), filejava.isFile());
 
     Hello2 test2 = new Hello2();
-    Assert.assertEquals("world2", test2.value);
+    Assert.assertEquals("world2", test2.value2);
     File filejava2 = new File("src/generated/java2/com/helger/tests/helloworld/Hello2.java");
     Assert.assertTrue("missing file " + filejava2.getAbsolutePath(), filejava2.isFile());
   }
