@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel.util;
 
+import jakarta.annotation.Nonnull;
+
 /**
  * Class defined for safe calls of getClassLoader methods of any kind (context/system/class
  * classloader. This MUST be package private and defined in every package which uses such
@@ -52,22 +54,25 @@ public final class JCSecureLoader
   private JCSecureLoader ()
   {}
 
+  @Nonnull
   public static ClassLoader getContextClassLoader ()
   {
     return Thread.currentThread ().getContextClassLoader ();
   }
 
-  public static ClassLoader getClassClassLoader (final Class <?> c)
+  @Nonnull
+  public static ClassLoader getClassClassLoader (@Nonnull final Class <?> aClass)
   {
-    return c.getClassLoader ();
+    return aClass.getClassLoader ();
   }
 
+  @Nonnull
   public static ClassLoader getSystemClassLoader ()
   {
     return ClassLoader.getSystemClassLoader ();
   }
 
-  public static void setContextClassLoader (final ClassLoader cl)
+  public static void setContextClassLoader (@Nonnull final ClassLoader cl)
   {
     Thread.currentThread ().setContextClassLoader (cl);
   }

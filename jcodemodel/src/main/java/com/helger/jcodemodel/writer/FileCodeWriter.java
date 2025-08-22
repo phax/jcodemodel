@@ -74,17 +74,17 @@ public class FileCodeWriter extends AbstractCodeWriter
 
   public FileCodeWriter (@Nonnull final File aTargetDir) throws IOException
   {
-    this (aTargetDir, DEFAULT_MARK_READ_ONLY, DEFAULT_CHARSET, JCMWriter.getDefaultNewLine ());
+    this (aTargetDir, DEFAULT_MARK_READ_ONLY, DEFAULT_CHARSET, JCMWriter.DEFAULT_NEW_LINE);
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir, @Nullable final Charset aEncoding) throws IOException
   {
-    this (aTargetDir, DEFAULT_MARK_READ_ONLY, aEncoding, JCMWriter.getDefaultNewLine ());
+    this (aTargetDir, DEFAULT_MARK_READ_ONLY, aEncoding, JCMWriter.DEFAULT_NEW_LINE);
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir, final boolean bMarkReadOnly) throws IOException
   {
-    this (aTargetDir, bMarkReadOnly, DEFAULT_CHARSET, JCMWriter.getDefaultNewLine ());
+    this (aTargetDir, bMarkReadOnly, DEFAULT_CHARSET, JCMWriter.DEFAULT_NEW_LINE);
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir,
@@ -97,7 +97,7 @@ public class FileCodeWriter extends AbstractCodeWriter
   public FileCodeWriter (@Nonnull final File aTargetDir, final boolean bMarkReadOnly, @Nullable final Charset aEncoding)
                                                                                                                          throws IOException
   {
-    this (aTargetDir, bMarkReadOnly, aEncoding, JCMWriter.getDefaultNewLine ());
+    this (aTargetDir, bMarkReadOnly, aEncoding, JCMWriter.DEFAULT_NEW_LINE);
   }
 
   public FileCodeWriter (@Nonnull final File aTargetDir,

@@ -98,12 +98,6 @@ License file that accompanied this code. Modifications: If applicable, add the f
 
 	<dependencyManagement>
 		<dependencies>
-			<!-- sub modules-->
-			<dependency>
-				<groupId>com.helger</groupId>
-				<artifactId>jcodemodel</artifactId>
-				<version>${project.version}</version>
-			</dependency>
 			<!-- parent modules-->
 			<dependency>
 				<groupId>com.helger.commons</groupId>
@@ -142,6 +136,13 @@ License file that accompanied this code. Modifications: If applicable, add the f
 				<artifactId>org.eclipse.jdt.core</artifactId>
 				<version>3.42.0</version>
 			</dependency>
+			
+      <!-- sub modules-->
+      <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>jcodemodel</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>

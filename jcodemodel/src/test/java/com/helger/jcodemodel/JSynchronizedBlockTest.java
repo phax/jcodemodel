@@ -54,16 +54,25 @@ import com.helger.jcodemodel.writer.JCMWriter;
  */
 public final class JSynchronizedBlockTest
 {
-  private static final String CRLF = JCMWriter.getDefaultNewLine ();
+  private static final String CRLF = JCMWriter.DEFAULT_NEW_LINE;
 
   @Test
   public void testBasic ()
   {
-    assertEquals ("synchronized (a)" + CRLF + "{}" + CRLF, CodeModelTestsHelper.toString (new JSynchronizedBlock (JExpr.ref ("a"))));
+    assertEquals ("synchronized (a)" + CRLF + "{}" + CRLF,
+                  CodeModelTestsHelper.toString (new JSynchronizedBlock (JExpr.ref ("a"))));
 
     final JSynchronizedBlock aSB = new JSynchronizedBlock (JExpr.ref ("abc"));
     aSB.body ().assign (JExpr.ref ("x"), JExpr.ref ("y"));
-    assertEquals ("synchronized (abc)" + CRLF + "{" + CRLF + JCMWriter.DEFAULT_INDENT_STRING + "x = y;" + CRLF + "}" + CRLF,
+    assertEquals ("synchronized (abc)" +
+                  CRLF +
+                  "{" +
+                  CRLF +
+                  JCMWriter.DEFAULT_INDENT_STRING +
+                  "x = y;" +
+                  CRLF +
+                  "}" +
+                  CRLF,
                   CodeModelTestsHelper.toString (aSB));
   }
 }

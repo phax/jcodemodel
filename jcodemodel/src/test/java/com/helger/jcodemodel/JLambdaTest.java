@@ -57,7 +57,7 @@ import com.helger.jcodemodel.writer.JCMWriter;
  */
 public final class JLambdaTest
 {
-  private static final String CRLF = JCMWriter.getDefaultNewLine ();
+  private static final String CRLF = JCMWriter.DEFAULT_NEW_LINE;
 
   @Test
   public void testExpressionBasic ()
@@ -117,7 +117,8 @@ public final class JLambdaTest
     final JLambda aLambda = new JLambda ();
     final JLambdaParam aParam = aLambda.addParam (cm.INT, "x");
     aLambda.body ()._return (aParam.plus (1));
-    assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF, CodeModelTestsHelper.toString (aLambda));
+    assertEquals ("(int x) -> {" + CRLF + "    return (x + 1);" + CRLF + "}" + CRLF,
+                  CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test

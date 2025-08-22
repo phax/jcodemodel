@@ -49,6 +49,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
+import com.helger.annotation.Nonempty;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JAnnotationUse;
@@ -75,29 +76,7 @@ public class JCMWriter
   public static final String DEFAULT_INDENT_STRING = "    ";
 
   /** Cached default new line */
-  private static String s_sDefaultNewLine;
-
-  @Nonnull
-  public static String getDefaultNewLine ()
-  {
-    String ret = s_sDefaultNewLine;
-    if (ret == null)
-    {
-      try
-      {
-        ret = s_sDefaultNewLine = System.getProperty ("line.separator");
-      }
-      catch (final Exception ex)
-      {
-        // Fall through
-      }
-
-      // Fall back
-      if (ret == null || ret.length () == 0)
-        ret = s_sDefaultNewLine = "\n";
-    }
-    return ret;
-  }
+  public static final String DEFAULT_NEW_LINE = System.lineSeparator ();
 
   private final JCodeModel m_aCM;
 
@@ -105,7 +84,7 @@ public class JCMWriter
   private Charset m_aCharset = StandardCharsets.UTF_8;
 
   /** The newline string to be used. Defaults to system default */
-  private String m_sNewLine = getDefaultNewLine ();
+  private String m_sNewLine = DEFAULT_NEW_LINE;
 
   /**
    * String to be used for each indentation. Defaults to four spaces.
@@ -114,12 +93,12 @@ public class JCMWriter
 
   public JCMWriter (@Nonnull final JCodeModel aCM)
   {
+    ValueEnforcer.notNull (aCM, "CodeModel");
     m_aCM = aCM;
   }
 
   /**
-   * @return The default charset used for building. <code>null</code> means
-   *         system default.
+   * @return The default charset used for building. <code>null</code> means system default.
    */
   @Nullable
   public Charset getCharset ()
@@ -131,8 +110,8 @@ public class JCMWriter
    * Set the charset to be used for emitting files.
    *
    * @param aCharset
-   *        The charset to be used. May be <code>null</code> to indicate the use
-   *        of the system default.
+   *        The charset to be used. May be <code>null</code> to indicate the use of the system
+   *        default.
    * @return this for chaining
    */
   @Nonnull
@@ -155,12 +134,11 @@ public class JCMWriter
    * Set the new line string to be used for emitting source files.
    *
    * @param sNewLine
-   *        The new line string to be used. May neither be <code>null</code> nor
-   *        empty.
+   *        The new line string to be used. May neither be <code>null</code> nor empty.
    * @return this for chaining
    */
   @Nonnull
-  public JCMWriter setNewLine (@Nonnull final String sNewLine)
+  public JCMWriter setNewLine (@Nonnull @Nonempty final String sNewLine)
   {
     ValueEnforcer.notEmpty (sNewLine, "NewLine");
     m_sNewLine = sNewLine;
@@ -188,8 +166,7 @@ public class JCMWriter
    * @param aDestDir
    *        source files and resources are generated into this directory.
    * @param aStatusPT
-   *        if non-<code>null</code>, progress indication will be sent to this
-   *        stream.
+   *        if non-<code>null</code>, progress indication will be sent to this stream.
    * @throws IOException
    *         on IO error
    */
@@ -209,8 +186,7 @@ public class JCMWriter
    * @param aStatusPT
    *        Progress tracker. May be <code>null</code>.
    * @throws IOException
-   *         on IO error if non-null, progress indication will be sent to this
-   *         stream.
+   *         on IO error if non-null, progress indication will be sent to this stream.
    */
   public void build (@Nonnull final File aSrcDir,
                      @Nonnull final File aResourceDir,
@@ -277,8 +253,12 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final AbstractCodeWriter aSourceWriter, @Nonnull final AbstractCodeWriter aResourceWriter) throws IOException
+  public void build (@Nonnull final AbstractCodeWriter aSourceWriter, @Nonnull final AbstractCodeWriter aResourceWriter)
+                                                                                                                         throws IOException
   {
+    ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
+    ValueEnforcer.notNull (aResourceWriter, "ResourceWriter");
+
     try
     {
       // Copy to avoid concurrent modification exception
@@ -310,8 +290,12 @@ public class JCMWriter
     return ret;
   }
 
-  public void buildPackage (@Nonnull final AbstractCodeWriter aSrcWriter, @Nonnull final JPackage aPackage) throws IOException
+  public void buildPackage (@Nonnull final AbstractCodeWriter aSourceWriter, @Nonnull final JPackage aPackage)
+                                                                                                               throws IOException
   {
+    ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
+    ValueEnforcer.notNull (aPackage, "Package");
+
     // write classes
     for (final JDefinedClass c : aPackage.classes ())
     {
@@ -321,7 +305,7 @@ public class JCMWriter
         continue;
       }
 
-      try (final JFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, c.name () + ".java"))
+      try (final JFormatter f = _createJavaSourceFileWriter (aSourceWriter, aPackage, c.name () + ".java"))
       {
         f.writeClassFull (c);
       }
@@ -332,7 +316,7 @@ public class JCMWriter
     final JDocComment aJavaDoc = aPackage.javadoc ();
     if (!aAnnotations.isEmpty () || !aJavaDoc.isEmpty ())
     {
-      try (final IJFormatter f = _createJavaSourceFileWriter (aSrcWriter, aPackage, "package-info.java"))
+      try (final IJFormatter f = _createJavaSourceFileWriter (aSourceWriter, aPackage, "package-info.java"))
       {
         if (!aJavaDoc.isEmpty ())
           f.generable (aJavaDoc);
@@ -346,12 +330,16 @@ public class JCMWriter
     }
   }
 
-  public void buildResourceDir (@Nonnull final AbstractCodeWriter aResWriter, @Nonnull final JResourceDir aResourceDir) throws IOException
+  public void buildResourceDir (@Nonnull final AbstractCodeWriter aResourceWriter,
+                                @Nonnull final JResourceDir aResourceDir) throws IOException
   {
+    ValueEnforcer.notNull (aResourceWriter, "ResourceWriter");
+    ValueEnforcer.notNull (aResourceDir, "ResourceDir");
+
     // write resources
     for (final AbstractJResourceFile rsrc : aResourceDir.getAllResourceFiles ())
     {
-      try (final OutputStream os = aResWriter.openBinary (aResourceDir.name (), rsrc.name ());
+      try (final OutputStream os = aResourceWriter.openBinary (aResourceDir.name (), rsrc.name ());
            final OutputStream bos = new BufferedOutputStream (os))
       {
         rsrc.build (bos);

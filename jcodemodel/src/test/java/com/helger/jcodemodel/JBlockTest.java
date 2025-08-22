@@ -54,14 +54,16 @@ import com.helger.jcodemodel.writer.JCMWriter;
  */
 public final class JBlockTest
 {
-  private static final String CRLF = JCMWriter.getDefaultNewLine ();
+  private static final String CRLF = JCMWriter.DEFAULT_NEW_LINE;
 
   @Test
   public void testBasic ()
   {
     assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsHelper.toString (new JBlock ()));
-    assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsHelper.toString (new JBlock ().bracesRequired (true).indentRequired (true)));
-    assertEquals ("{" + CRLF + "}" + CRLF, CodeModelTestsHelper.toString (new JBlock ().bracesRequired (true).indentRequired (false)));
+    assertEquals ("{" + CRLF + "}" + CRLF,
+                  CodeModelTestsHelper.toString (new JBlock ().bracesRequired (true).indentRequired (true)));
+    assertEquals ("{" + CRLF + "}" + CRLF,
+                  CodeModelTestsHelper.toString (new JBlock ().bracesRequired (true).indentRequired (false)));
     assertEquals ("", CodeModelTestsHelper.toString (new JBlock ().bracesRequired (false).indentRequired (true)));
     assertEquals ("", CodeModelTestsHelper.toString (new JBlock ().bracesRequired (false).indentRequired (false)));
   }

@@ -48,10 +48,9 @@ import java.io.PrintStream;
 import jakarta.annotation.Nonnull;
 
 /**
- * Output all source files into a single stream with a little formatting header
- * in front of each file. This is primarily for human consumption of the
- * generated source code, such as to debug/test CodeModel or to quickly inspect
- * the result.
+ * Output all source files into a single stream with a little formatting header in front of each
+ * file. This is primarily for human consumption of the generated source code, such as to debug/test
+ * CodeModel or to quickly inspect the result.
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
@@ -62,18 +61,18 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
 
   /**
    * @param aOS
-   *        This stream will be closed at the end of the code generation. Except
-   *        it is System.out or System.err
+   *        This stream will be closed at the end of the code generation. Except it is System.out or
+   *        System.err
    */
   public SingleStreamCodeWriter (@Nonnull final OutputStream aOS)
   {
-    this (aOS, JCMWriter.getDefaultNewLine ());
+    this (aOS, JCMWriter.DEFAULT_NEW_LINE);
   }
 
   /**
    * @param aOS
-   *        This stream will be closed at the end of the code generation. Except
-   *        it is System.out or System.err
+   *        This stream will be closed at the end of the code generation. Except it is System.out or
+   *        System.err
    * @param sNewLine
    *        The new line string to be used for source files
    */
@@ -92,7 +91,10 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
     if (sPkgName.length () > 0)
       sPkgName += '/';
 
-    m_aPS.println ("-----------------------------------" + sPkgName + sFilename + "-----------------------------------");
+    m_aPS.println ("-----------------------------------" +
+                   sPkgName +
+                   sFilename +
+                   "-----------------------------------");
 
     return new FilterOutputStream (m_aPS)
     {

@@ -43,6 +43,7 @@ package com.helger.jcodemodel.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.helger.annotation.concurrent.Immutable;
 import com.helger.base.enforce.ValueEnforcer;
 
 import jakarta.annotation.Nonnull;
@@ -51,6 +52,7 @@ import jakarta.annotation.Nonnull;
  * @author Ben Fagin
  * @version 2013-04-01
  */
+@Immutable
 public final class JCNameUtilities
 {
   private JCNameUtilities ()
@@ -61,26 +63,26 @@ public final class JCNameUtilities
   {
     ValueEnforcer.notNull (aClass, "Class");
 
-    final StringBuilder name = new StringBuilder ();
+    final StringBuilder ret = new StringBuilder ();
 
     // Package name
     // null on Java 8
     // Empty name on Java 11
     if (aClass.getPackage () != null && aClass.getPackage ().getName ().length () > 0)
-      name.append (aClass.getPackage ().getName ()).append ('.');
+      ret.append (aClass.getPackage ().getName ()).append ('.');
 
     // Get all enclosing classes
-    Class <?> klaus = aClass;
+    Class <?> aCurClass = aClass;
     final List <Class <?>> enclosingClasses = new ArrayList <> ();
-    while ((klaus = klaus.getEnclosingClass ()) != null)
-      enclosingClasses.add (klaus);
+    while ((aCurClass = aCurClass.getEnclosingClass ()) != null)
+      enclosingClasses.add (aCurClass);
 
     // Back to front
     for (int i = enclosingClasses.size () - 1; i >= 0; i--)
-      name.append (enclosingClasses.get (i).getSimpleName ()).append ('.');
+      ret.append (enclosingClasses.get (i).getSimpleName ()).append ('.');
 
     // Append main class name
-    name.append (aClass.getSimpleName ());
-    return name.toString ();
+    ret.append (aClass.getSimpleName ());
+    return ret.toString ();
   }
 }

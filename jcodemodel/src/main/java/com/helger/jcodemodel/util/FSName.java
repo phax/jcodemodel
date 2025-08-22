@@ -43,6 +43,7 @@ package com.helger.jcodemodel.util;
 import java.io.Serializable;
 import java.util.Locale;
 
+import com.helger.annotation.concurrent.Immutable;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.base.hashcode.IHashCodeGenerator;
@@ -50,12 +51,12 @@ import com.helger.base.hashcode.IHashCodeGenerator;
 import jakarta.annotation.Nonnull;
 
 /**
- * Utility class to represent case sensitive or case insensitive keys for file
- * and directory names.
+ * Utility class to represent case sensitive or case insensitive keys for file and directory names.
  *
  * @author Philip Helger
  * @since 3.4.0
  */
+@Immutable
 public final class FSName implements Comparable <FSName>, Serializable
 {
   private final String m_sName;
@@ -69,6 +70,9 @@ public final class FSName implements Comparable <FSName>, Serializable
     m_sKey = sKey;
   }
 
+  /**
+   * @return The file system name. Never <code>null</code>.
+   */
   @Nonnull
   public String getName ()
   {

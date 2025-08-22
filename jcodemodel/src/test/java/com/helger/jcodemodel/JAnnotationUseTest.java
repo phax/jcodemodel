@@ -67,7 +67,8 @@ public final class JAnnotationUseTest
     final JAnnotationUse suppressWarningAnnotation = testClass.annotate (SuppressWarnings.class);
     suppressWarningAnnotation.param (JAnnotationUse.SPECIAL_KEY_VALUE, "unused");
 
-    Assert.assertEquals ("@java.lang.SuppressWarnings(\"unused\")", CodeModelTestsHelper.generate (suppressWarningAnnotation));
+    Assert.assertEquals ("@java.lang.SuppressWarnings(\"unused\")",
+                         CodeModelTestsHelper.generate (suppressWarningAnnotation));
   }
 
   @Test
@@ -78,8 +79,14 @@ public final class JAnnotationUseTest
     final JAnnotationUse suppressWarningAnnotation = testClass.annotate (SuppressWarnings.class);
     suppressWarningAnnotation.paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, "unused", "deprecation");
 
-    final String sCRLF = JCMWriter.getDefaultNewLine ();
-    Assert.assertEquals ("@java.lang.SuppressWarnings({" + sCRLF + "    \"unused\"," + sCRLF + "    \"deprecation\"" + sCRLF + "})",
+    final String sCRLF = JCMWriter.DEFAULT_NEW_LINE;
+    Assert.assertEquals ("@java.lang.SuppressWarnings({" +
+                         sCRLF +
+                         "    \"unused\"," +
+                         sCRLF +
+                         "    \"deprecation\"" +
+                         sCRLF +
+                         "})",
                          CodeModelTestsHelper.generate (suppressWarningAnnotation));
   }
 

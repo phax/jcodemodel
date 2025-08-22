@@ -99,7 +99,7 @@ public final class CodeModelTestsHelper
   @Nonnull
   private static IJFormatter _createFormatter (@Nonnull final NonBlockingStringWriter aWriter)
   {
-    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.getDefaultNewLine ()),
+    return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.DEFAULT_NEW_LINE),
                            JCMWriter.DEFAULT_INDENT_STRING);
   }
 

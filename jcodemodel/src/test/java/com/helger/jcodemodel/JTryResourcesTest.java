@@ -58,7 +58,7 @@ import com.helger.jcodemodel.writer.JCMWriter;
  */
 public final class JTryResourcesTest
 {
-  private static final String CRLF = JCMWriter.getDefaultNewLine ();
+  private static final String CRLF = JCMWriter.DEFAULT_NEW_LINE;
 
   @Test
   public void testWith1 ()

@@ -47,15 +47,14 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 @Immutable
-public class JCHashCodeGenerator
+public final class JCHashCodeGenerator
 {
   private JCHashCodeGenerator ()
   {}
 
   /**
-   * Static helper method to create the hashcode of an object with a single
-   * invocation. This method must be used by objects that directly derive from
-   * Object.
+   * Static helper method to create the hashcode of an object with a single invocation. This method
+   * must be used by objects that directly derive from Object.
    *
    * @param aThis
    *        <code>this</code>
@@ -73,9 +72,8 @@ public class JCHashCodeGenerator
   }
 
   /**
-   * Static helper method to create the hashcode of an object with a single
-   * invocation. This method must be used by objects that derive from a class
-   * other than Object.
+   * Static helper method to create the hashcode of an object with a single invocation. This method
+   * must be used by objects that derive from a class other than Object.
    *
    * @param nSuperHashCode
    *        The result of <code>super.hashCode()</code>

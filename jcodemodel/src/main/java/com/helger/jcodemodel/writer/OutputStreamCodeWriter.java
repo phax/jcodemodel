@@ -70,7 +70,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
    */
   public OutputStreamCodeWriter (@Nonnull final OutputStream aOS, @Nullable final Charset aEncoding)
   {
-    this (aOS, aEncoding, JCMWriter.getDefaultNewLine ());
+    this (aOS, aEncoding, JCMWriter.DEFAULT_NEW_LINE);
   }
 
   /**
@@ -81,7 +81,9 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
    * @param sNewLine
    *        The new line string to be used for source files
    */
-  public OutputStreamCodeWriter (@Nonnull final OutputStream aOS, @Nullable final Charset aEncoding, @Nonnull final String sNewLine)
+  public OutputStreamCodeWriter (@Nonnull final OutputStream aOS,
+                                 @Nullable final Charset aEncoding,
+                                 @Nonnull final String sNewLine)
   {
     super (aEncoding, sNewLine);
     try

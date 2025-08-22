@@ -48,28 +48,27 @@ import com.helger.jcodemodel.AbstractJClass;
 import jakarta.annotation.Nonnull;
 
 /**
- * Comparator object that sorts {@link AbstractJClass}es in the order of their
- * names.
+ * Comparator object that sorts {@link AbstractJClass}es in the order of their names.
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
 public final class ClassNameComparator implements Comparator <AbstractJClass>, Serializable
 {
-  private static final ClassNameComparator s_aInstance = new ClassNameComparator ();
-
-  private ClassNameComparator ()
-  {}
+  private static final ClassNameComparator INSTANCE = new ClassNameComparator ();
 
   @Nonnull
   public static ClassNameComparator getInstance ()
   {
-    return s_aInstance;
+    return INSTANCE;
   }
 
+  private ClassNameComparator ()
+  {}
+
   /**
-   * Compare two JTypes by FQCN, giving sorting precedence to types that belong
-   * to packages java and javax over all others. This method is used to sort
-   * generated import statements in a conventional way for readability.
+   * Compare two JTypes by FQCN, giving sorting precedence to types that belong to packages java and
+   * javax over all others. This method is used to sort generated import statements in a
+   * conventional way for readability.
    */
   @Override
   public int compare (@Nonnull final AbstractJClass aObj1, @Nonnull final AbstractJClass aObj2)
