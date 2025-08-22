@@ -119,6 +119,11 @@ License file that accompanied this code. Modifications: If applicable, add the f
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>com.helger.jcodemodel</groupId>
+          <artifactId>jcodemodel-mùaven-plugin</artifactId>
+          <version>${project.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
