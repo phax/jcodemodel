@@ -11,6 +11,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
     <artifactId>parent-pom</artifactId>
     <version>3.0.0</version>
   </parent>
+
   <groupId>com.helger.jcodemodel</groupId>
   <artifactId>jcodemodel-parent-pom</artifactId>
   <version>4.0.0-SNAPSHOT</version>
@@ -114,7 +115,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
       </dependency>
     </dependencies>
   </dependencyManagement>
-  
+
   <build>
     <pluginManagement>
       <plugins>
