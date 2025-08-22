@@ -112,74 +112,11 @@ License file that accompanied this code. Modifications: If applicable, add the f
 				<artifactId>jcodemodel</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
-			<!-- other dependencies-->
-			<dependency>
-				<groupId>org.apache.maven</groupId>
-				<artifactId>maven-plugin-api</artifactId>
-				<version>3.9.11</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.maven</groupId>
-				<artifactId>maven-project</artifactId>
-				<version>2.2.1</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.maven.plugin-tools</groupId>
-				<artifactId>maven-plugin-annotations</artifactId>
-				<version>3.15.1</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.platform</groupId>
-				<artifactId>org.eclipse.equinox.common</artifactId>
-				<version>3.20.100</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.platform</groupId>
-				<artifactId>org.eclipse.core.runtime</artifactId>
-				<version>3.33.100</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.platform</groupId>
-				<artifactId>org.eclipse.core.resources</artifactId>
-				<version>3.22.200</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.platform</groupId>
-				<artifactId>org.eclipse.core.jobs</artifactId>
-				<version>3.15.600</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.platform</groupId>
-				<artifactId>org.eclipse.core.contenttype</artifactId>
-				<version>3.9.600</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jdt</groupId>
-				<artifactId>org.eclipse.jdt.core</artifactId>
-				<version>3.42.0</version>
-			</dependency>
-			<dependency>
-				<groupId>com.github.javaparser</groupId>
-				<artifactId>javaparser-core</artifactId>
-				<version>3.27.0</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
 		<pluginManagement>
 			<plugins>
-				<!-- https://mvnrepository.com/artifact/org.codehaus.mojo/versions-maven-plugin -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>versions-maven-plugin</artifactId>
-					<version>2.18.0</version>
-					<configuration>
-						<generateBackupPoms>false</generateBackupPoms>
-						<!-- ignore versions : 1.2.3-X 1.2.3.X -->
-						<ignoredVersions>.+\..+\..+-.+,.+\..+\..+\..+</ignoredVersions>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>
