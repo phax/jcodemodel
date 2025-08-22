@@ -9,6 +9,7 @@
   <artifactId>jcodemodel</artifactId>
   <packaging>bundle</packaging>
   <name>JCodeModel</name>
+  <url>https://github.com/phax/jcodemodel/jcodemodel</url>
 
   <dependencies>    
     <dependency>
