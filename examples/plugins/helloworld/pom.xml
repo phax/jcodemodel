@@ -32,6 +32,8 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
+              <generator>com.helger.jcodemodel.plugin.generators.helloworld.HelloWorldGenerator</generator>
+              <outputDir>src/generated/java2</outputDir>
               <params>
                 <name>com.helger.tests.helloworld.Hello2</name>
                 <value>world2</value>
@@ -46,9 +48,6 @@
             <version>${project.version}</version>
           </dependency>
         </dependencies>
-        <!-- <configuration>-->
-        <!-- <generator>com.helger.jcodemodel.plugin.generators.helloworld.HelloWorldGenerator</generator>-->
-        <!-- </configuration>-->
       </plugin>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
@@ -56,6 +55,7 @@
           <filesets>
             <fileset>
               <directory>src/generated/java</directory>
+              <directory>src/generated/java2</directory>
             </fileset>
           </filesets>
         </configuration>
@@ -75,6 +75,7 @@
             <configuration>
               <sources>
                 <source>src/generated/java</source>
+                <source>src/generated/java2</source>
               </sources>
             </configuration>
           </execution>

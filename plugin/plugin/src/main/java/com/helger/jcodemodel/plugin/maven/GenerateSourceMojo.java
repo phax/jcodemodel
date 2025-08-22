@@ -26,7 +26,7 @@ public class GenerateSourceMojo extends AbstractMojo {
   private MavenProject project;
 
   @Parameter(property = "jcodemodel.outdir")
-  private String outputJavaDir;
+  private String outputDir;
 
   @Parameter(property = "jcodemodel.generator")
   private String generator;
@@ -64,12 +64,12 @@ public class GenerateSourceMojo extends AbstractMojo {
   }
 
   protected File javaOutputFolder() {
-    if (outputJavaDir == null) {
+    if (outputDir == null) {
       return new File(project.getBasedir(), "src/generated/java");
-    } else if (outputJavaDir.startsWith("/")) {
-      return new File(outputJavaDir);
+    } else if (outputDir.startsWith("/")) {
+      return new File(outputDir);
     } else {
-      return new File(project.getBasedir(), outputJavaDir);
+      return new File(project.getBasedir(), outputDir);
     }
   }
 

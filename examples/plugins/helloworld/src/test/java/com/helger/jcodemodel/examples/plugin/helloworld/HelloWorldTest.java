@@ -1,5 +1,7 @@
 package com.helger.jcodemodel.examples.plugin.helloworld;
 
+import java.io.File;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,6 +16,8 @@ public class HelloWorldTest {
     Assert.assertEquals("world", test.value);
     Hello2 test2 = new Hello2();
     Assert.assertEquals("world2", test2.value);
+    File filejava2 = new File("src/generated/java2/com/helger/tests/helloworld/Hello2.java");
+    Assert.assertTrue("missing file " + filejava2.getAbsolutePath(), filejava2.isFile());
   }
 
 }
