@@ -52,7 +52,7 @@ public enum EWildcardBoundMode
    */
   private final String m_sDeclarationTokens;
 
-  private EWildcardBoundMode (@Nonnull final String sToken)
+  EWildcardBoundMode (@Nonnull final String sToken)
   {
     m_sDeclarationTokens = sToken;
   }

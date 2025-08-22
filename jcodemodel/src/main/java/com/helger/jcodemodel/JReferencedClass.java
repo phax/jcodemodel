@@ -187,7 +187,7 @@ class JReferencedClass extends AbstractJClass implements IJDeclaration
     // Resolve only once
     if (!m_bResolvedPrimitive)
     {
-      final Class <?> v = JCodeModel.s_aBoxToPrimitive.get (m_aClass);
+      final Class <?> v = JCodeModel.BOX_TO_PRIMITIVE.get (m_aClass);
       if (v != null)
         m_aPrimitiveType = AbstractJType.parse (owner (), v.getName ());
       else

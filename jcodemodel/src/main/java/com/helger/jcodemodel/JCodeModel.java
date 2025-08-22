@@ -116,12 +116,12 @@ public class JCodeModel implements Serializable
    * Conversion from primitive type {@link Class} (such as {@link Integer#TYPE}) to its boxed type
    * (such as <tt>Integer.class</tt>). It's an unmodifiable map.
    */
-  static final Map <Class <?>, Class <?>> s_aPrimitiveToBox;
+  static final Map <Class <?>, Class <?>> PRIMITIVE_TO_BOX;
 
   /**
-   * The reverse look up for {@link #s_aPrimitiveToBox}. It's an unmodifiable map.
+   * The reverse look up for {@link #PRIMITIVE_TO_BOX}. It's an unmodifiable map.
    */
-  static final Map <Class <?>, Class <?>> s_aBoxToPrimitive;
+  static final Map <Class <?>, Class <?>> BOX_TO_PRIMITIVE;
 
   static
   {
@@ -142,8 +142,8 @@ public class JCodeModel implements Serializable
     for (final Map.Entry <Class <?>, Class <?>> e : m1.entrySet ())
       m2.put (e.getValue (), e.getKey ());
 
-    s_aBoxToPrimitive = Collections.unmodifiableMap (m1);
-    s_aPrimitiveToBox = Collections.unmodifiableMap (m2);
+    BOX_TO_PRIMITIVE = Collections.unmodifiableMap (m1);
+    PRIMITIVE_TO_BOX = Collections.unmodifiableMap (m2);
   }
 
   private IFileSystemConvention m_aFSConvention;

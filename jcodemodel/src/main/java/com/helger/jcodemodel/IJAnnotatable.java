@@ -73,8 +73,8 @@ public interface IJAnnotatable
   JAnnotationUse annotate (@Nonnull Class <? extends Annotation> aClazz);
 
   /**
-   * Adds an annotation to this program element and returns a type-safe writer
-   * to fill in the values of such annotations.
+   * Adds an annotation to this program element and returns a type-safe writer to fill in the values
+   * of such annotations.
    *
    * @param aClazz
    *        Source class
@@ -83,7 +83,7 @@ public interface IJAnnotatable
    *        Implementation type
    */
   @Nonnull
-  default <W extends IJAnnotationWriter <?>> W annotate2 (@Nonnull final Class <W> aClazz)
+  default <W extends IJAnnotationWriter <? extends Annotation>> W annotate2 (@Nonnull final Class <W> aClazz)
   {
     return TypedAnnotationWriter.create (aClazz, this);
   }
