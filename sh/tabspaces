@@ -1,0 +1,7 @@
+#!/bin//bash
+
+# change the local config to load java files with tabs, but commit them with spaces
+
+echo "*.java filter=tabspace" > .git/info/attributes               # tell git to apply the tabspace script on the *.java files
+git config filter.tabspace.clean 'expand --tabs=2 --initial'       # replace tabs with two spaces when commit of *.java files
+git config filter.tabspace.smudge 'unexpand --tabs=2 --first-only' # replace double spaces with two tabs when checking a *.java file out
