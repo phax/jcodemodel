@@ -13,26 +13,26 @@ import org.apache.maven.project.MavenProject;
 @Mojo(name = "generate-source", threadSafe = true)
 public class GenerateSourceMojo extends AbstractMojo {
 
-	@Component
-	private MavenProject project;
+  @Component
+  private MavenProject project;
 
-	@Parameter(property = "jcodemodel-outdir")
-	private String outputJavaDir;
+  @Parameter(property = "jcodemodel-outdir")
+  private String outputJavaDir;
 
-	@Override
-	public void execute() throws MojoExecutionException, MojoFailureException {
-		// TODO Auto-generated method stub
+  @Override
+  public void execute() throws MojoExecutionException, MojoFailureException {
+    // TODO Auto-generated method stub
 
-	}
+  }
 
-	protected File javaOutputFolder() {
-		if (outputJavaDir == null) {
-			return new File(project.getBasedir(), "src/generated/java");
-		} else if (outputJavaDir.startsWith("/")) {
-			return new File(outputJavaDir);
-		} else {
-			return new File(project.getBasedir(), outputJavaDir);
-		}
-	}
+  protected File javaOutputFolder() {
+    if (outputJavaDir == null) {
+      return new File(project.getBasedir(), "src/generated/java");
+    } else if (outputJavaDir.startsWith("/")) {
+      return new File(outputJavaDir);
+    } else {
+      return new File(project.getBasedir(), outputJavaDir);
+    }
+  }
 
 }

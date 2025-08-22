@@ -4,8 +4,8 @@ import java.util.Map;
 
 public interface CodeModelBuilder {
 
-	void configure(Map<String, String> params);
+  void configure(Map<String, String> params);
 
-	void build();
+  void build();
 
 }
