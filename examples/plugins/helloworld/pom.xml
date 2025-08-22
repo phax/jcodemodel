@@ -9,7 +9,7 @@
   </parent>
   <groupId>com.helger.jcodemodel.examples.plugin</groupId>
   <artifactId>helloworld</artifactId>
-  <name>JCodeModel HelloWorld Plugin Example</name>
+  <name>JCodeModel HelloWorld Example</name>
   <description>demonstrates and validates the usage of the jcodemodel plugin alongside the helloworld generator</description>
 
   <build>
@@ -19,10 +19,24 @@
         <artifactId>jcodemodel-maven-plugin</artifactId>
         <executions>
           <execution>
+            <id>hello1</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>generate-source</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>hello2</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <params>
+                <name>com.helger.tests.helloworld.Hello2</name>
+                <value>world2</value>
+              </params>
+            </configuration>
           </execution>
         </executions>
         <dependencies>
@@ -32,13 +46,25 @@
             <version>${project.version}</version>
           </dependency>
         </dependencies>
+        <!-- <configuration>-->
+        <!-- <generator>com.helger.jcodemodel.plugin.generators.helloworld.HelloWorldGenerator</generator>-->
+        <!-- </configuration>-->
+      </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
         <configuration>
-<!--					<generator>com.helger.jcodemodel.plugin.generators.helloworld.HelloWorldGenerator</generator>-->
+          <filesets>
+            <fileset>
+              <directory>src/generated/java</directory>
+            </fileset>
+          </filesets>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.1</version>
         <executions>
           <execution>
             <id>add-source</id>
@@ -56,4 +82,12 @@
       </plugin>
     </plugins>
   </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

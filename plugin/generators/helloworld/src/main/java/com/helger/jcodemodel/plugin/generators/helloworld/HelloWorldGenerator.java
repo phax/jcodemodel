@@ -11,19 +11,19 @@ import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
 
 public class HelloWorldGenerator implements CodeModelBuilder {
 
-  private String className = null;
-  private String value = null;
+  private String className = "com.helger.tests.helloworld.Hello";
+  private String value = "world";
 
   @Override
   public void configure(Map<String, String> params) {
-    className = params.get("name");
-    value = params.get("value");
+    className = params.getOrDefault("name", className);
+    value = params.getOrDefault("value", value);
   }
 
   @Override
   public void build(JCodeModel model) throws JCodeModelException {
-    JDefinedClass cl = model._class(className == null ? "Hello" : className);
-    cl.field(JMod.PUBLIC, model._ref(String.class), "value").assign(JExpr.lit(value == null ? "world" : value));
+    JDefinedClass cl = model._class(className);
+    cl.field(JMod.PUBLIC, model._ref(String.class), "value", JExpr.lit(value));
   }
 
 }
