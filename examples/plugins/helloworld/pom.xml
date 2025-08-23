@@ -20,14 +20,12 @@
         <executions>
           <execution>
             <id>hello1</id>
-            <phase>generate-sources</phase>
             <goals>
               <goal>generate-source</goal>
             </goals>
           </execution>
           <execution>
             <id>hello2</id>
-            <phase>generate-sources</phase>
             <goals>
               <goal>generate-source</goal>
             </goals>
@@ -55,6 +53,8 @@
           <filesets>
             <fileset>
               <directory>src/generated/java</directory>
+            </fileset>
+            <fileset>
               <directory>src/generated/java2</directory>
             </fileset>
           </filesets>
