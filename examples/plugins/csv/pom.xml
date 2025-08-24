@@ -19,9 +19,23 @@
         <artifactId>jcodemodel-maven-plugin</artifactId>
         <executions>
           <execution>
+            <id>exec1</id>
             <goals>
               <goal>generate-source</goal>
             </goals>
+            <configuration>
+              <source>source1.csv</source>
+            </configuration>
+          </execution>
+          <execution>
+            <id>exec2</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>com.helger.jcodemodel.examples.plugin.csv.Example2,iarr,int[]
+com.helger.jcodemodel.examples.plugin.csv.Example2,darr,double  []   []</data>
+            </configuration>
           </execution>
         </executions>
         <dependencies>

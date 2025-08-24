@@ -1,8 +1,11 @@
 package com.helger.jcodemodel.plugin.maven;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -44,6 +47,9 @@ public class GenerateSourceMojo extends AbstractMojo {
   @Parameter(property = "jcodemodel.source")
   private String source;
 
+  @Parameter(property = "jcodemodel.data")
+  private String data;
+
   /**
    * The fullly qualified name of the generator used. Only needed if
    * <ul>
@@ -76,13 +82,17 @@ public class GenerateSourceMojo extends AbstractMojo {
     if (cmb == null) {
       throw new MojoExecutionException("could not load the generator class");
     }
-    getLog().info("generating model into " + dir.getAbsolutePath() + " from generator "
-        + cmb.getClass().getCanonicalName() + " with params " + params);
+    getLog().info("Generator " + cmb.getClass().getCanonicalName() + " generates model into "
+        + dir.getAbsolutePath() + " with params " + params);
     if (params != null) {
       cmb.configure(params);
     }
     JCodeModel cm = new JCodeModel();
-    InputStream source = findSource();
+    if (data != null && !data.isBlank() && source != null && !source.isBlank()) {
+      throw new MojoExecutionException(
+          "can not decide what to load between data[" + data + "] and source[" + source + "]");
+    }
+    InputStream source = data == null || data.isBlank() ? findSource() : new ByteArrayInputStream(data.getBytes());
     try {
       cmb.build(cm, source);
       new JCMWriter(cm).build(dir, (IProgressTracker) null);
@@ -96,7 +106,7 @@ public class GenerateSourceMojo extends AbstractMojo {
    * deduce the out java files output folder
    */
   protected File javaOutputFolder() {
-    if (outputDir == null) {
+    if (outputDir == null || outputDir.isBlank()) {
       return new File(project.getBasedir(), "src/generated/java");
     } else if (outputDir.startsWith("/")) {
       return new File(outputDir);
@@ -133,8 +143,25 @@ public class GenerateSourceMojo extends AbstractMojo {
     }
   }
 
-  protected InputStream findSource() {
-    return null;
+  protected InputStream findSource() throws MojoExecutionException {
+    if (source == null || source.isBlank()) {
+      return null;
+    }
+    // dumb checking : is it a file ? a URL ?
+    try {
+      File targetFile = source.startsWith("/") ? new File(source) : new File(project.getBasedir(), source);
+      FileInputStream fis = new FileInputStream(targetFile);
+      return fis;
+    } catch (Exception e) {
+      getLog().info("while trying to open " + source + " as a file", e);
+    }
+    try {
+      URL url = new URL(source);
+      return url.openStream();
+    } catch (IOException e) {
+      getLog().info("while trying to open " + source + " as a url", e);
+    }
+    throw new MojoExecutionException("could not open provided source " + source + " as a file or url");
   }
 
 }
