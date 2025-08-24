@@ -23,15 +23,42 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 @Mojo(name = "generate-source", threadSafe = true, defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateSourceMojo extends AbstractMojo {
 
+  /**
+   * passed to the generator in case it needs project-specific variables, like
+   * path etc.
+   */
   @Component
   private MavenProject project;
 
-  @Parameter(property = "jcodemodel.outdir")
+  /**
+   * target directory to place the generated java files into. The directory is
+   * created but not cleaned.
+   */
+  @Parameter(property = "jcodemodel.outdir", defaultValue = "src/generated/java")
   private String outputDir;
 
+  /**
+   * source of the data to transmit to the generator when building the model. can
+   * be a url, a file.
+   */
+  @Parameter(property = "jcodemodel.source")
+  private String source;
+
+  /**
+   * The fullly qualified name of the generator used. Only needed if
+   * <ul>
+   * <li>you use several generators in the plugin dependencies,</li>
+   * <li>the generator does not provide a {@link #GENERATOR_CLASS_FILE} file to
+   * load the class automatically</li>
+   * <li>you want a different generator class than the one it defaults to</li>
+   * </ul>
+   */
   @Parameter(property = "jcodemodel.generator")
   private String generator;
 
+  /**
+   * direct Map of params to transmit to the generator.
+   */
   @Parameter(property = "jcodemodel.params")
   private Map<String, String> params;
 
@@ -55,8 +82,9 @@ public class GenerateSourceMojo extends AbstractMojo {
       cmb.configure(params);
     }
     JCodeModel cm = new JCodeModel();
+    InputStream source = findSource();
     try {
-      cmb.build(cm);
+      cmb.build(cm, source);
       new JCMWriter(cm).build(dir, (IProgressTracker) null);
     } catch (JCodeModelException | IOException e) {
       throw new MojoFailureException(e);
@@ -64,6 +92,9 @@ public class GenerateSourceMojo extends AbstractMojo {
 
   }
 
+  /**
+   * deduce the out java files output folder
+   */
   protected File javaOutputFolder() {
     if (outputDir == null) {
       return new File(project.getBasedir(), "src/generated/java");
@@ -76,6 +107,9 @@ public class GenerateSourceMojo extends AbstractMojo {
 
   public final String GENERATOR_CLASS_FILE = "jcodemodel/plugin/generator";
 
+  /**
+   * deduce the generator's class and instantiate it
+   */
   protected CodeModelBuilder findBuilder()
       throws Exception {
     String generatorClass = generator;
@@ -97,6 +131,10 @@ public class GenerateSourceMojo extends AbstractMojo {
         return null;
       }
     }
+  }
+
+  protected InputStream findSource() {
+    return null;
   }
 
 }

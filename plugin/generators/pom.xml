@@ -13,6 +13,7 @@
   <name>JCodeModel Plugin Generators Pom</name>
   <modules>
     <module>helloworld</module>
+    <module>csv</module>
   </modules>
   <description>POM module for all the plugin-related codemodel generators</description>
 
