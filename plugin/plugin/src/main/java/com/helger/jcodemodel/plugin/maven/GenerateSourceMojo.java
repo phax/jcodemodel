@@ -89,8 +89,7 @@ public class GenerateSourceMojo extends AbstractMojo {
     }
     JCodeModel cm = new JCodeModel();
     if (data != null && !data.isBlank() && source != null && !source.isBlank()) {
-      throw new MojoExecutionException(
-          "can not decide what to load between data[" + data + "] and source[" + source + "]");
+      getLog().warn("discarding source param " + source + " as dat is already set");
     }
     InputStream source = data == null || data.isBlank() ? findSource() : new ByteArrayInputStream(data.getBytes());
     try {
