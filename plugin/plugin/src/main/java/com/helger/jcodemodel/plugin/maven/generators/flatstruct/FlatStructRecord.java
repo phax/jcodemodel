@@ -35,7 +35,8 @@ public sealed interface FlatStructRecord {
   }
 
   /** we know the field class before building the model ; it's an array */
-  public record KnownClassArrayField(String fullyQualifiedClassName, String fieldName, Class<?> fieldInternalClass)
+  public record KnownClassArrayField(String fullyQualifiedClassName, String fieldName, Class<?> fieldInternalClass,
+      int arrayDepth)
       implements FieldCreation {
     @Override
     public String fieldClassName() {

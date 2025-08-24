@@ -52,12 +52,8 @@ public class CSVGenerator extends FlatStructureGenerator {
     }
     try {
       Class<?> cl = convertType(fieldClassName);
-      while (arrayDepth > 1) {
-        cl = cl.arrayType();
-        arrayDepth--;
-      }
       return arrayDepth > 0
-          ? new KnownClassArrayField(className, fieldName, cl)
+          ? new KnownClassArrayField(className, fieldName, cl, arrayDepth)
           : new KnownClassFlatField(className, fieldName, cl);
     } catch (ClassNotFoundException e) {
       throw new UnsupportedOperationException(e);

@@ -52,7 +52,11 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       jdc.field(JMod.PUBLIC, model._ref(kcff.fieldClass()), kcff.fieldName());
     } else if (rec instanceof KnownClassArrayField kcaf) {
       JDefinedClass jdc = addClass(model, kcaf.fullyQualifiedClassName());
-      jdc.field(JMod.PUBLIC, model._ref(kcaf.fieldInternalClass().arrayType()), kcaf.fieldName());
+      Class<?> fieldType = kcaf.fieldInternalClass();
+      for (int i = 0; i < kcaf.arrayDepth(); i++) {
+        fieldType = fieldType.arrayType();
+      }
+      jdc.field(JMod.PUBLIC, model._ref(fieldType), kcaf.fieldName());
     } else {
       throw new RuntimeException("can't apply reccord " + rec);
     }
