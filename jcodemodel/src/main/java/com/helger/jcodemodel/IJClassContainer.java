@@ -56,37 +56,33 @@ import jakarta.annotation.Nonnull;
 public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE>> extends IJOwned
 {
   /**
-   * @return <code>true</code> if the container is a class, <code>false</code>
-   *         if it is a package
+   * @return <code>true</code> if the container is a class, <code>false</code> if it is a package
    * @see #isPackage()
    */
   boolean isClass ();
 
   /**
-   * @return <code>true</code> if the container is a package, <code>false</code>
-   *         if it is a class.
+   * @return <code>true</code> if the container is a package, <code>false</code> if it is a class.
    * @see #isClass()
    */
   boolean isPackage ();
 
   /**
-   * @return Parent {@link IJClassContainer}. If this is a package, this method
-   *         returns a parent package, or <code>null</code> if this package is
-   *         the root package. If this is an outer-most class, this method
-   *         returns a {@link JPackage} to which it belongs. If this is an inner
-   *         class, this method returns the outer class.
+   * @return Parent {@link IJClassContainer}. If this is a package, this method returns a parent
+   *         package, or <code>null</code> if this package is the root package. If this is an
+   *         outer-most class, this method returns a {@link JPackage} to which it belongs. If this
+   *         is an inner class, this method returns the outer class.
    */
   IJClassContainer <?> parentContainer ();
 
   /**
-   * @return The nearest package parent. If <tt>this.isPackage()</tt>, then
-   *         return <tt>this</tt>.
+   * @return The nearest package parent. If <code>this.isPackage()</code>, then return
+   *         <code>this</code>.
    */
   JPackage getPackage ();
 
   /**
-   * Creates a new class/enum/interface/annotation. This is the most generic
-   * method.
+   * Creates a new class/enum/interface/annotation. This is the most generic method.
    *
    * @param nMods
    *        Modifiers for this ...
@@ -230,8 +226,7 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
   }
 
   /**
-   * @return A collection with all nested classes defined in this class. Never
-   *         <code>null</code>.
+   * @return A collection with all nested classes defined in this class. Never <code>null</code>.
    */
   @Nonnull
   Collection <CLASSTYPE> classes ();

@@ -96,8 +96,8 @@ import jakarta.annotation.Nullable;
  * </pre>
  * <p>
  * Every CodeModel node is always owned by one {@link JCodeModel} object at any given time (which
- * can be often accessed by the <tt>owner()</tt> method.) As such, when you generate Java code, most
- * of the operation works in a top-down fashion. For example, you create a class from
+ * can be often accessed by the <code>owner()</code> method.) As such, when you generate Java code,
+ * most of the operation works in a top-down fashion. For example, you create a class from
  * {@link JCodeModel}, which gives you a {@link JDefinedClass}. Then you invoke a method on it to
  * generate a new method, which gives you {@link JMethod}, and so on. There are a few exceptions to
  * this, most notably building {@link IJExpression}s, but generally you work with CodeModel in a
@@ -114,7 +114,7 @@ public class JCodeModel implements Serializable
 
   /**
    * Conversion from primitive type {@link Class} (such as {@link Integer#TYPE}) to its boxed type
-   * (such as <tt>Integer.class</tt>). It's an unmodifiable map.
+   * (such as <code>Integer.class</code>). It's an unmodifiable map.
    */
   static final Map <Class <?>, Class <?>> PRIMITIVE_TO_BOX;
 

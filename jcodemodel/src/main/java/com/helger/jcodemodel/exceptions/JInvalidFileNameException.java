@@ -44,27 +44,25 @@ import jakarta.annotation.Nullable;
 
 /**
  * <p>
- * Exception thrown when trying to create a new resource (folder, file or class
- * file) with a name that is not accepted by target platform.
+ * Exception thrown when trying to create a new resource (folder, file or class file) with a name
+ * that is not accepted by target platform.
  * </p>
  * <p>
- * full name, if not null, contains the full name of the directory that was
- * invalid.
+ * full name, if not null, contains the full name of the directory that was invalid.
  * </p>
- * </p>
+ * <p>
  * part name, if not null, contains the part of the directory that was invalid.
  * </p>
  * <p>
- * If both are null, it means that the platform had a rejection based on
- * something else, eg a limit on the number of different files the platform can
- * accept //TODO should it go in another exception ?
+ * If both are null, it means that the platform had a rejection based on something else, eg a limit
+ * on the number of different files the platform can accept //TODO should it go in another exception
+ * ?
  * </p>
  * <p>
- * Typically, if the platform does not accept resources with a name starting
- * with a "cr" , trying to create the file "crazy/cropped" would fail, with
- * fulName being "crazy/cropped" or null depending on the method that threw that
- * exception, and partName being "crazy" or "cropped" depending on the method
- * that threw that exception.
+ * Typically, if the platform does not accept resources with a name starting with a "cr" , trying to
+ * create the file "crazy/cropped" would fail, with fulName being "crazy/cropped" or null depending
+ * on the method that threw that exception, and partName being "crazy" or "cropped" depending on the
+ * method that threw that exception.
  * </p>
  *
  * @author glelouet
@@ -78,8 +76,7 @@ public class JInvalidFileNameException extends JCodeModelException
   private final String m_sPartName;
 
   /**
-   * create an exception, from an invalid relative part and or the invalid
-   * global file name
+   * create an exception, from an invalid relative part and or the invalid global file name
    *
    * @param fullName
    *        full name

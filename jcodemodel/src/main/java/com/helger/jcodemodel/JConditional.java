@@ -107,7 +107,7 @@ public class JConditional implements IJStatement
   }
 
   /**
-   * Creates <tt>... else if(...) ...</tt> code.
+   * Creates <code>... else if(...) ...</code> code.
    *
    * @param aTestExpr
    *        The test expression for the new if
