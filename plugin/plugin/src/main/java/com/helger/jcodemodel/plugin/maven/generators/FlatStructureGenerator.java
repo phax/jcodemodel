@@ -77,13 +77,13 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       addGetter(fv, jdc);
     }
   }
-
   protected void addGetter(JFieldVar fv, JDefinedClass jdc) {
     AbstractJType retType = fv.type();
     String methName = "get" + Character.toUpperCase(fv.name().charAt(0))
         + (fv.name().length() < 2 ? "" : fv.name().substring(1));
     JMethod meth = jdc.method(JMod.PUBLIC, retType, methName);
     meth.body()._return(fv);
+    meth.javadoc().add("@return the {@link #" + fv.name() + "}");
   }
 
   protected void addSetter(JFieldVar fv, JDefinedClass jdc, JCodeModel model) {
@@ -93,6 +93,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     JMethod meth = jdc.method(JMod.PUBLIC, model.VOID, methName);
     JVar param = meth.param(paramType, fv.name());
     meth.body().assign(JExpr.refthis(fv), param);
+    meth.javadoc().add("set the {@link #" + fv.name() + "}");
   }
 
   protected Class<?> convertType(String typeName) throws ClassNotFoundException {
