@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.helger.jcodemodel.examples</groupId>
+    <artifactId>plugins</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
+  </parent>
+  <groupId>com.helger.jcodemodel.examples.plugin</groupId>
+  <artifactId>helloworld</artifactId>
+  <name>JCodeModel HelloWorld Example</name>
+  <description>demonstrates and validates the usage of the jcodemodel plugin alongside the helloworld generator</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.helger.jcodemodel</groupId>
+        <artifactId>jcodemodel-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>hello1</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>hello2</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <generator>com.helger.jcodemodel.plugin.generators.helloworld.HelloWorldGenerator2</generator>
+              <outputDir>src/generated/java2</outputDir>
+              <params>
+                <name>com.helger.tests.helloworld.Hello2</name>
+                <value>world2</value>
+              </params>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.helger.jcodemodel.plugin.generators</groupId>
+            <artifactId>helloworld</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>src/generated/java</directory>
+            </fileset>
+            <fileset>
+              <directory>src/generated/java2</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/generated/java</source>
+                <source>src/generated/java2</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

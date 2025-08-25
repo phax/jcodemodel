@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# add a upstream source if missing, then pull the upstream/master into this branch
+
+git remote -v | grep -q -w upstream || git remote add upstream git@github.com:phax/jcodemodel.git
+git pull upstream master
