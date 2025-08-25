@@ -9,7 +9,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
   <parent>
     <groupId>com.helger</groupId>
     <artifactId>parent-pom</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
   </parent>
 
   <groupId>com.helger.jcodemodel</groupId>
@@ -103,7 +103,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
       <dependency>
         <groupId>com.helger.commons</groupId>
         <artifactId>ph-commons-parent-pom</artifactId>
-        <version>12.0.0-SNAPSHOT</version>
+        <version>12.0.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -118,12 +118,15 @@ License file that accompanied this code. Modifications: If applicable, add the f
 
   <build>
     <pluginManagement>
+      
       <plugins>
+    <!--
         <plugin>
           <groupId>com.helger.jcodemodel</groupId>
-          <artifactId>jcodemodel-mùaven-plugin</artifactId>
+          <artifactId>jcodemodel-maven-plugin</artifactId>
           <version>${project.version}</version>
         </plugin>
+    -->
       </plugins>
     </pluginManagement>
   </build>
