@@ -1,12 +1,13 @@
 package com.helger.jcodemodel.examples.plugin.csv;
 
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class CSVTest {
 
   @Test
-  public void testValue() {
+  public void testExample1() {
     new Example1();
 
     Example1b test1 = new Example1b();
@@ -14,10 +15,21 @@ public class CSVTest {
     test1.c = 'c';
     test1.s = "s";
     test1.sarr = new String[] { "array" };
+  }
 
-    Example2 test2 = new Example2();
-    test2.darr = new double[][] { { 0.1, 0.2 } };
-    test2.iarr = new int[] { 9, 7, 5, 3 };
+  @Test
+  public void testExample2() {
+    Example2 test = new Example2();
+    test.darr = new double[][] { { 0.1, 0.2 } };
+    test.iarr = new int[] { 9, 7, 5, 3 };
+  }
+
+  @Test
+  public void testExample3() {
+    Example3 test = new Example3();
+    test.setI(45);
+    Assert.assertEquals(45, test.getI());
+    test.getSarr();
   }
 
 }

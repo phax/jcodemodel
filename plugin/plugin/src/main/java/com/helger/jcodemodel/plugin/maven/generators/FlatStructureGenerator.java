@@ -8,9 +8,14 @@ import java.util.stream.Stream;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JFieldVar;
+import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.KnownClassArrayField;
@@ -49,17 +54,45 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       addClass(model, cc.fullyQualifiedClassName());
     } else if (rec instanceof KnownClassFlatField kcff) {
       JDefinedClass jdc = addClass(model, kcff.fullyQualifiedClassName());
-      jdc.field(JMod.PUBLIC, model._ref(kcff.fieldClass()), kcff.fieldName());
+      addField(jdc, model._ref(kcff.fieldClass()), kcff.fieldName(), kcff.options(), model);
     } else if (rec instanceof KnownClassArrayField kcaf) {
       JDefinedClass jdc = addClass(model, kcaf.fullyQualifiedClassName());
       Class<?> fieldType = kcaf.fieldInternalClass();
       for (int i = 0; i < kcaf.arrayDepth(); i++) {
         fieldType = fieldType.arrayType();
       }
-      jdc.field(JMod.PUBLIC, model._ref(fieldType), kcaf.fieldName());
+      addField(jdc, model._ref(fieldType), kcaf.fieldName(), kcaf.options(), model);
     } else {
       throw new RuntimeException("can't apply reccord " + rec);
     }
+  }
+
+  protected void addField(JDefinedClass jdc, AbstractJType type, String fieldName, FieldOptions options,
+      JCodeModel model) {
+    JFieldVar fv = jdc.field(options.visibility().jmod, type, fieldName);
+    if (options.setter()) {
+      addSetter(fv, jdc, model);
+    }
+    if (options.getter()) {
+      addGetter(fv, jdc);
+    }
+  }
+
+  protected void addGetter(JFieldVar fv, JDefinedClass jdc) {
+    AbstractJType retType = fv.type();
+    String methName = "get" + Character.toUpperCase(fv.name().charAt(0))
+        + (fv.name().length() < 2 ? "" : fv.name().substring(1));
+    JMethod meth = jdc.method(JMod.PUBLIC, retType, methName);
+    meth.body()._return(fv);
+  }
+
+  protected void addSetter(JFieldVar fv, JDefinedClass jdc, JCodeModel model) {
+    AbstractJType paramType = fv.type();
+    String methName = "set" + Character.toUpperCase(fv.name().charAt(0))
+        + (fv.name().length() < 2 ? "" : fv.name().substring(1));
+    JMethod meth = jdc.method(JMod.PUBLIC, model.VOID, methName);
+    JVar param = meth.param(paramType, fv.name());
+    meth.body().assign(JExpr.refthis(fv), param);
   }
 
   protected Class<?> convertType(String typeName) throws ClassNotFoundException {

@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.helger.jcodemodel.plugin.maven.generators.FlatStructureGenerator;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldConstruct;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.KnownClassArrayField;
@@ -50,11 +53,35 @@ public class CSVGenerator extends FlatStructureGenerator {
       fieldClassName = fieldClassName.replaceFirst("\\[\\]", "").trim();
 
     }
+    FieldOptions options = new FieldOptions();
+    if (spl.length >= 4) {
+      for(int i= 3; i<spl.length;i++) {
+        String optStr = spl[i];
+        if (optStr == null || optStr.isBlank()) {
+          continue;
+        }
+        if (i == 3) {
+          FieldVisibility fv = FieldVisibility.of(optStr);
+          if (fv == null) {
+            throw new UnsupportedOperationException("can't deduce visibility from "+optStr);
+          } else {
+            fv.apply(options);
+          }
+        } else {
+          FieldConstruct fa = FieldConstruct.of(optStr);
+          if (fa == null) {
+            throw new UnsupportedOperationException("can't deduce option from "+optStr);
+          } else {
+            fa.apply(options);
+          }
+        }
+      }
+    }
     try {
       Class<?> cl = convertType(fieldClassName);
       return arrayDepth > 0
-          ? new KnownClassArrayField(className, fieldName, cl, arrayDepth)
-          : new KnownClassFlatField(className, fieldName, cl);
+          ? new KnownClassArrayField(className, fieldName, cl, arrayDepth, options)
+          : new KnownClassFlatField(className, fieldName, cl, options);
     } catch (ClassNotFoundException e) {
       throw new UnsupportedOperationException(e);
     }

@@ -37,6 +37,16 @@
 com.helger.jcodemodel.examples.plugin.csv.Example2,darr,double  []   []</data>
             </configuration>
           </execution>
+          <execution>
+            <id>exec3</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>com.helger.jcodemodel.examples.plugin.csv.Example3,i,int,private,set,get
+com.helger.jcodemodel.examples.plugin.csv.Example3,sarr,string  [],protected,noget,get</data>
+            </configuration>
+          </execution>
         </executions>
         <dependencies>
           <dependency>
