@@ -13,7 +13,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
 
   <groupId>com.helger.jcodemodel</groupId>
   <artifactId>jcodemodel-parent-pom</artifactId>
-  <version>4.0.0</version>
+  <version>4.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>JCodeModel Parent POM</name>
   <description>Java code generation library parent POM</description>
@@ -32,7 +32,7 @@ License file that accompanied this code. Modifications: If applicable, add the f
     <connection>scm:git:https://github.com/phax/jcodemodel.git</connection>
     <developerConnection>scm:git:https://github.com/phax/jcodemodel.git</developerConnection>
     <url>http://github.com/phax/jcodemodel</url>
-    <tag>jcodemodel-parent-pom-4.0.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <developers>
