@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -101,21 +102,25 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   public void createFields(JCodeModel model, List<FlatStructRecord> records) {
     for (FlatStructRecord rec : records) {
       if (rec instanceof SimpleField af) {
-        JDefinedClass jdc = definedClasses.get(af.fullyQualifiedClassName());
+        JDefinedClass owner = Objects.requireNonNull(definedClasses.get(af.fullyQualifiedClassName()),
+            "can't find defined class " + af.fullyQualifiedClassName() + " for field " + af);
+        FieldOptions ownerOptions = pathOptions.get(owner.fullName());
+        Objects.requireNonNull(ownerOptions, "can't find options for class " + owner.fullName()
+            + " known classes are " + pathOptions.keySet());
+        af.options().setParent(ownerOptions);
         AbstractJType fieldType = resolveType(model, af.fieldInternalClassName(), af.arrayDepth());
         if (fieldType == null) {
           throw new RuntimeException("can't resolve tytpe " + af.fieldClassName() + " for field "
               + af.fullyQualifiedClassName() + "::" + af.fieldName());
         }
-        addField(jdc, fieldType, af.fieldName(), af.options(), model);
+        addField(owner, fieldType, af.fieldName(), af.options(), model);
       }
     }
   }
 
-  protected AbstractJType resolveType(JCodeModel model, String typeName, int arrayLevel) {
+  protected AbstractJType resolveType(JCodeModel model, String typeName) {
     AbstractJType defined = definedClasses.get(typeName);
     if (defined == null) {
-      System.err.println("resolving simple class name for " + typeName);
       Set<JDefinedClass> set = simpleDefinedClasses.get(typeName);
       if (set != null && !set.isEmpty()) {
         if (set.size() > 1) {
@@ -127,25 +132,31 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       }
     }
     if (defined != null) {
-      for (int i = 0; i < arrayLevel; i++) {
-        defined = defined.array();
-      }
       return defined;
     }
     try {
-      Class<?> staticResolved = convertType(typeName);
+      Class<?> staticResolved = convertStaticType(typeName);
       if (staticResolved != null) {
-        for (int i = 0; i < arrayLevel; i++) {
-          staticResolved = staticResolved.arrayType();
-        }
         return model._ref(staticResolved);
       }
     } catch (ClassNotFoundException e) {
     }
     return null;
+
   }
 
-  protected Class<?> convertType(String typeName) throws ClassNotFoundException {
+  protected AbstractJType resolveType(JCodeModel model, String typeName, int arrayLevel) {
+    AbstractJType ret = resolveType(model, typeName);
+    if (ret == null) {
+      return null;
+    }
+    for (int i = 0; i < arrayLevel; i++) {
+      ret = ret.array();
+    }
+    return ret;
+  }
+
+  protected Class<?> convertStaticType(String typeName) throws ClassNotFoundException {
     return switch (typeName) {
     case "bool", "boolean" -> boolean.class;
     case "Bool", "Boolean" -> Boolean.class;

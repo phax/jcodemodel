@@ -60,6 +60,8 @@
               <data>
                 com.helger.jcodemodel.examples.plugin.csv.example4.Parent,children,Child[],private,get,set
                 com.helger.jcodemodel.examples.plugin.csv.example4.Child,parent,Parent,private,get,set
+                com.helger.jcodemodel.examples.plugin.csv.example4.Imported,model,com.helger.jcodemodel.JCodeModel,private,get,set
+                com.helger.jcodemodel.examples.plugin.csv.example4.Imported,modelArr,com.helger.jcodemodel.JCodeModel[],private,get,set
               </data>
             </configuration>
           </execution>
@@ -117,6 +119,11 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
