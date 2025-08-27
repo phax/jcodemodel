@@ -2,8 +2,10 @@ package com.helger.jcodemodel.plugin.maven.generators;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import com.helger.jcodemodel.AbstractJType;
@@ -36,9 +38,15 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   }
 
   /**
-   * all the classes we created
+   * all the classes we created, by fully qualified name
    */
   private Map<String, JDefinedClass> definedClasses = new HashMap<>();
+
+  /**
+   * all the classes we created, by simple name . eg "my.own.LittleClass" would be
+   * stored as "LittleClass" .
+   */
+  private Map<String, Set<JDefinedClass>> simpleDefinedClasses = new HashMap<>();
 
   /**
    * classes and package options, added as we create them.
@@ -70,6 +78,8 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         throw new RuntimeException(e);
       }
     });
+    String simpleName = fullyQualifiedName.replaceAll(".*\\.", "");
+    simpleDefinedClasses.computeIfAbsent(simpleName, n -> new HashSet<>()).add(clazz);
     pathOptions.computeIfAbsent(fullyQualifiedName, cn -> new FieldOptions());
     return clazz;
   }
@@ -102,8 +112,20 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     }
   }
 
-  protected AbstractJType resolveType(JCodeModel model, String fullyQualifiedName, int arrayLevel) {
-    AbstractJType defined = definedClasses.get(fullyQualifiedName);
+  protected AbstractJType resolveType(JCodeModel model, String typeName, int arrayLevel) {
+    AbstractJType defined = definedClasses.get(typeName);
+    if (defined == null) {
+      System.err.println("resolving simple class name for " + typeName);
+      Set<JDefinedClass> set = simpleDefinedClasses.get(typeName);
+      if (set != null && !set.isEmpty()) {
+        if (set.size() > 1) {
+          throw new UnsupportedOperationException(
+              "several classes stored for simple name " + typeName + " : " + set);
+        } else {
+          defined = set.iterator().next();
+        }
+      }
+    }
     if (defined != null) {
       for (int i = 0; i < arrayLevel; i++) {
         defined = defined.array();
@@ -111,7 +133,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       return defined;
     }
     try {
-      Class<?> staticResolved = convertType(fullyQualifiedName);
+      Class<?> staticResolved = convertType(typeName);
       if (staticResolved != null) {
         for (int i = 0; i < arrayLevel; i++) {
           staticResolved = staticResolved.arrayType();
