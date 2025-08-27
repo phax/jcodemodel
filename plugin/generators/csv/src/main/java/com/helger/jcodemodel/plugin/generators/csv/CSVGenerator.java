@@ -60,13 +60,9 @@ public class CSVGenerator extends FlatStructureGenerator {
         if (optStr == null || optStr.isBlank()) {
           continue;
         }
-        if (i == 3) {
-          FieldVisibility fv = FieldVisibility.of(optStr);
-          if (fv == null) {
-            throw new UnsupportedOperationException("can't deduce visibility from " + optStr);
-          } else {
-            fv.apply(options);
-          }
+        FieldVisibility fv = FieldVisibility.of(optStr);
+        if (fv != null) {
+          fv.apply(options);
         } else {
           FieldConstruct fa = FieldConstruct.of(optStr);
           if (fa == null) {

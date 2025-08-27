@@ -58,10 +58,10 @@
             </goals>
             <configuration>
               <data>
-                p com.helger.jcodemodel.examples.plugin.csv.example4,,,,get
-                com.helger.jcodemodel.examples.plugin.csv.example4.Parent,children,Child[],private,set
+                p com.helger.jcodemodel.examples.plugin.csv.example4,,,get
+                com.helger.jcodemodel.examples.plugin.csv.example4.Parent,children,Child[],set,private
                 com.helger.jcodemodel.examples.plugin.csv.example4.Child,parent,Parent,private,set
-                com.helger.jcodemodel.examples.plugin.csv.example4.Imported,,,,set
+                com.helger.jcodemodel.examples.plugin.csv.example4.Imported,,,set
                 com.helger.jcodemodel.examples.plugin.csv.example4.Imported,model,com.helger.jcodemodel.JCodeModel,private
                 com.helger.jcodemodel.examples.plugin.csv.example4.Imported,modelArr,com.helger.jcodemodel.JCodeModel[],private
               </data>
