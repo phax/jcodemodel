@@ -43,6 +43,9 @@ public class CSVTest {
     Child child = new Child();
     parent.setChildren(new Child[] { child });
     child.setParent(parent);
+    parent.getChildren();
+    child.getParent();
+
     Imported imported = new Imported();
     imported.setModel(new JCodeModel());
     imported.setModelArr(new JCodeModel[] {});

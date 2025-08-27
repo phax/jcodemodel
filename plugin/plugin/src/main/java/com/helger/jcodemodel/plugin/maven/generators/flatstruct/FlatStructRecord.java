@@ -5,9 +5,15 @@ public sealed interface FlatStructRecord {
   String fullyQualifiedClassName();
 
   /**
-   * create a class.
+   * specify package-wide options
    */
-  public record ClassCreation(String fullyQualifiedClassName) implements FlatStructRecord {
+  public record PackageCreation(String fullyQualifiedClassName, FieldOptions options) implements FlatStructRecord {
+  }
+
+  /**
+   * create a class, with options
+   */
+  public record ClassCreation(String fullyQualifiedClassName, FieldOptions options) implements FlatStructRecord {
   }
 
   /**
@@ -17,6 +23,9 @@ public sealed interface FlatStructRecord {
 
     String fieldName();
 
+    /**
+     * @return fully readable requested type
+     */
     String fieldClassName();
 
     FieldOptions options();

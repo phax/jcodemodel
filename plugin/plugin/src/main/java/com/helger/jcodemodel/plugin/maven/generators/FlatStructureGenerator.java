@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -23,6 +24,7 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.FieldCreation;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.SimpleField;
 
 public abstract class FlatStructureGenerator implements CodeModelBuilder {
@@ -33,8 +35,8 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   public void build(JCodeModel model, InputStream source) throws JCodeModelException {
     List<FlatStructRecord> records = loadSource(source).toList();
     createClasses(model, records);
-    updateParentOptions();
-    applyInheritance();
+    updateParentOptions(records);
+    applyInheritance(records);
     createFields(model, records);
   }
 
@@ -61,9 +63,11 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   protected void createClasses(JCodeModel model, List<FlatStructRecord> records) {
     for (FlatStructRecord rec : records) {
       if (rec instanceof ClassCreation cc) {
-        ensureClass(model, cc.fullyQualifiedClassName());
+        ensureClass(model, cc.fullyQualifiedClassName(), cc.options());
+      } else if (rec instanceof PackageCreation pc) {
+        pathOptions.put(pc.fullyQualifiedClassName(), pc.options());
       } else if (rec instanceof FieldCreation fc) {
-        ensureClass(model, fc.fullyQualifiedClassName());
+        ensureClass(model, fc.fullyQualifiedClassName(), null);
       }
     }
   }
@@ -71,7 +75,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   /**
    * ensure a jdefinedclass exists for given name
    */
-  protected JDefinedClass ensureClass(JCodeModel model, String fullyQualifiedName) {
+  protected JDefinedClass ensureClass(JCodeModel model, String fullyQualifiedName, FieldOptions options) {
     JDefinedClass clazz = definedClasses.computeIfAbsent(fullyQualifiedName, n -> {
       try {
         return model._class(n);
@@ -81,21 +85,45 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     });
     String simpleName = fullyQualifiedName.replaceAll(".*\\.", "");
     simpleDefinedClasses.computeIfAbsent(simpleName, n -> new HashSet<>()).add(clazz);
-    pathOptions.computeIfAbsent(fullyQualifiedName, cn -> new FieldOptions());
+    if (options == null) {
+      pathOptions.computeIfAbsent(fullyQualifiedName, cn -> new FieldOptions());
+    } else {
+      pathOptions.put(fullyQualifiedName, options);
+    }
     return clazz;
   }
 
   /**
-   * link each class options to its parent package option
+   * link each class options and package option to its parent package option
    */
-  protected void updateParentOptions() {
+  protected void updateParentOptions(List<FlatStructRecord> records) {
+    for (Entry<String, FieldOptions> e : pathOptions.entrySet()) {
+      e.getValue().setParent(findParentOption(e.getKey()));
+    }
+  }
 
+  /**
+   * find the fieldoptions associated to the longest leading path of the child.
+   * eg. if child is my.own.LittleClass, and there is a fieldoptions stored for my
+   * and one for my.own, then this would return the fieldoptions associated to
+   * my.own.
+   */
+  protected FieldOptions findParentOption(String fullChildName) {
+    String search = fullChildName;
+    FieldOptions found = null;
+    do {
+      // remove last dot token
+      int idx = search.lastIndexOf('.');
+      search = idx > -1 ? search.substring(0, idx) : null;
+      found = pathOptions.get(search);
+    } while (found == null && search != null && !search.isBlank());
+    return found;
   }
 
   /**
    * make the classes extends or implement their parent classes, if any
    */
-  protected void applyInheritance() {
+  protected void applyInheritance(List<FlatStructRecord> records) {
 
   }
 
