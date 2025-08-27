@@ -4,6 +4,9 @@ package com.helger.jcodemodel.examples.plugin.csv;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.helger.jcodemodel.examples.plugin.csv.example4.Child;
+import com.helger.jcodemodel.examples.plugin.csv.example4.Parent;
+
 public class CSVTest {
 
   @Test
@@ -30,6 +33,14 @@ public class CSVTest {
     test.setI(45);
     Assert.assertEquals(45, test.getI());
     test.getSarr();
+  }
+
+  @Test
+  public void testExample4() {
+    Parent parent = new Parent();
+    Child child = new Child();
+    parent.setChildren(new Child[] { child });
+    child.setParent(parent);
   }
 
 }

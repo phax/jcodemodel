@@ -33,8 +33,10 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
-              <data>com.helger.jcodemodel.examples.plugin.csv.Example2,iarr,int[]
-com.helger.jcodemodel.examples.plugin.csv.Example2,darr,double  []   []</data>
+              <data>
+                com.helger.jcodemodel.examples.plugin.csv.Example2,iarr,int[]
+                com.helger.jcodemodel.examples.plugin.csv.Example2,darr,double [] []
+              </data>
             </configuration>
           </execution>
           <execution>
@@ -43,8 +45,22 @@ com.helger.jcodemodel.examples.plugin.csv.Example2,darr,double  []   []</data>
               <goal>generate-source</goal>
             </goals>
             <configuration>
-              <data>com.helger.jcodemodel.examples.plugin.csv.Example3,i,int,private,set,get
-com.helger.jcodemodel.examples.plugin.csv.Example3,sarr,string  [],protected,noget,get</data>
+              <data>
+                com.helger.jcodemodel.examples.plugin.csv.Example3,i,int,private,set,get
+                com.helger.jcodemodel.examples.plugin.csv.Example3,sarr,string [],protected,noget,get
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+            <id>exec4</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                com.helger.jcodemodel.examples.plugin.csv.example4.Parent,children,com.helger.jcodemodel.examples.plugin.csv.example4.Child[],private,get,set
+                com.helger.jcodemodel.examples.plugin.csv.example4.Child,parent,com.helger.jcodemodel.examples.plugin.csv.example4.Parent,private,get,set
+              </data>
             </configuration>
           </execution>
         </executions>

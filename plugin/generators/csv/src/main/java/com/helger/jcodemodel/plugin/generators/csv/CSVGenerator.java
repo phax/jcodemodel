@@ -13,8 +13,7 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.KnownClassArrayField;
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.KnownClassFlatField;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.SimpleField;
 
 public class CSVGenerator extends FlatStructureGenerator {
 
@@ -77,14 +76,7 @@ public class CSVGenerator extends FlatStructureGenerator {
         }
       }
     }
-    try {
-      Class<?> cl = convertType(fieldClassName);
-      return arrayDepth > 0
-          ? new KnownClassArrayField(className, fieldName, cl, arrayDepth, options)
-          : new KnownClassFlatField(className, fieldName, cl, options);
-    } catch (ClassNotFoundException e) {
-      throw new UnsupportedOperationException(e);
-    }
+    return new SimpleField(className, fieldName, fieldClassName, arrayDepth, options);
   }
 
 }

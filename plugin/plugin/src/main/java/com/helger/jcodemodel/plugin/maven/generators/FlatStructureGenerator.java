@@ -2,6 +2,7 @@ package com.helger.jcodemodel.plugin.maven.generators;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -18,8 +19,8 @@ import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.KnownClassArrayField;
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.KnownClassFlatField;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.FieldCreation;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.SimpleField;
 
 public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
@@ -27,17 +28,41 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
   @Override
   public void build(JCodeModel model, InputStream source) throws JCodeModelException {
-    loadSource(source).forEach(rec -> applyRecord(rec, model));
+    List<FlatStructRecord> records = loadSource(source).toList();
+    createClasses(model, records);
+    updateParentOptions();
+    applyInheritance();
+    createFields(model, records);
   }
 
-  Map<String, AbstractJType> knownTypes = new HashMap<>();
-
-  Map<String, JDefinedClass> definedClasses = new HashMap<>();
+  /**
+   * all the classes we created
+   */
+  private Map<String, JDefinedClass> definedClasses = new HashMap<>();
 
   /**
-   * ensure a jdefinedclass exists
+   * classes and package options, added as we create them.
    */
-  protected JDefinedClass addClass(JCodeModel model, String fullyQualifiedName) {
+  private Map<String, FieldOptions> pathOptions = new HashMap<>();
+
+  /**
+   * create the classes files, so that we can link them dynamically ; and the
+   * packages
+   */
+  protected void createClasses(JCodeModel model, List<FlatStructRecord> records) {
+    for (FlatStructRecord rec : records) {
+      if (rec instanceof ClassCreation cc) {
+        ensureClass(model, cc.fullyQualifiedClassName());
+      } else if (rec instanceof FieldCreation fc) {
+        ensureClass(model, fc.fullyQualifiedClassName());
+      }
+    }
+  }
+
+  /**
+   * ensure a jdefinedclass exists for given name
+   */
+  protected JDefinedClass ensureClass(JCodeModel model, String fullyQualifiedName) {
     JDefinedClass clazz = definedClasses.computeIfAbsent(fullyQualifiedName, n -> {
       try {
         return model._class(n);
@@ -45,55 +70,57 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         throw new RuntimeException(e);
       }
     });
-    knownTypes.computeIfAbsent(fullyQualifiedName, n -> clazz);
+    pathOptions.computeIfAbsent(fullyQualifiedName, cn -> new FieldOptions());
     return clazz;
   }
 
-  public void applyRecord(FlatStructRecord rec, JCodeModel model) {
-    if (rec instanceof ClassCreation cc) {
-      addClass(model, cc.fullyQualifiedClassName());
-    } else if (rec instanceof KnownClassFlatField kcff) {
-      JDefinedClass jdc = addClass(model, kcff.fullyQualifiedClassName());
-      addField(jdc, model._ref(kcff.fieldClass()), kcff.fieldName(), kcff.options(), model);
-    } else if (rec instanceof KnownClassArrayField kcaf) {
-      JDefinedClass jdc = addClass(model, kcaf.fullyQualifiedClassName());
-      Class<?> fieldType = kcaf.fieldInternalClass();
-      for (int i = 0; i < kcaf.arrayDepth(); i++) {
-        fieldType = fieldType.arrayType();
+  /**
+   * link each class options to its parent package option
+   */
+  protected void updateParentOptions() {
+
+  }
+
+  /**
+   * make the classes extends or implement their parent classes, if any
+   */
+  protected void applyInheritance() {
+
+  }
+
+  public void createFields(JCodeModel model, List<FlatStructRecord> records) {
+    for (FlatStructRecord rec : records) {
+      if (rec instanceof SimpleField af) {
+        JDefinedClass jdc = definedClasses.get(af.fullyQualifiedClassName());
+        AbstractJType fieldType = resolveType(model, af.fieldInternalClassName(), af.arrayDepth());
+        if (fieldType == null) {
+          throw new RuntimeException("can't resolve tytpe " + af.fieldClassName() + " for field "
+              + af.fullyQualifiedClassName() + "::" + af.fieldName());
+        }
+        addField(jdc, fieldType, af.fieldName(), af.options(), model);
       }
-      addField(jdc, model._ref(fieldType), kcaf.fieldName(), kcaf.options(), model);
-    } else {
-      throw new RuntimeException("can't apply reccord " + rec);
     }
   }
 
-  protected void addField(JDefinedClass jdc, AbstractJType type, String fieldName, FieldOptions options,
-      JCodeModel model) {
-    JFieldVar fv = jdc.field(options.visibility().jmod, type, fieldName);
-    if (options.setter()) {
-      addSetter(fv, jdc, model);
+  protected AbstractJType resolveType(JCodeModel model, String fullyQualifiedName, int arrayLevel) {
+    AbstractJType defined = definedClasses.get(fullyQualifiedName);
+    if (defined != null) {
+      for (int i = 0; i < arrayLevel; i++) {
+        defined = defined.array();
+      }
+      return defined;
     }
-    if (options.getter()) {
-      addGetter(fv, jdc);
+    try {
+      Class<?> staticResolved = convertType(fullyQualifiedName);
+      if (staticResolved != null) {
+        for (int i = 0; i < arrayLevel; i++) {
+          staticResolved = staticResolved.arrayType();
+        }
+        return model._ref(staticResolved);
+      }
+    } catch (ClassNotFoundException e) {
     }
-  }
-  protected void addGetter(JFieldVar fv, JDefinedClass jdc) {
-    AbstractJType retType = fv.type();
-    String methName = "get" + Character.toUpperCase(fv.name().charAt(0))
-        + (fv.name().length() < 2 ? "" : fv.name().substring(1));
-    JMethod meth = jdc.method(JMod.PUBLIC, retType, methName);
-    meth.body()._return(fv);
-    meth.javadoc().add("@return the {@link #" + fv.name() + "}");
-  }
-
-  protected void addSetter(JFieldVar fv, JDefinedClass jdc, JCodeModel model) {
-    AbstractJType paramType = fv.type();
-    String methName = "set" + Character.toUpperCase(fv.name().charAt(0))
-        + (fv.name().length() < 2 ? "" : fv.name().substring(1));
-    JMethod meth = jdc.method(JMod.PUBLIC, model.VOID, methName);
-    JVar param = meth.param(paramType, fv.name());
-    meth.body().assign(JExpr.refthis(fv), param);
-    meth.javadoc().add("set the {@link #" + fv.name() + "}");
+    return null;
   }
 
   protected Class<?> convertType(String typeName) throws ClassNotFoundException {
@@ -113,6 +140,36 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     case "string", "String" -> String.class;
     default -> Class.forName(typeName);
     };
+  }
+
+  protected void addField(JDefinedClass jdc, AbstractJType type, String fieldName, FieldOptions options,
+      JCodeModel model) {
+    JFieldVar fv = jdc.field(options.visibility().jmod, type, fieldName);
+    if (options.setter()) {
+      addSetter(fv, jdc, model);
+    }
+    if (options.getter()) {
+      addGetter(fv, jdc);
+    }
+  }
+
+  protected void addGetter(JFieldVar fv, JDefinedClass jdc) {
+    AbstractJType retType = fv.type();
+    String methName = "get" + Character.toUpperCase(fv.name().charAt(0))
+        + (fv.name().length() < 2 ? "" : fv.name().substring(1));
+    JMethod meth = jdc.method(JMod.PUBLIC, retType, methName);
+    meth.body()._return(fv);
+    meth.javadoc().add("@return the {@link #" + fv.name() + "}");
+  }
+
+  protected void addSetter(JFieldVar fv, JDefinedClass jdc, JCodeModel model) {
+    AbstractJType paramType = fv.type();
+    String methName = "set" + Character.toUpperCase(fv.name().charAt(0))
+        + (fv.name().length() < 2 ? "" : fv.name().substring(1));
+    JMethod meth = jdc.method(JMod.PUBLIC, model.VOID, methName);
+    JVar param = meth.param(paramType, fv.name());
+    meth.body().assign(JExpr.refthis(fv), param);
+    meth.javadoc().add("set the {@link #" + fv.name() + "}");
   }
 
 }

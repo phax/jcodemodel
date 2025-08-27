@@ -23,31 +23,13 @@ public sealed interface FlatStructRecord {
 
   }
 
-
-  /**
-   * we already know the field class before building the model, and it's a flat
-   * field
-   */
-  public record KnownClassFlatField(String fullyQualifiedClassName, String fieldName, Class<?> fieldClass,
-      FieldOptions options)
-      implements FieldCreation {
-    @Override
-    public String fieldClassName() {
-      return fieldClass.getName();
-    }
-  }
-
-  /** we know the field class before building the model ; it's an array */
-  public record KnownClassArrayField(String fullyQualifiedClassName, String fieldName, Class<?> fieldInternalClass,
+  /** A field definition in a class, with a simple type that can be an array */
+  public record SimpleField(String fullyQualifiedClassName, String fieldName, String fieldInternalClassName,
       int arrayDepth, FieldOptions options)
       implements FieldCreation {
     @Override
     public String fieldClassName() {
-      Class<?> cl = fieldInternalClass;
-      for (int i = 0; i < arrayDepth; i++) {
-        cl = cl.arrayType();
-      }
-      return cl.getName();
+      return fieldInternalClassName + "[]".repeat(arrayDepth);
     }
   }
 
