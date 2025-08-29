@@ -2,6 +2,7 @@ package com.helger.jcodemodel.plugin.maven.generators;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.time.Instant;
 import java.util.HashMap;
@@ -274,7 +275,6 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     }
   }
 
-
   protected void applyRedirect(JCodeModel model, SimpleField af, JDefinedClass fieldOwner,
       JDefinedClass fieldType) {
     for (JMethod m : fieldType.methods()) {
@@ -293,8 +293,13 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         }
       }
     }
-
   }
+
+  private static final Set<String> OBJECT_NOARGMETH = new HashSet<>(
+      Stream.of(Object.class.getMethods())
+          .filter(m -> m.getParameterCount() == 0)
+          .map(Method::getName)
+          .toList());
 
   protected void applyRedirect(JCodeModel model, SimpleField af, JDefinedClass fieldOwner,
       Class<?> fieldClass) {
@@ -302,7 +307,15 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       return;
     }
     for (Method m : fieldClass.getMethods()) {
-      if (m.getDeclaringClass() == Object.class) {
+      if (
+          // synthetic methods are added by the compiler, not in the actual code
+          m.isSynthetic()
+          // static methods should not be redirected
+          || (m.getModifiers() & Modifier.STATIC) != 0
+          // don't redirect methods that are either those of Object,
+          || m.getDeclaringClass() == Object.class
+          // or with no argument and present in Object without argument (hashcode, tostring)
+          || m.getParameterCount() == 0 && OBJECT_NOARGMETH.contains(m.getName())) {
         continue;
       }
       System.err.println("redirecting method " + m);

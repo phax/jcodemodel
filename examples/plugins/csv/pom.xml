@@ -85,6 +85,8 @@
                 com.helger.jcodemodel.examples.plugin.csv.example5.Redirected,,,private,redirect
                 com.helger.jcodemodel.examples.plugin.csv.example5.Redirected,abc,ABC,set
                 com.helger.jcodemodel.examples.plugin.csv.example5.Redirected,jCatchBlock,com.helger.jcodemodel.JCatchBlock,set
+                
+                com.helger.jcodemodel.examples.plugin.csv.example5.ClassRedirect,e,java.lang.ArrayIndexOutOfBoundsException,set,redirect
               </data>
             </configuration>
           </execution>
