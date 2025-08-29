@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel;
 
+import java.lang.reflect.Modifier;
+
 import com.helger.base.enforce.ValueEnforcer;
 
 import jakarta.annotation.Nonnull;
@@ -211,35 +213,103 @@ public class JMods implements IJGenerable
 
   private void _setFlag (final int bit, final boolean bNewValue)
   {
-    m_nMods = (m_nMods & ~bit) | (bNewValue ? bit : 0);
+    m_nMods = m_nMods & ~bit | (bNewValue ? bit : 0);
   }
 
+  @Override
   public void generate (@Nonnull final IJFormatter f)
   {
     // The order is taken from popular CodeStyle tools
-    if ((m_nMods & JMod.PUBLIC) != 0)
+    if ((m_nMods & JMod.PUBLIC) != 0) {
       f.print ("public");
-    if ((m_nMods & JMod.PROTECTED) != 0)
+    }
+    if ((m_nMods & JMod.PROTECTED) != 0) {
       f.print ("protected");
-    if ((m_nMods & JMod.PRIVATE) != 0)
+    }
+    if ((m_nMods & JMod.PRIVATE) != 0) {
       f.print ("private");
-    if ((m_nMods & JMod.ABSTRACT) != 0)
+    }
+    if ((m_nMods & JMod.ABSTRACT) != 0) {
       f.print ("abstract");
-    if ((m_nMods & JMod.STATIC) != 0)
+    }
+    if ((m_nMods & JMod.STATIC) != 0) {
       f.print ("static");
-    if ((m_nMods & JMod.FINAL) != 0)
+    }
+    if ((m_nMods & JMod.FINAL) != 0) {
       f.print ("final");
-    if ((m_nMods & JMod.TRANSIENT) != 0)
+    }
+    if ((m_nMods & JMod.TRANSIENT) != 0) {
       f.print ("transient");
-    if ((m_nMods & JMod.VOLATILE) != 0)
+    }
+    if ((m_nMods & JMod.VOLATILE) != 0) {
       f.print ("volatile");
-    if ((m_nMods & JMod.SYNCHRONIZED) != 0)
+    }
+    if ((m_nMods & JMod.SYNCHRONIZED) != 0) {
       f.print ("synchronized");
-    if ((m_nMods & JMod.NATIVE) != 0)
+    }
+    if ((m_nMods & JMod.NATIVE) != 0) {
       f.print ("native");
-    if ((m_nMods & JMod.STRICTFP) != 0)
+    }
+    if ((m_nMods & JMod.STRICTFP) != 0) {
       f.print ("strictfp");
-    if ((m_nMods & JMod.DEFAULT) != 0)
+    }
+    if ((m_nMods & JMod.DEFAULT) != 0) {
       f.print ("default");
+    }
+  }
+
+  public enum ModifierMap {
+    NONE(JMod.NONE, 0),
+    PUBLIC(JMod.PUBLIC, Modifier.PUBLIC),
+    PROTECTED(JMod.PROTECTED, Modifier.PROTECTED),
+    PRIVATE(JMod.PRIVATE, Modifier.PRIVATE),
+    FINAL(JMod.FINAL, Modifier.FINAL),
+    STATIC(JMod.STATIC, Modifier.STATIC),
+    ABSTRACT(JMod.ABSTRACT, Modifier.ABSTRACT),
+    NATIVE(JMod.NATIVE, Modifier.NATIVE),
+    SYNCHRONIZED(JMod.SYNCHRONIZED, Modifier.SYNCHRONIZED),
+    TRANSIENT(JMod.TRANSIENT, Modifier.TRANSIENT),
+    VOLATILE(JMod.VOLATILE, Modifier.VOLATILE),
+    // default does not exist in the reflect : it's a public non-abstrct non-static method in an interface
+    DEFAULT(JMod.DEFAULT, 0),
+    STRICTFP(JMod.STRICTFP, Modifier.STRICT),
+    ;
+
+    public final int jmod;
+    public final int modifier;
+
+    public boolean isPresentJMod(int jmods) {
+      return (jmod & jmods) != 0;
+    }
+
+    public boolean isPresentModifiers(int modifiers) {
+      return modifier != 0 && (modifier & modifiers) != 0;
+    }
+
+    ModifierMap(int jmod, int modifier) {
+      this.jmod = jmod;
+      this.modifier = modifier;
+    }
+
+  }
+
+  public static int toModifier(int jmod) {
+    int ret = 0;
+    for (ModifierMap m : ModifierMap.values()) {
+      if (m.isPresentJMod(jmod)) {
+        ret |= m.modifier;
+      }
+    }
+    return ret;
+  }
+
+  public static int fromModifier(int modifier) {
+    int ret = 0;
+    for (ModifierMap m : ModifierMap.values()) {
+      if (m.isPresentModifiers(modifier)) {
+        ret |= m.jmod;
+      }
+    }
+    return ret;
   }
 }
