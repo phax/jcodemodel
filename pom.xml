@@ -93,7 +93,9 @@ License file that accompanied this code. Modifications: If applicable, add the f
   </contributors>
 
   <modules>
+    <module>examples</module>
     <module>jcodemodel</module>
+    <module>plugin</module>
   </modules>
 
   <dependencyManagement>
