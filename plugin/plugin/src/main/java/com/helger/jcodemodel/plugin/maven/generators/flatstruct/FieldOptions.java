@@ -1,5 +1,9 @@
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
+/**
+ * list of options to apply to fields. Those can be hold by classes or packages,
+ * represented by their {@link #parent}.
+ */
 public class FieldOptions {
 
   private FieldOptions parent = null;
@@ -70,6 +74,48 @@ public class FieldOptions {
       return parent.setter();
     }
     return DEFAULT_SETTER;
+  }
+
+  // create Instant lastUpdated
+
+  private Boolean lastUpdated = null;
+
+  public FieldOptions setLastUpdated(Boolean lastUpdated) {
+    this.lastUpdated = lastUpdated;
+    return this;
+  }
+
+  public static final boolean DEFAULT_LAST_UPDATED = false;
+
+  public boolean lastUpdated() {
+    if (lastUpdated != null) {
+      return lastUpdated;
+    }
+    if (parent != null) {
+      return parent.lastUpdated();
+    }
+    return DEFAULT_LAST_UPDATED;
+  }
+
+  // redirect field methods on the owner class
+
+  private Boolean redirect = null;
+
+  public FieldOptions setRedirect(Boolean redirect) {
+    this.redirect = redirect;
+    return this;
+  }
+
+  public static final boolean DEFAULT_REDIRECT = false;
+
+  public boolean redirect() {
+    if (redirect != null) {
+      return redirect;
+    }
+    if (parent != null) {
+      return parent.redirect();
+    }
+    return DEFAULT_REDIRECT;
   }
 
 }

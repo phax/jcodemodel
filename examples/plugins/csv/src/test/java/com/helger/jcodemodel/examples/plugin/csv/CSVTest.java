@@ -8,6 +8,7 @@ import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.examples.plugin.csv.example4.Child;
 import com.helger.jcodemodel.examples.plugin.csv.example4.Imported;
 import com.helger.jcodemodel.examples.plugin.csv.example4.Parent;
+import com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated;
 
 public class CSVTest {
 
@@ -49,6 +50,14 @@ public class CSVTest {
     Imported imported = new Imported();
     imported.setModel(new JCodeModel());
     imported.setModelArr(new JCodeModel[] {});
+  }
+
+  @Test
+  public void testExample5LastUpdated() {
+    LastUpdated test = new LastUpdated();
+    Assert.assertNull(test.getLastUpdated());
+    test.setI(5);
+    Assert.assertNotNull(test.getLastUpdated());
   }
 
 }

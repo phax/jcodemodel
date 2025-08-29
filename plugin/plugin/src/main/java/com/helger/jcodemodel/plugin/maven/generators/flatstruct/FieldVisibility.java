@@ -2,6 +2,9 @@ package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
 import com.helger.jcodemodel.JMod;
 
+/**
+ * visibility to set when constructing a field
+ */
 public enum FieldVisibility {
 
   PUBLIC(JMod.PUBLIC), PRIVATE(JMod.PRIVATE), PROTECTED(JMod.PROTECTED), PACKAGE(JMod.PROTECTED);

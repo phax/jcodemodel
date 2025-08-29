@@ -67,6 +67,19 @@
               </data>
             </configuration>
           </execution>
+          <execution>
+            <id>exec5</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated,,,set,get,private,lastupdated
+                com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated,i,int
+                com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated,s,string
+              </data>
+            </configuration>
+          </execution>
         </executions>
         <dependencies>
           <dependency>

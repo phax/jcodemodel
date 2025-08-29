@@ -1,6 +1,7 @@
 package com.helger.jcodemodel.plugin.maven.generators;
 
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,6 +56,11 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
    * classes and package options, added as we create them.
    */
   private Map<String, FieldOptions> pathOptions = new HashMap<>();
+
+  /**
+   * fully qualified class name to the lastUpdated field
+   */
+  private Map<String, JFieldVar> classLastUpdated = new HashMap<>();
 
   /**
    * create the classes files, so that we can link them dynamically ; and the
@@ -207,7 +213,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       JCodeModel model) {
     JFieldVar fv = jdc.field(options.visibility().jmod, type, fieldName);
     if (options.setter()) {
-      addSetter(fv, jdc, model);
+      addSetter(fv, jdc, model, options);
     }
     if (options.getter()) {
       addGetter(fv, jdc);
@@ -223,14 +229,30 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     meth.javadoc().add("@return the {@link #" + fv.name() + "}");
   }
 
-  protected void addSetter(JFieldVar fv, JDefinedClass jdc, JCodeModel model) {
+  protected void addSetter(JFieldVar fv, JDefinedClass jdc, JCodeModel model, FieldOptions options) {
     AbstractJType paramType = fv.type();
     String methName = "set" + Character.toUpperCase(fv.name().charAt(0))
         + (fv.name().length() < 2 ? "" : fv.name().substring(1));
     JMethod meth = jdc.method(JMod.PUBLIC, model.VOID, methName);
     JVar param = meth.param(paramType, fv.name());
     meth.body().assign(JExpr.refthis(fv), param);
+    if (options.lastUpdated()) {
+      JFieldVar lastUpdated = classLastUpdated.computeIfAbsent(jdc.fullName(),
+          n -> addLastUpdated(jdc, model));
+      meth.body().assign(JExpr.refthis(lastUpdated), model.ref(Instant.class).staticInvoke("now"));
+    }
     meth.javadoc().add("set the {@link #" + fv.name() + "}");
+  }
+
+  protected JFieldVar addLastUpdated(JDefinedClass jdc, JCodeModel model) {
+    FieldOptions ownerOptions = pathOptions.get(jdc.fullName());
+    JFieldVar lastUpdated = jdc.field(ownerOptions.visibility().jmod, model.ref(Instant.class), "lastUpdated",
+        JExpr._null());
+    lastUpdated.javadoc().add("last time the class was directly set a field using a setter");
+    if (ownerOptions.getter()) {
+      addGetter(lastUpdated, jdc);
+    }
+    return lastUpdated;
   }
 
 }

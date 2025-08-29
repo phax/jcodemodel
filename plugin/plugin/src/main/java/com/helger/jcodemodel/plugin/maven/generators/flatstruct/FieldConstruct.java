@@ -1,5 +1,8 @@
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
+/**
+ * Additional features to add when constructing fields
+ */
 public enum FieldConstruct {
 
   GETTER {
@@ -25,6 +28,32 @@ public enum FieldConstruct {
     public void apply(FieldOptions opt) {
       opt.setSetter(false);
     }
+  },
+  LASTUPDATED {
+    @Override
+    public void apply(FieldOptions opt) {
+      opt.setLastUpdated(true);
+
+    }
+  },
+  NOLASTUPDATED {
+  @Override
+    public void apply(FieldOptions opt) {
+      opt.setLastUpdated(false);
+    }
+  },
+  REDIRECT {
+    @Override
+    public void apply(FieldOptions opt) {
+      opt.setRedirect(true);
+
+    }
+  },
+  NOREDIRECT {
+    @Override
+    public void apply(FieldOptions opt) {
+      opt.setRedirect(false);
+    }
   };
 
   public abstract void apply(FieldOptions opt);
@@ -38,6 +67,10 @@ public enum FieldConstruct {
     case "nogetter", "noget" -> NOGETTER;
     case "setter", "set" -> SETTER;
     case "nosetter", "noset" -> NOSETTER;
+    case "lastupdated", "updated" -> LASTUPDATED;
+    case "nolastupdated", "noupdated" -> NOLASTUPDATED;
+    case "redirect" -> REDIRECT;
+    case "noredirect" -> NOREDIRECT;
     default -> null;
     };
   }
