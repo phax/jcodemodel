@@ -183,11 +183,22 @@ public class JMods implements IJGenerable
     _setFlag (JMod.PRIVATE, true);
   }
 
+  public boolean isPrivate ()
+  {
+    return (m_nMods & JMod.PRIVATE) != 0;
+  }
+  
+
   public void setPackagePrivate ()
   {
     _setFlag (JMod.PUBLIC, false);
     _setFlag (JMod.PROTECTED, false);
     _setFlag (JMod.PRIVATE, false);
+  }
+
+  public boolean isPackagePrivate ()
+  {
+    return (m_nMods & (JMod.PUBLIC | JMod.PROTECTED | JMod.PRIVATE)) == 0;
   }
 
   public void setProtected ()
@@ -197,6 +208,11 @@ public class JMods implements IJGenerable
     _setFlag (JMod.PRIVATE, false);
   }
 
+  public boolean isProtected ()
+  {
+    return (m_nMods & JMod.PROTECTED) != 0;
+  }
+
   public void setPublic ()
   {
     _setFlag (JMod.PUBLIC, true);
@@ -204,9 +220,19 @@ public class JMods implements IJGenerable
     _setFlag (JMod.PRIVATE, false);
   }
 
+  public boolean isPublic ()
+  {
+    return (m_nMods & JMod.PUBLIC) != 0;
+  }
+
   public void setFinal (final boolean bNewValue)
   {
     _setFlag (JMod.FINAL, bNewValue);
+  }
+
+  public boolean isFinal ()
+  {
+    return (m_nMods & JMod.FINAL) != 0;
   }
 
   private void _setFlag (final int bit, final boolean bNewValue)
