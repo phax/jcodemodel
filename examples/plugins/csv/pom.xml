@@ -77,6 +77,14 @@
                 com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated,,,set,get,private,lastupdated
                 com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated,i,int
                 com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated,s,string
+                
+                com.helger.jcodemodel.examples.plugin.csv.example5.ABC,,,private,get,set
+                com.helger.jcodemodel.examples.plugin.csv.example5.ABC,a,int
+                com.helger.jcodemodel.examples.plugin.csv.example5.ABC,b,bool
+                com.helger.jcodemodel.examples.plugin.csv.example5.ABC,c,char
+                com.helger.jcodemodel.examples.plugin.csv.example5.Redirected,,,private,redirect
+                com.helger.jcodemodel.examples.plugin.csv.example5.Redirected,abc,ABC,set
+                com.helger.jcodemodel.examples.plugin.csv.example5.Redirected,jCatchBlock,com.helger.jcodemodel.JCatchBlock,set
               </data>
             </configuration>
           </execution>

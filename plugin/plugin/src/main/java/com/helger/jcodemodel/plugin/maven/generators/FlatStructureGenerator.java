@@ -1,6 +1,8 @@
 package com.helger.jcodemodel.plugin.maven.generators;
 
 import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,14 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.helger.jcodemodel.AbstractJType;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
@@ -39,6 +34,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     updateParentOptions(records);
     applyInheritance(records);
     createFields(model, records);
+    applyRedirects(model, records);
   }
 
   /**
@@ -253,6 +249,82 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       addGetter(lastUpdated, jdc);
     }
     return lastUpdated;
+  }
+
+  protected void applyRedirects(JCodeModel model, List<FlatStructRecord> records) {
+    for (FlatStructRecord rec : records) {
+      if (rec instanceof SimpleField af) {
+        if (af.options().redirect()) {
+          if (af.arrayDepth() > 0) {
+            continue;
+          }
+          JDefinedClass fieldOwner = Objects.requireNonNull(definedClasses.get(af.fullyQualifiedClassName()),
+              "can't find defined class " + af.fullyQualifiedClassName() + " for field " + af);
+          AbstractJType fieldType = resolveType(model, af.fieldInternalClassName());
+          if (fieldType instanceof JDefinedClass jdc) {
+            applyRedirect(model, af, fieldOwner, jdc);
+          } else if (fieldType instanceof JReferencedClass jrc) {
+            applyRedirect(model, af, fieldOwner, jrc.getReferencedClass());
+          } else {
+            throw new UnsupportedOperationException("can't apply redirect to " + fieldType + " "
+                + af.fieldClassName() + "::" + af.fieldName());
+          }
+        }
+      }
+    }
+  }
+
+
+  protected void applyRedirect(JCodeModel model, SimpleField af, JDefinedClass fieldOwner,
+      JDefinedClass fieldType) {
+    for (JMethod m : fieldType.methods()) {
+
+      if (m.mods().isPublic() && !m.mods().isStatic()) {
+        int mods = redirectMethodMods(m.mods().getValue());
+        JMethod newMeth = fieldOwner.method(mods, m.type(), m.name());
+        JInvocation call = JExpr.invoke(JExpr.ref(af.fieldName()), m.name());
+        for (JVar p : m.params()) {
+          call.arg(newMeth.param(p.type(), p.name()));
+        }
+        if (newMeth.type().equals(model.VOID)) {
+          newMeth.body().add(call);
+        } else {
+          newMeth.body()._return(call);
+        }
+      }
+    }
+
+  }
+
+  protected void applyRedirect(JCodeModel model, SimpleField af, JDefinedClass fieldOwner,
+      Class<?> fieldClass) {
+    if (fieldClass.isPrimitive()) {
+      return;
+    }
+    for (Method m : fieldClass.getMethods()) {
+      if (m.getDeclaringClass() == Object.class) {
+        continue;
+      }
+      System.err.println("redirecting method " + m);
+      int mods = redirectMethodMods(JMod.PUBLIC);
+      JMethod newMeth = fieldOwner.method(mods, m.getReturnType(), m.getName());
+      JInvocation call = JExpr.invoke(JExpr.ref(af.fieldName()), m.getName());
+      for (Parameter p : m.getParameters()) {
+        call.arg(newMeth.param(p.getType(), p.getName()));
+      }
+      if (newMeth.type().equals(model.VOID)) {
+        newMeth.body().add(call);
+      } else {
+        newMeth.body()._return(call);
+      }
+    }
+  }
+
+  static int redirectMethodMods(int jmods) {
+    // remove the synchronized and strict modifiers from the calling method.
+    return jmods
+        & ~JMod.SYNCHRONIZED
+        & ~JMod.STRICTFP;
   }
 
 }

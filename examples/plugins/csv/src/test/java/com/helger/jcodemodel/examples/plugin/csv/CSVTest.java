@@ -8,7 +8,9 @@ import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.examples.plugin.csv.example4.Child;
 import com.helger.jcodemodel.examples.plugin.csv.example4.Imported;
 import com.helger.jcodemodel.examples.plugin.csv.example4.Parent;
+import com.helger.jcodemodel.examples.plugin.csv.example5.ABC;
 import com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated;
+import com.helger.jcodemodel.examples.plugin.csv.example5.Redirected;
 
 public class CSVTest {
 
@@ -58,6 +60,17 @@ public class CSVTest {
     Assert.assertNull(test.getLastUpdated());
     test.setI(5);
     Assert.assertNotNull(test.getLastUpdated());
+  }
+
+  @Test
+  public void testExample5Redirect() {
+    ABC abc = new ABC();
+    Redirected redirected = new Redirected();
+    redirected.setAbc(abc);
+    abc.setA(49);
+    Assert.assertEquals(49, redirected.getA());
+    abc.setA(404);
+    Assert.assertEquals(404, redirected.getA());
   }
 
 }
