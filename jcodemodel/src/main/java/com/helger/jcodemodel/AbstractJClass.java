@@ -53,18 +53,18 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 /**
- * Represents a Java reference type, such as a class, an interface, an enum, an
- * array type, a parameterized type.
+ * Represents a Java reference type, such as a class, an interface, an enum, an array type, a
+ * parameterized type.
  * <p>
- * To be exact, this object represents an "use" of a reference type, not
- * necessarily a declaration of it, which is modeled as {@link JDefinedClass}.
+ * To be exact, this object represents an "use" of a reference type, not necessarily a declaration
+ * of it, which is modeled as {@link JDefinedClass}.
  */
 public abstract class AbstractJClass extends AbstractJType
 {
   /**
    * Sometimes useful reusable empty array.
    */
-  public static final JTypeVar [] EMPTY_ARRAY = new JTypeVar [0];
+  public static final JTypeVar [] EMPTY_ARRAY = {};
 
   private final JCodeModel m_aOwner;
   private JArrayClass m_aArrayClass;
@@ -77,25 +77,23 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Gets the name of this class.
    *
-   * @return name of this class, without any qualification. For example, this
-   *         method returns "String" for <code>java.lang.String</code>.
+   * @return name of this class, without any qualification. For example, this method returns
+   *         "String" for <code>java.lang.String</code>.
    */
   @Override
   public abstract String name ();
 
   /**
-   * Gets the package to which this class belongs. TODO: shall we move move this
-   * down?
+   * Gets the package to which this class belongs. TODO: shall we move move this down?
    *
-   * @return The {@link JPackage} this class belongs to. Is usually not
-   *         <code>null</code> except for the {@link JTypeVar} and the
-   *         {@link JTypeWildcard} implementation.
+   * @return The {@link JPackage} this class belongs to. Is usually not <code>null</code> except for
+   *         the {@link JTypeVar} and the {@link JTypeWildcard} implementation.
    */
   public abstract JPackage _package ();
 
   /**
-   * @return the class in which this class is nested, or <tt>null</tt> if this
-   *         is a top-level class.
+   * @return the class in which this class is nested, or <code>null</code> if this is a top-level
+   *         class.
    */
   @Nullable
   public AbstractJClass outer ()
@@ -112,12 +110,11 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Gets the super class of this class.
    *
-   * @return Returns the {@link AbstractJClass} representing the superclass of
-   *         the entity (class or interface) represented by this
-   *         {@link AbstractJClass}. Even if no super class is given explicitly
-   *         or this {@link AbstractJClass} is not a class, this method still
-   *         returns {@link AbstractJClass} for {@link Object}. If this
-   *         {@link AbstractJClass} represents {@link Object}, return null.
+   * @return Returns the {@link AbstractJClass} representing the superclass of the entity (class or
+   *         interface) represented by this {@link AbstractJClass}. Even if no super class is given
+   *         explicitly or this {@link AbstractJClass} is not a class, this method still returns
+   *         {@link AbstractJClass} for {@link Object}. If this {@link AbstractJClass} represents
+   *         {@link Object}, return null.
    */
   @Nullable
   public abstract AbstractJClass _extends ();
@@ -125,9 +122,8 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Iterates all super interfaces directly implemented by this class/interface.
    *
-   * @return A non-null valid iterator that iterates all {@link AbstractJClass}
-   *         objects that represents those interfaces implemented by this
-   *         object.
+   * @return A non-null valid iterator that iterates all {@link AbstractJClass} objects that
+   *         represents those interfaces implemented by this object.
    */
   @Nonnull
   public abstract Iterator <AbstractJClass> _implements ();
@@ -144,8 +140,8 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * @return If this class represents one of the wrapper classes defined in the
-   *         <code>java.lang</code> package, return the corresponding primitive
-   *         type. Otherwise <code>null</code>.
+   *         <code>java.lang</code> package, return the corresponding primitive type. Otherwise
+   *         <code>null</code>.
    */
   @Nullable
   public JPrimitiveType getPrimitiveType ()
@@ -154,9 +150,8 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * @deprecated calling this method from {@link AbstractJClass} would be
-   *             meaningless, since it's always guaranteed to return
-   *             <tt>this</tt>.
+   * @deprecated calling this method from {@link AbstractJClass} would be meaningless, since it's
+   *             always guaranteed to return <code>this</code>.
    */
   @Deprecated
   @Override
@@ -205,8 +200,8 @@ public abstract class AbstractJClass extends AbstractJType
    *
    * @param aBaseType
    *        The class whose parameterization we are interested in.
-   * @return The use of {@code baseType} in {@code this} type. or null if the
-   *         type is not assignable to the base type.
+   * @return The use of {@code baseType} in {@code this} type. or null if the type is not assignable
+   *         to the base type.
    */
   @Nullable
   public final AbstractJClass getBaseClass (@Nonnull final AbstractJClass aBaseType)
@@ -249,10 +244,8 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * "Narrows" a generic class to a concrete class by specifying a type
-   * argument.<br>
-   * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from
-   * <code>Set</code>.
+   * "Narrows" a generic class to a concrete class by specifying a type argument.<br>
+   * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from <code>Set</code>.
    *
    * @param aClazz
    *        class to narrow with
@@ -274,10 +267,8 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * "Narrows" a generic class to a concrete class by specifying a type
-   * argument. <br>
-   * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from
-   * <code>Set</code>.
+   * "Narrows" a generic class to a concrete class by specifying a type argument. <br>
+   * <code>.narrow(X)</code> builds <code>Set&lt;X&gt;</code> from <code>Set</code>.
    *
    * @param aClazz
    *        class to narrow with
@@ -308,8 +299,7 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * @return A narrowed type without any type parameter (as in
-   *         <code>HashMap &lt;&gt;</code>)
+   * @return A narrowed type without any type parameter (as in <code>HashMap &lt;&gt;</code>)
    */
   @Nonnull
   public AbstractJClass narrowEmpty ()
@@ -318,8 +308,7 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * @return A narrowed type just with a "?" parameter (as in
-   *         <code>HashMap &lt;?&gt;</code>)
+   * @return A narrowed type just with a "?" parameter (as in <code>HashMap &lt;?&gt;</code>)
    * @since 3.0.0
    */
   @Nonnull
@@ -329,8 +318,7 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * @return If this class is parameterized, the type parameters of the given
-   *         index.
+   * @return If this class is parameterized, the type parameters of the given index.
    */
   @Nonnull
   public List <? extends AbstractJClass> getTypeParameters ()
@@ -340,9 +328,8 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Iterates all the type parameters of this class/interface. <br>
-   * For example, if this {@link AbstractJClass} represents
-   * <code>Set&lt;T&gt;</code>, this method returns an array that contains
-   * single {@link JTypeVar} for 'T'.
+   * For example, if this {@link AbstractJClass} represents <code>Set&lt;T&gt;</code>, this method
+   * returns an array that contains single {@link JTypeVar} for 'T'.
    *
    * @return All type parameters as array.
    */
@@ -411,9 +398,9 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * Substitutes the type variables with their actual arguments. <br>
-   * For example, when this class is Map&lt;String,Map&lt;V&gt;&gt;, (where V
-   * then doing substituteParams( V, Integer ) returns a {@link AbstractJClass}
-   * for <code>Map&lt;String,Map&lt;Integer&gt;&gt;</code>. <br>
+   * For example, when this class is Map&lt;String,Map&lt;V&gt;&gt;, (where V then doing
+   * substituteParams( V, Integer ) returns a {@link AbstractJClass} for
+   * <code>Map&lt;String,Map&lt;Integer&gt;&gt;</code>. <br>
    * This method needs to work recursively.
    *
    * @param aVariables
@@ -423,7 +410,8 @@ public abstract class AbstractJClass extends AbstractJType
    * @return Never <code>null</code>.
    */
   @Nonnull
-  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables, @Nonnull List <? extends AbstractJClass> aBindings);
+  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables,
+                                                      @Nonnull List <? extends AbstractJClass> aBindings);
 
   /**
    * Get all inner classes of this class.
@@ -444,8 +432,8 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * Check if this class is a class container and if so try to find the inner
-   * class with the provided name.
+   * Check if this class is a class container and if so try to find the inner class with the
+   * provided name.
    *
    * @param sName
    *        The name to check. May be <code>null</code>.
@@ -523,8 +511,8 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   /**
-   * Method reference for JDK8 (as in <code>String::valueOf</code>) for the
-   * special <code>::new</code>.
+   * Method reference for JDK8 (as in <code>String::valueOf</code>) for the special
+   * <code>::new</code>.
    *
    * @return Newly created {@link JLambdaMethodRef}
    * @since 3.2.4
@@ -550,8 +538,7 @@ public abstract class AbstractJClass extends AbstractJType
 
   /**
    * @param sName
-   *        Enumeration constant name. May neither be <code>null</code> nor
-   *        empty.
+   *        Enumeration constant name. May neither be <code>null</code> nor empty.
    * @return <code>class.name</code>
    * @since 3.2.4
    */

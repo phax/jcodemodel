@@ -45,14 +45,12 @@ import jakarta.annotation.Nonnull;
 /**
  * A Java expression.
  * <p>
- * Unlike most of CodeModel, JExpressions are built bottom-up ( meaning you
- * start from leaves and then gradually build complicated expressions by
- * combining them.)
+ * Unlike most of CodeModel, JExpressions are built bottom-up ( meaning you start from leaves and
+ * then gradually build complicated expressions by combining them.)
  * <p>
- * {@link IJExpression} defines a series of composer methods, which returns a
- * complicated expression (by often taking other {@link IJExpression}s as
- * parameters. For example, you can build "5+2" by
- * <tt>JExpr.lit(5).add(JExpr.lit(2))</tt>
+ * {@link IJExpression} defines a series of composer methods, which returns a complicated expression
+ * (by often taking other {@link IJExpression}s as parameters. For example, you can build "5+2" by
+ * <code>JExpr.lit(5).add(JExpr.lit(2))</code>
  */
 public interface IJExpression extends IJGenerable
 {
@@ -66,7 +64,7 @@ public interface IJExpression extends IJGenerable
   }
 
   /**
-   * Logical 'not' <tt>'!x'</tt>.
+   * Logical 'not' <code>'!x'</code>.
    *
    * @return <code>![this]" from "[this]</code>.
    */
@@ -740,8 +738,8 @@ public interface IJExpression extends IJGenerable
   /**
    * @param aMethod
    *        Method to be invoked
-   * @return <code>[this].[method]</code>. Arguments shall be added to the
-   *         returned {@link JInvocation} object.
+   * @return <code>[this].[method]</code>. Arguments shall be added to the returned
+   *         {@link JInvocation} object.
    */
   @Nonnull
   default JInvocation invoke (@Nonnull final JMethod aMethod)
@@ -752,8 +750,8 @@ public interface IJExpression extends IJGenerable
   /**
    * @param sMethod
    *        name of the method to invoke
-   * @return <code>[this].[method]</code>. Arguments shall be added to the
-   *         returned {@link JInvocation} object.
+   * @return <code>[this].[method]</code>. Arguments shall be added to the returned
+   *         {@link JInvocation} object.
    */
   @Nonnull
   default JInvocation invoke (@Nonnull final String sMethod)

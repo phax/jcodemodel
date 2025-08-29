@@ -77,7 +77,7 @@ public final class JOp
   }
 
   /**
-   * Logical not <tt>'!x'</tt>.
+   * Logical not <code>'!x'</code>.
    *
    * @param aExpr
    *        Expression to invert

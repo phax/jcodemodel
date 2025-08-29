@@ -61,15 +61,17 @@ import jakarta.annotation.Nullable;
 /**
  * A generated Java class/interface/enum/....
  * <p>
- * This class models a declaration, and since a declaration can be always used
- * as a reference, it inherits {@link AbstractJClass}.
+ * This class models a declaration, and since a declaration can be always used as a reference, it
+ * inherits {@link AbstractJClass}.
  * <h2>Where to go from here?</h2>
  * <p>
  * You'd want to generate fields and methods on a class. See
- * {@link #method(int, AbstractJType, String)} and
- * {@link #field(int, AbstractJType, String)}.
+ * {@link #method(int, AbstractJType, String)} and {@link #field(int, AbstractJType, String)}.
  */
-public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> implements IJGenerifiable, IJAnnotatable, IJDocCommentable
+public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> implements
+                           IJGenerifiable,
+                           IJAnnotatable,
+                           IJDocCommentable
 {
   /**
    * The optional header that is emitted prior to the package (Issue #47)
@@ -122,10 +124,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   private final List <JMethod> m_aMethods = new ArrayList <> ();
 
   /**
-   * Flag that controls whether this class should be really generated or not.
-   * Sometimes it is useful to generate code that refers to class X, without
-   * actually generating the code of X. This flag is used to suppress X.java
-   * file in the output.
+   * Flag that controls whether this class should be really generated or not. Sometimes it is useful
+   * to generate code that refers to class X, without actually generating the code of X. This flag
+   * is used to suppress X.java file in the output.
    */
   private boolean m_bHideFile = false;
 
@@ -135,9 +136,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   private String m_sDirectBlock;
 
   /**
-   * Set of enum constants that are keyed by names. In Java, enum constant order
-   * is actually significant, because of order ID they get. So let's preserve
-   * the order.
+   * Set of enum constants that are keyed by names. In Java, enum constant order is actually
+   * significant, because of order ID they get. So let's preserve the order.
    */
   private final Map <String, JEnumConstant> m_aEnumConstantsByName = new LinkedHashMap <> ();
 
@@ -235,8 +235,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
-   * @return the current modifiers of this class. Always return non-null valid
-   *         object.
+   * @return the current modifiers of this class. Always return non-null valid object.
    */
   @Nonnull
   public JMods mods ()
@@ -327,9 +326,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
-   * If the named enum already exists, the reference to it is returned.
-   * Otherwise this method generates a new enum reference with the given name
-   * and returns it.
+   * If the named enum already exists, the reference to it is returned. Otherwise this method
+   * generates a new enum reference with the given name and returns it.
    *
    * @param sName
    *        The name of the constant.
@@ -339,6 +337,18 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   public JEnumConstant enumConstant (@Nonnull final String sName)
   {
     return m_aEnumConstantsByName.computeIfAbsent (sName, k -> new JEnumConstant (this, k));
+  }
+
+  /**
+   * Check if a specific enum constant name is already in use
+   * 
+   * @param sName
+   *        Enum constant name to check. May not be <code>null</code>.
+   * @return <code>true</code> if it is contained, <code>false</code> otherwise
+   */
+  public boolean containsEnumConstant (@Nonnull final String sName)
+  {
+    return m_aEnumConstantsByName.containsKey (sName);
   }
 
   @Override
@@ -422,8 +432,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
-   * Returns all the fields declared in this class. The returned {@link Map} is
-   * a read-only live view.
+   * Returns all the fields declared in this class. The returned {@link Map} is a read-only live
+   * view.
    *
    * @return always non-null.
    */
@@ -450,15 +460,16 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   /**
    * @param sName
    *        Field name to check. May be <code>null</code>.
-   * @return <code>true</code> if such a field is contained, <code>false</code>
-   *         otherwise.
+   * @return <code>true</code> if such a field is contained, <code>false</code> otherwise.
    */
   public boolean containsField (@Nullable final String sName)
   {
     return sName != null && m_aFields.containsKey (sName);
   }
 
-  void internalRenameField (@Nonnull final String sOldName, @Nonnull final String sNewName, @Nonnull final JFieldVar aField)
+  void internalRenameField (@Nonnull final String sOldName,
+                            @Nonnull final String sNewName,
+                            @Nonnull final JFieldVar aField)
   {
     if (m_aFields.remove (sOldName) == null)
       throw new IllegalArgumentException ("Failed to remove field with name '" +
@@ -590,8 +601,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
-   * @return <code>true</code> if a header comment (before the package) is
-   *         present, <code>false</code> if not.
+   * @return <code>true</code> if a header comment (before the package) is present,
+   *         <code>false</code> if not.
    */
   public boolean hasHeaderComment ()
   {
@@ -599,8 +610,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
-   * @return The optional header comment that is emitted BEFORE the package (so
-   *         e.g. for license headers). Never <code>null</code>.
+   * @return The optional header comment that is emitted BEFORE the package (so e.g. for license
+   *         headers). Never <code>null</code>.
    */
   @Nonnull
   public JDocComment headerComment ()
@@ -620,8 +631,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
 
   /**
    * Mark this file as hidden, so that this file won't be generated. <br>
-   * This feature could be used to generate code that refers to class X, without
-   * actually generating X.java.
+   * This feature could be used to generate code that refers to class X, without actually generating
+   * X.java.
    */
   public void hide ()
   {
@@ -728,9 +739,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
-   * Places the given string directly inside the generated class. This method
-   * can be used to add methods/fields that are not generated by CodeModel. This
-   * method should be used only as the last resort.
+   * Places the given string directly inside the generated class. This method can be used to add
+   * methods/fields that are not generated by CodeModel. This method should be used only as the last
+   * resort.
    *
    * @param string
    *        Direct code block
@@ -780,7 +791,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   @Override
-  protected AbstractJClass substituteParams (final JTypeVar [] aVariables, final List <? extends AbstractJClass> aBindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] aVariables,
+                                             final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }
@@ -842,11 +854,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
-   * Returns true if this class or it's inner classes contains references to
-   * error-types.
+   * Returns true if this class or it's inner classes contains references to error-types.
    *
-   * @return <code>true</code> if an error type is contained, <code>false</code>
-   *         otherwise
+   * @return <code>true</code> if an error type is contained, <code>false</code> otherwise
    * @see JErrorClass
    */
   public boolean containsErrorTypes ()

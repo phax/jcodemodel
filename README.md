@@ -22,7 +22,7 @@ Add the following to your pom.xml to use this artifact:
 
 # News and noteworthy
 
-v4.0.0 - work in progress
+v4.0.0 - 2025-08-25
 * Requires Java 17 as the minimum version
 * Using `ph-commons` as a compile dependency for common stuff
 * Moved all exceptions to `exceptions` package
