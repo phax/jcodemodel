@@ -1,5 +1,6 @@
 package com.helger.jcodemodel.plugin.generators.helloworld;
 
+import java.io.InputStream;
 import java.util.Map;
 
 import com.helger.jcodemodel.JCodeModel;
@@ -21,7 +22,7 @@ public class HelloWorldGenerator implements CodeModelBuilder {
   }
 
   @Override
-  public void build(JCodeModel model) throws JCodeModelException {
+  public void build(JCodeModel model, InputStream source) throws JCodeModelException {
     JDefinedClass cl = model._class(className);
     cl.field(JMod.PUBLIC, model._ref(String.class), "value", JExpr.lit(value));
   }
