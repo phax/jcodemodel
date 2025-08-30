@@ -1,5 +1,5 @@
-com.helger.jcodemodel.examples.plugin.csv.Example1
-com.helger.jcodemodel.examples.plugin.csv.Example1b,i,int
-com.helger.jcodemodel.examples.plugin.csv.Example1b,c,char
-com.helger.jcodemodel.examples.plugin.csv.Example1b,s,string
-com.helger.jcodemodel.examples.plugin.csv.Example1b,sarr,string[]
+com.helger.jcodemodel.examples.plugin.csv.basic.Example1
+com.helger.jcodemodel.examples.plugin.csv.basic.Example1b,i,int
+com.helger.jcodemodel.examples.plugin.csv.basic.Example1b,c,char
+com.helger.jcodemodel.examples.plugin.csv.basic.Example1b,s,string
+com.helger.jcodemodel.examples.plugin.csv.basic.Example1b,sarr,string[]

@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.examples.plugin.csv;
+package com.helger.jcodemodel.examples.plugin.csv.basic;
 
 public class Example1b {
     public int i;

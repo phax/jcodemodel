@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.examples.plugin.csv.example4;
+package com.helger.jcodemodel.examples.plugin.csv.resolve;
 
 import com.helger.jcodemodel.JCodeModel;
 

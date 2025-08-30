@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.examples.plugin.csv.example5;
+package com.helger.jcodemodel.examples.plugin.csv.redirect;
 
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.IJFormatter;

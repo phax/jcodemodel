@@ -53,6 +53,9 @@ public class CSVGenerator extends FlatStructureGenerator {
         fieldClassName = fieldClassName.replaceFirst("\\[\\]", "").trim();
       }
     }
+    if (fieldClassName != null && fieldClassName.isBlank()) {
+      fieldClassName = null;
+    }
     FieldOptions options = new FieldOptions();
     if (spl.length >= 4) {
       for (int i = 3; i < spl.length; i++) {
@@ -79,7 +82,7 @@ public class CSVGenerator extends FlatStructureGenerator {
       if (className.contains(" ")) {
         return new PackageCreation(className.replaceAll(".* ", ""), options);
       } else {
-        return new ClassCreation(className, options);
+        return new ClassCreation(className, fieldClassName, options);
       }
     } else {
       return new SimpleField(className, fieldName, fieldClassName, arrayDepth, options);

@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.examples.plugin.csv.example5;
+package com.helger.jcodemodel.examples.plugin.csv.redirect;
 
 import java.io.PrintStream;
 import java.io.PrintWriter;

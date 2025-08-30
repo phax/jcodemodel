@@ -19,7 +19,8 @@
         <artifactId>jcodemodel-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>exec1</id>
+          <!-- create claass with primitive, string, or array fields, from a file-->
+            <id>basicfile</id>
             <goals>
               <goal>generate-source</goal>
             </goals>
@@ -28,65 +29,94 @@
             </configuration>
           </execution>
           <execution>
-            <id>exec2</id>
+          <!--create field with multiple level array-->
+            <id>deeparray</id>
             <goals>
               <goal>generate-source</goal>
             </goals>
             <configuration>
               <data>
-                com.helger.jcodemodel.examples.plugin.csv.Example2,iarr,int[]
-                com.helger.jcodemodel.examples.plugin.csv.Example2,darr,double [] []
+                com.helger.jcodemodel.examples.plugin.csv.deeparray.Example2,iarr,int[]
+                com.helger.jcodemodel.examples.plugin.csv.deeparray.Example2,darr,double [] []
               </data>
             </configuration>
           </execution>
           <execution>
-            <id>exec3</id>
+          <!-- create classes with getters/setter-->
+            <id>getset</id>
             <goals>
               <goal>generate-source</goal>
             </goals>
             <configuration>
               <data>
-                com.helger.jcodemodel.examples.plugin.csv.Example3,i,int,private,set,get
-                com.helger.jcodemodel.examples.plugin.csv.Example3,sarr,string [],protected,noget,get
+                com.helger.jcodemodel.examples.plugin.csv.getset.Example3,i,int,private,set,get
+                com.helger.jcodemodel.examples.plugin.csv.getset.Example3,sarr,string [],protected,noget,get
               </data>
             </configuration>
           </execution>
           <execution>
-            <id>exec4</id>
+          <!--create elments which refer to other created elements in a cycle-->
+            <id>resolve</id>
             <goals>
               <goal>generate-source</goal>
             </goals>
             <configuration>
               <data>
-                p com.helger.jcodemodel.examples.plugin.csv.example4,,,get
-                com.helger.jcodemodel.examples.plugin.csv.example4.Parent,children,Child[],set,private
-                com.helger.jcodemodel.examples.plugin.csv.example4.Child,parent,Parent,private,set
-                com.helger.jcodemodel.examples.plugin.csv.example4.Imported,,,set
-                com.helger.jcodemodel.examples.plugin.csv.example4.Imported,model,com.helger.jcodemodel.JCodeModel,private
-                com.helger.jcodemodel.examples.plugin.csv.example4.Imported,modelArr,com.helger.jcodemodel.JCodeModel[],private
+                p com.helger.jcodemodel.examples.plugin.csv.resolve,,,get
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Parent,children,Child[],set,private
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Child,parent,Parent,private,set
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Imported,,,set
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Imported,model,com.helger.jcodemodel.JCodeModel,private
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Imported,modelArr,com.helger.jcodemodel.JCodeModel[],private
               </data>
             </configuration>
           </execution>
           <execution>
-            <id>exec5</id>
+          <!-- add lastUpdated field modified by using setters-->
+            <id>lastupdated</id>
             <goals>
               <goal>generate-source</goal>
             </goals>
             <configuration>
               <data>
-                com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated,,,set,get,private,lastupdated
-                com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated,i,int
-                com.helger.jcodemodel.examples.plugin.csv.example5.LastUpdated,s,string
+                com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated,,,set,get,private,lastupdated
+                com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated,i,int
+                com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated,s,string
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+            <id>redirect</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,,,private,get,set
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,a,int
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,b,bool
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,c,char
+                com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected,,,private,redirect
+                com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected,abc,ABC,set
+                com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected,jCatchBlock,com.helger.jcodemodel.JCatchBlock,set
                 
-                com.helger.jcodemodel.examples.plugin.csv.example5.ABC,,,private,get,set
-                com.helger.jcodemodel.examples.plugin.csv.example5.ABC,a,int
-                com.helger.jcodemodel.examples.plugin.csv.example5.ABC,b,bool
-                com.helger.jcodemodel.examples.plugin.csv.example5.ABC,c,char
-                com.helger.jcodemodel.examples.plugin.csv.example5.Redirected,,,private,redirect
-                com.helger.jcodemodel.examples.plugin.csv.example5.Redirected,abc,ABC,set
-                com.helger.jcodemodel.examples.plugin.csv.example5.Redirected,jCatchBlock,com.helger.jcodemodel.JCatchBlock,set
-                
-                com.helger.jcodemodel.examples.plugin.csv.example5.ClassRedirect,e,java.lang.ArrayIndexOutOfBoundsException,set,redirect
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ClassRedirect,e,java.lang.ArrayIndexOutOfBoundsException,set,redirect
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+            <id>inherit</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                p com.helger.jcodemodel.examples.plugin.csv.inherit,,,set,get,private
+                com.helger.jcodemodel.examples.plugin.csv.inherit.Point,x,int
+                com.helger.jcodemodel.examples.plugin.csv.inherit.Point,y,int
+                com.helger.jcodemodel.examples.plugin.csv.inherit.City,,Point
+                com.helger.jcodemodel.examples.plugin.csv.inherit.City,name,string
+                com.helger.jcodemodel.examples.plugin.csv.inherit.City,zip,int
               </data>
             </configuration>
           </execution>

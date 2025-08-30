@@ -33,7 +33,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     List<FlatStructRecord> records = loadSource(source).toList();
     createClasses(model, records);
     updateParentOptions(records);
-    applyInheritance(records);
+    applyInheritance(model, records);
     createFields(model, records);
     applyRedirects(model, records);
   }
@@ -115,7 +115,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     String search = fullChildName;
     FieldOptions found = null;
     do {
-      // remove last dot token
+      // remove last element of the path
       int idx = search.lastIndexOf('.');
       search = idx > -1 ? search.substring(0, idx) : null;
       found = pathOptions.get(search);
@@ -126,7 +126,29 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   /**
    * make the classes extends or implement their parent classes, if any
    */
-  protected void applyInheritance(List<FlatStructRecord> records) {
+  protected void applyInheritance(JCodeModel model, List<FlatStructRecord> records) {
+    for (FlatStructRecord rec : records) {
+      if (rec instanceof ClassCreation cc) {
+        if (cc.parentClassName() != null && !cc.parentClassName().isBlank()) {
+          AbstractJType parentType = resolveType(model, cc.parentClassName());
+          if (parentType == null) {
+            throw new RuntimeException("can't resolve type " + cc.parentClassName() + " as parent of "
+                + cc.fullyQualifiedClassName());
+          }
+          if (parentType instanceof JPrimitiveType jpt) {
+            throw new RuntimeException(
+                "class " + cc.fullyQualifiedClassName() + " cannot extend the primitive class " + jpt);
+          }
+          AbstractJClass parentJClass = (AbstractJClass) parentType;
+          JDefinedClass ownerClass = definedClasses.get(cc.fullyQualifiedClassName());
+          if (parentJClass.isInterface()) {
+            ownerClass._implements(parentJClass);
+          } else {
+            ownerClass._extends(parentJClass);
+          }
+        }
+      }
+    }
 
   }
 

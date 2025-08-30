@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.examples.plugin.csv;
+package com.helger.jcodemodel.examples.plugin.csv.getset;
 
 public class Example3 {
     private int i;

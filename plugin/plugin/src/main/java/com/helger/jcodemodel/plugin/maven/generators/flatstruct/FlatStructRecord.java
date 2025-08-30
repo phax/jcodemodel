@@ -13,7 +13,8 @@ public sealed interface FlatStructRecord {
   /**
    * create a class, with options
    */
-  public record ClassCreation(String fullyQualifiedClassName, FieldOptions options) implements FlatStructRecord {
+  public record ClassCreation(String fullyQualifiedClassName, String parentClassName, FieldOptions options)
+      implements FlatStructRecord {
   }
 
   /**

@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.examples.plugin.csv.example4;
+package com.helger.jcodemodel.examples.plugin.csv.resolve;
 
 public class Child {
     private Parent parent;
