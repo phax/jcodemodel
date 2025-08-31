@@ -147,6 +147,26 @@ public class JMods implements IJGenerable
     return (m_nMods & JMod.NATIVE) != 0;
   }
 
+  public boolean isPackagePrivate ()
+  {
+    return (m_nMods & JMod.PUBLIC|JMod.PRIVATE|JMod.PROTECTED) == 0;
+  }
+
+  public boolean isPublic ()
+  {
+    return (m_nMods & JMod.PUBLIC) != 0;
+  }
+
+  public boolean isPrivate ()
+  {
+    return (m_nMods & JMod.PRIVATE) != 0;
+  }
+
+  public boolean isProtected ()
+  {
+    return (m_nMods & JMod.PROTECTED) != 0;
+  }
+
   public boolean isStatic ()
   {
     return (m_nMods & JMod.STATIC) != 0;

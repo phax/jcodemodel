@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.util.ClassNameComparator;
@@ -528,6 +529,14 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   public Iterator <JMethod> constructors ()
   {
     return m_aConstructors.iterator ();
+  }
+  
+  /**
+   * @return a stream of the declared constructors
+   */
+  public Stream<JMethod> constructorsStream()
+  {
+    return m_aConstructors.stream();
   }
 
   /**
