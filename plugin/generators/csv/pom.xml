@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.helger.jcodemodel.plugin</groupId>
     <artifactId>generators</artifactId>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>4.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
   <artifactId>csv</artifactId>

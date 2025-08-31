@@ -5,8 +5,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.examples.plugin.csv.basic.Example1;
-import com.helger.jcodemodel.examples.plugin.csv.basic.Example1b;
+import com.helger.jcodemodel.examples.plugin.csv.basic.EmptyClass;
+import com.helger.jcodemodel.examples.plugin.csv.basic.SimpleFields;
 import com.helger.jcodemodel.examples.plugin.csv.deeparray.Example2;
 import com.helger.jcodemodel.examples.plugin.csv.getset.Example3;
 import com.helger.jcodemodel.examples.plugin.csv.inherit.City;
@@ -21,9 +21,9 @@ public class CSVTest {
 
   @Test
   public void testBasic() {
-    new Example1();
+    new EmptyClass();
 
-    Example1b test1 = new Example1b();
+    SimpleFields test1 = new SimpleFields();
     test1.i = 3;
     test1.c = 'c';
     test1.s = "s";
