@@ -1,16 +1,23 @@
 package com.helger.jcodemodel.examples.plugin.csv.immutable;
 
 import java.time.Instant;
+import java.util.List;
 
 public class Animal {
     private final Instant dob;
+    private final long id;
     private String name;
     private final Animal[] parents;
-    private Animal[] children;
+    private final List<Animal> children;
 
-    public Animal(Instant dob, Animal[] parents) {
+    public Animal(Instant dob,
+        long id,
+        Animal[] parents,
+        List<Animal> children) {
         this.dob = dob;
+        this.id = id;
         this.parents = parents;
+        this.children = children;
     }
 
     /**
@@ -18,6 +25,13 @@ public class Animal {
      */
     public Instant getDob() {
         return dob;
+    }
+
+    /**
+     * @return the {@link #id}
+     */
+    public long getId() {
+        return id;
     }
 
     /**
@@ -42,16 +56,9 @@ public class Animal {
     }
 
     /**
-     * set the {@link #children}
-     */
-    public void setChildren(Animal[] children) {
-        this.children = children;
-    }
-
-    /**
      * @return the {@link #children}
      */
-    public Animal[] getChildren() {
+    public List<Animal> getChildren() {
         return children;
     }
 }

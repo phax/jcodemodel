@@ -3,6 +3,7 @@ package com.helger.jcodemodel.examples.plugin.csv;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -96,7 +97,7 @@ public class CSVTest {
 
   @Test
   public void testImmutable() {
-    Animal animal = new Dog(Instant.now(), null, "canus");
+    Animal animal = new Dog(Instant.now(), 0, null, new ArrayList<>(), "canus");
     animal.setName("wolf");
 
     new WeirdReference("a", Instant.now()).setVisible(false);

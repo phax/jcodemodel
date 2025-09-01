@@ -67,7 +67,19 @@ public enum FieldConstruct {
     public void apply(FieldOptions opt) {
       opt.setFinal(false);
     }
-  };
+  },
+  LIST {
+    @Override
+    public void apply(FieldOptions opt) {
+      opt.setList(true);
+    }
+  },
+  NOLIST {
+    @Override
+    public void apply(FieldOptions opt) {
+      opt.setList(false);
+    }
+  },;
 
   public abstract void apply(FieldOptions opt);
 
@@ -86,6 +98,8 @@ public enum FieldConstruct {
     case "noredirect" -> NOREDIRECT;
     case "final", "const", "immutable" -> FINAL;
     case "nofinal", "noconst", "mutable" -> NOFINAL;
+    case "list" -> LIST;
+    case "nolist" -> NOLIST;
     default -> null;
     };
   }

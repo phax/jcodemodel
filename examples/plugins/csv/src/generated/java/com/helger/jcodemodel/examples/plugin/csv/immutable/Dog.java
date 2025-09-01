@@ -1,6 +1,7 @@
 package com.helger.jcodemodel.examples.plugin.csv.immutable;
 
 import java.time.Instant;
+import java.util.List;
 
 public class Dog
     extends Animal
@@ -8,8 +9,12 @@ public class Dog
     private final String species;
     private String master;
 
-    public Dog(Instant dob, Animal[] parents, String species) {
-        super(dob, parents);
+    public Dog(Instant dob,
+        long id,
+        Animal[] parents,
+        List<Animal> children,
+        String species) {
+        super(dob, id, parents, children);
         this.species = species;
     }
 

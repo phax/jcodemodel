@@ -132,9 +132,10 @@
               <data>
                 p com.helger.jcodemodel.examples.plugin.csv.immutable,,,set,get,private,final
                 com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,dob,date
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,id,long
                 com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,name,string,mutable
                 com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,parents,Animal[]
-                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,children,Animal[], mutable
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,children,Animal, list
                 com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,,Animal
                 com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,species,string
                 com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,master,string,mutable

@@ -166,8 +166,15 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         af.options().setParent(ownerOptions);
         AbstractJType fieldType = resolveType(model, af.fieldInternalClassName(), af.arrayDepth());
         if (fieldType == null) {
-          throw new RuntimeException("can't resolve tytpe " + af.fieldClassName() + " for field "
+          throw new RuntimeException("can't resolve type " + af.fieldClassName() + " for field "
               + af.fullyQualifiedClassName() + "::" + af.fieldName());
+        }
+        if (af.options().isList()) {
+          if (fieldType instanceof JPrimitiveType) {
+            throw new RuntimeException("can't create a list of primitive : " + fieldType + " for field "
+                + af.fullyQualifiedClassName() + "::" + af.fieldName());
+          }
+          fieldType = model.ref(List.class).narrow(fieldType);
         }
         addField(owner, fieldType, af.fieldName(), af.options(), model);
       }
