@@ -55,7 +55,7 @@
             </configuration>
           </execution>
           <execution>
-          <!--create elments which refer to other created elements in a cycle-->
+          <!--create elements which refer to other created elements in a cycle-->
             <id>resolve</id>
             <goals>
               <goal>generate-source</goal>
@@ -117,6 +117,28 @@
                 com.helger.jcodemodel.examples.plugin.csv.inherit.City,,Point
                 com.helger.jcodemodel.examples.plugin.csv.inherit.City,name,string
                 com.helger.jcodemodel.examples.plugin.csv.inherit.City,zip,int
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+            <id>final</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                p com.helger.jcodemodel.examples.plugin.csv.immutable,,,set,get,private,final
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,dob,date
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,name,string,mutable
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,parents,Animal[]
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,children,Animal[], mutable
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,,Animal
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,species,string
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,master,string,mutable
+                
+                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference,,java.lang.ref.WeakReference,get,set
+                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference,created,date,final
+                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference, visible ,	boolean, mutable 							
               </data>
             </configuration>
           </execution>

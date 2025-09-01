@@ -1,6 +1,8 @@
 package com.helger.jcodemodel.examples.plugin.csv;
 
 
+import java.time.Instant;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -9,6 +11,9 @@ import com.helger.jcodemodel.examples.plugin.csv.basic.EmptyClass;
 import com.helger.jcodemodel.examples.plugin.csv.basic.SimpleFields;
 import com.helger.jcodemodel.examples.plugin.csv.deeparray.Example2;
 import com.helger.jcodemodel.examples.plugin.csv.getset.Example3;
+import com.helger.jcodemodel.examples.plugin.csv.immutable.Animal;
+import com.helger.jcodemodel.examples.plugin.csv.immutable.Dog;
+import com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference;
 import com.helger.jcodemodel.examples.plugin.csv.inherit.City;
 import com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated;
 import com.helger.jcodemodel.examples.plugin.csv.redirect.ABC;
@@ -82,6 +87,14 @@ public class CSVTest {
   public void testInherit() {
     City test = new City();
     test.setX(25);
+  }
+
+  @Test
+  public void testImmutable() {
+    Animal animal = new Dog(Instant.now(), null, "canus");
+    animal.setName("wolf");
+
+    new WeirdReference("a", Instant.now()).setVisible(false);
   }
 
 }

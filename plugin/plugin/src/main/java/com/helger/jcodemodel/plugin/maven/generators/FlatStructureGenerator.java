@@ -1,10 +1,12 @@
 package com.helger.jcodemodel.plugin.maven.generators;
 
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +37,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     updateParentOptions(records);
     applyInheritance(model, records);
     createFields(model, records);
+    createConstructors(model, records);
     applyRedirects(model, records);
   }
 
@@ -152,7 +155,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
   }
 
-  public void createFields(JCodeModel model, List<FlatStructRecord> records) {
+  protected void createFields(JCodeModel model, List<FlatStructRecord> records) {
     for (FlatStructRecord rec : records) {
       if (rec instanceof SimpleField af) {
         JDefinedClass owner = Objects.requireNonNull(definedClasses.get(af.fullyQualifiedClassName()),
@@ -221,6 +224,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     case "Float" -> Float.class;
     case "int" -> int.class;
     case "Int", "Integer" -> Integer.class;
+    case "date", "instant", "datetime" -> Instant.class;
     case "long" -> long.class;
     case "Long" -> Long.class;
     case "string", "String" -> String.class;
@@ -230,11 +234,11 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
   protected void addField(JDefinedClass jdc, AbstractJType type, String fieldName, FieldOptions options,
       JCodeModel model) {
-    JFieldVar fv = jdc.field(options.visibility().jmod, type, fieldName);
-    if (options.setter()) {
+    JFieldVar fv = jdc.field(options.getVisibility().jmod | (options.isFinal() ? JMod.FINAL : 0), type, fieldName);
+    if (options.isSetter() && !options.isFinal()) {
       addSetter(fv, jdc, model, options);
     }
-    if (options.getter()) {
+    if (options.isGetter()) {
       addGetter(fv, jdc);
     }
   }
@@ -255,7 +259,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     JMethod meth = jdc.method(JMod.PUBLIC, model.VOID, methName);
     JVar param = meth.param(paramType, fv.name());
     meth.body().assign(JExpr.refthis(fv), param);
-    if (options.lastUpdated()) {
+    if (options.isLastUpdated()) {
       JFieldVar lastUpdated = classLastUpdated.computeIfAbsent(jdc.fullName(),
           n -> addLastUpdated(jdc, model));
       meth.body().assign(JExpr.refthis(lastUpdated), model.ref(Instant.class).staticInvoke("now"));
@@ -265,19 +269,162 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
   protected JFieldVar addLastUpdated(JDefinedClass jdc, JCodeModel model) {
     FieldOptions ownerOptions = pathOptions.get(jdc.fullName());
-    JFieldVar lastUpdated = jdc.field(ownerOptions.visibility().jmod, model.ref(Instant.class), "lastUpdated",
+    JFieldVar lastUpdated = jdc.field(ownerOptions.getVisibility().jmod, model.ref(Instant.class), "lastUpdated",
         JExpr._null());
     lastUpdated.javadoc().add("last time the class was directly set a field using a setter");
-    if (ownerOptions.getter()) {
+    if (ownerOptions.isGetter()) {
       addGetter(lastUpdated, jdc);
     }
     return lastUpdated;
   }
 
+  //
+  // apply constructors
+  //
+
+  /**
+   * create constructors for classes that have a final field or extends a class
+   * without no-arg constructor
+   */
+  protected void createConstructors(JCodeModel model, List<FlatStructRecord> records) {
+    Set<JDefinedClass> done = new HashSet<>();
+    for (JDefinedClass createdClass : definedClasses.values()) {
+      createConstructors(model, createdClass, done);
+    }
+  }
+
+  protected void createConstructors(JCodeModel model, JDefinedClass createdClass,
+      Set<JDefinedClass> done) {
+    if (done.contains(createdClass)) {
+      return;
+    }
+    AbstractJClass parent;
+    if ((parent = createdClass._extends()) != null) {
+      if (parent instanceof JDefinedClass parentClass) {
+        createConstructors(model, createdClass, parentClass, done);
+      } else if (parent instanceof JReferencedClass parentClass) {
+        createConstructors(model, createdClass, parentClass);
+      } else {
+        throw new UnsupportedOperationException("can't create constructor for abstractjclass " + parent);
+      }
+    } else {
+      createConstructors(model, createdClass);
+    }
+    done.add(createdClass);
+  }
+
+  protected List<JFieldVar> extractFinalFields(JDefinedClass createdClass) {
+    return createdClass.fields().values().stream()
+        .filter(jfv -> jfv.mods().isFinal())
+        // TODO test is field is assigned
+        .toList();
+  }
+
+  protected void createConstructors(JCodeModel model, JDefinedClass createdClass, JDefinedClass parentClass,
+      Set<JDefinedClass> done) {
+    createConstructors(model, parentClass, done);
+    int[] lowestArgs = { Integer.MAX_VALUE };
+    List<JMethod> selectedConstructors = new ArrayList<>();
+    parentClass.constructorsStream().forEach(constructor -> {
+      int params = constructor.params().size();
+      if (params < lowestArgs[0]) {
+        lowestArgs[0] = params;
+        selectedConstructors.clear();
+        selectedConstructors.add(constructor);
+      } else if (params == lowestArgs[0]) {
+        selectedConstructors.add(constructor);
+      }
+    });
+    if (selectedConstructors.isEmpty() || lowestArgs[0] == 0) {
+      createConstructors(model, createdClass);
+      return;
+    }
+    List<JFieldVar> finalFields = extractFinalFields(createdClass);
+    selectedConstructors.stream().forEach(sc -> {
+      JMethod newConstructor = createdClass.constructor(JMod.PUBLIC);
+      JBlock body = newConstructor.body();
+      JInvocation supercall = JExpr.invoke("super");
+      for (JVar jv : sc.params()) {
+        supercall.arg(newConstructor.param(jv.type(), jv.name()));
+      }
+      body.add(supercall);
+      for (JFieldVar jfv : finalFields) {
+        body.add(
+            JExpr.assign(
+                JExpr.refthis(jfv), newConstructor.param(jfv.type(), jfv.name())));
+      }
+    });
+  }
+
+  protected void createConstructors(JCodeModel model, JDefinedClass createdClass, JReferencedClass parentClass) {
+    Class<?> parent = parentClass.getReferencedClass();
+    if (parent.equals(Object.class)) {
+      createConstructors(model, createdClass);
+      return;
+    }
+
+    int lowestArgs = Integer.MAX_VALUE;
+    List<Constructor<?>> selectedConstructors = new ArrayList<>();
+    for (Constructor<?> c : parent.getDeclaredConstructors()) {
+      if ((c.getModifiers() & (Modifier.PUBLIC | Modifier.PROTECTED)) != 0) {
+        int params = c.getParameterCount();
+        if (params < lowestArgs) {
+          lowestArgs = params;
+          selectedConstructors.clear();
+          selectedConstructors.add(c);
+        } else if (params == lowestArgs) {
+          selectedConstructors.add(c);
+        }
+      }
+    }
+    if (selectedConstructors.isEmpty() || lowestArgs == 0) {
+      createConstructors(model, createdClass);
+      return;
+    }
+    List<JFieldVar> finalFields = extractFinalFields(createdClass);
+    selectedConstructors.stream().forEach(sc -> {
+      JMethod newConstructor = createdClass.constructor(JMod.PUBLIC);
+      JBlock body = newConstructor.body();
+      JInvocation supercall = JExpr.invoke("super");
+      for (Parameter p : sc.getParameters()) {
+        supercall.arg(newConstructor.param(model.ref(p.getType()), p.getName()));
+      }
+      body.add(supercall);
+      for (JFieldVar jfv : finalFields) {
+        body.add(
+            JExpr.assign(
+                JExpr.refthis(jfv), newConstructor.param(jfv.type(), jfv.name())));
+      }
+    });
+
+  }
+
+  /**
+   * create the constructors for a class that does not have super class, or that
+   * super class has an empty constructor.
+   */
+  protected void createConstructors(JCodeModel model, JDefinedClass createdClass) {
+    List<JFieldVar> finalFields = extractFinalFields(createdClass);
+    if (finalFields.isEmpty()) {
+      return;
+    }
+    JMethod newConstructor = createdClass.constructor(JMod.PUBLIC);
+    JBlock body = newConstructor.body();
+    for (JFieldVar jfv : finalFields) {
+      body.add(
+          JExpr.assign(
+              JExpr.refthis(jfv), newConstructor.param(jfv.type(), jfv.name())));
+    }
+  }
+
+  //
+  // apply redirect
+  //
+
   protected void applyRedirects(JCodeModel model, List<FlatStructRecord> records) {
     for (FlatStructRecord rec : records) {
       if (rec instanceof SimpleField af) {
-        if (af.options().redirect()) {
+        if (af.options().isRedirect()) {
           if (af.arrayDepth() > 0) {
             continue;
           }
@@ -330,17 +477,17 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     }
     for (Method m : fieldClass.getMethods()) {
       if (
-          // synthetic methods are added by the compiler, not in the actual code
-          m.isSynthetic()
+      // synthetic methods are added by the compiler, not in the actual code
+      m.isSynthetic()
           // static methods should not be redirected
           || (m.getModifiers() & Modifier.STATIC) != 0
           // don't redirect methods that are either those of Object,
           || m.getDeclaringClass() == Object.class
-          // or with no argument and present in Object without argument (hashcode, tostring)
+          // or with no argument and present in Object without argument (hashcode,
+          // tostring)
           || m.getParameterCount() == 0 && OBJECT_NOARGMETH.contains(m.getName())) {
         continue;
       }
-      System.err.println("redirecting method " + m);
       int mods = redirectMethodMods(JMod.PUBLIC);
       JMethod newMeth = fieldOwner.method(mods, m.getReturnType(), m.getName());
       JInvocation call = JExpr.invoke(JExpr.ref(af.fieldName()), m.getName());

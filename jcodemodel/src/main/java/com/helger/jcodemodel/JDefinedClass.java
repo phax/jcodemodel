@@ -97,7 +97,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   /**
    * Fields keyed by their names.
    */
-  private final Map <String, JFieldVar> m_aFields = new LinkedHashMap <> ();
+  private final LinkedHashMap <String, JFieldVar> m_aFields = new LinkedHashMap <> ();
 
   /**
    * Static initializer, if this class has one
@@ -427,7 +427,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @return always non-null.
    */
   @Nonnull
-  public Map <String, JFieldVar> fieldsMutable ()
+  public LinkedHashMap <String, JFieldVar> fieldsMutable ()
   {
     return m_aFields;
   }

@@ -142,6 +142,11 @@ public class JMods implements IJGenerable
     return (m_nMods & JMod.ABSTRACT) != 0;
   }
 
+  public boolean isFinal ()
+  {
+    return (m_nMods & JMod.FINAL) != 0;
+  }
+
   public boolean isNative ()
   {
     return (m_nMods & JMod.NATIVE) != 0;

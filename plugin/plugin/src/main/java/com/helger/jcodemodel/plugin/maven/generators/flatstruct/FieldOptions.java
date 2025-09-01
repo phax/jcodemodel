@@ -13,26 +13,27 @@ public class FieldOptions {
     return this;
   }
 
-  // visibility of the field
+  // is field final
 
-  private FieldVisibility visibility = null;
+  private Boolean _final = null;
 
-  public FieldOptions setVisibility(FieldVisibility visibility) {
-    this.visibility = visibility;
+  public FieldOptions setFinal(Boolean _final) {
+    this._final = _final;
     return this;
   }
 
-  public static final FieldVisibility DEFAULT_VISIBILITY = FieldVisibility.PUBLIC;
+  public static final boolean DEFAULT_FINAL = false;
 
-  public FieldVisibility visibility() {
-    if (visibility != null) {
-      return visibility;
+  public boolean isFinal() {
+    if (_final != null) {
+      return _final;
     }
     if (parent != null) {
-      return parent.visibility();
+      return parent.isFinal();
     }
-    return DEFAULT_VISIBILITY;
+    return DEFAULT_FINAL;
   }
+
 
   // create getter
 
@@ -45,35 +46,14 @@ public class FieldOptions {
 
   public static final boolean DEFAULT_GETTER = false;
 
-  public boolean getter() {
+  public boolean isGetter() {
     if (getter != null) {
       return getter;
     }
     if (parent != null) {
-      return parent.getter();
+      return parent.isGetter();
     }
     return DEFAULT_GETTER;
-  }
-
-  // create setter
-
-  private Boolean setter = null;
-
-  public FieldOptions setSetter(Boolean setter) {
-    this.setter = setter;
-    return this;
-  }
-
-  public static final boolean DEFAULT_SETTER = false;
-
-  public boolean setter() {
-    if (setter != null) {
-      return setter;
-    }
-    if (parent != null) {
-      return parent.setter();
-    }
-    return DEFAULT_SETTER;
   }
 
   // create Instant lastUpdated
@@ -87,12 +67,12 @@ public class FieldOptions {
 
   public static final boolean DEFAULT_LAST_UPDATED = false;
 
-  public boolean lastUpdated() {
+  public boolean isLastUpdated() {
     if (lastUpdated != null) {
       return lastUpdated;
     }
     if (parent != null) {
-      return parent.lastUpdated();
+      return parent.isLastUpdated();
     }
     return DEFAULT_LAST_UPDATED;
   }
@@ -108,14 +88,56 @@ public class FieldOptions {
 
   public static final boolean DEFAULT_REDIRECT = false;
 
-  public boolean redirect() {
+  public boolean isRedirect() {
     if (redirect != null) {
       return redirect;
     }
     if (parent != null) {
-      return parent.redirect();
+      return parent.isRedirect();
     }
     return DEFAULT_REDIRECT;
+  }
+
+  // create setter
+
+  private Boolean setter = null;
+
+  public FieldOptions setSetter(Boolean setter) {
+    this.setter = setter;
+    return this;
+  }
+
+  public static final boolean DEFAULT_SETTER = false;
+
+  public boolean isSetter() {
+    if (setter != null) {
+      return setter;
+    }
+    if (parent != null) {
+      return parent.isSetter();
+    }
+    return DEFAULT_SETTER;
+  }
+
+  // visibility of the field
+
+  private FieldVisibility visibility = null;
+
+  public FieldOptions setVisibility(FieldVisibility visibility) {
+    this.visibility = visibility;
+    return this;
+  }
+
+  public static final FieldVisibility DEFAULT_VISIBILITY = FieldVisibility.PUBLIC;
+
+  public FieldVisibility getVisibility() {
+    if (visibility != null) {
+      return visibility;
+    }
+    if (parent != null) {
+      return parent.getVisibility();
+    }
+    return DEFAULT_VISIBILITY;
   }
 
 }

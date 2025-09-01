@@ -39,10 +39,14 @@ public class CSVGenerator extends FlatStructureGenerator {
     String[] spl = line.trim().split(fldSep);
     String className = spl[0].trim();
 
+    // field name for fields. Absent for non-fields
+
     String fieldName = null;
     if (spl.length > 1) {
       fieldName = spl[1].trim();
     }
+
+    // find the type specified, if any, and array depth
 
     String fieldClassName = null;
     int arrayDepth = 0;
@@ -56,12 +60,15 @@ public class CSVGenerator extends FlatStructureGenerator {
     if (fieldClassName != null && fieldClassName.isBlank()) {
       fieldClassName = null;
     }
+
     FieldOptions options = new FieldOptions();
     if (spl.length >= 4) {
       for (int i = 3; i < spl.length; i++) {
         String optStr = spl[i];
         if (optStr == null || optStr.isBlank()) {
           continue;
+        } else {
+          optStr=optStr.trim();
         }
         FieldVisibility fv = FieldVisibility.of(optStr);
         if (fv != null) {
