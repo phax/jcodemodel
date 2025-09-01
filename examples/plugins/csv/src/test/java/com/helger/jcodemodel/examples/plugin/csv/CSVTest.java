@@ -1,6 +1,7 @@
 package com.helger.jcodemodel.examples.plugin.csv;
 
 
+import java.io.Serializable;
 import java.time.Instant;
 
 import org.junit.Assert;
@@ -15,6 +16,7 @@ import com.helger.jcodemodel.examples.plugin.csv.immutable.Animal;
 import com.helger.jcodemodel.examples.plugin.csv.immutable.Dog;
 import com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference;
 import com.helger.jcodemodel.examples.plugin.csv.inherit.City;
+import com.helger.jcodemodel.examples.plugin.csv.inherit.Dated;
 import com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated;
 import com.helger.jcodemodel.examples.plugin.csv.redirect.ABC;
 import com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected;
@@ -87,6 +89,9 @@ public class CSVTest {
   public void testInherit() {
     City test = new City();
     test.setX(25);
+
+    Serializable c = new Dated(Instant.now());
+    c.toString();
   }
 
   @Test

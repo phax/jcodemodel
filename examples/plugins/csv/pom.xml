@@ -117,6 +117,9 @@
                 com.helger.jcodemodel.examples.plugin.csv.inherit.City,,Point
                 com.helger.jcodemodel.examples.plugin.csv.inherit.City,name,string
                 com.helger.jcodemodel.examples.plugin.csv.inherit.City,zip,int
+                
+                com.helger.jcodemodel.examples.plugin.csv.inherit.Dated,,java.io.Serializable,lastupdated
+                com.helger.jcodemodel.examples.plugin.csv.inherit.Dated,created,date, final, getter
               </data>
             </configuration>
           </execution>
@@ -138,7 +141,7 @@
                 
                 com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference,,java.lang.ref.WeakReference,get,set
                 com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference,created,date,final
-                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference, visible ,	boolean, mutable 							
+                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference, visible ,	boolean, mutable 
               </data>
             </configuration>
           </execution>
