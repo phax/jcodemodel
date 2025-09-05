@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.helger.jcodemodel.plugin.maven.generators.FlatStructureGenerator;
+import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldConstruct;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
@@ -16,6 +17,7 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.SimpleField;
 
+@JCMGen
 public class CSVGenerator extends FlatStructureGenerator {
 
   private String fldSep = ",";

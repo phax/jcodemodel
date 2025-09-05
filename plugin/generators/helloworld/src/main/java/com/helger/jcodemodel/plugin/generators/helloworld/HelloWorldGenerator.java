@@ -9,7 +9,9 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 
+@JCMGen
 public class HelloWorldGenerator implements CodeModelBuilder {
 
   protected String className = "com.helger.tests.helloworld.Hello";
