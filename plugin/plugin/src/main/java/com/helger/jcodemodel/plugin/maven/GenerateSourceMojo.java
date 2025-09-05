@@ -114,7 +114,7 @@ public class GenerateSourceMojo extends AbstractMojo {
     }
   }
 
-  public final String GENERATOR_CLASS_FILE = "jcodemodel/plugin/generator";
+  public static final String GENERATOR_CLASS_FILE = "jcodemodel/plugin/generator";
 
   /**
    * deduce the generator's class and instantiate it

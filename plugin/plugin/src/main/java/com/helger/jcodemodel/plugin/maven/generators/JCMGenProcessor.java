@@ -16,6 +16,7 @@ import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 
 import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.GenerateSourceMojo;
 
 /**
  * generate a generator descriptor for a single {@link CodeModelBuilder}
@@ -24,6 +25,7 @@ import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
 @SupportedAnnotationTypes("com.helger.jcodemodel.plugin.maven.generators.JCMGen")
 @SupportedSourceVersion(SourceVersion.RELEASE_17)
 public class JCMGenProcessor extends AbstractProcessor {
+
 
   @Override
   public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -39,7 +41,7 @@ public class JCMGenProcessor extends AbstractProcessor {
       for (Element e : elements) {
         TypeMirror annotatedClass = e.asType();
         TypeMirror jcmgen = processingEnv.getElementUtils()
-            .getTypeElement("com.helger.jcodemodel.plugin.maven.CodeModelBuilder").asType();
+            .getTypeElement(CodeModelBuilder.class.getCanonicalName()).asType();
         boolean isJcmgen = processingEnv.getTypeUtils().isAssignable(annotatedClass, jcmgen);
         if (!isJcmgen) {
           throw new RuntimeException(
@@ -47,7 +49,8 @@ public class JCMGenProcessor extends AbstractProcessor {
                   + annotatedClass);
         }
         try {
-          FileObject fo = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "", "jcodemodel/plugin/generator");
+          FileObject fo = processingEnv.getFiler().createResource(StandardLocation.CLASS_OUTPUT, "",
+              GenerateSourceMojo.GENERATOR_CLASS_FILE);
           Writer w = fo.openWriter();
           w.write(annotatedClass.toString());
           w.close();
