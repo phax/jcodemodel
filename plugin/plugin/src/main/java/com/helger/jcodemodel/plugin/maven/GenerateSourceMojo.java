@@ -125,8 +125,7 @@ public class GenerateSourceMojo extends AbstractMojo {
     if (generatorClass == null) {
       generatorClass = findGeneratorClass();
     }
-    System.err.println("using generator class " + generatorClass);
-    return generatorClass == null ? null
+    return generatorClass == null || generatorClass.isBlank() ? null
         : (CodeModelBuilder) Class.forName(generatorClass).getDeclaredConstructor().newInstance();
   }
 
