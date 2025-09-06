@@ -12,8 +12,9 @@
   <packaging>pom</packaging>
   <name>JCodeModel Plugin Generators Pom</name>
   <modules>
-    <module>helloworld</module>
     <module>csv</module>
+    <module>helloworld</module>
+    <module>json</module>
   </modules>
   <description>POM module for all the plugin-related codemodel generators</description>
 

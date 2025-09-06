@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.helger.jcodemodel.examples</groupId>
+    <artifactId>plugins</artifactId>
+    <version>4.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.helger.jcodemodel.examples.plugin</groupId>
+  <artifactId>json</artifactId>
+  <name>JCodeModel Json Plugin Example</name>
+  <description>demonstrates and validates the usage of the jcodemodel plugin alongside the Json generator</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.helger.jcodemodel</groupId>
+        <artifactId>jcodemodel-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>basic</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+{
+  "com":{
+    "helger":{
+      "jcodemodel":{
+        "examples":{
+          "plugin":{
+            "json":{
+              "basic":{
+                "package":[
+                  "get",
+                  "set"
+                ],
+                "A":{
+                  "var":{
+                    "a":{
+                      "class":"int",
+                      "options":[
+                        "private",
+                        "final"
+                      ]
+                    }
+                  }
+                },
+                "B":{
+                  "extends":"A",
+                  "var":{
+                    "b":{
+                      "class":"int",
+                      "options":[
+                        "private"
+                      ]
+                    }
+                  }
+                },
+                "C":{
+                  "var":{
+                    "redirect":{
+                      "class":"B",
+                      "options":[
+                        "private",
+                        "redirect"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+              </data>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.helger.jcodemodel.plugin.generators</groupId>
+            <artifactId>json</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>src/generated/java</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/generated/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!--only here to be called later in the maven reactor-->
+    <dependency>
+      <groupId>com.helger.jcodemodel.examples.plugin</groupId>
+      <artifactId>helloworld</artifactId>
+      <version>${project.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

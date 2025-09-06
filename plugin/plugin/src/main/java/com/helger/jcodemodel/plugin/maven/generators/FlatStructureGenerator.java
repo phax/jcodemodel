@@ -19,7 +19,9 @@ import java.util.stream.Stream;
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldConstruct;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.FieldCreation;
@@ -454,7 +456,6 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   protected void applyRedirect(JCodeModel model, SimpleField af, JDefinedClass fieldOwner,
       JDefinedClass fieldType) {
     for (JMethod m : fieldType.methods()) {
-
       if (m.mods().isPublic() && !m.mods().isStatic()) {
         int mods = redirectMethodMods(m.mods().getValue());
         JMethod newMeth = fieldOwner.method(mods, m.type(), m.name());
@@ -514,6 +515,46 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     return jmods
         & ~JMod.SYNCHRONIZED
         & ~JMod.STRICTFP;
+  }
+
+  protected void applyToFieldOptions(String optStr, FieldOptions options) {
+    if (optStr == null || optStr.isBlank()) {
+      return;
+    } else {
+      optStr = optStr.trim();
+    }
+    FieldVisibility fv = FieldVisibility.of(optStr);
+    if (fv != null) {
+      fv.apply(options);
+    } else {
+      FieldConstruct fa = FieldConstruct.of(optStr);
+      if (fa == null) {
+        throw new UnsupportedOperationException("can't deduce option from " + optStr);
+      } else {
+        fa.apply(options);
+      }
+    }
+  }
+
+
+  public record ArrayDepth(String type, int arrayDepth) {
+
+    /*
+     * parse eg "string []   []" into (string, 2)
+     */
+    public static ArrayDepth parse(String sourceType) {
+      int arrayDepth = 0;
+      sourceType = sourceType.trim();
+      while (sourceType.endsWith("[]")) {
+        arrayDepth++;
+        sourceType = sourceType.replaceFirst("\\[\\]", "").trim();
+      }
+      if (sourceType != null && sourceType.isBlank()) {
+        sourceType = null;
+      }
+      return new ArrayDepth(sourceType, arrayDepth);
+    }
+
   }
 
 }

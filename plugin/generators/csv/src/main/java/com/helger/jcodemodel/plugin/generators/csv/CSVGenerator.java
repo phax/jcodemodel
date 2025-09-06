@@ -9,9 +9,7 @@ import java.util.stream.Stream;
 
 import com.helger.jcodemodel.plugin.maven.generators.FlatStructureGenerator;
 import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldConstruct;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.PackageCreation;
@@ -53,36 +51,17 @@ public class CSVGenerator extends FlatStructureGenerator {
     String fieldClassName = null;
     int arrayDepth = 0;
     if (spl.length > 2) {
-      fieldClassName = spl[2].trim();
-      while (fieldClassName.endsWith("[]")) {
-        arrayDepth++;
-        fieldClassName = fieldClassName.replaceFirst("\\[\\]", "").trim();
+      ArrayDepth ad = ArrayDepth.parse(spl[2]);
+      if (ad != null) {
+        fieldClassName = ad.type();
+        arrayDepth = ad.arrayDepth();
       }
-    }
-    if (fieldClassName != null && fieldClassName.isBlank()) {
-      fieldClassName = null;
     }
 
     FieldOptions options = new FieldOptions();
     if (spl.length >= 4) {
       for (int i = 3; i < spl.length; i++) {
-        String optStr = spl[i];
-        if (optStr == null || optStr.isBlank()) {
-          continue;
-        } else {
-          optStr=optStr.trim();
-        }
-        FieldVisibility fv = FieldVisibility.of(optStr);
-        if (fv != null) {
-          fv.apply(options);
-        } else {
-          FieldConstruct fa = FieldConstruct.of(optStr);
-          if (fa == null) {
-            throw new UnsupportedOperationException("can't deduce option from " + optStr);
-          } else {
-            fa.apply(options);
-          }
-        }
+        applyToFieldOptions(spl[i], options);
       }
     }
 

@@ -15,9 +15,10 @@ public interface CodeModelBuilder {
 
   /**
    * called by the plugin after creating the generator, with the plugin "params"
-   * configuration
+   * configuration. Override to handle generator-specific parameters
    */
-  void configure(Map<String, String> params);
+  default void configure(Map<String, String> params) {
+  }
 
   /**
    * asking the generator to build a model.
