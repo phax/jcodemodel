@@ -29,6 +29,8 @@ com.helger.jcodemodel.examples.plugin.yaml.basic:
             options:
                - private
                - redirect
-   D: # empty class. Needs the class field with at least one empty value
+   Empty1: # empty class. Needs the class field with at least one empty value
       class:
        - 
+   Empty2: # empty class. is a class because extends is present
+      extends: "" 

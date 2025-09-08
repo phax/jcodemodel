@@ -41,7 +41,7 @@ public class JsonPackage {
    * @return true if this requires to build a class
    */
   public boolean isClassInfo() {
-    return clazz != null || fields != null && !fields.isEmpty();
+    return clazz != null || fields != null && !fields.isEmpty() || parentClassName != null;
   }
 
   /**

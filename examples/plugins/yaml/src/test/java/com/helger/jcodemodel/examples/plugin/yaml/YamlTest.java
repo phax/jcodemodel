@@ -6,7 +6,8 @@ import org.junit.Test;
 import com.helger.jcodemodel.examples.plugin.yaml.basic.A;
 import com.helger.jcodemodel.examples.plugin.yaml.basic.B;
 import com.helger.jcodemodel.examples.plugin.yaml.basic.C;
-import com.helger.jcodemodel.examples.plugin.yaml.basic.D;
+import com.helger.jcodemodel.examples.plugin.yaml.basic.Empty1;
+import com.helger.jcodemodel.examples.plugin.yaml.basic.Empty2;
 
 public class YamlTest {
 
@@ -27,7 +28,8 @@ public class YamlTest {
     c.setDistances(distances);
     Assert.assertSame(distances, b.getDistances());
 
-    new D();
+    new Empty1();
+    new Empty2();
   }
 
 }
