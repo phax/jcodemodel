@@ -1,0 +1,6 @@
+com.helger.jcodemodel.examples.plugin.csv.basic.EmptyClass
+
+com.helger.jcodemodel.examples.plugin.csv.basic.SimpleFields,i,int
+com.helger.jcodemodel.examples.plugin.csv.basic.SimpleFields,c,char
+com.helger.jcodemodel.examples.plugin.csv.basic.SimpleFields,s,string
+com.helger.jcodemodel.examples.plugin.csv.basic.SimpleFields,sarr,string[]

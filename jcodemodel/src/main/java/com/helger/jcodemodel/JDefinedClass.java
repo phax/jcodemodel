@@ -50,6 +50,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.util.ClassNameComparator;
@@ -96,7 +97,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   /**
    * Fields keyed by their names.
    */
-  private final Map <String, JFieldVar> m_aFields = new LinkedHashMap <> ();
+  private final LinkedHashMap <String, JFieldVar> m_aFields = new LinkedHashMap <> ();
 
   /**
    * Static initializer, if this class has one
@@ -426,7 +427,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @return always non-null.
    */
   @Nonnull
-  public Map <String, JFieldVar> fieldsMutable ()
+  public LinkedHashMap <String, JFieldVar> fieldsMutable ()
   {
     return m_aFields;
   }
@@ -528,6 +529,14 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   public Iterator <JMethod> constructors ()
   {
     return m_aConstructors.iterator ();
+  }
+  
+  /**
+   * @return a stream of the declared constructors
+   */
+  public Stream<JMethod> constructorsStream()
+  {
+    return m_aConstructors.stream();
   }
 
   /**

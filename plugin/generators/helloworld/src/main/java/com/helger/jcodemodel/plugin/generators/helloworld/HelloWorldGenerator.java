@@ -1,5 +1,6 @@
 package com.helger.jcodemodel.plugin.generators.helloworld;
 
+import java.io.InputStream;
 import java.util.Map;
 
 import com.helger.jcodemodel.JCodeModel;
@@ -8,7 +9,9 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 
+@JCMGen
 public class HelloWorldGenerator implements CodeModelBuilder {
 
   protected String className = "com.helger.tests.helloworld.Hello";
@@ -21,7 +24,7 @@ public class HelloWorldGenerator implements CodeModelBuilder {
   }
 
   @Override
-  public void build(JCodeModel model) throws JCodeModelException {
+  public void build(JCodeModel model, InputStream source) throws JCodeModelException {
     JDefinedClass cl = model._class(className);
     cl.field(JMod.PUBLIC, model._ref(String.class), "value", JExpr.lit(value));
   }

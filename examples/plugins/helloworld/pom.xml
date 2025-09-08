@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.helger.jcodemodel.examples</groupId>
     <artifactId>plugins</artifactId>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>4.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.examples.plugin</groupId>
   <artifactId>helloworld</artifactId>
@@ -88,6 +88,11 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

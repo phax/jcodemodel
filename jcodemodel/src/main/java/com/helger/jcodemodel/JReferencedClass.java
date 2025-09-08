@@ -59,7 +59,7 @@ import jakarta.annotation.Nullable;
  * <code>_package()</code> method, which obtains the owner {@link JPackage} object, which is scoped
  * to JCodeModel.
  */
-class JReferencedClass extends AbstractJClass implements IJDeclaration
+public class JReferencedClass extends AbstractJClass implements IJDeclaration
 {
   private static final long serialVersionUID = 1;
 

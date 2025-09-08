@@ -1,8 +1,11 @@
 package com.helger.jcodemodel.plugin.maven;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -23,15 +26,45 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 @Mojo(name = "generate-source", threadSafe = true, defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateSourceMojo extends AbstractMojo {
 
+  /**
+   * passed to the generator in case it needs project-specific variables, like
+   * path etc.
+   */
   @Component
   private MavenProject project;
 
-  @Parameter(property = "jcodemodel.outdir")
+  /**
+   * target directory to place the generated java files into. The directory is
+   * created but not cleaned.
+   */
+  @Parameter(property = "jcodemodel.outdir", defaultValue = "src/generated/java")
   private String outputDir;
 
+  /**
+   * source of the data to transmit to the generator when building the model. can
+   * be a url, a file.
+   */
+  @Parameter(property = "jcodemodel.source")
+  private String source;
+
+  @Parameter(property = "jcodemodel.data")
+  private String data;
+
+  /**
+   * The fullly qualified name of the generator used. Only needed if
+   * <ul>
+   * <li>you use several generators in the plugin dependencies,</li>
+   * <li>the generator does not provide a {@link #GENERATOR_CLASS_FILE} file to
+   * load the class automatically</li>
+   * <li>you want a different generator class than the one it defaults to</li>
+   * </ul>
+   */
   @Parameter(property = "jcodemodel.generator")
   private String generator;
 
+  /**
+   * direct Map of params to transmit to the generator.
+   */
   @Parameter(property = "jcodemodel.params")
   private Map<String, String> params;
 
@@ -49,14 +82,18 @@ public class GenerateSourceMojo extends AbstractMojo {
     if (cmb == null) {
       throw new MojoExecutionException("could not load the generator class");
     }
-    getLog().info("generating model into " + dir.getAbsolutePath() + " from generator "
-        + cmb.getClass().getCanonicalName() + " with params " + params);
+    getLog().info("Generator " + cmb.getClass().getCanonicalName() + " generates model into "
+        + dir.getAbsolutePath() + " with params " + params);
     if (params != null) {
       cmb.configure(params);
     }
     JCodeModel cm = new JCodeModel();
+    if (data != null && !data.isBlank() && source != null && !source.isBlank()) {
+      getLog().warn("discarding source param " + source + " as dat is already set");
+    }
+    InputStream source = data == null || data.isBlank() ? findSource() : new ByteArrayInputStream(data.getBytes());
     try {
-      cmb.build(cm);
+      cmb.build(cm, source);
       new JCMWriter(cm).build(dir, (IProgressTracker) null);
     } catch (JCodeModelException | IOException e) {
       throw new MojoFailureException(e);
@@ -64,8 +101,11 @@ public class GenerateSourceMojo extends AbstractMojo {
 
   }
 
+  /**
+   * deduce the out java files output folder
+   */
   protected File javaOutputFolder() {
-    if (outputDir == null) {
+    if (outputDir == null || outputDir.isBlank()) {
       return new File(project.getBasedir(), "src/generated/java");
     } else if (outputDir.startsWith("/")) {
       return new File(outputDir);
@@ -74,15 +114,18 @@ public class GenerateSourceMojo extends AbstractMojo {
     }
   }
 
-  public final String GENERATOR_CLASS_FILE = "jcodemodel/plugin/generator";
+  public static final String GENERATOR_CLASS_FILE = "jcodemodel/plugin/generator";
 
+  /**
+   * deduce the generator's class and instantiate it
+   */
   protected CodeModelBuilder findBuilder()
       throws Exception {
     String generatorClass = generator;
     if (generatorClass == null) {
       generatorClass = findGeneratorClass();
     }
-    return generatorClass == null ? null
+    return generatorClass == null || generatorClass.isBlank() ? null
         : (CodeModelBuilder) Class.forName(generatorClass).getDeclaredConstructor().newInstance();
   }
 
@@ -97,6 +140,27 @@ public class GenerateSourceMojo extends AbstractMojo {
         return null;
       }
     }
+  }
+
+  protected InputStream findSource() throws MojoExecutionException {
+    if (source == null || source.isBlank()) {
+      return null;
+    }
+    // dumb checking : is it a file ? a URL ?
+    try {
+      File targetFile = source.startsWith("/") ? new File(source) : new File(project.getBasedir(), source);
+      FileInputStream fis = new FileInputStream(targetFile);
+      return fis;
+    } catch (Exception e) {
+      getLog().info("while trying to open " + source + " as a file", e);
+    }
+    try {
+      URL url = new URL(source);
+      return url.openStream();
+    } catch (IOException e) {
+      getLog().info("while trying to open " + source + " as a url", e);
+    }
+    throw new MojoExecutionException("could not open provided source " + source + " as a file or url");
   }
 
 }

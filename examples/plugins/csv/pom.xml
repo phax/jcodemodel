@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.helger.jcodemodel.examples</groupId>
+    <artifactId>plugins</artifactId>
+    <version>4.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>com.helger.jcodemodel.examples.plugin</groupId>
+  <artifactId>csv</artifactId>
+  <name>JCodeModel CSV Plugin Example</name>
+  <description>demonstrates and validates the usage of the jcodemodel plugin alongside the CSV generator</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.helger.jcodemodel</groupId>
+        <artifactId>jcodemodel-maven-plugin</artifactId>
+        <executions>
+          <execution>
+          <!-- create claass with primitive, string, or array fields, from a file-->
+            <id>basicfile</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <source>source1.csv</source>
+            </configuration>
+          </execution>
+          <execution>
+          <!--create field with multiple level array-->
+            <id>deeparray</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                com.helger.jcodemodel.examples.plugin.csv.deeparray.Example2,iarr,int[]
+                com.helger.jcodemodel.examples.plugin.csv.deeparray.Example2,darr,double [] []
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+          <!-- create classes with getters/setter-->
+            <id>getset</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                com.helger.jcodemodel.examples.plugin.csv.getset.Example3,i,int,private,set,get
+                com.helger.jcodemodel.examples.plugin.csv.getset.Example3,sarr,string [],protected,noget,get
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+          <!--create elements which refer to other created elements in a cycle-->
+            <id>resolve</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                p com.helger.jcodemodel.examples.plugin.csv.resolve,,,get
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Parent,children,Child[],set,private
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Child,parent,Parent,private,set
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Imported,,,set
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Imported,model,com.helger.jcodemodel.JCodeModel,private
+                com.helger.jcodemodel.examples.plugin.csv.resolve.Imported,modelArr,com.helger.jcodemodel.JCodeModel[],private
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+          <!-- add lastUpdated field modified by using setters-->
+            <id>lastupdated</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated,,,set,get,private,lastupdated
+                com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated,i,int
+                com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated,s,string
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+            <id>redirect</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,,,private,get,set
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,a,int
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,b,bool
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,c,char
+                com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected,,,private,redirect
+                com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected,abc,ABC,set
+                com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected,jCatchBlock,com.helger.jcodemodel.JCatchBlock,set
+                
+                com.helger.jcodemodel.examples.plugin.csv.redirect.ClassRedirect,e,java.lang.ArrayIndexOutOfBoundsException,set,redirect
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+            <id>inherit</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                p com.helger.jcodemodel.examples.plugin.csv.inherit,,,set,get,private
+                com.helger.jcodemodel.examples.plugin.csv.inherit.Point,x,int
+                com.helger.jcodemodel.examples.plugin.csv.inherit.Point,y,int
+                com.helger.jcodemodel.examples.plugin.csv.inherit.City,,Point
+                com.helger.jcodemodel.examples.plugin.csv.inherit.City,name,string
+                com.helger.jcodemodel.examples.plugin.csv.inherit.City,zip,int
+                
+                com.helger.jcodemodel.examples.plugin.csv.inherit.Dated,,java.io.Serializable,lastupdated
+                com.helger.jcodemodel.examples.plugin.csv.inherit.Dated,created,date, final, getter
+              </data>
+            </configuration>
+          </execution>
+          <execution>
+            <id>final</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <data>
+                p com.helger.jcodemodel.examples.plugin.csv.immutable,,,set,get,private,final
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,dob,date
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,id,long
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,name,string,mutable
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,parents,Animal[]
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,children,Animal, list
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,,Animal
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,species,string
+                com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,master,string,mutable
+                
+                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference,,java.lang.ref.WeakReference,get,set
+                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference,created,date,final
+                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference, visible ,	boolean, mutable 
+              </data>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.helger.jcodemodel.plugin.generators</groupId>
+            <artifactId>csv</artifactId>
+            <version>${project.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>src/generated/java</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>src/generated/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <!--only here to be called later in the maven reactor-->
+    <dependency>
+      <groupId>com.helger.jcodemodel.examples.plugin</groupId>
+      <artifactId>helloworld</artifactId>
+      <version>${project.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
