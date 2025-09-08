@@ -9,6 +9,6 @@
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
   <artifactId>csv</artifactId>
-  <name>JCodeModel CSV Generator</name>
+  <name>JCodeModel Generator CSV</name>
   <description>generates a structure tree from a csv file</description>
 </project>

@@ -8,9 +8,9 @@
     <version>4.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.examples.plugin</groupId>
-  <artifactId>json</artifactId>
-  <name>JCodeModel Example Generator JSON</name>
-  <description>demonstrates and validates the usage of the jcodemodel plugin alongside the Json generator</description>
+  <artifactId>yaml</artifactId>
+  <name>JCodeModel Example Generator YAML</name>
+  <description>demonstrates and validates the usage of the jcodemodel plugin alongside the YAML generator</description>
 
   <build>
     <plugins>
@@ -24,68 +24,14 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
-              <data>
-{
-  "com":{
-    "helger":{
-      "jcodemodel":{
-        "examples":{
-          "plugin":{
-            "json":{
-              "basic":{
-                "package":[
-                  "get",
-                  "set"
-                ],
-                "A":{
-                  "var":{
-                    "a":{
-                      "class":"int",
-                      "options":[
-                        "private",
-                        "final"
-                      ]
-                    }
-                  }
-                },
-                "B":{
-                  "extends":"A",
-                  "var":{
-                    "b":{
-                      "class":"int",
-                      "options":[
-                        "private"
-                      ]
-                    }
-                  }
-                },
-                "C":{
-                  "var":{
-                    "redirect":{
-                      "class":"B",
-                      "options":[
-                        "private",
-                        "redirect"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-              </data>
+              <source>source1.yaml</source>
             </configuration>
           </execution>
         </executions>
         <dependencies>
           <dependency>
             <groupId>com.helger.jcodemodel.plugin.generators</groupId>
-            <artifactId>json</artifactId>
+            <artifactId>yaml</artifactId>
             <version>${project.version}</version>
           </dependency>
         </dependencies>
@@ -124,14 +70,6 @@
   </build>
 
   <dependencies>
-    <!--only here to be called later in the maven reactor-->
-    <dependency>
-      <groupId>com.helger.jcodemodel.examples.plugin</groupId>
-      <artifactId>helloworld</artifactId>
-      <version>${project.version}</version>
-      <optional>true</optional>
-    </dependency>
-
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

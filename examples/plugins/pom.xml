@@ -10,12 +10,13 @@
   <groupId>com.helger.jcodemodel.examples</groupId>
   <artifactId>plugins</artifactId>
   <packaging>pom</packaging>
-  <name>JCodeModel Plugins Examples Pom</name>
+  <name>JCodeModel Examples Plugins Pom</name>
 
   <modules>
     <module>csv</module>
     <module>helloworld</module>
     <module>json</module>
+    <module>yaml</module>
   </modules>
   <description>POM module for all the plugin examples</description>
 </project>

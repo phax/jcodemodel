@@ -1,0 +1,31 @@
+# yaml is stored in file as the pom tabs can be changed by git, which is not allowed by yaml format. 
+
+com.helger.jcodemodel.examples.plugin.yaml.basic:
+   # we add getters and setters on all field of the package
+   package:
+      - get
+      - set
+   A:
+      var:
+         a:
+            class: int
+            options:
+               - private
+               - final
+   B:
+      extends: A
+      var:
+         b:
+            class: int
+            options:
+               - private
+   C:
+      var:
+         redir:
+            class: B
+            options:
+               - private
+               - redirect
+   D: # empty class. Needs the class field with at least one empty value
+      class:
+       - 

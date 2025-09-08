@@ -9,7 +9,7 @@
   </parent>
   <groupId>com.helger.jcodemodel.examples.plugin</groupId>
   <artifactId>csv</artifactId>
-  <name>JCodeModel CSV Plugin Example</name>
+  <name>JCodeModel Example Generator CSV</name>
   <description>demonstrates and validates the usage of the jcodemodel plugin alongside the CSV generator</description>
 
   <build>

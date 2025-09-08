@@ -9,7 +9,7 @@
   </parent>
   <groupId>com.helger.jcodemodel.examples.plugin</groupId>
   <artifactId>helloworld</artifactId>
-  <name>JCodeModel HelloWorld Example</name>
+  <name>JCodeModel Example Generator HelloWorld</name>
   <description>demonstrates and validates the usage of the jcodemodel plugin alongside the helloworld generator</description>
 
   <build>
