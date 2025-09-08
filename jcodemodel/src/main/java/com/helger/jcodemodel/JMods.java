@@ -154,7 +154,7 @@ public class JMods implements IJGenerable
 
   public boolean isPackagePrivate ()
   {
-    return (m_nMods & JMod.PUBLIC|JMod.PRIVATE|JMod.PROTECTED) == 0;
+    return (m_nMods & (JMod.PUBLIC|JMod.PRIVATE|JMod.PROTECTED) ) == 0;
   }
 
   public boolean isPublic ()
