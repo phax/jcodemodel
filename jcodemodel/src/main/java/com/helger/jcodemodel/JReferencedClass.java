@@ -104,9 +104,8 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   public AbstractJClass outer ()
   {
     final Class <?> p = m_aClass.getDeclaringClass ();
-    if (p == null) {
-    return null;
-  }
+    if (p == null)
+      return null;
     return owner ().ref (p);
   }
 
@@ -117,15 +116,13 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
     final String name = fullName ();
 
     // this type is array
-    if (name.indexOf ('[') != -1) {
-    return owner ().rootPackage ();
-  }
+    if (name.indexOf ('[') != -1)
+      return owner ().rootPackage ();
 
     // other normal case
     final int idx = name.lastIndexOf (JPackage.SEPARATOR);
-    if (idx < 0) {
-    return owner ().rootPackage ();
-  }
+    if (idx < 0)
+      return owner ().rootPackage ();
     return owner ()._package (name.substring (0, idx));
   }
 
@@ -135,9 +132,8 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
     final Class <?> sp = m_aClass.getSuperclass ();
     if (sp == null)
     {
-      if (isInterface ()) {
-    return owner ().ref (Object.class);
-    }
+      if (isInterface ())
+        return owner ().ref (Object.class);
       return null;
     }
     return owner ().ref (sp);
@@ -192,11 +188,10 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
     if (!m_bResolvedPrimitive)
     {
       final Class <?> v = JCodeModel.BOX_TO_PRIMITIVE.get (m_aClass);
-      if (v != null) {
-    m_aPrimitiveType = AbstractJType.parse (owner (), v.getName ());
-    } else {
-    m_aPrimitiveType = null;
-    }
+      if (v != null)
+        m_aPrimitiveType = AbstractJType.parse (owner (), v.getName ());
+      else
+        m_aPrimitiveType = null;
       m_bResolvedPrimitive = true;
     }
     return m_aPrimitiveType;
