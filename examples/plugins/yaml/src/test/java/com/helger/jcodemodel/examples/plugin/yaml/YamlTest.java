@@ -12,17 +12,20 @@ public class YamlTest {
 
   @Test
   public void testBasic() {
-    A a = new A(25);
-    Assert.assertEquals(25, a.getA());
+    A a = new A(25L);
+    Assert.assertEquals(25L, a.getUuid());
 
-    B b = new B(28);
-    b.setB(30);
-    Assert.assertEquals(28, b.getA());
-    Assert.assertEquals(30, b.getB());
+    B b = new B(28L);
+    b.setNbChildren(30);
+    Assert.assertEquals(28L, b.getUuid());
+    Assert.assertEquals(30, b.getNbChildren());
 
     C c = new C();
     c.setRedir(b);
-    Assert.assertEquals(30, c.getB());
+    Assert.assertEquals(30, c.getNbChildren());
+    double[][] distances = new double[2][];
+    c.setDistances(distances);
+    Assert.assertSame(distances, b.getDistances());
 
     new D();
   }

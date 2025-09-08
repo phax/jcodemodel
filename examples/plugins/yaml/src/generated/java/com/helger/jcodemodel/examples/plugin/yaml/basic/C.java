@@ -17,11 +17,19 @@ public class C {
         return redir;
     }
 
-    public void setB(int b) {
-        redir.setB(b);
+    public void setNbChildren(int nbChildren) {
+        redir.setNbChildren(nbChildren);
     }
 
-    public int getB() {
-        return redir.getB();
+    public int getNbChildren() {
+        return redir.getNbChildren();
+    }
+
+    public void setDistances(double[][] distances) {
+        redir.setDistances(distances);
+    }
+
+    public double[][] getDistances() {
+        return redir.getDistances();
     }
 }

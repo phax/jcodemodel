@@ -1,16 +1,16 @@
 package com.helger.jcodemodel.examples.plugin.yaml.basic;
 
 public class A {
-    private final int a;
+    private final long uuid;
 
-    public A(int a) {
-        this.a = a;
+    public A(long uuid) {
+        this.uuid = uuid;
     }
 
     /**
-     * @return the {@link #a}
+     * @return the {@link #uuid}
      */
-    public int getA() {
-        return a;
+    public long getUuid() {
+        return uuid;
     }
 }

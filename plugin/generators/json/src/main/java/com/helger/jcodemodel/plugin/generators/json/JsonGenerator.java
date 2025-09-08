@@ -21,15 +21,16 @@ public class JsonGenerator extends FlatStructureGenerator {
 
   @Override
   protected Stream<FlatStructRecord> loadSource(InputStream source) {
-    Stream<FlatStructRecord> ret = Stream.empty();
-    ObjectMapper mapper = new ObjectMapper();
     try {
-      JsonPackage ms = mapper.readerFor(JsonPackage.class).readValue(source);
-      ret = Stream.concat(ret, visitPackage(ms, null));
+      return visitPackage(load(source), null);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    return ret;
+  }
+
+  protected JsonPackage load(InputStream source) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    return mapper.readerFor(JsonPackage.class).readValue(source);
   }
 
   protected Stream<FlatStructRecord> visitPackage(JsonPackage pck, String path) {
