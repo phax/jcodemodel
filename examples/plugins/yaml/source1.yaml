@@ -4,6 +4,7 @@ com.helger.jcodemodel.examples.plugin.yaml.basic:
    package: # we add getters and setters on all field of the package
       - get
       - set
+      
    A: # class A with an int. It is final so no setter actually created, and constructor added
       var:
          uuid:
@@ -11,6 +12,7 @@ com.helger.jcodemodel.examples.plugin.yaml.basic:
             options:
                - private
                - final
+               
    B: # extends A so add a constructor
       extends: A
       var:
@@ -22,6 +24,7 @@ com.helger.jcodemodel.examples.plugin.yaml.basic:
             class: double [] []
             options:
                - private
+               
    C: 
       var:
          redir: # all public methods exposed in B are exposed in that class and redirect to the field 
@@ -31,10 +34,19 @@ com.helger.jcodemodel.examples.plugin.yaml.basic:
                - redirect
          list:
             class: obj list list set
+            
    Empty1: # empty class. Needs the class field with at least one empty value
       class:
        - 
+       
    Empty2: # empty class. is a class because extends is present
       extends: "" 
-   ListSon: # empty class. is a class because extends is present
+      
+   ListSon:
       extends: "object list list" 
+      class:
+         - noget
+         - noset
+      var:
+         listf:
+            class: "object list list"
