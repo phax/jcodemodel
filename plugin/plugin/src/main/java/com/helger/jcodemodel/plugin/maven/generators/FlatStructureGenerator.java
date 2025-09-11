@@ -24,6 +24,7 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.Encapsulation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.FieldCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.SimpleField;
@@ -166,17 +167,11 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         Objects.requireNonNull(ownerOptions, "can't find options for class " + owner.fullName()
             + " known classes are " + pathOptions.keySet());
         af.options().setParent(ownerOptions);
-        AbstractJType fieldType = resolveType(model, af.fieldInternalClassName(), af.arrayDepth());
+
+        AbstractJType fieldType = resolveType(model, af.fieldInternalClassName(), af.encapsulations());
         if (fieldType == null) {
           throw new RuntimeException("can't resolve type " + af.fieldClassName() + " for field "
               + af.fullyQualifiedClassName() + "::" + af.fieldName());
-        }
-        if (af.options().isList()) {
-          if (fieldType instanceof JPrimitiveType) {
-            throw new RuntimeException("can't create a list of primitive : " + fieldType + " for field "
-                + af.fullyQualifiedClassName() + "::" + af.fieldName());
-          }
-          fieldType = model.ref(List.class).narrow(fieldType);
         }
         addField(owner, fieldType, af.fieldName(), af.options(), model);
       }
@@ -210,13 +205,13 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
   }
 
-  protected AbstractJType resolveType(JCodeModel model, String typeName, int arrayLevel) {
+  protected AbstractJType resolveType(JCodeModel model, String typeName, List<Encapsulation> encapsulations) {
     AbstractJType ret = resolveType(model, typeName);
     if (ret == null) {
       return null;
     }
-    for (int i = 0; i < arrayLevel; i++) {
-      ret = ret.array();
+    for (Encapsulation e : encapsulations) {
+      ret = e.apply(ret, model);
     }
     return ret;
   }
@@ -434,7 +429,9 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     for (FlatStructRecord rec : records) {
       if (rec instanceof SimpleField af) {
         if (af.options().isRedirect()) {
-          if (af.arrayDepth() > 0) {
+          // can't redirect calls to a field encapsulated, eg String[] or List<Double>
+
+          if (af.encapsulations().size() > 0) {
             continue;
           }
           JDefinedClass fieldOwner = Objects.requireNonNull(definedClasses.get(af.fullyQualifiedClassName()),
@@ -534,27 +531,6 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         fa.apply(options);
       }
     }
-  }
-
-
-  public record ArrayDepth(String type, int arrayDepth) {
-
-    /*
-     * parse eg "string []   []" into (string, 2)
-     */
-    public static ArrayDepth parse(String sourceType) {
-      int arrayDepth = 0;
-      sourceType = sourceType.trim();
-      while (sourceType.endsWith("[]")) {
-        arrayDepth++;
-        sourceType = sourceType.replaceFirst("\\[\\]", "").trim();
-      }
-      if (sourceType != null && sourceType.isBlank()) {
-        sourceType = null;
-      }
-      return new ArrayDepth(sourceType, arrayDepth);
-    }
-
   }
 
 }

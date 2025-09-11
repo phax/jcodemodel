@@ -13,6 +13,7 @@ import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.Encapsulated;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.SimpleField;
 
@@ -77,8 +78,8 @@ public class JsonGenerator extends FlatStructureGenerator {
         applyToFieldOptions(optStr, options);
       }
     }
-    ArrayDepth ad = ArrayDepth.parse(field.type);
-    return Stream.of(new SimpleField(path, fieldName, ad.type(), ad.arrayDepth(), options));
+    Encapsulated enc = Encapsulated.parse(field.type);
+    return Stream.of(new SimpleField(path, fieldName, enc.baseClassName(), enc.encapsulations(), options));
   }
 
 }

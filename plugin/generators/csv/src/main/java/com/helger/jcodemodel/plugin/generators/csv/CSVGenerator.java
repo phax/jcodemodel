@@ -4,6 +4,8 @@ package com.helger.jcodemodel.plugin.generators.csv;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -12,6 +14,8 @@ import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.Encapsulated;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.Encapsulation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.SimpleField;
 
@@ -48,14 +52,13 @@ public class CSVGenerator extends FlatStructureGenerator {
 
     // find the type specified, if any, and array depth
 
+
     String fieldClassName = null;
-    int arrayDepth = 0;
+    List<Encapsulation> encs = new ArrayList<>();
     if (spl.length > 2) {
-      ArrayDepth ad = ArrayDepth.parse(spl[2]);
-      if (ad != null) {
-        fieldClassName = ad.type();
-        arrayDepth = ad.arrayDepth();
-      }
+      Encapsulated ec = Encapsulated.parse(spl[2]);
+      fieldClassName = ec.baseClassName();
+      encs = ec.encapsulations();
     }
 
     FieldOptions options = new FieldOptions();
@@ -73,7 +76,7 @@ public class CSVGenerator extends FlatStructureGenerator {
         return new ClassCreation(className, fieldClassName, options);
       }
     } else {
-      return new SimpleField(className, fieldName, fieldClassName, arrayDepth, options);
+      return new SimpleField(className, fieldName, fieldClassName, encs, options);
     }
   }
 
