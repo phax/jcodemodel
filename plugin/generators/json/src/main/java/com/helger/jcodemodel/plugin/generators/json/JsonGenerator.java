@@ -45,7 +45,8 @@ public class JsonGenerator extends FlatStructureGenerator {
             applyToFieldOptions(optStr, options);
           }
         }
-        ret = Stream.concat(ret, Stream.of(new ClassCreation(path, pck.parentClassName, options)));
+        ret = Stream.concat(ret,
+            Stream.of(new ClassCreation(path, Encapsulated.parse(pck.parentClassName), options)));
       }
       if (pck.fields != null) {
         for (Entry<String, JsonField> e : pck.fields.entrySet()) {
@@ -79,7 +80,7 @@ public class JsonGenerator extends FlatStructureGenerator {
       }
     }
     Encapsulated enc = Encapsulated.parse(field.type);
-    return Stream.of(new SimpleField(path, fieldName, enc.baseClassName(), enc.encapsulations(), options));
+    return Stream.of(new SimpleField(path, fieldName, enc, options));
   }
 
 }

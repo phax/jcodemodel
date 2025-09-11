@@ -3,7 +3,7 @@ package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 /**
  * Additional features to add when constructing fields
  */
-public enum FieldConstruct {
+public enum FieldOption {
 
   GETTER {
     @Override
@@ -71,7 +71,7 @@ public enum FieldConstruct {
 
   public abstract void apply(FieldOptions opt);
 
-  public static FieldConstruct of(String value) {
+  public static FieldOption of(String value) {
     if (value == null || value.isBlank()) {
       return null;
     }

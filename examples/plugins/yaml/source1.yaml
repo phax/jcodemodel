@@ -36,3 +36,5 @@ com.helger.jcodemodel.examples.plugin.yaml.basic:
        - 
    Empty2: # empty class. is a class because extends is present
       extends: "" 
+   ListSon: # empty class. is a class because extends is present
+      extends: "object list list" 

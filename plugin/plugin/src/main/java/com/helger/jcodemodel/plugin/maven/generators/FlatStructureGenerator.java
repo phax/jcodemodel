@@ -19,11 +19,12 @@ import java.util.stream.Stream;
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldConstruct;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOption;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.Encapsulated;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.Encapsulation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.FieldCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.PackageCreation;
@@ -135,10 +136,12 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   protected void applyInheritance(JCodeModel model, List<FlatStructRecord> records) {
     for (FlatStructRecord rec : records) {
       if (rec instanceof ClassCreation cc) {
-        if (cc.parentClassName() != null && !cc.parentClassName().isBlank()) {
-          AbstractJType parentType = resolveType(model, cc.parentClassName());
+        if (cc.parentType() != null
+            && cc.parentType().baseClassName() != null
+            && !cc.parentType().baseClassName().isBlank()) {
+          AbstractJType parentType = resolveConcreteType(model, cc.parentType());
           if (parentType == null) {
-            throw new RuntimeException("can't resolve type " + cc.parentClassName() + " as parent of "
+            throw new RuntimeException("can't resolve type " + cc.parentType() + " as parent of "
                 + cc.fullyQualifiedClassName());
           }
           if (parentType instanceof JPrimitiveType jpt) {
@@ -168,7 +171,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
             + " known classes are " + pathOptions.keySet());
         af.options().setParent(ownerOptions);
 
-        AbstractJType fieldType = resolveType(model, af.fieldInternalClassName(), af.encapsulations());
+        AbstractJType fieldType = resolveType(model, af.fieldType());
         if (fieldType == null) {
           throw new RuntimeException("can't resolve type " + af.fieldClassName() + " for field "
               + af.fullyQualifiedClassName() + "::" + af.fieldName());
@@ -176,6 +179,22 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         addField(owner, fieldType, af.fieldName(), af.options(), model);
       }
     }
+  }
+
+  protected AbstractJType resolveType(JCodeModel model, Encapsulated enc) {
+    AbstractJType ret = resolveType(model, enc.baseClassName());
+    for (Encapsulation e : enc.encapsulations()) {
+      ret = e.apply(ret, model);
+    }
+    return ret;
+  }
+
+  protected AbstractJType resolveConcreteType(JCodeModel model, Encapsulated enc) {
+    AbstractJType ret = resolveType(model, enc.baseClassName());
+    for (Encapsulation e : enc.encapsulations()) {
+      ret = e.applyConcrete(ret, model);
+    }
+    return ret;
   }
 
   protected AbstractJType resolveType(JCodeModel model, String typeName) {
@@ -305,6 +324,10 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     }
     AbstractJClass parent;
     if ((parent = createdClass._extends()) != null) {
+      if (parent instanceof JNarrowedClass narrowed) {
+        parent = narrowed.basis();
+      }
+//			TODO convert to pattern matching post java 21
       if (parent instanceof JDefinedClass parentClass) {
         createConstructors(model, createdClass, parentClass, done);
       } else if (parent instanceof JReferencedClass parentClass) {
@@ -432,12 +455,12 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         if (af.options().isRedirect()) {
           // can't redirect calls to a field encapsulated, eg String[] or List<Double>
 
-          if (af.encapsulations().size() > 0) {
+          if (af.fieldType().encapsulations().size() > 0) {
             continue;
           }
           JDefinedClass fieldOwner = Objects.requireNonNull(definedClasses.get(af.fullyQualifiedClassName()),
               "can't find defined class " + af.fullyQualifiedClassName() + " for field " + af);
-          AbstractJType fieldType = resolveType(model, af.fieldInternalClassName());
+          AbstractJType fieldType = resolveType(model, af.fieldType().baseClassName());
           if (fieldType instanceof JDefinedClass jdc) {
             applyRedirect(model, af, fieldOwner, jdc);
           } else if (fieldType instanceof JReferencedClass jrc) {
@@ -525,7 +548,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     if (fv != null) {
       fv.apply(options);
     } else {
-      FieldConstruct fa = FieldConstruct.of(optStr);
+      FieldOption fa = FieldOption.of(optStr);
       if (fa == null) {
         throw new UnsupportedOperationException("can't deduce option from " + optStr);
       } else {

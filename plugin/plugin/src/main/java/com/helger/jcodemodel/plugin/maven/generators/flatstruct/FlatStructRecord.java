@@ -1,6 +1,8 @@
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,7 +25,7 @@ public sealed interface FlatStructRecord {
   /**
    * create a class, with options
    */
-  public record ClassCreation(String fullyQualifiedClassName, String parentClassName, FieldOptions options)
+  public record ClassCreation(String fullyQualifiedClassName, Encapsulated parentType, FieldOptions options)
       implements FlatStructRecord {
   }
 
@@ -44,16 +46,12 @@ public sealed interface FlatStructRecord {
   }
 
   /** A field definition in a class, with a simple type that can be an array */
-  public record SimpleField(String fullyQualifiedClassName, String fieldName, String fieldInternalClassName,
-      List<Encapsulation> encapsulations, FieldOptions options)
+  public record SimpleField(String fullyQualifiedClassName, String fieldName, Encapsulated fieldType,
+      FieldOptions options)
       implements FieldCreation {
     @Override
     public String fieldClassName() {
-      String ret = fieldInternalClassName;
-      for (Encapsulation e : encapsulations) {
-        ret = e.apply(ret);
-      }
-      return ret;
+      return fieldType().toString();
     }
   }
 
@@ -68,6 +66,11 @@ public sealed interface FlatStructRecord {
       public AbstractJType apply(AbstractJType t, JCodeModel cm) {
         return t.array();
       }
+
+      @Override
+      public AbstractJType applyConcrete(AbstractJType t, JCodeModel cm) {
+        return t.array();
+      }
     },
     LIST() {
       @Override
@@ -78,6 +81,11 @@ public sealed interface FlatStructRecord {
       @Override
       public AbstractJType apply(AbstractJType e, JCodeModel cm) {
         return cm.ref(List.class).narrow(e);
+      }
+
+      @Override
+      public AbstractJType applyConcrete(AbstractJType e, JCodeModel cm) {
+        return cm.ref(ArrayList.class).narrow(e);
       }
     },
     MAP() {
@@ -90,6 +98,11 @@ public sealed interface FlatStructRecord {
       public AbstractJType apply(AbstractJType e, JCodeModel cm) {
         return cm.ref(Map.class).narrow(cm.ref(Object.class)).narrow(e);
       }
+
+      @Override
+      public AbstractJType applyConcrete(AbstractJType e, JCodeModel cm) {
+        return cm.ref(HashMap.class).narrow(cm.ref(Object.class)).narrow(e);
+      }
     },
     SET() {
       @Override
@@ -101,9 +114,18 @@ public sealed interface FlatStructRecord {
       public AbstractJType apply(AbstractJType e, JCodeModel cm) {
         return cm.ref(Set.class).narrow(e);
       }
+
+      @Override
+      public AbstractJType applyConcrete(AbstractJType e, JCodeModel cm) {
+        return cm.ref(HashSet.class).narrow(e);
+      }
     };
 
     public abstract String apply(String encapsulatedClassName);
+
+    public abstract AbstractJType apply(AbstractJType e, JCodeModel cm);
+
+    public abstract AbstractJType applyConcrete(AbstractJType e, JCodeModel cm);
 
     public static Encapsulation parse(String s) {
       if (s == null) {
@@ -121,8 +143,6 @@ public sealed interface FlatStructRecord {
       }
       };
     }
-
-    public abstract AbstractJType apply(AbstractJType e, JCodeModel cm);
   }
 
   record Encapsulated(String baseClassName, List<Encapsulation> encapsulations) {
@@ -151,6 +171,15 @@ public sealed interface FlatStructRecord {
         }
       }
       return new Encapsulated(baseClass, encapsulations);
+    }
+
+    @Override
+    public String toString() {
+      String ret = baseClassName();
+      for (Encapsulation enc : encapsulations()) {
+        ret = enc.apply(ret);
+      }
+      return ret;
     }
 
   }
