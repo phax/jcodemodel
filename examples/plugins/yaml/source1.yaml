@@ -29,6 +29,8 @@ com.helger.jcodemodel.examples.plugin.yaml.basic:
             options:
                - private
                - redirect
+         list:
+            class: obj list list set
    Empty1: # empty class. Needs the class field with at least one empty value
       class:
        - 

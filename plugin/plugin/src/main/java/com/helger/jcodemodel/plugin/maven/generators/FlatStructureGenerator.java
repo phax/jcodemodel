@@ -231,6 +231,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     case "date", "instant", "datetime" -> Instant.class;
     case "long" -> long.class;
     case "Long" -> Long.class;
+    case "obj", "object" -> Object.class;
     case "string", "String" -> String.class;
     default -> Class.forName(typeName);
     };
