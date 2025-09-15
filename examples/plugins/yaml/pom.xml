@@ -24,7 +24,21 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
-              <source>source1.yaml</source>
+              <source>sourceBasic.yaml</source>
+            </configuration>
+          </execution>
+          <execution>
+            <id>concrete</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <source>sourceConcrete.yaml</source>
+              <params>
+                <concrete.list>LinkedList</concrete.list>
+                <concrete.map>LinkedHashMap</concrete.map>
+                <concrete.set>LinkedHashSet</concrete.set>
+              </params>
             </configuration>
           </execution>
         </executions>

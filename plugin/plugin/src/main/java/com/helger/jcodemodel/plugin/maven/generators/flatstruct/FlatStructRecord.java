@@ -1,8 +1,6 @@
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,7 +66,7 @@ public sealed interface FlatStructRecord {
       }
 
       @Override
-      public AbstractJType applyConcrete(AbstractJType t, JCodeModel cm) {
+      public AbstractJType applyConcrete(AbstractJType t, JCodeModel cm, ConcreteTypes concrete) {
         return t.array();
       }
     },
@@ -84,8 +82,8 @@ public sealed interface FlatStructRecord {
       }
 
       @Override
-      public AbstractJType applyConcrete(AbstractJType e, JCodeModel cm) {
-        return cm.ref(ArrayList.class).narrow(e);
+      public AbstractJType applyConcrete(AbstractJType e, JCodeModel cm, ConcreteTypes concrete) {
+        return cm.ref(concrete.list).narrow(e);
       }
     },
     MAP() {
@@ -100,8 +98,8 @@ public sealed interface FlatStructRecord {
       }
 
       @Override
-      public AbstractJType applyConcrete(AbstractJType e, JCodeModel cm) {
-        return cm.ref(HashMap.class).narrow(cm.ref(Object.class)).narrow(e);
+      public AbstractJType applyConcrete(AbstractJType e, JCodeModel cm, ConcreteTypes concrete) {
+        return cm.ref(concrete.map).narrow(cm.ref(Object.class)).narrow(e);
       }
     },
     SET() {
@@ -116,8 +114,8 @@ public sealed interface FlatStructRecord {
       }
 
       @Override
-      public AbstractJType applyConcrete(AbstractJType e, JCodeModel cm) {
-        return cm.ref(HashSet.class).narrow(e);
+      public AbstractJType applyConcrete(AbstractJType e, JCodeModel cm, ConcreteTypes concrete) {
+        return cm.ref(concrete.set).narrow(e);
       }
     };
 
@@ -125,7 +123,7 @@ public sealed interface FlatStructRecord {
 
     public abstract AbstractJType apply(AbstractJType e, JCodeModel cm);
 
-    public abstract AbstractJType applyConcrete(AbstractJType e, JCodeModel cm);
+    public abstract AbstractJType applyConcrete(AbstractJType e, JCodeModel cm, ConcreteTypes concrete);
 
     public static Encapsulation parse(String s) {
       if (s == null) {

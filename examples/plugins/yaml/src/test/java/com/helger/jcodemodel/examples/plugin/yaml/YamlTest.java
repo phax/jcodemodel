@@ -1,5 +1,9 @@
 package com.helger.jcodemodel.examples.plugin.yaml;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,6 +12,9 @@ import com.helger.jcodemodel.examples.plugin.yaml.basic.B;
 import com.helger.jcodemodel.examples.plugin.yaml.basic.C;
 import com.helger.jcodemodel.examples.plugin.yaml.basic.Empty1;
 import com.helger.jcodemodel.examples.plugin.yaml.basic.Empty2;
+import com.helger.jcodemodel.examples.plugin.yaml.concrete.ConcreteList;
+import com.helger.jcodemodel.examples.plugin.yaml.concrete.ConcreteMap;
+import com.helger.jcodemodel.examples.plugin.yaml.concrete.ConcreteSet;
 
 public class YamlTest {
 
@@ -30,6 +37,14 @@ public class YamlTest {
 
     new Empty1();
     new Empty2();
+  }
+
+  @Test
+  public void testConcrete() {
+    // just check that the implementation are indeed
+    Assert.assertTrue(new ConcreteList() instanceof LinkedList<?>);
+    Assert.assertTrue(new ConcreteMap() instanceof LinkedHashMap<?, ?>);
+    Assert.assertTrue(new ConcreteSet() instanceof LinkedHashSet<?>);
   }
 
 }

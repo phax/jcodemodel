@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.ConcreteTypes;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOption;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
@@ -33,6 +34,14 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord
 public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
   protected abstract Stream<FlatStructRecord> loadSource(InputStream source);
+
+  protected ConcreteTypes concrete;
+
+  @Override
+  public void configure(Map<String, String> params) {
+    CodeModelBuilder.super.configure(params);
+    concrete = ConcreteTypes.from(params);
+  }
 
   @Override
   public void build(JCodeModel model, InputStream source) throws JCodeModelException {
@@ -192,7 +201,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   protected AbstractJType resolveConcreteType(JCodeModel model, Encapsulated enc) {
     AbstractJType ret = resolveType(model, enc.baseClassName());
     for (Encapsulation e : enc.encapsulations()) {
-      ret = e.applyConcrete(ret, model);
+      ret = e.applyConcrete(ret, model, concrete);
     }
     return ret;
   }
