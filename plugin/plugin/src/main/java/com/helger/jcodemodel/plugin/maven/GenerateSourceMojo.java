@@ -40,6 +40,9 @@ public class GenerateSourceMojo extends AbstractMojo {
   @Parameter(property = "jcodemodel.outdir", defaultValue = "src/generated/java")
   private String outputDir;
 
+  @Parameter(property = "jcodemodel.rootpackage", defaultValue = "")
+  private String rootPackage;
+
   /**
    * source of the data to transmit to the generator when building the model. can
    * be a url, a file.
@@ -84,12 +87,17 @@ public class GenerateSourceMojo extends AbstractMojo {
     }
     getLog().info("Generator " + cmb.getClass().getCanonicalName() + " generates model into "
         + dir.getAbsolutePath() + " with params " + params);
+
+    if (rootPackage != null && !rootPackage.isBlank()) {
+      cmb.setRootPackage(rootPackage);
+    }
     if (params != null) {
       cmb.configure(params);
     }
+
     JCodeModel cm = new JCodeModel();
     if (data != null && !data.isBlank() && source != null && !source.isBlank()) {
-      getLog().warn("discarding source param " + source + " as dat is already set");
+      getLog().warn("discarding source param " + source + " as data is already set");
     }
     InputStream source = data == null || data.isBlank() ? findSource() : new ByteArrayInputStream(data.getBytes());
     try {

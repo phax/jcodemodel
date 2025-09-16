@@ -13,6 +13,10 @@ public class FieldOptions {
     return this;
   }
 
+  public FieldOptions getParent() {
+    return parent;
+  }
+
   // is field final
 
   private Boolean _final = null;

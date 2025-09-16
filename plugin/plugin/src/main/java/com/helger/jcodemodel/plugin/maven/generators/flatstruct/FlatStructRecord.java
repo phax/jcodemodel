@@ -12,18 +12,18 @@ import com.helger.jcodemodel.JCodeModel;
 
 public sealed interface FlatStructRecord {
 
-  String fullyQualifiedClassName();
+  String localName();
 
   /**
    * specify package-wide options
    */
-  public record PackageCreation(String fullyQualifiedClassName, FieldOptions options) implements FlatStructRecord {
+  public record PackageCreation(String localName, FieldOptions options) implements FlatStructRecord {
   }
 
   /**
    * create a class, with options
    */
-  public record ClassCreation(String fullyQualifiedClassName, Encapsulated parentType, FieldOptions options)
+  public record ClassCreation(String localName, Encapsulated parentType, FieldOptions options)
       implements FlatStructRecord {
   }
 
@@ -44,7 +44,7 @@ public sealed interface FlatStructRecord {
   }
 
   /** A field definition in a class, with a simple type that can be an array */
-  public record SimpleField(String fullyQualifiedClassName, String fieldName, Encapsulated fieldType,
+  public record SimpleField(String localName, String fieldName, Encapsulated fieldType,
       FieldOptions options)
       implements FieldCreation {
     @Override

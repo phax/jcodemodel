@@ -51,10 +51,8 @@ public class CSVGenerator extends FlatStructureGenerator {
 
 
     Encapsulated ec = null;
-    String fieldClassName = null;
     if (spl.length > 2) {
       ec = Encapsulated.parse(spl[2]);
-      fieldClassName = ec.baseClassName();
     }
 
     FieldOptions options = new FieldOptions();

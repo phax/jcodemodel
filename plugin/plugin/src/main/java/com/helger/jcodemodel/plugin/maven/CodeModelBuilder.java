@@ -37,4 +37,17 @@ public interface CodeModelBuilder {
     build(model, null);
   }
 
+  void setRootPackage(String rootPackage);
+
+  String getRootPackage();
+
+  /**
+   * @param localPath class we want to create, eg "pck.MyClass"
+   * @return localpath prefixed by rootpackage and "." if needed.
+   */
+  default String expandClassName(String localPath) {
+    String rootPackage = getRootPackage();
+    return rootPackage == null || rootPackage.isBlank() ? localPath : rootPackage + "." + localPath;
+  }
+
 }

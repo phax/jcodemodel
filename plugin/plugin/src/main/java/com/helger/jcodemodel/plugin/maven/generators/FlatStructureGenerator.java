@@ -35,6 +35,18 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
   protected abstract Stream<FlatStructRecord> loadSource(InputStream source);
 
+  private String rootPackage = "";
+
+  @Override
+  public void setRootPackage(String rootPackage) {
+    this.rootPackage = rootPackage;
+  }
+
+  @Override
+  public String getRootPackage() {
+    return rootPackage;
+  }
+
   protected ConcreteTypes concrete;
 
   @Override
@@ -55,7 +67,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   }
 
   /**
-   * all the classes we created, by fully qualified name
+   * all the classes we created, by local name
    */
   private Map<String, JDefinedClass> definedClasses = new HashMap<>();
 
@@ -66,12 +78,12 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   private Map<String, Set<JDefinedClass>> simpleDefinedClasses = new HashMap<>();
 
   /**
-   * classes and package options, added as we create them.
+   * classes and package options stored by local name, added as we create them.
    */
   private Map<String, FieldOptions> pathOptions = new HashMap<>();
 
   /**
-   * fully qualified class name to the lastUpdated field
+   * fully qualified class name to their "lastUpdated" field
    */
   private Map<String, JFieldVar> classLastUpdated = new HashMap<>();
 
@@ -82,11 +94,11 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   protected void createClasses(JCodeModel model, List<FlatStructRecord> records) {
     for (FlatStructRecord rec : records) {
       if (rec instanceof ClassCreation cc) {
-        ensureClass(model, cc.fullyQualifiedClassName(), cc.options());
+        ensureClass(model, cc.localName(), cc.options());
       } else if (rec instanceof PackageCreation pc) {
-        pathOptions.put(pc.fullyQualifiedClassName(), pc.options());
+        pathOptions.put(pc.localName().replaceAll("^\\.", ""), pc.options());
       } else if (rec instanceof FieldCreation fc) {
-        ensureClass(model, fc.fullyQualifiedClassName(), null);
+        ensureClass(model, fc.localName(), null);
       }
     }
   }
@@ -94,20 +106,20 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   /**
    * ensure a jdefinedclass exists for given name
    */
-  protected JDefinedClass ensureClass(JCodeModel model, String fullyQualifiedName, FieldOptions options) {
-    JDefinedClass clazz = definedClasses.computeIfAbsent(fullyQualifiedName, n -> {
+  protected JDefinedClass ensureClass(JCodeModel model, String localName, FieldOptions options) {
+    JDefinedClass clazz = definedClasses.computeIfAbsent(localName, n -> {
       try {
-        return model._class(n);
+        return model._class(expandClassName(n));
       } catch (JCodeModelException e) {
         throw new RuntimeException(e);
       }
     });
-    String simpleName = fullyQualifiedName.replaceAll(".*\\.", "");
+    String simpleName = localName.replaceAll(".*\\.", "");
     simpleDefinedClasses.computeIfAbsent(simpleName, n -> new HashSet<>()).add(clazz);
     if (options == null) {
-      pathOptions.computeIfAbsent(fullyQualifiedName, cn -> new FieldOptions());
+      pathOptions.computeIfAbsent(localName, cn -> new FieldOptions());
     } else {
-      pathOptions.put(fullyQualifiedName, options);
+      pathOptions.put(localName, options);
     }
     return clazz;
   }
@@ -117,14 +129,17 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
    */
   protected void updateParentOptions(List<FlatStructRecord> records) {
     for (Entry<String, FieldOptions> e : pathOptions.entrySet()) {
-      e.getValue().setParent(findParentOption(e.getKey()));
+      if (!e.getKey().isBlank()) {
+        e.getValue().setParent(findParentOption(e.getKey()));
+      }
     }
   }
 
   /**
-   * find the fieldoptions associated to the longest leading path of the child.
-   * eg. if child is my.own.LittleClass, and there is a fieldoptions stored for my
-   * and one for my.own, then this would return the fieldoptions associated to
+   * find the FieldOptions associated to the longest leading path of the child.
+   * eg. if child is my.own.LittleClass, and there is a fieldoptions stored for
+   * "my"
+   * and one for "my.own", then this would return the fieldoptions associated to
    * my.own.
    */
   protected FieldOptions findParentOption(String fullChildName) {
@@ -136,6 +151,9 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       search = idx > -1 ? search.substring(0, idx) : null;
       found = pathOptions.get(search);
     } while (found == null && search != null && !search.isBlank());
+    if (found == null) {
+      found = pathOptions.get("");
+    }
     return found;
   }
 
@@ -151,14 +169,14 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
           AbstractJType parentType = resolveConcreteType(model, cc.parentType());
           if (parentType == null) {
             throw new RuntimeException("can't resolve type " + cc.parentType() + " as parent of "
-                + cc.fullyQualifiedClassName());
+                + cc.localName());
           }
           if (parentType instanceof JPrimitiveType jpt) {
             throw new RuntimeException(
-                "class " + cc.fullyQualifiedClassName() + " cannot extend the primitive class " + jpt);
+                "class " + cc.localName() + " cannot extend the primitive class " + jpt);
           }
           AbstractJClass parentJClass = (AbstractJClass) parentType;
-          JDefinedClass ownerClass = definedClasses.get(cc.fullyQualifiedClassName());
+          JDefinedClass ownerClass = definedClasses.get(cc.localName());
           if (parentJClass.isInterface()) {
             ownerClass._implements(parentJClass);
           } else {
@@ -173,17 +191,17 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   protected void createFields(JCodeModel model, List<FlatStructRecord> records) {
     for (FlatStructRecord rec : records) {
       if (rec instanceof SimpleField af) {
-        JDefinedClass owner = Objects.requireNonNull(definedClasses.get(af.fullyQualifiedClassName()),
-            "can't find defined class " + af.fullyQualifiedClassName() + " for field " + af);
-        FieldOptions ownerOptions = pathOptions.get(owner.fullName());
-        Objects.requireNonNull(ownerOptions, "can't find options for class " + owner.fullName()
+        JDefinedClass owner = Objects.requireNonNull(definedClasses.get(af.localName()),
+            "can't find defined class " + af.localName() + " for field " + af);
+        FieldOptions ownerOptions = pathOptions.get(af.localName());
+        Objects.requireNonNull(ownerOptions, "can't find options for class " + af.localName()
             + " known classes are " + pathOptions.keySet());
         af.options().setParent(ownerOptions);
 
         AbstractJType fieldType = resolveType(model, af.fieldType());
         if (fieldType == null) {
           throw new RuntimeException("can't resolve type " + af.fieldClassName() + " for field "
-              + af.fullyQualifiedClassName() + "::" + af.fieldName());
+              + af.localName() + "::" + af.fieldName());
         }
         addField(owner, fieldType, af.fieldName(), af.options(), model);
       }
@@ -206,6 +224,21 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     return ret;
   }
 
+  /**
+   * resolve a name to a class. The order of searching is :
+   * <ol>
+   * <li>a created class with that exact local name</li>
+   * <li>a created class with that exact simple name. If several classes exist
+   * with that simple name, throws an exception</li>
+   * <li>a static class with that exact full name</li>
+   * <li>a static class with that exact full name in package java.lang</li>
+   * <li>a static class with that exact full name in package java.util</li>
+   * </ol>
+   *
+   * @param model
+   * @param typeName
+   * @return
+   */
   protected AbstractJType resolveType(JCodeModel model, String typeName) {
     AbstractJType defined = definedClasses.get(typeName);
     if (defined == null) {
@@ -222,14 +255,17 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     if (defined != null) {
       return defined;
     }
-    try {
-      Class<?> staticResolved = convertStaticType(typeName);
+    Class<?> staticResolved = staticAlias(typeName);
+    for (String prefix : new String[] { null, "java.lang", "java.util" }) {
       if (staticResolved != null) {
-        return model._ref(staticResolved);
+        break;
       }
-    } catch (ClassNotFoundException e) {
+      try {
+        staticResolved = Class.forName((prefix == null || prefix.isBlank() ? "" : prefix + ".") + typeName);
+      } catch (ClassNotFoundException e) {
+      }
     }
-    return null;
+    return staticResolved == null ? null : model._ref(staticResolved);
 
   }
 
@@ -244,8 +280,13 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     return ret;
   }
 
-  protected Class<?> convertStaticType(String typeName) throws ClassNotFoundException {
-    return switch (typeName) {
+  /**
+   * convert an alias to a static class
+   *
+   * @return corresponding static class, or null if alias does not match any
+   */
+  protected Class<?> staticAlias(String alias) {
+    return switch (alias) {
     case "bool", "boolean" -> boolean.class;
     case "Bool", "Boolean" -> Boolean.class;
     case "char", "character" -> char.class;
@@ -261,7 +302,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     case "Long" -> Long.class;
     case "obj", "object" -> Object.class;
     case "string", "String" -> String.class;
-    default -> Class.forName(typeName);
+    default -> null;
     };
   }
 
@@ -294,14 +335,14 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     meth.body().assign(JExpr.refthis(fv), param);
     if (options.isLastUpdated()) {
       JFieldVar lastUpdated = classLastUpdated.computeIfAbsent(jdc.fullName(),
-          n -> addLastUpdated(jdc, model));
+          n -> addLastUpdated(jdc, model, options));
       meth.body().assign(JExpr.refthis(lastUpdated), model.ref(Instant.class).staticInvoke("now"));
     }
     meth.javadoc().add("set the {@link #" + fv.name() + "}");
   }
 
-  protected JFieldVar addLastUpdated(JDefinedClass jdc, JCodeModel model) {
-    FieldOptions ownerOptions = pathOptions.get(jdc.fullName());
+  protected JFieldVar addLastUpdated(JDefinedClass jdc, JCodeModel model, FieldOptions fieldOptions) {
+    FieldOptions ownerOptions = fieldOptions.getParent();
     JFieldVar lastUpdated = jdc.field(ownerOptions.getVisibility().jmod, model.ref(Instant.class), "lastUpdated",
         JExpr._null());
     lastUpdated.javadoc().add("last time the class was directly set a field using a setter");
@@ -467,8 +508,8 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
           if (af.fieldType().encapsulations().size() > 0) {
             continue;
           }
-          JDefinedClass fieldOwner = Objects.requireNonNull(definedClasses.get(af.fullyQualifiedClassName()),
-              "can't find defined class " + af.fullyQualifiedClassName() + " for field " + af);
+          JDefinedClass fieldOwner = Objects.requireNonNull(definedClasses.get(af.localName()),
+              "can't find defined class " + af.localName() + " for field " + af);
           AbstractJType fieldType = resolveType(model, af.fieldType().baseClassName());
           if (fieldType instanceof JDefinedClass jdc) {
             applyRedirect(model, af, fieldOwner, jdc);
