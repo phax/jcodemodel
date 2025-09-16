@@ -34,6 +34,7 @@
             </goals>
             <configuration>
               <source>sourceConcrete.yaml</source>
+              <rootPackage>com.helger.jcodemodel.examples.plugin.yaml.concrete</rootPackage>
               <params>
                 <concrete.list>LinkedList</concrete.list>
                 <concrete.map>LinkedHashMap</concrete.map>

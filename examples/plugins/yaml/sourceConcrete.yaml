@@ -1,15 +1,14 @@
 # yaml is stored in file as the pom tabs can be changed by git, which is not allowed by yaml format. 
 
-com.helger.jcodemodel.examples.plugin.yaml.concrete:
-   package: # we add getters and setters on all field of the package
-      - get
-      - set
-       
-   ConcreteList:
-      extends: "object list list" 
-       
-   ConcreteMap:
-      extends: "string map" 
-       
-   ConcreteSet:
-      extends: "object list set" 
+package: # we add getters and setters on all field of the package
+   - get
+   - set
+    
+ConcreteList:
+   extends: "object list list" 
+    
+ConcreteMap:
+   extends: "string map" 
+    
+ConcreteSet:
+   extends: "object list set" 
