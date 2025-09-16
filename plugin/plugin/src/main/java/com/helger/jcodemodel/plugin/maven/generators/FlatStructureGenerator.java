@@ -96,7 +96,8 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
       if (rec instanceof ClassCreation cc) {
         ensureClass(model, cc.localName(), cc.options());
       } else if (rec instanceof PackageCreation pc) {
-        pathOptions.put(pc.localName().replaceAll("^\\.", ""), pc.options());
+        String localName = pc.localName() == null ? "" : pc.localName().replaceAll("^\\.", "");
+        pathOptions.put(localName, pc.options());
       } else if (rec instanceof FieldCreation fc) {
         ensureClass(model, fc.localName(), null);
       }

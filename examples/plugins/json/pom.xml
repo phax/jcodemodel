@@ -24,56 +24,43 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
+            <rootPackage>com.helger.jcodemodel.examples.plugin.json.basic</rootPackage>
               <data>
 {
-  "com":{
-    "helger":{
-      "jcodemodel":{
-        "examples":{
-          "plugin":{
-            "json":{
-              "basic":{
-                "package":[
-                  "get",
-                  "set"
-                ],
-                "A":{
-                  "var":{
-                    "a":{
-                      "class":"int",
-                      "options":[
-                        "private",
-                        "final"
-                      ]
-                    }
-                  }
-                },
-                "B":{
-                  "extends":"A",
-                  "var":{
-                    "b":{
-                      "class":"int",
-                      "options":[
-                        "private"
-                      ]
-                    }
-                  }
-                },
-                "C":{
-                  "var":{
-                    "redirect":{
-                      "class":"B",
-                      "options":[
-                        "private",
-                        "redirect"
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+  "package":[
+    "get",
+    "set"
+  ],
+  "A":{
+    "var":{
+      "a":{
+        "class":"int",
+        "options":[
+          "private",
+          "final"
+        ]
+      }
+    }
+  },
+  "B":{
+    "extends":"A",
+    "var":{
+      "b":{
+        "class":"int",
+        "options":[
+          "private"
+        ]
+      }
+    }
+  },
+  "C":{
+    "var":{
+      "redirect":{
+        "class":"B",
+        "options":[
+          "private",
+          "redirect"
+        ]
       }
     }
   }
