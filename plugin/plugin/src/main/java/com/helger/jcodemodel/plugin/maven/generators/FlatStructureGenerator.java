@@ -9,6 +9,8 @@ import java.lang.reflect.Parameter;
 import java.time.Instant;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -316,27 +318,30 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
   protected void addField(JDefinedClass jdc, AbstractJType type, String fieldName, FieldOptions options,
       JCodeModel model) {
     FieldCanner fc = getCanner(options.getCanner());
-    JFieldVar fv = jdc.field(
-        options.getVisibility().jmod | (options.isFinal() ? JMod.FINAL : 0),
-        fc == null ? type : fc.makeType(model, type),
-        fieldName);
+    int fieldMods = options.getVisibility().jmod | (options.isFinal() ? JMod.FINAL : 0);
+    JFieldVar fv = fc == null
+        ? jdc.field(fieldMods, type, fieldName)
+        : fc.makeType(jdc, fieldName, type, fieldMods);
     if (options.isSetter() && !options.isFinal()) {
       addSetter(fv, jdc, model, options, type, fc);
     }
     if (options.isGetter()) {
       addGetter(fv, jdc, type, fc);
-      if (fc != null) {
-        fc.makePropertyGetter();
-      }
+    }
+    if (fc != null) {
+      fc.addAdditional(fv, options);
     }
   }
 
   protected void addGetter(JFieldVar fv, JDefinedClass jdc, AbstractJType retType, FieldCanner fc) {
+    IJExpression retExpression = fc == null ? fv : fc.makeGetter(fv);
+    if (retExpression == null) {
+      return ;
+    }
     String methName = "get" + Character.toUpperCase(fv.name().charAt(0))
         + (fv.name().length() < 2 ? "" : fv.name().substring(1));
     JMethod meth = jdc.method(JMod.PUBLIC, retType, methName);
-    IJExpression ret = fc == null ? fv : fc.makeGetter(fv);
-    meth.body()._return(ret);
+    meth.body()._return(retExpression);
     meth.javadoc().add("@return the {@link #" + fv.name() + "}");
   }
 
@@ -346,8 +351,12 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         + (fv.name().length() < 2 ? "" : fv.name().substring(1));
     JMethod meth = jdc.method(JMod.PUBLIC, model.VOID, methName);
     JVar param = meth.param(paramType, fv.name());
-    IJStatement assign = fc == null ? JExpr.assign(JExpr.refthis(fv), param) : fc.makeSetter(param, fv);
-    meth.body().add(assign);
+    IJStatement assignExpression = fc == null ? JExpr.assign(JExpr.refthis(fv), param) : fc.makeSetter(param, fv);
+    if (assignExpression == null) {
+      jdc.methods().remove(meth);
+      return;
+    }
+    meth.body().add(assignExpression);
     if (options.isLastUpdated()) {
       JFieldVar lastUpdated = classLastUpdated.computeIfAbsent(jdc.fullName(),
           n -> addLastUpdated(jdc, model, options));
@@ -569,7 +578,13 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     if (fieldClass.isPrimitive()) {
       return;
     }
-    for (Method m : fieldClass.getMethods()) {
+    Method[] sortedMethods = fieldClass.getMethods();
+    Arrays.sort(sortedMethods, Comparator
+        .comparing(Method::getName)
+        .thenComparing(Method::getParameterCount)
+        // Method::toString actually short signature
+        .thenComparing(Comparator.comparing(Method::toString)));
+    for (Method m : sortedMethods) {
       if (
       // synthetic methods are added by the compiler, not in the actual code
       m.isSynthetic()
@@ -673,7 +688,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
   public FieldCanner getCanner(String alias) {
     if (alias == null) {
-      alias="";
+      alias = "";
     }
     return canners().get(alias);
   }

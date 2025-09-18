@@ -25,4 +25,6 @@ public class NoCanner implements FieldCanner {
   public IJExpression makeGetter(JFieldVar fv) {
     return fv;
   }
+
+  public static final NoCanner INSTANCE = new NoCanner();
 }

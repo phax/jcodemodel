@@ -48,8 +48,16 @@ public class Redirected {
         return abc.getC();
     }
 
+    public JBlock body() {
+        return jCatchBlock.body();
+    }
+
     public AbstractJClass exception() {
         return jCatchBlock.exception();
+    }
+
+    public void generate(IJFormatter arg0) {
+        jCatchBlock.generate(arg0);
     }
 
     public JVar param() {
@@ -58,13 +66,5 @@ public class Redirected {
 
     public JVar param(String arg0) {
         return jCatchBlock.param(arg0);
-    }
-
-    public JBlock body() {
-        return jCatchBlock.body();
-    }
-
-    public void generate(IJFormatter arg0) {
-        jCatchBlock.generate(arg0);
     }
 }
