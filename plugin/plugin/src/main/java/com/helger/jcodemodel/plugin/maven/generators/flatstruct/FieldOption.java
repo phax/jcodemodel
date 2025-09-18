@@ -3,7 +3,7 @@ package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 /**
  * Additional features to add when constructing fields
  */
-public enum FieldConstruct {
+public enum FieldOption {
 
   GETTER {
     @Override
@@ -67,23 +67,11 @@ public enum FieldConstruct {
     public void apply(FieldOptions opt) {
       opt.setFinal(false);
     }
-  },
-  LIST {
-    @Override
-    public void apply(FieldOptions opt) {
-      opt.setList(true);
-    }
-  },
-  NOLIST {
-    @Override
-    public void apply(FieldOptions opt) {
-      opt.setList(false);
-    }
   },;
 
   public abstract void apply(FieldOptions opt);
 
-  public static FieldConstruct of(String value) {
+  public static FieldOption of(String value) {
     if (value == null || value.isBlank()) {
       return null;
     }
@@ -98,8 +86,6 @@ public enum FieldConstruct {
     case "noredirect" -> NOREDIRECT;
     case "final", "const", "immutable" -> FINAL;
     case "nofinal", "noconst", "mutable" -> NOFINAL;
-    case "list" -> LIST;
-    case "nolist" -> NOLIST;
     default -> null;
     };
   }

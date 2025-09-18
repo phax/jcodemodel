@@ -15,9 +15,10 @@ public interface CodeModelBuilder {
 
   /**
    * called by the plugin after creating the generator, with the plugin "params"
-   * configuration
+   * configuration. Override to handle generator-specific parameters
    */
-  void configure(Map<String, String> params);
+  default void configure(Map<String, String> params) {
+  }
 
   /**
    * asking the generator to build a model.
@@ -34,6 +35,21 @@ public interface CodeModelBuilder {
    */
   default void build(JCodeModel model) throws JCodeModelException {
     build(model, null);
+  }
+
+  // local path expansion
+
+  void setRootPackage(String rootPackage);
+
+  String getRootPackage();
+
+  /**
+   * @param localPath class we want to create, eg "pck.MyClass"
+   * @return localpath prefixed by rootpackage and "." if needed.
+   */
+  default String expandClassName(String localPath) {
+    String rootPackage = getRootPackage();
+    return rootPackage == null || rootPackage.isBlank() ? localPath : rootPackage + "." + localPath;
   }
 
 }

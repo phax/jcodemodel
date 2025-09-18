@@ -14,7 +14,8 @@ import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 @JCMGen
 public class HelloWorldGenerator implements CodeModelBuilder {
 
-  protected String className = "com.helger.tests.helloworld.Hello";
+  protected String rootPackage = "com.helger.tests.helloworld";
+  protected String className = "Hello";
   protected String value = "world";
 
   @Override
@@ -25,8 +26,18 @@ public class HelloWorldGenerator implements CodeModelBuilder {
 
   @Override
   public void build(JCodeModel model, InputStream source) throws JCodeModelException {
-    JDefinedClass cl = model._class(className);
+    JDefinedClass cl = model._class(expandClassName(className));
     cl.field(JMod.PUBLIC, model._ref(String.class), "value", JExpr.lit(value));
+  }
+
+  @Override
+  public void setRootPackage(String rootPackage) {
+    this.rootPackage = rootPackage;
+  }
+
+  @Override
+  public String getRootPackage() {
+    return rootPackage;
   }
 
 }

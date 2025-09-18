@@ -13,6 +13,31 @@ public class FieldOptions {
     return this;
   }
 
+  public FieldOptions getParent() {
+    return parent;
+  }
+
+  // canner system, by alias
+
+  private String canner = null;
+
+  public FieldOptions setCanner(String canner) {
+    this.canner = canner;
+    return this;
+  }
+
+  public static final String DEFAULT_CANNER = null;
+
+  public String getCanner() {
+    if (canner != null) {
+      return canner;
+    }
+    if (parent != null) {
+      return parent.getCanner();
+    }
+    return DEFAULT_CANNER;
+  }
+
   // is field final
 
   private Boolean _final = null;
@@ -77,27 +102,6 @@ public class FieldOptions {
     return DEFAULT_LAST_UPDATED;
   }
 
-  // is field a list
-
-  private Boolean list = null;
-
-  public FieldOptions setList(Boolean list) {
-    this.list = list;
-    return this;
-  }
-
-  public static final boolean DEFAULT_LIST = false;
-
-  public boolean isList() {
-    if (list != null) {
-      return list;
-    }
-    if (parent != null) {
-      return parent.isList();
-    }
-    return DEFAULT_LIST;
-  }
-
   // redirect field methods on the owner class
 
   private Boolean redirect = null;
@@ -160,5 +164,6 @@ public class FieldOptions {
     }
     return DEFAULT_VISIBILITY;
   }
+
 
 }
