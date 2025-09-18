@@ -25,32 +25,32 @@
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.equinox.common</artifactId>
-        <version>3.20.100</version>
+        <version>3.20.200</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>3.33.100</version>
+        <version>3.34.0</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>3.22.200</version>
+        <version>3.23.0</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.jobs</artifactId>
-        <version>3.15.600</version>
+        <version>3.15.700</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.contenttype</artifactId>
-        <version>3.9.600</version>
+        <version>3.9.700</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.jdt</groupId>
         <artifactId>org.eclipse.jdt.core</artifactId>
-        <version>3.42.0</version>
+        <version>3.43.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
