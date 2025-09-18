@@ -42,6 +42,16 @@
               </params>
             </configuration>
           </execution>
+          <execution>
+            <id>references</id>
+            <goals>
+              <goal>generate-source</goal>
+            </goals>
+            <configuration>
+              <rootPackage>com.helger.jcodemodel.examples.plugin.yaml.references</rootPackage>
+              <source>sourceReferences.yaml</source>
+            </configuration>
+          </execution>
         </executions>
         <dependencies>
           <dependency>

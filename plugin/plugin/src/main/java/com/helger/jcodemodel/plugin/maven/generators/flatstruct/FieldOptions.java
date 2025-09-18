@@ -17,6 +17,27 @@ public class FieldOptions {
     return parent;
   }
 
+  // canner system, by alias
+
+  private String canner = null;
+
+  public FieldOptions setCanner(String canner) {
+    this.canner = canner;
+    return this;
+  }
+
+  public static final String DEFAULT_CANNER = null;
+
+  public String getCanner() {
+    if (canner != null) {
+      return canner;
+    }
+    if (parent != null) {
+      return parent.getCanner();
+    }
+    return DEFAULT_CANNER;
+  }
+
   // is field final
 
   private Boolean _final = null;
@@ -143,5 +164,6 @@ public class FieldOptions {
     }
     return DEFAULT_VISIBILITY;
   }
+
 
 }

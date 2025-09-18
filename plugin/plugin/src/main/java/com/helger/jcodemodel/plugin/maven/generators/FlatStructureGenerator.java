@@ -2,10 +2,12 @@ package com.helger.jcodemodel.plugin.maven.generators;
 
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.time.Instant;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,12 +16,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.ConcreteTypes;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldCanner;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOption;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
@@ -30,6 +34,8 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.FieldCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.SimpleField;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.canners.NoCanner;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.canners.reference.WeakReferenceCanner;
 
 public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
@@ -309,31 +315,39 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
 
   protected void addField(JDefinedClass jdc, AbstractJType type, String fieldName, FieldOptions options,
       JCodeModel model) {
-    JFieldVar fv = jdc.field(options.getVisibility().jmod | (options.isFinal() ? JMod.FINAL : 0), type, fieldName);
+    FieldCanner fc = getCanner(options.getCanner());
+    JFieldVar fv = jdc.field(
+        options.getVisibility().jmod | (options.isFinal() ? JMod.FINAL : 0),
+        fc == null ? type : fc.makeType(model, type),
+        fieldName);
     if (options.isSetter() && !options.isFinal()) {
-      addSetter(fv, jdc, model, options);
+      addSetter(fv, jdc, model, options, type, fc);
     }
     if (options.isGetter()) {
-      addGetter(fv, jdc);
+      addGetter(fv, jdc, type, fc);
+      if (fc != null) {
+        fc.makePropertyGetter();
+      }
     }
   }
 
-  protected void addGetter(JFieldVar fv, JDefinedClass jdc) {
-    AbstractJType retType = fv.type();
+  protected void addGetter(JFieldVar fv, JDefinedClass jdc, AbstractJType retType, FieldCanner fc) {
     String methName = "get" + Character.toUpperCase(fv.name().charAt(0))
         + (fv.name().length() < 2 ? "" : fv.name().substring(1));
     JMethod meth = jdc.method(JMod.PUBLIC, retType, methName);
-    meth.body()._return(fv);
+    IJExpression ret = fc == null ? fv : fc.makeGetter(fv);
+    meth.body()._return(ret);
     meth.javadoc().add("@return the {@link #" + fv.name() + "}");
   }
 
-  protected void addSetter(JFieldVar fv, JDefinedClass jdc, JCodeModel model, FieldOptions options) {
-    AbstractJType paramType = fv.type();
+  protected void addSetter(JFieldVar fv, JDefinedClass jdc, JCodeModel model, FieldOptions options,
+      AbstractJType paramType, FieldCanner fc) {
     String methName = "set" + Character.toUpperCase(fv.name().charAt(0))
         + (fv.name().length() < 2 ? "" : fv.name().substring(1));
     JMethod meth = jdc.method(JMod.PUBLIC, model.VOID, methName);
     JVar param = meth.param(paramType, fv.name());
-    meth.body().assign(JExpr.refthis(fv), param);
+    IJStatement assign = fc == null ? JExpr.assign(JExpr.refthis(fv), param) : fc.makeSetter(param, fv);
+    meth.body().add(assign);
     if (options.isLastUpdated()) {
       JFieldVar lastUpdated = classLastUpdated.computeIfAbsent(jdc.fullName(),
           n -> addLastUpdated(jdc, model, options));
@@ -348,7 +362,7 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
         JExpr._null());
     lastUpdated.javadoc().add("last time the class was directly set a field using a setter");
     if (ownerOptions.isGetter()) {
-      addGetter(lastUpdated, jdc);
+      addGetter(lastUpdated, jdc, lastUpdated.type(), null);
     }
     return lastUpdated;
   }
@@ -598,14 +612,74 @@ public abstract class FlatStructureGenerator implements CodeModelBuilder {
     FieldVisibility fv = FieldVisibility.of(optStr);
     if (fv != null) {
       fv.apply(options);
-    } else {
-      FieldOption fa = FieldOption.of(optStr);
-      if (fa == null) {
-        throw new UnsupportedOperationException("can't deduce option from " + optStr);
-      } else {
-        fa.apply(options);
-      }
+      return;
     }
+    FieldOption fa = FieldOption.of(optStr);
+    if (fa != null) {
+      fa.apply(options);
+      return;
+    }
+    if (cannersAliases().contains(optStr)) {
+      options.setCanner(optStr);
+      return;
+    }
+    throw new UnsupportedOperationException("can't deduce option from " + optStr);
+
+  }
+
+  // canners handling
+
+  /**
+   * stream the known canners fieldgenerator by their name, to buld the internal
+   * map.<br />
+   * The usual overriding concatenates the super one with its own, so that its own
+   * overwrites the super's.
+   *
+   * @return stream of canner name to canner generator. The names are the one used
+   *         to parse and apply the fields' canner system
+   */
+  Stream<Entry<String, Class<? extends FieldCanner>>> streamCanners() {
+    return Stream.of(
+        new SimpleEntry<>("weakref", WeakReferenceCanner.class),
+        new SimpleEntry<>("", NoCanner.class));
+  }
+
+  private Map<String, FieldCanner> canners = null;
+
+  /**
+   * @return map of canner alias to canner implementation
+   */
+  protected Map<String, FieldCanner> canners() {
+    if (canners == null) {
+      canners = streamCanners()
+          .sequential() // to avoid merging inconsistency
+          .collect(
+              Collectors.toMap(Entry::getKey,
+                  e -> {
+                    try {
+                      return e.getValue().getConstructor().newInstance();
+                    } catch (InstantiationException | IllegalAccessException
+                        | IllegalArgumentException
+                        | InvocationTargetException | NoSuchMethodException
+                        | SecurityException e1) {
+                      throw new RuntimeException(e1);
+                    }
+                  },
+                  (o1, o2) -> o2)// merging using the last one
+          );
+    }
+    return canners;
+  }
+
+  public FieldCanner getCanner(String alias) {
+    if (alias == null) {
+      alias="";
+    }
+    return canners().get(alias);
+  }
+
+  public Set<String> cannersAliases() {
+    return canners().keySet();
   }
 
 }

@@ -37,6 +37,8 @@ public interface CodeModelBuilder {
     build(model, null);
   }
 
+  // local path expansion
+
   void setRootPackage(String rootPackage);
 
   String getRootPackage();
