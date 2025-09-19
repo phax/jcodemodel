@@ -53,14 +53,15 @@ import jakarta.annotation.Nullable;
  */
 public interface CodeModelBuilder
 {
-
   /**
-   * called by the plugin after creating the generator, with the plugin "params" configuration
+   * called by the plugin after creating the generator, with the plugin "params" configuration.
+   * Override to handle generator-specific parameters
    * 
    * @param params
    *        Parameters
    */
-  void configure (Map <String, String> params);
+  default void configure (final Map <String, String> params)
+  {}
 
   /**
    * asking the generator to build a model.
@@ -85,6 +86,21 @@ public interface CodeModelBuilder
   default void build (final JCodeModel model) throws JCodeModelException
   {
     build (model, null);
+  }
+
+  void setRootPackage (String rootPackage);
+
+  String getRootPackage ();
+
+  /**
+   * @param localPath
+   *        class we want to create, eg "pck.MyClass"
+   * @return localpath prefixed by rootpackage and "." if needed.
+   */
+  default String expandClassName (final String localPath)
+  {
+    final String rootPackage = getRootPackage ();
+    return rootPackage == null || rootPackage.isBlank () ? localPath : rootPackage + "." + localPath;
   }
 
 }

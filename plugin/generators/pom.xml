@@ -52,12 +52,14 @@
   <groupId>com.helger.jcodemodel.plugin</groupId>
   <artifactId>generators</artifactId>
   <packaging>pom</packaging>
-  <name>JCodeModel Plugin Generators Pom</name>
+  <name>JCodeModel Generators Pom</name>
   <description>POM module for all the plugin-related codemodel generators</description>
 
   <modules>
-    <module>helloworld</module>
     <module>csv</module>
+    <module>helloworld</module>
+    <module>json</module>
+    <module>yaml</module>
   </modules>
 
   <dependencies>

@@ -51,7 +51,7 @@
   </parent>
   <groupId>com.helger.jcodemodel.examples.plugin</groupId>
   <artifactId>csv</artifactId>
-  <name>JCodeModel CSV Plugin Example</name>
+  <name>JCodeModel Example Generator CSV</name>
   <description>demonstrates and validates the usage of the jcodemodel plugin alongside the CSV generator</description>
 
   <build>
@@ -103,13 +103,14 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
+              <rootPackage>com.helger.jcodemodel.examples.plugin.csv.resolve</rootPackage>
               <data>
-                p com.helger.jcodemodel.examples.plugin.csv.resolve,,,get
-                com.helger.jcodemodel.examples.plugin.csv.resolve.Parent,children,Child[],set,private
-                com.helger.jcodemodel.examples.plugin.csv.resolve.Child,parent,Parent,private,set
-                com.helger.jcodemodel.examples.plugin.csv.resolve.Imported,,,set
-                com.helger.jcodemodel.examples.plugin.csv.resolve.Imported,model,com.helger.jcodemodel.JCodeModel,private
-                com.helger.jcodemodel.examples.plugin.csv.resolve.Imported,modelArr,com.helger.jcodemodel.JCodeModel[],private
+                p .,,,get
+                Parent,children,Child[],set,private
+                Child,parent,Parent,private,set
+                Imported,,,set
+                Imported,model,com.helger.jcodemodel.JCodeModel,private
+                Imported,modelArr,com.helger.jcodemodel.JCodeModel[],private
               </data>
             </configuration>
           </execution>
@@ -120,10 +121,11 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
+              <rootPackage>com.helger.jcodemodel.examples.plugin.csv.lastupdated</rootPackage>
               <data>
-                com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated,,,set,get,private,lastupdated
-                com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated,i,int
-                com.helger.jcodemodel.examples.plugin.csv.lastupdated.LastUpdated,s,string
+                LastUpdated,,,set,get,private,lastupdated
+                LastUpdated,i,int
+                LastUpdated,s,string
               </data>
             </configuration>
           </execution>
@@ -133,16 +135,17 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
+              <rootPackage>com.helger.jcodemodel.examples.plugin.csv.redirect</rootPackage>
               <data>
-                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,,,private,get,set
-                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,a,int
-                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,b,bool
-                com.helger.jcodemodel.examples.plugin.csv.redirect.ABC,c,char
-                com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected,,,private,redirect
-                com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected,abc,ABC,set
-                com.helger.jcodemodel.examples.plugin.csv.redirect.Redirected,jCatchBlock,com.helger.jcodemodel.JCatchBlock,set
+                ABC,,,private,get,set
+                ABC,a,int
+                ABC,b,bool
+                ABC,c,char
+                Redirected,,,private,redirect
+                Redirected,abc,ABC,set
+                Redirected,jCatchBlock,com.helger.jcodemodel.JCatchBlock,set
                 
-                com.helger.jcodemodel.examples.plugin.csv.redirect.ClassRedirect,e,java.lang.ArrayIndexOutOfBoundsException,set,redirect
+                ClassRedirect,e,java.lang.ArrayIndexOutOfBoundsException,set,redirect
               </data>
             </configuration>
           </execution>
@@ -152,39 +155,41 @@
               <goal>generate-source</goal>
             </goals>
             <configuration>
+              <rootPackage>com.helger.jcodemodel.examples.plugin.csv</rootPackage>
               <data>
-                p com.helger.jcodemodel.examples.plugin.csv.inherit,,,set,get,private
-                com.helger.jcodemodel.examples.plugin.csv.inherit.Point,x,int
-                com.helger.jcodemodel.examples.plugin.csv.inherit.Point,y,int
-                com.helger.jcodemodel.examples.plugin.csv.inherit.City,,Point
-                com.helger.jcodemodel.examples.plugin.csv.inherit.City,name,string
-                com.helger.jcodemodel.examples.plugin.csv.inherit.City,zip,int
+                p inherit,,,set,get,private
+                inherit.Point,x,int
+                inherit.Point,y,int
+                inherit.City,,Point
+                inherit.City,name,string
+                inherit.City,zip,int
                 
-                com.helger.jcodemodel.examples.plugin.csv.inherit.Dated,,java.io.Serializable,lastupdated
-                com.helger.jcodemodel.examples.plugin.csv.inherit.Dated,created,date, final, getter
+                inherit.Dated,,java.io.Serializable,lastupdated
+                inherit.Dated,created,date, final, getter
               </data>
             </configuration>
           </execution>
           <execution>
-            <id>final</id>
+            <id>immutable</id>
             <goals>
               <goal>generate-source</goal>
             </goals>
             <configuration>
+              <rootPackage>com.helger.jcodemodel.examples.plugin.csv.immutable</rootPackage>
               <data>
-                p com.helger.jcodemodel.examples.plugin.csv.immutable,,,set,get,private,final
-                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,dob,date
-                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,id,long
-                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,name,string,mutable
-                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,parents,Animal[]
-                com.helger.jcodemodel.examples.plugin.csv.immutable.Animal,children,Animal, list
-                com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,,Animal
-                com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,species,string
-                com.helger.jcodemodel.examples.plugin.csv.immutable.Dog,master,string,mutable
+                p .,,,set,get,private,final
+                Animal,dob,date
+                Animal,id,long
+                Animal,name,string,mutable
+                Animal,parents,Animal[]
+                Animal,children,Animal list
+                Dog,,Animal
+                Dog,species,string
+                Dog,master,string,mutable
                 
-                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference,,java.lang.ref.WeakReference,get,set
-                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference,created,date,final
-                com.helger.jcodemodel.examples.plugin.csv.immutable.WeirdReference, visible ,	boolean, mutable 
+                WeirdReference,,java.lang.ref.WeakReference,get,set
+                WeirdReference,created,date,final
+                WeirdReference, visible ,	boolean, mutable 
               </data>
             </configuration>
           </execution>

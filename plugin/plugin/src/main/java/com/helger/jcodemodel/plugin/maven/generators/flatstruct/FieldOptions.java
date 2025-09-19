@@ -53,6 +53,10 @@ public class FieldOptions {
     return this;
   }
 
+  public FieldOptions getParent() {
+    return parent;
+  }
+
   // is field final
 
   private Boolean _final = null;
@@ -115,27 +119,6 @@ public class FieldOptions {
       return parent.isLastUpdated();
     }
     return DEFAULT_LAST_UPDATED;
-  }
-
-  // is field a list
-
-  private Boolean list = null;
-
-  public FieldOptions setList(Boolean list) {
-    this.list = list;
-    return this;
-  }
-
-  public static final boolean DEFAULT_LIST = false;
-
-  public boolean isList() {
-    if (list != null) {
-      return list;
-    }
-    if (parent != null) {
-      return parent.isList();
-    }
-    return DEFAULT_LIST;
   }
 
   // redirect field methods on the owner class
