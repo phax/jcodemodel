@@ -51,6 +51,6 @@
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
   <artifactId>helloworld</artifactId>
-  <name>JCodeModel HelloWorld Generator</name>
+  <name>JCodeModel Generator HelloWorld</name>
   <description>generates a simple class with a value</description>
 </project>

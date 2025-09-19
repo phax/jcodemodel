@@ -49,14 +49,16 @@
     <artifactId>examples</artifactId>
     <version>4.0.1-SNAPSHOT</version>
   </parent>
-    <groupId>com.helger.jcodemodel.examples</groupId>
+  <groupId>com.helger.jcodemodel.examples</groupId>
   <artifactId>plugins</artifactId>
   <packaging>pom</packaging>
-  <name>JCodeModel Plugins Examples Pom</name>
+  <name>JCodeModel Examples Plugins Pom</name>
 
   <modules>
-  <module>helloworld</module>
-  <module>csv</module>
+    <module>csv</module>
+    <module>helloworld</module>
+    <module>json</module>
+    <module>yaml</module>
   </modules>
   <description>POM module for all the plugin examples</description>
 </project>

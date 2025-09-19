@@ -49,11 +49,10 @@ import java.util.stream.Stream;
 
 import com.helger.jcodemodel.plugin.maven.generators.FlatStructureGenerator;
 import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldConstruct;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldVisibility;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.ClassCreation;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.Encapsulated;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FlatStructRecord.SimpleField;
 
@@ -90,39 +89,16 @@ public class CSVGenerator extends FlatStructureGenerator {
 
     // find the type specified, if any, and array depth
 
-    String fieldClassName = null;
-    int arrayDepth = 0;
+
+    Encapsulated ec = null;
     if (spl.length > 2) {
-      fieldClassName = spl[2].trim();
-      while (fieldClassName.endsWith("[]")) {
-        arrayDepth++;
-        fieldClassName = fieldClassName.replaceFirst("\\[\\]", "").trim();
-      }
-    }
-    if (fieldClassName != null && fieldClassName.isBlank()) {
-      fieldClassName = null;
+      ec = Encapsulated.parse(spl[2]);
     }
 
     FieldOptions options = new FieldOptions();
     if (spl.length >= 4) {
       for (int i = 3; i < spl.length; i++) {
-        String optStr = spl[i];
-        if (optStr == null || optStr.isBlank()) {
-          continue;
-        } else {
-          optStr=optStr.trim();
-        }
-        FieldVisibility fv = FieldVisibility.of(optStr);
-        if (fv != null) {
-          fv.apply(options);
-        } else {
-          FieldConstruct fa = FieldConstruct.of(optStr);
-          if (fa == null) {
-            throw new UnsupportedOperationException("can't deduce option from " + optStr);
-          } else {
-            fa.apply(options);
-          }
-        }
+        applyToFieldOptions(spl[i], options);
       }
     }
 
@@ -131,10 +107,10 @@ public class CSVGenerator extends FlatStructureGenerator {
       if (className.contains(" ")) {
         return new PackageCreation(className.replaceAll(".* ", ""), options);
       } else {
-        return new ClassCreation(className, fieldClassName, options);
+        return new ClassCreation(className, ec, options);
       }
     } else {
-      return new SimpleField(className, fieldName, fieldClassName, arrayDepth, options);
+      return new SimpleField(className, fieldName, ec, options);
     }
   }
 

@@ -40,15 +40,15 @@
  */
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
-import java.util.Locale;
-
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 /**
  * Additional features to add when constructing fields
  */
-public enum FieldConstruct
+public enum FieldOption
 {
+
   GETTER
   {
     @Override
@@ -128,33 +128,18 @@ public enum FieldConstruct
     {
       opt.setFinal (false);
     }
-  },
-  LIST
-  {
-    @Override
-    public void apply (final FieldOptions opt)
-    {
-      opt.setList (true);
-    }
-  },
-  NOLIST
-  {
-    @Override
-    public void apply (final FieldOptions opt)
-    {
-      opt.setList (false);
-    }
   },;
 
-  public abstract void apply (FieldOptions opt);
+  public abstract void apply (@Nonnull FieldOptions opt);
 
   @Nullable
-  public static FieldConstruct of (@Nullable final String value)
+  public static FieldOption of (@Nullable final String value)
   {
     if (value == null || value.isBlank ())
+    {
       return null;
-
-    return switch (value.toLowerCase (Locale.ROOT))
+    }
+    return switch (value.toLowerCase ())
     {
       case "getter", "get" -> GETTER;
       case "nogetter", "noget" -> NOGETTER;
@@ -166,8 +151,6 @@ public enum FieldConstruct
       case "noredirect" -> NOREDIRECT;
       case "final", "const", "immutable" -> FINAL;
       case "nofinal", "noconst", "mutable" -> NOFINAL;
-      case "list" -> LIST;
-      case "nolist" -> NOLIST;
       default -> null;
     };
   }
