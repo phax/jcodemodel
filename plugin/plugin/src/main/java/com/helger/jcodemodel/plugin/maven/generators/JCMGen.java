@@ -45,11 +45,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.ICodeModelBuilder;
 
 /**
  * marker that a class is a codemodel generator. Only one should be present per
- * maven module, and only applied to {@link CodeModelBuilder} implementing
+ * maven module, and only applied to {@link ICodeModelBuilder} implementing
  * class.
  */
 @Target(ElementType.TYPE)

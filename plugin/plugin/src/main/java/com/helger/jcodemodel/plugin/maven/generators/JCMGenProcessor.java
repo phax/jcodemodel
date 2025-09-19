@@ -55,18 +55,17 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
 
-import com.helger.jcodemodel.plugin.maven.CodeModelBuilder;
 import com.helger.jcodemodel.plugin.maven.GenerateSourceMojo;
+import com.helger.jcodemodel.plugin.maven.ICodeModelBuilder;
 
 /**
- * generate a generator descriptor for a single {@link CodeModelBuilder} implementation marked with
+ * generate a generator descriptor for a single {@link ICodeModelBuilder} implementation marked with
  * {@link JCMGen}
  */
 @SupportedAnnotationTypes ("com.helger.jcodemodel.plugin.maven.generators.JCMGen")
 @SupportedSourceVersion (SourceVersion.RELEASE_17)
 public class JCMGenProcessor extends AbstractProcessor
 {
-
   @Override
   public boolean process (final Set <? extends TypeElement> annotations, final RoundEnvironment roundEnv)
   {
@@ -87,7 +86,7 @@ public class JCMGenProcessor extends AbstractProcessor
       {
         final TypeMirror annotatedClass = e.asType ();
         final TypeMirror jcmgen = processingEnv.getElementUtils ()
-                                               .getTypeElement (CodeModelBuilder.class.getCanonicalName ())
+                                               .getTypeElement (ICodeModelBuilder.class.getCanonicalName ())
                                                .asType ();
         final boolean isJcmgen = processingEnv.getTypeUtils ().isAssignable (annotatedClass, jcmgen);
         if (!isJcmgen)

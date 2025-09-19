@@ -38,69 +38,51 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.plugin.maven;
+package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
-import java.io.InputStream;
-import java.util.Map;
+import java.util.Locale;
 
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.JMod;
 
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 /**
- * implementation of a jcodemodel builder (AKA generator)
+ * visibility to set when constructing a field
  */
-public interface CodeModelBuilder
+public enum EFieldVisibility
 {
-  /**
-   * called by the plugin after creating the generator, with the plugin "params" configuration.
-   * Override to handle generator-specific parameters
-   * 
-   * @param params
-   *        Parameters
-   */
-  default void configure (final Map <String, String> params)
-  {}
+  PUBLIC (JMod.PUBLIC),
+  PRIVATE (JMod.PRIVATE),
+  PROTECTED (JMod.PROTECTED),
+  PACKAGE (JMod.PROTECTED);
 
-  /**
-   * asking the generator to build a model.
-   *
-   * @param model
-   *        the model to build into.
-   * @param source
-   *        inputstream deduced by the plugin. May be {@link NullPointerException}.
-   * @throws JCodeModelException
-   *         in case of creation error
-   */
-  void build (JCodeModel model, @Nullable InputStream source) throws JCodeModelException;
+  public final int m_nJMod;
 
-  /**
-   * shortcut to {@link #build(JCodeModel, InputStream)} with null values.
-   * 
-   * @param model
-   *        the model to build into.
-   * @throws JCodeModelException
-   *         in case of creation error
-   */
-  default void build (final JCodeModel model) throws JCodeModelException
+  EFieldVisibility (final int jmod)
   {
-    build (model, null);
+    m_nJMod = jmod;
   }
 
-  void setRootPackage (String rootPackage);
-
-  String getRootPackage ();
-
-  /**
-   * @param localPath
-   *        class we want to create, eg "pck.MyClass"
-   * @return localpath prefixed by rootpackage and "." if needed.
-   */
-  default String expandClassName (final String localPath)
+  public void apply (@Nonnull final FieldOptions opt)
   {
-    final String rootPackage = getRootPackage ();
-    return rootPackage == null || rootPackage.isBlank () ? localPath : rootPackage + "." + localPath;
+    opt.setVisibility (this);
+  }
+
+  @Nullable
+  public static EFieldVisibility of (@Nullable final String value)
+  {
+    if (value == null || value.isBlank ())
+      return null;
+
+    return switch (value.toLowerCase (Locale.ROOT))
+    {
+      case "public", "all" -> PUBLIC;
+      case "private", "prv" -> PRIVATE;
+      case "protected", "prt" -> PROTECTED;
+      case "package", "packaged", "pck" -> PACKAGE;
+      default -> null;
+    };
   }
 
 }

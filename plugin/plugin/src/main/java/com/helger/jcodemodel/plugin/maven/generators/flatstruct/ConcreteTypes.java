@@ -1,3 +1,43 @@
+/*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+ *
+ * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Portions Copyright 2013-2025 Philip Helger + contributors
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * General Public License Version 2 only ("GPL") or the Common Development
+ * and Distribution License("CDDL") (collectively, the "License").  You
+ * may not use this file except in compliance with the License.  You can
+ * obtain a copy of the License at
+ * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
+ * or packager/legal/LICENSE.txt.  See the License for the specific
+ * language governing permissions and limitations under the License.
+ *
+ * When distributing the software, include this License Header Notice in each
+ * file and include the License file at packager/legal/LICENSE.txt.
+ *
+ * GPL Classpath Exception:
+ * Oracle designates this particular file as subject to the "Classpath"
+ * exception as provided by Oracle in the GPL Version 2 section of the License
+ * file that accompanied this code.
+ *
+ * Modifications:
+ * If applicable, add the following below the License Header, with the fields
+ * enclosed by brackets [] replaced by your own identifying information:
+ * "Portions Copyright [year] [name of copyright owner]"
+ *
+ * Contributor(s):
+ * If you wish your version of this file to be governed by only the CDDL or
+ * only the GPL Version 2, indicate your decision by adding "[Contributor]
+ * elects to include this software in this distribution under the [CDDL or GPL
+ * Version 2] license."  If you don't indicate a single choice of license, a
+ * recipient has the option to distribute your version of this file under
+ * either the CDDL, the GPL Version 2 or to extend the choice of license to
+ * its licensees as provided above.  However, if you add GPL Version 2 code
+ * and therefore, elected the GPL Version 2 license, then the option applies
+ * only if the new code is made subject to such option by the copyright
+ * holder.
+ */
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
 import java.util.ArrayList;
@@ -5,43 +45,54 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class ConcreteTypes {
+import jakarta.annotation.Nullable;
+
+public class ConcreteTypes
+{
 
   public static final String CONCRETE_LIST_PARAM = "concrete.list";
   public static final String CONCRETE_MAP_PARAM = "concrete.map";
   public static final String CONCRETE_SET_PARAM = "concrete.set";
 
-  public Class<?> list, map, set;
+  public Class <?> list, map, set;
 
-  public static ConcreteTypes from(Map<String, String> params) {
-    ConcreteTypes ret = new ConcreteTypes();
-    ret.list = findClass(params.get(CONCRETE_LIST_PARAM), ArrayList.class);
-    ret.map = findClass(params.get(CONCRETE_MAP_PARAM), HashMap.class);
-    ret.set = findClass(params.get(CONCRETE_SET_PARAM), HashSet.class);
+  public static ConcreteTypes from (final Map <String, String> params)
+  {
+    final ConcreteTypes ret = new ConcreteTypes ();
+    ret.list = findClass (params.get (CONCRETE_LIST_PARAM), ArrayList.class);
+    ret.map = findClass (params.get (CONCRETE_MAP_PARAM), HashMap.class);
+    ret.set = findClass (params.get (CONCRETE_SET_PARAM), HashSet.class);
     return ret;
   }
 
-  public static Class<?> findClass(String name, Class<?> defaultClass) {
-    if (name == null) {
+  @Nullable
+  public static Class <?> findClass (@Nullable final String name, @Nullable final Class <?> defaultClass)
+  {
+    if (name == null)
       return defaultClass;
+
+    Class <?> ret = null;
+    try
+    {
+      ret = Class.forName (name);
+      if (ret != null)
+        return ret;
     }
-    Class<?> ret = null;
-    try {
-      ret = Class.forName(name);
-    } catch (ClassNotFoundException e) {
-    }
-    if (ret != null) {
-      return ret;
-    }
-    for (String prefix : new String[] { "java.util", "java.lang" }) {
-      try {
-        ret = Class.forName(prefix + "." + name);
-        if (ret != null) {
+    catch (final ClassNotFoundException e)
+    {}
+
+    for (final String prefix : new String [] { "java.util", "java.lang" })
+    {
+      try
+      {
+        ret = Class.forName (prefix + "." + name);
+        if (ret != null)
           return ret;
-        }
-      } catch (ClassNotFoundException e) {
       }
+      catch (final ClassNotFoundException e)
+      {}
     }
-    throw new RuntimeException("can't find class " + name);
+
+    throw new IllegalArgumentException ("can't find class '" + name + "'");
   }
 }

@@ -40,148 +40,153 @@
  */
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 /**
- * list of options to apply to fields. Those can be hold by classes or packages,
- * represented by their {@link #parent}.
+ * list of options to apply to fields. Those can be hold by classes or packages, represented by
+ * their parent.
  */
-public class FieldOptions {
+public class FieldOptions
+{
+  public static final boolean DEFAULT_FINAL = false;
+  public static final boolean DEFAULT_GETTER = false;
+  public static final boolean DEFAULT_LAST_UPDATED = false;
+  public static final boolean DEFAULT_REDIRECT = false;
+  public static final boolean DEFAULT_SETTER = false;
+  public static final EFieldVisibility DEFAULT_VISIBILITY = EFieldVisibility.PUBLIC;
 
-  private FieldOptions parent = null;
+  private FieldOptions m_aParent;
+  private Boolean m_aFinal;
+  private Boolean m_aGetter;
+  private Boolean m_aLastUpdated;
+  private Boolean m_aRedirect;
+  private Boolean m_aSetter;
+  private EFieldVisibility m_aVisibility;
 
-  public FieldOptions setParent(FieldOptions parent) {
-    this.parent = parent;
-    return this;
+  @Nullable
+  public FieldOptions getParent ()
+  {
+    return m_aParent;
   }
 
-  public FieldOptions getParent() {
-    return parent;
+  @Nonnull
+  public FieldOptions setParent (@Nullable final FieldOptions parent)
+  {
+    m_aParent = parent;
+    return this;
   }
 
   // is field final
 
-  private Boolean _final = null;
+  public boolean isFinal ()
+  {
+    if (m_aFinal != null)
+      return m_aFinal.booleanValue ();
 
-  public FieldOptions setFinal(Boolean _final) {
-    this._final = _final;
-    return this;
-  }
-
-  public static final boolean DEFAULT_FINAL = false;
-
-  public boolean isFinal() {
-    if (_final != null) {
-      return _final;
-    }
-    if (parent != null) {
-      return parent.isFinal();
-    }
+    if (m_aParent != null)
+      return m_aParent.isFinal ();
     return DEFAULT_FINAL;
   }
 
-
-  // create getter
-
-  private Boolean getter = null;
-
-  public FieldOptions setGetter(Boolean getter) {
-    this.getter = getter;
+  @Nonnull
+  public FieldOptions setFinal (@Nullable final Boolean _final)
+  {
+    m_aFinal = _final;
     return this;
   }
 
-  public static final boolean DEFAULT_GETTER = false;
+  // create getter
 
-  public boolean isGetter() {
-    if (getter != null) {
-      return getter;
-    }
-    if (parent != null) {
-      return parent.isGetter();
-    }
+  public boolean isGetter ()
+  {
+    if (m_aGetter != null)
+      return m_aGetter.booleanValue ();
+
+    if (m_aParent != null)
+      return m_aParent.isGetter ();
     return DEFAULT_GETTER;
+  }
+
+  @Nonnull
+  public FieldOptions setGetter (@Nullable final Boolean getter)
+  {
+    m_aGetter = getter;
+    return this;
   }
 
   // create Instant lastUpdated
 
-  private Boolean lastUpdated = null;
+  public boolean isLastUpdated ()
+  {
+    if (m_aLastUpdated != null)
+      return m_aLastUpdated.booleanValue ();
 
-  public FieldOptions setLastUpdated(Boolean lastUpdated) {
-    this.lastUpdated = lastUpdated;
-    return this;
+    if (m_aParent != null)
+      return m_aParent.isLastUpdated ();
+    return DEFAULT_LAST_UPDATED;
   }
 
-  public static final boolean DEFAULT_LAST_UPDATED = false;
-
-  public boolean isLastUpdated() {
-    if (lastUpdated != null) {
-      return lastUpdated;
-    }
-    if (parent != null) {
-      return parent.isLastUpdated();
-    }
-    return DEFAULT_LAST_UPDATED;
+  @Nonnull
+  public FieldOptions setLastUpdated (@Nullable final Boolean lastUpdated)
+  {
+    m_aLastUpdated = lastUpdated;
+    return this;
   }
 
   // redirect field methods on the owner class
 
-  private Boolean redirect = null;
+  public boolean isRedirect ()
+  {
+    if (m_aRedirect != null)
+      return m_aRedirect.booleanValue ();
 
-  public FieldOptions setRedirect(Boolean redirect) {
-    this.redirect = redirect;
-    return this;
-  }
-
-  public static final boolean DEFAULT_REDIRECT = false;
-
-  public boolean isRedirect() {
-    if (redirect != null) {
-      return redirect;
-    }
-    if (parent != null) {
-      return parent.isRedirect();
-    }
+    if (m_aParent != null)
+      return m_aParent.isRedirect ();
     return DEFAULT_REDIRECT;
   }
 
-  // create setter
-
-  private Boolean setter = null;
-
-  public FieldOptions setSetter(Boolean setter) {
-    this.setter = setter;
+  @Nonnull
+  public FieldOptions setRedirect (@Nullable final Boolean redirect)
+  {
+    m_aRedirect = redirect;
     return this;
   }
 
-  public static final boolean DEFAULT_SETTER = false;
-
-  public boolean isSetter() {
-    if (setter != null) {
-      return setter;
-    }
-    if (parent != null) {
-      return parent.isSetter();
-    }
+  // create setter
+  public boolean isSetter ()
+  {
+    if (m_aSetter != null)
+      return m_aSetter.booleanValue ();
+    if (m_aParent != null)
+      return m_aParent.isSetter ();
     return DEFAULT_SETTER;
+  }
+
+  @Nonnull
+  public FieldOptions setSetter (@Nullable final Boolean setter)
+  {
+    m_aSetter = setter;
+    return this;
   }
 
   // visibility of the field
 
-  private FieldVisibility visibility = null;
+  @Nullable
+  public EFieldVisibility getVisibility ()
+  {
+    if (m_aVisibility != null)
+      return m_aVisibility;
 
-  public FieldOptions setVisibility(FieldVisibility visibility) {
-    this.visibility = visibility;
-    return this;
-  }
-
-  public static final FieldVisibility DEFAULT_VISIBILITY = FieldVisibility.PUBLIC;
-
-  public FieldVisibility getVisibility() {
-    if (visibility != null) {
-      return visibility;
-    }
-    if (parent != null) {
-      return parent.getVisibility();
-    }
+    if (m_aParent != null)
+      return m_aParent.getVisibility ();
     return DEFAULT_VISIBILITY;
   }
 
+  @Nonnull
+  public FieldOptions setVisibility (@Nullable final EFieldVisibility visibility)
+  {
+    m_aVisibility = visibility;
+    return this;
+  }
 }

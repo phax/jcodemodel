@@ -38,38 +38,69 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
+package com.helger.jcodemodel.plugin.maven;
 
-import com.helger.jcodemodel.JMod;
+import java.io.InputStream;
+import java.util.Map;
+
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
+
+import jakarta.annotation.Nullable;
 
 /**
- * visibility to set when constructing a field
+ * implementation of a jcodemodel builder (AKA generator)
  */
-public enum FieldVisibility {
+public interface ICodeModelBuilder
+{
+  /**
+   * called by the plugin after creating the generator, with the plugin "params" configuration.
+   * Override to handle generator-specific parameters
+   * 
+   * @param params
+   *        Parameters
+   */
+  default void configure (final Map <String, String> params)
+  {}
 
-  PUBLIC(JMod.PUBLIC), PRIVATE(JMod.PRIVATE), PROTECTED(JMod.PROTECTED), PACKAGE(JMod.PROTECTED);
+  /**
+   * asking the generator to build a model.
+   *
+   * @param model
+   *        the model to build into.
+   * @param source
+   *        inputstream deduced by the plugin. May be <code>null</code>.
+   * @throws JCodeModelException
+   *         in case of creation error
+   */
+  void build (JCodeModel model, @Nullable InputStream source) throws JCodeModelException;
 
-  public final int jmod;
-
-  FieldVisibility(int jmod) {
-    this.jmod = jmod;
+  /**
+   * shortcut to {@link #build(JCodeModel, InputStream)} with null values.
+   * 
+   * @param model
+   *        the model to build into.
+   * @throws JCodeModelException
+   *         in case of creation error
+   */
+  default void build (final JCodeModel model) throws JCodeModelException
+  {
+    build (model, null);
   }
 
-  public void apply(FieldOptions opt) {
-    opt.setVisibility(this);
-  }
+  void setRootPackage (String rootPackage);
 
-  public static FieldVisibility of(String value) {
-    if(value==null || value.isBlank()) {
-      return null;
-    }
-    return switch(value.toLowerCase()) {
-    case "public", "all" -> PUBLIC;
-    case "private", "prv" -> PRIVATE;
-    case "protected", "prt" -> PROTECTED;
-    case "package", "packaged", "pck" -> PACKAGE;
-    default-> null;
-    };
+  String getRootPackage ();
+
+  /**
+   * @param localPath
+   *        class we want to create, eg "pck.MyClass"
+   * @return localpath prefixed by rootpackage and "." if needed.
+   */
+  default String expandClassName (final String localPath)
+  {
+    final String rootPackage = getRootPackage ();
+    return rootPackage == null || rootPackage.isBlank () ? localPath : rootPackage + "." + localPath;
   }
 
 }

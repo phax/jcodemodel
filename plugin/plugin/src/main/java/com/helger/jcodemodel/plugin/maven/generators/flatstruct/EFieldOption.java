@@ -40,106 +40,106 @@
  */
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
+import java.util.Locale;
+
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 /**
  * Additional features to add when constructing fields
  */
-public enum FieldOption
+public enum EFieldOption
 {
-
   GETTER
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setGetter (true);
+      opt.setGetter (Boolean.TRUE);
     }
   },
   NOGETTER
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setGetter (false);
+      opt.setGetter (Boolean.FALSE);
     }
   },
   SETTER
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setSetter (true);
+      opt.setSetter (Boolean.TRUE);
     }
   },
   NOSETTER
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setSetter (false);
+      opt.setSetter (Boolean.FALSE);
     }
   },
   LASTUPDATED
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setLastUpdated (true);
+      opt.setLastUpdated (Boolean.TRUE);
     }
   },
   NOLASTUPDATED
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setLastUpdated (false);
+      opt.setLastUpdated (Boolean.FALSE);
     }
   },
   REDIRECT
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setRedirect (true);
+      opt.setRedirect (Boolean.TRUE);
     }
   },
   NOREDIRECT
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setRedirect (false);
+      opt.setRedirect (Boolean.FALSE);
     }
   },
   FINAL
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setFinal (true);
+      opt.setFinal (Boolean.TRUE);
     }
   },
   NOFINAL
   {
     @Override
-    public void apply (final FieldOptions opt)
+    public void apply (@Nonnull final FieldOptions opt)
     {
-      opt.setFinal (false);
+      opt.setFinal (Boolean.FALSE);
     }
   },;
 
   public abstract void apply (@Nonnull FieldOptions opt);
 
   @Nullable
-  public static FieldOption of (@Nullable final String value)
+  public static EFieldOption of (@Nullable final String value)
   {
     if (value == null || value.isBlank ())
-    {
       return null;
-    }
-    return switch (value.toLowerCase ())
+
+    return switch (value.toLowerCase (Locale.ROOT))
     {
       case "getter", "get" -> GETTER;
       case "nogetter", "noget" -> NOGETTER;
