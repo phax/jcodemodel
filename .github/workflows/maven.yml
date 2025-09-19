@@ -1,0 +1,45 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java#apache-maven-with-a-settings-path
+
+name: Maven deploy Snapshots
+
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 17, 21, 24 ]
+    name: Java ${{ matrix.java }} build
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK ${{ matrix.java }}
+      uses: actions/setup-java@v4
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: 'adopt'
+        server-id: central
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
+
+    - name: Cache local Maven repository
+      uses: actions/cache@v4
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Publish to the Maven Central Repository
+      run: mvn --batch-mode --update-snapshots -P release-snapshot deploy
+      if: matrix.java == 17
+      env:
+        MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+
+    - name: Maven Build
+      run: mvn --batch-mode --update-snapshots install
+      if: matrix.java != 17
