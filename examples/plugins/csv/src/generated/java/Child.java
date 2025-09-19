@@ -7,4 +7,11 @@ public class Child {
     public void setParent(Parent parent) {
         this.parent = parent;
     }
+
+    /**
+     * @return the {@link #parent}
+     */
+    public Parent getParent() {
+        return parent;
+    }
 }

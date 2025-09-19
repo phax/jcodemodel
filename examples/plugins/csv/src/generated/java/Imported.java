@@ -12,9 +12,23 @@ public class Imported {
     }
 
     /**
+     * @return the {@link #model}
+     */
+    public JCodeModel getModel() {
+        return model;
+    }
+
+    /**
      * set the {@link #modelArr}
      */
     public void setModelArr(JCodeModel[] modelArr) {
         this.modelArr = modelArr;
+    }
+
+    /**
+     * @return the {@link #modelArr}
+     */
+    public JCodeModel[] getModelArr() {
+        return modelArr;
     }
 }

@@ -40,35 +40,38 @@
  */
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
-import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.Encapsulated;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.EEncapsulation;
+import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.Encapsulated;
 
-public class FlatStructRecordTest {
+public class FlatStructRecordTest
+{
 
   @Test
-  public void testParse() {
-    Encapsulated test1 = Encapsulated.parse("String[]");
-    Assert.assertEquals("String", test1.baseClassName());
-    Assert.assertEquals(EEncapsulation.ARRAY, test1.encapsulations().get(0));
+  public void testParse ()
+  {
+    final Encapsulated test1 = Encapsulated.parse ("String[]");
+    assertEquals ("String", test1.baseClassName ());
+    assertEquals (EEncapsulation.ARRAY, test1.encapsulations ().get (0));
 
-    Encapsulated test2 = Encapsulated.parse("int [ ][ ] map");
-    Assert.assertEquals("int", test2.baseClassName());
-    Assert.assertEquals(EEncapsulation.ARRAY, test2.encapsulations().get(0));
-    Assert.assertEquals(EEncapsulation.ARRAY, test2.encapsulations().get(1));
-    Assert.assertEquals(EEncapsulation.MAP, test2.encapsulations().get(2));
+    final Encapsulated test2 = Encapsulated.parse ("int [ ][ ] map");
+    assertEquals ("int", test2.baseClassName ());
+    assertEquals (EEncapsulation.ARRAY, test2.encapsulations ().get (0));
+    assertEquals (EEncapsulation.ARRAY, test2.encapsulations ().get (1));
+    assertEquals (EEncapsulation.MAP, test2.encapsulations ().get (2));
 
-    Encapsulated test3 = Encapsulated.parse("double []set[]");
-    Assert.assertEquals("double", test3.baseClassName());
-    Assert.assertEquals(EEncapsulation.ARRAY, test3.encapsulations().get(0));
-    Assert.assertEquals(EEncapsulation.SET, test3.encapsulations().get(1));
-    Assert.assertEquals(EEncapsulation.ARRAY, test3.encapsulations().get(2));
+    final Encapsulated test3 = Encapsulated.parse ("double []set[]");
+    assertEquals ("double", test3.baseClassName ());
+    assertEquals (EEncapsulation.ARRAY, test3.encapsulations ().get (0));
+    assertEquals (EEncapsulation.SET, test3.encapsulations ().get (1));
+    assertEquals (EEncapsulation.ARRAY, test3.encapsulations ().get (2));
 
-    Encapsulated test4 = Encapsulated.parse("java.lang.String MAP   ");
-    Assert.assertEquals("java.lang.String", test4.baseClassName());
-    Assert.assertEquals(EEncapsulation.MAP, test4.encapsulations().get(0));
+    final Encapsulated test4 = Encapsulated.parse ("java.lang.String MAP   ");
+    assertEquals ("java.lang.String", test4.baseClassName ());
+    assertEquals (EEncapsulation.MAP, test4.encapsulations ().get (0));
   }
 
 }
