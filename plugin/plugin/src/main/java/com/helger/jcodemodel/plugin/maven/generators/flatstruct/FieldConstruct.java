@@ -40,108 +40,135 @@
  */
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
+import java.util.Locale;
+
+import jakarta.annotation.Nullable;
+
 /**
  * Additional features to add when constructing fields
  */
-public enum FieldConstruct {
-
-  GETTER {
+public enum FieldConstruct
+{
+  GETTER
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setGetter(true);
+    public void apply (final FieldOptions opt)
+    {
+      opt.setGetter (true);
     }
   },
-  NOGETTER {
+  NOGETTER
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setGetter(false);
+    public void apply (final FieldOptions opt)
+    {
+      opt.setGetter (false);
     }
   },
-  SETTER {
+  SETTER
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setSetter(true);
+    public void apply (final FieldOptions opt)
+    {
+      opt.setSetter (true);
     }
   },
-  NOSETTER {
+  NOSETTER
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setSetter(false);
+    public void apply (final FieldOptions opt)
+    {
+      opt.setSetter (false);
     }
   },
-  LASTUPDATED {
+  LASTUPDATED
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setLastUpdated(true);
-
+    public void apply (final FieldOptions opt)
+    {
+      opt.setLastUpdated (true);
     }
   },
-  NOLASTUPDATED {
-  @Override
-    public void apply(FieldOptions opt) {
-      opt.setLastUpdated(false);
+  NOLASTUPDATED
+  {
+    @Override
+    public void apply (final FieldOptions opt)
+    {
+      opt.setLastUpdated (false);
     }
   },
-  REDIRECT {
+  REDIRECT
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setRedirect(true);
-
+    public void apply (final FieldOptions opt)
+    {
+      opt.setRedirect (true);
     }
   },
-  NOREDIRECT {
+  NOREDIRECT
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setRedirect(false);
+    public void apply (final FieldOptions opt)
+    {
+      opt.setRedirect (false);
     }
   },
-  FINAL {
+  FINAL
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setFinal(true);
-
+    public void apply (final FieldOptions opt)
+    {
+      opt.setFinal (true);
     }
   },
-  NOFINAL {
+  NOFINAL
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setFinal(false);
+    public void apply (final FieldOptions opt)
+    {
+      opt.setFinal (false);
     }
   },
-  LIST {
+  LIST
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setList(true);
+    public void apply (final FieldOptions opt)
+    {
+      opt.setList (true);
     }
   },
-  NOLIST {
+  NOLIST
+  {
     @Override
-    public void apply(FieldOptions opt) {
-      opt.setList(false);
+    public void apply (final FieldOptions opt)
+    {
+      opt.setList (false);
     }
   },;
 
-  public abstract void apply(FieldOptions opt);
+  public abstract void apply (FieldOptions opt);
 
-  public static FieldConstruct of(String value) {
-    if (value == null || value.isBlank()) {
+  @Nullable
+  public static FieldConstruct of (@Nullable final String value)
+  {
+    if (value == null || value.isBlank ())
       return null;
-    }
-    return switch (value.toLowerCase()) {
-    case "getter", "get" -> GETTER;
-    case "nogetter", "noget" -> NOGETTER;
-    case "setter", "set" -> SETTER;
-    case "nosetter", "noset" -> NOSETTER;
-    case "lastupdated", "updated" -> LASTUPDATED;
-    case "nolastupdated", "noupdated" -> NOLASTUPDATED;
-    case "redirect" -> REDIRECT;
-    case "noredirect" -> NOREDIRECT;
-    case "final", "const", "immutable" -> FINAL;
-    case "nofinal", "noconst", "mutable" -> NOFINAL;
-    case "list" -> LIST;
-    case "nolist" -> NOLIST;
-    default -> null;
+
+    return switch (value.toLowerCase (Locale.ROOT))
+    {
+      case "getter", "get" -> GETTER;
+      case "nogetter", "noget" -> NOGETTER;
+      case "setter", "set" -> SETTER;
+      case "nosetter", "noset" -> NOSETTER;
+      case "lastupdated", "updated" -> LASTUPDATED;
+      case "nolastupdated", "noupdated" -> NOLASTUPDATED;
+      case "redirect" -> REDIRECT;
+      case "noredirect" -> NOREDIRECT;
+      case "final", "const", "immutable" -> FINAL;
+      case "nofinal", "noconst", "mutable" -> NOFINAL;
+      case "list" -> LIST;
+      case "nolist" -> NOLIST;
+      default -> null;
     };
   }
-
 }

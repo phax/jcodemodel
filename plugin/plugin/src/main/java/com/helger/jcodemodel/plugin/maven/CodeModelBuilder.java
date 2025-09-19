@@ -43,37 +43,48 @@ package com.helger.jcodemodel.plugin.maven;
 import java.io.InputStream;
 import java.util.Map;
 
-import org.apache.maven.project.MavenProject;
-
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+
+import jakarta.annotation.Nullable;
 
 /**
  * implementation of a jcodemodel builder (AKA generator)
  */
-public interface CodeModelBuilder {
+public interface CodeModelBuilder
+{
 
   /**
-   * called by the plugin after creating the generator, with the plugin "params"
-   * configuration
+   * called by the plugin after creating the generator, with the plugin "params" configuration
+   * 
+   * @param params
+   *        Parameters
    */
-  void configure(Map<String, String> params);
+  void configure (Map <String, String> params);
 
   /**
    * asking the generator to build a model.
    *
-   * @param model   the model to build into.
-   * @param source  inputstream deduced by the plugin
+   * @param model
+   *        the model to build into.
+   * @param source
+   *        inputstream deduced by the plugin. May be {@link NullPointerException}.
    * @throws JCodeModelException
+   *         in case of creation error
    */
-  void build(JCodeModel model, InputStream source) throws JCodeModelException;
+  void build (JCodeModel model, @Nullable InputStream source) throws JCodeModelException;
 
   /**
-   * shortcut to {@link #build(JCodeModel, MavenProject, InputStream)} with null
-   * values.
+   * shortcut to {@link #build(JCodeModel, InputStream)} with null values.
+   * 
+   * @param model
+   *        the model to build into.
+   * @throws JCodeModelException
+   *         in case of creation error
    */
-  default void build(JCodeModel model) throws JCodeModelException {
-    build(model, null);
+  default void build (final JCodeModel model) throws JCodeModelException
+  {
+    build (model, null);
   }
 
 }
