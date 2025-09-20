@@ -309,9 +309,12 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
    * </ol>
    *
    * @param model
+   *        code model
    * @param typeName
-   * @return
+   *        type name
+   * @return resolved type or <code>null</code>.
    */
+  @Nullable
   protected AbstractJType resolveType (final JCodeModel model, final String typeName)
   {
     AbstractJType defined = definedClasses.get (typeName);
@@ -324,10 +327,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
         {
           throw new UnsupportedOperationException ("several classes stored for simple name " + typeName + " : " + set);
         }
-        else
-        {
-          defined = set.iterator ().next ();
-        }
+        defined = set.iterator ().next ();
       }
     }
     if (defined != null)
@@ -357,21 +357,22 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
   {
     AbstractJType ret = resolveType (model, typeName);
     if (ret == null)
-    {
       return null;
-    }
+
     for (final EEncapsulation e : encapsulations)
-    {
       ret = e.apply (ret, model);
-    }
+
     return ret;
   }
 
   /**
    * convert an alias to a static class
-   *
+   * 
+   * @param alias
+   *        alias to resolve
    * @return corresponding static class, or null if alias does not match any
    */
+  @Nullable
   protected Class <?> staticAlias (@Nonnull final String alias)
   {
     return switch (alias)
@@ -405,13 +406,10 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
                                     type,
                                     fieldName);
     if (options.isSetter () && !options.isFinal ())
-    {
       addSetter (fv, jdc, model, options);
-    }
+
     if (options.isGetter ())
-    {
       addGetter (fv, jdc);
-    }
   }
 
   protected void addGetter (@Nonnull final JFieldVar fv, @Nonnull final JDefinedClass jdc)
@@ -485,16 +483,14 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
                                      @Nonnull final Set <JDefinedClass> done)
   {
     if (done.contains (createdClass))
-    {
       return;
-    }
+
     AbstractJClass parent = createdClass._extends ();
     if (parent != null)
     {
       if (parent instanceof final JNarrowedClass narrowed)
-      {
         parent = narrowed.basis ();
-      }
+
       // TODO convert to pattern matching post java 21
       if (parent instanceof final JDefinedClass parentClass)
       {
