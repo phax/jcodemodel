@@ -24,14 +24,15 @@
     <version>4.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
-  <artifactId>yaml</artifactId>
+  <artifactId>generator-yaml</artifactId>
   <name>JCodeModel Generator YAML</name>
   <description>generates a structure tree from a yaml file</description>
+  
   <dependencies>
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>
       <artifactId>jackson-dataformat-yaml</artifactId>
-      <version>2.20.0</version>
+      <version>${jackson.version}</version>
     </dependency>
     <dependency>
       <groupId>com.helger.jcodemodel.plugin.generators</groupId>
