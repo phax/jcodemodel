@@ -36,6 +36,7 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name: Publish to the Maven Central Repository
+      if: github.repository == 'phax/jcodemodel'
       run: mvn --batch-mode --update-snapshots -P release-snapshot deploy
       env:
         MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
