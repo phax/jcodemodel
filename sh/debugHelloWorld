@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# install only the csv plugin example alongside its dependencies, with debuging on
+
+reset ; mvn clean install -pl com.helger.jcodemodel.examples.plugin:helloworld -am -e
