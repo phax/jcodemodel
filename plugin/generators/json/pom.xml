@@ -24,7 +24,7 @@
     <version>4.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
-  <artifactId>generator-json</artifactId>
+  <artifactId>json</artifactId>
   <name>JCodeModel Generator JSON</name>
   <description>generates a structure tree from a json file</description>
   

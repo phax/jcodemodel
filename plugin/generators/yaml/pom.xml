@@ -24,10 +24,9 @@
     <version>4.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
-  <artifactId>generator-yaml</artifactId>
+  <artifactId>yaml</artifactId>
   <name>JCodeModel Generator YAML</name>
   <description>generates a structure tree from a yaml file</description>
-  
   <dependencies>
     <dependency>
       <groupId>com.fasterxml.jackson.dataformat</groupId>

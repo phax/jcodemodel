@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# compile and test the project on a void cache
+
+mvn -Dmaven.repo.local=$(mktemp -d) -T2C -ntp integration-test
