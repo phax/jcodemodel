@@ -35,10 +35,6 @@
     <module>json</module>
     <module>yaml</module>
   </modules>
-  
-  <properties>
-    <jackson.version>2.20.0</jackson.version>
-  </properties>
 
   <dependencies>
     <dependency>
