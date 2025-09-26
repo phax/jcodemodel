@@ -28,7 +28,7 @@ jobs:
         server-password: MAVEN_PASSWORD
     - name: Publish to the Maven Central Repository
       if: github.repository == 'phax/jcodemodel'
-      run: mvn --batch-mode --update-snapshots -P release-snapshot deploy
+      run: mvn --batch-mode --update-snapshots -ntp -P release-snapshot deploy
       env:
         MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
