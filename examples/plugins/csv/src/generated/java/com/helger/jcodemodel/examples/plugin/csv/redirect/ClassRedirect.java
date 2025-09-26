@@ -13,12 +13,12 @@ public class ClassRedirect {
         this.e = e;
     }
 
-    public void printStackTrace(PrintWriter arg0) {
-        e.printStackTrace(arg0);
-    }
-
     public void printStackTrace() {
         e.printStackTrace();
+    }
+
+    public void printStackTrace(PrintWriter arg0) {
+        e.printStackTrace(arg0);
     }
 
     public void printStackTrace(PrintStream arg0) {
