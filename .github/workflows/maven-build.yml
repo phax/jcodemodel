@@ -21,14 +21,5 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: 'adopt'
- 
-    - name: Cache local Maven repository
-      uses: actions/cache@v4
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-
     - name: Maven Build
       run: mvn --batch-mode --update-snapshots install

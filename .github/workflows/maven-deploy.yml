@@ -26,15 +26,6 @@ jobs:
         server-id: central
         server-username: MAVEN_USERNAME
         server-password: MAVEN_PASSWORD
-
-    - name: Cache local Maven repository
-      uses: actions/cache@v4
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-
     - name: Publish to the Maven Central Repository
       if: github.repository == 'phax/jcodemodel'
       run: mvn --batch-mode --update-snapshots -P release-snapshot deploy
