@@ -13,20 +13,8 @@ public class ClassRedirect {
         this.e = e;
     }
 
-    public void printStackTrace() {
-        e.printStackTrace();
-    }
-
-    public void printStackTrace(PrintWriter arg0) {
-        e.printStackTrace(arg0);
-    }
-
-    public void printStackTrace(PrintStream arg0) {
-        e.printStackTrace(arg0);
-    }
-
-    public StackTraceElement[] getStackTrace() {
-        return e.getStackTrace();
+    public void addSuppressed(Throwable arg0) {
+        e.addSuppressed(arg0);
     }
 
     public Throwable fillInStackTrace() {
@@ -37,27 +25,39 @@ public class ClassRedirect {
         return e.getCause();
     }
 
-    public Throwable initCause(Throwable arg0) {
-        return e.initCause(arg0);
+    public String getLocalizedMessage() {
+        return e.getLocalizedMessage();
     }
 
     public String getMessage() {
         return e.getMessage();
     }
 
+    public StackTraceElement[] getStackTrace() {
+        return e.getStackTrace();
+    }
+
     public Throwable[] getSuppressed() {
         return e.getSuppressed();
     }
 
-    public String getLocalizedMessage() {
-        return e.getLocalizedMessage();
+    public Throwable initCause(Throwable arg0) {
+        return e.initCause(arg0);
+    }
+
+    public void printStackTrace() {
+        e.printStackTrace();
+    }
+
+    public void printStackTrace(PrintStream arg0) {
+        e.printStackTrace(arg0);
+    }
+
+    public void printStackTrace(PrintWriter arg0) {
+        e.printStackTrace(arg0);
     }
 
     public void setStackTrace(StackTraceElement[] arg0) {
         e.setStackTrace(arg0);
-    }
-
-    public void addSuppressed(Throwable arg0) {
-        e.addSuppressed(arg0);
     }
 }
