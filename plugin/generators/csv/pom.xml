@@ -24,7 +24,7 @@
     <version>4.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
-  <artifactId>generator-csv</artifactId>
+  <artifactId>csv</artifactId>
   <name>JCodeModel Generator CSV</name>
   <description>generates a structure tree from a csv file</description>
 </project>
