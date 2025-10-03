@@ -30,12 +30,15 @@ public interface ICodeModelBuilder
   /**
    * called by the plugin after creating the generator, with the plugin "params" configuration.
    * Override to handle generator-specific parameters
-   * 
+   *
    * @param params
    *        Parameters
    */
   default void configure (final Map <String, String> params)
   {}
+
+  default void setClassHeader(String header) {
+  }
 
   /**
    * asking the generator to build a model.
@@ -51,7 +54,7 @@ public interface ICodeModelBuilder
 
   /**
    * shortcut to {@link #build(JCodeModel, InputStream)} with null values.
-   * 
+   *
    * @param model
    *        the model to build into.
    * @throws JCodeModelException
