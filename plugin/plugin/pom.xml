@@ -25,7 +25,7 @@
   </parent>
   <artifactId>jcodemodel-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <name>JCodeModel Maven Plugin</name>
+  <name>MVN JCodeModel Maven Plugin</name>
   <description>Maven plugin to generate classes using JCodeModel. This plugin requires a dedicated data loader to feed the JCodeModel the classes.</description>
 
   <dependencies>
