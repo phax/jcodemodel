@@ -28,7 +28,7 @@
   <artifactId>jcodemodel-parent-pom</artifactId>
   <version>4.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <name>JCodeModel Parent POM</name>
+  <name>POM JCodeModel Parent</name>
   <description>Java code generation library parent POM</description>
   <url>https://github.com/phax/jcodemodel</url>
   <inceptionYear>2013</inceptionYear>

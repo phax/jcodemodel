@@ -25,7 +25,7 @@
   </parent>
   <artifactId>plugin</artifactId>
   <packaging>pom</packaging>
-  <name>JCodeModel Plugins Pom</name>
+  <name>POM Plugins</name>
   <description>POM module for all the plugin-related modules</description>
 
   <modules>

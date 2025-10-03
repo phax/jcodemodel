@@ -21,6 +21,8 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -402,7 +404,8 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
                            @Nonnull final FieldOptions options,
                            final JCodeModel model)
   {
-    final JFieldVar fv = jdc.field (options.getVisibility ().m_nJMod | (options.isFinal () ? JMod.FINAL : 0),
+    int fieldMods = options.getVisibility().m_nJMod | (options.isFinal() ? JMod.FINAL : 0);
+    final JFieldVar fv = jdc.field(fieldMods,
                                     type,
                                     fieldName);
     if (options.isSetter () && !options.isFinal ())
@@ -729,7 +732,13 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     {
       return;
     }
-    for (final Method m : fieldClass.getMethods ())
+    Method[] sortedMethods = fieldClass.getMethods();
+      Arrays.sort(sortedMethods, Comparator
+              .comparing(Method::getName)
+              .thenComparing(Method::getParameterCount)
+              // Method::toString actually short signature
+              .thenComparing(Comparator.comparing(Method::toString)));
+    for (final Method m : sortedMethods)
     {
       if (
       // synthetic methods are added by the compiler, not in the actual code

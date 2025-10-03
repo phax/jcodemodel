@@ -26,7 +26,7 @@
   <groupId>com.helger.jcodemodel.plugin</groupId>
   <artifactId>generators</artifactId>
   <packaging>pom</packaging>
-  <name>JCodeModel Generators Pom</name>
+  <name>POM Generators</name>
   <description>POM module for all the plugin-related codemodel generators</description>
 
   <modules>
@@ -35,7 +35,6 @@
     <module>json</module>
     <module>yaml</module>
   </modules>
-  
   <properties>
     <jackson.version>2.20.0</jackson.version>
   </properties>
@@ -48,7 +47,7 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-  
+
   <build>
     <plugins>
       <plugin>
