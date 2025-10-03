@@ -25,7 +25,7 @@
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
   <artifactId>yaml</artifactId>
-  <name>JCodeModel Generator YAML</name>
+  <name>GEN YAML</name>
   <description>generates a structure tree from a yaml file</description>
   <dependencies>
     <dependency>
