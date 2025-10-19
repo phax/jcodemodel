@@ -106,6 +106,7 @@
       <groupId>com.helger.commons</groupId>
       <artifactId>ph-io</artifactId>
     </dependency>
+    
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -119,7 +120,7 @@
     <dependency>
       <groupId>com.github.javaparser</groupId>
       <artifactId>javaparser-core</artifactId>
-      <version>3.27.0</version>
+      <version>3.27.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
