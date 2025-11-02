@@ -155,7 +155,7 @@ public class JCodeModel implements Serializable
   private final Map <FSName, JResourceDir> m_aResourceDirs = new HashMap <> ();
 
   /** All JReferencedClasses are pooled here. */
-  private final Map <Class <?>, JReferencedClass> m_aRefClasses = new HashMap <> ();
+  private final Map <Class <?>, JReferencedClass> m_aRefClassesCache = new HashMap <> ();
 
   /** Obtains a reference to the special "null" type. */
   public final JNullType NULL = new JNullType (this);
@@ -713,7 +713,7 @@ public class JCodeModel implements Serializable
   @NonNull
   public AbstractJClass ref (@NonNull final Class <?> aClazz)
   {
-    JReferencedClass aRefClass = m_aRefClasses.get (aClazz);
+    JReferencedClass aRefClass = m_aRefClassesCache.get (aClazz);
     if (aRefClass == null)
     {
       if (aClazz.isPrimitive ())
@@ -728,7 +728,7 @@ public class JCodeModel implements Serializable
       }
 
       aRefClass = new JReferencedClass (this, aClazz);
-      m_aRefClasses.put (aClazz, aRefClass);
+      m_aRefClassesCache.put (aClazz, aRefClass);
     }
     return aRefClass;
   }

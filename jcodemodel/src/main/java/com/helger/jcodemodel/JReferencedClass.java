@@ -69,7 +69,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   private transient boolean m_bResolvedPrimitive = false;
   private transient JPrimitiveType m_aPrimitiveType;
 
-  JReferencedClass (@NonNull final JCodeModel aOwner, @NonNull final Class <?> aClass)
+  protected JReferencedClass (@NonNull final JCodeModel aOwner, @NonNull final Class <?> aClass)
   {
     super (aOwner);
     m_aClass = aClass;
@@ -212,7 +212,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
 
   @Override
   protected AbstractJClass substituteParams (@NonNull final JTypeVar [] aVariables,
-      @NonNull final List <? extends AbstractJClass> aBindings)
+                                             @NonNull final List <? extends AbstractJClass> aBindings)
   {
     // TODO: does JDK 1.5 reflection provides these information?
     return this;

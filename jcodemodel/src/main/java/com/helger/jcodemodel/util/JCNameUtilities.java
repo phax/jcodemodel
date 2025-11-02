@@ -73,13 +73,13 @@ public final class JCNameUtilities
 
     // Get all enclosing classes
     Class <?> aCurClass = aClass;
-    final List <Class <?>> enclosingClasses = new ArrayList <> ();
+    final List <Class <?>> aEnclosingClasses = new ArrayList <> ();
     while ((aCurClass = aCurClass.getEnclosingClass ()) != null)
-      enclosingClasses.add (aCurClass);
+      aEnclosingClasses.add (aCurClass);
 
     // Back to front
-    for (int i = enclosingClasses.size () - 1; i >= 0; i--)
-      ret.append (enclosingClasses.get (i).getSimpleName ()).append ('.');
+    for (int i = aEnclosingClasses.size () - 1; i >= 0; i--)
+      ret.append (aEnclosingClasses.get (i).getSimpleName ()).append ('.');
 
     // Append main class name
     ret.append (aClass.getSimpleName ());
