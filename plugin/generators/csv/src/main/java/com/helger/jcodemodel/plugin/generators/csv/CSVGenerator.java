@@ -20,6 +20,10 @@ import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.plugin.maven.generators.AbstractFlatStructureGenerator;
 import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
@@ -32,11 +36,10 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 @JCMGen
 public class CSVGenerator extends AbstractFlatStructureGenerator
 {
-
   private String fldSep = ",";
 
   @Override
-  public void configure (final Map <String, String> params)
+  public void configure (@NonNull final Map <String, String> params)
   {
     fldSep = params.getOrDefault ("field_sep", fldSep);
   }
@@ -44,12 +47,13 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
   @Override
   protected Stream <IFlatStructRecord> loadSource (final InputStream source)
   {
+    // What charset to use?
     return new BufferedReader (new InputStreamReader (source)).lines ().map (this::convertLine).filter (r -> r != null);
   }
 
-  protected IFlatStructRecord convertLine (final String line)
+  protected IFlatStructRecord convertLine (@Nullable final String line)
   {
-    if (line == null || line.isBlank ())
+    if (StringHelper.isEmpty (line))
     {
       return null;
     }
@@ -82,12 +86,11 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
     }
 
     // no field name specified : class or package definition
-    if (fieldName == null || fieldName.isBlank ())
+    if (StringHelper.isEmpty (fieldName))
     {
       if (className.contains (" "))
-      {
         return new PackageCreation (className.replaceAll (".* ", ""), options);
-      }
+
       return new ClassCreation (className, ec, options);
     }
     return new SimpleField (className, fieldName, ec, options);
