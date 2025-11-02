@@ -79,6 +79,12 @@ public class GenerateSourceMojo extends AbstractMojo
   private String generator;
 
   /**
+   * documentation added to the main generated classes.
+   */
+  @Parameter(property = "jcodemodel.classheader")
+  private String classHeader;
+
+  /**
    * direct Map of params to transmit to the generator.
    */
   @Parameter (property = "jcodemodel.params")
@@ -114,6 +120,11 @@ public class GenerateSourceMojo extends AbstractMojo
     {
       cmb.setRootPackage (rootPackage);
     }
+    if (classHeader!=null && !classHeader.isBlank()) 
+    {
+      cmb.setClassHeader(classHeader);
+    }
+    
     if (params != null)
     {
       cmb.configure (params);

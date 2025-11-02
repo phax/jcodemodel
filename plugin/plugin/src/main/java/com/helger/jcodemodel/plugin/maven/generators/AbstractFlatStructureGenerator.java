@@ -65,7 +65,10 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 
 public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilder
 {
+
   private String m_sRootPackage = "";
+  private String m_sClassHeader = "";
+
   /**
    * all the classes we created, by local name
    */
@@ -89,11 +92,22 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
 
   protected abstract Stream <IFlatStructRecord> loadSource (@Nullable InputStream source);
 
+  @Override
+  public void setClassHeader(String header) {
+    m_sClassHeader = header;
+  }
+
+  public String getClassHeader() {
+    return m_sClassHeader;
+  }
+
+  @Override
   public void setRootPackage (final String rootPackage)
   {
     m_sRootPackage = rootPackage;
   }
 
+  @Override
   public String getRootPackage ()
   {
     return m_sRootPackage;
@@ -101,12 +115,14 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
 
   protected ConcreteTypes concrete;
 
+  @Override
   public void configure (final Map <String, String> params)
   {
     ICodeModelBuilder.super.configure (params);
     concrete = ConcreteTypes.from (params);
   }
 
+  @Override
   public void build (final JCodeModel model, final InputStream source) throws JCodeModelException
   {
     final List <IFlatStructRecord> records = loadSource (source).toList ();
@@ -151,7 +167,10 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     final JDefinedClass clazz = definedClasses.computeIfAbsent (localName, n -> {
       try
       {
-        return model._class (expandClassName (n));
+        JDefinedClass ret = model._class (expandClassName (n));
+        if(getClassHeader()!=null && !getClassHeader().isBlank())
+          ret.headerComment().add(getClassHeader());
+        return ret;
       }
       catch (final JCodeModelException e)
       {
@@ -358,18 +377,20 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
                                        final List <EEncapsulation> encapsulations)
   {
     AbstractJType ret = resolveType (model, typeName);
-    if (ret == null)
+    if (ret == null) {
       return null;
+    }
 
-    for (final EEncapsulation e : encapsulations)
+    for (final EEncapsulation e : encapsulations) {
       ret = e.apply (ret, model);
+    }
 
     return ret;
   }
 
   /**
    * convert an alias to a static class
-   * 
+   *
    * @param alias
    *        alias to resolve
    * @return corresponding static class, or null if alias does not match any
@@ -408,11 +429,13 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     final JFieldVar fv = jdc.field(fieldMods,
                                     type,
                                     fieldName);
-    if (options.isSetter () && !options.isFinal ())
+    if (options.isSetter () && !options.isFinal ()) {
       addSetter (fv, jdc, model, options);
+    }
 
-    if (options.isGetter ())
+    if (options.isGetter ()) {
       addGetter (fv, jdc);
+    }
   }
 
   protected void addGetter (@NonNull final JFieldVar fv, @NonNull final JDefinedClass jdc)
@@ -485,14 +508,16 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
                                      @NonNull final JDefinedClass createdClass,
                                      @NonNull final Set <JDefinedClass> done)
   {
-    if (done.contains (createdClass))
+    if (done.contains (createdClass)) {
       return;
+    }
 
     AbstractJClass parent = createdClass._extends ();
     if (parent != null)
     {
-      if (parent instanceof final JNarrowedClass narrowed)
+      if (parent instanceof final JNarrowedClass narrowed) {
         parent = narrowed.basis ();
+      }
 
       // TODO convert to pattern matching post java 21
       if (parent instanceof final JDefinedClass parentClass)

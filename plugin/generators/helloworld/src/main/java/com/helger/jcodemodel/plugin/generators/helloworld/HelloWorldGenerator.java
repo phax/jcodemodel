@@ -30,29 +30,50 @@ public class HelloWorldGenerator implements ICodeModelBuilder
 {
 
   protected String m_sRootPackage = "com.helger.tests.helloworld";
+  private String m_sClassHeader = "";
   protected String className = "Hello";
   protected String value = "world";
 
+  @Override
   public void configure (final Map <String, String> params)
   {
     className = params.getOrDefault ("name", className);
     value = params.getOrDefault ("value", value);
   }
 
+  protected String fieldName() {
+    return "value";
+  }
+
+  @Override
   public void build (final JCodeModel model, final InputStream source) throws JCodeModelException
   {
     final JDefinedClass cl = model._class (expandClassName (className));
-    cl.field (JMod.PUBLIC, model._ref (String.class), "value", JExpr.lit (value));
+    if (m_sClassHeader != null && !m_sClassHeader.isBlank()) {
+      cl.headerComment().add(m_sClassHeader);
+    }
+    cl.field(JMod.PUBLIC, model._ref(String.class), fieldName(), JExpr.lit(value));
   }
 
+  @Override
   public void setRootPackage (final String rootPackage)
   {
     m_sRootPackage = rootPackage;
   }
 
+  @Override
   public String getRootPackage ()
   {
     return m_sRootPackage;
+  }
+
+  @Override
+  public void setClassHeader(String header) {
+    m_sClassHeader = header;
+  }
+
+  public String getClassHeader() {
+    return m_sClassHeader;
   }
 
 }
