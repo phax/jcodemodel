@@ -27,6 +27,7 @@
   <artifactId>plugins</artifactId>
   <packaging>pom</packaging>
   <name>POM Plugins Examples</name>
+  <description>POM module for all the plugin examples</description>
 
   <modules>
     <module>csv</module>
@@ -34,5 +35,4 @@
     <module>json</module>
     <module>yaml</module>
   </modules>
-  <description>POM module for all the plugin examples</description>
 </project>

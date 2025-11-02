@@ -128,11 +128,6 @@
         <artifactId>jcodemodel</artifactId>
         <version>${project.version}</version>
       </dependency>
-      <dependency>
-        <groupId>com.helger.jcodemodel.plugin.generators</groupId>
-        <artifactId>csv</artifactId>
-        <version>${project.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 

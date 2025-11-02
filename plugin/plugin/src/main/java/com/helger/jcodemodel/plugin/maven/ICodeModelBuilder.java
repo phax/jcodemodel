@@ -20,6 +20,7 @@ import java.util.Map;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 
@@ -38,7 +39,7 @@ public interface ICodeModelBuilder
   default void configure (@NonNull final Map <String, String> params)
   {}
 
-  default void setClassHeader (final String header)
+  default void setClassHeader (@Nullable final String header)
   {}
 
   /**
@@ -66,19 +67,19 @@ public interface ICodeModelBuilder
     build (model, null);
   }
 
-  void setRootPackage (String rootPackage);
-
+  @Nullable
   String getRootPackage ();
+
+  void setRootPackage (@Nullable String rootPackage);
 
   /**
    * @param localPath
    *        class we want to create, eg "pck.MyClass"
    * @return localpath prefixed by rootpackage and "." if needed.
    */
-  default String expandClassName (final String localPath)
+  default String expandClassName (@Nullable final String localPath)
   {
     final String rootPackage = getRootPackage ();
-    return rootPackage == null || rootPackage.isBlank () ? localPath : rootPackage + "." + localPath;
+    return StringHelper.isEmpty (rootPackage) ? localPath : rootPackage + "." + localPath;
   }
-
 }

@@ -51,6 +51,7 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
     return new BufferedReader (new InputStreamReader (source)).lines ().map (this::convertLine).filter (r -> r != null);
   }
 
+  @Nullable
   protected IFlatStructRecord convertLine (@Nullable final String line)
   {
     if (StringHelper.isEmpty (line))
@@ -59,6 +60,8 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
     }
     final String [] spl = line.trim ().split (fldSep);
     final String className = spl[0].trim ();
+    if (StringHelper.isEmpty (className))
+      return null;
 
     // field name for fields. Absent for non-fields
 

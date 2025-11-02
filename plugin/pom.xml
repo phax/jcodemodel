@@ -29,7 +29,7 @@
   <description>POM module for all the plugin-related modules</description>
 
   <modules>
-    <module>generators</module>
     <module>plugin</module>
+    <module>generators</module>
   </modules>
 </project>
