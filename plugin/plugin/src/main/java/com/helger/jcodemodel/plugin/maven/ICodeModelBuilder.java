@@ -17,6 +17,7 @@ package com.helger.jcodemodel.plugin.maven;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.jcodemodel.JCodeModel;
@@ -34,11 +35,11 @@ public interface ICodeModelBuilder
    * @param params
    *        Parameters
    */
-  default void configure (final Map <String, String> params)
+  default void configure (@NonNull final Map <String, String> params)
   {}
 
-  default void setClassHeader(String header) {
-  }
+  default void setClassHeader (final String header)
+  {}
 
   /**
    * asking the generator to build a model.

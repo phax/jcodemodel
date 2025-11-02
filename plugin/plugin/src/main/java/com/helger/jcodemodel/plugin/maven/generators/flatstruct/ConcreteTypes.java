@@ -19,18 +19,22 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class ConcreteTypes
 {
-
   public static final String CONCRETE_LIST_PARAM = "concrete.list";
   public static final String CONCRETE_MAP_PARAM = "concrete.map";
   public static final String CONCRETE_SET_PARAM = "concrete.set";
 
   public Class <?> list, map, set;
 
-  public static ConcreteTypes from (final Map <String, String> params)
+  private ConcreteTypes ()
+  {}
+
+  @NonNull
+  public static ConcreteTypes from (@NonNull final Map <String, String> params)
   {
     final ConcreteTypes ret = new ConcreteTypes ();
     ret.list = findClass (params.get (CONCRETE_LIST_PARAM), ArrayList.class);

@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -35,6 +34,7 @@ import java.util.stream.Stream;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JBlock;
@@ -65,9 +65,9 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 
 public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilder
 {
-
-  private String m_sRootPackage = "";
   private String m_sClassHeader = "";
+  private String m_sRootPackage = "";
+  protected ConcreteTypes concrete;
 
   /**
    * all the classes we created, by local name
@@ -92,31 +92,33 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
 
   protected abstract Stream <IFlatStructRecord> loadSource (@Nullable InputStream source);
 
-  @Override
-  public void setClassHeader(String header) {
-    m_sClassHeader = header;
-  }
-
-  public String getClassHeader() {
+  public @Nullable String getClassHeader ()
+  {
     return m_sClassHeader;
   }
 
-  @Override
-  public void setRootPackage (final String rootPackage)
+  public boolean hasClassHeader ()
+  {
+    return StringHelper.isNotEmpty (m_sClassHeader);
+  }
+
+  public void setClassHeader (@Nullable final String header)
+  {
+    m_sClassHeader = header;
+  }
+
+  public @Nullable String getRootPackage ()
+  {
+    return m_sRootPackage;
+  }
+
+  public void setRootPackage (@Nullable final String rootPackage)
   {
     m_sRootPackage = rootPackage;
   }
 
   @Override
-  public String getRootPackage ()
-  {
-    return m_sRootPackage;
-  }
-
-  protected ConcreteTypes concrete;
-
-  @Override
-  public void configure (final Map <String, String> params)
+  public void configure (@NonNull final Map <String, String> params)
   {
     ICodeModelBuilder.super.configure (params);
     concrete = ConcreteTypes.from (params);
@@ -134,7 +136,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     applyRedirects (model, records);
   }
 
-  /**
+  /*
    * create the classes files, so that we can link them dynamically ; and the packages
    */
   protected void createClasses (final JCodeModel model, final List <IFlatStructRecord> records)
@@ -159,7 +161,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     }
   }
 
-  /**
+  /*
    * ensure a jdefinedclass exists for given name
    */
   protected JDefinedClass ensureClass (final JCodeModel model, final String localName, final FieldOptions options)
@@ -167,44 +169,37 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     final JDefinedClass clazz = definedClasses.computeIfAbsent (localName, n -> {
       try
       {
-        JDefinedClass ret = model._class (expandClassName (n));
-        if(getClassHeader()!=null && !getClassHeader().isBlank())
-          ret.headerComment().add(getClassHeader());
+        final JDefinedClass ret = model._class (expandClassName (n));
+        if (hasClassHeader ())
+          ret.headerComment ().add (getClassHeader ());
         return ret;
       }
       catch (final JCodeModelException e)
       {
-        throw new RuntimeException (e);
+        throw new IllegalStateException (e);
       }
     });
+
     final String simpleName = localName.replaceAll (".*\\.", "");
     simpleDefinedClasses.computeIfAbsent (simpleName, n -> new HashSet <> ()).add (clazz);
     if (options == null)
-    {
       pathOptions.computeIfAbsent (localName, cn -> new FieldOptions ());
-    }
     else
-    {
       pathOptions.put (localName, options);
-    }
     return clazz;
   }
 
-  /**
+  /*
    * link each class options and package option to its parent package option
    */
   protected void updateParentOptions (final List <IFlatStructRecord> records)
   {
-    for (final Entry <String, FieldOptions> e : pathOptions.entrySet ())
-    {
-      if (!e.getKey ().isBlank ())
-      {
+    for (final Map.Entry <String, FieldOptions> e : pathOptions.entrySet ())
+      if (StringHelper.isNotEmpty (e.getKey ()))
         e.getValue ().setParent (findParentOption (e.getKey ()));
-      }
-    }
   }
 
-  /**
+  /*
    * find the FieldOptions associated to the longest leading path of the child. eg. if child is
    * my.own.LittleClass, and there is a fieldoptions stored for "my" and one for "my.own", then this
    * would return the fieldoptions associated to my.own.
@@ -220,14 +215,13 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
       search = idx > -1 ? search.substring (0, idx) : null;
       found = pathOptions.get (search);
     } while (found == null && search != null && !search.isBlank ());
+
     if (found == null)
-    {
       found = pathOptions.get ("");
-    }
     return found;
   }
 
-  /**
+  /*
    * make the classes extends or implement their parent classes, if any
    */
   protected void applyInheritance (final JCodeModel model, final List <IFlatStructRecord> records)
@@ -377,11 +371,13 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
                                        final List <EEncapsulation> encapsulations)
   {
     AbstractJType ret = resolveType (model, typeName);
-    if (ret == null) {
+    if (ret == null)
+    {
       return null;
     }
 
-    for (final EEncapsulation e : encapsulations) {
+    for (final EEncapsulation e : encapsulations)
+    {
       ret = e.apply (ret, model);
     }
 
@@ -425,15 +421,15 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
                            @NonNull final FieldOptions options,
                            final JCodeModel model)
   {
-    int fieldMods = options.getVisibility().m_nJMod | (options.isFinal() ? JMod.FINAL : 0);
-    final JFieldVar fv = jdc.field(fieldMods,
-                                    type,
-                                    fieldName);
-    if (options.isSetter () && !options.isFinal ()) {
+    final int fieldMods = options.getVisibility ().m_nJMod | (options.isFinal () ? JMod.FINAL : 0);
+    final JFieldVar fv = jdc.field (fieldMods, type, fieldName);
+    if (options.isSetter () && !options.isFinal ())
+    {
       addSetter (fv, jdc, model, options);
     }
 
-    if (options.isGetter ()) {
+    if (options.isGetter ())
+    {
       addGetter (fv, jdc);
     }
   }
@@ -491,7 +487,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
   // apply constructors
   //
 
-  /**
+  /*
    * create constructors for classes that have a final field or extends a class without no-arg
    * constructor
    */
@@ -508,14 +504,16 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
                                      @NonNull final JDefinedClass createdClass,
                                      @NonNull final Set <JDefinedClass> done)
   {
-    if (done.contains (createdClass)) {
+    if (done.contains (createdClass))
+    {
       return;
     }
 
     AbstractJClass parent = createdClass._extends ();
     if (parent != null)
     {
-      if (parent instanceof final JNarrowedClass narrowed) {
+      if (parent instanceof final JNarrowedClass narrowed)
+      {
         parent = narrowed.basis ();
       }
 
@@ -649,7 +647,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     });
   }
 
-  /**
+  /*
    * create the constructors for a class that does not have super class, or that super class has an
    * empty constructor.
    */
@@ -757,12 +755,12 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     {
       return;
     }
-    Method[] sortedMethods = fieldClass.getMethods();
-      Arrays.sort(sortedMethods, Comparator
-              .comparing(Method::getName)
-              .thenComparing(Method::getParameterCount)
-              // Method::toString actually short signature
-              .thenComparing(Comparator.comparing(Method::toString)));
+    final Method [] sortedMethods = fieldClass.getMethods ();
+    Arrays.sort (sortedMethods,
+                 Comparator.comparing (Method::getName)
+                           .thenComparing (Method::getParameterCount)
+                           // Method::toString actually short signature
+                           .thenComparing (Comparator.comparing (Method::toString)));
     for (final Method m : sortedMethods)
     {
       if (
@@ -802,33 +800,26 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     return jmods & ~JMod.SYNCHRONIZED & ~JMod.STRICTFP;
   }
 
-  protected void applyToFieldOptions (String optStr, final FieldOptions options)
+  protected void applyToFieldOptions (final String optStr, final FieldOptions options)
   {
     if (optStr == null || optStr.isBlank ())
     {
       return;
     }
-    else
-    {
-      optStr = optStr.trim ();
-    }
-    final EFieldVisibility fv = EFieldVisibility.of (optStr);
+
+    final String sCleanOptStr = optStr.trim ();
+    final EFieldVisibility fv = EFieldVisibility.of (sCleanOptStr);
     if (fv != null)
     {
       fv.apply (options);
     }
     else
     {
-      final EFieldOption fa = EFieldOption.of (optStr);
+      final EFieldOption fa = EFieldOption.of (sCleanOptStr);
       if (fa == null)
-      {
-        throw new UnsupportedOperationException ("can't deduce option from " + optStr);
-      }
-      else
-      {
-        fa.apply (options);
-      }
+        throw new UnsupportedOperationException ("can't deduce option from '" + sCleanOptStr + "'");
+
+      fa.apply (options);
     }
   }
-
 }

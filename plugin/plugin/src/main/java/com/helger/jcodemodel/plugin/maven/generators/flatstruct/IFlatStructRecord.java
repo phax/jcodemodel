@@ -197,10 +197,7 @@ public sealed interface IFlatStructRecord
         case "list" -> LIST;
         case "map" -> MAP;
         case "set" -> SET;
-        default ->
-        {
-          throw new UnsupportedOperationException ();
-        }
+        default -> throw new UnsupportedOperationException ();
       };
     }
   }

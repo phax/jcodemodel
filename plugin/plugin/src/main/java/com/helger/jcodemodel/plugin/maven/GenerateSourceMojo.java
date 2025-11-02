@@ -14,7 +14,6 @@
  */
 package com.helger.jcodemodel.plugin.maven;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,6 +32,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
+import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -81,7 +82,7 @@ public class GenerateSourceMojo extends AbstractMojo
   /**
    * documentation added to the main generated classes.
    */
-  @Parameter(property = "jcodemodel.classheader")
+  @Parameter (property = "jcodemodel.classheader")
   private String classHeader;
 
   /**
@@ -116,28 +117,22 @@ public class GenerateSourceMojo extends AbstractMojo
                     " with params " +
                     params);
 
-    if (rootPackage != null && !rootPackage.isBlank ())
-    {
+    if (StringHelper.isNotEmpty (classHeader))
+      cmb.setClassHeader (classHeader);
+
+    if (StringHelper.isNotEmpty (rootPackage))
       cmb.setRootPackage (rootPackage);
-    }
-    if (classHeader!=null && !classHeader.isBlank()) 
-    {
-      cmb.setClassHeader(classHeader);
-    }
-    
+
     if (params != null)
-    {
       cmb.configure (params);
-    }
 
     final JCodeModel cm = new JCodeModel ();
     if (data != null && !data.isBlank () && source != null && !source.isBlank ())
     {
       getLog ().warn ("discarding source param " + source + " as data is already set");
     }
-    final InputStream source = data == null || data.isBlank () ? findSource () : new ByteArrayInputStream (data
-                                                                                                               .getBytes ());
-    try
+    try (final InputStream source = StringHelper.isEmpty (data) ? findSource () : new NonBlockingByteArrayInputStream (
+                                                                                                                       data.getBytes (StandardCharsets.UTF_8)))
     {
       cmb.build (cm, source);
       new JCMWriter (cm).build (dir, (IProgressTracker) null);
@@ -154,36 +149,28 @@ public class GenerateSourceMojo extends AbstractMojo
   protected File javaOutputFolder ()
   {
     if (outputDir == null || outputDir.isBlank ())
-    {
       return new File (project.getBasedir (), "src/generated/java");
-    }
-    else
-      if (outputDir.startsWith ("/"))
-      {
-        return new File (outputDir);
-      }
-      else
-      {
-        return new File (project.getBasedir (), outputDir);
-      }
+
+    if (outputDir.startsWith ("/"))
+      return new File (outputDir);
+
+    return new File (project.getBasedir (), outputDir);
   }
 
   public static final String GENERATOR_CLASS_FILE = "jcodemodel/plugin/generator";
 
-  /**
+  /*
    * deduce the generator's class and instantiate it
    */
   protected ICodeModelBuilder findBuilder () throws Exception
   {
     String generatorClass = generator;
     if (generatorClass == null)
-    {
       generatorClass = findGeneratorClass ();
-    }
-    return generatorClass == null || generatorClass.isBlank () ? null : (ICodeModelBuilder) Class.forName (
-                                                                                                           generatorClass)
-                                                                                                 .getDeclaredConstructor ()
-                                                                                                 .newInstance ();
+
+    return StringHelper.isEmpty (generatorClass) ? null : (ICodeModelBuilder) Class.forName (generatorClass)
+                                                                                   .getDeclaredConstructor ()
+                                                                                   .newInstance ();
   }
 
   @Nullable
@@ -231,5 +218,4 @@ public class GenerateSourceMojo extends AbstractMojo
 
     throw new MojoExecutionException ("could not open provided source " + source + " as a file or url");
   }
-
 }
