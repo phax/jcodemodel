@@ -43,10 +43,10 @@ package com.helger.jcodemodel;
 import java.util.Iterator;
 import java.util.List;
 
-import com.helger.jcodemodel.exceptions.JErrorClassUsedException;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.jcodemodel.exceptions.JErrorClassUsedException;
 
 /**
  * A special {@link AbstractJClass} that represents an error class.
@@ -76,12 +76,12 @@ public class JErrorClass extends AbstractJClass
   private final String m_sMessage;
   private final String m_sName;
 
-  protected JErrorClass (@Nonnull final JCodeModel aOwner, @Nonnull final String sMessage)
+  protected JErrorClass (@NonNull final JCodeModel aOwner, @NonNull final String sMessage)
   {
     this (aOwner, sMessage, null);
   }
 
-  protected JErrorClass (@Nonnull final JCodeModel aOwner, @Nonnull final String sMessage, @Nullable final String sName)
+  protected JErrorClass (@NonNull final JCodeModel aOwner, @NonNull final String sMessage, @Nullable final String sName)
   {
     super (aOwner);
     m_sMessage = sMessage;
@@ -96,28 +96,28 @@ public class JErrorClass extends AbstractJClass
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     throw new JErrorClassUsedException (m_sMessage);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public JPackage _package ()
   {
     throw new JErrorClassUsedException (m_sMessage);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public AbstractJClass _extends ()
   {
     throw new JErrorClassUsedException (m_sMessage);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Iterator <AbstractJClass> _implements ()
   {
     throw new JErrorClassUsedException (m_sMessage);
@@ -141,16 +141,16 @@ public class JErrorClass extends AbstractJClass
     return true;
   }
 
-  @Nonnull
+  @NonNull
   public String getMessage ()
   {
     return m_sMessage;
   }
 
   @Override
-  @Nonnull
-  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
-                                             @Nonnull final List <? extends AbstractJClass> aBindings)
+  @NonNull
+  protected AbstractJClass substituteParams (@NonNull final JTypeVar [] aVariables,
+                                             @NonNull final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }

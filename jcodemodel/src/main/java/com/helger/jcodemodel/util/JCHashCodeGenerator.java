@@ -40,11 +40,11 @@
  */
 package com.helger.jcodemodel.util;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.base.hashcode.HashCodeGenerator;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 @Immutable
 public final class JCHashCodeGenerator
@@ -62,7 +62,7 @@ public final class JCHashCodeGenerator
    *        A list of all members. Primitive types must be boxed.
    * @return The generated hashCode.
    */
-  public static int getHashCode (@Nonnull final Object aThis, @Nullable final Object... aMembers)
+  public static int getHashCode (@NonNull final Object aThis, @Nullable final Object... aMembers)
   {
     final HashCodeGenerator aHCGen = new HashCodeGenerator (aThis);
     if (aMembers != null)

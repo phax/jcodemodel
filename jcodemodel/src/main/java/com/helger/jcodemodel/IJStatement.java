@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Common interface for code components that can generate uses of themselves as
@@ -48,5 +48,5 @@ import jakarta.annotation.Nonnull;
  */
 public interface IJStatement extends IJObject
 {
-  void state (@Nonnull IJFormatter f);
+  void state (@NonNull IJFormatter f);
 }

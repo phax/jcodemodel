@@ -48,11 +48,11 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Represents an annotation on a program element.
@@ -77,30 +77,30 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    */
   private final Map <String, AbstractJAnnotationValue> m_aMemberValues = new LinkedHashMap <> ();
 
-  public JAnnotationUse (@Nonnull final AbstractJClass aAnnotationClass)
+  public JAnnotationUse (@NonNull final AbstractJClass aAnnotationClass)
   {
     m_aAnnotationClass = ValueEnforcer.notNull (aAnnotationClass, "AnnotationClass");
   }
 
-  @Nonnull
+  @NonNull
   public AbstractJClass getAnnotationClass ()
   {
     return m_aAnnotationClass;
   }
 
-  @Nonnull
+  @NonNull
   public JCodeModel owner ()
   {
     return m_aAnnotationClass.owner ();
   }
 
-  @Nonnull
+  @NonNull
   public Map <String, AbstractJAnnotationValue> annotationMembersMutable ()
   {
     return m_aMemberValues;
   }
 
-  @Nonnull
+  @NonNull
   public Map <String, AbstractJAnnotationValue> getAnnotationMembers ()
   {
     return Collections.unmodifiableMap (annotationMembersMutable ());
@@ -119,7 +119,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
 
   @SuppressWarnings ("unchecked")
   private static <T> T _castAnnotationArgument (@Nullable final AbstractJAnnotationValue aValue,
-                                                @Nonnull final Class <T> aClazz) throws ClassCastException
+                                                @NonNull final Class <T> aClazz) throws ClassCastException
   {
     if (!aClazz.isArray ())
     {
@@ -176,7 +176,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *         If the parameter is not of the specified type
    */
   @Nullable
-  public <T> T getParam (@Nonnull final String sName, @Nonnull final Class <T> aClazz) throws ClassCastException
+  public <T> T getParam (@NonNull final String sName, @NonNull final Class <T> aClazz) throws ClassCastException
   {
     final AbstractJAnnotationValue value = getParam (sName);
     return _castAnnotationArgument (value, aClazz);
@@ -196,8 +196,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
     return aParam != null ? aParam.value () : null;
   }
 
-  @Nonnull
-  private JAnnotationUse _addValue (@Nonnull final String sName, @Nonnull final AbstractJAnnotationValue aAnnotationValue)
+  @NonNull
+  private JAnnotationUse _addValue (@NonNull final String sName, @NonNull final AbstractJAnnotationValue aAnnotationValue)
   {
     ValueEnforcer.notEmpty (sName, "Name");
     ValueEnforcer.notNull (aAnnotationValue, "AnnotationValue");
@@ -218,7 +218,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
+  @NonNull
   public JAnnotationUse param (final boolean bValue)
   {
     return param (SPECIAL_KEY_VALUE, bValue);
@@ -233,14 +233,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final boolean bValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, final boolean bValue)
   {
     return _addValue (sName, wrap (bValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final boolean... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final boolean... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -255,7 +255,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
+  @NonNull
   public JAnnotationUse param (final byte nValue)
   {
     return param (SPECIAL_KEY_VALUE, nValue);
@@ -270,14 +270,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final byte nValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, final byte nValue)
   {
     return _addValue (sName, wrap (nValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final byte... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final byte... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -292,7 +292,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
+  @NonNull
   public JAnnotationUse param (final char cValue)
   {
     return param (SPECIAL_KEY_VALUE, cValue);
@@ -307,14 +307,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final char cValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, final char cValue)
   {
     return _addValue (sName, wrap (cValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final char... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final char... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -329,7 +329,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
+  @NonNull
   public JAnnotationUse param (final double dValue)
   {
     return param (SPECIAL_KEY_VALUE, dValue);
@@ -344,14 +344,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final double dValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, final double dValue)
   {
     return _addValue (sName, wrap (dValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final double... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final double... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -366,7 +366,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
+  @NonNull
   public JAnnotationUse param (final float fValue)
   {
     return param (SPECIAL_KEY_VALUE, fValue);
@@ -381,14 +381,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final float fValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, final float fValue)
   {
     return _addValue (sName, wrap (fValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final float... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final float... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -403,7 +403,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
+  @NonNull
   public JAnnotationUse param (final int nValue)
   {
     return param (SPECIAL_KEY_VALUE, nValue);
@@ -418,14 +418,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final int nValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, final int nValue)
   {
     return _addValue (sName, wrap (nValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final int... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final int... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -440,7 +440,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
+  @NonNull
   public JAnnotationUse param (final long nValue)
   {
     return param (SPECIAL_KEY_VALUE, nValue);
@@ -455,14 +455,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final long nValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, final long nValue)
   {
     return _addValue (sName, wrap (nValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final long... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final long... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -477,7 +477,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
+  @NonNull
   public JAnnotationUse param (final short nValue)
   {
     return param (SPECIAL_KEY_VALUE, nValue);
@@ -492,14 +492,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, final short nValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, final short nValue)
   {
     return _addValue (sName, wrap (nValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final short... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final short... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -514,8 +514,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sValue)
   {
     return param (SPECIAL_KEY_VALUE, sValue);
   }
@@ -529,14 +529,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final String sValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, @NonNull final String sValue)
   {
     return _addValue (sName, wrap (sValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final String... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final String... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -551,8 +551,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final Enum <?> aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final Enum <?> aValue)
   {
     return param (SPECIAL_KEY_VALUE, aValue);
   }
@@ -566,14 +566,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final Enum <?> aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, @NonNull final Enum <?> aValue)
   {
     return _addValue (sName, wrap (aValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final Enum <?>... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final Enum <?>... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -588,8 +588,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final JEnumConstant aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final JEnumConstant aValue)
   {
     return param (SPECIAL_KEY_VALUE, aValue);
   }
@@ -603,14 +603,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final JEnumConstant aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, @NonNull final JEnumConstant aValue)
   {
     return _addValue (sName, wrap (aValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final JEnumConstant... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final JEnumConstant... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -632,8 +632,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final Class <?> aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final Class <?> aValue)
   {
     return param (SPECIAL_KEY_VALUE, aValue);
   }
@@ -655,14 +655,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final Class <?> aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, @NonNull final Class <?> aValue)
   {
     return _addValue (sName, wrap (aValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final Class <?>... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final Class <?>... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -677,8 +677,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final AbstractJType aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final AbstractJType aValue)
   {
     return param (SPECIAL_KEY_VALUE, aValue);
   }
@@ -693,14 +693,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final AbstractJType aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, @NonNull final AbstractJType aValue)
   {
     return _addValue (sName, wrap (aValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final AbstractJType... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final AbstractJType... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -715,8 +715,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    * @since 3.2.0
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final IJExpression aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final IJExpression aValue)
   {
     return param (SPECIAL_KEY_VALUE, aValue);
   }
@@ -730,14 +730,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse param (@Nonnull final String sName, @Nonnull final IJExpression aValue)
+  @NonNull
+  public JAnnotationUse param (@NonNull final String sName, @NonNull final IJExpression aValue)
   {
     return _addValue (sName, wrap (aValue));
   }
 
-  @Nonnull
-  public JAnnotationUse paramArray (@Nonnull final String sName, @Nonnull final IJExpression... aValues)
+  @NonNull
+  public JAnnotationUse paramArray (@NonNull final String sName, @NonNull final IJExpression... aValues)
   {
     paramArray (sName).params (aValues);
     return this;
@@ -751,8 +751,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return The {@link JAnnotationArrayMember}. For adding array aValues
    * @see JAnnotationArrayMember
    */
-  @Nonnull
-  public JAnnotationArrayMember paramArray (@Nonnull final String sName)
+  @NonNull
+  public JAnnotationArrayMember paramArray (@NonNull final String sName)
   {
     final JAnnotationArrayMember aArrayMember = new JAnnotationArrayMember (owner ());
     _addValue (sName, aArrayMember);
@@ -770,8 +770,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The annotation class which is member value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse annotationParam (@Nonnull final String sName, @Nonnull final Class <? extends Annotation> aValue)
+  @NonNull
+  public JAnnotationUse annotationParam (@NonNull final String sName, @NonNull final Class <? extends Annotation> aValue)
   {
     return annotationParam (sName, owner ().ref (aValue));
   }
@@ -787,8 +787,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    *        The annotation class which is member value for this annotation
    * @return <code>this</code> for chaining
    */
-  @Nonnull
-  public JAnnotationUse annotationParam (@Nonnull final String sName, @Nonnull final AbstractJClass aValue)
+  @NonNull
+  public JAnnotationUse annotationParam (@NonNull final String sName, @NonNull final AbstractJClass aValue)
   {
     final JAnnotationUse aAnnotationUse = new JAnnotationUse (aValue);
     _addValue (sName, aAnnotationUse);

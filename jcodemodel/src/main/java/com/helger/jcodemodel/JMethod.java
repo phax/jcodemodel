@@ -48,12 +48,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.util.ClassNameComparator;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Java method.
@@ -125,10 +125,10 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @param sName
    *        Name of this method. May neither be <code>null</code> nor empty.
    */
-  protected JMethod (@Nonnull final JDefinedClass aOwningClass,
+  protected JMethod (@NonNull final JDefinedClass aOwningClass,
                      final int nMods,
-                     @Nonnull final AbstractJType aReturnType,
-                     @Nonnull final String sName)
+                     @NonNull final AbstractJType aReturnType,
+                     @NonNull final String sName)
   {
     ValueEnforcer.notNull (aOwningClass, "OwningClass");
     ValueEnforcer.notNull (aReturnType, "ReturnType");
@@ -147,7 +147,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @param aClass
    *        Class containing this constructor. May not be <code>null</code>.
    */
-  protected JMethod (final int nMods, @Nonnull final JDefinedClass aClass)
+  protected JMethod (final int nMods, @NonNull final JDefinedClass aClass)
   {
     ValueEnforcer.notNull (aClass, "Class");
     m_aMods = JMods.forMethod (nMods);
@@ -161,13 +161,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     return m_aReturnType == null;
   }
 
-  @Nonnull
+  @NonNull
   public Set <AbstractJClass> throwsMutable ()
   {
     return m_aThrows;
   }
 
-  @Nonnull
+  @NonNull
   public Collection <AbstractJClass> getThrows ()
   {
     return Collections.unmodifiableSet (throwsMutable ());
@@ -180,15 +180,15 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        Name of an exception that this method may throw
    * @return this
    */
-  @Nonnull
-  public JMethod _throws (@Nonnull final AbstractJClass aException)
+  @NonNull
+  public JMethod _throws (@NonNull final AbstractJClass aException)
   {
     m_aThrows.add (aException);
     return this;
   }
 
-  @Nonnull
-  public JMethod _throws (@Nonnull final Class <? extends Throwable> aException)
+  @NonNull
+  public JMethod _throws (@NonNull final Class <? extends Throwable> aException)
   {
     return _throws (m_aOwningClass.owner ().ref (aException));
   }
@@ -198,7 +198,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *
    * @return List of parameters of this method. This list is modifiable.
    */
-  @Nonnull
+  @NonNull
   public List <JVar> paramsMutable ()
   {
     return m_aParams;
@@ -209,13 +209,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *
    * @return List of parameters of this method. This list is not modifiable.
    */
-  @Nonnull
+  @NonNull
   public List <JVar> params ()
   {
     return Collections.unmodifiableList (paramsMutable ());
   }
 
-  @Nonnull
+  @NonNull
   public JVar paramAtIndex (@Nonnegative final int nIndex) throws IndexOutOfBoundsException
   {
     return m_aParams.get (nIndex);
@@ -233,28 +233,28 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        Name of the parameter being added
    * @return New parameter variable of type {@link JVar}
    */
-  @Nonnull
-  public JVar param (final int nMods, @Nonnull final AbstractJType aType, @Nonnull final String sName)
+  @NonNull
+  public JVar param (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
     final JVar aVar = new JVar (JMods.forVar (nMods), aType, sName, null);
     m_aParams.add (aVar);
     return aVar;
   }
 
-  @Nonnull
-  public JVar param (@Nonnull final AbstractJType aType, @Nonnull final String sName)
+  @NonNull
+  public JVar param (@NonNull final AbstractJType aType, @NonNull final String sName)
   {
     return param (JMod.NONE, aType, sName);
   }
 
-  @Nonnull
-  public JVar param (final int nMods, @Nonnull final Class <?> aType, @Nonnull final String sName)
+  @NonNull
+  public JVar param (final int nMods, @NonNull final Class <?> aType, @NonNull final String sName)
   {
     return param (nMods, m_aOwningClass.owner ()._ref (aType), sName);
   }
 
-  @Nonnull
-  public JVar param (@Nonnull final Class <?> aType, @Nonnull final String sName)
+  @NonNull
+  public JVar param (@NonNull final Class <?> aType, @NonNull final String sName)
   {
     return param (m_aOwningClass.owner ()._ref (aType), sName);
   }
@@ -272,8 +272,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *         If this method is called twice. varargs in J2SE 1.5 can appear only
    *         once in the method signature.
    */
-  @Nonnull
-  public JVar varParam (@Nonnull final Class <?> aType, @Nonnull final String sName)
+  @NonNull
+  public JVar varParam (@NonNull final Class <?> aType, @NonNull final String sName)
   {
     return varParam (m_aOwningClass.owner ()._ref (aType), sName);
   }
@@ -291,8 +291,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *         If this method is called twice. varargs in J2SE 1.5 can appear only
    *         once in the method signature.
    */
-  @Nonnull
-  public JVar varParam (@Nonnull final AbstractJType aType, @Nonnull final String sName)
+  @NonNull
+  public JVar varParam (@NonNull final AbstractJType aType, @NonNull final String sName)
   {
     return varParam (JMod.NONE, aType, sName);
   }
@@ -313,8 +313,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *         If this method is called twice. varargs in J2SE 1.5 can appear only
    *         once in the method signature.
    */
-  @Nonnull
-  public JVar varParam (final int nMods, @Nonnull final Class <?> aType, @Nonnull final String sName)
+  @NonNull
+  public JVar varParam (final int nMods, @NonNull final Class <?> aType, @NonNull final String sName)
   {
     return varParam (nMods, m_aOwningClass.owner ()._ref (aType), sName);
   }
@@ -335,8 +335,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *         If this method is called twice. varargs in J2SE 1.5 can appear only
    *         once in the method signature.
    */
-  @Nonnull
-  public JVar varParam (final int nMods, @Nonnull final AbstractJType aType, @Nonnull final String sName)
+  @NonNull
+  public JVar varParam (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
     ValueEnforcer.isFalse (hasVarArgs (),
                            "Cannot have two varargs in a method,\n" + "Check if varParam method of JMethod is" + " invoked more than once");
@@ -378,8 +378,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        The annotation class to annotate the field with
    * @return The created object. Never <code>null</code>.
    */
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final AbstractJClass aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
@@ -395,13 +395,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        The annotation class to annotate the field with
    * @return The created object. Never <code>null</code>.
    */
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
     return annotate (owner ().ref (aClazz));
   }
 
-  @Nonnull
+  @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
@@ -409,7 +409,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     return m_aAnnotations;
   }
 
-  @Nonnull
+  @NonNull
   public Collection <JAnnotationUse> annotations ()
   {
     return Collections.unmodifiableList (annotationsMutable ());
@@ -426,7 +426,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @param sName
    *        New name
    */
-  public void name (@Nonnull final String sName)
+  public void name (@NonNull final String sName)
   {
     ValueEnforcer.notEmpty (sName, "Name");
     m_sName = sName;
@@ -458,7 +458,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *
    * @return If there's no parameter, an empty array will be returned.
    */
-  @Nonnull
+  @NonNull
   public AbstractJType [] listParamTypes ()
   {
     final AbstractJType [] r = new AbstractJType [m_aParams.size ()];
@@ -472,7 +472,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *
    * @return If there's no parameter, an empty array will be returned.
    */
-  @Nonnull
+  @NonNull
   public JVar [] listParams ()
   {
     return m_aParams.toArray (new JVar [m_aParams.size ()]);
@@ -485,7 +485,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        Signature to check
    * @return <code>true</code> if this method has the provided signature
    */
-  public boolean hasSignature (@Nonnull final AbstractJType [] argTypes)
+  public boolean hasSignature (@NonNull final AbstractJType [] argTypes)
   {
     final JVar [] aParams = listParams ();
     if (aParams.length != argTypes.length)
@@ -503,7 +503,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *
    * @return Body of method. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public JBlock body ()
   {
     if (m_aBody == null)
@@ -522,7 +522,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     m_aDefaultValue = aDefaultValue;
   }
 
-  @Nonnull
+  @NonNull
   public JDocComment javadoc ()
   {
     if (m_aJDoc == null)
@@ -531,7 +531,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Override
-  public void declare (@Nonnull final IJFormatter f)
+  public void declare (@NonNull final IJFormatter f)
   {
     if (m_aJDoc != null)
       f.generable (m_aJDoc);
@@ -618,7 +618,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @return the current modifiers of this method. Always return non-null valid
    *         object.
    */
-  @Nonnull
+  @NonNull
   public JMods mods ()
   {
     return m_aMods;
@@ -628,13 +628,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @return The {@link JDefinedClass} to which this methods belongs. Never
    *         <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public JDefinedClass owningClass ()
   {
     return m_aOwningClass;
   }
 
-  @Nonnull
+  @NonNull
   public JCodeModel owner ()
   {
     return m_aOwningClass.owner ();

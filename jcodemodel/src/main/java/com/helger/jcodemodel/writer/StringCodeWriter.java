@@ -49,14 +49,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 import com.helger.collection.commons.CommonsArrayList;
 import com.helger.collection.commons.ICommonsList;
 import com.helger.jcodemodel.JCodeModel;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * CodeWriter that stores {@link OutputStream}s for the files. A call to toString() will then sort
@@ -68,13 +68,13 @@ public class StringCodeWriter extends AbstractCodeWriter
 {
   private final Map <String, NonBlockingByteArrayOutputStream> m_aBinaries = new HashMap <> ();
 
-  public StringCodeWriter (@Nullable final Charset aEncoding, @Nonnull final String sNewLine)
+  public StringCodeWriter (@Nullable final Charset aEncoding, @NonNull final String sNewLine)
   {
     super (aEncoding, sNewLine);
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
+  public OutputStream openBinary (@NonNull final String sDirName, @NonNull final String sFilename) throws IOException
   {
     ValueEnforcer.notNull (sDirName, "DirName");
     ValueEnforcer.notNull (sFilename, "Filename");
@@ -88,7 +88,7 @@ public class StringCodeWriter extends AbstractCodeWriter
     // empty
   }
 
-  @Nonnull
+  @NonNull
   public String getAsString ()
   {
     final ICommonsList <Map.Entry <String, NonBlockingByteArrayOutputStream>> coll = new CommonsArrayList <> (m_aBinaries.entrySet ());
@@ -113,8 +113,8 @@ public class StringCodeWriter extends AbstractCodeWriter
    *        the codemodel to export
    * @return the representation fo the codemodel.
    */
-  @Nonnull
-  public static String represent (@Nonnull final JCodeModel aTarget)
+  @NonNull
+  public static String represent (@NonNull final JCodeModel aTarget)
   {
     final StringCodeWriter aSCW = new StringCodeWriter (StandardCharsets.UTF_8, "\n");
     try

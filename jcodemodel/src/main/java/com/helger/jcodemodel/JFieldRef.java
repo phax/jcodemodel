@@ -42,11 +42,11 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Field Reference
@@ -87,12 +87,12 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
    * @param sName
    *        Name of field to access. May not be <code>null</code>.
    */
-  protected JFieldRef (@Nullable final IJExpression aObject, @Nonnull final String sName)
+  protected JFieldRef (@Nullable final IJExpression aObject, @NonNull final String sName)
   {
     this (null, aObject, sName, (JVar) null, false);
   }
 
-  protected JFieldRef (@Nullable final IJExpression aObject, @Nonnull final JVar aVar)
+  protected JFieldRef (@Nullable final IJExpression aObject, @NonNull final JVar aVar)
   {
     this (null, aObject, (String) null, aVar, false);
   }
@@ -105,7 +105,7 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
    * @param sName
    *        Field name
    */
-  protected JFieldRef (@Nonnull final AbstractJType aType, @Nonnull final String sName)
+  protected JFieldRef (@NonNull final AbstractJType aType, @NonNull final String sName)
   {
     this (aType.owner (), aType, sName, (JVar) null, false);
   }
@@ -118,17 +118,17 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
    * @param aVar
    *        Referenced variable
    */
-  protected JFieldRef (@Nonnull final AbstractJType aType, @Nonnull final JVar aVar)
+  protected JFieldRef (@NonNull final AbstractJType aType, @NonNull final JVar aVar)
   {
     this (aType.owner (), aType, (String) null, aVar, false);
   }
 
-  protected JFieldRef (@Nullable final IJGenerable aObject, @Nonnull final String sName, final boolean bExplicitThis)
+  protected JFieldRef (@Nullable final IJGenerable aObject, @NonNull final String sName, final boolean bExplicitThis)
   {
     this (null, aObject, sName, (JVar) null, bExplicitThis);
   }
 
-  protected JFieldRef (@Nullable final IJGenerable aObject, @Nonnull final JVar aVar, final boolean bExplicitThis)
+  protected JFieldRef (@Nullable final IJGenerable aObject, @NonNull final JVar aVar, final boolean bExplicitThis)
   {
     this (null, aObject, (String) null, aVar, bExplicitThis);
   }
@@ -160,7 +160,7 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
     return m_aObject;
   }
 
-  @Nonnull
+  @NonNull
   public String name ()
   {
     String sName = m_sName;
@@ -180,14 +180,14 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
     return m_bExplicitThis;
   }
 
-  @Nonnull
+  @NonNull
   public JFieldRef explicitThis (final boolean bExplicitThis)
   {
     m_bExplicitThis = bExplicitThis;
     return this;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     final String name = name ();
 

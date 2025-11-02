@@ -45,9 +45,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.BitSet;
 
-import com.helger.annotation.Nonnegative;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.annotation.Nonnegative;
 
 /**
  * {@link Writer} that escapes non US-ASCII characters into Java Unicode escape
@@ -67,7 +67,7 @@ public class UnicodeEscapeWriter extends FilterWriter
         ESCAPE.set (i, true);
   }
 
-  public UnicodeEscapeWriter (@Nonnull final Writer aNext)
+  public UnicodeEscapeWriter (@NonNull final Writer aNext)
   {
     super (aNext);
   }
@@ -104,7 +104,7 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   @Override
-  public final void write (@Nonnull final char [] aBuf, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
+  public final void write (@NonNull final char [] aBuf, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
   {
     final int nMax = nOfs + nLen;
     for (int i = nOfs; i < nMax; i++)
@@ -112,19 +112,19 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   @Override
-  public final void write (@Nonnull final char [] aBuf) throws IOException
+  public final void write (@NonNull final char [] aBuf) throws IOException
   {
     write (aBuf, 0, aBuf.length);
   }
 
   @Override
-  public final void write (@Nonnull final String sStr, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
+  public final void write (@NonNull final String sStr, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
   {
     write (sStr.toCharArray (), nOfs, nLen);
   }
 
   @Override
-  public final void write (@Nonnull final String sStr) throws IOException
+  public final void write (@NonNull final String sStr) throws IOException
   {
     write (sStr.toCharArray (), 0, sStr.length ());
   }

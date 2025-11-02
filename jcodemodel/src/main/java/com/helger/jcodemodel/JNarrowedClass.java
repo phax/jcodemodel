@@ -46,10 +46,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Represents X&lt;Y&gt;. TODO: consider separating the decl and the use.
@@ -67,17 +67,17 @@ public class JNarrowedClass extends AbstractJClass
    */
   private final List <? extends AbstractJClass> m_aArgs;
 
-  public JNarrowedClass (@Nonnull final AbstractJClass aBasis, @Nonnull final AbstractJClass aArg)
+  public JNarrowedClass (@NonNull final AbstractJClass aBasis, @NonNull final AbstractJClass aArg)
   {
     this (aBasis, Collections.singletonList (aArg));
   }
 
-  public JNarrowedClass (@Nonnull final AbstractJClass aBasis, @Nonnull final AbstractJClass [] aArgs)
+  public JNarrowedClass (@NonNull final AbstractJClass aBasis, @NonNull final AbstractJClass [] aArgs)
   {
     this (aBasis, Arrays.asList (aArgs));
   }
 
-  public JNarrowedClass (@Nonnull final AbstractJClass aBasis, @Nonnull final List <? extends AbstractJClass> aArgs)
+  public JNarrowedClass (@NonNull final AbstractJClass aBasis, @NonNull final List <? extends AbstractJClass> aArgs)
   {
     super (aBasis.owner ());
     ValueEnforcer.isFalse (aBasis instanceof JNarrowedClass, () -> "aBasis may not be a narrowed class: " + aBasis);
@@ -97,14 +97,14 @@ public class JNarrowedClass extends AbstractJClass
     return false;
   }
 
-  @Nonnull
+  @NonNull
   public AbstractJClass basis ()
   {
     return m_aBasis;
   }
 
   @Override
-  public JNarrowedClass narrow (@Nonnull final AbstractJClass aClazz)
+  public JNarrowedClass narrow (@NonNull final AbstractJClass aClazz)
   {
     ValueEnforcer.notNull (aClazz, "NarrowingClass");
 
@@ -114,7 +114,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  public JNarrowedClass narrow (@Nonnull final AbstractJClass... aClazz)
+  public JNarrowedClass narrow (@NonNull final AbstractJClass... aClazz)
   {
     ValueEnforcer.notNull (aClazz, "NarrowingClass");
 
@@ -143,7 +143,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     final StringBuilder buf = new StringBuilder ();
@@ -205,7 +205,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public JPackage _package ()
   {
     return m_aBasis._package ();
@@ -222,7 +222,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Iterator <AbstractJClass> _implements ()
   {
     return new Iterator <> ()
@@ -247,7 +247,7 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public AbstractJClass erasure ()
   {
     return m_aBasis;
@@ -291,8 +291,8 @@ public class JNarrowedClass extends AbstractJClass
   }
 
   @Override
-  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
-                                             @Nonnull final List <? extends AbstractJClass> aBindings)
+  protected AbstractJClass substituteParams (@NonNull final JTypeVar [] aVariables,
+                                             @NonNull final List <? extends AbstractJClass> aBindings)
   {
     final AbstractJClass b = m_aBasis.substituteParams (aVariables, aBindings);
     boolean bDifferent = b != m_aBasis;

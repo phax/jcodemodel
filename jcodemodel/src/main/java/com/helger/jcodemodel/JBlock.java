@@ -44,11 +44,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * A block of Java code, which may contain statements and local declarations.
@@ -103,7 +103,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        <code>true</code> to make this block a virtual block.
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   public JBlock virtual (final boolean bVirtualBlock)
   {
     m_bVirtualBlock = bVirtualBlock;
@@ -115,7 +115,7 @@ public class JBlock implements IJGenerable, IJStatement
     return m_bBracesRequired;
   }
 
-  @Nonnull
+  @NonNull
   public JBlock bracesRequired (final boolean bBracesRequired)
   {
     m_bBracesRequired = bBracesRequired;
@@ -127,7 +127,7 @@ public class JBlock implements IJGenerable, IJStatement
     return m_bIndentRequired;
   }
 
-  @Nonnull
+  @NonNull
   public JBlock indentRequired (final boolean bIndentRequired)
   {
     m_bIndentRequired = bIndentRequired;
@@ -138,7 +138,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @return The contained list of {@link IJStatement}s and
    *         {@link IJDeclaration} in this block.
    */
-  @Nonnull
+  @NonNull
   public List <IJObject> contentsMutable ()
   {
     return m_aContentList;
@@ -148,20 +148,20 @@ public class JBlock implements IJGenerable, IJStatement
    * @return a read-only view of {@link IJStatement}s and {@link IJDeclaration}
    *         in this block.
    */
-  @Nonnull
+  @NonNull
   public List <IJObject> getContents ()
   {
     return Collections.unmodifiableList (contentsMutable ());
   }
 
-  @Nonnull
-  protected final <T extends IJObject> T internalInsert (@Nonnull final T aStatementOrDeclaration)
+  @NonNull
+  protected final <T extends IJObject> T internalInsert (@NonNull final T aStatementOrDeclaration)
   {
     return internalInsertAt (m_nPos, aStatementOrDeclaration);
   }
 
-  @Nonnull
-  protected final <T extends IJObject> T internalInsertAt (final int nIndex, @Nonnull final T aStatementOrDeclaration)
+  @NonNull
+  protected final <T extends IJObject> T internalInsertAt (final int nIndex, @NonNull final T aStatementOrDeclaration)
   {
     ValueEnforcer.isGE0 (nIndex, "Index");
     ValueEnforcer.notNull (aStatementOrDeclaration, "StatementOrDeclaration");
@@ -257,8 +257,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Name of the variable
    * @return Newly generated {@link JVar}
    */
-  @Nonnull
-  public JVar decl (@Nonnull final AbstractJType aType, @Nonnull final String sName)
+  @NonNull
+  public JVar decl (@NonNull final AbstractJType aType, @NonNull final String sName)
   {
     return decl (JMod.NONE, aType, sName, null);
   }
@@ -275,8 +275,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Name of the variable
    * @return Newly generated {@link JVar}
    */
-  @Nonnull
-  public JVar decl (final int nMods, @Nonnull final AbstractJType aType, @Nonnull final String sName)
+  @NonNull
+  public JVar decl (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
     return decl (nMods, aType, sName, null);
   }
@@ -293,8 +293,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Initialization expression for this variable. May be null.
    * @return Newly generated {@link JVar}
    */
-  @Nonnull
-  public JVar decl (@Nonnull final AbstractJType aType, @Nonnull final String sName, @Nullable final IJExpression aInit)
+  @NonNull
+  public JVar decl (@NonNull final AbstractJType aType, @NonNull final String sName, @Nullable final IJExpression aInit)
   {
     return decl (JMod.NONE, aType, sName, aInit);
   }
@@ -313,8 +313,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Initialization expression for this variable. May be null.
    * @return Newly generated {@link JVar}
    */
-  @Nonnull
-  public JVar decl (final int nMods, @Nonnull final AbstractJType aType, @Nonnull final String sName, @Nullable final IJExpression aInit)
+  @NonNull
+  public JVar decl (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName, @Nullable final IJExpression aInit)
   {
     final JVar v = new JVar (JMods.forVar (nMods), aType, sName, aInit);
     internalInsert (v);
@@ -333,8 +333,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        {@link IndexOutOfBoundsException} is thrown.
    * @return this for chaining
    */
-  @Nonnull
-  public JBlock insertBefore (@Nonnull final JVar aVar, @Nonnull final Object aBefore)
+  @NonNull
+  public JBlock insertBefore (@NonNull final JVar aVar, @NonNull final Object aBefore)
   {
     final int i = m_aContentList.indexOf (aBefore);
     internalInsertAt (i, aVar);
@@ -350,36 +350,36 @@ public class JBlock implements IJGenerable, IJStatement
    *        Right hand side expression
    * @return this for chaining
    */
-  @Nonnull
-  public JBlock assign (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
+  @NonNull
+  public JBlock assign (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aExpr)
   {
     internalInsert (JExpr.assign (aLhs, aExpr));
     return this;
   }
 
-  @Nonnull
-  public JBlock assignPlus (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
+  @NonNull
+  public JBlock assignPlus (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aExpr)
   {
     internalInsert (JExpr.assignPlus (aLhs, aExpr));
     return this;
   }
 
-  @Nonnull
-  public JBlock assignMinus (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
+  @NonNull
+  public JBlock assignMinus (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aExpr)
   {
     internalInsert (JExpr.assignMinus (aLhs, aExpr));
     return this;
   }
 
-  @Nonnull
-  public JBlock assignTimes (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
+  @NonNull
+  public JBlock assignTimes (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aExpr)
   {
     internalInsert (JExpr.assignTimes (aLhs, aExpr));
     return this;
   }
 
-  @Nonnull
-  public JBlock assignDivide (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aExpr)
+  @NonNull
+  public JBlock assignDivide (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aExpr)
   {
     internalInsert (JExpr.assignDivide (aLhs, aExpr));
     return this;
@@ -396,7 +396,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @param sMethod
    *        Name of method to invoke
    */
-  public void invoke (@Nonnull final IJExpression aExpr, @Nonnull final String sMethod)
+  public void invoke (@NonNull final IJExpression aExpr, @NonNull final String sMethod)
   {
     invoke ((JCodeModel) null, aExpr, sMethod);
   }
@@ -415,7 +415,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        Name of method to invoke
    * @since 3.1.0
    */
-  public void invoke (@Nullable final JCodeModel aCM, @Nonnull final IJExpression aExpr, @Nonnull final String sMethod)
+  public void invoke (@Nullable final JCodeModel aCM, @NonNull final IJExpression aExpr, @NonNull final String sMethod)
   {
     internalInsert (new JInvocation (aCM, aExpr, sMethod));
   }
@@ -428,7 +428,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @param sMethod
    *        Name of method to invoke on this
    */
-  public void invokeThis (@Nonnull final String sMethod)
+  public void invokeThis (@NonNull final String sMethod)
   {
     invoke (JExpr._this (), sMethod);
   }
@@ -457,7 +457,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @param aMethod
    *        {@link JMethod} to invoke
    */
-  public void invoke (@Nullable final IJExpression aExpr, @Nonnull final JMethod aMethod)
+  public void invoke (@Nullable final IJExpression aExpr, @NonNull final JMethod aMethod)
   {
     internalInsert (new JInvocation (aMethod.owner (), aExpr, aMethod));
   }
@@ -470,7 +470,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @param aMethod
    *        {@link JMethod} to invoke on this
    */
-  public void invokeThis (@Nonnull final JMethod aMethod)
+  public void invokeThis (@NonNull final JMethod aMethod)
   {
     invoke (JExpr._this (), aMethod);
   }
@@ -485,7 +485,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @param sMethod
    *        Name of method to invoke
    */
-  public void staticInvoke (@Nonnull final AbstractJClass aType, @Nonnull final String sMethod)
+  public void staticInvoke (@NonNull final AbstractJClass aType, @NonNull final String sMethod)
   {
     internalInsert (new JInvocation (aType.owner (), aType, sMethod));
   }
@@ -498,7 +498,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @param sMethod
    *        Name of method to invoke
    */
-  public void invoke (@Nonnull final String sMethod)
+  public void invoke (@NonNull final String sMethod)
   {
     internalInsert (new JInvocation ((JCodeModel) null, (IJExpression) null, sMethod));
   }
@@ -511,17 +511,17 @@ public class JBlock implements IJGenerable, IJStatement
    * @param aMethod
    *        JMethod to invoke
    */
-  public void invoke (@Nonnull final JMethod aMethod)
+  public void invoke (@NonNull final JMethod aMethod)
   {
     internalInsert (new JInvocation (aMethod.owner (), (IJExpression) null, aMethod));
   }
 
-  public void _new (@Nonnull final AbstractJClass aClass)
+  public void _new (@NonNull final AbstractJClass aClass)
   {
     internalInsert (new JInvocation (aClass));
   }
 
-  public void _new (@Nonnull final AbstractJType aType)
+  public void _new (@NonNull final AbstractJType aType)
   {
     internalInsert (new JInvocation (aType));
   }
@@ -533,8 +533,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        {@link IJStatement} to be added. May not be <code>null</code>.
    * @return this for chaining
    */
-  @Nonnull
-  public JBlock add (@Nonnull final IJStatement aStmt)
+  @NonNull
+  public JBlock add (@NonNull final IJStatement aStmt)
   {
     internalInsert (aStmt);
     return this;
@@ -545,7 +545,7 @@ public class JBlock implements IJGenerable, IJStatement
    *
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   public JBlock addSingleLineComment ()
   {
     return addSingleLineComment ("");
@@ -559,7 +559,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        string lead to an empty single line comment.
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   public JBlock addSingleLineComment (@Nullable final String sComment)
   {
     if (sComment != null)
@@ -574,8 +574,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        {@link IJExpression} to be tested to determine branching
    * @return Newly generated {@link JConditional} statement
    */
-  @Nonnull
-  public JConditional _if (@Nonnull final IJExpression aTestExpr)
+  @NonNull
+  public JConditional _if (@NonNull final IJExpression aTestExpr)
   {
     return internalInsert (new JConditional (aTestExpr));
   }
@@ -590,8 +590,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        The then-block. May not be <code>null</code>.
    * @return Newly generated {@link JConditional} statement
    */
-  @Nonnull
-  public JConditional _if (@Nonnull final IJExpression aTestExpr, @Nonnull final IJStatement aThen)
+  @NonNull
+  public JConditional _if (@NonNull final IJExpression aTestExpr, @NonNull final IJStatement aThen)
   {
     final JConditional aCond = new JConditional (aTestExpr);
     aCond._then ().add (aThen);
@@ -610,8 +610,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        The else-block. May not be <code>null</code>.
    * @return Newly generated {@link JConditional} statement
    */
-  @Nonnull
-  public JConditional _if (@Nonnull final IJExpression aTestExpr, @Nonnull final IJStatement aThen, @Nonnull final IJStatement aElse)
+  @NonNull
+  public JConditional _if (@NonNull final IJExpression aTestExpr, @NonNull final IJStatement aThen, @NonNull final IJStatement aElse)
   {
     final JConditional aCond = new JConditional (aTestExpr);
     aCond._then ().add (aThen);
@@ -625,7 +625,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JForLoop} statement. Never <code>null</code>
    *         .
    */
-  @Nonnull
+  @NonNull
   public JForLoop _for ()
   {
     return internalInsert (new JForLoop ());
@@ -638,8 +638,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Test expression for the while statement
    * @return Newly generated {@link JWhileLoop} statement
    */
-  @Nonnull
-  public JWhileLoop _while (@Nonnull final IJExpression aTestExpr)
+  @NonNull
+  public JWhileLoop _while (@NonNull final IJExpression aTestExpr)
   {
     return internalInsert (new JWhileLoop (aTestExpr));
   }
@@ -651,8 +651,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Test expression for the switch statement
    * @return Newly created {@link JSwitch}
    */
-  @Nonnull
-  public JSwitch _switch (@Nonnull final IJExpression aTestExpr)
+  @NonNull
+  public JSwitch _switch (@NonNull final IJExpression aTestExpr)
   {
     return internalInsert (new JSwitch (aTestExpr));
   }
@@ -664,8 +664,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Test expression for the while statement
    * @return Newly generated {@link JDoLoop} statement
    */
-  @Nonnull
-  public JDoLoop _do (@Nonnull final IJExpression aTestExpr)
+  @NonNull
+  public JDoLoop _do (@NonNull final IJExpression aTestExpr)
   {
     return internalInsert (new JDoLoop (aTestExpr));
   }
@@ -675,7 +675,7 @@ public class JBlock implements IJGenerable, IJStatement
    *
    * @return Newly generated {@link JTryBlock} statement
    */
-  @Nonnull
+  @NonNull
   public JTryBlock _try ()
   {
     return internalInsert (new JTryBlock ());
@@ -686,7 +686,7 @@ public class JBlock implements IJGenerable, IJStatement
    *
    * @return Newly created {@link JReturn} statement
    */
-  @Nonnull
+  @NonNull
   public JReturn _return ()
   {
     return internalInsert (new JReturn (null));
@@ -699,7 +699,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        Expression to be returned. May be <code>null</code>.
    * @return Newly created {@link JReturn} statement
    */
-  @Nonnull
+  @NonNull
   public JReturn _return (@Nullable final IJExpression aExpr)
   {
     return internalInsert (new JReturn (aExpr));
@@ -712,8 +712,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Expression to be thrown
    * @return Newly created {@link JThrow}
    */
-  @Nonnull
-  public JThrow _throw (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public JThrow _throw (@NonNull final IJExpression aExpr)
   {
     return internalInsert (new JThrow (aExpr));
   }
@@ -723,7 +723,7 @@ public class JBlock implements IJGenerable, IJStatement
    *
    * @return Newly created {@link JBreak}
    */
-  @Nonnull
+  @NonNull
   public JBreak _break ()
   {
     return _break ((JLabel) null);
@@ -736,7 +736,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        Optional label for the break statement
    * @return Newly created {@link JBreak}
    */
-  @Nonnull
+  @NonNull
   public JBreak _break (@Nullable final JLabel aLabel)
   {
     return internalInsert (new JBreak (aLabel));
@@ -750,8 +750,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Label name
    * @return Newly created {@link JLabel}
    */
-  @Nonnull
-  public JLabel label (@Nonnull final String sName)
+  @NonNull
+  public JLabel label (@NonNull final String sName)
   {
     final JLabel l = new JLabel (sName);
     internalInsert (l);
@@ -763,7 +763,7 @@ public class JBlock implements IJGenerable, IJStatement
    *
    * @return New {@link JContinue}
    */
-  @Nonnull
+  @NonNull
   public JContinue _continue ()
   {
     return _continue (null);
@@ -776,7 +776,7 @@ public class JBlock implements IJGenerable, IJStatement
    *        Optional label statement.
    * @return New {@link JContinue}
    */
-  @Nonnull
+  @NonNull
   public JContinue _continue (@Nullable final JLabel aLabel)
   {
     return internalInsert (new JContinue (aLabel));
@@ -790,7 +790,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @see #block(boolean, boolean)
    * @see #blockSimple()
    */
-  @Nonnull
+  @NonNull
   public JBlock block ()
   {
     return internalInsert (new JBlock ());
@@ -804,7 +804,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @see #block()
    * @see #block(boolean, boolean)
    */
-  @Nonnull
+  @NonNull
   public JBlock blockSimple ()
   {
     return block (false, false);
@@ -818,7 +818,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @see #block()
    * @see #block(boolean, boolean)
    */
-  @Nonnull
+  @NonNull
   public JBlock blockVirtual ()
   {
     return blockSimple ().virtual (true);
@@ -835,7 +835,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @see #block()
    * @see #blockSimple()
    */
-  @Nonnull
+  @NonNull
   public JBlock block (final boolean bBracesRequired, final boolean bIndentRequired)
   {
     return internalInsert (new JBlock ().bracesRequired (bBracesRequired).indentRequired (bIndentRequired));
@@ -853,8 +853,8 @@ public class JBlock implements IJGenerable, IJStatement
    *        Collection to be iterated
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
-  @Nonnull
-  public JForEach forEach (@Nonnull final AbstractJType aVarType, @Nonnull final String sName, @Nonnull final IJExpression aCollection)
+  @NonNull
+  public JForEach forEach (@NonNull final AbstractJType aVarType, @NonNull final String sName, @NonNull final IJExpression aCollection)
   {
     return forEach (0, aVarType, sName, aCollection);
   }
@@ -873,11 +873,11 @@ public class JBlock implements IJGenerable, IJStatement
    *        Collection to be iterated
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
-  @Nonnull
+  @NonNull
   public JForEach forEach (final int nMods,
-                           @Nonnull final AbstractJType aVarType,
-                           @Nonnull final String sName,
-                           @Nonnull final IJExpression aCollection)
+                           @NonNull final AbstractJType aVarType,
+                           @NonNull final String sName,
+                           @NonNull final IJExpression aCollection)
   {
     return internalInsert (new JForEach (JMods.forVar (nMods), aVarType, sName, aCollection));
   }
@@ -890,8 +890,8 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated synchronized block. Never <code>null</code>.
    * @since 2.7.10
    */
-  @Nonnull
-  public JSynchronizedBlock synchronizedBlock (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public JSynchronizedBlock synchronizedBlock (@NonNull final IJExpression aExpr)
   {
     return internalInsert (new JSynchronizedBlock (aExpr));
   }
@@ -908,15 +908,15 @@ public class JBlock implements IJGenerable, IJStatement
    *        The source code to state. May not be <code>null</code>.
    * @return The created direct statement.
    */
-  @Nonnull
-  public IJStatement directStatement (@Nonnull final String sSource)
+  @NonNull
+  public IJStatement directStatement (@NonNull final String sSource)
   {
     final JDirectStatement aStatement = new JDirectStatement (sSource);
     add (aStatement);
     return aStatement;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     if (m_bVirtualBlock)
     {
@@ -940,7 +940,7 @@ public class JBlock implements IJGenerable, IJStatement
     }
   }
 
-  protected void generateBody (@Nonnull final IJFormatter f)
+  protected void generateBody (@NonNull final IJFormatter f)
   {
     for (final IJObject aContentElement : m_aContentList)
     {
@@ -957,7 +957,7 @@ public class JBlock implements IJGenerable, IJStatement
     }
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.generable (this);
     if (m_bBracesRequired)

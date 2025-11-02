@@ -42,9 +42,9 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
-import com.helger.base.equals.EqualsHelper;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.equals.EqualsHelper;
 
 /**
  * A special atom for int values
@@ -63,7 +63,7 @@ public class JAtomInt implements IJExpression
     return m_nValue;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.print (Integer.toString (m_nValue));
   }

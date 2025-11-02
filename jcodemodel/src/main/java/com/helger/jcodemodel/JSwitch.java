@@ -44,7 +44,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Switch statement
@@ -72,32 +72,32 @@ public class JSwitch implements IJStatement
    * @param aTestExpr
    *        expression
    */
-  public JSwitch (@Nonnull final IJExpression aTestExpr)
+  public JSwitch (@NonNull final IJExpression aTestExpr)
   {
     m_aTestExpr = aTestExpr;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression test ()
   {
     return m_aTestExpr;
   }
 
-  @Nonnull
+  @NonNull
   public Iterator <JCase> cases ()
   {
     return m_aCases.iterator ();
   }
 
-  @Nonnull
-  public JCase _case (@Nonnull final IJExpression aLabel)
+  @NonNull
+  public JCase _case (@NonNull final IJExpression aLabel)
   {
     final JCase c = new JCase (aLabel);
     m_aCases.add (c);
     return c;
   }
 
-  @Nonnull
+  @NonNull
   public JCase _default ()
   {
     if (m_aDefaultCase == null)
@@ -108,7 +108,7 @@ public class JSwitch implements IJStatement
     return m_aDefaultCase;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     if (JOp.hasTopOp (m_aTestExpr))
     {

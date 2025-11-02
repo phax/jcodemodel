@@ -44,9 +44,9 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import com.helger.annotation.Nonnegative;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.annotation.Nonnegative;
 
 /**
  * {@link Writer} that escapes characters that are unsafe as Javadoc comments.
@@ -64,7 +64,7 @@ import jakarta.annotation.Nonnull;
  */
 public class JavadocEscapeWriter extends FilterWriter
 {
-  public JavadocEscapeWriter (@Nonnull final Writer aOut)
+  public JavadocEscapeWriter (@NonNull final Writer aOut)
   {
     super (aOut);
   }
@@ -82,7 +82,7 @@ public class JavadocEscapeWriter extends FilterWriter
   }
 
   @Override
-  public void write (@Nonnull final char [] aBuf, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
+  public void write (@NonNull final char [] aBuf, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
   {
     final int nMax = nOfs + nLen;
     for (int i = nOfs; i < nMax; i++)
@@ -90,19 +90,19 @@ public class JavadocEscapeWriter extends FilterWriter
   }
 
   @Override
-  public void write (@Nonnull final char [] aBuf) throws IOException
+  public void write (@NonNull final char [] aBuf) throws IOException
   {
     write (aBuf, 0, aBuf.length);
   }
 
   @Override
-  public void write (@Nonnull final String sStr, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
+  public void write (@NonNull final String sStr, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
   {
     write (sStr.toCharArray (), nOfs, nLen);
   }
 
   @Override
-  public void write (@Nonnull final String sStr) throws IOException
+  public void write (@NonNull final String sStr) throws IOException
   {
     write (sStr.toCharArray (), 0, sStr.length ());
   }

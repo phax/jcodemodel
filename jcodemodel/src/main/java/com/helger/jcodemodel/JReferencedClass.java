@@ -44,10 +44,10 @@ import java.lang.reflect.Modifier;
 import java.util.Iterator;
 import java.util.List;
 
-import com.helger.jcodemodel.util.JCNameUtilities;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.jcodemodel.util.JCNameUtilities;
 
 /**
  * References to existing classes.
@@ -69,7 +69,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   private transient boolean m_bResolvedPrimitive = false;
   private transient JPrimitiveType m_aPrimitiveType;
 
-  JReferencedClass (@Nonnull final JCodeModel aOwner, @Nonnull final Class <?> aClass)
+  JReferencedClass (@NonNull final JCodeModel aOwner, @NonNull final Class <?> aClass)
   {
     super (aOwner);
     m_aClass = aClass;
@@ -88,7 +88,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     return JCNameUtilities.getFullName (m_aClass);
@@ -110,7 +110,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public JPackage _package ()
   {
     final String name = fullName ();
@@ -154,7 +154,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
       }
 
       @Override
-      @Nonnull
+      @NonNull
       public AbstractJClass next ()
       {
         return owner ().ref (aInterfaces[m_nIdx++]);
@@ -211,8 +211,8 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
-      @Nonnull final List <? extends AbstractJClass> aBindings)
+  protected AbstractJClass substituteParams (@NonNull final JTypeVar [] aVariables,
+      @NonNull final List <? extends AbstractJClass> aBindings)
   {
     // TODO: does JDK 1.5 reflection provides these information?
     return this;

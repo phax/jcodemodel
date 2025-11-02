@@ -42,10 +42,10 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
 
 public class JOpBinary implements IJExpression
 {
@@ -53,32 +53,32 @@ public class JOpBinary implements IJExpression
   private final String m_sOperator;
   private final IJGenerable m_aRight;
 
-  protected JOpBinary (@Nonnull final IJExpression aLeft, @Nonnull final String sOperator, @Nonnull final IJGenerable aRight)
+  protected JOpBinary (@NonNull final IJExpression aLeft, @NonNull final String sOperator, @NonNull final IJGenerable aRight)
   {
     m_aLeft = ValueEnforcer.notNull (aLeft, "Left");
     m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
     m_aRight = ValueEnforcer.notNull (aRight, "Right");
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression left ()
   {
     return m_aLeft;
   }
 
-  @Nonnull
+  @NonNull
   public String op ()
   {
     return m_sOperator;
   }
 
-  @Nonnull
+  @NonNull
   public IJGenerable right ()
   {
     return m_aRight;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.print ('(').generable (m_aLeft).print (m_sOperator).generable (m_aRight).print (')');
   }

@@ -43,10 +43,10 @@ package com.helger.jcodemodel;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * JavaDoc comment.
@@ -92,12 +92,12 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   /** list of generic xdoclets */
   private final Map <String, Map <String, String>> m_aAtXdoclets = new LinkedHashMap <> ();
 
-  protected JDocComment (@Nonnull final JCodeModel owner)
+  protected JDocComment (@NonNull final JCodeModel owner)
   {
     m_aOwner = ValueEnforcer.notNull (owner, "Owner");
   }
 
-  @Nonnull
+  @NonNull
   public JCodeModel owner ()
   {
     return m_aOwner;
@@ -112,7 +112,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *        multi line mode (which is the default).
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   public JDocComment setSingleLineMode (final boolean bSingleLineMode)
   {
     m_bIsSingleLineMode = bSingleLineMode;
@@ -143,8 +143,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *        Parameter to be added
    * @return The created {@link JCommentPart}
    */
-  @Nonnull
-  public JCommentPart addParam (@Nonnull final String sParam)
+  @NonNull
+  public JCommentPart addParam (@NonNull final String sParam)
   {
     return m_aAtParams.computeIfAbsent (sParam, k -> new JCommentPart ());
   }
@@ -156,7 +156,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *        Parameter to be added
    * @return The created {@link JCommentPart}
    */
-  public JCommentPart addParam (@Nonnull final JVar sParam)
+  public JCommentPart addParam (@NonNull final JVar sParam)
   {
     return addParam (sParam.name ());
   }
@@ -168,7 +168,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   @Nullable
-  public JCommentPart removeParam (@Nonnull final JVar aParam)
+  public JCommentPart removeParam (@NonNull final JVar aParam)
   {
     return removeParam (aParam.name ());
   }
@@ -185,7 +185,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   @Nullable
-  public JCommentPart getParam (@Nonnull final JVar aParam)
+  public JCommentPart getParam (@NonNull final JVar aParam)
   {
     return getParam (aParam.name ());
   }
@@ -195,7 +195,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *
    * @return Always the same {@link JCommentPart}
    */
-  @Nonnull
+  @NonNull
   public JCommentPart addReturn ()
   {
     if (m_aAtReturn == null)
@@ -221,7 +221,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *        Exception to be added. May not be <code>null</code>.
    * @return New {@link JCommentPart}
    */
-  public JCommentPart addThrows (@Nonnull final Class <? extends Throwable> aException)
+  public JCommentPart addThrows (@NonNull final Class <? extends Throwable> aException)
   {
     return addThrows (m_aOwner.ref (aException));
   }
@@ -233,14 +233,14 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *        Exception to be added. May not be <code>null</code>.
    * @return New {@link JCommentPart}
    */
-  @Nonnull
-  public JCommentPart addThrows (@Nonnull final AbstractJClass aException)
+  @NonNull
+  public JCommentPart addThrows (@NonNull final AbstractJClass aException)
   {
     return m_aAtThrows.computeIfAbsent (aException, k -> new JCommentPart ());
   }
 
   @Nullable
-  public JCommentPart removeThrows (@Nonnull final Class <? extends Throwable> aException)
+  public JCommentPart removeThrows (@NonNull final Class <? extends Throwable> aException)
   {
     return removeThrows (m_aOwner.ref (aException));
   }
@@ -257,7 +257,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   @Nullable
-  public JCommentPart getThrows (@Nonnull final Class <? extends Throwable> aException)
+  public JCommentPart getThrows (@NonNull final Class <? extends Throwable> aException)
   {
     return getThrows (m_aOwner.ref (aException));
   }
@@ -268,8 +268,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
     return m_aAtThrows.get (aException);
   }
 
-  @Nonnull
-  public JCommentPart addTag (@Nonnull final String sName)
+  @NonNull
+  public JCommentPart addTag (@NonNull final String sName)
   {
     ValueEnforcer.notEmpty (sName, "Name");
     return m_aAtTags.computeIfAbsent (sName, k -> new JCommentPart ());
@@ -293,7 +293,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    * @return Always the same {@link JCommentPart}
    * @see #addTag(String)
    */
-  @Nonnull
+  @NonNull
   public JCommentPart addAuthor ()
   {
     return addTag (TAG_AUTHOR);
@@ -311,7 +311,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    * @return Always the same {@link JCommentPart}
    * @see #addTag(String)
    */
-  @Nonnull
+  @NonNull
   public JCommentPart addDeprecated ()
   {
     return addTag (TAG_DEPRECATED);
@@ -329,8 +329,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *        xdoclet name
    * @return Map with the key/value pairs
    */
-  @Nonnull
-  public Map <String, String> addXdoclet (@Nonnull final String sName)
+  @NonNull
+  public Map <String, String> addXdoclet (@NonNull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
     return m_aAtXdoclets.computeIfAbsent (sName, k -> new LinkedHashMap <> ());
@@ -345,8 +345,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *        Attributes to be added
    * @return Map with the key/value pairs
    */
-  @Nonnull
-  public Map <String, String> addXdoclet (@Nonnull final String sName, @Nonnull final Map <String, String> aAttributes)
+  @NonNull
+  public Map <String, String> addXdoclet (@NonNull final String sName, @NonNull final Map <String, String> aAttributes)
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (aAttributes, "Attributes");
@@ -367,8 +367,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    *        Attribute value to be added
    * @return Map with the key/value pairs
    */
-  @Nonnull
-  public Map <String, String> addXdoclet (@Nonnull final String sName, @Nonnull final String sAttribute, @Nullable final String sValue)
+  @NonNull
+  public Map <String, String> addXdoclet (@NonNull final String sName, @NonNull final String sAttribute, @Nullable final String sValue)
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (sAttribute, "Attribute");
@@ -388,7 +388,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
     m_aAtXdoclets.clear ();
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     // Is any "@" comment present?
     final boolean bHasAt = !m_aAtParams.isEmpty () ||

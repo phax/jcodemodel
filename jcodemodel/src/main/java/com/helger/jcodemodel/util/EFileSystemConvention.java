@@ -42,10 +42,10 @@ package com.helger.jcodemodel.util;
 
 import java.util.function.Predicate;
 
-import com.helger.base.system.EOperatingSystem;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.system.EOperatingSystem;
 
 /**
  * Default implementation of {@link IFileSystemConvention}
@@ -69,8 +69,8 @@ public enum EFileSystemConvention implements IFileSystemConvention
   private final Predicate <String> m_aFilenameCheck;
 
   EFileSystemConvention (final boolean bCaseSensitive,
-                         @Nonnull final Predicate <String> aDirNameCheck,
-                         @Nonnull final Predicate <String> aFilenameCheck)
+                         @NonNull final Predicate <String> aDirNameCheck,
+                         @NonNull final Predicate <String> aFilenameCheck)
   {
     m_bIsCaseSensitive = bCaseSensitive;
     m_aDirNameCheck = aDirNameCheck;

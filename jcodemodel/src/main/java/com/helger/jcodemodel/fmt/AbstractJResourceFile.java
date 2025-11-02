@@ -43,10 +43,10 @@ package com.helger.jcodemodel.fmt;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.WillNotClose;
 import com.helger.base.enforce.ValueEnforcer;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a resource file in the application-specific file format.
@@ -55,7 +55,7 @@ public abstract class AbstractJResourceFile
 {
   private final String m_sName;
 
-  protected AbstractJResourceFile (@Nonnull final String sName)
+  protected AbstractJResourceFile (@NonNull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
     m_sName = sName;
@@ -64,7 +64,7 @@ public abstract class AbstractJResourceFile
   /**
    * @return the name of this property file
    */
-  @Nonnull
+  @NonNull
   public final String name ()
   {
     return m_sName;
@@ -90,5 +90,5 @@ public abstract class AbstractJResourceFile
    * @throws IOException
    *         If writing on the stream throws an error
    */
-  public abstract void build (@Nonnull @WillNotClose OutputStream aOS) throws IOException;
+  public abstract void build (@NonNull @WillNotClose OutputStream aOS) throws IOException;
 }

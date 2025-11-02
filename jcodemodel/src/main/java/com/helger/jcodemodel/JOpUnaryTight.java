@@ -40,22 +40,22 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 public class JOpUnaryTight extends JOpUnary
 {
-  protected JOpUnaryTight (@Nonnull final IJExpression aExpr, @Nonnull final String sOperator)
+  protected JOpUnaryTight (@NonNull final IJExpression aExpr, @NonNull final String sOperator)
   {
     super (aExpr, sOperator);
   }
 
-  protected JOpUnaryTight (@Nonnull final String sOperator, @Nonnull final IJExpression aExpr)
+  protected JOpUnaryTight (@NonNull final String sOperator, @NonNull final IJExpression aExpr)
   {
     super (sOperator, aExpr);
   }
 
   @Override
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     if (opFirst ())
       f.print (op ()).generable (expr ());

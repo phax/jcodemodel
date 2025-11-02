@@ -45,9 +45,9 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import com.helger.annotation.WillNotClose;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.annotation.WillNotClose;
 
 /**
  * A simple class that takes an object and serializes it into a file in the
@@ -65,14 +65,14 @@ public class JSerializedObject extends AbstractJResourceFile
    * @throws IOException
    *         If the serialization fails, this exception is thrown
    */
-  public JSerializedObject (@Nonnull final String sName, @Nonnull final Serializable aObj) throws IOException
+  public JSerializedObject (@NonNull final String sName, @NonNull final Serializable aObj) throws IOException
   {
     super (sName);
     m_aObj = aObj;
   }
 
   @Override
-  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void build (@NonNull @WillNotClose final OutputStream aOS) throws IOException
   {
     // serialize the obj into an OutputStream
     try (final ObjectOutputStream oos = new ObjectOutputStream (aOS)

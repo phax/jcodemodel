@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Case statement
@@ -69,7 +69,7 @@ public class JCase implements IJStatement
    * @param aLabel
    *        Label name. May not be <code>null</code>.
    */
-  public JCase (@Nonnull final IJExpression aLabel)
+  public JCase (@NonNull final IJExpression aLabel)
   {
     this (aLabel, false);
   }
@@ -101,7 +101,7 @@ public class JCase implements IJStatement
     return m_bIsDefaultCase;
   }
 
-  @Nonnull
+  @NonNull
   public JBlock body ()
   {
     if (m_aBody == null)
@@ -109,7 +109,7 @@ public class JCase implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.indent ();
     if (m_bIsDefaultCase)

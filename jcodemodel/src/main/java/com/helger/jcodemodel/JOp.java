@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.annotation.concurrent.Immutable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.annotation.concurrent.Immutable;
 
 /**
  * Class for generating expressions containing operators
@@ -70,8 +70,8 @@ public final class JOp
 
   /* -- Unary operators -- */
 
-  @Nonnull
-  public static JOpUnary minus (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnary minus (@NonNull final IJExpression aExpr)
   {
     return new JOpUnary ("-", aExpr);
   }
@@ -83,8 +83,8 @@ public final class JOp
    *        Expression to invert
    * @return Inverted expression
    */
-  @Nonnull
-  public static IJExpression not (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static IJExpression not (@NonNull final IJExpression aExpr)
   {
     // Inline optimizations :)
     if (aExpr == JExpr.TRUE)
@@ -94,8 +94,8 @@ public final class JOp
     return new JOpUnary ("!", aExpr);
   }
 
-  @Nonnull
-  public static JOpUnary complement (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnary complement (@NonNull final IJExpression aExpr)
   {
     return new JOpUnary ("~", aExpr);
   }
@@ -107,8 +107,8 @@ public final class JOp
    *        expression
    * @return <code><em>aExpr</em>++</code>
    */
-  @Nonnull
-  public static JOpUnaryTight postincr (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnaryTight postincr (@NonNull final IJExpression aExpr)
   {
     return new JOpUnaryTight (aExpr, "++");
   }
@@ -120,8 +120,8 @@ public final class JOp
    *        expression
    * @return <code>++<em>aExpr</em></code>
    */
-  @Nonnull
-  public static JOpUnaryTight preincr (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnaryTight preincr (@NonNull final IJExpression aExpr)
   {
     return new JOpUnaryTight ("++", aExpr);
   }
@@ -133,8 +133,8 @@ public final class JOp
    *        expression
    * @return <code><em>aExpr</em>--</code>
    */
-  @Nonnull
-  public static JOpUnaryTight postdecr (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnaryTight postdecr (@NonNull final IJExpression aExpr)
   {
     return new JOpUnaryTight (aExpr, "--");
   }
@@ -146,76 +146,76 @@ public final class JOp
    *        expression
    * @return <code>--<em>aExpr</em></code>
    */
-  @Nonnull
-  public static JOpUnaryTight predecr (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnaryTight predecr (@NonNull final IJExpression aExpr)
   {
     return new JOpUnaryTight ("--", aExpr);
   }
 
   /* -- Binary operators -- */
 
-  @Nonnull
-  public static JOpBinary plus (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary plus (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "+", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary minus (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary minus (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "-", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary mul (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary mul (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "*", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary div (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary div (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "/", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary mod (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary mod (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "%", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary shl (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary shl (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "<<", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary shr (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary shr (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, ">>", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary shrz (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary shrz (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, ">>>", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary band (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary band (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "&", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary bor (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary bor (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "|", aRhs);
   }
 
-  @Nonnull
-  public static IJExpression cand (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static IJExpression cand (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     // Inline optimizations :)
     if (aLhs == JExpr.TRUE)
@@ -229,8 +229,8 @@ public final class JOp
     return new JOpBinary (aLhs, "&&", aRhs);
   }
 
-  @Nonnull
-  public static IJExpression cor (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static IJExpression cor (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     if (aLhs == JExpr.TRUE)
       return aLhs; // JExpr.TRUE
@@ -243,60 +243,60 @@ public final class JOp
     return new JOpBinary (aLhs, "||", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary xor (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary xor (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "^", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary lt (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary lt (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "<", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary lte (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary lte (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "<=", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary gt (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary gt (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, ">", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary gte (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary gte (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, ">=", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary eq (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary eq (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "==", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary ne (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JOpBinary ne (@NonNull final IJExpression aLhs, @NonNull final IJExpression aRhs)
   {
     return new JOpBinary (aLhs, "!=", aRhs);
   }
 
-  @Nonnull
-  public static JOpBinary _instanceof (@Nonnull final IJExpression aLhs, @Nonnull final AbstractJType aRhs)
+  @NonNull
+  public static JOpBinary _instanceof (@NonNull final IJExpression aLhs, @NonNull final AbstractJType aRhs)
   {
     return new JOpBinary (aLhs, "instanceof", aRhs);
   }
 
   /* -- Ternary operators -- */
 
-  @Nonnull
-  public static JOpTernary cond (@Nonnull final IJExpression aCond,
-                                 @Nonnull final IJExpression aIfTrue,
-                                 @Nonnull final IJExpression aIfFalse)
+  @NonNull
+  public static JOpTernary cond (@NonNull final IJExpression aCond,
+                                 @NonNull final IJExpression aIfTrue,
+                                 @NonNull final IJExpression aIfFalse)
   {
     return new JOpTernary (aCond, "?", aIfTrue, ":", aIfFalse);
   }

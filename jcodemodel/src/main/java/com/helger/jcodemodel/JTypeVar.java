@@ -46,10 +46,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Type variable used to declare generics.
@@ -62,7 +62,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   private final String m_sName;
   private final List <AbstractJClass> m_aBounds = new ArrayList <> ();
 
-  protected JTypeVar (@Nonnull final JCodeModel aOwner, @Nonnull final String sName)
+  protected JTypeVar (@NonNull final JCodeModel aOwner, @NonNull final String sName)
   {
     super (aOwner);
     m_sName = ValueEnforcer.notEmpty (sName, "Name");
@@ -75,14 +75,14 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return m_sName;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     return m_sName;
@@ -102,8 +102,8 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    *        Bound class to be added
    * @return this
    */
-  @Nonnull
-  public JTypeVar bound (@Nonnull final AbstractJClass aBound)
+  @NonNull
+  public JTypeVar bound (@NonNull final AbstractJClass aBound)
   {
     ValueEnforcer.notNull (aBound, "Bound");
     m_aBounds.add (aBound);
@@ -115,7 +115,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    *
    * @return this
    */
-  @Nonnull
+  @NonNull
   public List <AbstractJClass> boundsMutable ()
   {
     return m_aBounds;
@@ -126,7 +126,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    *
    * @return this
    */
-  @Nonnull
+  @NonNull
   public Collection <? extends AbstractJClass> bounds ()
   {
     return Collections.unmodifiableList (boundsMutable ());
@@ -139,8 +139,8 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    *        existing type-variable to copy bounds from
    * @return this (for fluent method chaining)
    */
-  @Nonnull
-  public JTypeVar boundLike (@Nonnull final JTypeVar aSourceTypeParameter)
+  @NonNull
+  public JTypeVar boundLike (@NonNull final JTypeVar aSourceTypeParameter)
   {
     ValueEnforcer.notNull (aSourceTypeParameter, "sourceTypeParameter");
 
@@ -155,7 +155,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    * If no bound is given, this method returns {@link Object}.
    */
   @Override
-  @Nonnull
+  @NonNull
   public AbstractJClass _extends ()
   {
     if (m_aBounds.isEmpty () || m_aBounds.get (0).isInterface ())
@@ -170,7 +170,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
    * Returns the interface bounds of this variable.
    */
   @Override
-  @Nonnull
+  @NonNull
   public Iterator <AbstractJClass> _implements ()
   {
     if (m_aBounds.isEmpty () || m_aBounds.get (0).isInterface ())
@@ -191,9 +191,9 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  @Nonnull
-  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
-                                             @Nonnull final List <? extends AbstractJClass> aBindings)
+  @NonNull
+  protected AbstractJClass substituteParams (@NonNull final JTypeVar [] aVariables,
+                                             @NonNull final List <? extends AbstractJClass> aBindings)
   {
     for (int i = 0; i < aVariables.length; i++)
       if (aVariables[i] == this)
@@ -204,7 +204,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   /**
    * Prints out the declaration of the variable.
    */
-  public void declare (@Nonnull final IJFormatter f)
+  public void declare (@NonNull final IJFormatter f)
   {
     f.id (name ());
     if (!m_aBounds.isEmpty ())
@@ -218,7 +218,7 @@ public class JTypeVar extends AbstractJClass implements IJDeclaration
   }
 
   @Override
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.id (m_sName);
   }

@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import java.io.Closeable;
 import java.util.Collection;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Base interface for JFormatter.
@@ -71,7 +71,7 @@ public interface IJFormatter extends Closeable
    *
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   IJFormatter indent ();
 
   /**
@@ -79,7 +79,7 @@ public interface IJFormatter extends Closeable
    *
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   IJFormatter outdent ();
 
   /**
@@ -87,7 +87,7 @@ public interface IJFormatter extends Closeable
    *
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   IJFormatter newline ();
 
   /**
@@ -97,10 +97,10 @@ public interface IJFormatter extends Closeable
    *        the char
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   IJFormatter print (char c);
 
-  @Nonnull
+  @NonNull
   default IJFormatter printCloseTypeArgs ()
   {
     return print (CLOSE_TYPE_ARGS);
@@ -113,8 +113,8 @@ public interface IJFormatter extends Closeable
    *        the String
    * @return this
    */
-  @Nonnull
-  IJFormatter print (@Nonnull String sStr);
+  @NonNull
+  IJFormatter print (@NonNull String sStr);
 
   /**
    * Print a type name.
@@ -126,11 +126,11 @@ public interface IJFormatter extends Closeable
    *        Type to be emitted
    * @return this for chaining
    */
-  @Nonnull
-  IJFormatter type (@Nonnull AbstractJClass aType);
+  @NonNull
+  IJFormatter type (@NonNull AbstractJClass aType);
 
-  @Nonnull
-  default IJFormatter type (@Nonnull final AbstractJType aType)
+  @NonNull
+  default IJFormatter type (@NonNull final AbstractJType aType)
   {
     if (aType.isReference ())
       return type ((AbstractJClass) aType);
@@ -145,8 +145,8 @@ public interface IJFormatter extends Closeable
    *        the {@link JVar} object
    * @return this for chaining
    */
-  @Nonnull
-  IJFormatter var (@Nonnull JVar aVar);
+  @NonNull
+  IJFormatter var (@NonNull JVar aVar);
 
   /**
    * Print an identifier
@@ -155,8 +155,8 @@ public interface IJFormatter extends Closeable
    *        identifier
    * @return this for chaining
    */
-  @Nonnull
-  IJFormatter id (@Nonnull String sID);
+  @NonNull
+  IJFormatter id (@NonNull String sID);
 
   /**
    * Cause the {@link IJGenerable} object to generate source for itself
@@ -165,8 +165,8 @@ public interface IJFormatter extends Closeable
    *        the object
    * @return this for chaining
    */
-  @Nonnull
-  IJFormatter generable (@Nonnull IJGenerable aObj);
+  @NonNull
+  IJFormatter generable (@NonNull IJGenerable aObj);
 
   /**
    * Produces {@link IJGenerable}s separated by ','
@@ -176,8 +176,8 @@ public interface IJFormatter extends Closeable
    *        comma
    * @return this for chaining
    */
-  @Nonnull
-  IJFormatter generable (@Nonnull final Collection <? extends IJGenerable> aList);
+  @NonNull
+  IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList);
 
   /**
    * Cause the {@link IJStatement} to generate source for itself
@@ -186,8 +186,8 @@ public interface IJFormatter extends Closeable
    *        the object
    * @return this for chaining
    */
-  @Nonnull
-  IJFormatter statement (@Nonnull IJStatement aObj);
+  @NonNull
+  IJFormatter statement (@NonNull IJStatement aObj);
 
   /**
    * Cause the {@link IJDeclaration} to generate source for itself
@@ -196,6 +196,6 @@ public interface IJFormatter extends Closeable
    *        the object
    * @return this for chaining
    */
-  @Nonnull
-  IJFormatter declaration (@Nonnull IJDeclaration aObj);
+  @NonNull
+  IJFormatter declaration (@NonNull IJDeclaration aObj);
 }

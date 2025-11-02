@@ -43,12 +43,12 @@ package com.helger.jcodemodel.util;
 import java.io.Serializable;
 import java.util.Locale;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.base.hashcode.IHashCodeGenerator;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Utility class to represent case sensitive or case insensitive keys for file and directory names.
@@ -64,7 +64,7 @@ public final class FSName implements Comparable <FSName>, Serializable
   // status vars
   private int m_nHashCode = IHashCodeGenerator.ILLEGAL_HASHCODE;
 
-  private FSName (@Nonnull final String sName, @Nonnull final String sKey)
+  private FSName (@NonNull final String sName, @NonNull final String sKey)
   {
     m_sName = sName;
     m_sKey = sKey;
@@ -73,7 +73,7 @@ public final class FSName implements Comparable <FSName>, Serializable
   /**
    * @return The file system name. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public String getName ()
   {
     return m_sName;
@@ -100,20 +100,20 @@ public final class FSName implements Comparable <FSName>, Serializable
   }
 
   @Override
-  public int compareTo (@Nonnull final FSName o)
+  public int compareTo (@NonNull final FSName o)
   {
     return m_sKey.compareTo (o.m_sKey);
   }
 
-  @Nonnull
-  public static FSName createCaseSensitive (@Nonnull final String sName)
+  @NonNull
+  public static FSName createCaseSensitive (@NonNull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
     return new FSName (sName, sName);
   }
 
-  @Nonnull
-  public static FSName createCaseInsensitive (@Nonnull final String sName)
+  @NonNull
+  public static FSName createCaseInsensitive (@NonNull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
     // Unify key to upper case

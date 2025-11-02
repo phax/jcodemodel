@@ -56,6 +56,9 @@ import java.util.Set;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.Nonnegative;
 import com.helger.annotation.concurrent.NotThreadSafe;
 import com.helger.base.enforce.ValueEnforcer;
@@ -75,9 +78,6 @@ import com.helger.jcodemodel.util.EFileSystemConvention;
 import com.helger.jcodemodel.util.FSName;
 import com.helger.jcodemodel.util.IFileSystemConvention;
 import com.helger.jcodemodel.util.JCSecureLoader;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Root of the code DOM.
@@ -192,7 +192,7 @@ public class JCodeModel implements Serializable
    *        The file system convention to be used. May not be <code>null</code>.
    * @since v3.4.0
    */
-  public JCodeModel (@Nonnull final IFileSystemConvention aFSConvention)
+  public JCodeModel (@NonNull final IFileSystemConvention aFSConvention)
   {
     ValueEnforcer.notNull (aFSConvention, "FSConvention");
     m_aFSConvention = aFSConvention;
@@ -203,7 +203,7 @@ public class JCodeModel implements Serializable
    * @since 3.4.0
    * @see IFileSystemConvention
    */
-  @Nonnull
+  @NonNull
   public final IFileSystemConvention getFileSystemConvention ()
   {
     return m_aFSConvention;
@@ -225,8 +225,8 @@ public class JCodeModel implements Serializable
    * @see IFileSystemConvention
    * @since 3.4.0
    */
-  @Nonnull
-  public final IFileSystemConvention setFileSystemConvention (@Nonnull final IFileSystemConvention aFSConvention) throws JCaseSensitivityChangeException,
+  @NonNull
+  public final IFileSystemConvention setFileSystemConvention (@NonNull final IFileSystemConvention aFSConvention) throws JCaseSensitivityChangeException,
                                                                                                                   JInvalidFileNameException
   {
     ValueEnforcer.notNull (aFSConvention, "FSConvention");
@@ -258,8 +258,8 @@ public class JCodeModel implements Serializable
     return old;
   }
 
-  @Nonnull
-  public final JCodeModel withFileSystemConvention (@Nonnull final IFileSystemConvention aFSConvention) throws JCodeModelException
+  @NonNull
+  public final JCodeModel withFileSystemConvention (@NonNull final IFileSystemConvention aFSConvention) throws JCodeModelException
   {
     setFileSystemConvention (aFSConvention);
     return this;
@@ -286,8 +286,8 @@ public class JCodeModel implements Serializable
    * @return Newly generated package. Never <code>null</code>.
    * @see #rootPackage()
    */
-  @Nonnull
-  public JPackage _package (@Nonnull final String sName)
+  @NonNull
+  public JPackage _package (@NonNull final String sName)
   {
     return m_aPackages.computeIfAbsent (sName, k -> new JPackage (k, this));
   }
@@ -296,7 +296,7 @@ public class JCodeModel implements Serializable
    * @return The root package. Never <code>null</code>. This is a shortcut for
    *         <code>_package ("")</code>.
    */
-  @Nonnull
+  @NonNull
   public JPackage rootPackage ()
   {
     return _package ("");
@@ -305,7 +305,7 @@ public class JCodeModel implements Serializable
   /**
    * @return an iterator that walks the packages defined using this code writer.
    */
-  @Nonnull
+  @NonNull
   public Iterator <JPackage> packages ()
   {
     return m_aPackages.values ().iterator ();
@@ -314,14 +314,14 @@ public class JCodeModel implements Serializable
   /**
    * @return a list with all packages. The list is mutable. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public List <JPackage> getAllPackages ()
   {
     return new ArrayList <> (m_aPackages.values ());
   }
 
-  @Nonnull
-  private static String _unifyPath (@Nonnull final String sName)
+  @NonNull
+  private static String _unifyPath (@NonNull final String sName)
   {
     // Convert "\" to "/"
     String sCleanPath = FilenameHelper.getPathUsingUnixSeparator (sName);
@@ -332,8 +332,8 @@ public class JCodeModel implements Serializable
     return sCleanPath;
   }
 
-  @Nonnull
-  private FSName _createFSName (@Nonnull final String sName)
+  @NonNull
+  private FSName _createFSName (@NonNull final String sName)
   {
     if (m_aFSConvention.isCaseSensistive ())
       return FSName.createCaseSensitive (sName);
@@ -354,8 +354,8 @@ public class JCodeModel implements Serializable
    * @see #rootResourceDir()
    * @since v3.4.0
    */
-  @Nonnull
-  public JResourceDir resourceDir (@Nonnull final String sName) throws JResourceAlreadyExistsException,
+  @NonNull
+  public JResourceDir resourceDir (@NonNull final String sName) throws JResourceAlreadyExistsException,
                                                                 JInvalidFileNameException
   {
     ValueEnforcer.notNull (sName, "Name");
@@ -407,7 +407,7 @@ public class JCodeModel implements Serializable
    *         <code>resourceDir ("")</code>.
    * @since v3.4.0
    */
-  @Nonnull
+  @NonNull
   public JResourceDir rootResourceDir ()
   {
     try
@@ -434,7 +434,7 @@ public class JCodeModel implements Serializable
    * @return an iterator that walks the packages defined using this code writer.
    * @since v3.4.0
    */
-  @Nonnull
+  @NonNull
   public Iterator <JResourceDir> resourceDirs ()
   {
     return m_aResourceDirs.values ().iterator ();
@@ -444,7 +444,7 @@ public class JCodeModel implements Serializable
    * @return a list with all packages. The list is mutable. Never <code>null</code>.
    * @since v3.4.0
    */
-  @Nonnull
+  @NonNull
   public List <JResourceDir> getAllResourceDirs ()
   {
     return new ArrayList <> (m_aResourceDirs.values ());
@@ -463,10 +463,10 @@ public class JCodeModel implements Serializable
    * @exception JCodeModelException
    *            When the specified class/interface was already created.
    */
-  @Nonnull
+  @NonNull
   public JDefinedClass _class (final int nMods,
-                               @Nonnull final String sFullyQualifiedClassName,
-                               @Nonnull final EClassType eClassType) throws JCodeModelException
+                               @NonNull final String sFullyQualifiedClassName,
+                               @NonNull final EClassType eClassType) throws JCodeModelException
   {
     final int nIdx = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIdx < 0)
@@ -486,8 +486,8 @@ public class JCodeModel implements Serializable
    * @exception JCodeModelException
    *            When the specified class/interface was already created.
    */
-  @Nonnull
-  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName) throws JCodeModelException
+  @NonNull
+  public JDefinedClass _class (@NonNull final String sFullyQualifiedClassName) throws JCodeModelException
   {
     return _class (sFullyQualifiedClassName, EClassType.CLASS);
   }
@@ -503,8 +503,8 @@ public class JCodeModel implements Serializable
    * @exception JCodeModelException
    *            When the specified class/interface was already created.
    */
-  @Nonnull
-  public JDefinedClass _class (final int nMods, @Nonnull final String sFullyQualifiedClassName)
+  @NonNull
+  public JDefinedClass _class (final int nMods, @NonNull final String sFullyQualifiedClassName)
                                                                                                 throws JCodeModelException
   {
     return _class (nMods, sFullyQualifiedClassName, EClassType.CLASS);
@@ -521,8 +521,8 @@ public class JCodeModel implements Serializable
    * @exception JCodeModelException
    *            When the specified class/interface was already created.
    */
-  @Nonnull
-  public JDefinedClass _class (@Nonnull final String sFullyQualifiedClassName, @Nonnull final EClassType eClassType)
+  @NonNull
+  public JDefinedClass _class (@NonNull final String sFullyQualifiedClassName, @NonNull final EClassType eClassType)
                                                                                                                      throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
@@ -538,8 +538,8 @@ public class JCodeModel implements Serializable
    *        {@link #parseType(String)} instead!
    * @return New {@link JDirectClass}
    */
-  @Nonnull
-  public JDirectClass directClass (@Nonnull final String sName)
+  @NonNull
+  public JDirectClass directClass (@NonNull final String sName)
   {
     return directClass (EClassType.CLASS, sName);
   }
@@ -556,8 +556,8 @@ public class JCodeModel implements Serializable
    *        {@link #parseType(String)} instead!
    * @return New {@link JDirectClass}
    */
-  @Nonnull
-  public JDirectClass directClass (@Nonnull final EClassType eClassType, @Nonnull final String sName)
+  @NonNull
+  public JDirectClass directClass (@NonNull final EClassType eClassType, @NonNull final String sName)
   {
     return new JDirectClass (this, null, eClassType, sName);
   }
@@ -586,8 +586,8 @@ public class JCodeModel implements Serializable
    * @see JCodeModel#buildsErrorTypeRefs()
    * @see JErrorClass
    */
-  @Nonnull
-  public JErrorClass errorClass (@Nonnull final String sMessage)
+  @NonNull
+  public JErrorClass errorClass (@NonNull final String sMessage)
   {
     return errorClass (sMessage, null);
   }
@@ -618,8 +618,8 @@ public class JCodeModel implements Serializable
    * @see JCodeModel#buildsErrorTypeRefs()
    * @see JErrorClass
    */
-  @Nonnull
-  public JErrorClass errorClass (@Nonnull final String sMessage, @Nullable final String sName)
+  @NonNull
+  public JErrorClass errorClass (@NonNull final String sMessage, @Nullable final String sName)
   {
     return new JErrorClass (this, sMessage, sName);
   }
@@ -648,7 +648,7 @@ public class JCodeModel implements Serializable
    * @see JPackage#_getClass(String)
    */
   @Nullable
-  public JDefinedClass _getClass (@Nonnull final String sFullyQualifiedClassName)
+  public JDefinedClass _getClass (@NonNull final String sFullyQualifiedClassName)
   {
     final int nIndex = sFullyQualifiedClassName.lastIndexOf (JPackage.SEPARATOR);
     if (nIndex < 0)
@@ -665,8 +665,8 @@ public class JCodeModel implements Serializable
    *        Base class
    * @return New {@link JAnonymousClass}
    */
-  @Nonnull
-  public JAnonymousClass anonymousClass (@Nonnull final AbstractJClass aBaseClass)
+  @NonNull
+  public JAnonymousClass anonymousClass (@NonNull final AbstractJClass aBaseClass)
   {
     return new JAnonymousClass (aBaseClass);
   }
@@ -678,8 +678,8 @@ public class JCodeModel implements Serializable
    *        Base class
    * @return New {@link JAnonymousClass}
    */
-  @Nonnull
-  public JAnonymousClass anonymousClass (@Nonnull final Class <?> aBaseClass)
+  @NonNull
+  public JAnonymousClass anonymousClass (@NonNull final Class <?> aBaseClass)
   {
     return anonymousClass (ref (aBaseClass));
   }
@@ -710,8 +710,8 @@ public class JCodeModel implements Serializable
    *         {@link JArrayClass}
    * @see #_ref(Class) for the version that handles more cases.
    */
-  @Nonnull
-  public AbstractJClass ref (@Nonnull final Class <?> aClazz)
+  @NonNull
+  public AbstractJClass ref (@NonNull final Class <?> aClazz)
   {
     JReferencedClass aRefClass = m_aRefClasses.get (aClazz);
     if (aRefClass == null)
@@ -758,8 +758,8 @@ public class JCodeModel implements Serializable
    * @see JCodeModelJavaxLangModelAdapter
    * @see #refWithErrorTypes(TypeElement,Elements)
    */
-  @Nonnull
-  public JDefinedClass ref (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils)
+  @NonNull
+  public JDefinedClass ref (@NonNull final TypeElement aElement, @NonNull final Elements aElementUtils)
                                                                                                         throws ErrorTypeFound,
                                                                                                         CodeModelBuildingException
   {
@@ -792,8 +792,8 @@ public class JCodeModel implements Serializable
    * @see JErrorClass
    * @see #buildsErrorTypeRefs()
    */
-  @Nonnull
-  public JDefinedClass refWithErrorTypes (@Nonnull final TypeElement aElement, @Nonnull final Elements aElementUtils)
+  @NonNull
+  public JDefinedClass refWithErrorTypes (@NonNull final TypeElement aElement, @NonNull final Elements aElementUtils)
                                                                                                                       throws CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
@@ -809,8 +809,8 @@ public class JCodeModel implements Serializable
    *         {@link JPrimitiveType}
    * @see #ref(Class)
    */
-  @Nonnull
-  public AbstractJType _ref (@Nonnull final Class <?> aClass)
+  @NonNull
+  public AbstractJType _ref (@NonNull final Class <?> aClass)
   {
     if (aClass.isPrimitive ())
       return AbstractJType.parse (this, aClass.getName ());
@@ -827,8 +827,8 @@ public class JCodeModel implements Serializable
    * @return Singleton reference to this class. Might be a <code>JReferencedClass</code> or a
    *         {@link JArrayClass} or a {@link JDirectClass}
    */
-  @Nonnull
-  public AbstractJClass ref (@Nonnull final String sFullyQualifiedClassName)
+  @NonNull
+  public AbstractJClass ref (@NonNull final String sFullyQualifiedClassName)
   {
     try
     {
@@ -858,7 +858,7 @@ public class JCodeModel implements Serializable
    * @return Singleton {@link AbstractJClass} representation for "?", which is equivalent to "?
    *         extends Object".
    */
-  @Nonnull
+  @NonNull
   public AbstractJClass wildcard ()
   {
     if (m_aWildcard == null)
@@ -877,8 +877,8 @@ public class JCodeModel implements Serializable
    * @return The internal representation of the specified name. Might be a {@link JArrayClass}, a
    *         {@link JPrimitiveType}, a <code>JReferencedClass</code>, a {@link JNarrowedClass}
    */
-  @Nonnull
-  public AbstractJType parseType (@Nonnull final String sName)
+  @NonNull
+  public AbstractJType parseType (@NonNull final String sName)
   {
     // array
     if (sName.endsWith ("[]"))
@@ -905,7 +905,7 @@ public class JCodeModel implements Serializable
     private final String m_sTypeName;
     private int m_nIdx;
 
-    public TypeNameParser (@Nonnull final String sTypeName)
+    public TypeNameParser (@NonNull final String sTypeName)
     {
       m_sTypeName = sTypeName;
     }
@@ -916,7 +916,7 @@ public class JCodeModel implements Serializable
      *
      * @return The parsed type name
      */
-    @Nonnull
+    @NonNull
     AbstractJClass parseTypeName ()
     {
       final int nStart = m_nIdx;
@@ -965,8 +965,8 @@ public class JCodeModel implements Serializable
     /**
      * Parses additional left-associative suffixes, like type arguments and array specifiers.
      */
-    @Nonnull
-    private AbstractJClass _parseSuffix (@Nonnull final AbstractJClass aClazz)
+    @NonNull
+    private AbstractJClass _parseSuffix (@NonNull final AbstractJClass aClazz)
     {
       if (m_nIdx == m_sTypeName.length ())
         // hit EOL
@@ -1004,8 +1004,8 @@ public class JCodeModel implements Serializable
      *
      * @return the index of the character next to '>'
      */
-    @Nonnull
-    private AbstractJClass _parseArguments (@Nonnull final AbstractJClass aRawType)
+    @NonNull
+    private AbstractJClass _parseArguments (@NonNull final AbstractJClass aRawType)
     {
       ValueEnforcer.isTrue (m_sTypeName.charAt (m_nIdx) == '<', "Expected '<' at current index");
       m_nIdx++;
@@ -1036,7 +1036,7 @@ public class JCodeModel implements Serializable
    * @return <code>true</code> if it was added, <code>false</code> if it was already contained.
    * @since 3.0.0
    */
-  public boolean addDontImportClass (@Nonnull final Class <?> aClass)
+  public boolean addDontImportClass (@NonNull final Class <?> aClass)
   {
     return addDontImportClass (ref (aClass));
   }
@@ -1049,7 +1049,7 @@ public class JCodeModel implements Serializable
    * @return <code>true</code> if it was added, <code>false</code> if it was already contained.
    * @since 3.0.0
    */
-  public boolean addDontImportClass (@Nonnull final AbstractJClass aClass)
+  public boolean addDontImportClass (@NonNull final AbstractJClass aClass)
   {
     ValueEnforcer.notNull (aClass, "Class");
     return m_aDontImportClasses.add (aClass);
@@ -1060,7 +1060,7 @@ public class JCodeModel implements Serializable
    *         empty.
    * @since 3.0.0
    */
-  @Nonnull
+  @NonNull
   public Set <AbstractJClass> getAllDontImportClasses ()
   {
     return new HashSet <> (m_aDontImportClasses);

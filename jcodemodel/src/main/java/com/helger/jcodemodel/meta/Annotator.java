@@ -54,13 +54,13 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.IJAnnotatable;
 import com.helger.jcodemodel.JAnnotationArrayMember;
 import com.helger.jcodemodel.JAnnotationUse;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
@@ -80,7 +80,7 @@ class Annotator
     m_aTypeEnvironment = typeEnvironment;
   }
 
-  void annotate (@Nonnull final List <? extends AnnotationMirror> annotationMirrors) throws CodeModelBuildingException,
+  void annotate (@NonNull final List <? extends AnnotationMirror> annotationMirrors) throws CodeModelBuildingException,
                                                                                      IllegalStateException,
                                                                                      ErrorTypeFound
   {
@@ -90,7 +90,7 @@ class Annotator
     }
   }
 
-  private void _annotate (@Nonnull final AnnotationMirror annotation) throws CodeModelBuildingException,
+  private void _annotate (@NonNull final AnnotationMirror annotation) throws CodeModelBuildingException,
                                                                       IllegalStateException,
                                                                       ErrorTypeFound
   {
@@ -104,7 +104,7 @@ class Annotator
   {
     private final JAnnotationUse m_aAnnotationUse;
 
-    public ArgumentAdder (@Nonnull final JAnnotationUse annotationUse)
+    public ArgumentAdder (@NonNull final JAnnotationUse annotationUse)
     {
       m_aAnnotationUse = annotationUse;
     }

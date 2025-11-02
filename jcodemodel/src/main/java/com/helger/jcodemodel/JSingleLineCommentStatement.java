@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * This class represents a special single-comment "statement"! This is not an
@@ -63,7 +63,7 @@ public class JSingleLineCommentStatement implements IJStatement
    *        The new comment string. May not be <code>null</code> but maybe
    *        empty.
    */
-  public JSingleLineCommentStatement (@Nonnull final String sComment)
+  public JSingleLineCommentStatement (@NonNull final String sComment)
   {
     comment (sComment);
   }
@@ -71,7 +71,7 @@ public class JSingleLineCommentStatement implements IJStatement
   /**
    * @return The current comment string, without the leading "//".
    */
-  @Nonnull
+  @NonNull
   public String comment ()
   {
     return m_sComment;
@@ -84,13 +84,13 @@ public class JSingleLineCommentStatement implements IJStatement
    *        The new comment string. May not be <code>null</code> but maybe
    *        empty.
    */
-  public final void comment (@Nonnull final String sComment)
+  public final void comment (@NonNull final String sComment)
   {
     ValueEnforcer.notNull (sComment, "Comment");
     m_sComment = sComment;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     if (m_sComment.length () > 0)
       f.print ("// ").print (m_sComment).newline ();

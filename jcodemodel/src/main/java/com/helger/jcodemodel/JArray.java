@@ -46,10 +46,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.helger.base.equals.EqualsHelper;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.equals.EqualsHelper;
 
 /**
  * array creation and initialization.
@@ -60,13 +60,13 @@ public class JArray implements IJExpression
   private final IJExpression m_aSize;
   private List <IJExpression> m_aExprs;
 
-  protected JArray (@Nonnull final AbstractJType aType, @Nullable final IJExpression aSize)
+  protected JArray (@NonNull final AbstractJType aType, @Nullable final IJExpression aSize)
   {
     m_aType = aType;
     m_aSize = aSize;
   }
 
-  @Nonnull
+  @NonNull
   public AbstractJType type ()
   {
     return m_aType;
@@ -85,8 +85,8 @@ public class JArray implements IJExpression
    *        Expression to be added to the array
    * @return this
    */
-  @Nonnull
-  public JArray add (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public JArray add (@NonNull final IJExpression aExpr)
   {
     if (m_aExprs == null)
       m_aExprs = new ArrayList <> ();
@@ -99,14 +99,14 @@ public class JArray implements IJExpression
    *
    * @return this
    */
-  @Nonnull
+  @NonNull
   public JArray removeAll ()
   {
     m_aExprs = null;
     return this;
   }
 
-  @Nonnull
+  @NonNull
   public List <IJExpression> exprsMutable ()
   {
     if (m_aExprs == null)
@@ -114,7 +114,7 @@ public class JArray implements IJExpression
     return m_aExprs;
   }
 
-  @Nonnull
+  @NonNull
   public List <IJExpression> exprs ()
   {
     return Collections.unmodifiableList (exprsMutable ());
@@ -125,7 +125,7 @@ public class JArray implements IJExpression
     return m_aExprs != null && !m_aExprs.isEmpty ();
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     // generally we produce new T[x], but when T is an array type (T=T'[])
     // then new T'[][x] is wrong. It has to be new T'[x][].

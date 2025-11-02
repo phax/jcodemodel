@@ -44,11 +44,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.JPackage;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Filter CodeWriter that writes a progress message to the specified {@link IProgressTracker}.
@@ -60,19 +60,19 @@ public class ProgressCodeWriter extends FilterCodeWriter
   @FunctionalInterface
   public static interface IProgressTracker extends Serializable
   {
-    void println (@Nonnull String sLine);
+    void println (@NonNull String sLine);
   }
 
   private final IProgressTracker m_aPT;
 
-  public ProgressCodeWriter (@Nonnull final AbstractCodeWriter output, @Nonnull final IProgressTracker progress)
+  public ProgressCodeWriter (@NonNull final AbstractCodeWriter output, @NonNull final IProgressTracker progress)
   {
     super (output);
     ValueEnforcer.notNull (progress, "Progress");
     m_aPT = progress;
   }
 
-  protected void report (@Nonnull final String sDirName, @Nonnull final String sFilename)
+  protected void report (@NonNull final String sDirName, @NonNull final String sFilename)
   {
     if (StringHelper.isEmpty (sDirName))
       m_aPT.println (sFilename);
@@ -81,14 +81,14 @@ public class ProgressCodeWriter extends FilterCodeWriter
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
+  public OutputStream openBinary (@NonNull final String sDirName, @NonNull final String sFilename) throws IOException
   {
     report (sDirName, sFilename);
     return super.openBinary (sDirName, sFilename);
   }
 
   @Override
-  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage, @Nonnull final String sFilename)
+  public SourcePrintWriter openSource (@NonNull final JPackage aPackage, @NonNull final String sFilename)
                                                                                                           throws IOException
   {
     report (toDirName (aPackage), sFilename);

@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * JBreak statement
@@ -67,7 +67,7 @@ public class JBreak implements IJStatement
     return m_aLabel;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     if (m_aLabel == null)
       f.print ("break;").newline ();

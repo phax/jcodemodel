@@ -43,10 +43,10 @@ package com.helger.jcodemodel.fmt;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.WillNotClose;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Allows the application to use OutputStream to define data that will be stored
@@ -58,7 +58,7 @@ public class JBinaryFile extends AbstractJResourceFile
 {
   private final NonBlockingByteArrayOutputStream m_aBAOS = new NonBlockingByteArrayOutputStream ();
 
-  public JBinaryFile (@Nonnull final String sName)
+  public JBinaryFile (@NonNull final String sName)
   {
     super (sName);
   }
@@ -67,14 +67,14 @@ public class JBinaryFile extends AbstractJResourceFile
    * @return Data written to the returned output stream will be written to the
    *         file.
    */
-  @Nonnull
+  @NonNull
   public OutputStream getDataStore ()
   {
     return m_aBAOS;
   }
 
   @Override
-  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void build (@NonNull @WillNotClose final OutputStream aOS) throws IOException
   {
     m_aBAOS.writeTo (aOS);
   }

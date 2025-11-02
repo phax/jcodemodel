@@ -48,6 +48,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.string.StringHelper;
@@ -59,9 +62,6 @@ import com.helger.jcodemodel.exceptions.JInvalidFileNameException;
 import com.helger.jcodemodel.exceptions.JResourceAlreadyExistsException;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.util.FSName;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * A Java resource directory - complementary to a {@link JPackage}.
@@ -104,9 +104,9 @@ public class JResourceDir implements IJOwned, Serializable
    * @throws JInvalidFileNameException
    *         If a part of the package name is not a valid filename part.
    */
-  protected JResourceDir (@Nonnull final JCodeModel aOwner,
+  protected JResourceDir (@NonNull final JCodeModel aOwner,
                           @Nullable final JResourceDir aParentDir,
-                          @Nonnull final String sName) throws JInvalidFileNameException
+                          @NonNull final String sName) throws JInvalidFileNameException
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (aOwner, "CodeModel");
@@ -130,7 +130,7 @@ public class JResourceDir implements IJOwned, Serializable
    * @return the code model root object being used to create this resource directory.
    */
   @Override
-  @Nonnull
+  @NonNull
   public final JCodeModel owner ()
   {
     return m_aOwner;
@@ -144,7 +144,7 @@ public class JResourceDir implements IJOwned, Serializable
    * @return The name of this resource directory, or the empty string if this is the root directory.
    *         For example, this method returns strings like <code>"dir1/dir2/dir3"</code>
    */
-  @Nonnull
+  @NonNull
   public final String name ()
   {
     return m_sName;
@@ -160,15 +160,15 @@ public class JResourceDir implements IJOwned, Serializable
     return m_aParentDir;
   }
 
-  @Nonnull
-  private FSName _createFSName (@Nonnull final String sName)
+  @NonNull
+  private FSName _createFSName (@NonNull final String sName)
   {
     if (m_aOwner.getFileSystemConvention ().isCaseSensistive ())
       return FSName.createCaseSensitive (sName);
     return FSName.createCaseInsensitive (sName);
   }
 
-  @Nonnull
+  @NonNull
   private JPackage _getMatchingPackage ()
   {
     return owner ()._package (StringReplace.replaceAll (m_sName, SEPARATOR, JPackage.SEPARATOR));
@@ -185,8 +185,8 @@ public class JResourceDir implements IJOwned, Serializable
    * @throws JCodeModelException
    *         if another resource with the same name already exists
    */
-  @Nonnull
-  public <T extends AbstractJResourceFile> T addResourceFile (@Nonnull final T aResFile) throws JCodeModelException
+  @NonNull
+  public <T extends AbstractJResourceFile> T addResourceFile (@NonNull final T aResFile) throws JCodeModelException
   {
     ValueEnforcer.notNull (aResFile, "ResourceFile");
 
@@ -240,7 +240,7 @@ public class JResourceDir implements IJOwned, Serializable
    *
    * @return Iterator
    */
-  @Nonnull
+  @NonNull
   public Iterator <AbstractJResourceFile> resourceFiles ()
   {
     return m_aResources.values ().iterator ();
@@ -249,7 +249,7 @@ public class JResourceDir implements IJOwned, Serializable
   /**
    * @return A copy of all contained resource files and never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public List <AbstractJResourceFile> getAllResourceFiles ()
   {
     return new ArrayList <> (m_aResources.values ());
@@ -264,8 +264,8 @@ public class JResourceDir implements IJOwned, Serializable
    * @throws JCodeModelException
    *         In case a resource file with the specified name is already present
    */
-  @Nonnull
-  public JResourceDir subDir (@Nonnull final String sSubDirName) throws JCodeModelException
+  @NonNull
+  public JResourceDir subDir (@NonNull final String sSubDirName) throws JCodeModelException
   {
     // Check if a file with the same name already exists
     if (hasResourceFile (sSubDirName))
@@ -296,8 +296,8 @@ public class JResourceDir implements IJOwned, Serializable
   /**
    * Convert the package name to directory path equivalent
    */
-  @Nonnull
-  File toPath (@Nonnull final File aDir)
+  @NonNull
+  File toPath (@NonNull final File aDir)
   {
     return isUnnamed () ? aDir : new File (aDir, m_sName);
   }
@@ -308,14 +308,14 @@ public class JResourceDir implements IJOwned, Serializable
     return m_aResources.size ();
   }
 
-  @Nonnull
-  String fullChildName (@Nonnull final String sChildName)
+  @NonNull
+  String fullChildName (@NonNull final String sChildName)
   {
     return isUnnamed () ? sChildName : m_sName + SEPARATOR + sChildName;
   }
 
-  @Nonnull
-  static JResourceDir root (@Nonnull final JCodeModel aOwner)
+  @NonNull
+  static JResourceDir root (@NonNull final JCodeModel aOwner)
   {
     try
     {

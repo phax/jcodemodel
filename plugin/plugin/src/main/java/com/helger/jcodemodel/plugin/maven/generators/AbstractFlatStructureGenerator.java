@@ -32,6 +32,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JBlock;
@@ -59,9 +62,6 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.IFieldCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.SimpleField;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilder
 {
@@ -375,7 +375,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
    * @return corresponding static class, or null if alias does not match any
    */
   @Nullable
-  protected Class <?> staticAlias (@Nonnull final String alias)
+  protected Class <?> staticAlias (@NonNull final String alias)
   {
     return switch (alias)
     {
@@ -398,10 +398,10 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     };
   }
 
-  protected void addField (@Nonnull final JDefinedClass jdc,
+  protected void addField (@NonNull final JDefinedClass jdc,
                            final AbstractJType type,
                            final String fieldName,
-                           @Nonnull final FieldOptions options,
+                           @NonNull final FieldOptions options,
                            final JCodeModel model)
   {
     int fieldMods = options.getVisibility().m_nJMod | (options.isFinal() ? JMod.FINAL : 0);
@@ -415,7 +415,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
       addGetter (fv, jdc);
   }
 
-  protected void addGetter (@Nonnull final JFieldVar fv, @Nonnull final JDefinedClass jdc)
+  protected void addGetter (@NonNull final JFieldVar fv, @NonNull final JDefinedClass jdc)
   {
     final AbstractJType retType = fv.type ();
     final String methName = "get" +
@@ -426,10 +426,10 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     meth.javadoc ().add ("@return the {@link #" + fv.name () + "}");
   }
 
-  protected void addSetter (@Nonnull final JFieldVar fv,
-                            @Nonnull final JDefinedClass jdc,
-                            @Nonnull final JCodeModel model,
-                            @Nonnull final FieldOptions options)
+  protected void addSetter (@NonNull final JFieldVar fv,
+                            @NonNull final JDefinedClass jdc,
+                            @NonNull final JCodeModel model,
+                            @NonNull final FieldOptions options)
   {
     final AbstractJType paramType = fv.type ();
     final String methName = "set" +
@@ -447,9 +447,9 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     meth.javadoc ().add ("set the {@link #" + fv.name () + "}");
   }
 
-  protected JFieldVar addLastUpdated (@Nonnull final JDefinedClass jdc,
-                                      @Nonnull final JCodeModel model,
-                                      @Nonnull final FieldOptions fieldOptions)
+  protected JFieldVar addLastUpdated (@NonNull final JDefinedClass jdc,
+                                      @NonNull final JCodeModel model,
+                                      @NonNull final FieldOptions fieldOptions)
   {
     final FieldOptions ownerOptions = fieldOptions.getParent ();
     final JFieldVar lastUpdated = jdc.field (ownerOptions.getVisibility ().m_nJMod,
@@ -482,8 +482,8 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
   }
 
   protected void createConstructors (final JCodeModel model,
-                                     @Nonnull final JDefinedClass createdClass,
-                                     @Nonnull final Set <JDefinedClass> done)
+                                     @NonNull final JDefinedClass createdClass,
+                                     @NonNull final Set <JDefinedClass> done)
   {
     if (done.contains (createdClass))
       return;
@@ -516,8 +516,8 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     done.add (createdClass);
   }
 
-  @Nonnull
-  protected List <JFieldVar> extractFinalFields (@Nonnull final JDefinedClass createdClass)
+  @NonNull
+  protected List <JFieldVar> extractFinalFields (@NonNull final JDefinedClass createdClass)
   {
     return createdClass.fields ()
                        .values ()
@@ -528,9 +528,9 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
   }
 
   protected void createConstructors (final JCodeModel model,
-                                     @Nonnull final JDefinedClass createdClass,
-                                     @Nonnull final JDefinedClass parentClass,
-                                     @Nonnull final Set <JDefinedClass> done)
+                                     @NonNull final JDefinedClass createdClass,
+                                     @NonNull final JDefinedClass parentClass,
+                                     @NonNull final Set <JDefinedClass> done)
   {
     createConstructors (model, parentClass, done);
     final int [] lowestArgs = { Integer.MAX_VALUE };

@@ -42,9 +42,9 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
-import com.helger.base.equals.EqualsHelper;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.equals.EqualsHelper;
 
 /**
  * Assignment statements, which are also expressions.
@@ -63,7 +63,7 @@ public class JAssignment implements IJExpressionStatement
    * @param rhs
    *        right
    */
-  protected JAssignment (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs)
+  protected JAssignment (@NonNull final IJAssignmentTarget lhs, @NonNull final IJExpression rhs)
   {
     this (lhs, rhs, "");
   }
@@ -78,20 +78,20 @@ public class JAssignment implements IJExpressionStatement
    * @param sOperator
    *        additional operator
    */
-  protected JAssignment (@Nonnull final IJAssignmentTarget lhs, @Nonnull final IJExpression rhs, @Nonnull final String sOperator)
+  protected JAssignment (@NonNull final IJAssignmentTarget lhs, @NonNull final IJExpression rhs, @NonNull final String sOperator)
   {
     m_aLhs = lhs;
     m_aRhs = rhs;
     m_sOperator = sOperator;
   }
 
-  @Nonnull
+  @NonNull
   public IJAssignmentTarget lhs ()
   {
     return m_aLhs;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression rhs ()
   {
     return m_aRhs;
@@ -100,7 +100,7 @@ public class JAssignment implements IJExpressionStatement
   /**
    * @return The additional operator (without the "=")
    */
-  @Nonnull
+  @NonNull
   public String op ()
   {
     return m_sOperator;
@@ -109,18 +109,18 @@ public class JAssignment implements IJExpressionStatement
   /**
    * @return The additional operator (with the "=")
    */
-  @Nonnull
+  @NonNull
   public String opFull ()
   {
     return m_sOperator + '=';
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.generable (m_aLhs).print (opFull ()).generable (m_aRhs);
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.generable (this).print (';').newline ();
   }

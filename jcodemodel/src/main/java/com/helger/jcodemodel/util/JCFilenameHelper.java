@@ -42,11 +42,11 @@ package com.helger.jcodemodel.util;
 
 import java.util.Locale;
 
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.base.string.StringHelper;
 import com.helger.io.file.FilenameHelper;
-
-import jakarta.annotation.Nullable;
 
 /**
  * All kind of file name handling stuff. This class gives you platform independent file name

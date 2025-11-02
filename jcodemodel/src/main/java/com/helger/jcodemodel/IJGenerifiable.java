@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Declarations that can have type variables. Something that can be made into a
@@ -57,8 +57,8 @@ public interface IJGenerifiable extends IJDeclaration, IJOwned
    *        type variable name
    * @return The created {@link JTypeVar}
    */
-  @Nonnull
-  JTypeVar generify (@Nonnull String sName);
+  @NonNull
+  JTypeVar generify (@NonNull String sName);
 
   /**
    * Adds a new type variable to this declaration with a bound.
@@ -69,8 +69,8 @@ public interface IJGenerifiable extends IJDeclaration, IJOwned
    *        Bound class
    * @return The created {@link JTypeVar}
    */
-  @Nonnull
-  default JTypeVar generify (@Nonnull final String sName, @Nonnull final Class <?> aExtends)
+  @NonNull
+  default JTypeVar generify (@NonNull final String sName, @NonNull final Class <?> aExtends)
   {
     return generify (sName, owner ().ref (aExtends));
   }
@@ -84,8 +84,8 @@ public interface IJGenerifiable extends IJDeclaration, IJOwned
    *        Bound class
    * @return The created {@link JTypeVar}
    */
-  @Nonnull
-  default JTypeVar generify (@Nonnull final String sName, @Nonnull final AbstractJClass aExtends)
+  @NonNull
+  default JTypeVar generify (@NonNull final String sName, @NonNull final AbstractJClass aExtends)
   {
     return generify (sName).bound (aExtends);
   }
@@ -95,6 +95,6 @@ public interface IJGenerifiable extends IJDeclaration, IJOwned
    *
    * @return All type parameters
    */
-  @Nonnull
+  @NonNull
   JTypeVar [] typeParams ();
 }

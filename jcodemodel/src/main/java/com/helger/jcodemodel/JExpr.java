@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.annotation.Nonnegative;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.annotation.Nonnegative;
 
 /**
  * Factory methods that generate various {@link IJExpression}s.
@@ -53,13 +53,13 @@ public final class JExpr
   /**
    * Boolean constant that represents <code>true</code>
    */
-  @Nonnull
+  @NonNull
   public static final JAtom TRUE = new JAtom ("true");
 
   /**
    * Boolean constant that represents <code>false</code>
    */
-  @Nonnull
+  @NonNull
   public static final JAtom FALSE = new JAtom ("false");
 
   private static final String CHAR_ESCAPE = "\b\t\n\f\r\"\'\\";
@@ -74,171 +74,171 @@ public final class JExpr
   private JExpr ()
   {}
 
-  @Nonnull
-  public static JAssignment assign (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assign (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs);
   }
 
-  @Nonnull
-  public static JAssignment assignPlus (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignPlus (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, "+");
   }
 
-  @Nonnull
-  public static JAssignment assignMinus (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignMinus (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, "-");
   }
 
-  @Nonnull
-  public static JAssignment assignTimes (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignTimes (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, "*");
   }
 
-  @Nonnull
-  public static JAssignment assignDivide (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignDivide (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, "/");
   }
 
-  @Nonnull
-  public static JAssignment assignShl (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignShl (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, "<<");
   }
 
-  @Nonnull
-  public static JAssignment assignShr (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignShr (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, ">>");
   }
 
-  @Nonnull
-  public static JAssignment assignShrz (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignShrz (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, ">>>");
   }
 
-  @Nonnull
-  public static JAssignment assignBand (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignBand (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, "&");
   }
 
-  @Nonnull
-  public static JAssignment assignXor (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignXor (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, "^");
   }
 
-  @Nonnull
-  public static JAssignment assignBor (@Nonnull final IJAssignmentTarget aLhs, @Nonnull final IJExpression aRhs)
+  @NonNull
+  public static JAssignment assignBor (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs, "|");
   }
 
-  @Nonnull
-  public static JOpUnaryTight incr (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnaryTight incr (@NonNull final IJExpression aExpr)
   {
     return JOp.postincr (aExpr);
   }
 
-  @Nonnull
-  public static JOpUnaryTight preincr (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnaryTight preincr (@NonNull final IJExpression aExpr)
   {
     return JOp.preincr (aExpr);
   }
 
-  @Nonnull
-  public static JOpUnaryTight decr (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnaryTight decr (@NonNull final IJExpression aExpr)
   {
     return JOp.postdecr (aExpr);
   }
 
-  @Nonnull
-  public static JOpUnaryTight predecr (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JOpUnaryTight predecr (@NonNull final IJExpression aExpr)
   {
     return JOp.predecr (aExpr);
   }
 
-  @Nonnull
-  public static JInvocation _new (@Nonnull final AbstractJType aType)
+  @NonNull
+  public static JInvocation _new (@NonNull final AbstractJType aType)
   {
     return new JInvocation (aType);
   }
 
-  @Nonnull
-  public static JInvocation invoke (@Nonnull final String sMethod)
+  @NonNull
+  public static JInvocation invoke (@NonNull final String sMethod)
   {
     return invoke ((IJExpression) null, sMethod);
   }
 
-  @Nonnull
-  public static JInvocation invokeThis (@Nonnull final String sMethod)
+  @NonNull
+  public static JInvocation invokeThis (@NonNull final String sMethod)
   {
     return invoke (JExpr._this (), sMethod);
   }
 
-  @Nonnull
-  public static JInvocation invoke (@Nonnull final JMethod aMethod)
+  @NonNull
+  public static JInvocation invoke (@NonNull final JMethod aMethod)
   {
     return invoke ((IJExpression) null, aMethod);
   }
 
-  @Nonnull
-  public static JInvocation invokeThis (@Nonnull final JMethod aMethod)
+  @NonNull
+  public static JInvocation invokeThis (@NonNull final JMethod aMethod)
   {
     return invoke (JExpr._this (), aMethod);
   }
 
-  @Nonnull
-  public static JInvocation invoke (@Nullable final IJExpression aLhs, @Nonnull final JMethod aMethod)
+  @NonNull
+  public static JInvocation invoke (@Nullable final IJExpression aLhs, @NonNull final JMethod aMethod)
   {
     return new JInvocation (aMethod.owner (), aLhs, aMethod);
   }
 
-  @Nonnull
-  public static JInvocation invoke (@Nullable final IJExpression aLhs, @Nonnull final String sMethod)
+  @NonNull
+  public static JInvocation invoke (@Nullable final IJExpression aLhs, @NonNull final String sMethod)
   {
     // No owner available
     return new JInvocation ((JCodeModel) null, aLhs, sMethod);
   }
 
-  @Nonnull
-  public static JInvocation invoke (@Nullable final JCodeModel aOwner, @Nullable final IJExpression aLhs, @Nonnull final String sMethod)
+  @NonNull
+  public static JInvocation invoke (@Nullable final JCodeModel aOwner, @Nullable final IJExpression aLhs, @NonNull final String sMethod)
   {
     return new JInvocation (aOwner, aLhs, sMethod);
   }
 
-  @Nonnull
+  @NonNull
   public static JInvocation invokeSuper ()
   {
     return JInvocation._super ();
   }
 
-  @Nonnull
-  public static JFieldRef ref (@Nonnull final JVar aField)
+  @NonNull
+  public static JFieldRef ref (@NonNull final JVar aField)
   {
     return ref (null, aField);
   }
 
-  @Nonnull
-  public static JFieldRef ref (@Nonnull final String sField)
+  @NonNull
+  public static JFieldRef ref (@NonNull final String sField)
   {
     return ref (null, sField);
   }
 
-  @Nonnull
-  public static JFieldRef ref (@Nullable final IJExpression aLhs, @Nonnull final JVar aField)
+  @NonNull
+  public static JFieldRef ref (@Nullable final IJExpression aLhs, @NonNull final JVar aField)
   {
     return new JFieldRef (aLhs, aField);
   }
 
-  @Nonnull
-  public static JFieldRef ref (@Nullable final IJExpression aLhs, @Nonnull final String sField)
+  @NonNull
+  public static JFieldRef ref (@Nullable final IJExpression aLhs, @NonNull final String sField)
   {
     return new JFieldRef (aLhs, sField);
   }
@@ -254,8 +254,8 @@ public final class JExpr
    *        empty.
    * @return [type].[name]
    */
-  @Nonnull
-  public static JEnumConstantRef enumConstantRef (@Nonnull final AbstractJClass aType, @Nonnull final String sName)
+  @NonNull
+  public static JEnumConstantRef enumConstantRef (@NonNull final AbstractJClass aType, @NonNull final String sName)
   {
     return new JEnumConstantRef (aType, sName);
   }
@@ -265,8 +265,8 @@ public final class JExpr
    *        field name to reference
    * @return [this].[field]
    */
-  @Nonnull
-  public static JFieldRef refthis (@Nonnull final JVar aField)
+  @NonNull
+  public static JFieldRef refthis (@NonNull final JVar aField)
   {
     return new JFieldRef (null, aField, true);
   }
@@ -276,20 +276,20 @@ public final class JExpr
    *        field name to reference
    * @return [this].[field]
    */
-  @Nonnull
-  public static JFieldRef refthis (@Nonnull final String sField)
+  @NonNull
+  public static JFieldRef refthis (@NonNull final String sField)
   {
     return new JFieldRef (null, sField, true);
   }
 
-  @Nonnull
-  public static JFieldRef refthis (@Nullable final IJExpression aLhs, @Nonnull final JVar aField)
+  @NonNull
+  public static JFieldRef refthis (@Nullable final IJExpression aLhs, @NonNull final JVar aField)
   {
     return new JFieldRef (aLhs, aField, true);
   }
 
-  @Nonnull
-  public static JFieldRef refthis (@Nullable final IJExpression aLhs, @Nonnull final String sField)
+  @NonNull
+  public static JFieldRef refthis (@Nullable final IJExpression aLhs, @NonNull final String sField)
   {
     return new JFieldRef (aLhs, sField, true);
   }
@@ -301,29 +301,29 @@ public final class JExpr
    *        The class to use ".class" of
    * @return The ".class" expression
    */
-  @Nonnull
-  public static IJExpression dotClass (@Nonnull final AbstractJType aClass)
+  @NonNull
+  public static IJExpression dotClass (@NonNull final AbstractJType aClass)
   {
-    return (@Nonnull final IJFormatter f) -> {
+    return (@NonNull final IJFormatter f) -> {
       final AbstractJType c = aClass instanceof JNarrowedClass ? ((JNarrowedClass) aClass).basis () : aClass;
       f.generable (c).print (".class");
     };
   }
 
-  @Nonnull
-  public static JArrayCompRef component (@Nonnull final IJExpression aLhs, @Nonnull final IJExpression aIndex)
+  @NonNull
+  public static JArrayCompRef component (@NonNull final IJExpression aLhs, @NonNull final IJExpression aIndex)
   {
     return new JArrayCompRef (aLhs, aIndex);
   }
 
-  @Nonnull
-  public static JCast cast (@Nonnull final AbstractJType aType, @Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JCast cast (@NonNull final AbstractJType aType, @NonNull final IJExpression aExpr)
   {
     return new JCast (aType, aExpr);
   }
 
-  @Nonnull
-  public static JArray newArray (@Nonnull final AbstractJType aType)
+  @NonNull
+  public static JArray newArray (@NonNull final AbstractJType aType)
   {
     return newArray (aType, null);
   }
@@ -337,8 +337,8 @@ public final class JExpr
    *        Size of the array
    * @return New {@link JArray}
    */
-  @Nonnull
-  public static JArray newArray (@Nonnull final AbstractJType aType, @Nullable final IJExpression aSize)
+  @NonNull
+  public static JArray newArray (@NonNull final AbstractJType aType, @Nullable final IJExpression aSize)
   {
     // you cannot create an array whose component aType is a generic
     return new JArray (aType.erasure (), aSize);
@@ -353,8 +353,8 @@ public final class JExpr
    *        Size of the array
    * @return New {@link JArray}
    */
-  @Nonnull
-  public static JArray newArray (@Nonnull final AbstractJType aType, @Nonnegative final int nSize)
+  @NonNull
+  public static JArray newArray (@NonNull final AbstractJType aType, @Nonnegative final int nSize)
   {
     return newArray (aType, lit (nSize));
   }
@@ -362,7 +362,7 @@ public final class JExpr
   /**
    * @return a reference to "this", an implicit reference to the current object.
    */
-  @Nonnull
+  @NonNull
   public static JAtom _this ()
   {
     return THIS;
@@ -372,7 +372,7 @@ public final class JExpr
    * @return a reference to "super", an implicit reference to the super class.
    * @see #invokeSuper() for the invocation
    */
-  @Nonnull
+  @NonNull
   public static JAtom _super ()
   {
     return SUPER;
@@ -380,37 +380,37 @@ public final class JExpr
 
   /* -- Literals -- */
 
-  @Nonnull
+  @NonNull
   public static JAtom _null ()
   {
     return NULL;
   }
 
-  @Nonnull
+  @NonNull
   public static JAtom lit (final boolean b)
   {
     return b ? TRUE : FALSE;
   }
 
-  @Nonnull
+  @NonNull
   public static JAtomInt lit (final int n)
   {
     return new JAtomInt (n);
   }
 
-  @Nonnull
+  @NonNull
   public static JAtomLong lit (final long n)
   {
     return new JAtomLong (n);
   }
 
-  @Nonnull
+  @NonNull
   public static JAtomFloat lit (final float f)
   {
     return new JAtomFloat (f);
   }
 
-  @Nonnull
+  @NonNull
   public static JAtomDouble lit (final double d)
   {
     return new JAtomDouble (d);
@@ -426,8 +426,8 @@ public final class JExpr
    *        Source string to quote
    * @return Qutoed string
    */
-  @Nonnull
-  public static String quotify (final char cQuote, @Nonnull final String sStr)
+  @NonNull
+  public static String quotify (final char cQuote, @NonNull final String sStr)
   {
     final int n = sStr.length ();
     final StringBuilder sb = new StringBuilder (n + 2);
@@ -476,14 +476,14 @@ public final class JExpr
     return sb.toString ();
   }
 
-  @Nonnull
+  @NonNull
   public static JAtom lit (final char c)
   {
     return new JAtom (quotify ('\'', Character.toString (c)));
   }
 
-  @Nonnull
-  public static JStringLiteral lit (@Nonnull final String sStr)
+  @NonNull
+  public static JStringLiteral lit (@NonNull final String sStr)
   {
     return new JStringLiteral (sStr);
   }
@@ -502,8 +502,8 @@ public final class JExpr
    *        Java source code
    * @return Direct aExpr
    */
-  @Nonnull
-  public static IJExpression direct (@Nonnull final String sSourceCode)
+  @NonNull
+  public static IJExpression direct (@NonNull final String sSourceCode)
   {
     return f -> f.print ('(').print (sSourceCode).print (')');
   }
@@ -521,10 +521,10 @@ public final class JExpr
    *        False condition
    * @return The created aExpr
    */
-  @Nonnull
-  public static JOpTernary cond (@Nonnull final IJExpression aCond,
-                                 @Nonnull final IJExpression aIfTrue,
-                                 @Nonnull final IJExpression aIfFalse)
+  @NonNull
+  public static JOpTernary cond (@NonNull final IJExpression aCond,
+                                 @NonNull final IJExpression aIfTrue,
+                                 @NonNull final IJExpression aIfFalse)
   {
     return JOp.cond (aCond, aIfTrue, aIfFalse);
   }

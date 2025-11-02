@@ -16,8 +16,8 @@ package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
 import java.util.Locale;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Additional features to add when constructing fields
@@ -27,7 +27,7 @@ public enum EFieldOption
   GETTER
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setGetter (Boolean.TRUE);
     }
@@ -35,7 +35,7 @@ public enum EFieldOption
   NOGETTER
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setGetter (Boolean.FALSE);
     }
@@ -43,7 +43,7 @@ public enum EFieldOption
   SETTER
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setSetter (Boolean.TRUE);
     }
@@ -51,7 +51,7 @@ public enum EFieldOption
   NOSETTER
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setSetter (Boolean.FALSE);
     }
@@ -59,7 +59,7 @@ public enum EFieldOption
   LASTUPDATED
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setLastUpdated (Boolean.TRUE);
     }
@@ -67,7 +67,7 @@ public enum EFieldOption
   NOLASTUPDATED
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setLastUpdated (Boolean.FALSE);
     }
@@ -75,7 +75,7 @@ public enum EFieldOption
   REDIRECT
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setRedirect (Boolean.TRUE);
     }
@@ -83,7 +83,7 @@ public enum EFieldOption
   NOREDIRECT
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setRedirect (Boolean.FALSE);
     }
@@ -91,7 +91,7 @@ public enum EFieldOption
   FINAL
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setFinal (Boolean.TRUE);
     }
@@ -99,13 +99,13 @@ public enum EFieldOption
   NOFINAL
   {
     @Override
-    public void apply (@Nonnull final FieldOptions opt)
+    public void apply (@NonNull final FieldOptions opt)
     {
       opt.setFinal (Boolean.FALSE);
     }
   },;
 
-  public abstract void apply (@Nonnull FieldOptions opt);
+  public abstract void apply (@NonNull FieldOptions opt);
 
   @Nullable
   public static EFieldOption of (@Nullable final String value)

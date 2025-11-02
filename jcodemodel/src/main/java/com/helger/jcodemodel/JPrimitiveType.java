@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Java built-in primitive types. Instances of this class can be obtained as constants of
@@ -59,9 +59,9 @@ public class JPrimitiveType extends AbstractJType
   private JArrayClass m_aArrayClass;
   private boolean m_bUseValueOf;
 
-  protected JPrimitiveType (@Nonnull final JCodeModel aOwner,
-                            @Nonnull final String sTypeName,
-                            @Nonnull final Class <?> aWrapper,
+  protected JPrimitiveType (@NonNull final JCodeModel aOwner,
+                            @NonNull final String sTypeName,
+                            @NonNull final Class <?> aWrapper,
                             final boolean bUseValueOf)
   {
     ValueEnforcer.notNull (aOwner, "Owner");
@@ -73,21 +73,21 @@ public class JPrimitiveType extends AbstractJType
     m_bUseValueOf = bUseValueOf;
   }
 
-  @Nonnull
+  @NonNull
   public JCodeModel owner ()
   {
     return m_aOwner;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     return m_sTypeName;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return fullName ();
@@ -100,7 +100,7 @@ public class JPrimitiveType extends AbstractJType
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public JArrayClass array ()
   {
     if (m_aArrayClass == null)
@@ -113,7 +113,7 @@ public class JPrimitiveType extends AbstractJType
    * to java.lang.Integer if this object represents int.
    */
   @Override
-  @Nonnull
+  @NonNull
   public final AbstractJClass boxify ()
   {
     return m_aWrapperClass;
@@ -125,7 +125,7 @@ public class JPrimitiveType extends AbstractJType
    */
   @Deprecated
   @Override
-  @Nonnull
+  @NonNull
   public final AbstractJType unboxify ()
   {
     return this;
@@ -143,8 +143,8 @@ public class JPrimitiveType extends AbstractJType
    * @return The created expression. Never <code>null</code>
    * @see #useValueOf()
    */
-  @Nonnull
-  public IJExpression wrap (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public IJExpression wrap (@NonNull final IJExpression aExpr)
   {
     if ("void".equals (m_sTypeName))
       throw new IllegalStateException ("Cannot wrap a 'void' expression!");
@@ -165,8 +165,8 @@ public class JPrimitiveType extends AbstractJType
    *        Expression to be unwrapped
    * @return The created primitive value expression. Never <code>null</code>
    */
-  @Nonnull
-  public IJExpression unwrap (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public IJExpression unwrap (@NonNull final IJExpression aExpr)
   {
     if ("void".equals (m_sTypeName))
       throw new IllegalStateException ("Cannot unwrap a 'void' expression!");
@@ -198,7 +198,7 @@ public class JPrimitiveType extends AbstractJType
     m_bUseValueOf = bUseValueOf;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.print (m_sTypeName);
   }

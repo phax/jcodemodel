@@ -43,9 +43,9 @@ package com.helger.jcodemodel.writer;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.helger.jcodemodel.JPackage;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.jcodemodel.JPackage;
 
 /**
  * {@link AbstractCodeWriter} that delegates to another
@@ -57,26 +57,26 @@ public class FilterCodeWriter extends AbstractCodeWriter
 {
   private final AbstractCodeWriter m_aCore;
 
-  public FilterCodeWriter (@Nonnull final AbstractCodeWriter aCore)
+  public FilterCodeWriter (@NonNull final AbstractCodeWriter aCore)
   {
     super (aCore.encoding (), aCore.getNewLine ());
     m_aCore = aCore;
   }
 
-  @Nonnull
+  @NonNull
   protected final AbstractCodeWriter core ()
   {
     return m_aCore;
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
+  public OutputStream openBinary (@NonNull final String sDirName, @NonNull final String sFilename) throws IOException
   {
     return m_aCore.openBinary (sDirName, sFilename);
   }
 
   @Override
-  public SourcePrintWriter openSource (@Nonnull final JPackage aPkg, @Nonnull final String sFilename) throws IOException
+  public SourcePrintWriter openSource (@NonNull final JPackage aPkg, @NonNull final String sFilename) throws IOException
   {
     return m_aCore.openSource (aPkg, sFilename);
   }

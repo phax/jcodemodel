@@ -43,10 +43,10 @@ package com.helger.jcodemodel;
 import java.util.Iterator;
 import java.util.List;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Represents a wildcard type like "? extends Foo" or "? super Foo".
@@ -64,7 +64,7 @@ public class JTypeWildcard extends AbstractJClass
   private final AbstractJClass m_aBoundClass;
   private final EWildcardBoundMode m_eBoundMode;
 
-  protected JTypeWildcard (@Nonnull final AbstractJClass aBoundClass, @Nonnull final EWildcardBoundMode eBoundMode)
+  protected JTypeWildcard (@NonNull final AbstractJClass aBoundClass, @NonNull final EWildcardBoundMode eBoundMode)
   {
     super (aBoundClass.owner ());
     ValueEnforcer.notNull (eBoundMode, "BoundMode");
@@ -72,13 +72,13 @@ public class JTypeWildcard extends AbstractJClass
     m_eBoundMode = eBoundMode;
   }
 
-  @Nonnull
+  @NonNull
   public AbstractJClass bound ()
   {
     return m_aBoundClass;
   }
 
-  @Nonnull
+  @NonNull
   @Override
   public AbstractJType declarable ()
   {
@@ -91,21 +91,21 @@ public class JTypeWildcard extends AbstractJClass
     return m_aBoundClass.containsTypeVar (aVar);
   }
 
-  @Nonnull
+  @NonNull
   public EWildcardBoundMode boundMode ()
   {
     return m_eBoundMode;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return m_eBoundMode.declarationTokens () + m_aBoundClass.name ();
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     return m_eBoundMode.declarationTokens () + m_aBoundClass.fullName ();
@@ -134,7 +134,7 @@ public class JTypeWildcard extends AbstractJClass
    * Returns the interface bounds of this variable.
    */
   @Override
-  @Nonnull
+  @NonNull
   public Iterator <AbstractJClass> _implements ()
   {
     return m_aBoundClass._implements ();
@@ -159,9 +159,9 @@ public class JTypeWildcard extends AbstractJClass
   }
 
   @Override
-  @Nonnull
-  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
-                                             @Nonnull final List <? extends AbstractJClass> aBindings)
+  @NonNull
+  protected AbstractJClass substituteParams (@NonNull final JTypeVar [] aVariables,
+                                             @NonNull final List <? extends AbstractJClass> aBindings)
   {
     final AbstractJClass nb = m_aBoundClass.substituteParams (aVariables, aBindings);
     if (nb == m_aBoundClass)
@@ -170,7 +170,7 @@ public class JTypeWildcard extends AbstractJClass
   }
 
   @Override
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     if (m_aBoundClass._extends () == null)
     {

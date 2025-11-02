@@ -45,7 +45,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Output all source files into a single stream with a little formatting header in front of each
@@ -64,7 +64,7 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
    *        This stream will be closed at the end of the code generation. Except it is System.out or
    *        System.err
    */
-  public SingleStreamCodeWriter (@Nonnull final OutputStream aOS)
+  public SingleStreamCodeWriter (@NonNull final OutputStream aOS)
   {
     this (aOS, JCMWriter.DEFAULT_NEW_LINE);
   }
@@ -76,7 +76,7 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
    * @param sNewLine
    *        The new line string to be used for source files
    */
-  public SingleStreamCodeWriter (@Nonnull final OutputStream aOS, @Nonnull final String sNewLine)
+  public SingleStreamCodeWriter (@NonNull final OutputStream aOS, @NonNull final String sNewLine)
   {
     super (null, sNewLine);
     // Do not close System.out or System.err
@@ -85,7 +85,7 @@ public class SingleStreamCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
+  public OutputStream openBinary (@NonNull final String sDirName, @NonNull final String sFilename) throws IOException
   {
     String sPkgName = sDirName;
     if (sPkgName.length () > 0)

@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * This represent a single parameter to a Java 8 lambda expression.
@@ -56,7 +56,7 @@ public class JLambdaParam implements IJAssignmentTarget, IJDeclaration
   private final AbstractJType m_aType;
   private final String m_sName;
 
-  public JLambdaParam (@Nullable final AbstractJType aType, @Nonnull final String sName)
+  public JLambdaParam (@Nullable final AbstractJType aType, @NonNull final String sName)
   {
     ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_aType = aType;
@@ -74,20 +74,20 @@ public class JLambdaParam implements IJAssignmentTarget, IJDeclaration
     return m_aType != null;
   }
 
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return m_sName;
   }
 
-  public void declare (@Nonnull final IJFormatter f)
+  public void declare (@NonNull final IJFormatter f)
   {
     if (m_aType != null)
       f.generable (m_aType);
     f.id (m_sName);
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.id (m_sName);
   }

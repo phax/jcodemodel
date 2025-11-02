@@ -40,11 +40,11 @@
  */
 package com.helger.jcodemodel.exceptions;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JDefinedClass;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Indicates that the class is already created.<br>
@@ -56,7 +56,7 @@ public class JClassAlreadyExistsException extends JCodeModelException
 {
   private final AbstractJClass m_aExisting;
 
-  public JClassAlreadyExistsException (@Nonnull final AbstractJClass aExisting)
+  public JClassAlreadyExistsException (@NonNull final AbstractJClass aExisting)
   {
     ValueEnforcer.notNull (aExisting, "ExistingClass");
     m_aExisting = aExisting;
@@ -67,7 +67,7 @@ public class JClassAlreadyExistsException extends JCodeModelException
    *
    * @return This method always return non-null valid object.
    */
-  @Nonnull
+  @NonNull
   public AbstractJClass getExistingClass ()
   {
     return m_aExisting;

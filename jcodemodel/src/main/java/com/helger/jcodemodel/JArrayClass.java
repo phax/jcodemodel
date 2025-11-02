@@ -44,10 +44,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Array class.
@@ -59,7 +59,7 @@ public class JArrayClass extends AbstractJClass
   // array component type
   private final AbstractJType m_aComponentType;
 
-  protected JArrayClass (@Nonnull final JCodeModel aOwner, @Nonnull final AbstractJType aComponentType)
+  protected JArrayClass (@NonNull final JCodeModel aOwner, @NonNull final AbstractJType aComponentType)
   {
     super (aOwner);
     m_aComponentType = ValueEnforcer.notNull (aComponentType, "ComponentType");
@@ -72,21 +72,21 @@ public class JArrayClass extends AbstractJClass
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return m_aComponentType.name () + "[]";
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     return m_aComponentType.fullName () + "[]";
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String binaryName ()
   {
     return m_aComponentType.binaryName () + "[]";
@@ -99,7 +99,7 @@ public class JArrayClass extends AbstractJClass
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public JPackage _package ()
   {
     return owner ().rootPackage ();
@@ -142,7 +142,7 @@ public class JArrayClass extends AbstractJClass
   }
 
   @Override
-  @Nonnull
+  @NonNull
   protected AbstractJClass substituteParams (final JTypeVar [] aVariables, final List <? extends AbstractJClass> aBindings)
   {
     if (m_aComponentType.isPrimitive ())

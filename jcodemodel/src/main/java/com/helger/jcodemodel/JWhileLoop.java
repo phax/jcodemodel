@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * While statement
@@ -65,19 +65,19 @@ public class JWhileLoop implements IJStatement
    * @param aTestExpr
    *        Test expression to use.
    */
-  public JWhileLoop (@Nonnull final IJExpression aTestExpr)
+  public JWhileLoop (@NonNull final IJExpression aTestExpr)
   {
     ValueEnforcer.notNull (aTestExpr, "TestExpr");
     m_aTextExpr = aTestExpr;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression test ()
   {
     return m_aTextExpr;
   }
 
-  @Nonnull
+  @NonNull
   public JBlock body ()
   {
     if (m_aBody == null)
@@ -85,7 +85,7 @@ public class JWhileLoop implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     if (JOp.hasTopOp (m_aTextExpr))
     {

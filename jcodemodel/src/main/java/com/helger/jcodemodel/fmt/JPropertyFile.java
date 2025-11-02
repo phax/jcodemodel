@@ -44,10 +44,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.WillNotClose;
 import com.helger.base.rt.NonBlockingProperties;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * A property file.
@@ -56,7 +56,7 @@ public class JPropertyFile extends AbstractJResourceFile
 {
   private final NonBlockingProperties m_aProps = new NonBlockingProperties ();
 
-  public JPropertyFile (@Nonnull final String sName)
+  public JPropertyFile (@NonNull final String sName)
   {
     super (sName);
   }
@@ -70,7 +70,7 @@ public class JPropertyFile extends AbstractJResourceFile
    * @param sValue
    *        Properties value
    */
-  public void add (@Nonnull final String sKey, @Nonnull final String sValue)
+  public void add (@NonNull final String sKey, @NonNull final String sValue)
   {
     m_aProps.put (sKey, sValue);
   }
@@ -83,13 +83,13 @@ public class JPropertyFile extends AbstractJResourceFile
    *        Properties to be added. May not be <code>null</code>.
    * @since 3.4.0
    */
-  public void addAll (@Nonnull final Map <? extends String, ? extends String> aValues)
+  public void addAll (@NonNull final Map <? extends String, ? extends String> aValues)
   {
     m_aProps.putAll (aValues);
   }
 
   @Override
-  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void build (@NonNull @WillNotClose final OutputStream aOS) throws IOException
   {
     m_aProps.store (aOS, null);
   }

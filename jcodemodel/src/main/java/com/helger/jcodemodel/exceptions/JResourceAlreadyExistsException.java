@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel.exceptions;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Indicates that the class is already created.
@@ -54,7 +54,7 @@ public class JResourceAlreadyExistsException extends JCodeModelException
 {
   private final String m_sFilename;
 
-  public JResourceAlreadyExistsException (@Nonnull final String sFilename)
+  public JResourceAlreadyExistsException (@NonNull final String sFilename)
   {
     ValueEnforcer.notEmpty (sFilename, "Filename");
     m_sFilename = sFilename;
@@ -64,7 +64,7 @@ public class JResourceAlreadyExistsException extends JCodeModelException
    * @return The existing filename that already exists as a resource. Neither
    *         <code>null</code> nor empty.
    */
-  @Nonnull
+  @NonNull
   public String getExistingFilename ()
   {
     return m_sFilename;

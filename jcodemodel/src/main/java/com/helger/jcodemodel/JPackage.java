@@ -51,6 +51,9 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.string.StringHelper;
 import com.helger.base.string.StringReplace;
@@ -58,9 +61,6 @@ import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.exceptions.JResourceAlreadyExistsException;
 import com.helger.jcodemodel.util.FSName;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * A Java package.
@@ -112,7 +112,7 @@ public class JPackage implements
    *        The name part to check
    * @return <code>true</code> if it is invalid, <code>false</code> if it is valid
    */
-  public static boolean isForbiddenPackageNamePart (@Nonnull final String sName)
+  public static boolean isForbiddenPackageNamePart (@NonNull final String sName)
   {
     // Empty is not allowed
     if (sName == null || sName.length () == 0)
@@ -171,7 +171,7 @@ public class JPackage implements
    * @throws IllegalArgumentException
    *         If each part of the package name is not a valid identifier
    */
-  protected JPackage (@Nonnull final String sName, @Nonnull final JCodeModel aOwner)
+  protected JPackage (@NonNull final String sName, @NonNull final JCodeModel aOwner)
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (aOwner, "CodeModel");
@@ -220,22 +220,22 @@ public class JPackage implements
     return true;
   }
 
-  @Nonnull
+  @NonNull
   public JPackage getPackage ()
   {
     return this;
   }
 
-  @Nonnull
-  private FSName _createFSName (@Nonnull final String sName)
+  @NonNull
+  private FSName _createFSName (@NonNull final String sName)
   {
     if (m_aOwner.getFileSystemConvention ().isCaseSensistive ())
       return FSName.createCaseSensitive (sName);
     return FSName.createCaseInsensitive (sName);
   }
 
-  @Nonnull
-  public JDefinedClass _class (final int nMods, @Nonnull final String sClassName, @Nonnull final EClassType eClassType)
+  @NonNull
+  public JDefinedClass _class (final int nMods, @NonNull final String sClassName, @NonNull final EClassType eClassType)
                                                                                                                         throws JCodeModelException
   {
     final FSName aKey = _createFSName (sClassName);
@@ -279,7 +279,7 @@ public class JPackage implements
     return m_aClasses.get (aKey);
   }
 
-  @Nonnull
+  @NonNull
   public JDocComment javadoc ()
   {
     if (m_aJavaDoc == null)
@@ -299,7 +299,7 @@ public class JPackage implements
    * @param aClass
    *        Class to be removed. May not be <code>null</code>.
    */
-  public void remove (@Nonnull final AbstractJClass aClass)
+  public void remove (@NonNull final AbstractJClass aClass)
   {
     ValueEnforcer.isTrue (aClass._package () == this,
                           () -> "the specified class (" +
@@ -323,8 +323,8 @@ public class JPackage implements
    * @throws ClassNotFoundException
    *         If the provided class does not exist
    */
-  @Nonnull
-  public AbstractJClass ref (@Nonnull final String sClassLocalName) throws ClassNotFoundException
+  @NonNull
+  public AbstractJClass ref (@NonNull final String sClassLocalName) throws ClassNotFoundException
   {
     ValueEnforcer.isTrue (sClassLocalName.indexOf (SEPARATOR) < 0,
                           () -> "JClass name contains '.': " + sClassLocalName);
@@ -340,8 +340,8 @@ public class JPackage implements
    *        Name of the sub-package
    * @return New sub-package
    */
-  @Nonnull
-  public JPackage subPackage (@Nonnull final String sSubPackageName)
+  @NonNull
+  public JPackage subPackage (@NonNull final String sSubPackageName)
   {
     return owner ()._package (isUnnamed () ? sSubPackageName : m_sName + SEPARATOR + sSubPackageName);
   }
@@ -349,7 +349,7 @@ public class JPackage implements
   /**
    * @return the top-level classes defined in this package.
    */
-  @Nonnull
+  @NonNull
   public Collection <JDefinedClass> classes ()
   {
     return m_aClasses.values ();
@@ -387,7 +387,7 @@ public class JPackage implements
    * @return The name of this package, or the empty string if this is the null package. For example,
    *         this method returns strings like <code>"java.lang"</code>
    */
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return m_sName;
@@ -396,14 +396,14 @@ public class JPackage implements
   /**
    * @return the code model root object being used to create this package.
    */
-  @Nonnull
+  @NonNull
   public final JCodeModel owner ()
   {
     return m_aOwner;
   }
 
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final AbstractJClass aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
     ValueEnforcer.isFalse (isUnnamed (), "the root package cannot be annotated");
 
@@ -415,13 +415,13 @@ public class JPackage implements
     return a;
   }
 
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
     return annotate (m_aOwner.ref (aClazz));
   }
 
-  @Nonnull
+  @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
@@ -429,7 +429,7 @@ public class JPackage implements
     return m_aAnnotations;
   }
 
-  @Nonnull
+  @NonNull
   public Collection <JAnnotationUse> annotations ()
   {
     return Collections.unmodifiableList (annotationsMutable ());
@@ -438,21 +438,21 @@ public class JPackage implements
   /**
    * Convert the package name to directory path equivalent
    */
-  @Nonnull
-  File toPath (@Nonnull final File aDir)
+  @NonNull
+  File toPath (@NonNull final File aDir)
   {
     if (isUnnamed ())
       return aDir;
     return new File (aDir, StringReplace.replaceAll (m_sName, SEPARATOR, File.separatorChar));
   }
 
-  public void declare (@Nonnull final IJFormatter f)
+  public void declare (@NonNull final IJFormatter f)
   {
     if (!isUnnamed ())
       f.print ("package").print (m_sName).print (';').newline ();
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.print (m_sName);
   }

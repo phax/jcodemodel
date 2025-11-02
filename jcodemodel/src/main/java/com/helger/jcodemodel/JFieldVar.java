@@ -42,11 +42,11 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * A field that can have a {@link JDocComment} associated with it
@@ -74,10 +74,10 @@ public class JFieldVar extends JVar implements IJDocCommentable
    * @param aInit
    *        Value to initialize this variable to
    */
-  protected JFieldVar (@Nonnull final JDefinedClass aOwnerClass,
-                       @Nonnull final JMods aMods,
-                       @Nonnull final AbstractJType aType,
-                       @Nonnull final String sName,
+  protected JFieldVar (@NonNull final JDefinedClass aOwnerClass,
+                       @NonNull final JMods aMods,
+                       @NonNull final AbstractJType aType,
+                       @NonNull final String sName,
                        @Nullable final IJExpression aInit)
   {
     super (aMods, aType, sName, aInit);
@@ -87,14 +87,14 @@ public class JFieldVar extends JVar implements IJDocCommentable
   /**
    * @return The owning class. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public JDefinedClass owner ()
   {
     return m_aOwnerClass;
   }
 
   @Override
-  public void name (@Nonnull final String sNewName)
+  public void name (@NonNull final String sNewName)
   {
     // make sure that the new name is available
     ValueEnforcer.isFalse (m_aOwnerClass.containsField (sNewName), () -> "Field name '" + sNewName + "' is already in use");
@@ -104,7 +104,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
     m_aOwnerClass.internalRenameField (sOldName, sNewName, this);
   }
 
-  @Nonnull
+  @NonNull
   public JDocComment javadoc ()
   {
     if (m_aJavaDoc == null)
@@ -116,14 +116,14 @@ public class JFieldVar extends JVar implements IJDocCommentable
    * @return A field reference to this field variable. May be used for public
    *         static final constants.
    */
-  @Nonnull
+  @NonNull
   public JFieldRef fieldRef ()
   {
     return new JFieldRef (m_aOwnerClass, this);
   }
 
   @Override
-  public void declare (@Nonnull final IJFormatter f)
+  public void declare (@NonNull final IJFormatter f)
   {
     // Declaration
     if (m_aJavaDoc != null)
@@ -132,7 +132,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
   }
 
   @Override
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     // Usage
     super.generate (f);

@@ -42,9 +42,9 @@ package com.helger.jcodemodel;
 
 import java.lang.reflect.Modifier;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Modifier groups.
@@ -102,35 +102,35 @@ public class JMods implements IJGenerable
     /* ## check for illegal combinations too */
   }
 
-  @Nonnull
+  @NonNull
   public static JMods forVar (final int nMods)
   {
     _check (nMods, VAR, "variable");
     return new JMods (nMods);
   }
 
-  @Nonnull
+  @NonNull
   public static JMods forField (final int nMods)
   {
     _check (nMods, FIELD, "field");
     return new JMods (nMods);
   }
 
-  @Nonnull
+  @NonNull
   public static JMods forMethod (final int nMods)
   {
     _check (nMods, METHOD, "method");
     return new JMods (nMods);
   }
 
-  @Nonnull
+  @NonNull
   public static JMods forClass (final int nMods)
   {
     _check (nMods, CLASS, "class");
     return new JMods (nMods);
   }
 
-  @Nonnull
+  @NonNull
   public static JMods forInterface (final int nMods)
   {
     _check (nMods, INTERFACE, "interface");
@@ -254,7 +254,7 @@ public class JMods implements IJGenerable
   }
 
   @Override
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     // The order is taken from popular CodeStyle tools
     if ((m_nMods & JMod.PUBLIC) != 0)

@@ -48,10 +48,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Enum Constant. When used as an {@link IJExpression}, this object represents a
@@ -86,13 +86,13 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
    */
   private List <IJExpression> m_aArgs;
 
-  protected JEnumConstant (@Nonnull final AbstractJClass aType, @Nonnull final String sName)
+  protected JEnumConstant (@NonNull final AbstractJClass aType, @NonNull final String sName)
   {
     m_aType = ValueEnforcer.notNull (aType, "Type");
     m_sName = ValueEnforcer.notNull (sName, "Name");
   }
 
-  @Nonnull
+  @NonNull
   public AbstractJClass type ()
   {
     return m_aType;
@@ -101,7 +101,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
   /**
    * @return The plain name of the enum constant, without any type prefix
    */
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return m_sName;
@@ -114,8 +114,8 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
    *        Argument to add to argument list
    * @return this for chaining
    */
-  @Nonnull
-  public JEnumConstant arg (@Nonnull final IJExpression aArg)
+  @NonNull
+  public JEnumConstant arg (@NonNull final IJExpression aArg)
   {
     ValueEnforcer.notNull (aArg, "Arg");
     if (m_aArgs == null)
@@ -124,7 +124,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
     return this;
   }
 
-  @Nonnull
+  @NonNull
   public List <IJExpression> args ()
   {
     return Collections.unmodifiableList (argsMutable ());
@@ -134,7 +134,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
    * @return Mutable list of arguments. Never <code>null</code>.
    * @since 3.0.2
    */
-  @Nonnull
+  @NonNull
   public List <IJExpression> argsMutable ()
   {
     if (m_aArgs == null)
@@ -152,13 +152,13 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
    *
    * @return never null.
    */
-  @Nonnull
+  @NonNull
   public String getName ()
   {
     return m_aType.fullName () + '.' + m_sName;
   }
 
-  @Nonnull
+  @NonNull
   public JDocComment javadoc ()
   {
     if (m_aJavaDoc == null)
@@ -172,8 +172,8 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
    * @param aClazz
    *        The annotation class to annotate the field with
    */
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final AbstractJClass aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
@@ -188,13 +188,13 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
    * @param aClazz
    *        The annotation class to annotate the field with
    */
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
     return annotate (m_aType.owner ().ref (aClazz));
   }
 
-  @Nonnull
+  @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
@@ -202,13 +202,13 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
     return m_aAnnotations;
   }
 
-  @Nonnull
+  @NonNull
   public Collection <JAnnotationUse> annotations ()
   {
     return Collections.unmodifiableList (annotationsMutable ());
   }
 
-  public void declare (@Nonnull final IJFormatter f)
+  public void declare (@NonNull final IJFormatter f)
   {
     if (m_aJavaDoc != null)
       f.newline ().generable (m_aJavaDoc);
@@ -220,7 +220,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
       f.print ('(').generable (m_aArgs).print (')');
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.type (m_aType).print ('.').print (m_sName);
   }

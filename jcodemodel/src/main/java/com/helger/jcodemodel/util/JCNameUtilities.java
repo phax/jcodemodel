@@ -43,10 +43,10 @@ package com.helger.jcodemodel.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.concurrent.Immutable;
 import com.helger.base.enforce.ValueEnforcer;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Ben Fagin
@@ -58,8 +58,8 @@ public final class JCNameUtilities
   private JCNameUtilities ()
   {}
 
-  @Nonnull
-  public static String getFullName (@Nonnull final Class <?> aClass)
+  @NonNull
+  public static String getFullName (@NonNull final Class <?> aClass)
   {
     ValueEnforcer.notNull (aClass, "Class");
 

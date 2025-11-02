@@ -51,6 +51,8 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
@@ -58,8 +60,6 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.JVar;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
@@ -77,7 +77,7 @@ class ClassFiller
     m_aNewClass = newClass;
   }
 
-  void fillClass (@Nonnull final TypeElement element, @Nonnull final TypeEnvironment environment) throws CodeModelBuildingException,
+  void fillClass (@NonNull final TypeElement element, @NonNull final TypeEnvironment environment) throws CodeModelBuildingException,
                                                                                                   ErrorTypeFound
   {
     m_aNewClass.hide ();

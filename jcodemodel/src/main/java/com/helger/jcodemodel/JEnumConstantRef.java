@@ -42,10 +42,10 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Enum Constant reference. When used as an {@link IJExpression}, this object
@@ -65,7 +65,7 @@ public class JEnumConstantRef implements IJExpression
    */
   private final String m_sName;
 
-  protected JEnumConstantRef (@Nonnull final AbstractJClass aType, @Nonnull final String sName)
+  protected JEnumConstantRef (@NonNull final AbstractJClass aType, @NonNull final String sName)
   {
     ValueEnforcer.notNull (aType, "Type");
     ValueEnforcer.notNull (sName, "Name");
@@ -73,7 +73,7 @@ public class JEnumConstantRef implements IJExpression
     m_sName = sName;
   }
 
-  @Nonnull
+  @NonNull
   public AbstractJClass type ()
   {
     return m_aType;
@@ -82,7 +82,7 @@ public class JEnumConstantRef implements IJExpression
   /**
    * @return The plain name of the enum constant, without any type prefix
    */
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return m_sName;
@@ -93,13 +93,13 @@ public class JEnumConstantRef implements IJExpression
    *
    * @return never null.
    */
-  @Nonnull
+  @NonNull
   public String getName ()
   {
     return m_aType.fullName () + '.' + m_sName;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.type (m_aType).print ('.').print (m_sName);
   }

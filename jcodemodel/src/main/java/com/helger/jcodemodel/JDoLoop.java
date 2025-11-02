@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Do loops
@@ -65,18 +65,18 @@ public class JDoLoop implements IJStatement
    * @param aTest
    *        Test expression
    */
-  public JDoLoop (@Nonnull final IJExpression aTest)
+  public JDoLoop (@NonNull final IJExpression aTest)
   {
     m_aTest = ValueEnforcer.notNull (aTest, "Test");
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression test ()
   {
     return m_aTest;
   }
 
-  @Nonnull
+  @NonNull
   public JBlock body ()
   {
     if (m_aBody == null)
@@ -84,7 +84,7 @@ public class JDoLoop implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.print ("do");
     if (m_aBody != null)

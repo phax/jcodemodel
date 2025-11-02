@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Things that can be values of an annotation element.
@@ -49,76 +49,76 @@ import jakarta.annotation.Nonnull;
  */
 public abstract class AbstractJAnnotationValue implements IJGenerable
 {
-  @Nonnull
+  @NonNull
   public static JAnnotationStringValue wrap (final boolean bValue)
   {
     return new JAnnotationStringValue (JExpr.lit (bValue), Boolean.valueOf (bValue));
   }
 
-  @Nonnull
+  @NonNull
   public static JAnnotationStringValue wrap (final byte nValue)
   {
     return new JAnnotationStringValue (JExpr.lit (nValue), Byte.valueOf (nValue));
   }
 
-  @Nonnull
+  @NonNull
   public static JAnnotationStringValue wrap (final char cValue)
   {
     return new JAnnotationStringValue (JExpr.lit (cValue), Character.valueOf (cValue));
   }
 
-  @Nonnull
+  @NonNull
   public static JAnnotationStringValue wrap (final double dValue)
   {
     return new JAnnotationStringValue (JExpr.lit (dValue), Double.valueOf (dValue));
   }
 
-  @Nonnull
+  @NonNull
   public static JAnnotationStringValue wrap (final float fValue)
   {
     return new JAnnotationStringValue (JExpr.lit (fValue), Float.valueOf (fValue));
   }
 
-  @Nonnull
+  @NonNull
   public static JAnnotationStringValue wrap (final int nValue)
   {
     return new JAnnotationStringValue (JExpr.lit (nValue), Integer.valueOf (nValue));
   }
 
-  @Nonnull
+  @NonNull
   public static JAnnotationStringValue wrap (final long nValue)
   {
     return new JAnnotationStringValue (JExpr.lit (nValue), Long.valueOf (nValue));
   }
 
-  @Nonnull
+  @NonNull
   public static JAnnotationStringValue wrap (final short nValue)
   {
     return new JAnnotationStringValue (JExpr.lit (nValue), Short.valueOf (nValue));
   }
 
-  @Nonnull
-  public static JAnnotationStringValue wrap (@Nonnull final String sValue)
+  @NonNull
+  public static JAnnotationStringValue wrap (@NonNull final String sValue)
   {
     // Escape string values with quotes so that they can
     // be generated accordingly
     return new JAnnotationStringValue (JExpr.lit (sValue), sValue);
   }
 
-  @Nonnull
-  public static JAnnotationStringValue wrap (@Nonnull final JEnumConstant aValue)
+  @NonNull
+  public static JAnnotationStringValue wrap (@NonNull final JEnumConstant aValue)
   {
     return new JAnnotationStringValue (aValue);
   }
 
-  @Nonnull
-  public static JAnnotationStringValue wrap (@Nonnull final AbstractJType aType)
+  @NonNull
+  public static JAnnotationStringValue wrap (@NonNull final AbstractJType aType)
   {
     return new JAnnotationStringValue (aType.boxify ().dotclass (), aType);
   }
 
-  @Nonnull
-  public static JAnnotationStringValue wrap (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JAnnotationStringValue wrap (@NonNull final IJExpression aExpr)
   {
     return new JAnnotationStringValue (aExpr);
   }

@@ -47,14 +47,14 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.io.nonblocking.NonBlockingBufferedWriter;
 import com.helger.base.string.StringReplace;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.util.UnicodeEscapeWriter;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Receives generated code and writes to the appropriate storage.
@@ -69,7 +69,7 @@ public abstract class AbstractCodeWriter implements Closeable
   private final Charset m_aEncoding;
   private final String m_sNewLine;
 
-  protected AbstractCodeWriter (@Nullable final Charset aEncoding, @Nonnull final String sNewLine)
+  protected AbstractCodeWriter (@Nullable final Charset aEncoding, @NonNull final String sNewLine)
   {
     ValueEnforcer.notNull (sNewLine, "NewLine");
 
@@ -90,7 +90,7 @@ public abstract class AbstractCodeWriter implements Closeable
    * @return The new line string as provided in the constructor. Defaults to
    *         <code>System.getProperty ("line.separator")</code>
    */
-  @Nonnull
+  @NonNull
   public String getNewLine ()
   {
     return m_sNewLine;
@@ -112,11 +112,11 @@ public abstract class AbstractCodeWriter implements Closeable
    *         On IO error
    * @since v3.3.1
    */
-  @Nonnull
-  public abstract OutputStream openBinary (@Nonnull String sDirName, @Nonnull String sFilename) throws IOException;
+  @NonNull
+  public abstract OutputStream openBinary (@NonNull String sDirName, @NonNull String sFilename) throws IOException;
 
-  @Nonnull
-  protected static String toDirName (@Nonnull final JPackage aPackage)
+  @NonNull
+  protected static String toDirName (@NonNull final JPackage aPackage)
   {
     // Convert package name to directory name
     // Forward slash works for Windows, Linux and ZIP files
@@ -137,8 +137,8 @@ public abstract class AbstractCodeWriter implements Closeable
    * @throws IOException
    *         On IO error
    */
-  @Nonnull
-  public final OutputStream openBinary (@Nonnull final JPackage aPackage, @Nonnull final String sFilename)
+  @NonNull
+  public final OutputStream openBinary (@NonNull final JPackage aPackage, @NonNull final String sFilename)
                                                                                                            throws IOException
   {
     return openBinary (toDirName (aPackage), sFilename);
@@ -158,8 +158,8 @@ public abstract class AbstractCodeWriter implements Closeable
    * @throws IOException
    *         On IO error
    */
-  @Nonnull
-  public SourcePrintWriter openSource (@Nonnull final JPackage aPackage, @Nonnull final String sFilename)
+  @NonNull
+  public SourcePrintWriter openSource (@NonNull final JPackage aPackage, @NonNull final String sFilename)
                                                                                                           throws IOException
   {
     final OutputStream aOS = openBinary (aPackage, sFilename);

@@ -42,10 +42,10 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * JAtoms: Simple code components that merely generate themselves.
@@ -54,7 +54,7 @@ public class JAtom implements IJExpression
 {
   private final String m_sWhat;
 
-  protected JAtom (@Nonnull final String sWhat)
+  protected JAtom (@NonNull final String sWhat)
   {
     ValueEnforcer.notNull (sWhat, "What");
     m_sWhat = sWhat;
@@ -64,13 +64,13 @@ public class JAtom implements IJExpression
    * @return The text representation of this atom content. The same as what as
    *         passed in the constructor.
    */
-  @Nonnull
+  @NonNull
   public String what ()
   {
     return m_sWhat;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.print (m_sWhat);
   }

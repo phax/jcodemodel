@@ -47,12 +47,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.Test;
 
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.writer.StringCodeWriter;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * abstract method for a test of copying. Such a test consist in creating a source codemodel,
@@ -111,19 +110,19 @@ public class ModelCopyTest
     }
   }
 
-  @Nonnull
-  protected JCodeModel copy (@Nonnull final JCodeModel source)
+  @NonNull
+  protected JCodeModel copy (@NonNull final JCodeModel source)
   {
     return source.copy ();
   }
 
-  @Nonnull
-  protected String represent (@Nonnull final JCodeModel target)
+  @NonNull
+  protected String represent (@NonNull final JCodeModel target)
   {
     return StringCodeWriter.represent (target);
   }
 
-  @Nonnull
+  @NonNull
   public List <Consumer <JCodeModel>> modifications ()
   {
     return Arrays.asList (cm -> {

@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * This is a single Java 8 lambda method reference expression.
@@ -69,7 +69,7 @@ public class JLambdaMethodRef implements IJExpression
    * @throws IllegalArgumentException
    *         If the passed method is not static
    */
-  public JLambdaMethodRef (@Nonnull final JMethod aMethod)
+  public JLambdaMethodRef (@NonNull final JMethod aMethod)
   {
     ValueEnforcer.notNull (aMethod, "Method");
     ValueEnforcer.isTrue (aMethod.mods ().isStatic (),
@@ -93,7 +93,7 @@ public class JLambdaMethodRef implements IJExpression
    *        Name of the static method to reference. May neither be
    *        <code>null</code> nor empty.
    */
-  public JLambdaMethodRef (@Nonnull final AbstractJType aType, @Nonnull final String sMethod)
+  public JLambdaMethodRef (@NonNull final AbstractJType aType, @NonNull final String sMethod)
   {
     ValueEnforcer.notNull (aType, "Type");
     ValueEnforcer.notEmpty (sMethod, "Method");
@@ -116,7 +116,7 @@ public class JLambdaMethodRef implements IJExpression
    *        Name of the method to reference. May neither be <code>null</code>
    *        nor empty.
    */
-  public JLambdaMethodRef (@Nonnull final JVar aVar, @Nonnull final String sMethod)
+  public JLambdaMethodRef (@NonNull final JVar aVar, @NonNull final String sMethod)
   {
     ValueEnforcer.notNull (aVar, "Var");
     ValueEnforcer.notEmpty (sMethod, "Method");
@@ -138,7 +138,7 @@ public class JLambdaMethodRef implements IJExpression
    * @param aMethod
    *        The instance method to reference. May not be <code>null</code>.
    */
-  public JLambdaMethodRef (@Nonnull final JVar aVar, @Nonnull final JMethod aMethod)
+  public JLambdaMethodRef (@NonNull final JVar aVar, @NonNull final JMethod aMethod)
   {
     ValueEnforcer.notNull (aVar, "Var");
     ValueEnforcer.notNull (aMethod, "Method");
@@ -165,7 +165,7 @@ public class JLambdaMethodRef implements IJExpression
    *        Name of the method to reference. May neither be <code>null</code>
    *        nor empty.
    */
-  public JLambdaMethodRef (@Nonnull final IJExpression aLhsExpr, @Nonnull final String sMethod)
+  public JLambdaMethodRef (@NonNull final IJExpression aLhsExpr, @NonNull final String sMethod)
   {
     ValueEnforcer.notNull (aLhsExpr, "Invocation");
     ValueEnforcer.notEmpty (sMethod, "Method");
@@ -189,7 +189,7 @@ public class JLambdaMethodRef implements IJExpression
    * @param aMethod
    *        The instance method to reference. May not be <code>null</code>.
    */
-  public JLambdaMethodRef (@Nonnull final IJExpression aLhsExpr, @Nonnull final JMethod aMethod)
+  public JLambdaMethodRef (@NonNull final IJExpression aLhsExpr, @NonNull final JMethod aMethod)
   {
     ValueEnforcer.notNull (aLhsExpr, "Invocation");
     ValueEnforcer.notNull (aMethod, "Method");
@@ -257,14 +257,14 @@ public class JLambdaMethodRef implements IJExpression
   /**
    * @return The name of the referenced method. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public String methodName ()
   {
     return m_aMethod != null ? m_aMethod.name () : m_sMethodName;
   }
 
   @Override
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     if (isStaticRef ())
       f.type (type ());
@@ -286,8 +286,8 @@ public class JLambdaMethodRef implements IJExpression
    * @return The created object. Never <code>null</code>.
    * @since 3.2.4
    */
-  @Nonnull
-  public static JLambdaMethodRef createForNew (@Nonnull final AbstractJType aType)
+  @NonNull
+  public static JLambdaMethodRef createForNew (@NonNull final AbstractJType aType)
   {
     return new JLambdaMethodRef (aType, "new");
   }

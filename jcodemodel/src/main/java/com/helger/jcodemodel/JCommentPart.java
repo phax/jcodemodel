@@ -44,8 +44,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A part is a part of a javadoc comment, and it is a list of values.
@@ -75,7 +75,7 @@ public class JCommentPart extends ArrayList <Object>
    *        {@link Object#toString()}.
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   public JCommentPart append (@Nullable final Object aValue)
   {
     add (aValue);
@@ -169,7 +169,7 @@ public class JCommentPart extends ArrayList <Object>
    * @param sIndent
    *        Indentation to use
    */
-  protected void format (@Nonnull final IJFormatter f, final String sIndent)
+  protected void format (@NonNull final IJFormatter f, final String sIndent)
   {
     if (!f.isPrinting ())
     {
@@ -231,8 +231,8 @@ public class JCommentPart extends ArrayList <Object>
    *        Source text. May not be <code>null</code>.
    * @return Escaped text
    */
-  @Nonnull
-  private static String _escape (@Nonnull final String sText)
+  @NonNull
+  private static String _escape (@NonNull final String sText)
   {
     String s = sText;
     while (true)

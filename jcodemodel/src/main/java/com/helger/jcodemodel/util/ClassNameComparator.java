@@ -43,9 +43,9 @@ package com.helger.jcodemodel.util;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import com.helger.jcodemodel.AbstractJClass;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.jcodemodel.AbstractJClass;
 
 /**
  * Comparator object that sorts {@link AbstractJClass}es in the order of their names.
@@ -56,7 +56,7 @@ public final class ClassNameComparator implements Comparator <AbstractJClass>, S
 {
   private static final ClassNameComparator INSTANCE = new ClassNameComparator ();
 
-  @Nonnull
+  @NonNull
   public static ClassNameComparator getInstance ()
   {
     return INSTANCE;
@@ -71,7 +71,7 @@ public final class ClassNameComparator implements Comparator <AbstractJClass>, S
    * conventional way for readability.
    */
   @Override
-  public int compare (@Nonnull final AbstractJClass aObj1, @Nonnull final AbstractJClass aObj2)
+  public int compare (@NonNull final AbstractJClass aObj1, @NonNull final AbstractJClass aObj2)
   {
     if (aObj1.isError () && aObj2.isError ())
       return 0;

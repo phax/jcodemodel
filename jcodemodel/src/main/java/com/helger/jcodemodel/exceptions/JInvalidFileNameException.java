@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel.exceptions;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <p>

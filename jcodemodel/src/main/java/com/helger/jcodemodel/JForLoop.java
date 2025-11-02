@@ -44,10 +44,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * For statement
@@ -62,10 +62,10 @@ public class JForLoop implements IJStatement
   public JForLoop ()
   {}
 
-  @Nonnull
+  @NonNull
   public JVar init (final int nMods,
-                    @Nonnull final AbstractJType aType,
-                    @Nonnull final String sVarName,
+                    @NonNull final AbstractJType aType,
+                    @NonNull final String sVarName,
                     @Nullable final IJExpression aInitExpr)
   {
     final JVar aVar = new JVar (JMods.forVar (nMods), aType, sVarName, aInitExpr);
@@ -73,13 +73,13 @@ public class JForLoop implements IJStatement
     return aVar;
   }
 
-  @Nonnull
-  public JVar init (@Nonnull final AbstractJType aType, @Nonnull final String sVarName, @Nullable final IJExpression aInitExpr)
+  @NonNull
+  public JVar init (@NonNull final AbstractJType aType, @NonNull final String sVarName, @Nullable final IJExpression aInitExpr)
   {
     return init (JMod.NONE, aType, sVarName, aInitExpr);
   }
 
-  public void init (@Nonnull final JVar aVar, @Nonnull final IJExpression aRhs)
+  public void init (@NonNull final JVar aVar, @NonNull final IJExpression aRhs)
   {
     final JAssignment aAssignment = JExpr.assign (aVar, aRhs);
     m_aInitExprs.add (aAssignment);
@@ -88,7 +88,7 @@ public class JForLoop implements IJStatement
   /**
    * @return List of {@link IJExpression} or {@link JVar}
    */
-  @Nonnull
+  @NonNull
   public List <IJObject> initsMutable ()
   {
     return m_aInitExprs;
@@ -97,7 +97,7 @@ public class JForLoop implements IJStatement
   /**
    * @return List of {@link IJExpression} or {@link JVar}
    */
-  @Nonnull
+  @NonNull
   public List <IJObject> inits ()
   {
     return Collections.unmodifiableList (initsMutable ());
@@ -114,25 +114,25 @@ public class JForLoop implements IJStatement
     return m_aTestExpr;
   }
 
-  public void update (@Nonnull final IJExpression aUpdate)
+  public void update (@NonNull final IJExpression aUpdate)
   {
     ValueEnforcer.notNull (aUpdate, "Update");
     m_aUpdateExprs.add (aUpdate);
   }
 
-  @Nonnull
+  @NonNull
   public List <IJExpression> updatesMutable ()
   {
     return m_aUpdateExprs;
   }
 
-  @Nonnull
+  @NonNull
   public List <IJExpression> updates ()
   {
     return Collections.unmodifiableList (updatesMutable ());
   }
 
-  @Nonnull
+  @NonNull
   public JBlock body ()
   {
     if (m_aBody == null)
@@ -140,7 +140,7 @@ public class JForLoop implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.print ("for (");
     boolean bFirst = true;

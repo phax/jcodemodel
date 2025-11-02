@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * ForEach Statement This will generate the code for statement based on the new
@@ -59,10 +59,10 @@ public class JForEach implements IJStatement
   private final IJExpression m_aCollection;
   private final JVar m_aLoopVar;
 
-  public JForEach (@Nonnull final JMods aMods,
-                   @Nonnull final AbstractJType aVarType,
-                   @Nonnull final String sVarName,
-                   @Nonnull final IJExpression aCollection)
+  public JForEach (@NonNull final JMods aMods,
+                   @NonNull final AbstractJType aVarType,
+                   @NonNull final String sVarName,
+                   @NonNull final IJExpression aCollection)
   {
     ValueEnforcer.notNull (aMods, "Mods");
     ValueEnforcer.notNull (aVarType, "VarType");
@@ -80,13 +80,13 @@ public class JForEach implements IJStatement
    * @return the current modifiers of this method. Always return non-null valid
    *         object.
    */
-  @Nonnull
+  @NonNull
   public JMods mods ()
   {
     return m_aMods;
   }
 
-  @Nonnull
+  @NonNull
   public AbstractJType type ()
   {
     return m_aType;
@@ -95,19 +95,19 @@ public class JForEach implements IJStatement
   /**
    * @return a reference to the loop variable.
    */
-  @Nonnull
+  @NonNull
   public JVar var ()
   {
     return m_aLoopVar;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression collection ()
   {
     return m_aCollection;
   }
 
-  @Nonnull
+  @NonNull
   public JBlock body ()
   {
     if (m_aBody == null)
@@ -115,7 +115,7 @@ public class JForEach implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.print ("for (");
     f.generable (m_aMods).generable (m_aType).id (m_sVarName).print (": ").generable (m_aCollection);

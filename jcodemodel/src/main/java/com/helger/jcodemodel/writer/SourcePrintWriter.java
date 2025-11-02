@@ -44,10 +44,9 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * A special version of {@link java.io.PrintWriter} that has a customizable new
@@ -61,13 +60,13 @@ public final class SourcePrintWriter extends FilterWriter
 
   private final String m_sNewLine;
 
-  public SourcePrintWriter (@Nonnull final Writer aWrappedWriter, @Nonnull final String sNewLine)
+  public SourcePrintWriter (@NonNull final Writer aWrappedWriter, @NonNull final String sNewLine)
   {
     super (aWrappedWriter);
     m_sNewLine = sNewLine;
   }
 
-  private void _handleException (@Nonnull final IOException ex, @Nonnull final String sSource)
+  private void _handleException (@NonNull final IOException ex, @NonNull final String sSource)
   {
     LOGGER.error ("Error on Writer: " + sSource, ex);
   }
@@ -84,7 +83,7 @@ public final class SourcePrintWriter extends FilterWriter
     }
   }
 
-  private void _write (@Nonnull final String sStr)
+  private void _write (@NonNull final String sStr)
   {
     try
     {
@@ -101,7 +100,7 @@ public final class SourcePrintWriter extends FilterWriter
     _write (c);
   }
 
-  public void print (@Nonnull final String sStr)
+  public void print (@NonNull final String sStr)
   {
     _write (sStr);
   }

@@ -42,8 +42,8 @@ package com.helger.jcodemodel;
 
 import java.util.Iterator;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A representation of a type in codeModel. A type is always either primitive (
@@ -64,8 +64,8 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * @throws IllegalArgumentException
    *         If the passed type name is not a primitive type name
    */
-  @Nonnull
-  public static JPrimitiveType parse (@Nonnull final JCodeModel aCodeModel, @Nonnull final String sTypeName)
+  @NonNull
+  public static JPrimitiveType parse (@NonNull final JCodeModel aCodeModel, @NonNull final String sTypeName)
   {
     if (sTypeName.equals ("void"))
       return aCodeModel.VOID;
@@ -104,7 +104,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    *
    * @return Name like "Foo$Bar", "int", "java.lang.String", "java.io.File[]". Never null.
    */
-  @Nonnull
+  @NonNull
   public String binaryName ()
   {
     return fullName ();
@@ -175,7 +175,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    *
    * @return Never <code>null</code>
    */
-  @Nonnull
+  @NonNull
   public abstract AbstractJClass boxify ();
 
   /**
@@ -186,7 +186,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    *
    * @return Never <code>null</code>
    */
-  @Nonnull
+  @NonNull
   public abstract AbstractJType unboxify ();
 
   /**
@@ -194,7 +194,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    *         <code>List&lt;Integer&gt;</code> in which case this method returns the reference to
    *         <code>List</code> without any generic type parameters.
    */
-  @Nonnull
+  @NonNull
   public AbstractJType erasure ()
   {
     return this;
@@ -205,7 +205,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    *         wildcards types that can't be used in such context in which case this method returns
    *         the bound of wildcard type.
    */
-  @Nonnull
+  @NonNull
   public AbstractJType declarable ()
   {
     return this;
@@ -219,7 +219,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    * @throws IllegalArgumentException
    *         If this is not an array type
    */
-  @Nonnull
+  @NonNull
   public AbstractJType elementType ()
   {
     throw new IllegalArgumentException ("Not an array type: " + fullName ());
@@ -267,12 +267,12 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
    *        Type to check
    * @return <code>true</code> if assignable, <code>false</code> if not
    */
-  public boolean isAssignableFrom (@Nonnull final AbstractJType aThat)
+  public boolean isAssignableFrom (@NonNull final AbstractJType aThat)
   {
     return isAssignableFrom (aThat, true);
   }
 
-  protected boolean isAssignableFrom (@Nonnull final AbstractJType aThat,
+  protected boolean isAssignableFrom (@NonNull final AbstractJType aThat,
                                       final boolean bAllowsRawTypeUnchekedConversion)
   {
     if (isError () || aThat.isError ())
@@ -358,7 +358,7 @@ public abstract class AbstractJType implements IJGenerable, IJOwned
     return false;
   }
 
-  @Nonnull
+  @NonNull
   public JInvocation _new ()
   {
     return JExpr._new (this);

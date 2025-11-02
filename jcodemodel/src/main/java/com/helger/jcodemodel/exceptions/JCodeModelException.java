@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel.exceptions;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Base class for all code model related exception.
@@ -54,12 +54,12 @@ public class JCodeModelException extends Exception
   protected JCodeModelException ()
   {}
 
-  public JCodeModelException (@Nonnull final String sMsg)
+  public JCodeModelException (@NonNull final String sMsg)
   {
     super (sMsg);
   }
 
-  public JCodeModelException (@Nonnull final String sMsg, @Nullable final Throwable aCause)
+  public JCodeModelException (@NonNull final String sMsg, @Nullable final Throwable aCause)
   {
     super (sMsg, aCause);
   }

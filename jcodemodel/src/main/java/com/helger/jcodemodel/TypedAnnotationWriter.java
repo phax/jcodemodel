@@ -50,11 +50,11 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.reflection.GenericReflection;
 import com.helger.jcodemodel.util.JCSecureLoader;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Dynamically implements the typed annotation writer interfaces.
@@ -91,22 +91,22 @@ public class TypedAnnotationWriter <ANNOTYPE extends Annotation, WRITERTYPE exte
    */
   private Map <String, JAnnotationArrayMember> m_aArrays;
 
-  protected TypedAnnotationWriter (@Nonnull final Class <ANNOTYPE> aAnnotation,
-                                   @Nonnull final Class <WRITERTYPE> aWriterType,
-                                   @Nonnull final JAnnotationUse aUse)
+  protected TypedAnnotationWriter (@NonNull final Class <ANNOTYPE> aAnnotation,
+                                   @NonNull final Class <WRITERTYPE> aWriterType,
+                                   @NonNull final JAnnotationUse aUse)
   {
     m_aAnnotationType = aAnnotation;
     m_aWriterType = aWriterType;
     m_aUse = aUse;
   }
 
-  @Nonnull
+  @NonNull
   public JAnnotationUse getAnnotationUse ()
   {
     return m_aUse;
   }
 
-  @Nonnull
+  @NonNull
   public Class <ANNOTYPE> getAnnotationType ()
   {
     return m_aAnnotationType;
@@ -281,7 +281,7 @@ public class TypedAnnotationWriter <ANNOTYPE extends Annotation, WRITERTYPE exte
   }
 
   @Nullable
-  private static Class <? extends Annotation> _findAnnotationTypeRecursive (@Nonnull final Class <?> aClazz)
+  private static Class <? extends Annotation> _findAnnotationTypeRecursive (@NonNull final Class <?> aClazz)
   {
     for (final Type t : aClazz.getGenericInterfaces ())
     {
@@ -308,9 +308,9 @@ public class TypedAnnotationWriter <ANNOTYPE extends Annotation, WRITERTYPE exte
   /**
    * Creates a new typed annotation writer.
    */
-  @Nonnull
-  static <W extends IJAnnotationWriter <? extends Annotation>> W create (@Nonnull final Class <W> aWriterType,
-                                                                         @Nonnull final IJAnnotatable aAnnotatable)
+  @NonNull
+  static <W extends IJAnnotationWriter <? extends Annotation>> W create (@NonNull final Class <W> aWriterType,
+                                                                         @NonNull final IJAnnotatable aAnnotatable)
   {
     final Class <? extends Annotation> a = _findAnnotationTypeRecursive (aWriterType);
     return (W) new TypedAnnotationWriter (a, aWriterType, aAnnotatable.annotate (a))._createProxy ();

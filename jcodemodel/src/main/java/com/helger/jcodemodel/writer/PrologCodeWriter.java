@@ -42,10 +42,10 @@ package com.helger.jcodemodel.writer;
 
 import java.io.IOException;
 
-import com.helger.jcodemodel.JPackage;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.jcodemodel.JPackage;
 
 /**
  * Writes all the source files under the specified file folder and inserts a
@@ -69,14 +69,14 @@ public class PrologCodeWriter extends FilterCodeWriter
    *        the beginning of each line to make it a valid Java comment, so the
    *        caller can just pass strings like "abc\ndef"
    */
-  public PrologCodeWriter (@Nonnull final AbstractCodeWriter aCore, @Nullable final String prolog)
+  public PrologCodeWriter (@NonNull final AbstractCodeWriter aCore, @Nullable final String prolog)
   {
     super (aCore);
     m_sProlog = prolog;
   }
 
   @Override
-  public SourcePrintWriter openSource (@Nonnull final JPackage pkg, @Nonnull final String sFilename) throws IOException
+  public SourcePrintWriter openSource (@NonNull final JPackage pkg, @NonNull final String sFilename) throws IOException
   {
     final SourcePrintWriter w = super.openSource (pkg, sFilename);
 

@@ -48,10 +48,10 @@ import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.helger.base.string.StringHelper;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.string.StringHelper;
 
 /**
  * Writes all the source files under the specified file folder.
@@ -72,38 +72,38 @@ public class FileCodeWriter extends AbstractCodeWriter
   /** Files that shall be marked as read only. */
   private final Set <File> m_aReadOnlyFiles = new HashSet <> ();
 
-  public FileCodeWriter (@Nonnull final File aTargetDir) throws IOException
+  public FileCodeWriter (@NonNull final File aTargetDir) throws IOException
   {
     this (aTargetDir, DEFAULT_MARK_READ_ONLY, DEFAULT_CHARSET, JCMWriter.DEFAULT_NEW_LINE);
   }
 
-  public FileCodeWriter (@Nonnull final File aTargetDir, @Nullable final Charset aEncoding) throws IOException
+  public FileCodeWriter (@NonNull final File aTargetDir, @Nullable final Charset aEncoding) throws IOException
   {
     this (aTargetDir, DEFAULT_MARK_READ_ONLY, aEncoding, JCMWriter.DEFAULT_NEW_LINE);
   }
 
-  public FileCodeWriter (@Nonnull final File aTargetDir, final boolean bMarkReadOnly) throws IOException
+  public FileCodeWriter (@NonNull final File aTargetDir, final boolean bMarkReadOnly) throws IOException
   {
     this (aTargetDir, bMarkReadOnly, DEFAULT_CHARSET, JCMWriter.DEFAULT_NEW_LINE);
   }
 
-  public FileCodeWriter (@Nonnull final File aTargetDir,
+  public FileCodeWriter (@NonNull final File aTargetDir,
                          @Nullable final Charset aEncoding,
-                         @Nonnull final String sNewLine) throws IOException
+                         @NonNull final String sNewLine) throws IOException
   {
     this (aTargetDir, DEFAULT_MARK_READ_ONLY, aEncoding, sNewLine);
   }
 
-  public FileCodeWriter (@Nonnull final File aTargetDir, final boolean bMarkReadOnly, @Nullable final Charset aEncoding)
+  public FileCodeWriter (@NonNull final File aTargetDir, final boolean bMarkReadOnly, @Nullable final Charset aEncoding)
                                                                                                                          throws IOException
   {
     this (aTargetDir, bMarkReadOnly, aEncoding, JCMWriter.DEFAULT_NEW_LINE);
   }
 
-  public FileCodeWriter (@Nonnull final File aTargetDir,
+  public FileCodeWriter (@NonNull final File aTargetDir,
                          final boolean bMarkReadOnly,
                          @Nullable final Charset aEncoding,
-                         @Nonnull final String sNewLine) throws IOException
+                         @NonNull final String sNewLine) throws IOException
   {
     super (aEncoding, sNewLine);
     m_aTargetDir = aTargetDir;
@@ -113,14 +113,14 @@ public class FileCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  @Nonnull
-  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
+  @NonNull
+  public OutputStream openBinary (@NonNull final String sDirName, @NonNull final String sFilename) throws IOException
   {
     return new FileOutputStream (getFile (sDirName, sFilename));
   }
 
-  @Nonnull
-  protected File getFile (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
+  @NonNull
+  protected File getFile (@NonNull final String sDirName, @NonNull final String sFilename) throws IOException
   {
     final File aDir;
     if (StringHelper.isEmpty (sDirName))
