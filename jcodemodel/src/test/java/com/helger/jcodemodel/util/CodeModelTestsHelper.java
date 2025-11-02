@@ -56,6 +56,7 @@ import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.internal.compiler.impl.CompilerOptions;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,8 +84,6 @@ import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
 import com.helger.jcodemodel.writer.SingleStreamCodeWriter;
 import com.helger.jcodemodel.writer.SourcePrintWriter;
 
-import jakarta.annotation.Nonnull;
-
 /**
  * Various utilities for codemodel tests.
  *
@@ -96,8 +95,8 @@ public final class CodeModelTestsHelper
   public static final Charset DEFAULT_ENCODING = StandardCharsets.UTF_8;
   private static final Logger LOGGER = LoggerFactory.getLogger (CodeModelTestsHelper.class);
 
-  @Nonnull
-  private static IJFormatter _createFormatter (@Nonnull final NonBlockingStringWriter aWriter)
+  @NonNull
+  private static IJFormatter _createFormatter (@NonNull final NonBlockingStringWriter aWriter)
   {
     return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.DEFAULT_NEW_LINE),
                            JCMWriter.DEFAULT_INDENT_STRING);
@@ -114,8 +113,8 @@ public final class CodeModelTestsHelper
    *        expression to print into a string.
    * @return Expression formatted as a string.
    */
-  @Nonnull
-  public static String toString (@Nonnull final IJExpression aGenerable)
+  @NonNull
+  public static String toString (@NonNull final IJExpression aGenerable)
   {
     ValueEnforcer.notNull (aGenerable, "Generable");
 
@@ -138,8 +137,8 @@ public final class CodeModelTestsHelper
    *        declaration to print into a string.
    * @return Declaration formatted as a string.
    */
-  @Nonnull
-  public static String toString (@Nonnull final IJDeclaration aDeclaration)
+  @NonNull
+  public static String toString (@NonNull final IJDeclaration aDeclaration)
   {
     ValueEnforcer.notNull (aDeclaration, "Declaration");
 
@@ -162,8 +161,8 @@ public final class CodeModelTestsHelper
    *        declaration to print into a string.
    * @return Declaration formatted as a string.
    */
-  @Nonnull
-  public static String toString (@Nonnull final IJStatement aStatement)
+  @NonNull
+  public static String toString (@NonNull final IJStatement aStatement)
   {
     ValueEnforcer.notNull (aStatement, "Statement");
 
@@ -179,8 +178,8 @@ public final class CodeModelTestsHelper
     }
   }
 
-  @Nonnull
-  public static String declare (@Nonnull final IJDeclaration aDeclaration)
+  @NonNull
+  public static String declare (@NonNull final IJDeclaration aDeclaration)
   {
     ValueEnforcer.notNull (aDeclaration, "Declaration");
 
@@ -196,8 +195,8 @@ public final class CodeModelTestsHelper
     }
   }
 
-  @Nonnull
-  public static String generate (@Nonnull final IJGenerable aGenerable)
+  @NonNull
+  public static String generate (@NonNull final IJGenerable aGenerable)
   {
     ValueEnforcer.notNull (aGenerable, "Generable");
 
@@ -220,8 +219,8 @@ public final class CodeModelTestsHelper
    *        Source code model
    * @return The byte array
    */
-  @Nonnull
-  public static byte [] getAllBytes (@Nonnull final JCodeModel cm)
+  @NonNull
+  public static byte [] getAllBytes (@NonNull final JCodeModel cm)
   {
     try (final NonBlockingByteArrayOutputStream aBAOS = new NonBlockingByteArrayOutputStream ())
     {
@@ -234,7 +233,7 @@ public final class CodeModelTestsHelper
     }
   }
 
-  @Nonnull
+  @NonNull
   private static CompilationUnit _parseWithJavaParser (final String sUnitName, final byte [] aBytes)
   {
     if (false)
@@ -252,8 +251,8 @@ public final class CodeModelTestsHelper
     }
   }
 
-  @Nonnull
-  private static org.eclipse.jdt.core.dom.CompilationUnit _parseWithJDT (final String sUnitName, final char [] aCode)
+  private static org.eclipse.jdt.core.dom.@NonNull CompilationUnit _parseWithJDT (final String sUnitName,
+                                                                                  final char [] aCode)
   {
     LOGGER.info ("Parsing '" + sUnitName + "' with Eclipse JDT");
 
@@ -290,7 +289,7 @@ public final class CodeModelTestsHelper
    * @param cm
    *        The code model to be parsed. May not be null.
    */
-  public static void parseCodeModel (@Nonnull final JCodeModel cm)
+  public static void parseCodeModel (@NonNull final JCodeModel cm)
   {
     try
     {
@@ -331,8 +330,8 @@ public final class CodeModelTestsHelper
     }
   }
 
-  @Nonnull
-  public static CompilationUnit parseAndGetSingleClassCodeModel (@Nonnull final JCodeModel cm)
+  @NonNull
+  public static CompilationUnit parseAndGetSingleClassCodeModel (@NonNull final JCodeModel cm)
   {
     assert cm != null;
     assert IteratorHelper.getSize (cm.packages ()) == 1;
@@ -347,14 +346,14 @@ public final class CodeModelTestsHelper
    * @param cm
    *        The code model to compile. May not be <code>null</code>.
    */
-  public static void compileCodeModel (@Nonnull final JCodeModel cm)
+  public static void compileCodeModel (@NonNull final JCodeModel cm)
   {
     // Compile using javax.tools
     final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
     assertNotNull (aLoader);
   }
 
-  public static void printCodeModel (@Nonnull final JCodeModel cm)
+  public static void printCodeModel (@NonNull final JCodeModel cm)
   {
     try
     {

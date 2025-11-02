@@ -49,6 +49,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,9 +69,6 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.NullWriter;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * This is a utility class for managing indentation and other basic formatting
@@ -95,7 +94,7 @@ public class JFormatter implements IJFormatter
     /** true if this name is used as an identifier (like a variable name.) **/
     private boolean m_bIsVariableName;
 
-    public NameUsage (@Nonnull final String sName)
+    public NameUsage (@NonNull final String sName)
     {
       m_sName = sName;
     }
@@ -106,7 +105,7 @@ public class JFormatter implements IJFormatter
      * @return <code>true</code> if the short name is ambiguous in context of
      *         enclosingClass and classes with this name can't be imported.
      */
-    public boolean isAmbiguousIn (@Nonnull final JDefinedClass aEnclosingClass)
+    public boolean isAmbiguousIn (@NonNull final JDefinedClass aEnclosingClass)
     {
       // more than one type with the same name
       if (m_aReferencedClasses.size () > 1)
@@ -149,7 +148,7 @@ public class JFormatter implements IJFormatter
       return false;
     }
 
-    public boolean addReferencedType (@Nonnull final AbstractJClass aClazz)
+    public boolean addReferencedType (@NonNull final AbstractJClass aClazz)
     {
       if (false)
         LOGGER.info ("Adding referenced type[" + m_sName + "]: " + aClazz.fullName ());
@@ -163,14 +162,14 @@ public class JFormatter implements IJFormatter
       return m_aReferencedClasses.contains (aClazz);
     }
 
-    @Nonnull
+    @NonNull
     public AbstractJClass getSingleReferencedType ()
     {
       assert m_aReferencedClasses.size () == 1;
       return m_aReferencedClasses.get (0);
     }
 
-    @Nonnull
+    @NonNull
     public List <AbstractJClass> getReferencedTypes ()
     {
       return m_aReferencedClasses;
@@ -295,13 +294,13 @@ public class JFormatter implements IJFormatter
       return aRealClass;
     }
 
-    public void addDontImportClass (@Nonnull final AbstractJClass aClass)
+    public void addDontImportClass (@NonNull final AbstractJClass aClass)
     {
       final AbstractJClass aRealClass = _getClassForImport (aClass);
       m_aDontImportClasses.add (aRealClass);
     }
 
-    public boolean add (@Nonnull final AbstractJClass aClass)
+    public boolean add (@NonNull final AbstractJClass aClass)
     {
       final AbstractJClass aRealClass = _getClassForImport (aClass);
       final String sSimpleName = aRealClass.name ();
@@ -346,7 +345,7 @@ public class JFormatter implements IJFormatter
       m_aNames.clear ();
     }
 
-    @Nonnull
+    @NonNull
     public List <AbstractJClass> getAllSorted ()
     {
       // Copy and sort
@@ -412,7 +411,7 @@ public class JFormatter implements IJFormatter
    *        Incremental indentation string, similar to tab value. May not be
    *        <code>null</code>.
    */
-  public JFormatter (@Nonnull @WillCloseWhenClosed final SourcePrintWriter aPW, @Nonnull final String sIndentString)
+  public JFormatter (@NonNull @WillCloseWhenClosed final SourcePrintWriter aPW, @NonNull final String sIndentString)
   {
     ValueEnforcer.notNull (aPW, "PrintWriter");
     ValueEnforcer.notNull (sIndentString, "IndentString");
@@ -444,14 +443,14 @@ public class JFormatter implements IJFormatter
     return m_eMode == EMode.PRINTING;
   }
 
-  @Nonnull
+  @NonNull
   public JFormatter indent ()
   {
     m_nIndentLevel++;
     return this;
   }
 
-  @Nonnull
+  @NonNull
   public JFormatter outdent ()
   {
     m_nIndentLevel--;
@@ -536,7 +535,7 @@ public class JFormatter implements IJFormatter
         m_aPW.print (' ');
   }
 
-  @Nonnull
+  @NonNull
   public JFormatter print (final char c)
   {
     if (m_eMode == EMode.PRINTING)
@@ -555,8 +554,8 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  @Nonnull
-  public JFormatter print (@Nonnull final String sStr)
+  @NonNull
+  public JFormatter print (@NonNull final String sStr)
   {
     if (m_eMode == EMode.PRINTING && sStr.length () > 0)
     {
@@ -567,8 +566,8 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  @Nonnull
-  public JFormatter type (@Nonnull final AbstractJClass aType)
+  @NonNull
+  public JFormatter type (@NonNull final AbstractJClass aType)
   {
     switch (m_eMode)
     {
@@ -625,8 +624,8 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  @Nonnull
-  public JFormatter id (@Nonnull final String sID)
+  @NonNull
+  public JFormatter id (@NonNull final String sID)
   {
     switch (m_eMode)
     {
@@ -643,7 +642,7 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  @Nonnull
+  @NonNull
   public JFormatter newline ()
   {
     if (m_eMode == EMode.PRINTING)
@@ -655,15 +654,15 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  @Nonnull
-  public JFormatter generable (@Nonnull final IJGenerable g)
+  @NonNull
+  public JFormatter generable (@NonNull final IJGenerable g)
   {
     g.generate (this);
     return this;
   }
 
-  @Nonnull
-  public JFormatter generable (@Nonnull final Collection <? extends IJGenerable> list)
+  @NonNull
+  public JFormatter generable (@NonNull final Collection <? extends IJGenerable> list)
   {
     if (!list.isEmpty ())
     {
@@ -679,28 +678,28 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  @Nonnull
-  public JFormatter declaration (@Nonnull final IJDeclaration d)
+  @NonNull
+  public JFormatter declaration (@NonNull final IJDeclaration d)
   {
     d.declare (this);
     return this;
   }
 
-  @Nonnull
-  public JFormatter statement (@Nonnull final IJStatement aStmt)
+  @NonNull
+  public JFormatter statement (@NonNull final IJStatement aStmt)
   {
     aStmt.state (this);
     return this;
   }
 
-  @Nonnull
-  public JFormatter var (@Nonnull final JVar aVar)
+  @NonNull
+  public JFormatter var (@NonNull final JVar aVar)
   {
     aVar.bind (this);
     return this;
   }
 
-  private boolean _collectCausesNoAmbiguities (@Nonnull final AbstractJClass aReference, @Nonnull final JDefinedClass aClassToBeWritten)
+  private boolean _collectCausesNoAmbiguities (@NonNull final AbstractJClass aReference, @NonNull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
       LOGGER.info ("_collectCausesNoAmbiguities(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
@@ -722,7 +721,7 @@ public class JFormatter implements IJFormatter
    * @return <code>true</code> if an import statement can be used to shorten
    *         references to referenced class
    */
-  private boolean _collectShouldBeImported (@Nonnull final AbstractJClass aReference, @Nonnull final JDefinedClass aClassToBeWritten)
+  private boolean _collectShouldBeImported (@NonNull final AbstractJClass aReference, @NonNull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
       LOGGER.info ("_collectShouldBeImported(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
@@ -770,8 +769,8 @@ public class JFormatter implements IJFormatter
    * @param aClassToBeWritten
    *        {@link AbstractJClass} that is the current class being processed
    */
-  private void _collectImportOuterClassIfCausesNoAmbiguities (@Nonnull final AbstractJClass aReference,
-                                                              @Nonnull final JDefinedClass aClassToBeWritten)
+  private void _collectImportOuterClassIfCausesNoAmbiguities (@NonNull final AbstractJClass aReference,
+                                                              @NonNull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
       LOGGER.info ("_collectImportOuterClassIfCausesNoAmbiguities(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
@@ -791,7 +790,7 @@ public class JFormatter implements IJFormatter
     }
   }
 
-  private boolean _isUnambiguousJavaLangImport (@Nonnull final AbstractJClass aJavaLangReference)
+  private boolean _isUnambiguousJavaLangImport (@NonNull final AbstractJClass aJavaLangReference)
   {
     final NameUsage aNU = m_aCollectedReferences.get (aJavaLangReference.name ());
     if (aNU == null)
@@ -814,7 +813,7 @@ public class JFormatter implements IJFormatter
    *        {@link AbstractJClass} that is the current class being processed
    * @return true if an import statement should be suppressed, false otherwise
    */
-  private boolean _printIsImplicitlyImported (@Nonnull final AbstractJClass aReference, @Nonnull final AbstractJClass aClassToBeWrittem)
+  private boolean _printIsImplicitlyImported (@NonNull final AbstractJClass aReference, @NonNull final AbstractJClass aClassToBeWrittem)
   {
     if (m_bDebugImport)
       LOGGER.info ("_printIsImplicitlyImported(" + aReference.fullName () + ", " + aClassToBeWrittem.fullName () + ")");
@@ -885,7 +884,7 @@ public class JFormatter implements IJFormatter
    * @param aClassToBeWritten
    *        Class to be written
    */
-  void writeClassFull (@Nonnull final JDefinedClass aClassToBeWritten)
+  void writeClassFull (@NonNull final JDefinedClass aClassToBeWritten)
   {
     m_aPckJavaLang = aClassToBeWritten.owner ()._package ("java.lang");
 
@@ -985,7 +984,7 @@ public class JFormatter implements IJFormatter
         m_aImportedClasses.addDontImportClass (aClass);
   }
 
-  public static boolean containsErrorTypes (@Nonnull final JDefinedClass aClass)
+  public static boolean containsErrorTypes (@NonNull final JDefinedClass aClass)
   {
     try (final JFormatter aFormatter = new JFormatter (new SourcePrintWriter (NullWriter.getInstance (), "\n"), "\t"))
     {

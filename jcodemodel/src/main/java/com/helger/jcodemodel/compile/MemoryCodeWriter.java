@@ -57,6 +57,8 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.ToolProvider;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,9 +71,6 @@ import com.helger.collection.commons.ICommonsList;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
 import com.helger.jcodemodel.writer.JCMWriter;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * An {@link AbstractCodeWriter} that stores the files created in the program memory.
@@ -121,7 +120,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
    *        The listener to call. May be <code>null</code>.
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   public final MemoryCodeWriter setDiagnosticListener (@Nullable final DiagnosticListener <? super JavaFileObject> aDL)
   {
     m_aDL = aDL;
@@ -132,7 +131,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
    * @return an unmodifiable map of the internal binaries. It's a map from filename to the payload.
    *         Don't modify the payload, as it is not copied!
    */
-  @Nonnull
+  @NonNull
   public Map <String, NonBlockingByteArrayOutputStream> getBinaries ()
   {
     return Collections.unmodifiableMap (m_aBinaries);
@@ -167,8 +166,8 @@ public class MemoryCodeWriter extends AbstractCodeWriter
    *        The dynamic class loader to use. May not be <code>null</code>.
    * @return {@link ESuccess#SUCCESS} if if worked, <code>false</code> if not.
    */
-  @Nonnull
-  public ESuccess compile (@Nonnull final DynamicClassLoader aDynamicClassLoader)
+  @NonNull
+  public ESuccess compile (@NonNull final DynamicClassLoader aDynamicClassLoader)
   {
     final ICommonsList <JavaFileObject> aCompilationUnits = new CommonsArrayList <> ();
 
@@ -234,7 +233,7 @@ public class MemoryCodeWriter extends AbstractCodeWriter
    *
    * @return An instance of {@link DynamicClassLoader} using this class' class loader.
    */
-  @Nonnull
+  @NonNull
   public static DynamicClassLoader dynCL ()
   {
     return new DynamicClassLoader (JavaCompiler.class.getClassLoader ());
@@ -254,8 +253,8 @@ public class MemoryCodeWriter extends AbstractCodeWriter
     return compile (aDCL).isSuccess () ? aDCL : null;
   }
 
-  @Nonnull
-  public static MemoryCodeWriter from (@Nonnull final JCodeModel jcm)
+  @NonNull
+  public static MemoryCodeWriter from (@NonNull final JCodeModel jcm)
   {
     final MemoryCodeWriter codeWriter = new MemoryCodeWriter ();
     try

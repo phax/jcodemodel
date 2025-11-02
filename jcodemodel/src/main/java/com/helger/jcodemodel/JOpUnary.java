@@ -42,10 +42,10 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
 
 public class JOpUnary implements IJExpression
 {
@@ -61,7 +61,7 @@ public class JOpUnary implements IJExpression
    * @param aExpr
    *        expression
    */
-  protected JOpUnary (@Nonnull final String sOperator, @Nonnull final IJExpression aExpr)
+  protected JOpUnary (@NonNull final String sOperator, @NonNull final IJExpression aExpr)
   {
     m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
     m_aExpr = ValueEnforcer.notNull (aExpr, "Expression");
@@ -76,20 +76,20 @@ public class JOpUnary implements IJExpression
    * @param sOperator
    *        operator
    */
-  protected JOpUnary (@Nonnull final IJExpression aExpr, @Nonnull final String sOperator)
+  protected JOpUnary (@NonNull final IJExpression aExpr, @NonNull final String sOperator)
   {
     m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
     m_aExpr = ValueEnforcer.notNull (aExpr, "Expression");
     m_bOperatorComesFirst = false;
   }
 
-  @Nonnull
+  @NonNull
   public String op ()
   {
     return m_sOperator;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression expr ()
   {
     return m_aExpr;
@@ -104,7 +104,7 @@ public class JOpUnary implements IJExpression
     return m_bOperatorComesFirst;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     if (m_bOperatorComesFirst)
       f.print ('(').print (m_sOperator).generable (m_aExpr).print (')');

@@ -43,10 +43,10 @@ package com.helger.jcodemodel.meta;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
-
-import jakarta.annotation.Nonnull;
 
 public class JCodeModelJavaxLangModelAdapter
 {
@@ -61,7 +61,7 @@ public class JCodeModelJavaxLangModelAdapter
    * @param elementUtils
    *        Program element utility. May not be <code>null</code>.
    */
-  public JCodeModelJavaxLangModelAdapter (@Nonnull final JCodeModel codeModel, @Nonnull final Elements elementUtils)
+  public JCodeModelJavaxLangModelAdapter (@NonNull final JCodeModel codeModel, @NonNull final Elements elementUtils)
   {
     m_aCodeModel = codeModel;
     m_aElementUtils = elementUtils;
@@ -80,8 +80,8 @@ public class JCodeModelJavaxLangModelAdapter
    *         when operation can't be performed. For example, when given class
    *         already exists.
    */
-  @Nonnull
-  public JDefinedClass getClass (@Nonnull final TypeElement element) throws ErrorTypeFound, CodeModelBuildingException
+  @NonNull
+  public JDefinedClass getClass (@NonNull final TypeElement element) throws ErrorTypeFound, CodeModelBuildingException
   {
     final ErrorTypePolicy policy = new ErrorTypePolicy (ErrorTypePolicy.EAction.THROW_EXCEPTION, true);
     return getClass (element, policy);
@@ -101,8 +101,8 @@ public class JCodeModelJavaxLangModelAdapter
    *         when operation can't be performed. For example, when given class
    *         already exists.
    */
-  @Nonnull
-  public JDefinedClass getClassWithErrorTypes (@Nonnull final TypeElement element) throws CodeModelBuildingException
+  @NonNull
+  public JDefinedClass getClassWithErrorTypes (@NonNull final TypeElement element) throws CodeModelBuildingException
   {
     final ErrorTypePolicy policy = new ErrorTypePolicy (ErrorTypePolicy.EAction.CREATE_ERROR_TYPE, true);
     try
@@ -135,8 +135,8 @@ public class JCodeModelJavaxLangModelAdapter
    *         when operation can't be performed. For example, when given class
    *         already exists.
    */
-  @Nonnull
-  public JDefinedClass getClass (@Nonnull final TypeElement element, @Nonnull final ErrorTypePolicy policy) throws ErrorTypeFound,
+  @NonNull
+  public JDefinedClass getClass (@NonNull final TypeElement element, @NonNull final ErrorTypePolicy policy) throws ErrorTypeFound,
                                                                                                             CodeModelBuildingException
   {
     final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (m_aCodeModel, m_aElementUtils, policy);

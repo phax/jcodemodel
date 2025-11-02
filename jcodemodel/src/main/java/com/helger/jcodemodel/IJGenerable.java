@@ -40,12 +40,12 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Common interface for code components that can generate uses of themselves.
  */
 public interface IJGenerable extends IJObject
 {
-  void generate (@Nonnull IJFormatter f);
+  void generate (@NonNull IJFormatter f);
 }

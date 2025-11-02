@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Label that can be used for continue and break.
@@ -59,18 +59,18 @@ public class JLabel implements IJStatement
    * @param sLabel
    *        label name.
    */
-  public JLabel (@Nonnull final String sLabel)
+  public JLabel (@NonNull final String sLabel)
   {
     m_sLabel = ValueEnforcer.notNull (sLabel, "Label");
   }
 
-  @Nonnull
+  @NonNull
   public String label ()
   {
     return m_sLabel;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.print (m_sLabel + ':').newline ();
   }

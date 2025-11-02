@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Try statement with Catch and/or Finally clause.
@@ -62,7 +62,7 @@ public class JTryBlock implements IJStatement
    * @return A mutable list of all try-resources for "try-with-resources".
    * @since 3.2.3
    */
-  @Nonnull
+  @NonNull
   public List <JTryResource> tryResources ()
   {
     return m_aResources;
@@ -71,7 +71,7 @@ public class JTryBlock implements IJStatement
   /**
    * @return The non-<code>null</code> try-body.
    */
-  @Nonnull
+  @NonNull
   public JBlock body ()
   {
     return m_aBody;
@@ -87,8 +87,8 @@ public class JTryBlock implements IJStatement
    *         <code>null</code>.
    * @see #catches()
    */
-  @Nonnull
-  public JCatchBlock _catch (@Nonnull final AbstractJClass aException)
+  @NonNull
+  public JCatchBlock _catch (@NonNull final AbstractJClass aException)
   {
     final JCatchBlock cb = new JCatchBlock (aException);
     m_aCatches.add (cb);
@@ -101,7 +101,7 @@ public class JTryBlock implements IJStatement
    *
    * @return A mutable list of all contained catch blocks.
    */
-  @Nonnull
+  @NonNull
   public List <JCatchBlock> catches ()
   {
     return m_aCatches;
@@ -121,7 +121,7 @@ public class JTryBlock implements IJStatement
    * @return A non-<code>null</code> finally block. The block is automatically
    *         created the first time you call this method.
    */
-  @Nonnull
+  @NonNull
   public JBlock _finally ()
   {
     if (m_aFinally == null)
@@ -150,7 +150,7 @@ public class JTryBlock implements IJStatement
     return m_aFinally != null;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.print ("try");
     if (!m_aResources.isEmpty ())

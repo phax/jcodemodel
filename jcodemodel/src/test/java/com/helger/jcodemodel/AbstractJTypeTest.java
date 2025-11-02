@@ -47,10 +47,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
 import org.junit.After;
 import org.junit.Test;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Test class for class {@link AbstractJType}
@@ -74,13 +73,12 @@ public final class AbstractJTypeTest
   private List <AbstractJClass> freshTypes = new ArrayList <> ();
   private List <AssignmentTypes> freshAssignableTypes = new ArrayList <> ();
 
-  @Nonnull
   private void _registerType (final AbstractJClass type)
   {
     freshTypes.add (type);
   }
 
-  @Nonnull
+  @NonNull
   private List <AbstractJClass> _refreshTypes ()
   {
     final List <AbstractJClass> result = freshTypes;
@@ -88,7 +86,7 @@ public final class AbstractJTypeTest
     return result;
   }
 
-  @Nonnull
+  @NonNull
   private List <AssignmentTypes> _refreshAssignableTypes ()
   {
     final List <AssignmentTypes> result = freshAssignableTypes;
@@ -199,11 +197,14 @@ public final class AbstractJTypeTest
         {
           _assertIsNotAssignable (_List.narrow (assignment.m_aVariable), _List.narrow (assignment.m_aValue));
         }
-        _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcardExtends ()), _List.narrow (assignment.m_aValue));
+        _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcardExtends ()),
+                             _List.narrow (assignment.m_aValue));
         _assertIsAssignable (_List.narrow (assignment.m_aVariable.wildcardExtends ()),
                              _List.narrow (assignment.m_aValue.wildcardExtends ()));
-        _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()), _List.narrow (assignment.m_aVariable));
-        _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()), _List.narrow (assignment.m_aVariable.wildcardSuper ()));
+        _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()),
+                             _List.narrow (assignment.m_aVariable));
+        _assertIsAssignable (_List.narrow (assignment.m_aValue.wildcardSuper ()),
+                             _List.narrow (assignment.m_aVariable.wildcardSuper ()));
       }
     }
   }

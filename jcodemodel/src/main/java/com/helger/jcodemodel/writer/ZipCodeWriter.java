@@ -46,9 +46,9 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import com.helger.base.string.StringHelper;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.string.StringHelper;
 
 /**
  * Writes all the files into a zip file.
@@ -64,7 +64,7 @@ public class ZipCodeWriter extends AbstractCodeWriter
    * @param target
    *        Zip file will be written to this stream.
    */
-  public ZipCodeWriter (@Nonnull final OutputStream target)
+  public ZipCodeWriter (@NonNull final OutputStream target)
   {
     this (target, JCMWriter.DEFAULT_NEW_LINE);
   }
@@ -75,7 +75,7 @@ public class ZipCodeWriter extends AbstractCodeWriter
    * @param sNewLine
    *        The new line string to be used for source files
    */
-  public ZipCodeWriter (@Nonnull final OutputStream target, @Nonnull final String sNewLine)
+  public ZipCodeWriter (@NonNull final OutputStream target, @NonNull final String sNewLine)
   {
     super (null, sNewLine);
     m_aZOS = new ZipOutputStream (target);
@@ -91,7 +91,7 @@ public class ZipCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
+  public OutputStream openBinary (@NonNull final String sDirName, @NonNull final String sFilename) throws IOException
   {
     final String sFullName;
     if (StringHelper.isNotEmpty (sDirName))

@@ -46,11 +46,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * A generated Java class/interface/enum/annotation<br>
@@ -100,9 +100,9 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
    * @param sName
    *        Name of this class
    */
-  protected AbstractJClassContainer (@Nonnull final JCodeModel aOwner,
+  protected AbstractJClassContainer (@NonNull final JCodeModel aOwner,
                                      @Nullable final IJClassContainer <?> aOuter,
-                                     @Nonnull final EClassType eClassType,
+                                     @NonNull final EClassType eClassType,
                                      @Nullable final String sName)
   {
     super (aOwner);
@@ -126,7 +126,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
     return null;
   }
 
-  @Nonnull
+  @NonNull
   public final EClassType getClassType ()
   {
     return m_eClassType;
@@ -198,13 +198,13 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   }
 
   @SuppressWarnings ("unchecked")
-  @Nonnull
+  @NonNull
   protected final CLASSTYPE thisAsT ()
   {
     return (CLASSTYPE) this;
   }
 
-  @Nonnull
+  @NonNull
   public final IJClassContainer <?> parentContainer ()
   {
     return m_aOuter;
@@ -215,13 +215,13 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
     return parentContainer ().getPackage ();
   }
 
-  @Nonnull
-  protected abstract CLASSTYPE createInnerClass (final int nMods, @Nonnull final EClassType eClassType, @Nonnull final String sName);
+  @NonNull
+  protected abstract CLASSTYPE createInnerClass (final int nMods, @NonNull final EClassType eClassType, @NonNull final String sName);
 
-  @Nonnull
+  @NonNull
   public final CLASSTYPE _class (final int nMods,
-                                 @Nonnull final String sName,
-                                 @Nonnull final EClassType eClassType) throws JCodeModelException
+                                 @NonNull final String sName,
+                                 @NonNull final EClassType eClassType) throws JCodeModelException
   {
     final String sRealName;
     if (owner ().getFileSystemConvention ().isCaseSensistive ())
@@ -249,7 +249,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
    * Returns an iterator that walks the nested classes defined in this class.
    * Don't modify the returned collection!
    */
-  @Nonnull
+  @NonNull
   public final Collection <CLASSTYPE> classes ()
   {
     if (m_aClasses == null)

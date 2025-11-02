@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Implementation of {@link IJGenerifiable}.
@@ -57,7 +57,7 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable
    */
   private Map <String, JTypeVar> m_aTypeVariables;
 
-  public void declare (@Nonnull final IJFormatter f)
+  public void declare (@NonNull final IJFormatter f)
   {
     if (m_aTypeVariables != null && !m_aTypeVariables.isEmpty ())
     {
@@ -73,8 +73,8 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable
     }
   }
 
-  @Nonnull
-  public JTypeVar generify (@Nonnull final String sName)
+  @NonNull
+  public JTypeVar generify (@NonNull final String sName)
   {
     final JTypeVar v = new JTypeVar (owner (), sName);
     if (m_aTypeVariables == null)
@@ -86,7 +86,7 @@ public abstract class AbstractJGenerifiableImpl implements IJGenerifiable
     return v;
   }
 
-  @Nonnull
+  @NonNull
   public JTypeVar [] typeParams ()
   {
     if (m_aTypeVariables == null)

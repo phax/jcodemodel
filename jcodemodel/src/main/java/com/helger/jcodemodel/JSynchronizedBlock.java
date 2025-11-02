@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Synchronized block within a method statement
@@ -55,24 +55,24 @@ public class JSynchronizedBlock implements IJStatement
   private IJExpression m_aExpression;
   private JBlock m_aBody;
 
-  public JSynchronizedBlock (@Nonnull final IJExpression aExpression)
+  public JSynchronizedBlock (@NonNull final IJExpression aExpression)
   {
     expr (aExpression);
   }
 
-  public final void expr (@Nonnull final IJExpression aExpression)
+  public final void expr (@NonNull final IJExpression aExpression)
   {
     ValueEnforcer.notNull (aExpression, "expression");
     m_aExpression = aExpression;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression expr ()
   {
     return m_aExpression;
   }
 
-  @Nonnull
+  @NonNull
   public JBlock body ()
   {
     if (m_aBody == null)
@@ -80,7 +80,7 @@ public class JSynchronizedBlock implements IJStatement
     return m_aBody;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.print ("synchronized (").generable (m_aExpression).print (")").newline ();
     if (m_aBody != null)

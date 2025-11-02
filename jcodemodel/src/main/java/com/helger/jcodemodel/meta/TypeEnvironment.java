@@ -43,10 +43,10 @@ package com.helger.jcodemodel.meta;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.helger.jcodemodel.AbstractJType;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.jcodemodel.AbstractJType;
 
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
@@ -69,14 +69,14 @@ class TypeEnvironment
     m_aParent = parent;
   }
 
-  @Nonnull
+  @NonNull
   public TypeEnvironment enclosed ()
   {
     return new TypeEnvironment (this);
   }
 
   @Nullable
-  public AbstractJType get (@Nonnull final String name)
+  public AbstractJType get (@NonNull final String name)
   {
     final AbstractJType result = m_aMap.get (name);
     if (result != null || m_aParent == null)
@@ -84,7 +84,7 @@ class TypeEnvironment
     return m_aParent.get (name);
   }
 
-  public void put (@Nonnull final String name, final AbstractJType type)
+  public void put (@NonNull final String name, final AbstractJType type)
   {
     m_aMap.put (name, type);
   }

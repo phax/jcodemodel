@@ -46,11 +46,11 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.WillNotClose;
 import com.helger.base.enforce.ValueEnforcer;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Simple text file.
@@ -62,7 +62,7 @@ public class JTextFile extends AbstractJResourceFile
   private String m_sContents;
   private final Charset m_aEncoding;
 
-  public JTextFile (@Nonnull final String sName, @Nonnull final Charset aEncoding)
+  public JTextFile (@NonNull final String sName, @NonNull final Charset aEncoding)
   {
     super (sName);
     m_aEncoding = ValueEnforcer.notNull (aEncoding, "Encoding");
@@ -72,7 +72,7 @@ public class JTextFile extends AbstractJResourceFile
    * @return The encoding as provided in the constructor. Never
    *         <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public final Charset encoding ()
   {
     return m_aEncoding;
@@ -94,7 +94,7 @@ public class JTextFile extends AbstractJResourceFile
    *        The contents to be used. May be <code>null</code>.
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   public final JTextFile contents (@Nullable final String sContents)
   {
     m_sContents = sContents;
@@ -102,7 +102,7 @@ public class JTextFile extends AbstractJResourceFile
   }
 
   @Override
-  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void build (@NonNull @WillNotClose final OutputStream aOS) throws IOException
   {
     if (m_sContents != null)
       try (final Writer w = new OutputStreamWriter (aOS, m_aEncoding)
@@ -119,8 +119,8 @@ public class JTextFile extends AbstractJResourceFile
       }
   }
 
-  @Nonnull
-  public static JTextFile createFully (@Nonnull final String sName, @Nonnull final Charset aEncoding, @Nullable final String sContents)
+  @NonNull
+  public static JTextFile createFully (@NonNull final String sName, @NonNull final Charset aEncoding, @Nullable final String sContents)
   {
     return new JTextFile (sName, aEncoding).contents (sContents);
   }

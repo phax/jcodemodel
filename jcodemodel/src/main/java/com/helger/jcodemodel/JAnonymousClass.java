@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Anonymous class quick hack.
@@ -54,7 +54,7 @@ public class JAnonymousClass extends JDefinedClass
    */
   private final AbstractJClass m_aBaseClass;
 
-  protected JAnonymousClass (@Nonnull final AbstractJClass aBaseClass)
+  protected JAnonymousClass (@NonNull final AbstractJClass aBaseClass)
   {
     super (aBaseClass.owner (), 0, null);
     m_aBaseClass = aBaseClass;
@@ -63,14 +63,14 @@ public class JAnonymousClass extends JDefinedClass
   /**
    * @return The base class to be used.
    */
-  @Nonnull
+  @NonNull
   public AbstractJClass base ()
   {
     return m_aBaseClass;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     // TODO I think this is incorrect! Some "$1" or the like is missing

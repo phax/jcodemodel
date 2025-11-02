@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Catch block for a try/catch/finally statement
@@ -52,18 +52,18 @@ public class JCatchBlock implements IJGenerable
   private JVar m_aVar;
   private final JBlock m_aBody = new JBlock ();
 
-  public JCatchBlock (@Nonnull final AbstractJClass aException)
+  public JCatchBlock (@NonNull final AbstractJClass aException)
   {
     m_aException = aException;
   }
 
-  @Nonnull
+  @NonNull
   public AbstractJClass exception ()
   {
     return m_aException;
   }
 
-  @Nonnull
+  @NonNull
   public JVar param (final String sName)
   {
     if (m_aVar != null)
@@ -78,13 +78,13 @@ public class JCatchBlock implements IJGenerable
     return m_aVar;
   }
 
-  @Nonnull
+  @NonNull
   public JBlock body ()
   {
     return m_aBody;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     if (m_aVar == null)
       m_aVar = new JVar (JMods.forVar (JMod.FINAL), m_aException, "ex", null);

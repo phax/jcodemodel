@@ -42,10 +42,10 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
 
 public class JOpTernary implements IJExpression
 {
@@ -55,11 +55,11 @@ public class JOpTernary implements IJExpression
   private final String m_sOperator2;
   private final IJExpression m_aExpr3;
 
-  protected JOpTernary (@Nonnull final IJExpression aExpr1,
-                        @Nonnull final String sOperator1,
-                        @Nonnull final IJExpression aExpr2,
-                        @Nonnull final String sOperator2,
-                        @Nonnull final IJExpression aExpr3)
+  protected JOpTernary (@NonNull final IJExpression aExpr1,
+                        @NonNull final String sOperator1,
+                        @NonNull final IJExpression aExpr2,
+                        @NonNull final String sOperator2,
+                        @NonNull final IJExpression aExpr3)
   {
     m_aExpr1 = ValueEnforcer.notNull (aExpr1, "Expr1");
     m_sOperator1 = ValueEnforcer.notNull (sOperator1, "Operator1");
@@ -68,37 +68,37 @@ public class JOpTernary implements IJExpression
     m_aExpr3 = ValueEnforcer.notNull (aExpr3, "Expr3");
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression expr1 ()
   {
     return m_aExpr1;
   }
 
-  @Nonnull
+  @NonNull
   public String op1 ()
   {
     return m_sOperator1;
   }
 
-  @Nonnull
+  @NonNull
   public IJGenerable expr2 ()
   {
     return m_aExpr2;
   }
 
-  @Nonnull
+  @NonNull
   public String op2 ()
   {
     return m_sOperator2;
   }
 
-  @Nonnull
+  @NonNull
   public IJGenerable expr3 ()
   {
     return m_aExpr3;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.print ('(').generable (m_aExpr1).print (m_sOperator1).generable (m_aExpr2).print (m_sOperator2).generable (m_aExpr3).print (')');
   }

@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * A special JBlock implementation that supports lambda expressions.
@@ -58,7 +58,7 @@ public class JLambdaBlock extends JBlock
    * @param aExpr
    *        The expression to be used. May not be <code>null</code>.
    */
-  public void lambdaExpr (@Nonnull final IJExpression aExpr)
+  public void lambdaExpr (@NonNull final IJExpression aExpr)
   {
     ValueEnforcer.notNull (aExpr, "Expression");
     removeAll ();
@@ -66,7 +66,7 @@ public class JLambdaBlock extends JBlock
   }
 
   @Override
-  protected void generateBody (@Nonnull final IJFormatter f)
+  protected void generateBody (@NonNull final IJFormatter f)
   {
     if (m_aContentList.size () == 1)
     {

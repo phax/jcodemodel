@@ -42,9 +42,9 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
-import com.helger.base.equals.EqualsHelper;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.equals.EqualsHelper;
 
 /**
  * A cast operation.
@@ -69,25 +69,25 @@ public class JCast implements IJExpression
    * @param aObject
    *        JExpression for the object upon which the cast is applied
    */
-  protected JCast (@Nonnull final AbstractJType aType, @Nonnull final IJExpression aObject)
+  protected JCast (@NonNull final AbstractJType aType, @NonNull final IJExpression aObject)
   {
     m_aType = aType;
     m_aObject = aObject;
   }
 
-  @Nonnull
+  @NonNull
   public AbstractJType type ()
   {
     return m_aType;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression object ()
   {
     return m_aObject;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.print ("((").generable (m_aType).print (')').generable (m_aObject).print (')');
   }

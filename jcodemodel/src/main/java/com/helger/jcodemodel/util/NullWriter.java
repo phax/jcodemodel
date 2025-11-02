@@ -43,7 +43,7 @@ package com.helger.jcodemodel.util;
 import java.io.IOException;
 import java.io.Writer;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An implementation of {@link Writer} that discards all input :)
@@ -54,7 +54,7 @@ public class NullWriter extends Writer
 {
   private static final NullWriter INSTANCE = new NullWriter ();
 
-  @Nonnull
+  @NonNull
   public static NullWriter getInstance ()
   {
     return INSTANCE;

@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A return statement
@@ -70,7 +70,7 @@ public class JReturn implements IJStatement
     return m_aExpr;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.print ("return");
     if (m_aExpr != null)

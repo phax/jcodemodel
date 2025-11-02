@@ -44,10 +44,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.helger.base.hashcode.HashCodeGenerator;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.hashcode.HashCodeGenerator;
 
 /**
  * A special {@link AbstractJClass} that represents an unknown class (except its
@@ -60,8 +60,8 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 {
   private final String m_sFullName;
 
-  @Nonnull
-  private static String _getName (@Nonnull final String sFullName)
+  @NonNull
+  private static String _getName (@NonNull final String sFullName)
   {
     final int nLast = sFullName.lastIndexOf ('.');
     if (nLast < 0)
@@ -69,17 +69,17 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
     return sFullName.substring (nLast + 1);
   }
 
-  protected JDirectClass (@Nonnull final JCodeModel aOwner,
+  protected JDirectClass (@NonNull final JCodeModel aOwner,
                           @Nullable final IJClassContainer <?> aOuter,
-                          @Nonnull final EClassType eClassType,
-                          @Nonnull final String sFullName)
+                          @NonNull final EClassType eClassType,
+                          @NonNull final String sFullName)
   {
     super (aOwner, aOuter, eClassType, _getName (sFullName));
     m_sFullName = sFullName;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return super.name ();
@@ -89,7 +89,7 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
    * Gets the fully qualified name of this class.
    */
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     if (getOuter () instanceof AbstractJClassContainer <?>)
@@ -100,7 +100,7 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public JPackage _package ()
   {
     final IJClassContainer <?> aOuter = getOuter ();
@@ -118,14 +118,14 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public AbstractJClass _extends ()
   {
     return owner ().ref (Object.class);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Iterator <AbstractJClass> _implements ()
   {
     return Collections.<AbstractJClass> emptyList ().iterator ();
@@ -138,14 +138,14 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   }
 
   @Override
-  @Nonnull
+  @NonNull
   protected AbstractJClass substituteParams (final JTypeVar [] aVariables, final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }
 
   @Override
-  @Nonnull
+  @NonNull
   protected JDirectClass createInnerClass (final int nMods, final EClassType eClassType, final String sName)
   {
     return new JDirectClass (owner (), this, eClassType, sName);

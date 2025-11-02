@@ -40,10 +40,10 @@
  */
 package com.helger.jcodemodel;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.util.JCNameUtilities;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Things that can be values of an annotation element and have an owning code
@@ -57,13 +57,13 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
   {
     private final Enum <?> m_aEnumConstant;
 
-    protected JEnumConstantExpr (@Nonnull final Enum <?> aEnumConstant)
+    protected JEnumConstantExpr (@NonNull final Enum <?> aEnumConstant)
     {
       m_aEnumConstant = ValueEnforcer.notNull (aEnumConstant, "EnumConstant");
     }
 
     @Override
-    public void generate (@Nonnull final IJFormatter f)
+    public void generate (@NonNull final IJFormatter f)
     {
       f.type (owner ().ref (m_aEnumConstant.getDeclaringClass ())).print ('.').print (m_aEnumConstant.name ());
     }
@@ -78,26 +78,26 @@ public abstract class AbstractJAnnotationValueOwned extends AbstractJAnnotationV
   {
     private final Class <?> m_aClass;
 
-    protected FullClassNameExpr (@Nonnull final Class <?> aClass)
+    protected FullClassNameExpr (@NonNull final Class <?> aClass)
     {
       m_aClass = ValueEnforcer.notNull (aClass, "Class");
     }
 
     @Override
-    public void generate (@Nonnull final IJFormatter f)
+    public void generate (@NonNull final IJFormatter f)
     {
       f.print (JCNameUtilities.getFullName (m_aClass)).print (".class");
     }
   }
 
-  @Nonnull
-  public AbstractJAnnotationValue wrap (@Nonnull final Enum <?> aEnumConstant)
+  @NonNull
+  public AbstractJAnnotationValue wrap (@NonNull final Enum <?> aEnumConstant)
   {
     return new JAnnotationStringValue (new JEnumConstantExpr (aEnumConstant), aEnumConstant);
   }
 
-  @Nonnull
-  public AbstractJAnnotationValue wrap (@Nonnull final Class <?> aClass)
+  @NonNull
+  public AbstractJAnnotationValue wrap (@NonNull final Class <?> aClass)
   {
     return new JAnnotationStringValue (new FullClassNameExpr (aClass), aClass);
   }

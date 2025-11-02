@@ -17,10 +17,10 @@ package com.helger.jcodemodel.plugin.maven;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.jspecify.annotations.Nullable;
+
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
-
-import jakarta.annotation.Nullable;
 
 /**
  * implementation of a jcodemodel builder (AKA generator)

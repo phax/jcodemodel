@@ -47,10 +47,10 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Represents a Java reference type, such as a class, an interface, an enum, an array type, a
@@ -69,7 +69,7 @@ public abstract class AbstractJClass extends AbstractJType
   private final JCodeModel m_aOwner;
   private JArrayClass m_aArrayClass;
 
-  protected AbstractJClass (@Nonnull final JCodeModel aOwner)
+  protected AbstractJClass (@NonNull final JCodeModel aOwner)
   {
     m_aOwner = ValueEnforcer.notNull (aOwner, "Owner");
   }
@@ -101,7 +101,7 @@ public abstract class AbstractJClass extends AbstractJType
     return null;
   }
 
-  @Nonnull
+  @NonNull
   public final JCodeModel owner ()
   {
     return m_aOwner;
@@ -125,7 +125,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return A non-null valid iterator that iterates all {@link AbstractJClass} objects that
    *         represents those interfaces implemented by this object.
    */
-  @Nonnull
+  @NonNull
   public abstract Iterator <AbstractJClass> _implements ();
 
   /**
@@ -161,7 +161,7 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public final AbstractJType unboxify ()
   {
     final JPrimitiveType aPrimitiveType = getPrimitiveType ();
@@ -169,7 +169,7 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public AbstractJClass erasure ()
   {
     return this;
@@ -204,7 +204,7 @@ public abstract class AbstractJClass extends AbstractJType
    *         to the base type.
    */
   @Nullable
-  public final AbstractJClass getBaseClass (@Nonnull final AbstractJClass aBaseType)
+  public final AbstractJClass getBaseClass (@NonNull final AbstractJClass aBaseType)
   {
     if (erasure ().equals (aBaseType))
       return this;
@@ -229,13 +229,13 @@ public abstract class AbstractJClass extends AbstractJType
   }
 
   @Nullable
-  public final AbstractJClass getBaseClass (@Nonnull final Class <?> aBaseType)
+  public final AbstractJClass getBaseClass (@NonNull final Class <?> aBaseType)
   {
     return getBaseClass (owner ().ref (aBaseType));
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public JArrayClass array ()
   {
     if (m_aArrayClass == null)
@@ -251,14 +251,14 @@ public abstract class AbstractJClass extends AbstractJType
    *        class to narrow with
    * @return Never <code>null</code>. Narrowed class.
    */
-  @Nonnull
-  public JNarrowedClass narrow (@Nonnull final Class <?> aClazz)
+  @NonNull
+  public JNarrowedClass narrow (@NonNull final Class <?> aClazz)
   {
     return narrow (owner ().ref (aClazz));
   }
 
-  @Nonnull
-  public AbstractJClass narrow (@Nonnull final Class <?>... aClazzes)
+  @NonNull
+  public AbstractJClass narrow (@NonNull final Class <?>... aClazzes)
   {
     final List <AbstractJClass> r = new ArrayList <> (aClazzes.length);
     for (final Class <?> aElement : aClazzes)
@@ -274,26 +274,26 @@ public abstract class AbstractJClass extends AbstractJType
    *        class to narrow with
    * @return Never <code>null</code>. Narrowed class.
    */
-  @Nonnull
-  public JNarrowedClass narrow (@Nonnull final AbstractJClass aClazz)
+  @NonNull
+  public JNarrowedClass narrow (@NonNull final AbstractJClass aClazz)
   {
     return new JNarrowedClass (this, aClazz);
   }
 
-  @Nonnull
-  public JNarrowedClass narrow (@Nonnull final AbstractJType aType)
+  @NonNull
+  public JNarrowedClass narrow (@NonNull final AbstractJType aType)
   {
     return narrow (aType.boxify ());
   }
 
-  @Nonnull
-  public AbstractJClass narrow (@Nonnull final AbstractJClass... aClazz)
+  @NonNull
+  public AbstractJClass narrow (@NonNull final AbstractJClass... aClazz)
   {
     return new JNarrowedClass (this, Arrays.asList (aClazz.clone ()));
   }
 
-  @Nonnull
-  public AbstractJClass narrow (@Nonnull final List <? extends AbstractJClass> aClazz)
+  @NonNull
+  public AbstractJClass narrow (@NonNull final List <? extends AbstractJClass> aClazz)
   {
     return new JNarrowedClass (this, new ArrayList <> (aClazz));
   }
@@ -301,7 +301,7 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * @return A narrowed type without any type parameter (as in <code>HashMap &lt;&gt;</code>)
    */
-  @Nonnull
+  @NonNull
   public AbstractJClass narrowEmpty ()
   {
     return new JNarrowedClass (this, new ArrayList <> ());
@@ -311,7 +311,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return A narrowed type just with a "?" parameter (as in <code>HashMap &lt;?&gt;</code>)
    * @since 3.0.0
    */
-  @Nonnull
+  @NonNull
   public AbstractJClass narrowAny ()
   {
     return narrow (owner ().wildcard ());
@@ -320,7 +320,7 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * @return If this class is parameterized, the type parameters of the given index.
    */
-  @Nonnull
+  @NonNull
   public List <? extends AbstractJClass> getTypeParameters ()
   {
     return Collections.emptyList ();
@@ -333,7 +333,7 @@ public abstract class AbstractJClass extends AbstractJType
    *
    * @return All type parameters as array.
    */
-  @Nonnull
+  @NonNull
   public JTypeVar [] typeParams ()
   {
     return EMPTY_ARRAY;
@@ -353,7 +353,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return never <code>null</code>
    * @deprecated Use {@link #wildcardExtends()} instead
    */
-  @Nonnull
+  @NonNull
   @Deprecated
   public final JTypeWildcard wildcard ()
   {
@@ -366,7 +366,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return never <code>null</code>
    * @since 3.0.0
    */
-  @Nonnull
+  @NonNull
   public final JTypeWildcard wildcardExtends ()
   {
     return wildcard (EWildcardBoundMode.EXTENDS);
@@ -377,7 +377,7 @@ public abstract class AbstractJClass extends AbstractJType
    *
    * @return never <code>null</code>
    */
-  @Nonnull
+  @NonNull
   public final JTypeWildcard wildcardSuper ()
   {
     return wildcard (EWildcardBoundMode.SUPER);
@@ -390,8 +390,8 @@ public abstract class AbstractJClass extends AbstractJType
    *        "extends" or "super"
    * @return never <code>null</code>
    */
-  @Nonnull
-  public final JTypeWildcard wildcard (@Nonnull final EWildcardBoundMode eMode)
+  @NonNull
+  public final JTypeWildcard wildcard (@NonNull final EWildcardBoundMode eMode)
   {
     return new JTypeWildcard (this, eMode);
   }
@@ -409,9 +409,9 @@ public abstract class AbstractJClass extends AbstractJType
    *        Bindings
    * @return Never <code>null</code>.
    */
-  @Nonnull
-  protected abstract AbstractJClass substituteParams (@Nonnull JTypeVar [] aVariables,
-                                                      @Nonnull List <? extends AbstractJClass> aBindings);
+  @NonNull
+  protected abstract AbstractJClass substituteParams (@NonNull JTypeVar [] aVariables,
+                                                      @NonNull List <? extends AbstractJClass> aBindings);
 
   /**
    * Get all inner classes of this class.
@@ -419,7 +419,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return Never <code>null</code>.
    * @since 3.0.3
    */
-  @Nonnull
+  @NonNull
   public Collection <AbstractJClassContainer <?>> getAllInnerClasses ()
   {
     if (this instanceof AbstractJClassContainer <?>)
@@ -452,7 +452,7 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * @return name<code>.class</code>
    */
-  @Nonnull
+  @NonNull
   public final IJExpression dotclass ()
   {
     return JExpr.dotClass (this);
@@ -465,8 +465,8 @@ public abstract class AbstractJClass extends AbstractJType
    *        Method to be invoked
    * @return Newly created {@link JInvocation}
    */
-  @Nonnull
-  public final JInvocation staticInvoke (@Nonnull final JMethod aMethod)
+  @NonNull
+  public final JInvocation staticInvoke (@NonNull final JMethod aMethod)
   {
     return new JInvocation (owner (), this, aMethod);
   }
@@ -478,8 +478,8 @@ public abstract class AbstractJClass extends AbstractJType
    *        Method to be invoked
    * @return Newly created {@link JInvocation}
    */
-  @Nonnull
-  public final JInvocation staticInvoke (@Nonnull final String sMethod)
+  @NonNull
+  public final JInvocation staticInvoke (@NonNull final String sMethod)
   {
     return new JInvocation (owner (), this, sMethod);
   }
@@ -491,8 +491,8 @@ public abstract class AbstractJClass extends AbstractJType
    *        Field to be referenced
    * @return Newly created {@link JFieldRef}
    */
-  @Nonnull
-  public final JFieldRef staticRef (@Nonnull final String sField)
+  @NonNull
+  public final JFieldRef staticRef (@NonNull final String sField)
   {
     return new JFieldRef (this, sField);
   }
@@ -504,8 +504,8 @@ public abstract class AbstractJClass extends AbstractJType
    *        Field to be referenced
    * @return Newly created {@link JFieldRef}
    */
-  @Nonnull
-  public final JFieldRef staticRef (@Nonnull final JVar aField)
+  @NonNull
+  public final JFieldRef staticRef (@NonNull final JVar aField)
   {
     return new JFieldRef (this, aField);
   }
@@ -517,7 +517,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @return Newly created {@link JLambdaMethodRef}
    * @since 3.2.4
    */
-  @Nonnull
+  @NonNull
   public final JLambdaMethodRef methodRefNew ()
   {
     return JLambdaMethodRef.createForNew (this);
@@ -530,8 +530,8 @@ public abstract class AbstractJClass extends AbstractJType
    *        Method to be referenced
    * @return Newly created {@link JLambdaMethodRef}
    */
-  @Nonnull
-  public final JLambdaMethodRef methodRef (@Nonnull final String sMethod)
+  @NonNull
+  public final JLambdaMethodRef methodRef (@NonNull final String sMethod)
   {
     return new JLambdaMethodRef (this, sMethod);
   }
@@ -542,8 +542,8 @@ public abstract class AbstractJClass extends AbstractJType
    * @return <code>class.name</code>
    * @since 3.2.4
    */
-  @Nonnull
-  public final IJExpression enumConstantRef (@Nonnull final String sName)
+  @NonNull
+  public final IJExpression enumConstantRef (@NonNull final String sName)
   {
     return JExpr.enumConstantRef (this, sName);
   }
@@ -554,13 +554,13 @@ public abstract class AbstractJClass extends AbstractJType
    * @return <code>class.name</code>
    * @since 3.2.4
    */
-  @Nonnull
-  public final IJExpression enumConstantRef (@Nonnull final Enum <?> aEnumEntry)
+  @NonNull
+  public final IJExpression enumConstantRef (@NonNull final Enum <?> aEnumEntry)
   {
     return enumConstantRef (aEnumEntry.name ());
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.type (this);
   }
@@ -571,7 +571,7 @@ public abstract class AbstractJClass extends AbstractJType
    * @param f
    *        Formatter to be used
    */
-  void printLink (@Nonnull final IJFormatter f)
+  void printLink (@NonNull final IJFormatter f)
   {
     f.print ("{@link ").generable (this).print ('}');
   }

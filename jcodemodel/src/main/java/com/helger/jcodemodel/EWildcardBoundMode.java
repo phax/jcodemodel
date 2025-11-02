@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 public enum EWildcardBoundMode
 {
@@ -52,12 +52,12 @@ public enum EWildcardBoundMode
    */
   private final String m_sDeclarationTokens;
 
-  EWildcardBoundMode (@Nonnull final String sToken)
+  EWildcardBoundMode (@NonNull final String sToken)
   {
     m_sDeclarationTokens = sToken;
   }
 
-  @Nonnull
+  @NonNull
   public String declarationTokens ()
   {
     return m_sDeclarationTokens;

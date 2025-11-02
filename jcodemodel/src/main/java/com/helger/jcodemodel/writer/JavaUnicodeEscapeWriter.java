@@ -45,9 +45,9 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.BitSet;
 
-import com.helger.jcodemodel.util.UnicodeEscapeWriter;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.jcodemodel.util.UnicodeEscapeWriter;
 
 /**
  * Special {@link UnicodeEscapeWriter} with less characters to encode.
@@ -69,7 +69,7 @@ public class JavaUnicodeEscapeWriter extends UnicodeEscapeWriter
   // we can't have Encoder in method signature
   private final CharsetEncoder m_aEncoder;
 
-  public JavaUnicodeEscapeWriter (@Nonnull final OutputStreamWriter bw)
+  public JavaUnicodeEscapeWriter (@NonNull final OutputStreamWriter bw)
   {
     super (bw);
     m_aEncoder = Charset.forName (bw.getEncoding ()).newEncoder ();

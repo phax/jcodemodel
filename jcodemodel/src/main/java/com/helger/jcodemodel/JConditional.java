@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * If statement, with optional else clause
@@ -70,13 +70,13 @@ public class JConditional implements IJStatement
    * @param aTestExpr
    *        JExpression which will determine branching
    */
-  public JConditional (@Nonnull final IJExpression aTestExpr)
+  public JConditional (@NonNull final IJExpression aTestExpr)
   {
     ValueEnforcer.notNull (aTestExpr, "Test expression");
     m_aTestExpr = aTestExpr;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression test ()
   {
     return m_aTestExpr;
@@ -87,7 +87,7 @@ public class JConditional implements IJStatement
    *
    * @return Then block. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public JBlock _then ()
   {
     return m_aThenBlock;
@@ -98,7 +98,7 @@ public class JConditional implements IJStatement
    *
    * @return Newly generated else block
    */
-  @Nonnull
+  @NonNull
   public JBlock _else ()
   {
     if (m_aElseBlock == null)
@@ -113,13 +113,13 @@ public class JConditional implements IJStatement
    *        The test expression for the new if
    * @return New {@link JConditional}
    */
-  @Nonnull
-  public JConditional _elseif (@Nonnull final IJExpression aTestExpr)
+  @NonNull
+  public JConditional _elseif (@NonNull final IJExpression aTestExpr)
   {
     return _else ()._if (aTestExpr);
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     if (m_aTestExpr == JExpr.TRUE)
     {

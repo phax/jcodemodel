@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Captures the value of the annotation.
@@ -60,24 +60,24 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
    */
   private final Object m_aNativeValue;
 
-  public JAnnotationStringValue (@Nonnull final IJExpression aValue)
+  public JAnnotationStringValue (@NonNull final IJExpression aValue)
   {
     this (aValue, aValue);
   }
 
-  public JAnnotationStringValue (@Nonnull final IJExpression aValue, @Nonnull final Object aNativeValue)
+  public JAnnotationStringValue (@NonNull final IJExpression aValue, @NonNull final Object aNativeValue)
   {
     m_aValue = ValueEnforcer.notNull (aValue, "Value");
     m_aNativeValue = ValueEnforcer.notNull (aNativeValue, "NativeValue");
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression value ()
   {
     return m_aValue;
   }
 
-  @Nonnull
+  @NonNull
   public Object nativeValue ()
   {
     return m_aNativeValue;
@@ -88,7 +88,7 @@ public class JAnnotationStringValue extends AbstractJAnnotationValue
     return m_aNativeValue instanceof IJExpression;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.generable (m_aValue);
   }

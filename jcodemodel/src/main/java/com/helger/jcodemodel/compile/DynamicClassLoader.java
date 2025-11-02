@@ -50,9 +50,9 @@ import java.net.URLStreamHandler;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
 /**
  * class loader that allows dynamic classes and resources.
@@ -116,7 +116,7 @@ public class DynamicClassLoader extends ClassLoader
    * @param cc
    *        the compiled java code file
    */
-  public void setCode (@Nonnull final CompiledCodeJavaFile cc)
+  public void setCode (@NonNull final CompiledCodeJavaFile cc)
   {
     m_aCustomCompiledCode.put (cc.getName (), cc);
   }

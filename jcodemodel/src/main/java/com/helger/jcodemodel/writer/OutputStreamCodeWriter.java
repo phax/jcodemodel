@@ -55,8 +55,8 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class OutputStreamCodeWriter extends AbstractCodeWriter
 {
@@ -68,7 +68,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
    * @param aEncoding
    *        Encoding to be used.
    */
-  public OutputStreamCodeWriter (@Nonnull final OutputStream aOS, @Nullable final Charset aEncoding)
+  public OutputStreamCodeWriter (@NonNull final OutputStream aOS, @Nullable final Charset aEncoding)
   {
     this (aOS, aEncoding, JCMWriter.DEFAULT_NEW_LINE);
   }
@@ -81,9 +81,9 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
    * @param sNewLine
    *        The new line string to be used for source files
    */
-  public OutputStreamCodeWriter (@Nonnull final OutputStream aOS,
+  public OutputStreamCodeWriter (@NonNull final OutputStream aOS,
                                  @Nullable final Charset aEncoding,
-                                 @Nonnull final String sNewLine)
+                                 @NonNull final String sNewLine)
   {
     super (aEncoding, sNewLine);
     try
@@ -97,7 +97,7 @@ public class OutputStreamCodeWriter extends AbstractCodeWriter
   }
 
   @Override
-  public OutputStream openBinary (@Nonnull final String sDirName, @Nonnull final String sFilename) throws IOException
+  public OutputStream openBinary (@NonNull final String sDirName, @NonNull final String sFilename) throws IOException
   {
     return new FilterOutputStream (m_aPS)
     {

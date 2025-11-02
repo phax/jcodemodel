@@ -44,8 +44,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Special class object that represents the type of "null".
@@ -56,27 +56,27 @@ import jakarta.annotation.Nullable;
  */
 public final class JNullType extends AbstractJClass
 {
-  protected JNullType (@Nonnull final JCodeModel aOwner)
+  protected JNullType (@NonNull final JCodeModel aOwner)
   {
     super (aOwner);
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return "null";
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     return "null";
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public JPackage _package ()
   {
     return owner ().rootPackage ();
@@ -90,7 +90,7 @@ public final class JNullType extends AbstractJClass
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public Iterator <AbstractJClass> _implements ()
   {
     return Collections.emptyIterator ();
@@ -109,9 +109,9 @@ public final class JNullType extends AbstractJClass
   }
 
   @Override
-  @Nonnull
-  protected AbstractJClass substituteParams (@Nonnull final JTypeVar [] aVariables,
-                                             @Nonnull final List <? extends AbstractJClass> aBindings)
+  @NonNull
+  protected AbstractJClass substituteParams (@NonNull final JTypeVar [] aVariables,
+                                             @NonNull final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }

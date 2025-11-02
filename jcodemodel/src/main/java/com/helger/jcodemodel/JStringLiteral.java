@@ -42,10 +42,10 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * String literal.
@@ -56,24 +56,24 @@ public class JStringLiteral implements IJExpression
 {
   private String m_sWhat;
 
-  protected JStringLiteral (@Nonnull final String sWhat)
+  protected JStringLiteral (@NonNull final String sWhat)
   {
     what (sWhat);
   }
 
-  @Nonnull
+  @NonNull
   public String what ()
   {
     return m_sWhat;
   }
 
-  public final void what (@Nonnull final String sWhat)
+  public final void what (@NonNull final String sWhat)
   {
     ValueEnforcer.notNull (sWhat, "What");
     m_sWhat = sWhat;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.print (JExpr.quotify ('"', m_sWhat));
   }

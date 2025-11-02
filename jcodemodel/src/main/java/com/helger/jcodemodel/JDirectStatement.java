@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * This class represents a single direct statement. A direct statement is a
@@ -55,24 +55,24 @@ public final class JDirectStatement implements IJStatement
 {
   private String m_sSource;
 
-  public JDirectStatement (@Nonnull final String sSource)
+  public JDirectStatement (@NonNull final String sSource)
   {
     source (sSource);
   }
 
-  @Nonnull
+  @NonNull
   public String source ()
   {
     return m_sSource;
   }
 
-  public void source (@Nonnull final String sSource)
+  public void source (@NonNull final String sSource)
   {
     ValueEnforcer.notNull (sSource, "Source");
     m_sSource = sSource;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.print (m_sSource).newline ();
   }

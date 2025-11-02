@@ -45,9 +45,9 @@
  */
 package com.helger.jcodemodel.meta;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * Defines policy to use with error-types.
@@ -87,7 +87,7 @@ public class ErrorTypePolicy
    *        if true try to (re-)bind references to error-types to existing
    *        types.
    */
-  public ErrorTypePolicy (@Nonnull final EAction aAction, final boolean tryBind)
+  public ErrorTypePolicy (@NonNull final EAction aAction, final boolean tryBind)
   {
     m_eAction = ValueEnforcer.notNull (aAction, "Action");
     m_bTryBind = tryBind;
@@ -96,7 +96,7 @@ public class ErrorTypePolicy
   /**
    * Action to perform if any error-type is found.
    */
-  @Nonnull
+  @NonNull
   EAction action ()
   {
     return m_eAction;

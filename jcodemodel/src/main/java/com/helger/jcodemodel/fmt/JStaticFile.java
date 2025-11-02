@@ -44,10 +44,10 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.WillNotClose;
 import com.helger.jcodemodel.util.JCSecureLoader;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Allows an application to copy a resource file to the output.
@@ -60,12 +60,12 @@ public class JStaticFile extends AbstractJResourceFile
   private final String m_sResourceName;
   private final boolean m_bIsResource;
 
-  public JStaticFile (@Nonnull final String sResourceName)
+  public JStaticFile (@NonNull final String sResourceName)
   {
     this (sResourceName, !sResourceName.endsWith (".java"));
   }
 
-  public JStaticFile (@Nonnull final String sResourceName, final boolean bIsResource)
+  public JStaticFile (@NonNull final String sResourceName, final boolean bIsResource)
   {
     this (JCSecureLoader.getClassClassLoader (JStaticFile.class), sResourceName, bIsResource);
   }
@@ -79,7 +79,7 @@ public class JStaticFile extends AbstractJResourceFile
    *        <code>false</code> if this is a Java source file. <code>true</code>
    *        if this is other resource files.
    */
-  public JStaticFile (@Nonnull final ClassLoader aClassLoader, @Nonnull final String sResourceName, final boolean bIsResource)
+  public JStaticFile (@NonNull final ClassLoader aClassLoader, @NonNull final String sResourceName, final boolean bIsResource)
   {
     super (sResourceName.substring (sResourceName.lastIndexOf ('/') + 1));
     m_aClassLoader = aClassLoader;
@@ -94,7 +94,7 @@ public class JStaticFile extends AbstractJResourceFile
   }
 
   @Override
-  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void build (@NonNull @WillNotClose final OutputStream aOS) throws IOException
   {
     try (final DataInputStream dis = new DataInputStream (m_aClassLoader.getResourceAsStream (m_sResourceName)))
     {

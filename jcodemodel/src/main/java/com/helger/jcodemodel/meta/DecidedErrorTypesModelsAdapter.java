@@ -56,6 +56,8 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.Nonnegative;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
@@ -67,8 +69,6 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 
-import jakarta.annotation.Nonnull;
-
 /**
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */
@@ -77,7 +77,7 @@ class DecidedErrorTypesModelsAdapter
   private static final Logger LOGGER = Logger.getLogger (DecidedErrorTypesModelsAdapter.class.getName ());
 
   @Nonnegative
-  static int toJMod (@Nonnull final Collection <Modifier> modifierCollection)
+  static int toJMod (@NonNull final Collection <Modifier> modifierCollection)
   {
     int modifiers = 0;
     for (final Modifier eModifier : modifierCollection)
@@ -127,8 +127,8 @@ class DecidedErrorTypesModelsAdapter
     return modifiers;
   }
 
-  @Nonnull
-  private static EClassType _toClassType (@Nonnull final ElementKind eKind)
+  @NonNull
+  private static EClassType _toClassType (@NonNull final ElementKind eKind)
   {
     switch (eKind)
     {
@@ -156,7 +156,7 @@ class DecidedErrorTypesModelsAdapter
     m_aErrorTypePolicy = errorTypePolicy;
   }
 
-  @Nonnull
+  @NonNull
   public JDefinedClass getClass (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
   {
     final Element enclosingElement = element.getEnclosingElement ();
@@ -197,7 +197,7 @@ class DecidedErrorTypesModelsAdapter
                                      enclosingElement);
   }
 
-  @Nonnull
+  @NonNull
   private JDefinedClass _defineClass (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
   {
     final Element enclosingElement = element.getEnclosingElement ();
@@ -211,7 +211,7 @@ class DecidedErrorTypesModelsAdapter
     return getClass (element);
   }
 
-  @Nonnull
+  @NonNull
   private JDefinedClass _defineTopLevelClass (final TypeElement element,
                                               final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
   {
@@ -311,7 +311,7 @@ class DecidedErrorTypesModelsAdapter
                                      enclosingClass);
   }
 
-  @Nonnull
+  @NonNull
   AbstractJClass ref (final TypeElement element) throws CodeModelBuildingException, ErrorTypeFound
   {
     try
@@ -326,7 +326,7 @@ class DecidedErrorTypesModelsAdapter
     }
   }
 
-  AbstractJType toJType (@Nonnull final TypeMirror type, final TypeEnvironment environment) throws CodeModelBuildingException,
+  AbstractJType toJType (@NonNull final TypeMirror type, final TypeEnvironment environment) throws CodeModelBuildingException,
                                                                                             ErrorTypeFound
   {
     try

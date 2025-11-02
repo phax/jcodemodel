@@ -40,8 +40,8 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A special type variable that is used inside {@link JInvocation} objects if
@@ -53,7 +53,7 @@ public class JTypeVarClass extends JTypeVar
 {
   private final AbstractJClass m_aClass;
 
-  protected JTypeVarClass (@Nonnull final AbstractJClass aClass)
+  protected JTypeVarClass (@NonNull final AbstractJClass aClass)
   {
     super (aClass.owner (), aClass.name ());
     m_aClass = aClass;
@@ -65,7 +65,7 @@ public class JTypeVarClass extends JTypeVar
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String name ()
   {
     // This method is used for the main printing
@@ -80,7 +80,7 @@ public class JTypeVarClass extends JTypeVar
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public String fullName ()
   {
     // This method is e.g. used for import statements

@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel.util;
 
-import com.helger.jcodemodel.writer.JCMWriter;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nullable;
+import com.helger.jcodemodel.writer.JCMWriter;
 
 /**
  * <p>

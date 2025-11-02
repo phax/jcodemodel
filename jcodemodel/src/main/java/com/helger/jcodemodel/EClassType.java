@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * This helps enable whether the JDefinedClass is a Class or Interface or AnnotationTypeDeclaration
@@ -60,12 +60,12 @@ public enum EClassType
    */
   private final String m_sDeclarationToken;
 
-  EClassType (@Nonnull final String sDeclarationToken)
+  EClassType (@NonNull final String sDeclarationToken)
   {
     m_sDeclarationToken = sDeclarationToken;
   }
 
-  @Nonnull
+  @NonNull
   public String declarationToken ()
   {
     return m_sDeclarationToken;

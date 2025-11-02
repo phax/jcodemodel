@@ -45,10 +45,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents an arrays as annotation members
@@ -63,13 +63,13 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   private final JCodeModel m_aOwner;
   private final List <AbstractJAnnotationValue> m_aValues = new ArrayList <> ();
 
-  public JAnnotationArrayMember (@Nonnull final JCodeModel aOwner)
+  public JAnnotationArrayMember (@NonNull final JCodeModel aOwner)
   {
     ValueEnforcer.notNull (aOwner, "Owner");
     m_aOwner = aOwner;
   }
 
-  @Nonnull
+  @NonNull
   public JCodeModel owner ()
   {
     return m_aOwner;
@@ -83,15 +83,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
-  public JAnnotationArrayMember param (@Nonnull final String sValue)
+  @NonNull
+  public JAnnotationArrayMember param (@NonNull final String sValue)
   {
     m_aValues.add (wrap (sValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final String... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final String... aValues)
   {
     for (final String sValue : aValues)
       m_aValues.add (wrap (sValue));
@@ -106,15 +106,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final boolean bValue)
   {
     m_aValues.add (wrap (bValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final boolean... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final boolean... aValues)
   {
     for (final boolean value : aValues)
       m_aValues.add (wrap (value));
@@ -129,15 +129,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final byte nValue)
   {
     m_aValues.add (wrap (nValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final byte... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final byte... aValues)
   {
     for (final byte value : aValues)
       m_aValues.add (wrap (value));
@@ -152,15 +152,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final char cValue)
   {
     m_aValues.add (wrap (cValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final char... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final char... aValues)
   {
     for (final char value : aValues)
       m_aValues.add (wrap (value));
@@ -175,15 +175,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final double dValue)
   {
     m_aValues.add (wrap (dValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final double... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final double... aValues)
   {
     for (final double value : aValues)
       m_aValues.add (wrap (value));
@@ -198,15 +198,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final long nValue)
   {
     m_aValues.add (wrap (nValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final long... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final long... aValues)
   {
     for (final long value : aValues)
       m_aValues.add (wrap (value));
@@ -221,15 +221,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final short nValue)
   {
     m_aValues.add (wrap (nValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final short... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final short... aValues)
   {
     for (final short value : aValues)
       m_aValues.add (wrap (value));
@@ -244,15 +244,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final int nValue)
   {
     m_aValues.add (wrap (nValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final int... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final int... aValues)
   {
     for (final int value : aValues)
       m_aValues.add (wrap (value));
@@ -267,15 +267,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final float fValue)
   {
     m_aValues.add (wrap (fValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final float... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final float... aValues)
   {
     for (final float value : aValues)
       m_aValues.add (wrap (value));
@@ -290,15 +290,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
-  public JAnnotationArrayMember param (@Nonnull final Enum <?> aEnumConstant)
+  @NonNull
+  public JAnnotationArrayMember param (@NonNull final Enum <?> aEnumConstant)
   {
     m_aValues.add (wrap (aEnumConstant));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final Enum <?>... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final Enum <?>... aValues)
   {
     for (final Enum <?> value : aValues)
       m_aValues.add (wrap (value));
@@ -313,15 +313,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final JEnumConstant aValue)
   {
     m_aValues.add (wrap (aValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final JEnumConstant... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final JEnumConstant... aValues)
   {
     for (final JEnumConstant value : aValues)
       m_aValues.add (wrap (value));
@@ -336,15 +336,15 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The JAnnotationArrayMember. More elements can be added by calling
    *         the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final IJExpression aValue)
   {
     m_aValues.add (wrap (aValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final IJExpression... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final IJExpression... aValues)
   {
     for (final IJExpression value : aValues)
       m_aValues.add (wrap (value));
@@ -359,30 +359,30 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @return The {@link JAnnotationArrayMember}. More elements can be added by
    *         calling the same method multiple times
    */
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final Class <?> aValue)
   {
     m_aValues.add (wrap (aValue));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final Class <?>... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final Class <?>... aValues)
   {
     for (final Class <?> value : aValues)
       m_aValues.add (wrap (value));
     return this;
   }
 
-  @Nonnull
+  @NonNull
   public JAnnotationArrayMember param (final AbstractJType aType)
   {
     m_aValues.add (wrap (aType));
     return this;
   }
 
-  @Nonnull
-  public JAnnotationArrayMember params (@Nonnull final AbstractJType... aValues)
+  @NonNull
+  public JAnnotationArrayMember params (@NonNull final AbstractJType... aValues)
   {
     for (final AbstractJType value : aValues)
       m_aValues.add (wrap (value));
@@ -392,8 +392,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   /**
    * Adds a new annotation to the array.
    */
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
     return annotate (owner ().ref (aClazz));
   }
@@ -401,8 +401,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
   /**
    * Adds a new annotation to the array.
    */
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final AbstractJClass aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
     final JAnnotationUse a = new JAnnotationUse (aClazz);
     m_aValues.add (a);
@@ -415,7 +415,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    * @see #getAllAnnotations()
    */
   @SuppressWarnings ({ "unchecked", "rawtypes" })
-  @Nonnull
+  @NonNull
   public List <JAnnotationUse> annotations ()
   {
     // FIXME this invocation is invalid if the caller isn't adding annotations
@@ -424,13 +424,13 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
     return Collections.<JAnnotationUse> unmodifiableList ((List) m_aValues);
   }
 
-  @Nonnull
+  @NonNull
   public List <AbstractJAnnotationValue> annotationsMutable ()
   {
     return m_aValues;
   }
 
-  @Nonnull
+  @NonNull
   public List <AbstractJAnnotationValue> getAllAnnotations ()
   {
     return Collections.unmodifiableList (annotationsMutable ());
@@ -442,7 +442,7 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
     return m_aValues.size ();
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.print ('{').newline ().indent ();
     boolean first = true;

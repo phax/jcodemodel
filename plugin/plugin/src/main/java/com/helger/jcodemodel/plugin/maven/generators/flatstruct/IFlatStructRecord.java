@@ -22,10 +22,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jspecify.annotations.Nullable;
+
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.JCodeModel;
-
-import jakarta.annotation.Nullable;
 
 public sealed interface IFlatStructRecord
 {

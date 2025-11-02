@@ -44,10 +44,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.helger.annotation.Nonnegative;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.annotation.Nonnegative;
 
 /**
  * This is a single Java 8 lambda expression. It consists of 0-n parameters and
@@ -75,8 +75,8 @@ public class JLambda implements IJExpression
    *        The variable name to use. May not be <code>null</code>.
    * @return The created {@link JLambdaParam} object.
    */
-  @Nonnull
-  public JLambdaParam addParam (@Nonnull final String sName)
+  @NonNull
+  public JLambdaParam addParam (@NonNull final String sName)
   {
     final JLambdaParam aParam = new JLambdaParam ((AbstractJType) null, sName);
     m_aParams.add (aParam);
@@ -92,8 +92,8 @@ public class JLambda implements IJExpression
    *        The variable name to use. May not be <code>null</code>.
    * @return The created {@link JLambdaParam} object.
    */
-  @Nonnull
-  public JLambdaParam addParam (@Nullable final AbstractJType aType, @Nonnull final String sName)
+  @NonNull
+  public JLambdaParam addParam (@Nullable final AbstractJType aType, @NonNull final String sName)
   {
     final JLambdaParam aParam = new JLambdaParam (aType, sName);
     m_aParams.add (aParam);
@@ -104,7 +104,7 @@ public class JLambda implements IJExpression
    * @return An modifiable list with all parameters present. Never
    *         <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public List <JLambdaParam> paramsMutable ()
   {
     return m_aParams;
@@ -114,7 +114,7 @@ public class JLambda implements IJExpression
    * @return An unmodifiable list with all parameters present. Never
    *         <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   public List <JLambdaParam> params ()
   {
     return Collections.unmodifiableList (paramsMutable ());
@@ -126,13 +126,13 @@ public class JLambda implements IJExpression
     return m_aParams.size ();
   }
 
-  @Nonnull
+  @NonNull
   public JLambdaBlock body ()
   {
     return m_aBodyStatement;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     final int nParams = m_aParams.size ();
     if (nParams > 0)
@@ -181,8 +181,8 @@ public class JLambda implements IJExpression
    * @return Never <code>null</code>.
    * @since 3.0.0
    */
-  @Nonnull
-  public static JLambda simple (@Nonnull final IJExpression aExpr)
+  @NonNull
+  public static JLambda simple (@NonNull final IJExpression aExpr)
   {
     final JLambda ret = new JLambda ();
     ret.body ().lambdaExpr (aExpr);

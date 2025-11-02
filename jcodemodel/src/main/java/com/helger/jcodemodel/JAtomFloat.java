@@ -42,9 +42,9 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
-import com.helger.base.equals.EqualsHelper;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.equals.EqualsHelper;
 
 /**
  * A special atom for float values
@@ -68,7 +68,7 @@ public class JAtomFloat implements IJExpression
     return m_fWhat;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     if (m_fWhat == Float.NEGATIVE_INFINITY)
       f.print (JAVA_LANG_FLOAT_NEGATIVE_INFINITY);

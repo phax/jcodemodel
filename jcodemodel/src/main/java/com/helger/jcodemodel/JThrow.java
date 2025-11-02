@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import com.helger.base.enforce.ValueEnforcer;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.enforce.ValueEnforcer;
 
 /**
  * JThrow statement
@@ -60,19 +60,19 @@ public class JThrow implements IJStatement
    * @param aExpr
    *        JExpression which evaluates to JThrow value
    */
-  public JThrow (@Nonnull final IJExpression aExpr)
+  public JThrow (@NonNull final IJExpression aExpr)
   {
     ValueEnforcer.notNull (aExpr, "Expr");
     m_aExpr = aExpr;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression expr ()
   {
     return m_aExpr;
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.print ("throw");
     f.generable (m_aExpr);

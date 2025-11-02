@@ -49,6 +49,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.Nonempty;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.IJFormatter;
@@ -60,9 +63,6 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JResourceDir;
 import com.helger.jcodemodel.fmt.AbstractJResourceFile;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Java Code Model Writer
@@ -91,7 +91,7 @@ public class JCMWriter
    */
   private String m_sIndentString = DEFAULT_INDENT_STRING;
 
-  public JCMWriter (@Nonnull final JCodeModel aCM)
+  public JCMWriter (@NonNull final JCodeModel aCM)
   {
     ValueEnforcer.notNull (aCM, "CodeModel");
     m_aCM = aCM;
@@ -114,7 +114,7 @@ public class JCMWriter
    *        default.
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   public JCMWriter setCharset (@Nullable final Charset aCharset)
   {
     m_aCharset = aCharset;
@@ -124,7 +124,7 @@ public class JCMWriter
   /**
    * @return The newline string to be used. Defaults to system default
    */
-  @Nonnull
+  @NonNull
   public String getNewLine ()
   {
     return m_sNewLine;
@@ -137,22 +137,22 @@ public class JCMWriter
    *        The new line string to be used. May neither be <code>null</code> nor empty.
    * @return this for chaining
    */
-  @Nonnull
-  public JCMWriter setNewLine (@Nonnull @Nonempty final String sNewLine)
+  @NonNull
+  public JCMWriter setNewLine (@NonNull @Nonempty final String sNewLine)
   {
     ValueEnforcer.notEmpty (sNewLine, "NewLine");
     m_sNewLine = sNewLine;
     return this;
   }
 
-  @Nonnull
+  @NonNull
   public String getIndentString ()
   {
     return m_sIndentString;
   }
 
-  @Nonnull
-  public JCMWriter setIndentString (@Nonnull final String sIndentString)
+  @NonNull
+  public JCMWriter setIndentString (@NonNull final String sIndentString)
   {
     ValueEnforcer.notNull (sIndentString, "IndentString");
     m_sIndentString = sIndentString;
@@ -170,7 +170,7 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final File aDestDir, @Nullable final IProgressTracker aStatusPT) throws IOException
+  public void build (@NonNull final File aDestDir, @Nullable final IProgressTracker aStatusPT) throws IOException
   {
     build (aDestDir, aDestDir, aStatusPT);
   }
@@ -188,8 +188,8 @@ public class JCMWriter
    * @throws IOException
    *         on IO error if non-null, progress indication will be sent to this stream.
    */
-  public void build (@Nonnull final File aSrcDir,
-                     @Nonnull final File aResourceDir,
+  public void build (@NonNull final File aSrcDir,
+                     @NonNull final File aResourceDir,
                      @Nullable final IProgressTracker aStatusPT) throws IOException
   {
     AbstractCodeWriter aSrcWriter = new FileCodeWriter (aSrcDir, m_aCharset, m_sNewLine);
@@ -210,7 +210,7 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final File aDestDir) throws IOException
+  public void build (@NonNull final File aDestDir) throws IOException
   {
     build (aDestDir, System.out::println);
   }
@@ -225,7 +225,7 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final File aSrcDir, @Nonnull final File aResourceDir) throws IOException
+  public void build (@NonNull final File aSrcDir, @NonNull final File aResourceDir) throws IOException
   {
     build (aSrcDir, aResourceDir, System.out::println);
   }
@@ -238,7 +238,7 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final AbstractCodeWriter aWriter) throws IOException
+  public void build (@NonNull final AbstractCodeWriter aWriter) throws IOException
   {
     build (aWriter, aWriter);
   }
@@ -253,7 +253,7 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@Nonnull final AbstractCodeWriter aSourceWriter, @Nonnull final AbstractCodeWriter aResourceWriter)
+  public void build (@NonNull final AbstractCodeWriter aSourceWriter, @NonNull final AbstractCodeWriter aResourceWriter)
                                                                                                                          throws IOException
   {
     ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
@@ -278,10 +278,10 @@ public class JCMWriter
     }
   }
 
-  @Nonnull
-  private JFormatter _createJavaSourceFileWriter (@Nonnull final AbstractCodeWriter aSrcWriter,
-                                                  @Nonnull final JPackage aPackage,
-                                                  @Nonnull final String sClassFilename) throws IOException
+  @NonNull
+  private JFormatter _createJavaSourceFileWriter (@NonNull final AbstractCodeWriter aSrcWriter,
+                                                  @NonNull final JPackage aPackage,
+                                                  @NonNull final String sClassFilename) throws IOException
   {
     final SourcePrintWriter aWriter = aSrcWriter.openSource (aPackage, sClassFilename);
     final JFormatter ret = new JFormatter (aWriter, m_sIndentString);
@@ -290,7 +290,7 @@ public class JCMWriter
     return ret;
   }
 
-  public void buildPackage (@Nonnull final AbstractCodeWriter aSourceWriter, @Nonnull final JPackage aPackage)
+  public void buildPackage (@NonNull final AbstractCodeWriter aSourceWriter, @NonNull final JPackage aPackage)
                                                                                                                throws IOException
   {
     ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
@@ -330,8 +330,8 @@ public class JCMWriter
     }
   }
 
-  public void buildResourceDir (@Nonnull final AbstractCodeWriter aResourceWriter,
-                                @Nonnull final JResourceDir aResourceDir) throws IOException
+  public void buildResourceDir (@NonNull final AbstractCodeWriter aResourceWriter,
+                                @NonNull final JResourceDir aResourceDir) throws IOException
   {
     ValueEnforcer.notNull (aResourceWriter, "ResourceWriter");
     ValueEnforcer.notNull (aResourceDir, "ResourceDir");

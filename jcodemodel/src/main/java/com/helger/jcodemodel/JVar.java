@@ -45,12 +45,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
 import com.helger.base.hashcode.HashCodeGenerator;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Variables and fields.
@@ -94,9 +94,9 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    * @param aInitExpr
    *        Value to initialize this variable to
    */
-  public JVar (@Nonnull final JMods aMods,
-      @Nonnull final AbstractJType aType,
-      @Nonnull final String sName,
+  public JVar (@NonNull final JMods aMods,
+      @NonNull final AbstractJType aType,
+      @NonNull final String sName,
       @Nullable final IJExpression aInitExpr)
   {
     ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
@@ -113,7 +113,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    *        Expression to be used to initialize this field
    * @return this for chaining
    */
-  @Nonnull
+  @NonNull
   public JVar init (@Nullable final IJExpression aInitExpr)
   {
     m_aInitExpr = aInitExpr;
@@ -134,7 +134,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    *
    * @return Name of the variable
    */
-  @Nonnull
+  @NonNull
   public String name ()
   {
     return m_sName;
@@ -146,7 +146,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    * @param sName
    *        New name of the variable
    */
-  public void name (@Nonnull final String sName)
+  public void name (@NonNull final String sName)
   {
     ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_sName = sName;
@@ -157,7 +157,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    *
    * @return always non-null.
    */
-  @Nonnull
+  @NonNull
   public AbstractJType type ()
   {
     return m_aType;
@@ -167,7 +167,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    * @return the current modifiers of this method. Always return non-null valid
    *         object.
    */
-  @Nonnull
+  @NonNull
   public JMods mods ()
   {
     return m_aMods;
@@ -180,8 +180,8 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    *        must not be null.
    * @return the old type value. always non-null.
    */
-  @Nonnull
-  public AbstractJType type (@Nonnull final AbstractJType aNewType)
+  @NonNull
+  public AbstractJType type (@NonNull final AbstractJType aNewType)
   {
     ValueEnforcer.notNull (aNewType, "NewType");
     final AbstractJType aOldType = m_aType;
@@ -202,8 +202,8 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    * @return New {@link JAnnotationUse}
    */
   @Override
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final AbstractJClass aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
     if (m_aAnnotations == null)
       m_aAnnotations = new ArrayList <> ();
@@ -220,13 +220,13 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    * @return New {@link JAnnotationUse}
    */
   @Override
-  @Nonnull
-  public JAnnotationUse annotate (@Nonnull final Class <? extends Annotation> aClazz)
+  @NonNull
+  public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
     return annotate (m_aType.owner ().ref (aClazz));
   }
 
-  @Nonnull
+  @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
@@ -235,7 +235,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   }
 
   @Override
-  @Nonnull
+  @NonNull
   public List <JAnnotationUse> annotations ()
   {
     return Collections.unmodifiableList (annotationsMutable ());
@@ -246,7 +246,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
     return m_aAnnotations != null;
   }
 
-  public void bind (@Nonnull final IJFormatter f)
+  public void bind (@NonNull final IJFormatter f)
   {
     if (m_aAnnotations != null)
     {
@@ -266,13 +266,13 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   }
 
   @Override
-  public void declare (@Nonnull final IJFormatter f)
+  public void declare (@NonNull final IJFormatter f)
   {
     f.var (this).print (';').newline ();
   }
 
   @Override
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.id (m_sName);
   }

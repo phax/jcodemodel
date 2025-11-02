@@ -42,9 +42,9 @@ package com.helger.jcodemodel;
 
 import java.util.Collection;
 
-import com.helger.jcodemodel.exceptions.JCodeModelException;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
 
 /**
  * The common aspect of a package and a class.
@@ -94,8 +94,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
-  @Nonnull
-  CLASSTYPE _class (int nMods, @Nonnull String sName, @Nonnull EClassType eClassType) throws JCodeModelException;
+  @NonNull
+  CLASSTYPE _class (int nMods, @NonNull String sName, @NonNull EClassType eClassType) throws JCodeModelException;
 
   /**
    * Add a new public class to this class/package.
@@ -106,8 +106,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
-  @Nonnull
-  default CLASSTYPE _class (@Nonnull final String sName) throws JCodeModelException
+  @NonNull
+  default CLASSTYPE _class (@NonNull final String sName) throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sName);
   }
@@ -123,8 +123,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
-  @Nonnull
-  default CLASSTYPE _class (final int nMods, @Nonnull final String sName) throws JCodeModelException
+  @NonNull
+  default CLASSTYPE _class (final int nMods, @NonNull final String sName) throws JCodeModelException
   {
     return _class (nMods, sName, EClassType.CLASS);
   }
@@ -138,8 +138,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
-  @Nonnull
-  default CLASSTYPE _interface (@Nonnull final String sName) throws JCodeModelException
+  @NonNull
+  default CLASSTYPE _interface (@NonNull final String sName) throws JCodeModelException
   {
     return _interface (JMod.PUBLIC, sName);
   }
@@ -155,8 +155,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
-  @Nonnull
-  default CLASSTYPE _interface (final int nMods, @Nonnull final String sName) throws JCodeModelException
+  @NonNull
+  default CLASSTYPE _interface (final int nMods, @NonNull final String sName) throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sName, EClassType.INTERFACE);
   }
@@ -170,8 +170,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
-  @Nonnull
-  default CLASSTYPE _annotationTypeDeclaration (@Nonnull final String sName) throws JCodeModelException
+  @NonNull
+  default CLASSTYPE _annotationTypeDeclaration (@NonNull final String sName) throws JCodeModelException
   {
     return _annotationTypeDeclaration (JMod.PUBLIC, sName);
   }
@@ -187,8 +187,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
-  @Nonnull
-  default CLASSTYPE _annotationTypeDeclaration (final int nMods, @Nonnull final String sName) throws JCodeModelException
+  @NonNull
+  default CLASSTYPE _annotationTypeDeclaration (final int nMods, @NonNull final String sName) throws JCodeModelException
   {
     return _class (nMods, sName, EClassType.ANNOTATION_TYPE_DECL);
   }
@@ -202,8 +202,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
-  @Nonnull
-  default CLASSTYPE _enum (@Nonnull final String sName) throws JCodeModelException
+  @NonNull
+  default CLASSTYPE _enum (@NonNull final String sName) throws JCodeModelException
   {
     return _enum (JMod.PUBLIC, sName);
   }
@@ -219,8 +219,8 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
    * @throws JCodeModelException
    *         If another class/interface/... with the same name already exists
    */
-  @Nonnull
-  default CLASSTYPE _enum (final int nMods, @Nonnull final String sName) throws JCodeModelException
+  @NonNull
+  default CLASSTYPE _enum (final int nMods, @NonNull final String sName) throws JCodeModelException
   {
     return _class (nMods, sName, EClassType.ENUM);
   }
@@ -228,6 +228,6 @@ public interface IJClassContainer <CLASSTYPE extends IJClassContainer <CLASSTYPE
   /**
    * @return A collection with all nested classes defined in this class. Never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   Collection <CLASSTYPE> classes ();
 }

@@ -42,10 +42,10 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * array component reference.
@@ -70,7 +70,7 @@ public class JArrayCompRef implements IJAssignmentTarget
    * @param aIndex
    *        JExpression for index of component to access
    */
-  protected JArrayCompRef (@Nonnull final IJExpression aArray, @Nonnull final IJExpression aIndex)
+  protected JArrayCompRef (@NonNull final IJExpression aArray, @NonNull final IJExpression aIndex)
   {
     ValueEnforcer.notNull (aArray, "Array");
     ValueEnforcer.notNull (aIndex, "Index");
@@ -78,19 +78,19 @@ public class JArrayCompRef implements IJAssignmentTarget
     m_aIndex = aIndex;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression array ()
   {
     return m_aArray;
   }
 
-  @Nonnull
+  @NonNull
   public IJExpression index ()
   {
     return m_aIndex;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     f.generable (m_aArray).print ('[').generable (m_aIndex).print (']');
   }

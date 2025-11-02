@@ -40,7 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Base interface for objects having a relation to a {@link JCodeModel}.
@@ -54,6 +54,6 @@ public interface IJOwned
    *
    * @return The owner and never <code>null</code>.
    */
-  @Nonnull
+  @NonNull
   JCodeModel owner ();
 }

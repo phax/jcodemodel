@@ -42,9 +42,9 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
-import com.helger.base.equals.EqualsHelper;
+import org.jspecify.annotations.NonNull;
 
-import jakarta.annotation.Nonnull;
+import com.helger.base.equals.EqualsHelper;
 
 /**
  * A special atom for double values
@@ -67,7 +67,7 @@ public class JAtomDouble implements IJExpression
     return m_dWhat;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     if (m_dWhat == Double.NEGATIVE_INFINITY)
       f.print (JAVA_LANG_DOUBLE_NEGATIVE_INFINITY);

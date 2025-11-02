@@ -14,8 +14,8 @@
  */
 package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * list of options to apply to fields. Those can be hold by classes or packages, represented by
@@ -44,7 +44,7 @@ public class FieldOptions
     return m_aParent;
   }
 
-  @Nonnull
+  @NonNull
   public FieldOptions setParent (@Nullable final FieldOptions parent)
   {
     m_aParent = parent;
@@ -63,7 +63,7 @@ public class FieldOptions
     return DEFAULT_FINAL;
   }
 
-  @Nonnull
+  @NonNull
   public FieldOptions setFinal (@Nullable final Boolean _final)
   {
     m_aFinal = _final;
@@ -82,7 +82,7 @@ public class FieldOptions
     return DEFAULT_GETTER;
   }
 
-  @Nonnull
+  @NonNull
   public FieldOptions setGetter (@Nullable final Boolean getter)
   {
     m_aGetter = getter;
@@ -101,7 +101,7 @@ public class FieldOptions
     return DEFAULT_LAST_UPDATED;
   }
 
-  @Nonnull
+  @NonNull
   public FieldOptions setLastUpdated (@Nullable final Boolean lastUpdated)
   {
     m_aLastUpdated = lastUpdated;
@@ -120,7 +120,7 @@ public class FieldOptions
     return DEFAULT_REDIRECT;
   }
 
-  @Nonnull
+  @NonNull
   public FieldOptions setRedirect (@Nullable final Boolean redirect)
   {
     m_aRedirect = redirect;
@@ -137,7 +137,7 @@ public class FieldOptions
     return DEFAULT_SETTER;
   }
 
-  @Nonnull
+  @NonNull
   public FieldOptions setSetter (@Nullable final Boolean setter)
   {
     m_aSetter = setter;
@@ -157,7 +157,7 @@ public class FieldOptions
     return DEFAULT_VISIBILITY;
   }
 
-  @Nonnull
+  @NonNull
   public FieldOptions setVisibility (@Nullable final EFieldVisibility visibility)
   {
     m_aVisibility = visibility;

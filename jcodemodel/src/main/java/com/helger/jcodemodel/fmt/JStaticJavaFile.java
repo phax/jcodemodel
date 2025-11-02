@@ -54,6 +54,9 @@ import java.util.function.Function;
 
 import javax.tools.JavaFileObject;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.annotation.WillNotClose;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.io.nonblocking.NonBlockingBufferedReader;
@@ -62,9 +65,6 @@ import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JTypeVar;
 import com.helger.jcodemodel.util.JCSecureLoader;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * Statically generated Java source file.
@@ -97,19 +97,19 @@ public class JStaticJavaFile extends AbstractJResourceFile
   private final Function <String, String> m_aFilter;
   private final Charset m_aEncoding;
 
-  public JStaticJavaFile (@Nonnull final JPackage aPkg,
-                          @Nonnull final String sClassName,
-                          @Nonnull final String sResourceName,
-                          @Nonnull final Charset aEncoding)
+  public JStaticJavaFile (@NonNull final JPackage aPkg,
+                          @NonNull final String sClassName,
+                          @NonNull final String sResourceName,
+                          @NonNull final Charset aEncoding)
   {
     this (aPkg, sClassName, JCSecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (sResourceName), null, aEncoding);
   }
 
-  public JStaticJavaFile (@Nonnull final JPackage aPkg,
-                          @Nonnull final String sClassName,
-                          @Nonnull final URL aSource,
+  public JStaticJavaFile (@NonNull final JPackage aPkg,
+                          @NonNull final String sClassName,
+                          @NonNull final URL aSource,
                           @Nullable final Function <String, String> aFilter,
-                          @Nonnull final Charset aEncoding)
+                          @NonNull final Charset aEncoding)
   {
     super (sClassName + JAVA_FILE_EXTENSION);
     m_aPkg = ValueEnforcer.notNull (aPkg, "Package");
@@ -123,7 +123,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
   /**
    * @return a class object that represents a statically generated code.
    */
-  @Nonnull
+  @NonNull
   public final AbstractJClass getJClass ()
   {
     return m_aClazz;
@@ -135,14 +135,14 @@ public class JStaticJavaFile extends AbstractJResourceFile
     return false;
   }
 
-  @Nonnull
+  @NonNull
   public final Charset getEncoding ()
   {
     return m_aEncoding;
   }
 
   @Override
-  public void build (@Nonnull @WillNotClose final OutputStream aOS) throws IOException
+  public void build (@NonNull @WillNotClose final OutputStream aOS) throws IOException
   {
     final Function <String, String> aFilter = _createLineFilter ();
     int nLineNumber = 1;
@@ -172,7 +172,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
    * A derived class can override this method to process the contents of the
    * source file.
    */
-  @Nonnull
+  @NonNull
   private Function <String, String> _createLineFilter ()
   {
     // this filter replaces the package declaration.
@@ -215,7 +215,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public String fullName ()
     {
       if (m_aPkg.isUnnamed ())
@@ -224,7 +224,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
     }
 
     @Override
-    @Nonnull
+    @NonNull
     public JPackage _package ()
     {
       return m_aPkg;

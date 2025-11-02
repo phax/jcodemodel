@@ -16,10 +16,10 @@ package com.helger.jcodemodel.plugin.maven.generators.flatstruct;
 
 import java.util.Locale;
 
-import com.helger.jcodemodel.JMod;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import com.helger.jcodemodel.JMod;
 
 /**
  * visibility to set when constructing a field
@@ -38,7 +38,7 @@ public enum EFieldVisibility
     m_nJMod = jmod;
   }
 
-  public void apply (@Nonnull final FieldOptions opt)
+  public void apply (@NonNull final FieldOptions opt)
   {
     opt.setVisibility (this);
   }

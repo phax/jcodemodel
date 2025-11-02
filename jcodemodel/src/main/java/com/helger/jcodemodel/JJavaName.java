@@ -43,7 +43,7 @@ package com.helger.jcodemodel;
 import java.util.HashSet;
 import java.util.Set;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Utility methods that convert arbitrary strings into Java identifiers.
@@ -134,7 +134,7 @@ public final class JJavaName
    * @return <code>true</code> if the string is a Java keyword,
    *         <code>false</code> if not.
    */
-  public static boolean isJavaReservedKeyword (@Nonnull final String sStr)
+  public static boolean isJavaReservedKeyword (@NonNull final String sStr)
   {
     return sStr.length () > 0 && RESERVED_KEYWORDS.contains (sStr);
   }
@@ -148,7 +148,7 @@ public final class JJavaName
    *         <code>false</code> if this is a reserved keyword or if it contains
    *         invalid characters.
    */
-  public static boolean isJavaIdentifier (@Nonnull final String sStr)
+  public static boolean isJavaIdentifier (@NonNull final String sStr)
   {
     if (sStr.length () == 0)
       return false;

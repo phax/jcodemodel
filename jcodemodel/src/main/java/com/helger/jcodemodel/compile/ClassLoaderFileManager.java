@@ -66,11 +66,11 @@ import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 import javax.tools.StandardLocation;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.annotation.style.UnsupportedOperation;
 import com.helger.base.string.StringHelper;
 import com.helger.base.string.StringReplace;
-
-import jakarta.annotation.Nonnull;
 
 /**
  * java file manager that also checks and writes inside a given {@link DynamicClassLoader}. This is
@@ -111,8 +111,8 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
 
   @Override
   public Iterable <JavaFileObject> list (final Location location,
-                                         @Nonnull final String packageName,
-                                         @Nonnull final Set <Kind> kinds,
+                                         @NonNull final String packageName,
+                                         @NonNull final Set <Kind> kinds,
                                          final boolean recurse) throws IOException
   {
     if (location == StandardLocation.PLATFORM_CLASS_PATH || packageName.startsWith ("java"))
@@ -126,7 +126,7 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
     return Collections.emptyList ();
   }
 
-  public List <JavaFileObject> find (@Nonnull final String packageName) throws IOException
+  public List <JavaFileObject> find (@NonNull final String packageName) throws IOException
   {
     final String sJavaPackageName = StringReplace.replaceAll (packageName, '.', '/');
     final List <JavaFileObject> result = new ArrayList <> ();
@@ -186,8 +186,8 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
     return result;
   }
 
-  @Nonnull
-  private List <JavaFileObject> processDir (@Nonnull final String packageName, @Nonnull final File directory)
+  @NonNull
+  private List <JavaFileObject> processDir (@NonNull final String packageName, @NonNull final File directory)
   {
     final List <JavaFileObject> result = new ArrayList <> ();
 

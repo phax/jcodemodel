@@ -44,12 +44,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
 import com.helger.base.hashcode.HashCodeGenerator;
-
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 
 /**
  * {@link JMethod} invocation
@@ -91,7 +91,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    */
   private List <JTypeVar> m_aTypeVariables;
 
-  protected JInvocation (@Nullable final JCodeModel aOwner, @Nullable final IJGenerable aObject, @Nonnull final String sName)
+  protected JInvocation (@Nullable final JCodeModel aOwner, @Nullable final IJGenerable aObject, @NonNull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.isFalse (sName.indexOf ('.') >= 0, () -> "method name contains '.': " + sName);
@@ -103,7 +103,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     m_aConstructorType = null;
   }
 
-  protected JInvocation (@Nonnull final JCodeModel aOwner, @Nullable final IJGenerable aObject, @Nonnull final JMethod aMethod)
+  protected JInvocation (@NonNull final JCodeModel aOwner, @Nullable final IJGenerable aObject, @NonNull final JMethod aMethod)
   {
     ValueEnforcer.notNull (aOwner, "Owner");
     ValueEnforcer.notNull (aMethod, "Method");
@@ -123,7 +123,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        added arguments are treated as array initializer. Thus you can
    *        create an expression like <code>new int[]{1,2,3,4,5}</code>.
    */
-  protected JInvocation (@Nonnull final AbstractJType aConstructorType)
+  protected JInvocation (@NonNull final AbstractJType aConstructorType)
   {
     ValueEnforcer.notNull (aConstructorType, "ConstructorType");
     m_aOwner = aConstructorType.owner ();
@@ -152,8 +152,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Argument to add to argument list
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation arg (@Nonnull final IJExpression aArg)
+  @NonNull
+  public JInvocation arg (@NonNull final IJExpression aArg)
   {
     ValueEnforcer.notNull (aArg, "Argument");
     m_aArgs.add (aArg);
@@ -167,8 +167,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Value to be added to the argument list
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation arg (@Nonnull final boolean v)
+  @NonNull
+  public JInvocation arg (@NonNull final boolean v)
   {
     return arg (JExpr.lit (v));
   }
@@ -180,8 +180,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Value to be added to the argument list
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation arg (@Nonnull final char v)
+  @NonNull
+  public JInvocation arg (@NonNull final char v)
   {
     return arg (JExpr.lit (v));
   }
@@ -193,8 +193,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Value to be added to the argument list
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation arg (@Nonnull final double v)
+  @NonNull
+  public JInvocation arg (@NonNull final double v)
   {
     return arg (JExpr.lit (v));
   }
@@ -206,8 +206,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Value to be added to the argument list
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation arg (@Nonnull final float v)
+  @NonNull
+  public JInvocation arg (@NonNull final float v)
   {
     return arg (JExpr.lit (v));
   }
@@ -219,8 +219,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Value to be added to the argument list
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation arg (@Nonnull final int v)
+  @NonNull
+  public JInvocation arg (@NonNull final int v)
   {
     return arg (JExpr.lit (v));
   }
@@ -232,8 +232,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Value to be added to the argument list
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation arg (@Nonnull final long v)
+  @NonNull
+  public JInvocation arg (@NonNull final long v)
   {
     return arg (JExpr.lit (v));
   }
@@ -245,8 +245,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Value to be added to the argument list
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation arg (@Nonnull final String v)
+  @NonNull
+  public JInvocation arg (@NonNull final String v)
   {
     return arg (JExpr.lit (v));
   }
@@ -257,7 +257,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * @return this for chaining
    * @since 3.0.2
    */
-  @Nonnull
+  @NonNull
   public JInvocation argNull ()
   {
     return arg (JExpr._null ());
@@ -269,7 +269,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * @return this for chaining
    * @since 3.0.2
    */
-  @Nonnull
+  @NonNull
   public JInvocation argThis ()
   {
     return arg (JExpr._this ());
@@ -280,13 +280,13 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *
    * @return If there's no arguments, an empty list will be returned.
    */
-  @Nonnull
+  @NonNull
   public List <IJExpression> args ()
   {
     return new ArrayList <> (m_aArgs);
   }
 
-  @Nonnull
+  @NonNull
   private JCodeModel _narrowOwner ()
   {
     final JCodeModel owner = owner ();
@@ -303,8 +303,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Bound type name. May neither be <code>null</code> nor empty.
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation narrow (@Nonnull final String sName)
+  @NonNull
+  public JInvocation narrow (@NonNull final String sName)
   {
     final JTypeVar v = new JTypeVar (_narrowOwner (), sName);
     if (m_aTypeVariables == null)
@@ -321,8 +321,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Bound class. May not be <code>null</code>.
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation narrow (@Nonnull final Class <?> aBound)
+  @NonNull
+  public JInvocation narrow (@NonNull final Class <?> aBound)
   {
     return narrow (_narrowOwner ().ref (aBound));
   }
@@ -334,8 +334,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    *        Bound class. May not be <code>null</code>.
    * @return this for chaining
    */
-  @Nonnull
-  public JInvocation narrow (@Nonnull final AbstractJClass aBound)
+  @NonNull
+  public JInvocation narrow (@NonNull final AbstractJClass aBound)
   {
     final JTypeVarClass v = new JTypeVarClass (aBound);
     if (m_aTypeVariables == null)
@@ -344,7 +344,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     return this;
   }
 
-  @Nonnull
+  @NonNull
   public List <JTypeVar> typeParamList ()
   {
     if (m_aTypeVariables == null)
@@ -352,7 +352,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     return new ArrayList <> (m_aTypeVariables);
   }
 
-  private void _addTypeVars (@Nonnull final IJFormatter f)
+  private void _addTypeVars (@NonNull final IJFormatter f)
   {
     if (m_aTypeVariables != null && !m_aTypeVariables.isEmpty ())
     {
@@ -375,7 +375,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     return m_aMethod != null ? m_aMethod.name () : m_sMethodName;
   }
 
-  public void generate (@Nonnull final IJFormatter f)
+  public void generate (@NonNull final IJFormatter f)
   {
     if (m_bIsConstructor)
     {
@@ -430,12 +430,12 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     }
   }
 
-  public void state (@Nonnull final IJFormatter f)
+  public void state (@NonNull final IJFormatter f)
   {
     f.generable (this).print (';').newline ();
   }
 
-  @Nonnull
+  @NonNull
   private String _typeFullName ()
   {
     return m_aConstructorType != null ? m_aConstructorType.fullName () : "";
@@ -497,7 +497,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * @return A new non-<code>null</code> {@link JInvocation}
    * @since 3.0.1
    */
-  @Nonnull
+  @NonNull
   public static JInvocation _super ()
   {
     return new JInvocation (null, null, JExpr._super ().what ());
@@ -511,7 +511,7 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * @return A new non-<code>null</code> {@link JInvocation}
    * @since 3.2.1
    */
-  @Nonnull
+  @NonNull
   public static JInvocation _this ()
   {
     return new JInvocation (null, null, JExpr._this ().what ());
