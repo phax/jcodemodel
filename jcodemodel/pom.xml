@@ -139,7 +139,7 @@
           <instructions>
             <Automatic-Module-Name>com.helger.jcodemodel</Automatic-Module-Name>
             <Export-Package>com.helger.jcodemodel.*</Export-Package>
-            <Import-Package>!jakarta.annotation.*,*</Import-Package>
+            <Import-Package>!org.jspecify.annotations.*,*</Import-Package>
           </instructions>
         </configuration>
       </plugin>

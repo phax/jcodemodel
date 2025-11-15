@@ -76,12 +76,14 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
     assert !m_aClass.isArray ();
   }
 
+  @NonNull
   public Class <?> getReferencedClass ()
   {
     return m_aClass;
   }
 
   @Override
+  @NonNull
   public String name ()
   {
     return m_aClass.getSimpleName ();
@@ -95,12 +97,14 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   }
 
   @Override
+  @NonNull
   public String binaryName ()
   {
     return m_aClass.getName ();
   }
 
   @Override
+  @Nullable
   public AbstractJClass outer ()
   {
     final Class <?> p = m_aClass.getDeclaringClass ();
@@ -127,6 +131,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   }
 
   @Override
+  @Nullable
   public AbstractJClass _extends ()
   {
     final Class <?> sp = m_aClass.getSuperclass ();
@@ -140,6 +145,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   }
 
   @Override
+  @NonNull
   public Iterator <AbstractJClass> _implements ()
   {
     final Class <?> [] aInterfaces = m_aClass.getInterfaces ();
@@ -204,6 +210,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   }
 
   @Override
+  @NonNull
   public JTypeVar [] typeParams ()
   {
     // TODO: does JDK 1.5 reflection provides these information?
@@ -211,6 +218,7 @@ public class JReferencedClass extends AbstractJClass implements IJDeclaration
   }
 
   @Override
+  @NonNull
   protected AbstractJClass substituteParams (@NonNull final JTypeVar [] aVariables,
                                              @NonNull final List <? extends AbstractJClass> aBindings)
   {

@@ -74,6 +74,12 @@ public abstract class AbstractJClass extends AbstractJType
     m_aOwner = ValueEnforcer.notNull (aOwner, "Owner");
   }
 
+  @NonNull
+  public final JCodeModel owner ()
+  {
+    return m_aOwner;
+  }
+
   /**
    * Gets the name of this class.
    *
@@ -99,12 +105,6 @@ public abstract class AbstractJClass extends AbstractJType
   public AbstractJClass outer ()
   {
     return null;
-  }
-
-  @NonNull
-  public final JCodeModel owner ()
-  {
-    return m_aOwner;
   }
 
   /**
