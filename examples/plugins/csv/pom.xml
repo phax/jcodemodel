@@ -20,7 +20,7 @@
   <parent>
     <groupId>com.helger.jcodemodel.examples</groupId>
     <artifactId>plugins</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.examples.plugin</groupId>
   <artifactId>csv</artifactId>

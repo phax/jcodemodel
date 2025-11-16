@@ -20,7 +20,7 @@
   <parent>
     <groupId>com.helger.jcodemodel.plugin</groupId>
     <artifactId>generators</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
   <artifactId>yaml</artifactId>
