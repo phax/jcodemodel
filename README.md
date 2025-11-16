@@ -10,17 +10,22 @@ A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. 
 
 ## Maven usage
 
-Add the following to your pom.xml to use this artifact:
+Add the following to your pom.xml to use this artifact (where `x.y.z` denotes the version):
 
 ```xml
 <dependency>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <version>3.4.0</version>
+  <version>x.y.z</version>
 </dependency>
 ```
 
 # News and noteworthy
+
+v4.1.0 - 2025-11-16
+* Updated to ph-commons 12.1.0
+* Using JSpecify annotations
+* Added Maven plugin to generate Java code from CSV, JSON or YAML. Thanks a million to @glelouet for providing all of the great work
 
 v4.0.0 - 2025-08-25
 * Requires Java 17 as the minimum version
