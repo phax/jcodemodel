@@ -34,9 +34,16 @@
   <inceptionYear>2013</inceptionYear>
 
   <licenses>
+    <!-- This refers to the main JCodeModel -->
     <license>
       <name>CDDL+GPL 1.1</name>
       <url>http://glassfish.java.net/public/CDDL+GPL_1_1.html</url>
+      <distribution>repo</distribution>
+    </license>
+    <!-- This refers to all the plugin submodules -->
+    <license>
+      <name>Apache 2</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
