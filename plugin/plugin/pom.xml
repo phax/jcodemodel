@@ -26,6 +26,16 @@
   <packaging>maven-plugin</packaging>
   <name>MVN JCodeModel Maven Plugin</name>
   <description>Maven plugin to generate classes using JCodeModel. This plugin requires a dedicated data loader to feed the JCodeModel the classes.</description>
+  <url>https://github.com/phax/jcodemodel/plugin</url>
+  <inceptionYear>2025</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
   <dependencies>
     <dependency>
