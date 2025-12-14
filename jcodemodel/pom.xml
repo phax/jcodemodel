@@ -67,17 +67,17 @@
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.equinox.common</artifactId>
-        <version>3.20.200</version>
+        <version>3.20.300</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.runtime</artifactId>
-        <version>3.34.0</version>
+        <version>3.34.100</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.resources</artifactId>
-        <version>3.23.0</version>
+        <version>3.23.100</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.platform</groupId>
@@ -87,12 +87,12 @@
       <dependency>
         <groupId>org.eclipse.platform</groupId>
         <artifactId>org.eclipse.core.contenttype</artifactId>
-        <version>3.9.700</version>
+        <version>3.9.800</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.jdt</groupId>
         <artifactId>org.eclipse.jdt.core</artifactId>
-        <version>3.43.0</version>
+        <version>3.44.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
