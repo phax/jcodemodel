@@ -112,6 +112,7 @@
   </contributors>
 
   <modules>
+    <module>bom</module>
     <module>jcodemodel</module>
     <module>plugin</module>
     <module>examples</module>
@@ -128,25 +129,7 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
-
-      <!-- sub modules-->
-      <dependency>
-        <groupId>com.helger</groupId>
-        <artifactId>jcodemodel</artifactId>
-        <version>${project.version}</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>com.helger.jcodemodel</groupId>
-          <artifactId>jcodemodel-maven-plugin</artifactId>
-          <version>${project.version}</version>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 </project>

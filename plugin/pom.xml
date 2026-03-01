@@ -19,8 +19,9 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.helger.jcodemodel</groupId>
-    <artifactId>jcodemodel-parent-pom</artifactId>
+    <artifactId>bom</artifactId>
     <version>4.2.0-SNAPSHOT</version>
+    <relativePath>../bom</relativePath>
   </parent>
   <artifactId>plugin</artifactId>
   <packaging>pom</packaging>
