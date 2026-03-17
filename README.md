@@ -1,5 +1,10 @@
 # jcodemodel
 
+<!-- ph-badge-start -->
+[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/com.helger.jcodemodel/jcodemodel-parent-pom/badge.svg)](https://maven-badges.sml.io/sonatype-central/com.helger.jcodemodel/jcodemodel-parent-pom/)
+[![javadoc](https://javadoc.io/badge2/com.helger/jcodemodel/javadoc.svg)](https://javadoc.io/doc/com.helger/jcodemodel)
+<!-- ph-badge-end -->
+
 A fork of the com.sun.codemodel 2.7-SNAPSHOT.
 The classes in this project use a different package name `com.helger.jcodemodel` to avoid conflicts 
 with other `com.sun.codemodel` instances that might be floating around in the classpath.
