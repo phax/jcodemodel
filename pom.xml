@@ -115,6 +115,7 @@
     <module>jcodemodel</module>
     <module>plugin</module>
     <module>examples</module>
+    <module>jcodemodeltests</module>
   </modules>
 
   <dependencyManagement>
