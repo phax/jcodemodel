@@ -2,7 +2,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
  * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
- * Portions Copyright 2013-2026 Philip Helger + contributors
+ * Portions Copyright 2013-2025 Philip Helger + contributors
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -353,6 +353,7 @@ public abstract class AbstractJClass extends AbstractJType
   @NonNull
   public JAnnotatedClass annotated (@NonNull final Class <? extends Annotation> aClazz)
   {
+    ValueEnforcer.notNull (aClazz, "Clazz");
     return annotated (owner ().ref (aClazz));
   }
 
@@ -392,7 +393,33 @@ public abstract class AbstractJClass extends AbstractJType
   @NonNull
   public JAnnotatedClass annotated (@NonNull final AbstractJClass aClazz)
   {
+    ValueEnforcer.notNull (aClazz, "Clazz");
     return new JAnnotatedClass (this, new JAnnotationUse (aClazz));
+  }
+
+  /**
+   * Creates a new type with a type-use annotation (JSR 308, Java 8+).
+   * <p>
+   * This overload accepts a pre-configured {@link JAnnotationUse}, allowing annotations
+   * with parameters:
+   * <pre>
+   * JAnnotationUse sizeAnnotation = new JAnnotationUse(codeModel.ref(Size.class));
+   * sizeAnnotation.param("min", 1).param("max", 10);
+   * AbstractJClass annotatedString = stringClass.annotated(sizeAnnotation);
+   * // Generates: @Size(min = 1, max = 10) String
+   * </pre>
+   *
+   * @param aAnnotation
+   *        The pre-configured annotation to apply as a type-use annotation.
+   * @return A new {@link JAnnotatedClass} wrapping this class with the annotation.
+   * @since 4.2.0
+   * @see #annotated(Class) for simple annotations without parameters
+   */
+  @NonNull
+  public JAnnotatedClass annotated (@NonNull final JAnnotationUse aAnnotation)
+  {
+    ValueEnforcer.notNull (aAnnotation, "Annotation");
+    return new JAnnotatedClass (this, aAnnotation);
   }
 
   /**
