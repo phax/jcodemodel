@@ -56,7 +56,6 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
 
   protected Stream <IFlatStructRecord> visitPackage (JsonPackage pck, String path)
   {
-    System.err.println ("visit package " + path);
     Stream <IFlatStructRecord> ret = Stream.empty ();
     if (pck.isClassInfo ())
     {
