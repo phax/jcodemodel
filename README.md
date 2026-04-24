@@ -28,6 +28,7 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 # News and noteworthy
 
 v4.2.0 - work in progress
+* Removed OSGI bundling
 * Added support for Java `record` types. Fixes [#98](https://github.com/phax/jcodemodel/issues/98) via [#126](https://github.com/phax/jcodemodel/pull/126) - thx @joelittlejohn
 * Added support for annotation target `TYPE_USE`. Fixes [#50](https://github.com/phax/jcodemodel/issues/50) via [#127](https://github.com/phax/jcodemodel/pull/127) - thx @joelittlejohn
 

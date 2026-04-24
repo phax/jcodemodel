@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
@@ -49,11 +50,10 @@
   </parent>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
-  <packaging>bundle</packaging>
+  <packaging>jar</packaging>
   <name>JCodeModel</name>
   <url>https://github.com/phax/jcodemodel/jcodemodel</url>
   <inceptionYear>2013</inceptionYear>
-  
   <licenses>
     <license>
       <name>CDDL+GPL 1.1</name>
@@ -61,7 +61,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -96,7 +95,6 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>com.helger.commons</groupId>
@@ -106,7 +104,6 @@
       <groupId>com.helger.commons</groupId>
       <artifactId>ph-io</artifactId>
     </dependency>
-    
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -129,20 +126,8 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <Automatic-Module-Name>com.helger.jcodemodel</Automatic-Module-Name>
-            <Export-Package>com.helger.jcodemodel.*</Export-Package>
-            <Import-Package>!org.jspecify.annotations.*,*</Import-Package>
-          </instructions>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>de.thetaphi</groupId>
         <artifactId>forbiddenapis</artifactId>
