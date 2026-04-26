@@ -1,15 +1,11 @@
-*.class
+.settings/
+target/
 
-# Package Files #
-*.jar
-*.war
-*.ear
-
-target
-/**/.pmd
-**/*.iml
-**/.settings/ 
-**/.project 
-**/.classpath 
-**/.idea
+.classpath
+.DS_Store
+.idea
+.pmd
+.project 
 pom.xml.versionsBackup
+
+*.iml
