@@ -105,13 +105,15 @@ public class GenerateTestFiles {
       SecurityException,
       IOException {
     for (Method m : clazz.getDeclaredMethods()) {
-      // only apply to methods public, with 0 args, and that produce a JCodeModel
+      // only apply to methods public
+      // and that produce a JCodeModel or require one or a package
       if ((m.getModifiers() & Modifier.PUBLIC) > 0) {
         boolean returnsJCM = m.getReturnType().equals(JCodeModel.class);
         boolean requiresJCM = false;
         Object[] params = new Object[m.getParameterCount()];
         boolean missingParam = false;
         JCodeModel produced = null;
+        JPackage rootPackage = null;
         for (int i = 0; i < params.length; i++) {
           Parameter param = m.getParameters()[i];
           if (param.getType() == JCodeModel.class) {
@@ -125,7 +127,10 @@ public class GenerateTestFiles {
             if (produced == null) {
               produced = new JCodeModel();
             }
-            params[i] = produced._package(clazz.getPackageName());
+            if (rootPackage == null) {
+              rootPackage = produced._package(clazz.getPackageName());
+            }
+            params[i] = rootPackage;
             requiresJCM = true;
 
           } else {
@@ -135,17 +140,17 @@ public class GenerateTestFiles {
         if (!missingParam && (returnsJCM || requiresJCM)) {
           m.setAccessible(true);
           if ((m.getModifiers() & Modifier.STATIC) > 0) {
-            if (requiresJCM) {
-              m.invoke(null, params);
-            } else {
+            if (returnsJCM) {
               produced = (JCodeModel) m.invoke(null, params);
+            } else {
+              m.invoke(null, params);
             }
           } else {
             Object inst = clazz.getDeclaredConstructor().newInstance();
-            if (requiresJCM) {
-              m.invoke(inst, params);
-            } else {
+            if (returnsJCM) {
               produced = (JCodeModel) m.invoke(inst, params);
+            } else {
+              m.invoke(inst, params);
             }
           }
           if (produced != null) {

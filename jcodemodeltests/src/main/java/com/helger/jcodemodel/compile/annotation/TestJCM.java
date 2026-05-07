@@ -10,8 +10,9 @@ import java.lang.annotation.Target;
 ///
 /// The methods that are selected must
 /// 1. be public
-/// 2. have 0 arguments
-/// 3. produce a JCodeModel
+/// 2. produce a JCodeModel or require a JCM or a package.
+///
+/// When requested, the package provided is the method's class' package
 ///
 /// They can be instance or static methods
 ///
