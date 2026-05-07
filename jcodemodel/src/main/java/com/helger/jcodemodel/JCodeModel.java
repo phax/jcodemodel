@@ -92,7 +92,7 @@ import com.helger.jcodemodel.util.JCSecureLoader;
  * ...
  *
  * // write them out
- * cm.build(new File("."));
+ * new JCMWriter (cm).build (new File ("."));
  * </pre>
  * <p>
  * Every CodeModel node is always owned by one {@link JCodeModel} object at any given time (which

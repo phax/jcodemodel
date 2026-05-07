@@ -1,5 +1,10 @@
 # jcodemodel
 
+<!-- ph-badge-start -->
+[![Sonatype Central](https://maven-badges.sml.io/sonatype-central/com.helger.jcodemodel/jcodemodel-parent-pom/badge.svg)](https://maven-badges.sml.io/sonatype-central/com.helger.jcodemodel/jcodemodel-parent-pom/)
+[![javadoc](https://javadoc.io/badge2/com.helger/jcodemodel/javadoc.svg)](https://javadoc.io/doc/com.helger/jcodemodel)
+<!-- ph-badge-end -->
+
 A fork of the com.sun.codemodel 2.7-SNAPSHOT.
 The classes in this project use a different package name `com.helger.jcodemodel` to avoid conflicts 
 with other `com.sun.codemodel` instances that might be floating around in the classpath.
@@ -52,6 +57,7 @@ In that case, the bom import defines the version of the other projects.
 # News and noteworthy
 
 v4.2.0 - work in progress
+* Removed OSGI bundling
 * Added support for Java `record` types. Fixes [#98](https://github.com/phax/jcodemodel/issues/98) via [#126](https://github.com/phax/jcodemodel/pull/126) - thx @joelittlejohn
 * Added support for annotation target `TYPE_USE`. Fixes [#50](https://github.com/phax/jcodemodel/issues/50) via [#127](https://github.com/phax/jcodemodel/pull/127) - thx @joelittlejohn
 
