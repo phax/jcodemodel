@@ -47,7 +47,6 @@ import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.helger.jcodemodel.tests.record.*;
 import com.helger.jcodemodel.tests.record.JRecordTestGen.RecordAnnotationExample;
 import com.helger.jcodemodel.tests.record.Outer.Inner;
 

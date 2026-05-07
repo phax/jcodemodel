@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
 import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
@@ -58,7 +60,7 @@ public class GenerateTestFiles {
 
   Stream<String> scanClasses(File dir, String packageName, Stream<String> stream) {
     List<String> newFound = new ArrayList<>();
-    if(!dir.isDirectory()) {
+    if (!dir.isDirectory()) {
       throw new RuntimeException("file " + dir.getAbsolutePath() + " expected to be a dir");
     }
     for (File child : dir.listFiles()) {
@@ -82,28 +84,69 @@ public class GenerateTestFiles {
       if (clazz.getAnnotation(TestJCM.class) != null) {
         runGeneration(clazz);
       }
-    } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-        | InvocationTargetException | InstantiationException | NoSuchMethodException | SecurityException
+    } catch (ClassNotFoundException
+        | IllegalAccessException
+        | IllegalArgumentException
+        | InvocationTargetException
+        | InstantiationException
+        | NoSuchMethodException
+        | SecurityException
         | IOException e) {
       throw new RuntimeException(e);
     }
   }
 
   private void runGeneration(Class<?> clazz)
-      throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException,
-      NoSuchMethodException, SecurityException, IOException {
+      throws IllegalAccessException,
+      IllegalArgumentException,
+      InvocationTargetException,
+      InstantiationException,
+      NoSuchMethodException,
+      SecurityException,
+      IOException {
     for (Method m : clazz.getDeclaredMethods()) {
       // only apply to methods public, with 0 args, and that produce a JCodeModel
-      if ((m.getModifiers() & Modifier.PUBLIC) > 0
-          && m.getParameterCount() == 0) {
-        if (m.getReturnType().equals(JCodeModel.class)) {
+      if ((m.getModifiers() & Modifier.PUBLIC) > 0) {
+        boolean returnsJCM = m.getReturnType().equals(JCodeModel.class);
+        boolean requiresJCM = false;
+        Object[] params = new Object[m.getParameterCount()];
+        boolean missingParam = false;
+        JCodeModel produced = null;
+        for (int i = 0; i < params.length; i++) {
+          Parameter param = m.getParameters()[i];
+          if (param.getType() == JCodeModel.class) {
+            if (produced == null) {
+              produced = new JCodeModel();
+            }
+            params[i] = produced;
+            requiresJCM = true;
+          } else if (param.getType() == JPackage.class) {
+            // request a root package that is the package of the class
+            if (produced == null) {
+              produced = new JCodeModel();
+            }
+            params[i] = produced._package(clazz.getPackageName());
+            requiresJCM = true;
+
+          } else {
+            missingParam = true;
+          }
+        }
+        if (!missingParam && (returnsJCM || requiresJCM)) {
           m.setAccessible(true);
-          JCodeModel produced = null;
           if ((m.getModifiers() & Modifier.STATIC) > 0) {
-            produced = (JCodeModel) m.invoke(null);
+            if (requiresJCM) {
+              m.invoke(null, params);
+            } else {
+              produced = (JCodeModel) m.invoke(null, params);
+            }
           } else {
             Object inst = clazz.getDeclaredConstructor().newInstance();
-            produced = (JCodeModel) m.invoke(inst);
+            if (requiresJCM) {
+              m.invoke(inst, params);
+            } else {
+              produced = (JCodeModel) m.invoke(inst, params);
+            }
           }
           if (produced != null) {
             new JCMWriter(produced).build(outputDir, (IProgressTracker) null);
