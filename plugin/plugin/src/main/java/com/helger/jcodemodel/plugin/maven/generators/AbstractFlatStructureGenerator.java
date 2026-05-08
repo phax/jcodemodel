@@ -231,28 +231,28 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
       if (rec instanceof final ClassCreation cc)
       {
         if (cc.parentType () != null &&
-            cc.parentType ().baseClassName () != null &&
-            !cc.parentType ().baseClassName ().isBlank ())
+          cc.parentType ().baseClassName () != null &&
+          !cc.parentType ().baseClassName ().isBlank ())
         {
           final AbstractJType parentType = resolveConcreteType (model, cc.parentType ());
           if (parentType == null)
           {
-            throw new RuntimeException ("can't resolve type " + cc.parentType () + " as parent of " + cc.localName ());
+            throw new IllegalStateException ("can't resolve type " +
+                                             cc.parentType () +
+                                             " as parent of " +
+                                             cc.localName ());
           }
           if (parentType instanceof final JPrimitiveType jpt)
           {
-            throw new RuntimeException ("class " + cc.localName () + " cannot extend the primitive class " + jpt);
+            throw new IllegalStateException ("class " + cc.localName () + " cannot extend the primitive class " + jpt);
           }
-          final AbstractJClass parentJClass = (AbstractJClass) parentType;
-          final JDefinedClass ownerClass = definedClasses.get (cc.localName ());
-          if (parentJClass.isInterface ())
-          {
-            ownerClass._implements (parentJClass);
-          }
+
+          final AbstractJClass aParentJClass = (AbstractJClass) parentType;
+          final JDefinedClass aOwnerClass = definedClasses.get (cc.localName ());
+          if (aParentJClass.isInterface ())
+            aOwnerClass._implements (aParentJClass);
           else
-          {
-            ownerClass._extends (parentJClass);
-          }
+            aOwnerClass._extends (aParentJClass);
         }
       }
     }
@@ -262,32 +262,32 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
   {
     for (final IFlatStructRecord rec : records)
     {
-      if (rec instanceof final SimpleField af)
+      if (rec instanceof final SimpleField aSimpleField)
       {
-        final JDefinedClass owner = Objects.requireNonNull (definedClasses.get (af.localName ()),
+        final JDefinedClass owner = Objects.requireNonNull (definedClasses.get (aSimpleField.localName ()),
                                                             "can't find defined class " +
-                                                                                                  af.localName () +
-                                                                                                  " for field " +
-                                                                                                  af);
-        final FieldOptions ownerOptions = pathOptions.get (af.localName ());
+                                                                                                            aSimpleField.localName () +
+                                                                                                            " for field " +
+                                                                                                            aSimpleField);
+        final FieldOptions ownerOptions = pathOptions.get (aSimpleField.localName ());
         Objects.requireNonNull (ownerOptions,
                                 "can't find options for class " +
-                                              af.localName () +
+                                              aSimpleField.localName () +
                                               " known classes are " +
                                               pathOptions.keySet ());
-        af.options ().setParent (ownerOptions);
+        aSimpleField.options ().setParent (ownerOptions);
 
-        final AbstractJType fieldType = resolveType (model, af.fieldType ());
+        final AbstractJType fieldType = resolveType (model, aSimpleField.fieldType ());
         if (fieldType == null)
         {
-          throw new RuntimeException ("can't resolve type " +
-                                      af.fieldClassName () +
-                                      " for field " +
-                                      af.localName () +
-                                      "::" +
-                                      af.fieldName ());
+          throw new IllegalStateException ("can't resolve type " +
+                                           aSimpleField.fieldClassName () +
+                                           " for field " +
+                                           aSimpleField.localName () +
+                                           "::" +
+                                           aSimpleField.fieldName ());
         }
-        addField (owner, fieldType, af.fieldName (), af.options (), model);
+        addField (owner, fieldType, aSimpleField.fieldName (), aSimpleField.options (), model);
       }
     }
   }
@@ -353,15 +353,16 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     for (final String prefix : new String [] { null, "java.lang", "java.util" })
     {
       if (staticResolved != null)
-      {
         break;
-      }
+
       try
       {
         staticResolved = Class.forName ((prefix == null || prefix.isBlank () ? "" : prefix + ".") + typeName);
       }
       catch (final ClassNotFoundException e)
-      {}
+      {
+        // Ignore
+      }
     }
     return staticResolved == null ? null : model._ref (staticResolved);
   }
@@ -767,12 +768,12 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
       // synthetic methods are added by the compiler, not in the actual code
       m.isSynthetic ()
       // static methods should not be redirected
-          || (m.getModifiers () & Modifier.STATIC) != 0
-          // don't redirect methods that are either those of Object,
-          || m.getDeclaringClass () == Object.class
-          // or with no argument and present in Object without argument (hashcode,
-          // tostring)
-          || m.getParameterCount () == 0 && OBJECT_NOARGMETH.contains (m.getName ()))
+        || (m.getModifiers () & Modifier.STATIC) != 0
+        // don't redirect methods that are either those of Object,
+        || m.getDeclaringClass () == Object.class
+        // or with no argument and present in Object without argument (hashcode,
+        // tostring)
+        || m.getParameterCount () == 0 && OBJECT_NOARGMETH.contains (m.getName ()))
       {
         continue;
       }

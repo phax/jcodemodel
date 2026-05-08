@@ -28,7 +28,6 @@ import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 @JCMGen
 public class HelloWorldGenerator implements ICodeModelBuilder
 {
-
   protected String m_sRootPackage = "com.helger.tests.helloworld";
   private String m_sClassHeader = "";
   protected String className = "Hello";
@@ -41,7 +40,8 @@ public class HelloWorldGenerator implements ICodeModelBuilder
     value = params.getOrDefault ("value", value);
   }
 
-  protected String fieldName() {
+  protected String fieldName ()
+  {
     return "value";
   }
 
@@ -49,10 +49,11 @@ public class HelloWorldGenerator implements ICodeModelBuilder
   public void build (final JCodeModel model, final InputStream source) throws JCodeModelException
   {
     final JDefinedClass cl = model._class (expandClassName (className));
-    if (m_sClassHeader != null && !m_sClassHeader.isBlank()) {
-      cl.headerComment().add(m_sClassHeader);
+    if (m_sClassHeader != null && !m_sClassHeader.isBlank ())
+    {
+      cl.headerComment ().add (m_sClassHeader);
     }
-    cl.field(JMod.PUBLIC, model._ref(String.class), fieldName(), JExpr.lit(value));
+    cl.field (JMod.PUBLIC, model._ref (String.class), fieldName (), JExpr.lit (value));
   }
 
   @Override
@@ -68,11 +69,13 @@ public class HelloWorldGenerator implements ICodeModelBuilder
   }
 
   @Override
-  public void setClassHeader(String header) {
+  public void setClassHeader (final String header)
+  {
     m_sClassHeader = header;
   }
 
-  public String getClassHeader() {
+  public String getClassHeader ()
+  {
     return m_sClassHeader;
   }
 

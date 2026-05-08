@@ -42,7 +42,6 @@ package com.helger.jcodemodel;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -50,14 +49,12 @@ import org.jspecify.annotations.Nullable;
 /**
  * A part is a part of a javadoc comment, and it is a list of values.
  * <p>
- * A part can contain a free-form text. This text is modeled as a collection of
- * 'values' in this class. A value can be a {@link AbstractJType} (which will be
- * prinited with a @link tag), anything that can be turned into a {@link String}
- * via the {@link Object#toString()} method, or a {@link Collection}/array of
- * those objects.
+ * A part can contain a free-form text. This text is modeled as a collection of 'values' in this
+ * class. A value can be a {@link AbstractJType} (which will be prinited with a @link tag), anything
+ * that can be turned into a {@link String} via the {@link Object#toString()} method, or a
+ * {@link Collection}/array of those objects.
  * <p>
- * Values can be added through the various append methods one by one or in a
- * bulk.
+ * Values can be added through the various append methods one by one or in a bulk.
  *
  * @author Kohsuke Kawaguchi
  */
@@ -70,9 +67,8 @@ public class JCommentPart extends ArrayList <Object>
    * Appends a new value.
    *
    * @param aValue
-   *        If the value is {@link AbstractJType} it will be printed as a @link
-   *        tag. Otherwise it will be converted to String via
-   *        {@link Object#toString()}.
+   *        If the value is {@link AbstractJType} it will be printed as a @link tag. Otherwise it
+   *        will be converted to String via {@link Object#toString()}.
    * @return this for chaining
    */
   @NonNull
@@ -115,13 +111,12 @@ public class JCommentPart extends ArrayList <Object>
   }
 
   /**
-   * Add the provided value, but before correct HTML character masking ("&lt;"
-   * becomes "&amp;lt;" etc.).
+   * Add the provided value, but before correct HTML character masking ("&lt;" becomes "&amp;lt;"
+   * etc.).
    *
    * @param sValue
    *        Source value. May be <code>null</code>.
-   * @return <code>true</code> if added, <code>false</code> if the source is
-   *         <code>null</code>.
+   * @return <code>true</code> if added, <code>false</code> if the source is <code>null</code>.
    */
   public boolean addMasked (@Nullable final String sValue)
   {
@@ -137,95 +132,32 @@ public class JCommentPart extends ArrayList <Object>
       return false;
 
     boolean bAny = false;
-    if (aValue instanceof Object [])
+    if (aValue instanceof final Object [] aArray)
     {
-      for (final Object o : (Object []) aValue)
+      for (final Object o : aArray)
         if (_flattenAppend (o))
           bAny = true;
     }
     else
-      if (aValue instanceof Collection <?>)
+      if (aValue instanceof final Collection <?> aColl)
       {
-        for (final Object o : (Collection <?>) aValue)
+        for (final Object o : aColl)
           if (_flattenAppend (o))
             bAny = true;
       }
       else
       {
         // Only String and AbstractJType are allowed
-        if (aValue instanceof String || aValue instanceof AbstractJType)
-          bAny = super.add (aValue);
-        else
+        if (!(aValue instanceof String) && !(aValue instanceof AbstractJType))
           throw new IllegalArgumentException ("Value is of an unsupported type: " + aValue.getClass ().toString ());
+        bAny = super.add (aValue);
       }
     return bAny;
   }
 
   /**
-   * Writes this part into the formatter by using the specified indentation.
-   *
-   * @param f
-   *        Formatter to use
-   * @param sIndent
-   *        Indentation to use
-   */
-  protected void format (@NonNull final IJFormatter f, final String sIndent)
-  {
-    if (!f.isPrinting ())
-    {
-      // quickly pass the types to IJFormatter, as that's all we care.
-      // we don't need to worry about the exact formatting of text.
-      for (final Object o : this)
-        if (o instanceof AbstractJClass)
-          f.generable ((AbstractJClass) o);
-      return;
-    }
-
-    if (!isEmpty ())
-      f.print (sIndent);
-
-    final Iterator <Object> itr = iterator ();
-    while (itr.hasNext ())
-    {
-      final Object o = itr.next ();
-
-      if (o instanceof String)
-      {
-        int idx;
-        String sStr = (String) o;
-        while ((idx = sStr.indexOf ('\n')) != -1)
-        {
-          final String line = sStr.substring (0, idx);
-          if (line.length () > 0)
-            f.print (_escape (line));
-          sStr = sStr.substring (idx + 1);
-          f.newline ().print (sIndent);
-        }
-        if (sStr.length () != 0)
-          f.print (_escape (sStr));
-      }
-      else
-        if (o instanceof AbstractJClass)
-        {
-          // TODO: this doesn't print the parameterized type properly
-          ((AbstractJClass) o).printLink (f);
-        }
-        else
-          if (o instanceof AbstractJType)
-          {
-            f.generable ((AbstractJType) o);
-          }
-          else
-            throw new IllegalStateException ("Invalid type present: " + o);
-    }
-
-    if (!isEmpty ())
-      f.newline ();
-  }
-
-  /**
-   * Escapes the appearance of the comment terminator "*" followed by "/". Note:
-   * quotes etc are not masked!
+   * Escapes the appearance of the comment terminator "*" followed by "/". Note: quotes etc are not
+   * masked!
    *
    * @param sText
    *        Source text. May not be <code>null</code>.
@@ -244,5 +176,63 @@ public class JCommentPart extends ArrayList <Object>
       s = s.substring (0, nIdx + 1) + "<!---->" + s.substring (nIdx + 1);
     }
     return s;
+  }
+
+  /**
+   * Writes this part into the formatter by using the specified indentation.
+   *
+   * @param f
+   *        Formatter to use
+   * @param sIndent
+   *        Indentation to use
+   */
+  protected void format (@NonNull final IJFormatter f, final String sIndent)
+  {
+    if (!f.isPrinting ())
+    {
+      // quickly pass the types to IJFormatter, as that's all we care.
+      // we don't need to worry about the exact formatting of text.
+      for (final Object o : this)
+        if (o instanceof final AbstractJClass aClass)
+          f.generable (aClass);
+      return;
+    }
+
+    if (!isEmpty ())
+      f.print (sIndent);
+
+    for (final Object o : this)
+    {
+      if (o instanceof String sStr)
+      {
+        int nIdx;
+        while ((nIdx = sStr.indexOf ('\n')) != -1)
+        {
+          final String sLine = sStr.substring (0, nIdx);
+          if (sLine.length () > 0)
+            f.print (_escape (sLine));
+          sStr = sStr.substring (nIdx + 1);
+          f.newline ().print (sIndent);
+        }
+        if (sStr.length () != 0)
+          f.print (_escape (sStr));
+      }
+      else
+        if (o instanceof final AbstractJClass aClass)
+        {
+          // TODO: this doesn't print the parameterized type properly
+          aClass.printLink (f);
+        }
+        else
+          if (o instanceof final AbstractJType aType)
+          {
+            f.generable (aType);
+          }
+          else
+            throw new IllegalStateException ("Invalid type present: " + o);
+    }
+
+    if (!isEmpty ())
+      f.newline ();
   }
 }
