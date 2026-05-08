@@ -8,22 +8,51 @@
 A fork of the com.sun.codemodel 2.7-SNAPSHOT.
 The classes in this project use a different package name `com.helger.jcodemodel` to avoid conflicts 
 with other `com.sun.codemodel` instances that might be floating around in the classpath.
-That of course implies, that this artefact cannot directly be used with JAXB, since the configuration of 
+That of course implies, that this artifact cannot directly be used with JAXB, since the configuration of 
 this would be very tricky.
 
 A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. is available.
 
-## Maven usage
+## Import in Maven
+
+### Straightforward import
 
 Add the following to your pom.xml to use this artifact (where `x.y.z` denotes the version):
 
 ```xml
-<dependency>
-  <groupId>com.helger</groupId>
-  <artifactId>jcodemodel</artifactId>
-  <version>x.y.z</version>
-</dependency>
+<project>
+  <dependencies>
+    <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>jcodemodel</artifactId>
+      <version>x.y.z</version>
+    </dependency>
 ```
+
+### Bill Of Materials import
+
+In case you want to use several of our projects, you may import the bom first, then the required modules :
+
+```xml
+<project>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.helger.jcodemodel</groupId>
+        <artifactId>bom</artifactId>
+        <version>x.y.z</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+...
+  <dependencies>
+    <dependency>
+      <groupId>com.helger</groupId>
+      <artifactId>jcodemodel</artifactId>
+    </dependency>
+```
+
+In that case, the bom import defines the version of the other projects.
 
 # News and noteworthy
 
