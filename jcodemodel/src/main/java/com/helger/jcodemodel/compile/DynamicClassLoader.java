@@ -44,6 +44,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
@@ -68,9 +70,8 @@ public class DynamicClassLoader extends ClassLoader
   private final Map <String, NonBlockingByteArrayOutputStream> m_aCustomResources = new HashMap <> ();
 
   /**
-   * internal url handler that generates url to load inside its own resources, if exists. It
-   * overloads the openConnection to provide an input stream if a corresponding bytearray is found
-   * for the resource.
+   * internal url handler that maps the url's filename to the internal bytearray
+   * if exists.
    */
   private final URLStreamHandler m_aURLStreamHandler = new URLStreamHandler ()
   {
@@ -84,15 +85,17 @@ public class DynamicClassLoader extends ClassLoader
         @Override
         public void connect () throws IOException
         {
-          if (aBAOS == null)
+          if (aBAOS == null) {
             throw new FileNotFoundException (u.getFile ());
+          }
         }
 
         @Override
         public InputStream getInputStream () throws IOException
         {
-          if (aBAOS == null)
+          if (aBAOS == null) {
             throw new FileNotFoundException (u.getFile ());
+          }
           return aBAOS.getAsInputStream ();
         }
       };
@@ -161,15 +164,20 @@ public class DynamicClassLoader extends ClassLoader
   protected URL findResource (final String sName)
   {
     final NonBlockingByteArrayOutputStream aBAOS = m_aCustomResources.get (sName);
-    if (aBAOS != null)
+    if (aBAOS != null) {
       try
       {
-        return new URL ("memory", null, 0, sName, m_aURLStreamHandler);
+        URI uri = new URI("memory:" + sName);
+        URL ret = URL.of(uri, m_aURLStreamHandler);
+// old way
+//				ret = new URL("memory", null, 0, sName, m_aURLStreamHandler);
+        return ret;
       }
-      catch (final MalformedURLException e)
+      catch (final MalformedURLException | URISyntaxException e)
       {
         throw new UnsupportedOperationException (e);
       }
+    }
 
     return super.findResource (sName);
   }
