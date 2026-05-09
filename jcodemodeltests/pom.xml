@@ -27,6 +27,12 @@
     <dependency>
       <groupId>com.helger</groupId>
       <artifactId>jcodemodel</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jspecify</groupId>
+          <artifactId>jspecify</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
