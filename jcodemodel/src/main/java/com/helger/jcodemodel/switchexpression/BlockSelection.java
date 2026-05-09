@@ -14,7 +14,7 @@ import com.helger.jcodemodel.JThrow;
 import com.helger.jcodemodel.JYield;
 
 ///
-/// represents a list of blocks to which add statements, with syntaxic sugar for yield.
+/// represents a list of blocks to which add statements, with syntaxic sugar for yield. Made specifically for switch (and yield)
 public interface BlockSelection<Self extends BlockSelection<?>> extends Iterable<JBlock> {
 
   List<JBlock> blocks();

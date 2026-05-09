@@ -15,6 +15,7 @@ import com.helger.jcodemodel.switchexpression.JCaseStatic;
 /// A switch whose result can be used as an expression or a statement.
 /// basically a copy of [JSwitch]
 /// It has two specific blocks : null and default. When writing those, they should be tested for equality.
+@SuppressWarnings("serial")
 public class JSwitchExpression implements IJExpressionStatement {
 
   /**
@@ -102,14 +103,29 @@ public class JSwitchExpression implements IJExpressionStatement {
 
   @Override
   public void generate(@NonNull IJFormatter f) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
+    f.print("switch (").generable(m_aTestExpr).print(')').print(" {").newline();
+    for (final JCaseArrow<?> c : m_aCases) {
+      f.statement(c);
+    }
+    f.indent();
+    if (m_aNullBlock != null && m_aDefaultBlock != null
+        && m_aNullBlock.getContents().equals(m_aDefaultBlock.getContents())) {
+      f.print("case null, default -> ").statement(m_aNullBlock);
+    } else {
+      if (m_aNullBlock != null) {
+        f.print("case null -> ").statement(m_aNullBlock);
+      }
+      if (m_aDefaultBlock != null) {
+        f.print("default -> ").statement(m_aNullBlock);
+      }
+    }
+    f.outdent();
+    f.print('}').newline();
   }
 
   @Override
-  public void state(@NonNull IJFormatter f) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
+  public void state(@NonNull final IJFormatter f) {
+    f.generable(this).print(';').newline();
   }
 
 }

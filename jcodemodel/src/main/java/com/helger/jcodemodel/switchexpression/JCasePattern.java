@@ -61,8 +61,21 @@ public class JCasePattern extends JCaseArrow<JCasePattern> {
 
   @Override
   public void state(@NonNull IJFormatter f) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
+    f.indent();
+    f.print("case ").declaration(param);
+    boolean first = true;
+    for (IJExpression ije : guards) {
+      if (first) {
+        f.print(" when ");
+      } else {
+        f.print(" && ");
+      }
+      f.generable(ije);
+      first = false;
+    }
+    stateBody(f);
+    f.outdent();
+
   }
 
 

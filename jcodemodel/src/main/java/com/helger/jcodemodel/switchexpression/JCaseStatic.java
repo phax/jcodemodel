@@ -7,7 +7,7 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
-import com.helger.jcodemodel.JBlock;
+import com.helger.jcodemodel.JEnumConstant;
 import com.helger.jcodemodel.JSwitchExpression;
 
 ///
@@ -17,8 +17,7 @@ import com.helger.jcodemodel.JSwitchExpression;
 /// case MyEnum.OPT1 ->
 /// ```
 @SuppressWarnings("serial")
-public class JCaseStatic extends JCaseArrow<JCaseStatic>
-{
+public class JCaseStatic extends JCaseArrow<JCaseStatic> {
 
   private final List<IJExpression> labels;
 
@@ -38,16 +37,29 @@ public class JCaseStatic extends JCaseArrow<JCaseStatic>
     return or(aLabel);
   }
 
+  /// copy of [JCase]
   @Override
-  public void state(@NonNull IJFormatter f) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public List<JBlock> blocks() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
+  public void state(@NonNull final IJFormatter f) {
+    f.indent();
+    f.print("case ");
+    boolean first = true;
+    for (IJExpression ije : labels) {
+      IJExpression aLabelName;
+      // Hack for #41 :)
+      if (ije instanceof JEnumConstant) {
+        // Just use the name, but not the type of the enum
+        aLabelName = f1 -> f1.print(((JEnumConstant) ije).name());
+      } else {
+        aLabelName = ije;
+      }
+      if (!first) {
+        f.print(", ");
+      }
+      f.generable(aLabelName);
+      first = false;
+    }
+    stateBody(f);
+    f.outdent();
   }
 
 }
