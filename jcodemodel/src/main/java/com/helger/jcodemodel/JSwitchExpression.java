@@ -116,7 +116,7 @@ public class JSwitchExpression implements IJExpressionStatement {
         f.print("case null -> ").statement(m_aNullBlock);
       }
       if (m_aDefaultBlock != null) {
-        f.print("default -> ").statement(m_aNullBlock);
+        f.print("default -> ").statement(m_aDefaultBlock);
       }
     }
     f.outdent();

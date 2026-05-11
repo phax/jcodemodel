@@ -21,7 +21,7 @@ public class SwitchExpressionTestGen {
 
     // java 21
     // case Integer i ->i+1
-    // we name variable but could be i. This is the "case" variable
+    // we name "variable" but could be "i". This is the case label's variable
     sw._case(jcm, Integer.class, "i")
         .yieldOn(variable -> JOp.plus(variable, JExpr.lit(1)));
 
@@ -55,23 +55,24 @@ public class SwitchExpressionTestGen {
     m.body()._return(sw);
   }
 
-
-  // the code we want
-  private int nullCount;
-  public Number plus1(Object o) {
-    return switch (o) {
-//		case 0, -0 -> -1;
-    case Integer i -> {
-      yield i + 1;
-    }
-    case Character c when c >= '0' && c <= '9' -> c - '0' + 1;
-    case Character c -> 1 + c;
-    case null -> {
-      nullCount++;
-      yield nullCount;
-    }
-    default -> throw new UnsupportedOperationException("case not handled : " + o);
-    };
+  public void switchEnum(JPackage root, JCodeModel jcm) throws JCodeModelException {
+    JDefinedClass cl = root._class("ESwitch");
+    JMethod m = cl.method(JMod.PUBLIC | JMod.STATIC, Number.class, "daysIn");
+    JVar o = m.param(jcm.ref(Object.class), "o");
+    JSwitchExpression sw = JExpr._switch(o);
+    m.body()._return(sw);
+    sw._default().andNull()._throws(jcm, UnsupportedOperationException.class);
+    sw._case(JExpr.enumConstantRef(jcm.ref(EnumMonths.class), "JAN"))
+        .or(JExpr.enumConstantRef(jcm.ref(EnumMonths.class), "MAR"))
+        .yield(JExpr.lit(31));
+    sw._case(JExpr.enumConstantRef(jcm.ref(EnumMonths.class), "FEB"))
+        .yield(JExpr.lit(28));
+    JDefinedClass ep = root._enum("EPeriod");
+    JEnumConstant yearConstant = ep.enumConstant("YEAR");
+    sw._case(yearConstant).yield(JExpr.lit(365));
+    sw._case(ep.enumConstant("WEEK")).yield(JExpr.lit(7));
+    sw._case(ep.enumConstant("MONTH"))._throws(jcm, UnsupportedOperationException.class,
+        JExpr.lit("a month can have 28, 30 or 31 days."));
   }
 
 }

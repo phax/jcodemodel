@@ -16,8 +16,7 @@ public class BasicSwitch {
                 yield nullCount;
             }
             default -> {
-                nullCount += 1;
-                yield nullCount;
+                throw new UnsupportedOperationException(("case not handled : "+ o));
             }
         }
         ;

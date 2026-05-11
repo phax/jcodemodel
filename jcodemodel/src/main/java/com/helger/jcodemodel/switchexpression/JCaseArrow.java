@@ -7,6 +7,7 @@ import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JLambdaBlock;
 import com.helger.jcodemodel.JSwitchExpression;
+import com.helger.jcodemodel.JThrow;
 import com.helger.jcodemodel.JYield;
 
 ///
@@ -41,12 +42,25 @@ public abstract class JCaseArrow<Self extends JCaseArrow<?>> implements IJStatem
   /// generate the arrow and body in the formatter
   protected void stateBody(IJFormatter f) {
     f.print(" -> ").newline();
-    if (block.getContents().size() == 1 && block.getContents().get(0) instanceof JYield jy) {
-      f.indent();
-      f.generable(jy.expr()).print(";").newline();
-      f.outdent();
-    } else {
-      f.statement(getBlock());
+    if (block.getContents().size() == 1) {
+      switch (block.getContents().get(0)) {
+      case JYield jy -> {
+        f.indent();
+        f.generable(jy.expr()).print(";").newline();
+        f.outdent();
+        return;
+      }
+      case JThrow jt -> {
+        f.indent();
+        f.statement(jt);
+        f.outdent();
+        return;
+      }
+      default -> {
+      }
+
+      }
     }
+      f.statement(getBlock());
   }
 }
