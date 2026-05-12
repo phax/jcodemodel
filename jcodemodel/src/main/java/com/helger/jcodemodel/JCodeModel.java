@@ -732,6 +732,12 @@ public class JCodeModel implements Serializable
     }
     return aRefClass;
   }
+  
+  ///
+  /// reference a existing enum value
+  public @NonNull JEnumConstantRef ref(Enum<?> e) {
+    return JExpr.enumConstantRef(ref(e.getDeclaringClass()), e.name());
+  }
 
   /**
    * Obtains a reference to a processable class from its TypeElement description.

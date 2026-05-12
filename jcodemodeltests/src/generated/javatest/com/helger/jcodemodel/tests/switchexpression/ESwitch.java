@@ -8,11 +8,11 @@ public class ESwitch {
                 31;
             case EnumMonths.FEB -> 
                 28;
-            case YEAR -> 
+            case EPeriod.YEAR -> 
                 365;
-            case WEEK -> 
+            case EPeriod.WEEK -> 
                 7;
-            case MONTH -> 
+            case EPeriod.MONTH -> 
                 throw new UnsupportedOperationException("a month can have 28, 30 or 31 days.");
             case null, default -> {
                 throw new UnsupportedOperationException();

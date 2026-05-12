@@ -74,6 +74,10 @@ public class JSwitchExpression implements IJExpressionStatement {
     return m_aCases.iterator();
   }
 
+  public JCaseStatic _case(@NonNull final JEnumConstant constantRef) {
+    return _case(JExpr.enumConstantRef(constantRef.type(), constantRef.name()));
+  }
+
   @NonNull
   public JCaseStatic _case(@NonNull final IJExpression aLabel) {
     JCaseStatic c = new JCaseStatic(this, aLabel);

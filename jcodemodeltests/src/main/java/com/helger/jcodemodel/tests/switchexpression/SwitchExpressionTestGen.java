@@ -62,11 +62,10 @@ public class SwitchExpressionTestGen {
     JSwitchExpression sw = JExpr._switch(o);
     m.body()._return(sw);
     sw._default().andNull()._throws(jcm, UnsupportedOperationException.class);
-    sw._case(JExpr.enumConstantRef(jcm.ref(EnumMonths.class), "JAN"))
-        .or(JExpr.enumConstantRef(jcm.ref(EnumMonths.class), "MAR"))
+    sw._case(jcm.ref(EnumMonths.JAN))
+        .or(jcm.ref(EnumMonths.MAR))
         .yield(JExpr.lit(31));
-    sw._case(JExpr.enumConstantRef(jcm.ref(EnumMonths.class), "FEB"))
-        .yield(JExpr.lit(28));
+    sw._case(jcm.ref(EnumMonths.FEB)).yield(JExpr.lit(28));
     JDefinedClass ep = root._enum("EPeriod");
     JEnumConstant yearConstant = ep.enumConstant("YEAR");
     sw._case(yearConstant).yield(JExpr.lit(365));
