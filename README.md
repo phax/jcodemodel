@@ -27,10 +27,14 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 
 # News and noteworthy
 
-v4.2.0 - work in progress
+v4.2.0 - 2026-05-13
 * Removed OSGI bundling
 * Added support for Java `record` types. Fixes [#98](https://github.com/phax/jcodemodel/issues/98) via [#126](https://github.com/phax/jcodemodel/pull/126) - thx @joelittlejohn
 * Added support for annotation target `TYPE_USE`. Fixes [#50](https://github.com/phax/jcodemodel/issues/50) via [#127](https://github.com/phax/jcodemodel/pull/127) - thx @joelittlejohn
+* Added `JDefinedClass.isRecord ()` and a mutable accessor `recordComponentsMutable ()`; `recordComponents ()` now returns an immutable list
+* Added `JExpr.ref (JRecordComponent)` and `JExpr.refthis (JRecordComponent)` for nicer record component references
+* Added `JBlock._throw (AbstractJClass, IJExpression...)` overload for throwing an exception with constructor arguments
+* Fixed JavaDoc reference to use `JCMWriter` instead of the deprecated `cm.build (...)`. See [#135](https://github.com/phax/jcodemodel/issues/135)
 
 v4.1.0 - 2025-11-16
 * Updated to ph-commons 12.1.0
