@@ -95,22 +95,22 @@ public class GenerateTestFiles {
       TestJCM annotation = clazz.getAnnotation(TestJCM.class);
       if (annotation != null) {
         int runtimeFeatureVersion = Runtime.version().feature();
-        String javaversion = System.getProperty("java.version");
-        String javarelease = System.getProperty("java.release", "0");
-        String releaseValue = System.getProperty("release");
+//				String javaversion = System.getProperty("java.version");
+//				String javarelease = System.getProperty("java.release", "0");
+        String releaseValue = System.getProperty("release", "" + runtimeFeatureVersion);
         int version = Integer.parseInt(releaseValue);
         // if split for ease of debuging
         if (annotation.javaMinVersion() <= version) {
-          System.err.println("pass " + className + ", requires version " + annotation.javaMinVersion()
-              + " has " + version + " from"
-              + " feature=" + runtimeFeatureVersion
-              + " java.version=" + javaversion
-              + " java.release=" + javarelease
-              + " release=" + releaseValue);
+//					System.err.println("pass " + className + ", requires version " + annotation.javaMinVersion()
+//							+ " has " + version + " from"
+//							+ " feature=" + runtimeFeatureVersion
+//							+ " java.version=" + javaversion
+//							+ " java.release=" + javarelease
+//							+ " release=" + releaseValue);
           runGeneration(clazz);
         } else {
-          System.err.println("skip " + className + ", requires version " + annotation.javaMinVersion()
-              + " has " + version);
+//					System.err.println("skip " + className + ", requires version " + annotation.javaMinVersion()
+//							+ " has " + version);
         }
       }
     } catch (ClassNotFoundException
