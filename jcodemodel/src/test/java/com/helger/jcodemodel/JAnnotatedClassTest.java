@@ -387,4 +387,57 @@ public final class JAnnotatedClassTest
     testClass.field (JMod.PRIVATE, annotatedIntArray, "values");
     CodeModelTestsHelper.parseCodeModel (cm);
   }
+
+  /**
+   * Test annotation with parameters: {@code @SuppressWarnings("unchecked") String}
+   */
+  @Test
+  public void testAnnotationWithParameters () throws JCodeModelException
+  {
+    final JCodeModel cm = JCodeModel.createUnified ();
+
+    // Create @SuppressWarnings("unchecked") String
+    final JAnnotationUse annotation = new JAnnotationUse (cm.ref (SuppressWarnings.class));
+    annotation.param ("value", "unchecked");
+    final AbstractJClass stringClass = cm.ref (String.class);
+    final JAnnotatedClass annotatedString = stringClass.annotated (annotation);
+
+    // Check generated output
+    final String generated = CodeModelTestsHelper.generate (annotatedString);
+    assertEquals ("@java.lang.SuppressWarnings(\"unchecked\") java.lang.String", generated);
+
+    // Verify it parses when used in a class
+    final JDefinedClass testClass = cm._class ("com.example.Test");
+    testClass.field (JMod.PRIVATE, annotatedString, "value");
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
+
+  /**
+   * Test annotation with multiple parameters in a generic type.
+   */
+  @Test
+  public void testAnnotationWithMultipleParameters () throws JCodeModelException
+  {
+    final JCodeModel cm = JCodeModel.createUnified ();
+    final JDefinedClass testClass = cm._class ("com.example.Test");
+
+    // Create a custom annotation class for testing (simulating @Size(min=1, max=10))
+    // We'll use @SuppressWarnings with array param as a proxy since it's available
+    final JAnnotationUse annotation = new JAnnotationUse (cm.ref (SuppressWarnings.class));
+    annotation.paramArray ("value", "unchecked", "rawtypes");
+
+    final AbstractJClass stringClass = cm.ref (String.class);
+    final JAnnotatedClass annotatedString = stringClass.annotated (annotation);
+    final AbstractJClass listType = cm.ref (List.class).narrow (annotatedString);
+
+    testClass.field (JMod.PRIVATE, listType, "items");
+
+    // Check the generated output contains the annotation with parameters
+    final String classOutput = CodeModelTestsHelper.declare (testClass);
+    assertTrue ("Expected annotation with array parameters in output",
+                classOutput.contains ("@java.lang.SuppressWarnings({"));
+
+    // Verify it parses
+    CodeModelTestsHelper.parseCodeModel (cm);
+  }
 }

@@ -69,8 +69,18 @@ import com.helger.base.enforce.ValueEnforcer;
  * Example: {@code private List<@NotNull String> items;}</li>
  * </ul>
  * <p>
- * Use {@link AbstractJClass#annotated(Class)} or {@link AbstractJClass#annotated(AbstractJClass)}
- * to create instances of this class.
+ * <b>Annotations with parameters:</b>
+ * <p>
+ * For annotations that require parameters, use {@link AbstractJClass#annotated(JAnnotationUse)}:
+ * <pre>
+ * JAnnotationUse sizeAnnotation = new JAnnotationUse(codeModel.ref(Size.class));
+ * sizeAnnotation.param("min", 1).param("max", 10);
+ * AbstractJClass annotatedString = stringClass.annotated(sizeAnnotation);
+ * // Generates: @Size(min = 1, max = 10) String
+ * </pre>
+ * <p>
+ * Use {@link AbstractJClass#annotated(Class)}, {@link AbstractJClass#annotated(AbstractJClass)},
+ * or {@link AbstractJClass#annotated(JAnnotationUse)} to create instances of this class.
  *
  * @since 4.2.0
  */
@@ -147,6 +157,15 @@ public class JAnnotatedClass extends AbstractJClass
   {
     final List <JAnnotationUse> newAnnotations = new ArrayList <> (m_aAnnotations);
     newAnnotations.add (new JAnnotationUse (aClazz));
+    return new JAnnotatedClass (m_aBasis, newAnnotations);
+  }
+
+  @Override
+  @NonNull
+  public JAnnotatedClass annotated (@NonNull final JAnnotationUse aAnnotation)
+  {
+    final List <JAnnotationUse> newAnnotations = new ArrayList <> (m_aAnnotations);
+    newAnnotations.add (aAnnotation);
     return new JAnnotatedClass (m_aBasis, newAnnotations);
   }
 
