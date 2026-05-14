@@ -22,6 +22,9 @@
     <version>4.2.0-SNAPSHOT</version>
   </parent>
   <artifactId>JCodeModel-Tests</artifactId>
+  <name>JCodeModel Tests</name>
+  <description>Integration tests for JCodeModel</description>
+  <url>https://github.com/phax/jcodemodel/jcodemodeltests</url>
 
   <dependencies>
     <dependency>
