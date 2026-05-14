@@ -28,12 +28,21 @@ limitations under the License. -->
     </dependency>
   </dependencies>
 
+
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.6.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.6.1</version>
         <executions>
           <execution>
             <id>add-javatest-generated-source</id>
@@ -81,14 +90,15 @@ limitations under the License. -->
     <profile>
       <id>java21tests</id>
       <activation>
-        <jdk>[21,)</jdk>
+        <property>
+          <name>test21</name>
+        </property>
       </activation>
       <build>
         <plugins>
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>build-helper-maven-plugin</artifactId>
-            <version>3.6.1</version>
             <executions>
               <execution>
                 <id>add-java21-test-source</id>
