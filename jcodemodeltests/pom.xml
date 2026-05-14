@@ -63,6 +63,12 @@ limitations under the License. -->
             <configuration>
               <arguments>${project.basedir}</arguments>
               <mainClass>com.helger.jcodemodel.compile.annotation.GenerateTestFiles</mainClass>
+              <systemProperties>
+                <systemProperty>
+                  <key>release</key>
+                  <value>${java.version}</value>
+                </systemProperty>
+              </systemProperties>
             </configuration>
           </execution>
         </executions>
