@@ -3,6 +3,7 @@ package com.helger.jcodemodel.switchexpression;
 import java.util.List;
 
 import com.helger.jcodemodel.IJFormatter;
+import com.helger.jcodemodel.IJObject;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JLambdaBlock;
@@ -43,24 +44,19 @@ public abstract class JCaseArrow<Self extends JCaseArrow<?>> implements IJStatem
   protected void stateBody(IJFormatter f) {
     f.print(" -> ").newline();
     if (block.getContents().size() == 1) {
-      switch (block.getContents().get(0)) {
-      case JYield jy -> {
+      IJObject firstContent = block.getContents().get(0);
+      if (firstContent instanceof JYield jy) {
         f.indent();
         f.generable(jy.expr()).print(";").newline();
         f.outdent();
         return;
-      }
-      case JThrow jt -> {
+      } else if (firstContent instanceof JThrow jt) {
         f.indent();
         f.statement(jt);
         f.outdent();
         return;
       }
-      default -> {
-      }
-
-      }
     }
-      f.statement(getBlock());
+    f.statement(getBlock());
   }
 }
