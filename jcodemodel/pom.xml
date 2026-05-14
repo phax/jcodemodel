@@ -46,7 +46,7 @@
   <parent>
     <groupId>com.helger.jcodemodel</groupId>
     <artifactId>jcodemodel-parent-pom</artifactId>
-    <version>4.2.1-SNAPSHOT</version>
+    <version>4.2.0-SNAPSHOT</version>
   </parent>
   <groupId>com.helger</groupId>
   <artifactId>jcodemodel</artifactId>
