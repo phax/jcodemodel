@@ -454,7 +454,7 @@ public final class JExpr
       final int j = CHAR_ESCAPE.indexOf (c);
       if (j >= 0)
       {
-        if ((cQuote == '"' && c == '\'') || (cQuote == '\'' && c == '"'))
+        if (cQuote == '"' && c == '\'' || cQuote == '\'' && c == '"')
         {
           sb.append (c);
         }
@@ -463,30 +463,27 @@ public final class JExpr
           sb.append ('\\');
           sb.append (CHAR_MACRO.charAt (j));
         }
+      } else // technically Unicode escape shouldn't be done here,
+      // for it's a lexical level handling.
+      //
+      // However, various tools are so broken around this area,
+      // so just to be on the safe side, it's better to do
+      // the escaping here (regardless of the actual file encoding)
+      //
+      // see bug
+      if (c < 0x20 || c > 0x7E)
+      {
+        // not printable. use Unicode escape
+        sb.append ("\\u");
+        final String hex = Integer.toHexString (c & 0xFFFF);
+        for (int k = hex.length (); k < 4; k++) {
+          sb.append ('0');
+        }
+        sb.append (hex);
       }
       else
       {
-        // technically Unicode escape shouldn't be done here,
-        // for it's a lexical level handling.
-        //
-        // However, various tools are so broken around this area,
-        // so just to be on the safe side, it's better to do
-        // the escaping here (regardless of the actual file encoding)
-        //
-        // see bug
-        if (c < 0x20 || c > 0x7E)
-        {
-          // not printable. use Unicode escape
-          sb.append ("\\u");
-          final String hex = Integer.toHexString (c & 0xFFFF);
-          for (int k = hex.length (); k < 4; k++)
-            sb.append ('0');
-          sb.append (hex);
-        }
-        else
-        {
-          sb.append (c);
-        }
+        sb.append (c);
       }
     }
     sb.append (cQuote);
@@ -541,5 +538,9 @@ public final class JExpr
                                  @NonNull final IJExpression aIfFalse)
   {
     return JOp.cond (aCond, aIfTrue, aIfFalse);
+  }
+
+  public static JSwitchExpression _switch(IJExpression exp) {
+    return new JSwitchExpression(exp);
   }
 }

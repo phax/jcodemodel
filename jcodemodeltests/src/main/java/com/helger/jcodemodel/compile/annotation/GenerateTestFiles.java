@@ -1,11 +1,8 @@
 /*
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -95,8 +92,26 @@ public class GenerateTestFiles {
     Class<?> clazz;
     try {
       clazz = Class.forName(className);
-      if (clazz.getAnnotation(TestJCM.class) != null) {
-        runGeneration(clazz);
+      TestJCM annotation = clazz.getAnnotation(TestJCM.class);
+      if (annotation != null) {
+        int runtimeFeatureVersion = Runtime.version().feature();
+//				String javaversion = System.getProperty("java.version");
+//				String javarelease = System.getProperty("java.release", "0");
+        String releaseValue = System.getProperty("release", "" + runtimeFeatureVersion);
+        int version = Integer.parseInt(releaseValue);
+        // if split for ease of debuging
+        if (annotation.javaMinVersion() <= version) {
+//					System.err.println("pass " + className + ", requires version " + annotation.javaMinVersion()
+//							+ " has " + version + " from"
+//							+ " feature=" + runtimeFeatureVersion
+//							+ " java.version=" + javaversion
+//							+ " java.release=" + javarelease
+//							+ " release=" + releaseValue);
+          runGeneration(clazz);
+        } else {
+//					System.err.println("skip " + className + ", requires version " + annotation.javaMinVersion()
+//							+ " has " + version);
+        }
       }
     } catch (ClassNotFoundException
         | IllegalAccessException

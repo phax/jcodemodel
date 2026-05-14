@@ -35,4 +35,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface TestJCM {
 
+  /// minimum java main version required to start this test.
+  /// Example 21 if a test uses features only avail in java 21+.
+  /// Defaults to 0.
+  public int javaMinVersion() default 0;
+
 }
