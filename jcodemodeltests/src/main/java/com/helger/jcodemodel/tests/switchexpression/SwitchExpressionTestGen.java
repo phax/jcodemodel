@@ -4,7 +4,7 @@ import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 
-@TestJCM
+@TestJCM(javaMinVersion = 21)
 public class SwitchExpressionTestGen {
 
   public void basicSwitch(JPackage root, JCodeModel jcm) throws JCodeModelException {

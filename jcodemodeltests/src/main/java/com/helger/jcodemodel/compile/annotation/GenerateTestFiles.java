@@ -95,8 +95,12 @@ public class GenerateTestFiles {
     Class<?> clazz;
     try {
       clazz = Class.forName(className);
-      if (clazz.getAnnotation(TestJCM.class) != null) {
-        runGeneration(clazz);
+      TestJCM annotation = clazz.getAnnotation(TestJCM.class);
+      if (annotation != null) {
+        // if split for ease of debugng
+        if (annotation.javaMinVersion() <= Runtime.version().feature()) {
+          runGeneration(clazz);
+        }
       }
     } catch (ClassNotFoundException
         | IllegalAccessException
