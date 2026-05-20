@@ -35,6 +35,20 @@ public class GenerateTestFiles {
 
   private static final String CLASS_SCAN_DIR = "src/main/java";
 
+  private static final String LICENCE = """
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+""";
+
   private final File outputDir;
 
   private final File classScanDir;
@@ -168,11 +182,22 @@ public class GenerateTestFiles {
             }
           }
           if (produced != null) {
+            postProcessJCM(produced);
             new JCMWriter(produced).build(outputDir, (IProgressTracker) null);
           }
         }
       }
     }
+  }
+
+  protected void postProcessJCM(JCodeModel jcm) {
+    jcm.getAllPackages().stream()
+        .flatMap(jp -> jp.classes().stream())
+        .filter(jdc -> !jdc.isHidden())
+        .filter(jdc -> !jdc.hasHeaderComment())
+        .forEach(jdc -> {
+          jdc.headerComment().add(LICENCE);
+        });
   }
 
 }
