@@ -542,4 +542,8 @@ public final class JExpr
   {
     return JOp.cond (aCond, aIfTrue, aIfFalse);
   }
+
+  public static JSwitchExpression _switch(IJExpression exp) {
+    return new JSwitchExpression(exp);
+  }
 }
