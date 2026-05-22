@@ -75,7 +75,6 @@ public class JCasePattern extends JCaseArrow<JCasePattern> {
     }
     stateBody(f);
     f.outdent();
-
   }
 
 

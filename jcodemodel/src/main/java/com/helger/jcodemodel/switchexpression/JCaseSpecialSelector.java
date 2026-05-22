@@ -28,10 +28,11 @@ public class JCaseSpecialSelector implements BlockSelection<JCaseSpecialSelector
     return this;
   }
 
-  public JCaseSpecialSelector andNull() {
-    setNull = true;
-    return this;
-  }
+// requires j21
+//	public JCaseSpecialSelector andNull() {
+//		setNull = true;
+//		return this;
+//	}
 
   @Override
   public List<JBlock> blocks() {

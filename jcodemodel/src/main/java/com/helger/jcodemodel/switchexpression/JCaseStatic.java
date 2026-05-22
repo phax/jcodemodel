@@ -8,6 +8,7 @@ import org.jspecify.annotations.NonNull;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JEnumConstant;
+import com.helger.jcodemodel.JEnumConstantRef;
 import com.helger.jcodemodel.JSwitchExpression;
 
 ///
@@ -49,6 +50,9 @@ public class JCaseStatic extends JCaseArrow<JCaseStatic> {
       if (ije instanceof JEnumConstant) {
         // Just use the name, but not the type of the enum
         aLabelName = f1 -> f1.print(((JEnumConstant) ije).name());
+      } else if (ije instanceof JEnumConstantRef) {
+        // Just use the name, but not the type of the enum
+        aLabelName = f1 -> f1.print(((JEnumConstantRef) ije).name());
       } else {
         aLabelName = ije;
       }

@@ -84,6 +84,7 @@ public class JSwitchExpression implements IJExpressionStatement {
     return c;
   }
 
+// requires j25
 //	@NonNull
 //	public JCasePattern _case(AbstractJType type, String varName) {
 //		JCasePattern c = new JCasePattern(this, type, varName);
@@ -91,14 +92,16 @@ public class JSwitchExpression implements IJExpressionStatement {
 //		return c;
 //	}
 
+// requires j25
 //	@NonNull
 //	public JCasePattern _case(JCodeModel jcm, Class<?> cl, String varName) {
 //		return _case(jcm.ref(cl), varName);
 //	}
 
-  public JCaseSpecialSelector _null() {
-    return new JCaseSpecialSelector(this, true);
-  }
+// requires j21
+//	public JCaseSpecialSelector _null() {
+//		return new JCaseSpecialSelector(this, true);
+//	}
 
   public JCaseSpecialSelector _default() {
     return new JCaseSpecialSelector(this, false);
@@ -106,6 +109,10 @@ public class JSwitchExpression implements IJExpressionStatement {
 
   @Override
   public void generate(@NonNull IJFormatter f) {
+    generate25(f);
+  }
+
+  protected void generate25(@NonNull IJFormatter f) {
     f.print("switch (").generable(m_aTestExpr).print(')').print(" {").newline();
     for (final JCaseArrow<?> c : m_aCases) {
       f.statement(c);
@@ -124,6 +131,12 @@ public class JSwitchExpression implements IJExpressionStatement {
     }
     f.outdent();
     f.print('}').newline();
+  }
+
+  protected void generatePre25(@NonNull IJFormatter f) {
+    // TODO in that case we generate only the static ones ; the pattern cases must
+    // be added on top of the default.
+    throw new UnsupportedOperationException("not implemented yet.");
   }
 
   @Override
