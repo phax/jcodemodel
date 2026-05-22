@@ -67,6 +67,12 @@ public class GenerateSourceMojo extends AbstractMojo
   @Parameter (property = "jcodemodel.source")
   private String source;
 
+  /**
+   * features allowed in the generated class files
+   */
+  @Parameter (property = "jcodemodel.java.feature")
+  private String javaFeature;
+
   @Parameter (property = "jcodemodel.data")
   private String data;
 
@@ -138,7 +144,9 @@ public class GenerateSourceMojo extends AbstractMojo
                                                                                                                         .getBytes (StandardCharsets.UTF_8)))
     {
       cmb.build (cm, aIS);
-      new JCMWriter (cm).build (dir, (IProgressTracker) null);
+      new JCMWriter (cm)
+        .setJavaFeature(findJavaFeature())
+        .build (dir, (IProgressTracker) null);
     }
     catch (JCodeModelException | IOException e)
     {
@@ -219,5 +227,10 @@ public class GenerateSourceMojo extends AbstractMojo
     }
 
     throw new MojoExecutionException ("could not open provided source " + source + " as a file or url");
+  }
+  
+  public int findJavaFeature() {
+    if(javaFeature==null || javaFeature.isBlank()) return JCMWriter.DEFAULT_JAVA_FEATURE;
+    return Integer.parseInt(javaFeature);
   }
 }

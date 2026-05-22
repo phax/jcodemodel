@@ -53,6 +53,8 @@ limitations under the License.
 
   private final File classScanDir;
 
+  private final int javaFeature;
+
   public static void main(String[] args) {
     String rootPath = args == null || args.length == 0 ? "." : args[0];
     File outputFile = new File(rootPath, OUTPUT_DIR);
@@ -61,9 +63,14 @@ limitations under the License.
         .apply();
   }
 
+  public static int extractJavaFeature() {
+    return Integer.parseInt(System.getProperty("java.feature", "" + JCMWriter.DEFAULT_JAVA_FEATURE));
+  }
+
   public GenerateTestFiles(File outputDir, File classScanDir) {
     this.outputDir = outputDir;
     this.classScanDir = classScanDir;
+    javaFeature = extractJavaFeature();
   }
 
   void apply() {
@@ -183,7 +190,9 @@ limitations under the License.
           }
           if (produced != null) {
             postProcessJCM(produced);
-            new JCMWriter(produced).build(outputDir, (IProgressTracker) null);
+            new JCMWriter(produced)
+                .setJavaFeature(javaFeature)
+                .build(outputDir, (IProgressTracker) null);
           }
         }
       }
