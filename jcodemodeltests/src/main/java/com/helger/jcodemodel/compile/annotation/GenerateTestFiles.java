@@ -139,7 +139,7 @@ limitations under the License.
         boolean returnsJCM = m.getReturnType().equals(JCodeModel.class);
         boolean requiresJCM = false;
         Object[] params = new Object[m.getParameterCount()];
-        boolean missingParam = false;
+        boolean unknownParam = false;
         JCodeModel produced = null;
         JPackage rootPackage = null;
         for (int i = 0; i < params.length; i++) {
@@ -162,10 +162,10 @@ limitations under the License.
             requiresJCM = true;
 
           } else {
-            missingParam = true;
+            unknownParam = true;
           }
         }
-        if (!missingParam && (returnsJCM || requiresJCM)) {
+        if (!unknownParam && (returnsJCM || requiresJCM)) {
           m.setAccessible(true);
           if ((m.getModifiers() & Modifier.STATIC) > 0) {
             if (returnsJCM) {

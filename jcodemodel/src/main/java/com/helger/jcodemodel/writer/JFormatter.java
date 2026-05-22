@@ -400,6 +400,8 @@ public class JFormatter implements IJFormatter
   private boolean m_bContainsErrorTypes;
 
   private boolean m_bDebugImport = false;
+  
+  private int m_iJavaFeature = JCMWriter.DEFAULT_JAVA_FEATURE;
 
   /**
    * Constructor
@@ -418,6 +420,17 @@ public class JFormatter implements IJFormatter
 
     m_aPW = aPW;
     m_sIndentString = sIndentString;
+  }
+  
+  public JFormatter setJavaFeature(int iJavaFeature)
+  {
+    this.m_iJavaFeature=iJavaFeature;
+    return this;
+  }
+  
+  public int getJavaFeature()
+  {
+    return this.m_iJavaFeature;
   }
 
   /**

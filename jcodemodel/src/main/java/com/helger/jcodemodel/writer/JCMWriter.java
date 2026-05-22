@@ -77,6 +77,8 @@ public class JCMWriter
 
   /** Cached default new line */
   public static final String DEFAULT_NEW_LINE = System.lineSeparator ();
+  
+  public static final int DEFAULT_JAVA_FEATURE=17;
 
   private final JCodeModel m_aCM;
 
@@ -90,6 +92,12 @@ public class JCMWriter
    * String to be used for each indentation. Defaults to four spaces.
    */
   private String m_sIndentString = DEFAULT_INDENT_STRING;
+
+
+  /// java release our target class files will be compiled under.
+  ///
+  /// For example, a feature requiring java25 will need to be replaced by another code if the release is below 25
+  private int m_iJavaRelease = DEFAULT_JAVA_FEATURE;
 
   public JCMWriter (@NonNull final JCodeModel aCM)
   {
@@ -160,6 +168,29 @@ public class JCMWriter
   }
 
   /**
+   * @return The javaFeature to be used
+   */
+  @NonNull
+  public int getJavaFeature() {
+    return m_iJavaRelease;
+  }
+
+  /**
+   * Set the javaFeature to be used.
+   *
+   * @param iJavaFeature
+   *                     The java feature to be used. All features that require a
+   *                     higher feature level will be disabled when writting a
+   *                     JCM.
+   * @return this for chaining
+   */
+  @NonNull
+  public JCMWriter setJavaFeature(final int iJavaFeature) {
+    m_iJavaRelease = iJavaFeature;
+    return this;
+  }
+
+  /**
    * Generates Java source code. A convenience method for
    * <code>build(destDir,destDir,status)</code>.
    *
@@ -168,7 +199,7 @@ public class JCMWriter
    * @param aStatusPT
    *        if non-<code>null</code>, progress indication will be sent to this stream.
    * @throws IOException
-   *         on IO error
+   *                     on IO error
    */
   public void build (@NonNull final File aDestDir, @Nullable final IProgressTracker aStatusPT) throws IOException
   {
@@ -270,7 +301,7 @@ public class JCMWriter
       final List <JResourceDir> aResourceDirs = m_aCM.getAllResourceDirs ();
       for (final JResourceDir aResourceDir : aResourceDirs)
         buildResourceDir (aResourceWriter, aResourceDir);
-    }
+      }
     finally
     {
       aSourceWriter.close ();
