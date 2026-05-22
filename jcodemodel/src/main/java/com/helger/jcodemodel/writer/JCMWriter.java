@@ -94,10 +94,10 @@ public class JCMWriter
   private String m_sIndentString = DEFAULT_INDENT_STRING;
 
 
-  /// java release our target class files will be compiled under.
+  /// java feature our target class files will be compiled under.
   ///
-  /// For example, a feature requiring java25 will need to be replaced by another code if the release is below 25
-  private int m_iJavaRelease = DEFAULT_JAVA_FEATURE;
+  /// For example, a feature requiring java25 will need to be replaced by another code if the java.feature is below 25
+  private int m_iJavaFeature = DEFAULT_JAVA_FEATURE;
 
   public JCMWriter (@NonNull final JCodeModel aCM)
   {
@@ -172,7 +172,7 @@ public class JCMWriter
    */
   @NonNull
   public int getJavaFeature() {
-    return m_iJavaRelease;
+    return m_iJavaFeature;
   }
 
   /**
@@ -186,7 +186,7 @@ public class JCMWriter
    */
   @NonNull
   public JCMWriter setJavaFeature(final int iJavaFeature) {
-    m_iJavaRelease = iJavaFeature;
+    m_iJavaFeature = iJavaFeature;
     return this;
   }
 
