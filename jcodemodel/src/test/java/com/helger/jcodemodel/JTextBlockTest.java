@@ -8,14 +8,14 @@ public class JTextBlockTest {
   @Test
   public void testFormat() {
     // 6 parenthesis should have the first and 4th one escaped
-    Assert.assertEquals("\\\"\"\"\\\"\"\"", JTextBlock.formatLine("\"".repeat(6)));
-    Assert.assertEquals("\\\"\"\"?\\\"\"\"", JTextBlock.formatLine("\"".repeat(3) + "?" + "\"".repeat(3)));
+    Assert.assertEquals("\\\"\"\\\"\\\"\"\\\"", JTextBlock.formatLine("\"".repeat(6)));
+    Assert.assertEquals("\\\"\"\\\"?\\\"\"\\\"", JTextBlock.formatLine("\"".repeat(3) + "?" + "\"".repeat(3)));
     // end space is octal space
     Assert.assertEquals("   \\040", JTextBlock.formatLine(" ".repeat(4)));
     // end tab is octal space
-    Assert.assertEquals(" \\040", JTextBlock.formatLine(" \t"));
+    Assert.assertEquals(" \\011", JTextBlock.formatLine(" \t"));
     // same but with alternating space and tabs
-    Assert.assertEquals(" \t \t \\040", JTextBlock.formatLine(" \t".repeat(3)));
+    Assert.assertEquals(" \t \t \\011", JTextBlock.formatLine(" \t".repeat(3)));
     // same but with alternating tabs and spaces
     Assert.assertEquals("\t \t \t\\040", JTextBlock.formatLine("\t ".repeat(3)));
   }

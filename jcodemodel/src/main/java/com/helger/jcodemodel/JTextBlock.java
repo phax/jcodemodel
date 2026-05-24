@@ -34,9 +34,12 @@ public class JTextBlock implements IJExpression, Iterable<String> {
     return
         line
             // escape triple parenthesis
-            .replace("\"\"\"", "\\\"\"\"")
-            // trailing spaces/tabs are stripped : replace last with octal space
-            .replaceAll("[ \t]$", "\\\\040");
+            .replace("\"\"\"", "\\\"\"\\\"")
+            // trailing spaces/tabs are stripped : replace last space octal space (ascii d32
+            // = o040 )
+            .replaceAll(" $", "\\\\040")
+            // and last tab with octal tab (ascii d9 = o011 )
+            .replaceAll("\t$", "\\\\011");
   }
 
   private int indentSize = 0;
@@ -130,7 +133,7 @@ public class JTextBlock implements IJExpression, Iterable<String> {
       lastEmpty = line.isEmpty();
     }
     f.print(LIMITER);
-    if (!lastEmpty) {
+    if (!lastEmpty && indentSize > 0) {
       // if the last line is not empty, then the delimiter is not enough to enforce
       // the indent. So we add a call after that.
       f

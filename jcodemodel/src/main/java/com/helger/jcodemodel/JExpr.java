@@ -40,6 +40,8 @@
  */
 package com.helger.jcodemodel;
 
+import java.util.stream.Stream;
+
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -506,15 +508,12 @@ public final class JExpr
   }
   
   @NonNull
-  public static JTextBlock textBlock (@NonNull final String sStr)
+  public static JTextBlock textBlock (@NonNull final String ... lines)
   {
-    return new JTextBlock (sStr);
-  }
-  
-  @NonNull
-  public static JTextBlock textBlock ()
-  {
-    return new JTextBlock ();
+    JTextBlock ret = new JTextBlock();
+    if(lines!=null && lines.length!=0)
+      Stream.of(lines).forEach(ret::add);
+    return ret;
   }
 
   /**
