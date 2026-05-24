@@ -504,6 +504,18 @@ public final class JExpr
   {
     return new JStringLiteral (sStr);
   }
+  
+  @NonNull
+  public static JTextBlock textBlock (@NonNull final String sStr)
+  {
+    return new JTextBlock (sStr);
+  }
+  
+  @NonNull
+  public static JTextBlock textBlock ()
+  {
+    return new JTextBlock ();
+  }
 
   /**
    * Creates an aExpr directly from a source code fragment.
