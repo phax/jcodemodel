@@ -15,6 +15,12 @@ import org.jspecify.annotations.NonNull;
 @SuppressWarnings("serial")
 public class JTextBlock implements IJExpression, Iterable<String> {
 
+  private char indentChar = ' ';
+
+  private int indentSize = 0;
+
+  private List<String> lines = new ArrayList<>();
+
   public JTextBlock() {
   }
 
@@ -52,8 +58,6 @@ public class JTextBlock implements IJExpression, Iterable<String> {
         .replaceAll("([^\\\\])\"$", "$1\\\\\"");
   }
 
-  private int indentSize = 0;
-
   public JTextBlock indentSize(int val) {
     indentSize = val;
     return this;
@@ -62,8 +66,6 @@ public class JTextBlock implements IJExpression, Iterable<String> {
   public int indentSize() {
     return indentSize;
   }
-
-  private char indentChar = ' ';
 
   public JTextBlock indentChar(char val) {
     if (val != ' ' && val != '\t') {
@@ -85,7 +87,6 @@ public class JTextBlock implements IJExpression, Iterable<String> {
     return indentChar;
   }
 
-  private List<String> lines = new ArrayList<>();
 
   ///
   /// transforms a line to make it fit to the text block syntax.
@@ -134,7 +135,7 @@ public class JTextBlock implements IJExpression, Iterable<String> {
     String indent =
         indentSize <= 0 || lines.isEmpty()
             ? ""
-            : ("" + indentChar).repeat(indentSize);
+            : Character.toString(indentChar).repeat(indentSize);
     boolean first = true;
     boolean lastEmpty = true;
     // the last line must not end with unescaped doublequote
