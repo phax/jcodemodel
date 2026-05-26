@@ -136,19 +136,27 @@ public class JTextBlock implements IJExpression, Iterable<String> {
         indentSize <= 0 || lines.isEmpty()
             ? ""
             : Character.toString(indentChar).repeat(indentSize);
-    boolean first = true;
+    boolean firstLine = true;
     boolean lastEmpty = true;
+    // don't modify the internal list.
+    List<String> modifiedLines = lines;
     // the last line must not end with unescaped doublequote
-    if (!lines.isEmpty()) {
-      String lastLine = lines.get(lines.size() - 1);
-      lines.set(lines.size() - 1, escapeLastIfDoubleQuote(lastLine));
+    // if escaping its last parentheses produces a different String, then we copy
+    // the full list to not modify the existing one.
+    if (!modifiedLines.isEmpty()) {
+      String lastLine = modifiedLines.get(modifiedLines.size() - 1);
+      String escapedLastLine = escapeLastIfDoubleQuote(lastLine);
+      if (!escapedLastLine.equals(lastLine)) {
+        modifiedLines = new ArrayList<>(lines);
+        modifiedLines.set(modifiedLines.size() - 1, escapedLastLine);
+      }
     }
-    for (String line : lines) {
-      if (!first) {
+    for (String line : modifiedLines) {
+      if (!firstLine) {
         f.newline();
       }
       f.print(indent).print(line);
-      first = false;
+      firstLine = false;
       lastEmpty = line.isEmpty();
     }
     f.print(LIMITER);
