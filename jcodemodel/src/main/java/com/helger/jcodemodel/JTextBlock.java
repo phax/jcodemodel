@@ -31,15 +31,25 @@ public class JTextBlock implements IJExpression, Iterable<String> {
 
   /// format a standard String line to make it a text block line.
   static String formatLine(String line) {
-    return
-        line
-            // escape triple parenthesis
-            .replace("\"\"\"", "\\\"\"\\\"")
-            // trailing spaces/tabs are stripped : replace last space octal space (ascii d32
-            // = o040 )
-            .replaceAll(" $", "\\\\040")
-            // and last tab with octal tab (ascii d9 = o011 )
-            .replaceAll("\t$", "\\\\011");
+    return line
+        // escape triple parenthesis
+        .replace("\"\"\"", "\"\"\\\"")
+        // trailing spaces/tabs are stripped : replace last space octal space (ascii d32
+        // = o040 )
+        .replaceAll(" $", "\\\\040")
+        // and last tab with octal tab (ascii d9 = o011 )
+        .replaceAll("\t$", "\\\\011");
+  }
+
+  static String escapeLastIfDoubleQuote(String s) {
+    if (s == null) {
+      return null;
+    }
+    if (s.equals("\"")) {
+      return "\\\"";
+    }
+    return s
+        .replaceAll("([^\\\\])\"$", "$1\\\\\"");
   }
 
   private int indentSize = 0;
@@ -81,6 +91,7 @@ public class JTextBlock implements IJExpression, Iterable<String> {
   /// transforms a line to make it fit to the text block syntax.
   ///
   /// @param line if null nothing happens
+  /// @return this, to chain
   public JTextBlock add(String line) {
     if (line != null) {
       formatLines(line).forEach(lines::add);
@@ -88,14 +99,16 @@ public class JTextBlock implements IJExpression, Iterable<String> {
     return this;
   }
 
-  /// shortcut to add a new line
+  /// shortcut to add an empty line
+  /// @return this, to chain
   public JTextBlock newline() {
     lines.add("");
     return this;
   }
 
-  /// shortcut to add new lines
-  /// if i<1 no new line is added
+  /// shortcut to add empty lines
+  /// @param nb when <1 nothing happens
+  /// @return this, to chain
   public JTextBlock newlines(int nb) {
     for (int i = 0; i < nb; i++) {
       newline();
@@ -124,6 +137,11 @@ public class JTextBlock implements IJExpression, Iterable<String> {
             : ("" + indentChar).repeat(indentSize);
     boolean first = true;
     boolean lastEmpty = true;
+    // the last line must not end with unescaped doublequote
+    if (!lines.isEmpty()) {
+      String lastLine = lines.get(lines.size() - 1);
+      lines.set(lines.size() - 1, escapeLastIfDoubleQuote(lastLine));
+    }
     for (String line : lines) {
       if (!first) {
         f.newline();

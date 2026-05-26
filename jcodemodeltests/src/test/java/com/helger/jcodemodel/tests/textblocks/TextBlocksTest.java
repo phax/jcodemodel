@@ -7,13 +7,16 @@ public class TextBlocksTest {
 
   @Test
   public void staticBlocks() {
-    Assert.assertEquals("", TextBlocks.EMPTY);
-    Assert.assertEquals("a", TextBlocks.ONE_LINE);
-    Assert.assertEquals("a\nb", TextBlocks.TWO_LINES);
-    Assert.assertEquals("\"\"\"\n\"\"\"", TextBlocks.TWO_TRIPLEQUOTES_LINES);
-    Assert.assertEquals("a  ", TextBlocks.ONE_LINE_ENDSPACE);
-    Assert.assertEquals("a\t\t", TextBlocks.ONE_LINE_ENDTAB);
-    Assert.assertEquals("a\t\t\nb\t\t", TextBlocks.TWO_LINES_ENDTAB);
+    Assert.assertEquals("", TextBlocksExample.EMPTY);
+    Assert.assertEquals("a", TextBlocksExample.ONE_LINE);
+    Assert.assertEquals("a\nb", TextBlocksExample.TWO_LINES);
+    Assert.assertEquals("\"\"\n\"\"", TextBlocksExample.TWO_DOUBLE_DQUOTES_LINES);
+    Assert.assertEquals("\"\"\"\n\"\"\"", TextBlocksExample.TWO_TRIPLE_DQUOTES_LINES);
+    Assert.assertEquals("\"\"\"\"\"", TextBlocksExample.FIVE_DQUOTES);
+    Assert.assertEquals("\"\"\"\"\"\n\"\"\"\"\"", TextBlocksExample.TWO_FIVE_DQUOTES_LINES);
+    Assert.assertEquals("a  ", TextBlocksExample.ONE_LINE_ENDSPACE);
+    Assert.assertEquals("a\t\t", TextBlocksExample.ONE_LINE_ENDTAB);
+    Assert.assertEquals("a\t\t\nb\t\t", TextBlocksExample.TWO_LINES_ENDTAB);
   }
 
 }

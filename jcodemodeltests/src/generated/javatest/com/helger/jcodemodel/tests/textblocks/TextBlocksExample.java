@@ -14,7 +14,7 @@
  */
 package com.helger.jcodemodel.tests.textblocks;
 
-public class TextBlocks {
+public class TextBlocksExample {
     public static final String EMPTY = """
     """;
     public static final String ONE_LINE = """
@@ -22,9 +22,17 @@ public class TextBlocks {
     public static final String TWO_LINES = """
     a
     b""";
-    public static final String TWO_TRIPLEQUOTES_LINES = """
-    \""\"
-    \""\"""";
+    public static final String TWO_DOUBLE_DQUOTES_LINES = """
+    ""
+    "\"""";
+    public static final String TWO_TRIPLE_DQUOTES_LINES = """
+    ""\"
+    ""\"""";
+    public static final String FIVE_DQUOTES = """
+    ""\""\"""";
+    public static final String TWO_FIVE_DQUOTES_LINES = """
+    ""\"""
+    ""\""\"""";
     public static final String ONE_LINE_ENDSPACE = """
     a \040 """;
     public static final String ONE_LINE_ENDTAB = """
