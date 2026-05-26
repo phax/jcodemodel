@@ -10,7 +10,7 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
 @TestJCM
 public class TextBlocksTestGen {
 
-  public void staticBlocks(JPackage root) throws JCodeModelException {
+  public void basicExamples(JPackage root) throws JCodeModelException {
     JDefinedClass cl = root._class("TextBlocksExample");
     cl.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class, "EMPTY", JExpr.textBlock());
     cl.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class, "ONE_LINE", JExpr.textBlock().add("a"));
@@ -35,6 +35,16 @@ public class TextBlocksTestGen {
         JExpr.textBlock()
             .add("a\t\t")
             .add("b\t\t"));
+  }
+
+  public void keepWhiteSpaces(JPackage root) throws JCodeModelException {
+    JDefinedClass cl = root._class("TextBlocksKeepWhiteSpaces");
+    cl.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class, "ONE_LINE_SPACES",
+        JExpr.textBlock().keepWhitespaces(true).add("  a  "));
+    cl.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class, "ONE_LINE_TABS",
+        JExpr.textBlock().keepWhitespaces(true).add("	a	"));
+    cl.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class, "SPACES_EMPTYLINE",
+        JExpr.textBlock().keepWhitespaces(true).add("  ").newline());
 
   }
 

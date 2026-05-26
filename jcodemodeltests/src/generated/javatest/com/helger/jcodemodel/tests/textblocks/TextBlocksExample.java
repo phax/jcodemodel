@@ -34,10 +34,10 @@ public class TextBlocksExample {
     ""\"""
     ""\""\"""";
     public static final String ONE_LINE_ENDSPACE = """
-    a \040 """;
+    a  """;
     public static final String ONE_LINE_ENDTAB = """
-    a	\011 """;
+    a		""";
     public static final String TWO_LINES_ENDTAB = """
-    a	\011
-    b	\011 """;
+    a		
+    b		""";
 }
