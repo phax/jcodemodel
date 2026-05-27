@@ -24,8 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.annotation.processing.Generated;
+
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.JReferencedClass;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
@@ -198,6 +201,19 @@ limitations under the License.
         .forEach(jdc -> {
           jdc.headerComment().add(LICENCE);
         });
+
+    jcm.getAllPackages().stream()
+        .flatMap(jp -> jp.classes().stream())
+        .filter(jdc -> !jdc.isHidden())
+        .filter(jdc -> jdc.annotations().stream()
+            .filter(ja -> ja.getAnnotationClass() instanceof JReferencedClass)
+            .map(ja -> (JReferencedClass) ja.getAnnotationClass())
+            .filter(jrc -> jrc.getReferencedClass().equals(Generated.class))
+            .findAny().isEmpty())
+        .forEach(jdc -> {
+          jdc.annotate(Generated.class).param(JCodeModel.class.getCanonicalName());
+        });
+
   }
 
 }

@@ -14,5 +14,8 @@
  */
 package com.helger.jcodemodel.tests.basic;
 
+import javax.annotation.processing.Generated;
+
+@Generated("com.helger.jcodemodel.JCodeModel")
 public class Simple2 {
 }

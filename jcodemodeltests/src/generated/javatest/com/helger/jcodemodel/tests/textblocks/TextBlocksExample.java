@@ -14,6 +14,9 @@
  */
 package com.helger.jcodemodel.tests.textblocks;
 
+import javax.annotation.processing.Generated;
+
+@Generated("com.helger.jcodemodel.JCodeModel")
 public class TextBlocksExample {
     public static final String EMPTY = """
     """;

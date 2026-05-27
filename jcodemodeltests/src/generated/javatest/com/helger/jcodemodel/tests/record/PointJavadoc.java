@@ -14,6 +14,8 @@
  */
 package com.helger.jcodemodel.tests.record;
 
+import javax.annotation.processing.Generated;
+
 
 /**
  * Represents a 2D point.
@@ -23,5 +25,6 @@ package com.helger.jcodemodel.tests.record;
  * @param y
  *     the y coordinate
  */
+@Generated("com.helger.jcodemodel.JCodeModel")
 public record PointJavadoc(int x, int y) {
 }
