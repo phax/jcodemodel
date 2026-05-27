@@ -30,8 +30,10 @@ import org.jspecify.annotations.NonNull;
 /// ## Property keepWhiteSpaces
 ///
 /// The produced lines differ depending on [#keepWhitespaces]
-///  - when false(default), the content of the file will be the one added. Adding ` a ` will result in the textblock containing it, thus the resulting line
-///  - when true, the content of the resulting string will be the one added
+///  - when false(default), the content of the file will be the one added.
+///    Adding ` a ` will result in the textblock containing it, thus the resulting line will be `a` because of whitespaces strupping in textblocks
+///  - when true, the content of the resulting string will be the one added.
+///    Adding `  a  ` will result in the textblock containing instead `\040 a \040` to ensure the resulting string will be `  a  `.
 /// In the later, if all lines start with a whitespace, then the first character is set to octal ; plus all line-ending whitespace are also set to octal.
 ///
 /// ## Indentation
