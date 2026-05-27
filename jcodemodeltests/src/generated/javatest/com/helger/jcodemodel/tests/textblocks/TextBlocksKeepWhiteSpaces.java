@@ -22,4 +22,8 @@ public class TextBlocksKeepWhiteSpaces {
     public static final String SPACES_EMPTYLINE = """
      \040
     """;
+    public static final String THREE_LINES_SPACES = """
+    \040a\040
+     b\040
+     c \040 """;
 }
