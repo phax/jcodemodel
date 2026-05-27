@@ -194,6 +194,7 @@ limitations under the License.
   }
 
   protected void postProcessJCM(JCodeModel jcm) {
+    // add the licence to classes not having a header comment yet.
     jcm.getAllPackages().stream()
         .flatMap(jp -> jp.classes().stream())
         .filter(jdc -> !jdc.isHidden())
@@ -201,7 +202,8 @@ limitations under the License.
         .forEach(jdc -> {
           jdc.headerComment().add(LICENCE);
         });
-
+    
+    // add @Generated(JCodeModel full name) to files' root classes not having that annotation yet.
     jcm.getAllPackages().stream()
         .flatMap(jp -> jp.classes().stream())
         .filter(jdc -> !jdc.isHidden())
