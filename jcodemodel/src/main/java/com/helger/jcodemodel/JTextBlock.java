@@ -10,19 +10,31 @@ import org.jspecify.annotations.NonNull;
 
 /// Represents a text block declaration, one line at a time.
 ///
+/// ## Main usage
 ///
+/// This class produces java text blocks in the generated source file.
+/// It is used by adding lines to it, either one at a time or by passing multiline-string.
+/// The added lines are split by newline separator, then double quotes are escaped when needed.
+/// The [#keepWhiteSpaces] property specifies whether the string added are the one in the *file* (default), or in the resulting *String*.
 ///
-/// ## doublequote escaping
+/// ## Indenting
+///
+/// The [#indentSize] and [#indentChar] (by default size 0 and char space) specify which indentation is to be *added* at the beginning of each line.
+/// Note that if the last line is not empty, then the *source* output will have requested indent but the *produced* String will have space indentation even when [indentChar] is set to tab.
+///
+/// ## Double quote escaping
 ///
 /// triple doublequotes `"""` are escaped by having the third one backslashed `""\"`.
 /// Plus, if the last line ends with an unescaped doublequote, this doublequote is escaped to avoid breaking the parser.
 ///
-/// ## keepWhiteSpaces
+/// ## Property keepWhiteSpaces
 ///
-/// The output of the lines differ depending on [#keepWhitespaces]
-///  - when false(default), the content of the file will be the one added.
+/// The produced lines differ depending on [#keepWhitespaces]
+///  - when false(default), the content of the file will be the one added. Adding ` a ` will result in the textblock containing it, thus the resulting line
 ///  - when true, the content of the resulting string will be the one added
-/// In the later, if all lines start with a whitespace, then all starting whitespace are set to otal ; plus all ending whitespace are also set to octal.
+/// In the later, if all lines start with a whitespace, then the first character is set to octal ; plus all line-ending whitespace are also set to octal.
+///
+/// ## Indentation
 ///
 /// [https://docs.oracle.com/en/java/javase/26/language/text-blocks.html]
 ///
@@ -187,7 +199,7 @@ public class JTextBlock implements IJExpression, Iterable<String> {
       if (!firstLine) {
         f.newline();
       }
-      if (requireEscapeStart) {
+      if (requireEscapeStart && firstLine) {
         // replace starting space/tab by octal
         line =
             line

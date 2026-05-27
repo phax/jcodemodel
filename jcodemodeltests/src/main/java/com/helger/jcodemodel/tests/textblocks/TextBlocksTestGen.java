@@ -45,6 +45,11 @@ public class TextBlocksTestGen {
         JExpr.textBlock().keepWhitespaces(true).add("	a	"));
     cl.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class, "SPACES_EMPTYLINE",
         JExpr.textBlock().keepWhitespaces(true).add("  ").newline());
+    cl.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class, "THREE_LINES_SPACES",
+        JExpr.textBlock().keepWhitespaces(true)
+            .add(" a ")
+            .add(" b ")
+            .add(" c  "));
 
   }
 
