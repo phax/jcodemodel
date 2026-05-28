@@ -14,6 +14,8 @@
  */
 package com.helger.jcodemodel.tests.basic;
 
+import javax.annotation.processing.Generated;
+
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
@@ -22,7 +24,7 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
 public class SimpleClassGenerating {
 
   public void createSimple1(JPackage root) throws JCodeModelException {
-    root._class("Simple1");
+    root._class("Simple1").annotate(Generated.class).param("test tester");
   }
 
 

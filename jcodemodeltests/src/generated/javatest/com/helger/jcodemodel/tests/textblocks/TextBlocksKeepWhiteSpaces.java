@@ -14,6 +14,9 @@
  */
 package com.helger.jcodemodel.tests.textblocks;
 
+import javax.annotation.processing.Generated;
+
+@Generated("com.helger.jcodemodel.JCodeModel")
 public class TextBlocksKeepWhiteSpaces {
     public static final String ONE_LINE_SPACES = """
     \040 a \040 """;

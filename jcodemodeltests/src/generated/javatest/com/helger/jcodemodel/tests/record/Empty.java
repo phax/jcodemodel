@@ -14,5 +14,8 @@
  */
 package com.helger.jcodemodel.tests.record;
 
+import javax.annotation.processing.Generated;
+
+@Generated("com.helger.jcodemodel.JCodeModel")
 public record Empty() {
 }
