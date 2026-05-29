@@ -8,13 +8,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository layout (Maven multi-module)
 
-The root `pom.xml` declares three modules:
+The root `pom.xml` declares four modules:
 
 - `jcodemodel/` — the core code generation library (`com.helger.jcodemodel:jcodemodel`). Licensed CDDL+GPL 1.1 (inherited from the upstream Sun fork).
 - `plugin/` — Apache 2 licensed. Contains:
   - `plugin/plugin/` — the `jcodemodel-maven-plugin` that generates Java code at build time.
   - `plugin/generators/` — pluggable generators consumed by the Maven plugin: `csv`, `json`, `yaml`, plus `helloworld` as a reference impl.
 - `examples/plugins/` — example projects that exercise the Maven plugin and its generators.
+- `jcodemodeltests/` — integration test module exercising generated output. Each feature follows a three-source-root pattern wired by `build-helper-maven-plugin` + `exec-maven-plugin`:
+  - `src/main/java/.../<feature>/*TestGen.java` — classes that use the `jcodemodel` API to emit Java source.
+  - `src/generated/javatest/.../<feature>/*.java` — files produced at build time by `com.helger.jcodemodel.compile.annotation.GenerateTestFiles` running the `TestGen` classes.
+  - `src/test/java/.../<feature>/*Test.java` — JUnit tests that verify the generated sources. Adding a new feature test means touching all three roots.
 
 Note: the core library and the plugin/generators are licensed differently — keep license headers correct when adding files (CDDL+GPL for core, Apache 2 for plugin tree).
 
@@ -40,6 +44,8 @@ mvn clean install -DskipTests
 ```
 
 The parent POM is `com.helger:parent-pom:3.0.3`, which configures the Java toolchain, license headers, and formatting plugins.
+
+CI (`.github/workflows/maven-build.yml`) runs the build on JDK 17, 21, and 25 on Ubuntu. JDK 17 is the minimum supported version — verify changes still compile and pass on 17.
 
 ## Core library architecture (`com.helger.jcodemodel`)
 
@@ -80,7 +86,7 @@ public ResponseEntity <String> doIt (final String sName)
 }
 ```
 
-Eclipse formatter/cleanup XMLs live under `jcodemodel/meta/` (referenced from the README as `meta/formatter/eclipse/`). The project tolerates contributors using tabs locally via the `sh/tabspaces` git filter script — do not commit tab-indented files.
+Eclipse formatter/cleanup XMLs live under `jcodemodel/meta/` (referenced from the README as `meta/formatter/eclipse/`). The project tolerates contributors using tabs locally via the `sh/cfg/tabspaces` git filter script — do not commit tab-indented files.
 
 Other conventions enforced by `~/.claude/rules/naming.md` (Hungarian notation, `m_`/`s_` scope prefixes, `I`/`E`/`Abstract` type prefixes, `ID` always uppercase, inline string concatenation in `LOGGER` calls, no `@Override` on pure interface implementations, no `serialVersionUID`) apply throughout this codebase — match the style of the file you are editing.
 
@@ -88,5 +94,5 @@ Other conventions enforced by `~/.claude/rules/naming.md` (Hungarian notation, `
 
 - v4.x requires Java 17.
 - v3.x required Java 8; v2.8+ required Java 6.
-- v4.2.0 (current `-SNAPSHOT`) removed OSGi bundling, added support for Java `record` types and `TYPE_USE` annotation targets.
+- v4.2.x (current is `4.2.1-SNAPSHOT`) removed OSGi bundling, added support for Java `record` types and `TYPE_USE` annotation targets.
 - The default output charset is UTF-8 (since v3.2.0).

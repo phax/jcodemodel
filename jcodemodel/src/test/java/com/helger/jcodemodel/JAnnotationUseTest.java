@@ -40,12 +40,13 @@
  */
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertEquals;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.helger.jcodemodel.exceptions.JCodeModelException;
@@ -67,8 +68,7 @@ public final class JAnnotationUseTest
     final JAnnotationUse suppressWarningAnnotation = testClass.annotate (SuppressWarnings.class);
     suppressWarningAnnotation.param (JAnnotationUse.SPECIAL_KEY_VALUE, "unused");
 
-    Assert.assertEquals ("@java.lang.SuppressWarnings(\"unused\")",
-                         CodeModelTestsHelper.generate (suppressWarningAnnotation));
+    assertEquals ("@java.lang.SuppressWarnings(\"unused\")", CodeModelTestsHelper.generate (suppressWarningAnnotation));
   }
 
   @Test
@@ -80,14 +80,14 @@ public final class JAnnotationUseTest
     suppressWarningAnnotation.paramArray (JAnnotationUse.SPECIAL_KEY_VALUE, "unused", "deprecation");
 
     final String sCRLF = JCMWriter.DEFAULT_NEW_LINE;
-    Assert.assertEquals ("@java.lang.SuppressWarnings({" +
-                         sCRLF +
-                         "    \"unused\"," +
-                         sCRLF +
-                         "    \"deprecation\"" +
-                         sCRLF +
-                         "})",
-                         CodeModelTestsHelper.generate (suppressWarningAnnotation));
+    assertEquals ("@java.lang.SuppressWarnings({" +
+                  sCRLF +
+                  "    \"unused\"," +
+                  sCRLF +
+                  "    \"deprecation\"" +
+                  sCRLF +
+                  "})",
+                  CodeModelTestsHelper.generate (suppressWarningAnnotation));
   }
 
   @Test

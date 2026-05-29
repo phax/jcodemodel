@@ -40,9 +40,9 @@
  */
 package com.helger.jcodemodel.util;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -67,7 +67,7 @@ public final class JCNameUtilitiesTest
                             Inner.class.getSimpleName ();
 
     final String name = JCNameUtilities.getFullName (Inner.class);
-    Assert.assertEquals (expected, name);
+    assertEquals (expected, name);
   }
 
   @Test
@@ -82,7 +82,7 @@ public final class JCNameUtilitiesTest
                             Inner.Inner2.class.getSimpleName ();
 
     final String name = JCNameUtilities.getFullName (Inner.Inner2.class);
-    Assert.assertEquals (expected, name);
+    assertEquals (expected, name);
   }
 
   @Test
@@ -94,6 +94,6 @@ public final class JCNameUtilitiesTest
     final String expected = "MockClassInDefaultPackage";
 
     final String name = JCNameUtilities.getFullName (aClass);
-    Assert.assertEquals (expected, name);
+    assertEquals (expected, name);
   }
 }
