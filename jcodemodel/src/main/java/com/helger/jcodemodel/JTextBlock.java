@@ -14,38 +14,44 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.string.StringReplace;
 import com.helger.cache.regex.RegExHelper;
 
-/// Represents a text block declaration, one line at a time.
-///
-/// ## Main usage
-///
-/// This class produces java text blocks in the generated source file.
-/// It is used by adding lines to it, either one at a time or by passing multiline-string.
-/// The added lines are split by newline separator, then double quotes are escaped when needed.
-/// The [#keepWhiteSpaces] property specifies whether the string added are the one in the *file* (default), or in the resulting *String*.
-///
-/// ## Indenting
-///
-/// The [#indentSize] and [#indentChar] (by default size 0 and char space) specify which indentation is to be *added* at the beginning of each line.
-/// Note that if the last line is not empty, then the *source* output will have requested indent but the *produced* String will have space indentation even when [indentChar] is set to tab.
-///
-/// ## Double quote escaping
-///
-/// triple doublequotes `"""` are escaped by having the third one backslashed `""\"`.
-/// Plus, if the last line ends with an unescaped doublequote, this doublequote is escaped to avoid breaking the parser.
-///
-/// ## Property keepWhiteSpaces
-///
-/// The produced lines differ depending on [#keepWhitespaces]
-///  - when false(default), the content of the **file** will be the one added.
-///    Adding ` a ` will result in the textblock containing it, thus the resulting line will be `a` because of whitespaces strupping in textblocks
-///  - when true, the content of the **parsed string** will be the one added.
-///    Adding `  a  ` will result in the textblock containing instead `\040 a \040` to ensure the parsed string will be `  a  `.
-/// In the later, if all lines start with a whitespace, then the first character is set to octal ; plus all line-ending whitespace are also set to octal.
-///
-///
-/// [https://docs.oracle.com/en/java/javase/26/language/text-blocks.html]
-/// @author Guillaume Le Louët (guillaume.lelouet@gmail.com)
-///
+/**
+ * Represents a text block declaration, one line at a time.
+ * <h2>Main usage</h2>
+ * <p>
+ * This class produces java text blocks in the generated source file. It is used by adding lines to
+ * it, either one at a time or by passing multiline-string. The added lines are split by newline
+ * separator, then double quotes are escaped when needed. The {@link #keepWhitespaces} property
+ * specifies whether the string added are the one in the <em>file</em> (default), or in the
+ * resulting <em>String</em>.
+ * <h2>Indenting</h2>
+ * <p>
+ * The {@link #indentSize} and {@link #indentChar} (by default size 0 and char space) specify which
+ * indentation is to be <em>added</em> at the beginning of each line. Note that if the last line is
+ * not empty, then the <em>source</em> output will have requested indent but the <em>produced</em>
+ * String will have space indentation even when {@link #indentChar} is set to tab.
+ * <h2>Double quote escaping</h2>
+ * <p>
+ * triple doublequotes <code>"""</code> are escaped by having the third one backslashed
+ * <code>""\"</code>. Plus, if the last line ends with an unescaped doublequote, this doublequote is
+ * escaped to avoid breaking the parser.
+ * <h2>Property keepWhiteSpaces</h2>
+ * <p>
+ * The produced lines differ depending on {@link #keepWhitespaces}
+ * <ul>
+ * <li>when false(default), the content of the <b>file</b> will be the one added. Adding
+ * <code> a </code> will result in the textblock containing it, thus the resulting line will be
+ * <code>a</code> because of whitespaces strupping in textblocks</li>
+ * <li>when true, the content of the <b>parsed string</b> will be the one added. Adding
+ * <code>  a  </code> will result in the textblock containing instead <code>\040 a \040</code> to
+ * ensure the parsed string will be <code>  a  </code>.</li>
+ * </ul>
+ * In the later, if all lines start with a whitespace, then the first character is set to octal ;
+ * plus all line-ending whitespace are also set to octal.
+ *
+ * @see <a href=
+ *      "https://docs.oracle.com/en/java/javase/26/language/text-blocks.html">text-blocks</a>
+ * @author Guillaume Le Louët (guillaume.lelouet@gmail.com)
+ */
 public class JTextBlock implements IJExpression, Iterable <String>
 {
   private static final String LIMITER = "\"\"\"";
@@ -63,13 +69,17 @@ public class JTextBlock implements IJExpression, Iterable <String>
     add (value);
   }
 
-  /// convert a user line into several individual text block lines.
+  /**
+   * convert a user line into several individual text block lines.
+   */
   static @NonNull Stream <String> formatLines (final @NonNull String line)
   {
     return line.lines ().map (JTextBlock::formatLine);
   }
 
-  /// format a standard String line to make it a text block line.
+  /**
+   * format a standard String line to make it a text block line.
+   */
   static @Nullable String formatLine (final @Nullable String line)
   {
     // escape triple parenthesis
@@ -85,13 +95,17 @@ public class JTextBlock implements IJExpression, Iterable <String>
     return RegExHelper.stringReplacePattern ("([^\\\\])\"$", s, "$1\\\\\"");
   }
 
-  /// @return this, to chain
+  /**
+   * @return this, to chain
+   */
   public @Nonnegative int indentSize ()
   {
     return indentSize;
   }
 
-  /// @return this, to chain
+  /**
+   * @return this, to chain
+   */
   public @NonNull JTextBlock indentSize (final @Nonnegative int val)
   {
     ValueEnforcer.isGE0 (val, "IndentSize");
@@ -99,13 +113,17 @@ public class JTextBlock implements IJExpression, Iterable <String>
     return this;
   }
 
-  /// @return this, to chain
+  /**
+   * @return this, to chain
+   */
   public char indentChar ()
   {
     return indentChar;
   }
 
-  /// @return this, to chain
+  /**
+   * @return this, to chain
+   */
   public @NonNull JTextBlock indentChar (final char val)
   {
     if (val != ' ' && val != '\t')
@@ -115,13 +133,17 @@ public class JTextBlock implements IJExpression, Iterable <String>
     return this;
   }
 
-  /// @return this, to chain
+  /**
+   * @return this, to chain
+   */
   public @NonNull JTextBlock indentSpace ()
   {
     return indentChar (' ');
   }
 
-  /// @return this, to chain
+  /**
+   * @return this, to chain
+   */
   public @NonNull JTextBlock indentTab ()
   {
     return indentChar ('\t');
@@ -132,18 +154,22 @@ public class JTextBlock implements IJExpression, Iterable <String>
     return keepWhitespaces;
   }
 
-  /// @return this, to chain
+  /**
+   * @return this, to chain
+   */
   public @NonNull JTextBlock keepWhitespaces (final boolean verbatim)
   {
     keepWhitespaces = verbatim;
     return this;
   }
 
-  ///
-  /// transforms a line to make it fit to the text block syntax.
-  ///
-  /// @param line if null nothing happens
-  /// @return this, to chain
+  /**
+   * transforms a line to make it fit to the text block syntax.
+   *
+   * @param line
+   *        if null nothing happens
+   * @return this, to chain
+   */
   public @NonNull JTextBlock add (final @Nullable String line)
   {
     if (line != null)
@@ -152,17 +178,24 @@ public class JTextBlock implements IJExpression, Iterable <String>
     return this;
   }
 
-  /// shortcut to add an empty line
-  /// @return this, to chain
+  /**
+   * shortcut to add an empty line
+   *
+   * @return this, to chain
+   */
   public @NonNull JTextBlock newline ()
   {
     lines.add ("");
     return this;
   }
 
-  /// shortcut to add empty lines
-  /// @param nb when <1 nothing happens
-  /// @return this, to chain
+  /**
+   * shortcut to add empty lines
+   *
+   * @param nb
+   *        when &lt;1 nothing happens
+   * @return this, to chain
+   */
   public @NonNull JTextBlock newlines (final int nb)
   {
     for (int i = 0; i < nb; i++)
@@ -171,7 +204,9 @@ public class JTextBlock implements IJExpression, Iterable <String>
     return this;
   }
 
-  /// unmodifiable iterator over the internal lines
+  /**
+   * unmodifiable iterator over the internal lines
+   */
   public @NonNull Iterator <String> iterator ()
   {
     return Collections.unmodifiableList (lines).iterator ();
@@ -240,11 +275,15 @@ public class JTextBlock implements IJExpression, Iterable <String>
     }
   }
 
-  /// We need to escape initial whitespace to preserve indentation iff
-  /// 1. we are keepWhitespaces
-  /// 2. there are lines
-  /// 3. all non-blank line start with space/tab
-  /// 4. final line starts with space/tab even if blank
+  /**
+   * We need to escape initial whitespace to preserve indentation iff
+   * <ol>
+   * <li>we are keepWhitespaces</li>
+   * <li>there are lines</li>
+   * <li>all non-blank line start with space/tab</li>
+   * <li>final line starts with space/tab even if blank</li>
+   * </ol>
+   */
   static boolean requiresEscapeFirstChar (final boolean keepWhitespaces, final @NonNull List <String> lines)
   {
     if (!keepWhitespaces)

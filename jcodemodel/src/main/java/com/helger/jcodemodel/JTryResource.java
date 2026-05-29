@@ -52,8 +52,10 @@ import org.jspecify.annotations.NonNull;
 public class JTryResource implements IJGenerable
 {
   private final JVar m_aVar;
-  
-  /// when set to true, the jvar is already defined and should only be *generated*
+
+  /**
+   * when set to true, the jvar is already defined and should only be <em>generated</em>
+   */
   private final boolean reuse;
 
   public JTryResource (@NonNull final AbstractJType aType, @NonNull final String sName, @NonNull final IJExpression aInitExpr)

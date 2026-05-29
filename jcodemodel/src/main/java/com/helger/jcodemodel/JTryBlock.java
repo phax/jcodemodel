@@ -68,17 +68,22 @@ public class JTryBlock implements IJStatement
     return m_aResources;
   }
   
-  /// add an existing var to be closed as a resource 
-  ///  @return this, for ease of chaining.
+  /**
+   * add an existing var to be closed as a resource
+   *
+   * @return this, for ease of chaining.
+   */
   public JTryBlock withResource(JVar avar)
   {
     tryResources().add(new JTryResource(avar));
     return this;
   }	
   
-  /// create a new variable to be closed as a resource
-  /// 
-  ///  @return the created variable.
+  /**
+   * create a new variable to be closed as a resource
+   *
+   * @return the created variable.
+   */
   public JVar withResource(@NonNull final AbstractJType aType, @NonNull final String sName, @NonNull final IJExpression aInitExpr)
   {
     JTryResource resource = new JTryResource(aType, sName, aInitExpr);
@@ -86,9 +91,11 @@ public class JTryBlock implements IJStatement
     return resource.var();
   }
   
-  /// create a new variable to be closed as a resource
-  /// 
-  ///  @return the created variable.
+  /**
+   * create a new variable to be closed as a resource
+   *
+   * @return the created variable.
+   */
   public JVar withResource(final int nMods,
                        @NonNull final AbstractJType aType,
                        @NonNull final String sName,

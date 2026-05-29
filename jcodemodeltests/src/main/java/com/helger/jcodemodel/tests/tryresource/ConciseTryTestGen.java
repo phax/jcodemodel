@@ -14,7 +14,9 @@ public class ConciseTryTestGen {
 
   public interface NoErrorCloseable extends AutoCloseable {
 
-    /// doesn't throw an ioexception
+    /**
+     * doesn't throw an ioexception
+     */
     @Override
     void close();
   }
