@@ -1,32 +1,35 @@
 package com.helger.jcodemodel.tests.textblocks;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
-public class TextBlocksTest {
+public class TextBlocksTest
+{
 
   @Test
-  public void testBasicExamples() {
-    Assert.assertEquals("", TextBlocksExample.EMPTY);
-    Assert.assertEquals("a", TextBlocksExample.ONE_LINE);
-    Assert.assertEquals("a\nb", TextBlocksExample.TWO_LINES);
-    Assert.assertEquals("\"\"\n\"\"", TextBlocksExample.TWO_DOUBLE_DQUOTES_LINES);
-    Assert.assertEquals("\"\"\"\n\"\"\"", TextBlocksExample.TWO_TRIPLE_DQUOTES_LINES);
-    Assert.assertEquals("\"\"\"\"\"", TextBlocksExample.FIVE_DQUOTES);
-    Assert.assertEquals("\"\"\"\"\"\n\"\"\"\"\"", TextBlocksExample.TWO_FIVE_DQUOTES_LINES);
-    Assert.assertEquals("a", TextBlocksExample.ONE_LINE_ENDSPACE);
-    Assert.assertEquals("a", TextBlocksExample.ONE_LINE_ENDTAB);
-    Assert.assertEquals("a\nb", TextBlocksExample.TWO_LINES_ENDTAB);
+  public void testBasicExamples ()
+  {
+    assertEquals ("", TextBlocksExample.EMPTY);
+    assertEquals ("a", TextBlocksExample.ONE_LINE);
+    assertEquals ("a\nb", TextBlocksExample.TWO_LINES);
+    assertEquals ("\"\"\n\"\"", TextBlocksExample.TWO_DOUBLE_DQUOTES_LINES);
+    assertEquals ("\"\"\"\n\"\"\"", TextBlocksExample.TWO_TRIPLE_DQUOTES_LINES);
+    assertEquals ("\"\"\"\"\"", TextBlocksExample.FIVE_DQUOTES);
+    assertEquals ("\"\"\"\"\"\n\"\"\"\"\"", TextBlocksExample.TWO_FIVE_DQUOTES_LINES);
+    assertEquals ("a", TextBlocksExample.ONE_LINE_ENDSPACE);
+    assertEquals ("a", TextBlocksExample.ONE_LINE_ENDTAB);
+    assertEquals ("a\nb", TextBlocksExample.TWO_LINES_ENDTAB);
   }
 
   @Test
-  public void testKeepWhiteSpaces() {
-    Assert.assertEquals("  a  ", TextBlocksKeepWhiteSpaces.ONE_LINE_SPACES);
-    Assert.assertEquals("	a	", TextBlocksKeepWhiteSpaces.ONE_LINE_TABS);
-    Assert.assertEquals("  \n", TextBlocksKeepWhiteSpaces.SPACES_EMPTYLINE);
-    Assert.assertEquals(" a \n b \n c  ", TextBlocksKeepWhiteSpaces.THREE_LINES_SPACES);
-    Assert.assertEquals("\n  a", TextBlocksKeepWhiteSpaces.EMPTY_THEN_SPACED);
-    Assert.assertEquals("\n\n  \n   ", TextBlocksKeepWhiteSpaces.TWO_EMPTY_LINES_2SPACES_3SPACES);
+  public void testKeepWhiteSpaces ()
+  {
+    assertEquals ("  a  ", TextBlocksKeepWhiteSpaces.ONE_LINE_SPACES);
+    assertEquals ("	a	", TextBlocksKeepWhiteSpaces.ONE_LINE_TABS);
+    assertEquals ("  \n", TextBlocksKeepWhiteSpaces.SPACES_EMPTYLINE);
+    assertEquals (" a \n b \n c  ", TextBlocksKeepWhiteSpaces.THREE_LINES_SPACES);
+    assertEquals ("\n  a", TextBlocksKeepWhiteSpaces.EMPTY_THEN_SPACED);
+    assertEquals ("\n\n  \n   ", TextBlocksKeepWhiteSpaces.TWO_EMPTY_LINES_2SPACES_3SPACES);
   }
-
 }

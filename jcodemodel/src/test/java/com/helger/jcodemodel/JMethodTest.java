@@ -40,7 +40,9 @@
  */
 package com.helger.jcodemodel;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+
 import org.junit.Test;
 
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
@@ -61,8 +63,8 @@ public final class JMethodTest
     final JVar foo = m.param (String.class, "foo");
     m.body ().assign (foo, JExpr.lit ("bar"));
 
-    Assert.assertEquals (1, m.params ().size ());
-    Assert.assertSame (foo, m.params ().get (0));
+    assertEquals (1, m.params ().size ());
+    assertSame (foo, m.params ().get (0));
 
     CodeModelTestsHelper.parseCodeModel (cm);
     CodeModelTestsHelper.compileCodeModel (cm);

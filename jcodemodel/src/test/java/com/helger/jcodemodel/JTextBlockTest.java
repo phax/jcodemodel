@@ -1,31 +1,37 @@
 package com.helger.jcodemodel;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
-public class JTextBlockTest {
+public class JTextBlockTest
+{
 
   @Test
-  public void testFormatLine() {
+  public void testFormatLine ()
+  {
     // 6 parenthesis should have the 3rd and 6th one escaped
-    Assert.assertEquals("\"\"\\\"\"\"\\\"", JTextBlock.formatLine("\"".repeat(6)));
-    Assert.assertEquals("\"\"\\\"?\"\"\\\"", JTextBlock.formatLine("\"".repeat(3) + "?" + "\"".repeat(3)));
+    assertEquals ("\"\"\\\"\"\"\\\"", JTextBlock.formatLine ("\"".repeat (6)));
+    assertEquals ("\"\"\\\"?\"\"\\\"", JTextBlock.formatLine ("\"".repeat (3) + "?" + "\"".repeat (3)));
   }
 
   @Test
-  public void testEscapeLastIfDoubleQuote() {
-    Assert.assertEquals("", JTextBlock.escapeLastIfDoubleQuote(""));
-    Assert.assertEquals("\\\"", JTextBlock.escapeLastIfDoubleQuote("\""));
-    Assert.assertEquals("\"\\\"", JTextBlock.escapeLastIfDoubleQuote("\"\""));
+  public void testEscapeLastIfDoubleQuote ()
+  {
+    assertEquals ("", JTextBlock.escapeLastIfDoubleQuote (""));
+    assertEquals ("\\\"", JTextBlock.escapeLastIfDoubleQuote ("\""));
+    assertEquals ("\"\\\"", JTextBlock.escapeLastIfDoubleQuote ("\"\""));
   }
 
   @Test
-  public void testConstruction() {
-    JTextBlock test = new JTextBlock();
-    test.add("a\n b ");
-    Assert.assertTrue(test.lines().filter(l -> l.equals("a")).findAny().isPresent());
-    Assert.assertTrue(test.lines().filter(l -> l.equals(" b ")).findAny().isPresent());
-    Assert.assertEquals(2L, test.lines().count());
+  public void testConstruction ()
+  {
+    final JTextBlock test = new JTextBlock ();
+    test.add ("a\n b ");
+    assertTrue (test.lines ().filter (l -> l.equals ("a")).findAny ().isPresent ());
+    assertTrue (test.lines ().filter (l -> l.equals (" b ")).findAny ().isPresent ());
+    assertEquals (2L, test.lines ().count ());
   }
 
 }
