@@ -29,4 +29,12 @@ public class TextBlocksKeepWhiteSpaces {
     \040a\040
      b\040
      c \040 """;
+    public static final String EMPTY_THEN_SPACED = """
+
+    \040 a""";
+    public static final String TWO_EMPTY_LINES_2SPACES_3SPACES = """
+
+
+    \040\040
+      \040 """;
 }
