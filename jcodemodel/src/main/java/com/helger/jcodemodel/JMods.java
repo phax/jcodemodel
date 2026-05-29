@@ -40,11 +40,10 @@
  */
 package com.helger.jcodemodel;
 
-import java.lang.reflect.Modifier;
-
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.modifiers.EMod;
 
 /**
  * Modifier groups.
@@ -76,8 +75,14 @@ public class JMods implements IJGenerable
                                    JMod.PROTECTED |
                                    JMod.STATIC |
                                    JMod.FINAL |
-                                   JMod.ABSTRACT;
-  private static final int INTERFACE = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED;
+                                   JMod.ABSTRACT |
+                                   JMod.SEALED |
+                                   JMod.NONSEALED ;
+  private static final int INTERFACE = JMod.PUBLIC |
+                      JMod.PRIVATE |
+                      JMod.PROTECTED |
+                      JMod.SEALED |
+                      JMod.NONSEALED;
 
   /** bit-packed representation of modifiers. */
   private int m_nMods;
@@ -146,6 +151,16 @@ public class JMods implements IJGenerable
   {
     return (m_nMods & JMod.FINAL) != 0;
   }
+
+  public boolean isSealed ()
+  {
+    return (m_nMods & JMod.SEALED) != 0;
+  }
+
+  public boolean isNonSealed ()
+  {
+    return (m_nMods & JMod.NONSEALED) != 0;
+  }	
 
   public boolean isNative ()
   {
@@ -253,6 +268,16 @@ public class JMods implements IJGenerable
     _setFlag (JMod.FINAL, bNewValue);
   }
 
+  public void setSealed (final boolean bNewValue)
+  {
+    _setFlag (JMod.SEALED, bNewValue);
+  }
+
+  public void setNonSealed (final boolean bNewValue)
+  {
+    _setFlag (JMod.NONSEALED, bNewValue);
+  }
+
   @Override
   public void generate (@NonNull final IJFormatter f)
   {
@@ -275,6 +300,12 @@ public class JMods implements IJGenerable
     if ((m_nMods & JMod.FINAL) != 0)
       f.print ("final");
 
+    if ((m_nMods & JMod.SEALED) != 0)
+      f.print ("sealed");
+
+    if ((m_nMods & JMod.NONSEALED) != 0)
+      f.print ("non-sealed");
+
     if ((m_nMods & JMod.TRANSIENT) != 0)
       f.print ("transient");
 
@@ -294,50 +325,10 @@ public class JMods implements IJGenerable
       f.print ("default");
   }
 
-  public enum ModifierMap
-  {
-    NONE (JMod.NONE, 0),
-    PUBLIC (JMod.PUBLIC, Modifier.PUBLIC),
-    PROTECTED (JMod.PROTECTED, Modifier.PROTECTED),
-    PRIVATE (JMod.PRIVATE, Modifier.PRIVATE),
-    FINAL (JMod.FINAL, Modifier.FINAL),
-    STATIC (JMod.STATIC, Modifier.STATIC),
-    ABSTRACT (JMod.ABSTRACT, Modifier.ABSTRACT),
-    NATIVE (JMod.NATIVE, Modifier.NATIVE),
-    SYNCHRONIZED (JMod.SYNCHRONIZED, Modifier.SYNCHRONIZED),
-    TRANSIENT (JMod.TRANSIENT, Modifier.TRANSIENT),
-    VOLATILE (JMod.VOLATILE, Modifier.VOLATILE),
-    /*
-     * default does not exist in the reflect : it's a public non-abstrct non-static method in an
-     * interface
-     */
-    DEFAULT (JMod.DEFAULT, 0),
-    STRICTFP (JMod.STRICTFP, Modifier.STRICT);
-
-    public final int m_nJMod;
-    public final int m_nModifier;
-
-    ModifierMap (final int jmod, final int modifier)
-    {
-      m_nJMod = jmod;
-      m_nModifier = modifier;
-    }
-
-    public boolean isPresentJMod (final int jmods)
-    {
-      return (m_nJMod & jmods) != 0;
-    }
-
-    public boolean isPresentModifiers (final int modifiers)
-    {
-      return m_nModifier != 0 && (m_nModifier & modifiers) != 0;
-    }
-  }
-
   public static int toModifier (final int jmod)
   {
     int ret = 0;
-    for (final ModifierMap e : ModifierMap.values ())
+    for (final EMod e : EMod.values ())
     {
       if (e.isPresentJMod (jmod))
         ret |= e.m_nModifier;
@@ -348,7 +339,7 @@ public class JMods implements IJGenerable
   public static int fromModifier (final int modifier)
   {
     int ret = 0;
-    for (final ModifierMap e : ModifierMap.values ())
+    for (final EMod e : EMod.values ())
     {
       if (e.isPresentModifiers (modifier))
         ret |= e.m_nJMod;

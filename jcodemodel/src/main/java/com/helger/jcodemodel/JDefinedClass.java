@@ -41,15 +41,7 @@
 package com.helger.jcodemodel;
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
@@ -95,6 +87,11 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * List of interfaces that this class implements
    */
   private final Set <AbstractJClass> m_aInterfaces = new TreeSet <> (ClassNameComparator.getInstance ());
+
+  /**
+   * Set of the classes/interfaces permitted to inherit
+   */
+  private final LinkedHashSet<AbstractJClass> m_aPermited = new LinkedHashSet<>();
 
   /**
    * Fields keyed by their names.
@@ -164,6 +161,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    */
   private final IJGenerifiable m_aGenerifiable = new AbstractJGenerifiableImpl ()
   {
+    @Override
     @NonNull
     public JCodeModel owner ()
     {
@@ -241,10 +239,11 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
       }
     }
 
-    if (isInterface ())
+    if (isInterface ()) {
       m_aMods = JMods.forInterface (nMods);
-    else
+    } else {
       m_aMods = JMods.forClass (nMods);
+    }
   }
 
   /**
@@ -278,8 +277,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     ValueEnforcer.notNull (aSuperClass, "SuperClass");
     if (isInterface ())
     {
-      if (aSuperClass.isInterface ())
+      if (aSuperClass.isInterface ()) {
         return _implements (aSuperClass);
+      }
       throw new IllegalArgumentException ("unable to set the super class for an interface");
     }
 
@@ -312,8 +312,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @NonNull
   public AbstractJClass _extends ()
   {
-    if (m_aSuperClass == null)
+    if (m_aSuperClass == null) {
       m_aSuperClass = owner ().ref (Object.class);
+    }
     return m_aSuperClass;
   }
 
@@ -345,6 +346,31 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   public Iterator <AbstractJClass> _implements ()
   {
     return m_aInterfaces.iterator ();
+  }
+
+  /**
+   * This class permits the specified class.
+   *
+   * @param aClass
+   *               class that this class permits
+   * @return This class
+   */
+  @NonNull
+  public JDefinedClass permits(@NonNull final AbstractJClass... aClasses) {
+    if (aClasses != null) {
+      for (@NonNull
+      AbstractJClass ajc : aClasses) {
+        if (ajc instanceof JDefinedClass jdc) {
+          m_aPermited.add(jdc);
+        } else if (ajc instanceof JReferencedClass jrc) {
+          m_aPermited.add(jrc);
+        } else {
+          throw new UnsupportedOperationException("only " + JDefinedClass.class.getSimpleName() + " and "
+              + JReferencedClass.class.getSimpleName() + " can be permitted");
+        }
+      }
+    }
+    return this;
   }
 
   /**
@@ -391,8 +417,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     ValueEnforcer.notNull (aType, "Type");
     ValueEnforcer.notNull (sName, "Name");
 
-    if (!isRecord ())
+    if (!isRecord ()) {
       throw new IllegalStateException ("recordComponent() is only valid for record types");
+    }
 
     final JRecordComponent comp = new JRecordComponent (this, aType, sName, false);
     m_aRecordComponents.add (comp);
@@ -435,8 +462,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     ValueEnforcer.notNull (aType, "Type");
     ValueEnforcer.notNull (sName, "Name");
 
-    if (!isRecord ())
+    if (!isRecord ()) {
       throw new IllegalStateException ("recordComponentVararg() is only valid for record types");
+    }
 
     final JRecordComponent comp = new JRecordComponent (this, aType.array (), sName, true);
     m_aRecordComponents.add (comp);
@@ -470,7 +498,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * is used for validation or normalization of record components.
    * <p>
    * Example:
-   * 
+   *
    * <pre>
    * public record Range (int lo, int hi)
    * {
@@ -492,11 +520,13 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @NonNull
   public JMethod compactConstructor (final int nMods)
   {
-    if (!isRecord ())
+    if (!isRecord ()) {
       throw new IllegalStateException ("compactConstructor() is only valid for record types");
+    }
 
-    if (m_aCompactConstructor != null)
+    if (m_aCompactConstructor != null) {
       throw new IllegalStateException ("Another compact constructor has already been defined");
+    }
 
     m_aCompactConstructor = new JMethod (nMods, this);
     return m_aCompactConstructor;
@@ -515,8 +545,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @Override
   public String binaryName ()
   {
-    if (getOuter () instanceof AbstractJClassContainer <?>)
+    if (getOuter () instanceof AbstractJClassContainer <?>) {
       return ((AbstractJClassContainer <?>) getOuter ()).binaryName () + '$' + name ();
+    }
 
     // FIXME This is incorrect, e.g. for anonymous classes!
     return fullName ();
@@ -614,8 +645,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    */
   public void removeField (@NonNull final JFieldVar aField)
   {
-    if (m_aFields.remove (aField.name ()) != aField)
+    if (m_aFields.remove (aField.name ()) != aField) {
       throw new IllegalArgumentException ("Failed to remove field " + aField);
+    }
   }
 
   /**
@@ -632,12 +664,13 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
                             @NonNull final String sNewName,
                             @NonNull final JFieldVar aField)
   {
-    if (m_aFields.remove (sOldName) == null)
+    if (m_aFields.remove (sOldName) == null) {
       throw new IllegalArgumentException ("Failed to remove field with name '" +
                                           sOldName +
                                           "' for replacement with field with name '" +
                                           sNewName +
                                           "'");
+    }
     m_aFields.put (sNewName, aField);
   }
 
@@ -649,8 +682,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @NonNull
   public JBlock init ()
   {
-    if (m_aStaticInit == null)
+    if (m_aStaticInit == null) {
       m_aStaticInit = new JBlock ();
+    }
     return m_aStaticInit;
   }
 
@@ -662,8 +696,9 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @NonNull
   public JBlock instanceInit ()
   {
-    if (m_aInstanceInit == null)
+    if (m_aInstanceInit == null) {
       m_aInstanceInit = new JBlock ();
+    }
     return m_aInstanceInit;
   }
 
@@ -709,9 +744,11 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @Nullable
   public JMethod getConstructor (@NonNull final AbstractJType [] aArgTypes)
   {
-    for (final JMethod m : m_aConstructors)
-      if (m.hasSignature (aArgTypes))
+    for (final JMethod m : m_aConstructors) {
+      if (m.hasSignature (aArgTypes)) {
         return m;
+      }
+    }
     return null;
   }
 
@@ -762,10 +799,13 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @Nullable
   public JMethod getMethod (final String sName, final AbstractJType [] aArgTypes)
   {
-    for (final JMethod m : m_aMethods)
-      if (m.name ().equals (sName))
-        if (m.hasSignature (aArgTypes))
+    for (final JMethod m : m_aMethods) {
+      if (m.name ().equals (sName)) {
+        if (m.hasSignature (aArgTypes)) {
           return m;
+        }
+      }
+    }
     return null;
   }
 
@@ -785,16 +825,19 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @NonNull
   public JDocComment headerComment ()
   {
-    if (m_aHeaderComment == null)
+    if (m_aHeaderComment == null) {
       m_aHeaderComment = new JDocComment (owner ());
+    }
     return m_aHeaderComment;
   }
 
+  @Override
   @NonNull
   public JDocComment javadoc ()
   {
-    if (m_aJDoc == null)
+    if (m_aJDoc == null) {
       m_aJDoc = new JDocComment (owner ());
+    }
     return m_aJDoc;
   }
 
@@ -813,16 +856,20 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     return m_bHideFile;
   }
 
+  @Override
   public void declare (@NonNull final IJFormatter f)
   {
     // Java docs
-    if (m_aJDoc != null)
+    if (m_aJDoc != null) {
       f.newline ().generable (m_aJDoc);
+    }
 
     // Class annotations
-    if (m_aAnnotations != null)
-      for (final JAnnotationUse aAnnotation : m_aAnnotations)
+    if (m_aAnnotations != null) {
+      for (final JAnnotationUse aAnnotation : m_aAnnotations) {
         f.generable (aAnnotation).newline ();
+      }
+    }
 
     // Modifiers (private, protected, public)
     // Type of class (class, interface, enum, @interface, record)
@@ -837,10 +884,11 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
       boolean bFirst = true;
       for (final JRecordComponent comp : m_aRecordComponents)
       {
-        if (bFirst)
+        if (bFirst) {
           bFirst = false;
-        else
+        } else {
           f.print (',');
+        }
         f.generable (comp);
       }
       f.print (')');
@@ -858,11 +906,24 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     // Add all interfaces
     if (!m_aInterfaces.isEmpty ())
     {
-      if (!bHasSuperClass)
+      if (!bHasSuperClass) {
         f.newline ();
+      }
       f.indent ().print (isInterface () ? "extends" : "implements");
       f.generable (m_aInterfaces);
       f.newline ().outdent ();
+    }
+
+    if (!m_aPermited.isEmpty()) {
+      f.print("permits");
+      boolean first = true;
+      for (AbstractJClass ajc : m_aPermited) {
+        if (!first) {
+          f.print(',');
+        }
+        ajc.erasure().generate(f);
+        first = false;
+      }
     }
 
     declareBody (f);
@@ -883,37 +944,43 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     {
       for (final JEnumConstant c : m_aEnumConstantsByName.values ())
       {
-        if (bFirst)
+        if (bFirst) {
           bFirst = false;
-        else
+        } else {
           f.print (',').newline ();
+        }
         f.declaration (c);
       }
       f.print (';').newline ();
     }
 
     // All fields
-    for (final JFieldVar field : m_aFields.values ())
+    for (final JFieldVar field : m_aFields.values ()) {
       f.declaration (field);
+    }
 
     // Static init
-    if (m_aStaticInit != null)
+    if (m_aStaticInit != null) {
       f.newline ().print ("static").statement (m_aStaticInit);
+    }
 
     // Instance init
-    if (m_aInstanceInit != null)
+    if (m_aInstanceInit != null) {
       f.newline ().statement (m_aInstanceInit);
+    }
 
     // Compact constructor for records (special syntax without parameter list)
     if (m_aCompactConstructor != null)
     {
       f.newline ();
       // Output javadoc if present
-      if (m_aCompactConstructor.hasJavadoc ())
+      if (m_aCompactConstructor.hasJavadoc ()) {
         f.generable (m_aCompactConstructor.javadoc ());
+      }
       // Output annotations
-      for (final JAnnotationUse annotation : m_aCompactConstructor.annotations ())
+      for (final JAnnotationUse annotation : m_aCompactConstructor.annotations ()) {
         f.generable (annotation).newline ();
+      }
       // Output modifiers and name only (no parentheses)
       f.generable (m_aCompactConstructor.mods ()).id (name ());
       // Output body
@@ -921,21 +988,26 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     }
 
     // All regular constructors
-    for (final JMethod m : m_aConstructors)
+    for (final JMethod m : m_aConstructors) {
       f.newline ().declaration (m);
+    }
 
     // All regular methods
-    for (final JMethod m : m_aMethods)
+    for (final JMethod m : m_aMethods) {
       f.newline ().declaration (m);
+    }
 
     // All inner classes
-    if (m_aClasses != null)
-      for (final JDefinedClass dc : m_aClasses.values ())
+    if (m_aClasses != null) {
+      for (final JDefinedClass dc : m_aClasses.values ()) {
         f.newline ().declaration (dc);
+      }
+    }
 
     // Hacks...
-    if (m_sDirectBlock != null)
+    if (m_sDirectBlock != null) {
       f.print (m_sDirectBlock);
+    }
 
     f.outdent ().print ('}').newline ();
   }
@@ -950,11 +1022,12 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    */
   public void direct (@Nullable final String string)
   {
-    if (m_sDirectBlock == null)
+    if (m_sDirectBlock == null) {
       m_sDirectBlock = string;
-    else
-      if (string != null)
+    } else
+      if (string != null) {
         m_sDirectBlock += string;
+      }
   }
 
   @Override
@@ -962,23 +1035,27 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   public final JPackage _package ()
   {
     IJClassContainer <?> p = getOuter ();
-    while (!(p instanceof JPackage))
+    while (!(p instanceof JPackage)) {
       p = p.parentContainer ();
+    }
     return (JPackage) p;
   }
 
+  @Override
   @NonNull
   public JTypeVar generify (@NonNull final String sName)
   {
     return m_aGenerifiable.generify (sName);
   }
 
+  @Override
   @NonNull
   public JTypeVar generify (@NonNull final String sName, @NonNull final Class <?> aBoundClass)
   {
     return m_aGenerifiable.generify (sName, aBoundClass);
   }
 
+  @Override
   @NonNull
   public JTypeVar generify (@NonNull final String sName, @NonNull final AbstractJClass aBoundClass)
   {
@@ -999,17 +1076,20 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     return this;
   }
 
+  @Override
   @NonNull
   public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
     return annotate (owner ().ref (aClazz));
   }
 
+  @Override
   @NonNull
   public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
-    if (m_aAnnotations == null)
+    if (m_aAnnotations == null) {
       m_aAnnotations = new ArrayList <> ();
+    }
     final JAnnotationUse a = new JAnnotationUse (aClazz);
     m_aAnnotations.add (a);
     return a;
@@ -1018,11 +1098,13 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
-    if (m_aAnnotations == null)
+    if (m_aAnnotations == null) {
       m_aAnnotations = new ArrayList <> ();
+    }
     return m_aAnnotations;
   }
 
+  @Override
   @NonNull
   public Collection <JAnnotationUse> annotations ()
   {
@@ -1032,7 +1114,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   @Nullable
   public JAnnotationUse getAnnotation (final Class <?> aAnnotationClass)
   {
-    if (m_aAnnotations != null)
+    if (m_aAnnotations != null) {
       for (final JAnnotationUse jannotation : m_aAnnotations)
       {
         final AbstractJClass jannotationClass = jannotation.getAnnotationClass ();
@@ -1045,6 +1127,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
           }
         }
       }
+    }
     return null;
   }
 
