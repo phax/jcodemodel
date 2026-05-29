@@ -56,10 +56,10 @@ public class JTextBlock implements IJExpression, Iterable <String>
 {
   private static final String LIMITER = "\"\"\"";
 
-  private char indentChar = ' ';
-  private int indentSize = 0;
-  private final List <String> lines = new ArrayList <> ();
-  private boolean keepWhitespaces = false;
+  private char m_cIndentChar = ' ';
+  private int m_nIndentSize = 0;
+  private final List <String> m_aLines = new ArrayList <> ();
+  private boolean m_bKeepWhitespaces = false;
 
   public JTextBlock ()
   {}
@@ -100,7 +100,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
    */
   public @Nonnegative int indentSize ()
   {
-    return indentSize;
+    return m_nIndentSize;
   }
 
   /**
@@ -109,7 +109,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
   public @NonNull JTextBlock indentSize (final @Nonnegative int val)
   {
     ValueEnforcer.isGE0 (val, "IndentSize");
-    indentSize = val;
+    m_nIndentSize = val;
     return this;
   }
 
@@ -118,7 +118,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
    */
   public char indentChar ()
   {
-    return indentChar;
+    return m_cIndentChar;
   }
 
   /**
@@ -129,7 +129,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
     if (val != ' ' && val != '\t')
       throw new IllegalArgumentException ("escape char must be space or tab");
 
-    indentChar = val;
+    m_cIndentChar = val;
     return this;
   }
 
@@ -151,7 +151,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
 
   public boolean keepWhitespaces ()
   {
-    return keepWhitespaces;
+    return m_bKeepWhitespaces;
   }
 
   /**
@@ -159,7 +159,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
    */
   public @NonNull JTextBlock keepWhitespaces (final boolean verbatim)
   {
-    keepWhitespaces = verbatim;
+    m_bKeepWhitespaces = verbatim;
     return this;
   }
 
@@ -173,7 +173,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
   public @NonNull JTextBlock add (final @Nullable String line)
   {
     if (line != null)
-      formatLines (line).forEach (lines::add);
+      formatLines (line).forEach (m_aLines::add);
 
     return this;
   }
@@ -185,7 +185,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
    */
   public @NonNull JTextBlock newline ()
   {
-    lines.add ("");
+    m_aLines.add ("");
     return this;
   }
 
@@ -209,23 +209,24 @@ public class JTextBlock implements IJExpression, Iterable <String>
    */
   public @NonNull Iterator <String> iterator ()
   {
-    return Collections.unmodifiableList (lines).iterator ();
+    return Collections.unmodifiableList (m_aLines).iterator ();
   }
 
   public @NonNull Stream <String> lines ()
   {
-    return lines.stream ();
+    return m_aLines.stream ();
   }
 
   public void generate (@NonNull final IJFormatter f)
   {
     f.print (LIMITER).newline ();
-    final String indent = indentSize <= 0 || lines.isEmpty () ? ""
-                                                              : Character.toString (indentChar).repeat (indentSize);
+    final String indent = m_nIndentSize <= 0 || m_aLines.isEmpty () ? ""
+                                                                    : Character.toString (m_cIndentChar)
+                                                                               .repeat (m_nIndentSize);
     boolean firstLine = true;
     boolean lastEmpty = true;
     // don't modify the internal list : work on a copy if modification required.
-    List <String> modifiedLines = lines;
+    List <String> modifiedLines = m_aLines;
     // the last line must not end with unescaped doublequote
     // if that's the case, we copy the full list to not modify the existing one.
     if (!modifiedLines.isEmpty ())
@@ -234,15 +235,12 @@ public class JTextBlock implements IJExpression, Iterable <String>
       final String escapedLastLine = escapeLastIfDoubleQuote (lastLine);
       if (!escapedLastLine.equals (lastLine))
       {
-        modifiedLines = new ArrayList <> (lines);
+        modifiedLines = new ArrayList <> (m_aLines);
         modifiedLines.set (modifiedLines.size () - 1, escapedLastLine);
       }
     }
 
-    boolean escapeFirstChar = requiresEscapeFirstChar (keepWhitespaces, modifiedLines);
-    // if (keepWhitespaces) {
-    // System.err.println("escapefirst " + escapeFirstChar + " from " + modifiedLines);
-    // }
+    boolean escapeFirstChar = requiresEscapeFirstChar (m_bKeepWhitespaces, modifiedLines);
 
     for (String line : modifiedLines)
     {
@@ -256,7 +254,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
         line = RegExHelper.stringReplacePattern ("^\t", line, "\\\\t");
         escapeFirstChar = false;
       }
-      if (keepWhitespaces)
+      if (m_bKeepWhitespaces)
       {
         // replace ending space/tab by octal
         line = RegExHelper.stringReplacePattern (" $", line, "\\\\s");
@@ -267,11 +265,11 @@ public class JTextBlock implements IJExpression, Iterable <String>
       lastEmpty = line.isEmpty ();
     }
     f.print (LIMITER);
-    if (!lastEmpty && indentSize > 0)
+    if (!lastEmpty && m_nIndentSize > 0)
     {
       // if the last line is not empty, then the delimiter is not enough to enforce
       // the indent. So we add a call after that.
-      f.print (".indent(").print (Integer.toString (indentSize)).print (")");
+      f.print (".indent(").print (Integer.toString (m_nIndentSize)).print (")");
     }
   }
 

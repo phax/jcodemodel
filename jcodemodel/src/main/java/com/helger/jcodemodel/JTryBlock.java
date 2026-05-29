@@ -67,43 +67,50 @@ public class JTryBlock implements IJStatement
   {
     return m_aResources;
   }
-  
+
   /**
    * add an existing var to be closed as a resource
    *
+   * @param aVar
+   *        the variable to close
    * @return this, for ease of chaining.
    */
-  public JTryBlock withResource(JVar avar)
+  @NonNull
+  public JTryBlock withResource (@NonNull final JVar aVar)
   {
-    tryResources().add(new JTryResource(avar));
+    tryResources ().add (new JTryResource (aVar));
     return this;
-  }	
-  
-  /**
-   * create a new variable to be closed as a resource
-   *
-   * @return the created variable.
-   */
-  public JVar withResource(@NonNull final AbstractJType aType, @NonNull final String sName, @NonNull final IJExpression aInitExpr)
-  {
-    JTryResource resource = new JTryResource(aType, sName, aInitExpr);
-    tryResources().add(resource);
-    return resource.var();
   }
-  
+
   /**
    * create a new variable to be closed as a resource
    *
    * @return the created variable.
    */
-  public JVar withResource(final int nMods,
-                       @NonNull final AbstractJType aType,
-                       @NonNull final String sName,
-                       @NonNull final IJExpression aInitExpr)
+  @NonNull
+  public JVar withResource (@NonNull final AbstractJType aType,
+                            @NonNull final String sName,
+                            @NonNull final IJExpression aInitExpr)
   {
-    JTryResource resource = new JTryResource(nMods, aType, sName, aInitExpr);
-    tryResources().add(resource);
-    return resource.var();
+    final JTryResource aResource = new JTryResource (aType, sName, aInitExpr);
+    tryResources ().add (aResource);
+    return aResource.var ();
+  }
+
+  /**
+   * create a new variable to be closed as a resource
+   *
+   * @return the created variable.
+   */
+  @NonNull
+  public JVar withResource (final int nMods,
+                            @NonNull final AbstractJType aType,
+                            @NonNull final String sName,
+                            @NonNull final IJExpression aInitExpr)
+  {
+    final JTryResource aResource = new JTryResource (nMods, aType, sName, aInitExpr);
+    tryResources ().add (aResource);
+    return aResource.var ();
   }
 
   /**

@@ -42,8 +42,6 @@ package com.helger.jcodemodel.meta;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
@@ -57,6 +55,8 @@ import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.annotation.Nonnegative;
 import com.helger.jcodemodel.AbstractJClass;
@@ -74,7 +74,7 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
  */
 class DecidedErrorTypesModelsAdapter
 {
-  private static final Logger LOGGER = Logger.getLogger (DecidedErrorTypesModelsAdapter.class.getName ());
+  private static final Logger LOGGER = LoggerFactory.getLogger (DecidedErrorTypesModelsAdapter.class);
 
   @Nonnegative
   static int toJMod (@NonNull final Collection <Modifier> modifierCollection)
@@ -121,7 +121,7 @@ class DecidedErrorTypesModelsAdapter
           modifiers |= JMod.STRICTFP;
           break;
         default:
-          LOGGER.log (Level.WARNING, "Skpping unsupported modifier: " + eModifier);
+          LOGGER.warn ("Skipping unsupported modifier: " + eModifier);
       }
     }
     return modifiers;
