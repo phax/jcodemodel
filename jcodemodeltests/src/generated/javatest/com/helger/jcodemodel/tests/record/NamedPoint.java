@@ -14,6 +14,9 @@
  */
 package com.helger.jcodemodel.tests.record;
 
+import javax.annotation.processing.Generated;
+
+@Generated("com.helger.jcodemodel.JCodeModel")
 public record NamedPoint(int x, int y, String name)
     implements Comparable<NamedPoint>
 {

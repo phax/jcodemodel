@@ -24,34 +24,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.annotation.processing.Generated;
+
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JPackage;
+import com.helger.jcodemodel.JReferencedClass;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
-public class GenerateTestFiles {
-
+public class GenerateTestFiles
+{
   private static final String OUTPUT_DIR = "src/generated/javatest";
-
   private static final String CLASS_SCAN_DIR = "src/main/java";
-
   private static final String LICENCE = """
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+      Licensed under the Apache License, Version 2.0 (the "License");
+      you may not use this file except in compliance with the License.
+      You may obtain a copy of the License at
 
-        http://www.apache.org/licenses/LICENSE-2.0
+              http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-""";
+      Unless required by applicable law or agreed to in writing, software
+      distributed under the License is distributed on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      See the License for the specific language governing permissions and
+      limitations under the License.
+      """;
 
-  private final File outputDir;
-
-  private final File classScanDir;
+  private final File m_aOutputDir;
+  private final File m_aClassScanDir;
 
   private final int javaFeature;
 
@@ -68,145 +68,199 @@ limitations under the License.
   }
 
   public GenerateTestFiles(File outputDir, File classScanDir) {
-    this.outputDir = outputDir;
-    this.classScanDir = classScanDir;
+    m_aOutputDir = outputDir;
+    m_aClassScanDir = classScanDir;
     javaFeature = extractJavaFeature();
-  }
-
-  void apply() {
-    delete(outputDir);
-    outputDir.mkdirs();
-    scanClasses(classScanDir).forEach(this::applyCandidateClass);
 
   }
 
-  void delete(File file) {
-    if (file.isDirectory()) {
-      for (File sub : file.listFiles()) {
-        delete(sub);
+  void apply ()
+  {
+    delete (m_aOutputDir);
+    m_aOutputDir.mkdirs ();
+    scanClasses (m_aClassScanDir).forEach (this::applyCandidateClass);
+  }
+
+  void delete (final File file)
+  {
+    if (file.isDirectory ())
+    {
+      for (final File sub : file.listFiles ())
+      {
+        delete (sub);
       }
     }
-    file.delete();
+    file.delete ();
   }
 
-  Stream<String> scanClasses(File rootDir) {
-    return scanClasses(rootDir, "", Stream.of());
+  Stream <String> scanClasses (final File rootDir)
+  {
+    return scanClasses (rootDir, "", Stream.of ());
   }
 
-  Stream<String> scanClasses(File dir, String packageName, Stream<String> stream) {
-    List<String> newFound = new ArrayList<>();
-    if (!dir.isDirectory()) {
-      throw new RuntimeException("file " + dir.getAbsolutePath() + " expected to be a dir");
+  Stream <String> scanClasses (final File dir, final String packageName, final Stream <String> stream)
+  {
+    Stream <String> ret = stream;
+    final List <String> newFound = new ArrayList <> ();
+    if (!dir.isDirectory ())
+    {
+      throw new RuntimeException ("file " + dir.getAbsolutePath () + " expected to be a dir");
     }
-    for (File child : dir.listFiles()) {
-      if (child.isDirectory()) {
-        stream = scanClasses(child, (packageName.isEmpty() ? "" : packageName + ".") + child.getName(), stream);
+    for (final File child : dir.listFiles ())
+    {
+      if (child.isDirectory ())
+      {
+        ret = scanClasses (child, (packageName.isEmpty () ? "" : packageName + ".") + child.getName (), ret);
 
-      } else if (child.isFile() && child.getName().endsWith(".java")) {
-        newFound.add(packageName + "." + child.getName().replace(".java", ""));
+      }
+      else
+        if (child.isFile () && child.getName ().endsWith (".java"))
+        {
+          newFound.add (packageName + "." + child.getName ().replace (".java", ""));
+        }
+    }
+    if (!newFound.isEmpty ())
+    {
+      ret = Stream.concat (ret, newFound.stream ());
+    }
+    return ret;
+  }
+
+  void applyCandidateClass (final String className)
+  {
+    Class <?> clazz;
+    try
+    {
+      clazz = Class.forName (className);
+      if (clazz.getAnnotation (TestJCM.class) != null)
+      {
+        runGeneration (clazz);
       }
     }
-    if (!newFound.isEmpty()) {
-      stream = Stream.concat(stream, newFound.stream());
-    }
-    return stream;
-  }
-
-  void applyCandidateClass(String className) {
-    Class<?> clazz;
-    try {
-      clazz = Class.forName(className);
-      if (clazz.getAnnotation(TestJCM.class) != null) {
-        runGeneration(clazz);
-      }
-    } catch (ClassNotFoundException
-        | IllegalAccessException
-        | IllegalArgumentException
-        | InvocationTargetException
-        | InstantiationException
-        | NoSuchMethodException
-        | SecurityException
-        | IOException e) {
-      throw new RuntimeException(e);
+    catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException |
+           InstantiationException | NoSuchMethodException | SecurityException | IOException e)
+    {
+      throw new RuntimeException (e);
     }
   }
 
-  private void runGeneration(Class<?> clazz)
-      throws IllegalAccessException,
-      IllegalArgumentException,
-      InvocationTargetException,
-      InstantiationException,
-      NoSuchMethodException,
-      SecurityException,
-      IOException {
-    for (Method m : clazz.getDeclaredMethods()) {
+  private void runGeneration (final Class <?> clazz) throws IllegalAccessException,
+                                                     IllegalArgumentException,
+                                                     InvocationTargetException,
+                                                     InstantiationException,
+                                                     NoSuchMethodException,
+                                                     SecurityException,
+                                                     IOException
+  {
+    for (final Method m : clazz.getDeclaredMethods ())
+    {
       // only apply to methods public
       // and that produce a JCodeModel or require one or a package
-      if ((m.getModifiers() & Modifier.PUBLIC) > 0) {
-        boolean returnsJCM = m.getReturnType().equals(JCodeModel.class);
+      if ((m.getModifiers () & Modifier.PUBLIC) > 0)
+      {
+        final boolean returnsJCM = m.getReturnType ().equals (JCodeModel.class);
         boolean requiresJCM = false;
-        Object[] params = new Object[m.getParameterCount()];
+        final Object [] params = new Object [m.getParameterCount ()];
         boolean unknownParam = false;
         JCodeModel produced = null;
         JPackage rootPackage = null;
-        for (int i = 0; i < params.length; i++) {
-          Parameter param = m.getParameters()[i];
-          if (param.getType() == JCodeModel.class) {
-            if (produced == null) {
-              produced = new JCodeModel();
+        for (int i = 0; i < params.length; i++)
+        {
+          final Parameter param = m.getParameters ()[i];
+          if (param.getType () == JCodeModel.class)
+          {
+            if (produced == null)
+            {
+              produced = new JCodeModel ();
             }
             params[i] = produced;
             requiresJCM = true;
-          } else if (param.getType() == JPackage.class) {
-            // request a root package that is the package of the class
-            if (produced == null) {
-              produced = new JCodeModel();
-            }
-            if (rootPackage == null) {
-              rootPackage = produced._package(clazz.getPackageName());
-            }
-            params[i] = rootPackage;
-            requiresJCM = true;
+          }
+          else
+            if (param.getType () == JPackage.class)
+            {
+              // request a root package that is the package of the class
+              if (produced == null)
+              {
+                produced = new JCodeModel ();
+              }
+              if (rootPackage == null)
+              {
+                rootPackage = produced._package (clazz.getPackageName ());
+              }
+              params[i] = rootPackage;
+              requiresJCM = true;
 
-          } else {
-            unknownParam = true;
-          }
+            }
+            else
+            {
+              unknownParam = true;
+            }
         }
-        if (!unknownParam && (returnsJCM || requiresJCM)) {
-          m.setAccessible(true);
-          if ((m.getModifiers() & Modifier.STATIC) > 0) {
-            if (returnsJCM) {
-              produced = (JCodeModel) m.invoke(null, params);
-            } else {
-              m.invoke(null, params);
+        if (!unknownParam && (returnsJCM || requiresJCM))
+        {
+          m.setAccessible (true);
+          if ((m.getModifiers () & Modifier.STATIC) > 0)
+          {
+            if (returnsJCM)
+            {
+              produced = (JCodeModel) m.invoke (null, params);
             }
-          } else {
-            Object inst = clazz.getDeclaredConstructor().newInstance();
-            if (returnsJCM) {
-              produced = (JCodeModel) m.invoke(inst, params);
-            } else {
-              m.invoke(inst, params);
+            else
+            {
+              m.invoke (null, params);
             }
           }
-          if (produced != null) {
-            postProcessJCM(produced);
-            new JCMWriter(produced)
-                .setJavaFeature(javaFeature)
-                .build(outputDir, (IProgressTracker) null);
+
+          else
+          {
+            final Object inst = clazz.getDeclaredConstructor ().newInstance ();
+            if (returnsJCM)
+            {
+              produced = (JCodeModel) m.invoke (inst, params);
+            }
+            else
+            {
+              m.invoke (inst, params);
+            }
+          }
+          if (produced != null)
+          {
+            postProcessJCM (produced);
+            new JCMWriter (produced).build (m_aOutputDir, (IProgressTracker) null);
           }
         }
       }
     }
   }
 
-  protected void postProcessJCM(JCodeModel jcm) {
-    jcm.getAllPackages().stream()
-        .flatMap(jp -> jp.classes().stream())
-        .filter(jdc -> !jdc.isHidden())
-        .filter(jdc -> !jdc.hasHeaderComment())
-        .forEach(jdc -> {
-          jdc.headerComment().add(LICENCE);
-        });
+  protected void postProcessJCM (final JCodeModel jcm)
+  {
+    // add the licence to classes not having a header comment yet.
+    jcm.getAllPackages ()
+       .stream ()
+       .flatMap (jp -> jp.classes ().stream ())
+       .filter (jdc -> !jdc.isHidden ())
+       .filter (jdc -> !jdc.hasHeaderComment ())
+       .forEach (jdc -> {
+         jdc.headerComment ().add (LICENCE);
+       });
+
+    // add @Generated(JCodeModel full name) to files' root classes not having that annotation yet.
+    jcm.getAllPackages ()
+       .stream ()
+       .flatMap (jp -> jp.classes ().stream ())
+       .filter (jdc -> !jdc.isHidden ())
+       .filter (jdc -> jdc.annotations ()
+                          .stream ()
+                          .filter (ja -> ja.getAnnotationClass () instanceof JReferencedClass)
+                          .map (ja -> (JReferencedClass) ja.getAnnotationClass ())
+                          .filter (jrc -> jrc.getReferencedClass ().equals (Generated.class))
+                          .findAny ()
+                          .isEmpty ())
+       .forEach (jdc -> {
+         jdc.annotate (Generated.class).param (JCodeModel.class.getCanonicalName ());
+       });
   }
 
 }

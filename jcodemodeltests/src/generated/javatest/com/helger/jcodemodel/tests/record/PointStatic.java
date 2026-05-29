@@ -14,6 +14,9 @@
  */
 package com.helger.jcodemodel.tests.record;
 
+import javax.annotation.processing.Generated;
+
+@Generated("com.helger.jcodemodel.JCodeModel")
 public record PointStatic(int x, int y) {
     public static final PointStatic ORIGIN = new PointStatic(0, 0);
 

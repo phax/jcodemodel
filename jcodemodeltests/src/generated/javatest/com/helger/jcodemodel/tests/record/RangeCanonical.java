@@ -14,6 +14,9 @@
  */
 package com.helger.jcodemodel.tests.record;
 
+import javax.annotation.processing.Generated;
+
+@Generated("com.helger.jcodemodel.JCodeModel")
 public record RangeCanonical(int lo, int hi) {
 
     public RangeCanonical(int lo, int hi) {

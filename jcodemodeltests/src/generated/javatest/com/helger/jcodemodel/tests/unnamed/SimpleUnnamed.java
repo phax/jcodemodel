@@ -14,6 +14,9 @@
  */
 package com.helger.jcodemodel.tests.unnamed;
 
+import javax.annotation.processing.Generated;
+
+@Generated("com.helger.jcodemodel.JCodeModel")
 public class SimpleUnnamed {
 
     public boolean equals(Object _unnamed) {

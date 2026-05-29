@@ -12,19 +12,29 @@
  * limitations under the License.
  * 
  */
-package com.helger.jcodemodel.tests.record;
+package com.helger.jcodemodel.tests.textblocks;
 
 import javax.annotation.processing.Generated;
 
-
-/**
- * Represents a 2D point.
- * 
- * @param x
- *     the x coordinate
- * @param y
- *     the y coordinate
- */
 @Generated("com.helger.jcodemodel.JCodeModel")
-public record PointJavadoc(int x, int y) {
+public class TextBlocksKeepWhiteSpaces {
+    public static final String ONE_LINE_SPACES = """
+    \s a \s""";
+    public static final String ONE_LINE_TABS = """
+    \ta\t""";
+    public static final String SPACES_EMPTYLINE = """
+     \s
+    """;
+    public static final String THREE_LINES_SPACES = """
+    \sa\s
+     b\s
+     c \s""";
+    public static final String EMPTY_THEN_SPACED = """
+
+    \s a""";
+    public static final String TWO_EMPTY_LINES_2SPACES_3SPACES = """
+
+
+    \s\s
+      \s""";
 }
