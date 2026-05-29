@@ -52,6 +52,9 @@ import org.jspecify.annotations.NonNull;
 public class JTryResource implements IJGenerable
 {
   private final JVar m_aVar;
+  
+  /// when set to true, the jvar is already defined and should only be *generated*
+  private final boolean reuse;
 
   public JTryResource (@NonNull final AbstractJType aType, @NonNull final String sName, @NonNull final IJExpression aInitExpr)
   {
@@ -64,6 +67,13 @@ public class JTryResource implements IJGenerable
                        @NonNull final IJExpression aInitExpr)
   {
     m_aVar = new JVar (JMods.forVar (nMods), aType, sName, aInitExpr);
+    reuse=false;
+  }
+  
+  public JTryResource(JVar avar)
+  {
+    this.m_aVar=avar;
+    reuse=true;
   }
 
   @NonNull
@@ -74,6 +84,9 @@ public class JTryResource implements IJGenerable
 
   public void generate (@NonNull final IJFormatter aFormatter)
   {
-    aFormatter.var (m_aVar);
+    if(reuse)
+      aFormatter.generable(m_aVar);
+    else 
+      aFormatter.var (m_aVar);
   }
 }
