@@ -27,6 +27,12 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 
 # News and noteworthy
 
+v4.2.1 - 2026-05-29
+* Added support for annotations with parameters on type annotations and fixed `@since` tags. See [#130](https://github.com/phax/jcodemodel/pull/130) - thx @joelittlejohn
+* Added support for Java text blocks via [#145](https://github.com/phax/jcodemodel/pull/145) and [#147](https://github.com/phax/jcodemodel/pull/147), including a `keepWhiteSpaces` option - thx @glelouet
+* Generated test sources now carry an `@Generated` annotation [#149](https://github.com/phax/jcodemodel/pull/149) - thx @glelouet
+* Added proper license headers to the `generated/javatests` sources [#139](https://github.com/phax/jcodemodel/pull/139) - thx @glelouet
+
 v4.2.0 - 2026-05-13
 * Removed OSGI bundling
 * Added support for Java `record` types. Fixes [#98](https://github.com/phax/jcodemodel/issues/98) via [#126](https://github.com/phax/jcodemodel/pull/126) - thx @joelittlejohn
