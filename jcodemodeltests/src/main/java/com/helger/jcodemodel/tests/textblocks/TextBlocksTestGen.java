@@ -50,6 +50,16 @@ public class TextBlocksTestGen {
             .add(" a ")
             .add(" b ")
             .add(" c  "));
+    cl.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class, "EMPTY_THEN_SPACED",
+        JExpr.textBlock().keepWhitespaces(true)
+            .newline()
+            .add("  a"));
+    cl.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL, String.class, "TWO_EMPTY_LINES_2SPACES_3SPACES",
+        JExpr.textBlock().keepWhitespaces(true)
+            .newline()
+            .newline()
+            .add("  ")
+            .add("   "));
 
   }
 

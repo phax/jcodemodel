@@ -25,6 +25,8 @@ public class TextBlocksTest {
     Assert.assertEquals("	a	", TextBlocksKeepWhiteSpaces.ONE_LINE_TABS);
     Assert.assertEquals("  \n", TextBlocksKeepWhiteSpaces.SPACES_EMPTYLINE);
     Assert.assertEquals(" a \n b \n c  ", TextBlocksKeepWhiteSpaces.THREE_LINES_SPACES);
+    Assert.assertEquals("\n  a", TextBlocksKeepWhiteSpaces.EMPTY_THEN_SPACED);
+    Assert.assertEquals("\n\n  \n   ", TextBlocksKeepWhiteSpaces.TWO_EMPTY_LINES_2SPACES_3SPACES);
   }
 
 }

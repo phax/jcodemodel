@@ -30,15 +30,15 @@ import org.jspecify.annotations.NonNull;
 /// ## Property keepWhiteSpaces
 ///
 /// The produced lines differ depending on [#keepWhitespaces]
-///  - when false(default), the content of the file will be the one added.
+///  - when false(default), the content of the **file** will be the one added.
 ///    Adding ` a ` will result in the textblock containing it, thus the resulting line will be `a` because of whitespaces strupping in textblocks
-///  - when true, the content of the resulting string will be the one added.
-///    Adding `  a  ` will result in the textblock containing instead `\040 a \040` to ensure the resulting string will be `  a  `.
+///  - when true, the content of the **parsed string** will be the one added.
+///    Adding `  a  ` will result in the textblock containing instead `\040 a \040` to ensure the parsed string will be `  a  `.
 /// In the later, if all lines start with a whitespace, then the first character is set to octal ; plus all line-ending whitespace are also set to octal.
 ///
-/// ## Indentation
 ///
 /// [https://docs.oracle.com/en/java/javase/26/language/text-blocks.html]
+/// @author Guillaume Le Louët (guillaume.lelouet@gmail.com)
 ///
 @SuppressWarnings("serial")
 public class JTextBlock implements IJExpression, Iterable<String> {
@@ -190,29 +190,29 @@ public class JTextBlock implements IJExpression, Iterable<String> {
         modifiedLines.set(modifiedLines.size() - 1, escapedLastLine);
       }
     }
-    // we need to escape starting whitespaces iff we are verbatim and all lines
-    // start with space or tab
-    boolean requireEscapeStart =
-        keepWhitespaces
-            && modifiedLines.stream()
-                .filter(l -> !l.startsWith(" ") && !l.startsWith("\t"))
-                .findAny().isEmpty();
+
+    boolean escapeFirstChar = requiresEscapeFirstChar(keepWhitespaces, modifiedLines);
+//		if (keepWhitespaces) {
+//			System.err.println("escapefirst " + escapeFirstChar + " from " + modifiedLines);
+//		}
+
     for (String line : modifiedLines) {
       if (!firstLine) {
         f.newline();
       }
-      if (requireEscapeStart && firstLine) {
+      if (escapeFirstChar && !line.isEmpty()) {
         // replace starting space/tab by octal
         line =
             line
-                .replaceAll("^ ", "\\\\040")
+                .replaceAll("^ ", "\\\\s")
                 .replaceAll("^\t", "\\\\011");
+        escapeFirstChar = false;
       }
       if (keepWhitespaces) {
         // replace ending space/tab by octal
         line =
             line
-                .replaceAll(" $", "\\\\040")
+                .replaceAll(" $", "\\\\s")
                 .replaceAll("\t$", "\\\\011");
       }
       f.print(indent).print(line);
@@ -228,6 +228,23 @@ public class JTextBlock implements IJExpression, Iterable<String> {
           .print("" + indentSize)
           .print(")");
     }
+  }
+
+  /// We need to escape initial whitespace to preserve indentation iff
+  /// 1. we are keepWhitespaces
+  /// 2. there are lines
+  /// 3. all non-blank line start with space/tab
+  /// 4. final line starts with space/tab even if blank
+  static boolean requiresEscapeFirstChar(boolean keepWhitespaces, List<String> lines) {
+    return keepWhitespaces
+        && !lines.isEmpty()
+        // no non-blank line that does not start with a space or tab
+        && lines.stream()
+            .filter(l -> !(l.isBlank() || l.startsWith(" ") || l.startsWith("\t")))
+            .findAny().isEmpty()
+        // if last line does not start with space/tab we don't need to escape, blank or
+        // not.
+        && lines.get(lines.size() - 1).matches("^[ \\t].*");
   }
 
 }

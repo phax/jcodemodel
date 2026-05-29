@@ -19,14 +19,22 @@ import javax.annotation.processing.Generated;
 @Generated("com.helger.jcodemodel.JCodeModel")
 public class TextBlocksKeepWhiteSpaces {
     public static final String ONE_LINE_SPACES = """
-    \040 a \040 """;
+    \s a \s""";
     public static final String ONE_LINE_TABS = """
     \011a\011 """;
     public static final String SPACES_EMPTYLINE = """
-     \040
+     \s
     """;
     public static final String THREE_LINES_SPACES = """
-    \040a\040
-     b\040
-     c \040 """;
+    \sa\s
+     b\s
+     c \s""";
+    public static final String EMPTY_THEN_SPACED = """
+
+    \s a""";
+    public static final String TWO_EMPTY_LINES_2SPACES_3SPACES = """
+
+
+    \s\s
+      \s""";
 }
