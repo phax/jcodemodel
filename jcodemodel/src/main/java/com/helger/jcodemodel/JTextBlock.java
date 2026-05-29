@@ -204,7 +204,7 @@ public class JTextBlock implements IJExpression, Iterable<String> {
         // replace starting space/tab by octal
         line =
             line
-                .replaceAll("^ ", "\\\\040")
+                .replaceAll("^ ", "\\\\s")
                 .replaceAll("^\t", "\\\\011");
         escapeFirstChar = false;
       }
@@ -212,7 +212,7 @@ public class JTextBlock implements IJExpression, Iterable<String> {
         // replace ending space/tab by octal
         line =
             line
-                .replaceAll(" $", "\\\\040")
+                .replaceAll(" $", "\\\\s")
                 .replaceAll("\t$", "\\\\011");
       }
       f.print(indent).print(line);
