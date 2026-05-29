@@ -205,7 +205,7 @@ public class JTextBlock implements IJExpression, Iterable<String> {
         line =
             line
                 .replaceAll("^ ", "\\\\s")
-                .replaceAll("^\t", "\\\\011");
+                .replaceAll("^\t", "\\\\t");
         escapeFirstChar = false;
       }
       if (keepWhitespaces) {
@@ -213,7 +213,7 @@ public class JTextBlock implements IJExpression, Iterable<String> {
         line =
             line
                 .replaceAll(" $", "\\\\s")
-                .replaceAll("\t$", "\\\\011");
+                .replaceAll("\t$", "\\\\t");
       }
       f.print(indent).print(line);
       firstLine = false;

@@ -21,7 +21,7 @@ public class TextBlocksKeepWhiteSpaces {
     public static final String ONE_LINE_SPACES = """
     \s a \s""";
     public static final String ONE_LINE_TABS = """
-    \011a\011 """;
+    \ta\t""";
     public static final String SPACES_EMPTYLINE = """
      \s
     """;
