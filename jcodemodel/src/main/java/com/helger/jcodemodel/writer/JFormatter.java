@@ -401,6 +401,8 @@ public class JFormatter implements IJFormatter
 
   private boolean m_bDebugImport = false;
 
+  private int m_nJavaFeature = JCMWriter.DEFAULT_JAVA_FEATURE;
+
   /**
    * Constructor
    *
@@ -436,6 +438,29 @@ public class JFormatter implements IJFormatter
   public void setDebugImports (final boolean bDebug)
   {
     m_bDebugImport = bDebug;
+  }
+
+  /**
+   * @return The Java feature (major release version) the generated code is targeted at. Defaults to
+   *         {@link JCMWriter#DEFAULT_JAVA_FEATURE}.
+   */
+  public int getJavaFeature ()
+  {
+    return m_nJavaFeature;
+  }
+
+  /**
+   * Set the Java feature (major release version) the generated code is targeted at.
+   *
+   * @param nJavaFeature
+   *        The Java feature to be used.
+   * @return this for chaining
+   */
+  @NonNull
+  public JFormatter setJavaFeature (final int nJavaFeature)
+  {
+    m_nJavaFeature = nJavaFeature;
+    return this;
   }
 
   public boolean isPrinting ()

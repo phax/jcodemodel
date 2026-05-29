@@ -52,6 +52,7 @@ public class GenerateTestFiles
 
   private final File m_aOutputDir;
   private final File m_aClassScanDir;
+  private final int m_nJavaFeature;
 
   public static void main (final String [] args)
   {
@@ -61,10 +62,33 @@ public class GenerateTestFiles
     new GenerateTestFiles (outputFile, classScanDir).apply ();
   }
 
+  /**
+   * Resolve the Java feature to be used by parsing the system property <code>java.feature</code>.
+   * Falls back to {@link JCMWriter#DEFAULT_JAVA_FEATURE} when the property is unset or cannot be
+   * parsed as an integer.
+   */
+  public static int extractJavaFeature ()
+  {
+    final String sValue = System.getProperty ("java.feature");
+    if (sValue == null || sValue.isBlank ())
+      return JCMWriter.DEFAULT_JAVA_FEATURE;
+    try
+    {
+      // accept full version strings like "17.0.5" by taking the major component
+      final int nDot = sValue.indexOf ('.');
+      return Integer.parseInt (nDot < 0 ? sValue : sValue.substring (0, nDot));
+    }
+    catch (final NumberFormatException ex)
+    {
+      return JCMWriter.DEFAULT_JAVA_FEATURE;
+    }
+  }
+
   public GenerateTestFiles (final File outputDir, final File classScanDir)
   {
     this.m_aOutputDir = outputDir;
     this.m_aClassScanDir = classScanDir;
+    this.m_nJavaFeature = extractJavaFeature ();
   }
 
   void apply ()
@@ -219,7 +243,7 @@ public class GenerateTestFiles
           if (produced != null)
           {
             postProcessJCM (produced);
-            new JCMWriter (produced).build (m_aOutputDir, (IProgressTracker) null);
+            new JCMWriter (produced).setJavaFeature (m_nJavaFeature).build (m_aOutputDir, (IProgressTracker) null);
           }
         }
       }

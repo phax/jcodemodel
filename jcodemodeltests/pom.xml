@@ -73,6 +73,12 @@
             <configuration>
               <arguments>${project.basedir}</arguments>
               <mainClass>com.helger.jcodemodel.compile.annotation.GenerateTestFiles</mainClass>
+              <systemProperties>
+                <systemProperty>
+                  <key>java.feature</key>
+                  <value>${java.specification.version}</value>
+                </systemProperty>
+              </systemProperties>
             </configuration>
           </execution>
         </executions>

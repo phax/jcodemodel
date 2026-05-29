@@ -78,6 +78,9 @@ public class JCMWriter
   /** Cached default new line */
   public static final String DEFAULT_NEW_LINE = System.lineSeparator ();
 
+  /** Default Java feature (major release version) targeted by generated code. */
+  public static final int DEFAULT_JAVA_FEATURE = 17;
+
   private final JCodeModel m_aCM;
 
   /** The charset used for building the output - null means system default */
@@ -90,6 +93,12 @@ public class JCMWriter
    * String to be used for each indentation. Defaults to four spaces.
    */
   private String m_sIndentString = DEFAULT_INDENT_STRING;
+
+  /**
+   * Java feature (major release version) the generated code is targeted at. A feature that requires
+   * a higher Java feature level than this value may be replaced with fallback code by the writer.
+   */
+  private int m_nJavaFeature = DEFAULT_JAVA_FEATURE;
 
   public JCMWriter (@NonNull final JCodeModel aCM)
   {
@@ -156,6 +165,31 @@ public class JCMWriter
   {
     ValueEnforcer.notNull (sIndentString, "IndentString");
     m_sIndentString = sIndentString;
+    return this;
+  }
+
+  /**
+   * @return The Java feature (major release version) the generated code is targeted at. Defaults to
+   *         {@link #DEFAULT_JAVA_FEATURE}.
+   */
+  public int getJavaFeature ()
+  {
+    return m_nJavaFeature;
+  }
+
+  /**
+   * Set the Java feature (major release version) the generated code is targeted at. Any feature
+   * that requires a higher Java feature level than this value may be disabled or replaced with
+   * fallback code when writing.
+   *
+   * @param nJavaFeature
+   *        The Java feature to be used.
+   * @return this for chaining
+   */
+  @NonNull
+  public JCMWriter setJavaFeature (final int nJavaFeature)
+  {
+    m_nJavaFeature = nJavaFeature;
     return this;
   }
 
@@ -285,6 +319,7 @@ public class JCMWriter
   {
     final SourcePrintWriter aWriter = aSrcWriter.openSource (aPackage, sClassFilename);
     final JFormatter ret = new JFormatter (aWriter, m_sIndentString);
+    ret.setJavaFeature (m_nJavaFeature);
     // Add all classes to not be imported (may be empty)
     ret.addDontImportClasses (m_aCM.getAllDontImportClasses ());
     return ret;

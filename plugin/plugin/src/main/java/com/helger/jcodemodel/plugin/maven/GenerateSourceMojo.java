@@ -67,6 +67,13 @@ public class GenerateSourceMojo extends AbstractMojo
   @Parameter (property = "jcodemodel.source")
   private String source;
 
+  /**
+   * Java feature (major release version) the generated class files are targeted at. When unset the
+   * default of {@link JCMWriter#DEFAULT_JAVA_FEATURE} is used.
+   */
+  @Parameter (property = "jcodemodel.java.feature")
+  private String javaFeature;
+
   @Parameter (property = "jcodemodel.data")
   private String data;
 
@@ -138,7 +145,7 @@ public class GenerateSourceMojo extends AbstractMojo
                                                                                                                         .getBytes (StandardCharsets.UTF_8)))
     {
       cmb.build (cm, aIS);
-      new JCMWriter (cm).build (dir, (IProgressTracker) null);
+      new JCMWriter (cm).setJavaFeature (findJavaFeature ()).build (dir, (IProgressTracker) null);
     }
     catch (JCodeModelException | IOException e)
     {
@@ -219,5 +226,16 @@ public class GenerateSourceMojo extends AbstractMojo
     }
 
     throw new MojoExecutionException ("could not open provided source " + source + " as a file or url");
+  }
+
+  /**
+   * @return the configured {@link #javaFeature} parsed as an integer, falling back to
+   *         {@link JCMWriter#DEFAULT_JAVA_FEATURE} when unset or blank.
+   */
+  public int findJavaFeature ()
+  {
+    if (javaFeature == null || javaFeature.isBlank ())
+      return JCMWriter.DEFAULT_JAVA_FEATURE;
+    return Integer.parseInt (javaFeature);
   }
 }
