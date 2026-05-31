@@ -17,7 +17,7 @@ this would be very tricky.
 ## Links and doc
 
  - A site with the links to the [API docs](http://phax.github.io/jcodemodel/) etc. is available.
- - This project has a dedicated [documentation folder](./documentation) maintained by helpers. Don't hesitate [to help](documentation/contributing.md) !
+ - This project has a dedicated [documentation folder](./docs) maintained by helpers. Don't hesitate [to help](documentation/contributing.md) !
 
 
 ## Maven usage
