@@ -10,7 +10,9 @@ public class JCMFirstProgram {
   public static void main(String... args) throws JCodeModelException, IOException {
     var jcm = new JCodeModel();
     jcm._class("JCMFirstClass");
-    new JCMWriter(jcm).build(new File("."));
+    File outFile = new File("src/generated/java/");
+    outFile.mkdirs();
+    new JCMWriter(jcm).build(outFile);
   }
 
 }
