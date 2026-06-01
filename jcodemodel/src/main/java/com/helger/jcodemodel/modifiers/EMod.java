@@ -35,14 +35,15 @@ public enum EMod
 {
   ABSTRACT (JMod.ABSTRACT, Modifier.ABSTRACT, "abstract"),
   /**
-   * default does not exist in reflect : it's a public non-abstrct non-static method in an interface
+   * default does not exist in reflect : it's a public non-abstract non-static method in an
+   * interface
    */
   DEFAULT (JMod.DEFAULT, 0, "default"),
   FINAL (JMod.FINAL, Modifier.FINAL, "final"),
   NATIVE (JMod.NATIVE, Modifier.NATIVE, "native"),
   NONE (JMod.NONE, 0, ""),
   /**
-   * nopn-sealed is not present at runtime, indicates allowed inheritance
+   * non-sealed is not present at runtime, indicates allowed inheritance
    */
   NONSEALED (JMod.NONSEALED, 0, "non-sealed"),
   PRIVATE (JMod.PRIVATE, Modifier.PRIVATE, "private"),
