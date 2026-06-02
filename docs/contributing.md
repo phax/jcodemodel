@@ -1,5 +1,15 @@
 ## Contributing
 
+The target audience is people who use JCM already
+
+If you use JCM, you may come across bugs, have ideas to implement, request features that could help you, or help implement or resolve issues.
+
+The ideas and requests should go to the [git's discussion](https://github.com/phax/jcodemodel/discussions) . They can then be converted to issues.
+
+Any bug should go in the [git's issues](https://github.com/phax/jcodemodel/issues) . They are then open for solving. Please provide a minimal working example, so that we can reproduce and check that the verification passes ; also mention what you are working on to avoid multiple person doing the same work.
+
+To help resolve an issue, you can [clone](https://github.com/phax/jcodemodel/fork) the repository, create a new branch, commit your changes, then submit a pull request, explaining what are the choices you made for that issue.
+
 ### Formatting
 
 Pull requests must follow my personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md)

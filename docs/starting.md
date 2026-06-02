@@ -1,5 +1,7 @@
 ## Starting with JCodeModel (JCM)
 
+The target audience is developers who intend to use JCM as a part of their production.
+
 JCM at its core generates java source code, with the ability to do so at runtime and loaded the generated code, by a running java program.
 
 It can be used to generate data structures used to parse files or resources, create database entities, load runtime information and validate against meta data.  
