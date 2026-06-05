@@ -162,7 +162,7 @@ public class JMods implements IJGenerable
   public boolean isNonSealed ()
   {
     return (m_nMods & JMod.NONSEALED) != 0;
-  }	
+  }
 
   public boolean isNative ()
   {
@@ -325,14 +325,14 @@ public class JMods implements IJGenerable
 
     if ((m_nMods & JMod.DEFAULT) != 0)
       f.print ("default");
-  }
+    }
 
   public void addEMod(Set<EMod> allowed, EMod... emods) {
     if (emods != null) {
       for (EMod emod : emods) {
         if (allowed.contains(emod)) {
           for (EMod exc : emod.excludes()) {
-            m_nMods ^= exc.m_nJMod;
+            m_nMods &= ~exc.m_nJMod;
           }
           m_nMods |= emod.m_nJMod;
         }
@@ -343,7 +343,7 @@ public class JMods implements IJGenerable
   public void removeEMod(EMod... emods) {
     if (emods != null) {
       for (EMod emod : emods) {
-        m_nMods ^= emod.m_nJMod;
+        m_nMods &= ~emod.m_nJMod;
       }
     }
   }
