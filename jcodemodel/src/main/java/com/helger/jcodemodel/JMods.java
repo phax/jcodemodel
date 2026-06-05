@@ -46,12 +46,11 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.modifiers.EMod;
-import com.helger.jcodemodel.modifiers.IJModified;
 
 /**
  * Modifier groups.
  */
-public class JMods implements IJGenerable, IJModified
+public class JMods implements IJGenerable
 {
   //
   // mask
@@ -328,26 +327,40 @@ public class JMods implements IJGenerable, IJModified
       f.print ("default");
   }
 
-  @Override
-  public JMods addEMod(EMod... emods) {
-    m_nMods= EMod.addEmod(EMod.ALLOWED_CLASS, m_nMods, emods);
-    return this;
+  public void addEMod(Set<EMod> allowed, EMod... emods) {
+    if (emods != null) {
+      for (EMod emod : emods) {
+        if (allowed.contains(emod)) {
+          for (EMod exc : emod.excludes()) {
+            m_nMods ^= exc.m_nJMod;
+          }
+          m_nMods |= emod.m_nJMod;
+        }
+      }
+    }
   }
 
-  @Override
-  public JMods removeEMod(EMod... emods) {
-    m_nMods=EMod.removeEmod(m_nMods, emods);
-    return this;
+  public void removeEMod(EMod... emods) {
+    if (emods != null) {
+      for (EMod emod : emods) {
+        m_nMods ^= emod.m_nJMod;
+      }
+    }
   }
 
-  @Override
   public Set<EMod> emods() {
     return EMod.ofJMods(m_nMods);
   }
 
-  @Override
   public boolean isEMod(EMod... emods) {
-    return EMod.isEmod(m_nMods, emods);
+    if (emods != null) {
+      for (EMod emod : emods) {
+        if (!emod.isPresentJMod(m_nMods)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
 }

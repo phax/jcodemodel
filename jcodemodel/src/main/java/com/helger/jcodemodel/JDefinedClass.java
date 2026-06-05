@@ -1152,7 +1152,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
 
   @Override
   public JDefinedClass addEMod(EMod... emods) {
-    mods().addEMod(emods);
+    mods().addEMod(EMod.ALLOWED_CLASS, emods);
     return this;
   }
 

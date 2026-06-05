@@ -259,20 +259,6 @@ public enum EMod
   // static tools for the [IJModified] implementations
   //
 
-  public static int addEmod(Set<EMod> allowed, int jmodifiers, EMod... emods) {
-    if (emods != null) {
-      for (EMod emod : emods) {
-        if (allowed.contains(emod)) {
-          for (EMod exc : emod.excludes()) {
-            jmodifiers ^= exc.m_nJMod;
-          }
-          jmodifiers |= emod.m_nJMod;
-        }
-      }
-    }
-    return jmodifiers;
-  }
-
   public static void addEmod(Set<EMod> allowed, Set<EMod> emodifiers, EMod... emods) {
     if (emods != null) {
       for (EMod emod : emods) {
@@ -284,41 +270,12 @@ public enum EMod
     }
   }
 
-  public static int removeEmod(int jmodifiers, EMod... emods) {
-    if (emods != null) {
-      for (EMod emod : emods) {
-        jmodifiers ^= emod.m_nJMod;
-      }
-    }
-    return jmodifiers;
-  }
-
-  public static void removeEmod(Set<EMod> emodifiers, EMod... emods) {
-    if (emods != null) {
-      for (EMod emod : emods) {
-        emodifiers.remove(emod);
-      }
-    }
-  }
-
-  public static boolean isEmod(int jmodifiers, EMod... emods) {
-    if (emods != null) {
-      for (EMod emod : emods) {
-        if (!emod.isPresentJMod(jmodifiers)) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
   public static boolean isEmod(Set<EMod> emodifiers, EMod... emods) {
     if (emods != null) {
-      for (EMod emod : emods) {
-        if (!emodifiers.contains(emod)) {
-          return false;
-        }
-      }
+      return Stream.of(emods)
+          .filter(em->!emodifiers.contains(em))
+          .findAny()
+          .isEmpty();
     }
     return true;
   }
