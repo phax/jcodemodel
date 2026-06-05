@@ -47,6 +47,7 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.modifiers.EMod;
 
 /**
  * A field that can have a {@link JDocComment} associated with it
@@ -154,4 +155,17 @@ public class JFieldVar extends JVar implements IJDocCommentable
   {
     return getHashCode (super.hashCode (), new Object [] { m_aOwnerClass });
   }
+  
+  @Override
+  public JFieldVar addEMod(EMod... emods) {
+    mods().addEMod(EMod.ALLOWED_FIELD, emods);
+    return this;
+  }
+
+  @Override
+  public JFieldVar removeEMod(EMod... emods) {
+    mods().removeEMod(emods);
+    return this;
+  }
+  
 }
