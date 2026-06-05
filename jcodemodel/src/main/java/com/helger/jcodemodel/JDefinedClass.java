@@ -50,6 +50,7 @@ import org.jspecify.annotations.Nullable;
 import com.helger.annotation.style.ReturnsImmutableObject;
 import com.helger.annotation.style.ReturnsMutableObject;
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.modifiers.EMod;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.writer.JFormatter;
 
@@ -1147,5 +1148,27 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   public boolean containsErrorTypes ()
   {
     return JFormatter.containsErrorTypes (this);
+  }
+
+  @Override
+  public JDefinedClass addEMod(EMod... emods) {
+    mods().addEMod(emods);
+    return this;
+  }
+
+  @Override
+  public JDefinedClass removeEMod(EMod... emods) {
+    mods().removeEMod(emods);
+    return this;
+  }
+
+  @Override
+  public Set<EMod> emods() {
+    return mods().emods();
+  }
+
+  @Override
+  public boolean isEMod(EMod... emods) {
+    return mods().isEMod(emods);
   }
 }

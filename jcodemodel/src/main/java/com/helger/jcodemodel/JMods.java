@@ -40,15 +40,18 @@
  */
 package com.helger.jcodemodel;
 
+import java.util.Set;
+
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.modifiers.EMod;
+import com.helger.jcodemodel.modifiers.IJModified;
 
 /**
  * Modifier groups.
  */
-public class JMods implements IJGenerable
+public class JMods implements IJGenerable, IJModified
 {
   //
   // mask
@@ -325,25 +328,26 @@ public class JMods implements IJGenerable
       f.print ("default");
   }
 
-  public static int toModifier (final int jmod)
-  {
-    int ret = 0;
-    for (final EMod e : EMod.values ())
-    {
-      if (e.isPresentJMod (jmod))
-        ret |= e.m_nModifier;
-    }
-    return ret;
+  @Override
+  public JMods addEMod(EMod... emods) {
+    m_nMods= EMod.addEmod(EMod.ALLOWED_CLASS, m_nMods, emods);
+    return this;
   }
 
-  public static int fromModifier (final int modifier)
-  {
-    int ret = 0;
-    for (final EMod e : EMod.values ())
-    {
-      if (e.isPresentModifiers (modifier))
-        ret |= e.m_nJMod;
-    }
-    return ret;
+  @Override
+  public JMods removeEMod(EMod... emods) {
+    m_nMods=EMod.removeEmod(m_nMods, emods);
+    return this;
   }
+
+  @Override
+  public Set<EMod> emods() {
+    return EMod.ofJMods(m_nMods);
+  }
+
+  @Override
+  public boolean isEMod(EMod... emods) {
+    return EMod.isEmod(m_nMods, emods);
+  }
+
 }

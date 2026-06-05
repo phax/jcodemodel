@@ -43,11 +43,13 @@ package com.helger.jcodemodel;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.base.hashcode.HashCodeGenerator;
+import com.helger.jcodemodel.modifiers.EMod;
 
 /**
  * A special {@link AbstractJClass} that represents an unknown class (except its
@@ -168,5 +170,25 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   public int hashCode ()
   {
     return new HashCodeGenerator (this).append (m_sFullName).getHashCode ();
+  }
+
+  @Override
+  public JDirectClass addEMod(EMod... emods) {
+    return this;
+  }
+
+  @Override
+  public JDirectClass removeEMod(EMod... emods) {
+    return this;
+  }
+
+  @Override
+  public Set<EMod> emods() {
+    return Set.of();
+  }
+
+  @Override
+  public boolean isEMod(EMod... emods) {
+    return emods==null || emods.length==0;
   }
 }
