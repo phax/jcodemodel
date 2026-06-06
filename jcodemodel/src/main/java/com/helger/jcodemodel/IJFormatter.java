@@ -89,6 +89,11 @@ public interface IJFormatter extends Closeable
    */
   @NonNull
   IJFormatter newline ();
+  
+  /**
+   * @return the internal String used for new lines.
+   */
+  String getNewLine();
 
   /**
    * Print a char into the stream
