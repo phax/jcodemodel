@@ -5,7 +5,7 @@
 [![javadoc](https://javadoc.io/badge2/com.helger/jcodemodel/javadoc.svg)](https://javadoc.io/doc/com.helger/jcodemodel)
 <!-- ph-badge-end -->
 
-This project provides modeling and exporting java source code at java runtime, either in a pre-processing phase or to acces them using a dynamic Classloader.
+This project provides modeling and exporting java source code at java runtime, either in a pre-processing phase or to access them using a dynamic Classloader.
 
 It is a fork of the com.sun.codemodel 2.7-SNAPSHOT.
 

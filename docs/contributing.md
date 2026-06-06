@@ -16,7 +16,7 @@ Pull requests must follow my personal [Coding Styleguide](https://github.com/pha
 
 #### Tabs vs spaces
 
-This project uses double-space for indentation. If you want to use tabs, you can ask git to modify the files when commiting them and when pulling them. A [specific script](../sh/tabspaces) makes that change, run it from the root project.
+This project uses double-space for indentation. If you want to use tabs, you can ask git to modify the files when commiting them and when pulling them. A [specific script](../sh/cfg/tabspaces) makes that change, run it from the root project.
 
 
 What this script does  : 
@@ -71,10 +71,11 @@ General convention is as such, for feature Feat : generat**ing** is `jcodemodel/
 
 A generator generates a JCM that the plugin will export when requested.
 
- - The generator module should be in the [../plugin/generators] submodule, with a module name starting with `GEN ` (in its pom) ;
- - The testing module should be in the [../examples/plugins] submodule, with a module name starting with `XPL Generator ` .
+ - The generator module should be in the [plugin's generators](../plugin/generators/pom.xml) submodule, with a module name starting with `GEN ` (in its pom) ;
+ - The testing module should be in the [plugins examples](../examples/plugins/pom.xml) submodule, with a module name starting with `XPL Generator ` .
 
-For example, the [HelloWorld generator](../plugin/generators/helloworld/pom.xml) and its [HelloWorld example](../examples/plugins/helloworld/pom.xml) modules.
+For example, see the [HelloWorld generator](../plugin/generators/helloworld/pom.xml) and its [HelloWorld example](../examples/plugins/helloworld/pom.xml) modules.
+The former is *named* `GEN Helloworld`, the later `XPL Generator Helloworld`.
 
 The testing module should not rely on internet data, as this can be an issue when remote host is down.
 With [correct configuration](../examples/plugins/helloworld/pom.xml) the plugin will apply the generator and produce the classes in `src/generated/java` , allowing the usual unit tests in that module.

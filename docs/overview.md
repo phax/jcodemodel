@@ -6,11 +6,10 @@ The project is split in
 
  - The [root pom project](../pom.xml)
  - The [core project](../jcodemodel/pom.xml) lib to generate classes and resources programmatically.
- - The [test project](../jccodemodeltests/pom.xml) validates the *generated* classes behavior.
- - The [plugin](../plugin//plugin/pom.xml) to generate java classes in maven
+ - The [test project](../jcodemodeltests/pom.xml) validates the *generated* classes behavior.
+ - The [plugin](../plugin/plugin/pom.xml) to generate java classes in maven
  - The various [plugin generators](../plugin/generators/pom.xml) to load a JCodeModel in the plugin
  - The [examples](../examples/pom.xml) that showcase how to use JCodeModel, the plugin, the generators.
- - The [beta](../beta/pom.xml) contains projects that may be merged into the core, or other modules, but could also be discarded entirely. 
 
 ### Core classes
 

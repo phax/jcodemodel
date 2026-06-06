@@ -2,7 +2,7 @@
 
 The target audience is developers who intend to use JCM as a part of their production.
 
-JCM at its core generates java source code, with the ability to do so at runtime and loaded the generated code, by a running java program.
+JCM at its core generates java source code, with the ability to do so at runtime and load the generated code, by a running java program.
 
 It can be used to generate data structures used to parse files or resources, create database entities, load runtime information and validate against meta data.  
 
@@ -72,7 +72,7 @@ OR even (recommended) you remove the version line completely and instead import 
 		
 ### First program
 
-Let's first make a simple program that generates a new, empty class. With [java 25](https://openjdk.org/jeps/445) you can create a file `JCMFirstProgram.java` containing only 
+Let's first make a simple program that generates a new, empty class. With [java 25](https://openjdk.org/jeps/512) you can create a file `JCMFirstProgram.java` containing only 
 
 ```java
 void main() throws JCodeModelException, IOException {
@@ -84,7 +84,7 @@ void main() throws JCodeModelException, IOException {
 }
 ```
 
-Then ask your IDE resolve the names for you. This should add imports at the top of the file
+Then ask your IDE to resolve the names for you. This should add imports at the top of the file.
 
 If you are using java <25 then you need to use a full class. We made [one already](../jcodemodel/src/test/java/JCMFirstProgram.java) that contains those lines.
 
@@ -103,7 +103,7 @@ Now that you have a main class that produces code, you may want to embed that co
 
 It's actually possible to have maven do two passes of compiling but this is a bad habit as it blurs the visibility of what is generated, embedded, and can lead to issues with non-deterministic approaches. See [stackoverflow](https://stackoverflow.com/questions/21342342/run-maven-compilation-twice)
 
-#### Regorganising the maven project
+#### Reorganising the maven project
 
 1. You need to change your **root** module to a `pom` *packaging* (in your root `pom.xml`). This means, your root pom becomes an aggregation of other modules. This is the case, for example, for our [root module](../pom.xml) . Note that the root module can't anymore export java code by itself. Regardless, this is a good habit for maven projects, with your root module defining all the dependencies, properties, plugins, etc. .
 2. You need one **generator** sub module in that root pom to have the class generation. This module will have the java class that we made previously.
@@ -115,7 +115,7 @@ Your **core** pom.xml should now contain :
 
 ```xml
 <project>
-	<dependencie>
+	<dependencies>
 		<dependency>
 			<groupId>my.project</groupId>
 			<artifactId>CodeGenerator</artifactId>
