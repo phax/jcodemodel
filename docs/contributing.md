@@ -16,15 +16,14 @@ Pull requests must follow my personal [Coding Styleguide](https://github.com/pha
 
 #### Tabs vs spaces
 
-This project uses double-space for indentation. If you want to use tabs, you can ask git to modify the files when commiting them and when pulling them. A [specific script](../sh/cfg/tabspaces) makes that change, run it from the root project.
+This project uses double-space for indentation. If you want to use tabs, you can ask git to modify the files when commiting them. A [specific script](../sh/cfg/tabspaces) makes that change, run it from the root project.
 
 
 What this script does  : 
 
- - create the file .git/info/attributes with `*.java filter=tabspace` . This will tell git to apply the script tabspace on the *.java files
- - run `git config filter.tabspace.clean 'expand --tabs=2 --initial'` to ask git to replace tabs with two spaces on commit of *.java files.
- - run `git config filter.tabspace.smudge 'unexpand --tabs=2 --first-only'` to request git to replace double spaces with tabs when checking a *.java file out.
-
+ - create the file .git/info/attributes with `*.java filter=tabspace` . This will tell git to apply the filter `tabspace` on the *.java files ; if the file already exists it is deleted.
+ - append the line `*.xml filter=tabspace` to this same file. This will tell git to apply the filter `tabspace` on the *.xml files. This is because `pom.xml` files are also supposed to be space-started.
+ - run `git config filter.tabspace.clean 'expand --tabs=2 --initial'` : Before committing (*clean*) files applied the *filter*`tabspace`, *git* must run the [expand](https://man7.org/linux/man-pages/man1/expand.1.html) command, replacing tabs with *2* spaces at the beginning of each line (*--initial*). This setting is repository-specific and can be removed by deleting the corresponding line in `.git/config`
 
 #### Eclipse
 
