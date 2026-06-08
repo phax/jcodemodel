@@ -53,6 +53,11 @@ public class JTryResource implements IJGenerable
 {
   private final JVar m_aVar;
 
+  /**
+   * when set to true, the jvar is already defined and should only be <em>generated</em>
+   */
+  private final boolean m_bReuse;
+
   public JTryResource (@NonNull final AbstractJType aType, @NonNull final String sName, @NonNull final IJExpression aInitExpr)
   {
     this (JMod.FINAL, aType, sName, aInitExpr);
@@ -64,6 +69,13 @@ public class JTryResource implements IJGenerable
                        @NonNull final IJExpression aInitExpr)
   {
     m_aVar = new JVar (JMods.forVar (nMods), aType, sName, aInitExpr);
+    m_bReuse = false;
+  }
+
+  public JTryResource (@NonNull final JVar aVar)
+  {
+    m_aVar = aVar;
+    m_bReuse = true;
   }
 
   @NonNull
@@ -74,6 +86,9 @@ public class JTryResource implements IJGenerable
 
   public void generate (@NonNull final IJFormatter aFormatter)
   {
-    aFormatter.var (m_aVar);
+    if (m_bReuse)
+      aFormatter.generable (m_aVar);
+    else
+      aFormatter.var (m_aVar);
   }
 }

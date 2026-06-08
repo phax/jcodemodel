@@ -49,26 +49,33 @@ public class GenerateSourceMojo extends AbstractMojo
    * passed to the generator in case it needs project-specific variables, like path etc.
    */
   @Component
-  private MavenProject project;
+  private MavenProject m_aProject;
 
   /**
    * target directory to place the generated java files into. The directory is created but not
    * cleaned.
    */
-  @Parameter (property = "jcodemodel.outdir", defaultValue = "src/generated/java")
-  private String outputDir;
+  @Parameter (name = "outputDir", property = "jcodemodel.outdir", defaultValue = "src/generated/java")
+  private String m_sOutputDir;
 
-  @Parameter (property = "jcodemodel.rootpackage", defaultValue = "")
-  private String rootPackage;
+  @Parameter (name = "rootPackage", property = "jcodemodel.rootpackage", defaultValue = "")
+  private String m_sRootPackage;
 
   /**
    * source of the data to transmit to the generator when building the model. can be a url, a file.
    */
-  @Parameter (property = "jcodemodel.source")
-  private String source;
+  @Parameter (name = "source", property = "jcodemodel.source")
+  private String m_sSource;
 
-  @Parameter (property = "jcodemodel.data")
-  private String data;
+  /**
+   * Java feature (major release version) the generated class files are targeted at. When unset the
+   * default of {@link JCMWriter#DEFAULT_JAVA_FEATURE} is used.
+   */
+  @Parameter (name = "javaFeature", property = "jcodemodel.java.feature")
+  private String m_sJavaFeature;
+
+  @Parameter (name = "data", property = "jcodemodel.data")
+  private String m_sData;
 
   /**
    * The fullly qualified name of the generator used. Only needed if
@@ -79,20 +86,20 @@ public class GenerateSourceMojo extends AbstractMojo
    * <li>you want a different generator class than the one it defaults to</li>
    * </ul>
    */
-  @Parameter (property = "jcodemodel.generator")
-  private String generator;
+  @Parameter (name = "generator", property = "jcodemodel.generator")
+  private String m_sGenerator;
 
   /**
    * documentation added to the main generated classes.
    */
-  @Parameter (property = "jcodemodel.classheader")
-  private String classHeader;
+  @Parameter (name = "classHeader", property = "jcodemodel.classheader")
+  private String m_sClassHeader;
 
   /**
    * direct Map of params to transmit to the generator.
    */
-  @Parameter (property = "jcodemodel.params")
-  private Map <String, String> params;
+  @Parameter (name = "params", property = "jcodemodel.params")
+  private Map <String, String> m_aParams;
 
   @Override
   public void execute () throws MojoExecutionException, MojoFailureException
@@ -118,27 +125,27 @@ public class GenerateSourceMojo extends AbstractMojo
                     " generates model into " +
                     dir.getAbsolutePath () +
                     " with params " +
-                    params);
+                    m_aParams);
 
-    if (StringHelper.isNotEmpty (classHeader))
-      cmb.setClassHeader (classHeader);
+    if (StringHelper.isNotEmpty (m_sClassHeader))
+      cmb.setClassHeader (m_sClassHeader);
 
-    if (StringHelper.isNotEmpty (rootPackage))
-      cmb.setRootPackage (rootPackage);
+    if (StringHelper.isNotEmpty (m_sRootPackage))
+      cmb.setRootPackage (m_sRootPackage);
 
-    if (params != null)
-      cmb.configure (params);
+    if (m_aParams != null)
+      cmb.configure (m_aParams);
 
     final JCodeModel cm = new JCodeModel ();
-    if (data != null && !data.isBlank () && source != null && !source.isBlank ())
+    if (m_sData != null && !m_sData.isBlank () && m_sSource != null && !m_sSource.isBlank ())
     {
-      getLog ().warn ("discarding source param " + source + " as data is already set");
+      getLog ().warn ("discarding source param " + m_sSource + " as data is already set");
     }
-    try (final InputStream aIS = StringHelper.isEmpty (data) ? findSource () : new NonBlockingByteArrayInputStream (data
-                                                                                                                        .getBytes (StandardCharsets.UTF_8)))
+    try (final InputStream aIS = StringHelper.isEmpty (m_sData) ? findSource ()
+                                                                : new NonBlockingByteArrayInputStream (m_sData.getBytes (StandardCharsets.UTF_8)))
     {
       cmb.build (cm, aIS);
-      new JCMWriter (cm).build (dir, (IProgressTracker) null);
+      new JCMWriter (cm).setJavaFeature (findJavaFeature ()).build (dir, (IProgressTracker) null);
     }
     catch (JCodeModelException | IOException e)
     {
@@ -152,13 +159,13 @@ public class GenerateSourceMojo extends AbstractMojo
   @NonNull
   protected File javaOutputFolder ()
   {
-    if (outputDir == null || outputDir.isBlank ())
-      return new File (project.getBasedir (), "src/generated/java");
+    if (m_sOutputDir == null || m_sOutputDir.isBlank ())
+      return new File (m_aProject.getBasedir (), "src/generated/java");
 
-    if (outputDir.startsWith ("/"))
-      return new File (outputDir);
+    if (m_sOutputDir.startsWith ("/"))
+      return new File (m_sOutputDir);
 
-    return new File (project.getBasedir (), outputDir);
+    return new File (m_aProject.getBasedir (), m_sOutputDir);
   }
 
   /*
@@ -166,13 +173,13 @@ public class GenerateSourceMojo extends AbstractMojo
    */
   protected ICodeModelBuilder findBuilder () throws Exception
   {
-    String generatorClass = generator;
-    if (generatorClass == null)
-      generatorClass = findGeneratorClass ();
+    String sGeneratorClass = m_sGenerator;
+    if (sGeneratorClass == null)
+      sGeneratorClass = findGeneratorClass ();
 
-    return StringHelper.isEmpty (generatorClass) ? null : (ICodeModelBuilder) Class.forName (generatorClass)
-                                                                                   .getDeclaredConstructor ()
-                                                                                   .newInstance ();
+    return StringHelper.isEmpty (sGeneratorClass) ? null : (ICodeModelBuilder) Class.forName (sGeneratorClass)
+                                                                                    .getDeclaredConstructor ()
+                                                                                    .newInstance ();
   }
 
   @Nullable
@@ -194,30 +201,84 @@ public class GenerateSourceMojo extends AbstractMojo
   @Nullable
   protected InputStream findSource () throws MojoExecutionException
   {
-    if (source == null || source.isBlank ())
+    if (m_sSource == null || m_sSource.isBlank ())
       return null;
 
     // dumb checking : is it a file ? a URL ?
     try
     {
-      final File targetFile = source.startsWith ("/") ? new File (source) : new File (project.getBasedir (), source);
-      return new FileInputStream (targetFile);
+      final File aTargetFile = m_sSource.startsWith ("/") ? new File (m_sSource)
+                                                          : new File (m_aProject.getBasedir (), m_sSource);
+      return new FileInputStream (aTargetFile);
     }
     catch (final Exception e)
     {
-      getLog ().info ("while trying to open " + source + " as a file", e);
+      getLog ().info ("while trying to open " + m_sSource + " as a file", e);
     }
 
     try
     {
-      final URL url = new URL (source);
-      return url.openStream ();
+      final URL aURL = new URL (m_sSource);
+      return aURL.openStream ();
     }
     catch (final IOException e)
     {
-      getLog ().info ("while trying to open " + source + " as a url", e);
+      getLog ().info ("while trying to open " + m_sSource + " as a url", e);
     }
 
-    throw new MojoExecutionException ("could not open provided source " + source + " as a file or url");
+    throw new MojoExecutionException ("could not open provided source " + m_sSource + " as a file or url");
+  }
+
+  /**
+   * @return the configured {@link #m_sJavaFeature} parsed as an integer, falling back to
+   *         {@link JCMWriter#DEFAULT_JAVA_FEATURE} when unset or blank.
+   */
+  public int findJavaFeature ()
+  {
+    if (m_sJavaFeature == null || m_sJavaFeature.isBlank ())
+      return JCMWriter.DEFAULT_JAVA_FEATURE;
+    return Integer.parseInt (m_sJavaFeature);
+  }
+
+  // Setters used by Maven Plexus injection (must match XML element name)
+
+  public void setOutputDir (@Nullable final String sOutputDir)
+  {
+    m_sOutputDir = sOutputDir;
+  }
+
+  public void setRootPackage (@Nullable final String sRootPackage)
+  {
+    m_sRootPackage = sRootPackage;
+  }
+
+  public void setSource (@Nullable final String sSource)
+  {
+    m_sSource = sSource;
+  }
+
+  public void setJavaFeature (@Nullable final String sJavaFeature)
+  {
+    m_sJavaFeature = sJavaFeature;
+  }
+
+  public void setData (@Nullable final String sData)
+  {
+    m_sData = sData;
+  }
+
+  public void setGenerator (@Nullable final String sGenerator)
+  {
+    m_sGenerator = sGenerator;
+  }
+
+  public void setClassHeader (@Nullable final String sClassHeader)
+  {
+    m_sClassHeader = sClassHeader;
+  }
+
+  public void setParams (@Nullable final Map <String, String> aParams)
+  {
+    m_aParams = aParams;
   }
 }

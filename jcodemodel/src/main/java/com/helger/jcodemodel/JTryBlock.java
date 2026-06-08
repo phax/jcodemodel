@@ -69,6 +69,51 @@ public class JTryBlock implements IJStatement
   }
 
   /**
+   * add an existing var to be closed as a resource
+   *
+   * @param aVar
+   *        the variable to close
+   * @return this, for ease of chaining.
+   */
+  @NonNull
+  public JTryBlock withResource (@NonNull final JVar aVar)
+  {
+    tryResources ().add (new JTryResource (aVar));
+    return this;
+  }
+
+  /**
+   * create a new variable to be closed as a resource
+   *
+   * @return the created variable.
+   */
+  @NonNull
+  public JVar withResource (@NonNull final AbstractJType aType,
+                            @NonNull final String sName,
+                            @NonNull final IJExpression aInitExpr)
+  {
+    final JTryResource aResource = new JTryResource (aType, sName, aInitExpr);
+    tryResources ().add (aResource);
+    return aResource.var ();
+  }
+
+  /**
+   * create a new variable to be closed as a resource
+   *
+   * @return the created variable.
+   */
+  @NonNull
+  public JVar withResource (final int nMods,
+                            @NonNull final AbstractJType aType,
+                            @NonNull final String sName,
+                            @NonNull final IJExpression aInitExpr)
+  {
+    final JTryResource aResource = new JTryResource (nMods, aType, sName, aInitExpr);
+    tryResources ().add (aResource);
+    return aResource.var ();
+  }
+
+  /**
    * @return The non-<code>null</code> try-body.
    */
   @NonNull

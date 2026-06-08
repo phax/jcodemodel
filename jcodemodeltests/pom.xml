@@ -19,7 +19,7 @@
   <parent>
     <groupId>com.helger.jcodemodel</groupId>
     <artifactId>jcodemodel-parent-pom</artifactId>
-    <version>4.2.1-SNAPSHOT</version>
+    <version>4.2.2-SNAPSHOT</version>
   </parent>
   <artifactId>JCodeModel-Tests</artifactId>
   <name>JCodeModel Tests</name>
@@ -73,6 +73,12 @@
             <configuration>
               <arguments>${project.basedir}</arguments>
               <mainClass>com.helger.jcodemodel.compile.annotation.GenerateTestFiles</mainClass>
+              <systemProperties>
+                <systemProperty>
+                  <key>java.feature</key>
+                  <value>${java.specification.version}</value>
+                </systemProperty>
+              </systemProperties>
             </configuration>
           </execution>
         </executions>
