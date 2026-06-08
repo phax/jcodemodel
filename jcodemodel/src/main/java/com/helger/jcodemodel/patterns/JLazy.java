@@ -6,15 +6,15 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.*;
 
 
-/// Create an expression to initialize at most once a value from another
-/// expression.
+/// Create an expression initialized at most once from another expression.
 ///
 /// For example, you want `getString()` to cache the result of the method `String
-/// longMethod() ` :
+/// longMethod() ` , then check that thjs value if ≥ 5:
 /// ```java
 /// var lazy = new JLazy(myJDefinedClass, String.class, "getString")
 ///    .static()
 ///    .init(Jexpr.invoke("longMethod"));
+/// lazy.expr().ge(5);
 ///
 /// ```
 ///
