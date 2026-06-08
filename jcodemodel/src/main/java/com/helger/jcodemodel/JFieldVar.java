@@ -74,7 +74,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
    * @param aInit
    *        Value to initialize this variable to
    */
-  protected JFieldVar (@NonNull final JDefinedClass aOwnerClass,
+  public JFieldVar (@NonNull final JDefinedClass aOwnerClass,
                        @NonNull final JMods aMods,
                        @NonNull final AbstractJType aType,
                        @NonNull final String sName,
