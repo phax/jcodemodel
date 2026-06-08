@@ -135,7 +135,6 @@ public class JLazy implements IJDeclaration, IJOwned {
       throw new NullPointerException("init of " + this + " is null");
     }
 
-
     int fieldMods = JMod.PRIVATE|JMod.VOLATILE;
     if (_static) {
       fieldMods |= JMod.STATIC;
@@ -144,6 +143,7 @@ public class JLazy implements IJDeclaration, IJOwned {
         new JFieldVar(clazz, JMods.forField(fieldMods), expressionType, extractFieldName(methodName), null);
     f.declaration(jfv);
     f.newline();
+    JFieldRef fieldRef = _static ? clazz.staticRef(jfv) : JExpr.refthis(jfv);
 
     int methodMods = JMod.PUBLIC;
     if (_static) {
@@ -151,11 +151,7 @@ public class JLazy implements IJDeclaration, IJOwned {
     }
     JMethod jm = new JMethod(clazz, methodMods, expressionType, methodName);
     JBlock methodBody = jm.body();
-    String varName = methodName;
-    if(varName.equals(jfv.name())) {
-      varName+="_";
-    }
-    JVar jv = methodBody.decl(expressionType, varName).init(jfv);
+    JVar jv = methodBody.decl(expressionType, "ret").init(fieldRef);
     JBlock initBlock = methodBody._if(jv.eqNull())._then();
     if (sync) {
       initBlock =
@@ -165,9 +161,10 @@ public class JLazy implements IJDeclaration, IJOwned {
                   : JExpr._this())
               .body();
     }
+    initBlock.assign(jv, fieldRef);
     initBlock._if(jv.eqNull())._then()
         .assign(jv, init)
-        .assign(jfv, jv);
+        .assign(fieldRef, jv);
     methodBody._return(jv);
 
     f.declaration(jm);

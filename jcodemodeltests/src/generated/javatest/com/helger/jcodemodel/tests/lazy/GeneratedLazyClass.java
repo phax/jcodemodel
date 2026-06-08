@@ -26,58 +26,62 @@ public class GeneratedLazyClass {
     private volatile Integer syncInstance;
 
     public Integer getSyncInstance() {
-        Integer getSyncInstance = syncInstance;
-        if (getSyncInstance == null) {
+        Integer ret = this.syncInstance;
+        if (ret == null) {
             synchronized (this)
             {
-                if (getSyncInstance == null) {
-                    getSyncInstance = JLazyTestGen.inc();
-                    syncInstance = getSyncInstance;
+                ret = this.syncInstance;
+                if (ret == null) {
+                    ret = JLazyTestGen.inc();
+                    this.syncInstance = ret;
                 }
             }
         }
-        return getSyncInstance;
+        return ret;
     }
 
     private static volatile Integer syncStatic;
 
     public static Integer getSyncStatic() {
-        Integer getSyncStatic = syncStatic;
-        if (getSyncStatic == null) {
+        Integer ret = GeneratedLazyClass.syncStatic;
+        if (ret == null) {
             synchronized (GeneratedLazyClass.class)
             {
-                if (getSyncStatic == null) {
-                    getSyncStatic = JLazyTestGen.inc();
-                    syncStatic = getSyncStatic;
+                ret = GeneratedLazyClass.syncStatic;
+                if (ret == null) {
+                    ret = JLazyTestGen.inc();
+                    GeneratedLazyClass.syncStatic = ret;
                 }
             }
         }
-        return getSyncStatic;
+        return ret;
     }
 
     private volatile Integer aSyncInstance;
 
     public Integer getASyncInstance() {
-        Integer getASyncInstance = aSyncInstance;
-        if (getASyncInstance == null) {
-            if (getASyncInstance == null) {
-                getASyncInstance = JLazyTestGen.inc();
-                aSyncInstance = getASyncInstance;
+        Integer ret = this.aSyncInstance;
+        if (ret == null) {
+            ret = this.aSyncInstance;
+            if (ret == null) {
+                ret = JLazyTestGen.inc();
+                this.aSyncInstance = ret;
             }
         }
-        return getASyncInstance;
+        return ret;
     }
 
     private static volatile Integer aSyncStatic;
 
     public static Integer getASyncStatic() {
-        Integer getASyncStatic = aSyncStatic;
-        if (getASyncStatic == null) {
-            if (getASyncStatic == null) {
-                getASyncStatic = JLazyTestGen.inc();
-                aSyncStatic = getASyncStatic;
+        Integer ret = GeneratedLazyClass.aSyncStatic;
+        if (ret == null) {
+            ret = GeneratedLazyClass.aSyncStatic;
+            if (ret == null) {
+                ret = JLazyTestGen.inc();
+                GeneratedLazyClass.aSyncStatic = ret;
             }
         }
-        return getASyncStatic;
+        return ret;
     }
 }

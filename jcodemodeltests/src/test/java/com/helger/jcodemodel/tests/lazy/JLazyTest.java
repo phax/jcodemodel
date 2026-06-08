@@ -22,10 +22,10 @@ public class JLazyTest {
   public void testInstance() {
     GeneratedLazyClass test = new GeneratedLazyClass();
     Set<Integer> values =
-        IntStream.rangeClosed(0, 1000).parallel()
+        IntStream.rangeClosed(0, 10000).parallel()
             .mapToObj(i -> test.getSyncInstance())
             .collect(Collectors.toSet());
-    Assert.assertEquals(1, values.size());
+    Assert.assertEquals("received " + values, 1, values.size());
   }
 
 }
