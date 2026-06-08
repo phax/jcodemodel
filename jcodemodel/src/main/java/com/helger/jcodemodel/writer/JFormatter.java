@@ -462,6 +462,11 @@ public class JFormatter implements IJFormatter
     m_nJavaFeature = nJavaFeature;
     return this;
   }
+  
+  public String getNewLine()
+  {
+    return m_aPW.getNewLine();
+  }
 
   public boolean isPrinting ()
   {

@@ -172,8 +172,9 @@ public class JTextBlock implements IJExpression, Iterable <String>
    */
   public @NonNull JTextBlock add (final @Nullable String line)
   {
-    if (line != null)
+    if (line != null) {
       formatLines (line).forEach (m_aLines::add);
+    }
 
     return this;
   }
@@ -207,6 +208,7 @@ public class JTextBlock implements IJExpression, Iterable <String>
   /**
    * unmodifiable iterator over the internal lines
    */
+  @Override
   public @NonNull Iterator <String> iterator ()
   {
     return Collections.unmodifiableList (m_aLines).iterator ();
@@ -217,9 +219,12 @@ public class JTextBlock implements IJExpression, Iterable <String>
     return m_aLines.stream ();
   }
 
+  @Override
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print (LIMITER).newline ();
+    StringBuilder sb = new StringBuilder();
+    String newLine = f.getNewLine();
+    sb.append(LIMITER).append(newLine);
     final String indent = m_nIndentSize <= 0 || m_aLines.isEmpty () ? ""
                                                                     : Character.toString (m_cIndentChar)
                                                                                .repeat (m_nIndentSize);
@@ -244,8 +249,9 @@ public class JTextBlock implements IJExpression, Iterable <String>
 
     for (String line : modifiedLines)
     {
-      if (!firstLine)
-        f.newline ();
+      if (!firstLine) {
+        sb.append(newLine);
+      }
 
       if (escapeFirstChar && !line.isEmpty ())
       {
@@ -260,17 +266,18 @@ public class JTextBlock implements IJExpression, Iterable <String>
         line = RegExHelper.stringReplacePattern (" $", line, "\\\\s");
         line = RegExHelper.stringReplacePattern ("\t$", line, "\\\\t");
       }
-      f.print (indent).print (line);
+      sb.append(indent).append(line);
       firstLine = false;
       lastEmpty = line.isEmpty ();
     }
-    f.print (LIMITER);
+    sb.append(LIMITER);
     if (!lastEmpty && m_nIndentSize > 0)
     {
       // if the last line is not empty, then the delimiter is not enough to enforce
       // the indent. So we add a call after that.
-      f.print (".indent(").print (Integer.toString (m_nIndentSize)).print (")");
+      sb.append(".indent(").append (Integer.toString (m_nIndentSize)).append (")");
     }
+    f.print(sb.toString());
   }
 
   /**
@@ -284,18 +291,21 @@ public class JTextBlock implements IJExpression, Iterable <String>
    */
   static boolean requiresEscapeFirstChar (final boolean keepWhitespaces, final @NonNull List <String> lines)
   {
-    if (!keepWhitespaces)
+    if (!keepWhitespaces) {
       return false;
+    }
 
-    if (lines.isEmpty ())
+    if (lines.isEmpty ()) {
       return false;
+    }
 
     // no non-blank line that does not start with a space or tab
     if (lines.stream ()
              .filter (l -> !(l.isBlank () || l.startsWith (" ") || l.startsWith ("\t")))
              .findAny ()
-             .isPresent ())
+             .isPresent ()) {
       return false;
+    }
 
     // if last line does not start with space/tab we don't need to escape, blank or
     // not.

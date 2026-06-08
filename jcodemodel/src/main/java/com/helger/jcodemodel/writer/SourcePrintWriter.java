@@ -65,6 +65,11 @@ public final class SourcePrintWriter extends FilterWriter
     super (aWrappedWriter);
     m_sNewLine = sNewLine;
   }
+  
+  public String getNewLine()
+  {
+    return m_sNewLine;
+  }
 
   private void _handleException (@NonNull final IOException ex, @NonNull final String sSource)
   {
