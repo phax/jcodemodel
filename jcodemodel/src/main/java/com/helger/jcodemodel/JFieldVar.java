@@ -80,7 +80,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
                        @NonNull final String sName,
                        @Nullable final IJExpression aInit)
   {
-    super (aMods, aType, sName, aInit);
+    super(aMods, ValueEnforcer.notNull(aType, "type"), sName, aInit);
     m_aOwnerClass = ValueEnforcer.notNull (aOwnerClass, "OwnerClass");
   }
 
