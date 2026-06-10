@@ -46,6 +46,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
+import com.helger.jcodemodel.expressions.JInstanceOfVar;
 
 /**
  * Factory methods that generate various {@link IJExpression}s.
@@ -552,5 +553,9 @@ public final class JExpr
                                  @NonNull final IJExpression aIfFalse)
   {
     return JOp.cond (aCond, aIfTrue, aIfFalse);
+  }
+  
+  public static JInstanceOfVar instanceOf(@NonNull IJExpression expr, @NonNull AbstractJType type, @NonNull String name) {
+    return new JInstanceOfVar(expr, type, name);
   }
 }
