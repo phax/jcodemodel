@@ -249,13 +249,13 @@ public class JBlock implements IJGenerable, IJStatement
    * enabled!
    *
    * @param aType
-   *        JType of the variable
+   *        JType of the variable, or null to use var.
    * @param sName
    *        Name of the variable
    * @return Newly generated {@link JVar}
    */
   @NonNull
-  public JVar decl (@NonNull final AbstractJType aType, @NonNull final String sName)
+  public JVar decl (final AbstractJType aType, @NonNull final String sName)
   {
     return decl (JMod.NONE, aType, sName, null);
   }
@@ -301,18 +301,18 @@ public class JBlock implements IJGenerable, IJStatement
    * enabled!
    *
    * @param nMods
-   *        Modifiers for the variable
+   *              Modifiers for the variable
    * @param aType
-   *        JType of the variable
+   *              JType of the variable, or null to use var.
    * @param sName
-   *        Name of the variable
+   *              Name of the variable
    * @param aInit
-   *        Initialization expression for this variable. May be null.
+   *              Initialization expression for this variable. May be null.
    * @return Newly generated {@link JVar}
    */
   @NonNull
   public JVar decl (final int nMods,
-                    @NonNull final AbstractJType aType,
+                    final AbstractJType aType,
                     @NonNull final String sName,
                     @Nullable final IJExpression aInit)
   {
@@ -966,8 +966,8 @@ public class JBlock implements IJGenerable, IJStatement
         f.outdent ();
       if (m_bBracesRequired)
         f.print ('}');
+      }
     }
-  }
 
   protected void generateBody (@NonNull final IJFormatter f)
   {
@@ -991,5 +991,5 @@ public class JBlock implements IJGenerable, IJStatement
     f.generable (this);
     if (m_bBracesRequired)
       f.newline ();
+    }
   }
-}

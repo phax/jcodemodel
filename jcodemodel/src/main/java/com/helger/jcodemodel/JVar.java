@@ -63,7 +63,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   private final JMods m_aMods;
 
   /**
-   * Type of the variable
+   * Type of the variable. When set to null, use "var" instead.
    */
   private AbstractJType m_aType;
 
@@ -88,14 +88,14 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    * @param aMods
    *        Modifiers to use
    * @param aType
-   *        Data type of this variable
+   *        Data type of this variable, or null to use var.
    * @param sName
    *        Name of this variable
    * @param aInitExpr
    *        Value to initialize this variable to
    */
   public JVar (@NonNull final JMods aMods,
-      @NonNull final AbstractJType aType,
+      final AbstractJType aType,
       @NonNull final String sName,
       @Nullable final IJExpression aInitExpr)
   {
@@ -153,11 +153,8 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   }
 
   /**
-   * Return the type of this variable.
-   *
-   * @return always non-null.
+   * @return the type of this variable, or null if the variable type is infered.
    */
-  @NonNull
   public AbstractJType type ()
   {
     return m_aType;
@@ -180,8 +177,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    *        must not be null.
    * @return the old type value. always non-null.
    */
-  @NonNull
-  public AbstractJType type (@NonNull final AbstractJType aNewType)
+  public AbstractJType type (final AbstractJType aNewType)
   {
     ValueEnforcer.notNull (aNewType, "NewType");
     final AbstractJType aOldType = m_aType;
@@ -205,8 +201,9 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   @NonNull
   public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
-    if (m_aAnnotations == null)
+    if (m_aAnnotations == null) {
       m_aAnnotations = new ArrayList <> ();
+    }
     final JAnnotationUse a = new JAnnotationUse (aClazz);
     m_aAnnotations.add (a);
     return a;
@@ -223,14 +220,18 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   @NonNull
   public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
+    if(m_aType==null) {
+      throw new UnsupportedOperationException("can't reference class "+aClazz.getCanonicalName()+" without a JCM owner, use JVar::annotate(AbstractJClass) instead");
+    }
     return annotate (m_aType.owner ().ref (aClazz));
   }
 
   @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
-    if (m_aAnnotations == null)
+    if (m_aAnnotations == null) {
       m_aAnnotations = new ArrayList <> ();
+    }
     return m_aAnnotations;
   }
 
@@ -248,21 +249,32 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
 
   public void bind (@NonNull final IJFormatter f)
   {
+    if(m_aType==null && m_aInitExpr==null) {
+      throw new RuntimeException("can't declare a variable with no type and no init");
+    }
     if (m_aAnnotations != null)
     {
       final boolean bNewLine = this instanceof JFieldVar;
       for (final JAnnotationUse annotation : m_aAnnotations)
       {
         f.generable (annotation);
-        if (bNewLine)
+        if (bNewLine) {
           f.newline ();
-        else
+        } else {
           f.print (' ');
+        }
       }
     }
-    f.generable (m_aMods).generable (m_aType).id (m_sName);
-    if (m_aInitExpr != null)
+    f.generable(m_aMods);
+    if (m_aType != null) {
+      f.generable(m_aType);
+    } else {
+      f.print("var");
+    }
+    f.id(m_sName);
+    if (m_aInitExpr != null) {
       f.print ('=').generable (m_aInitExpr);
+    }
   }
 
   @Override
@@ -280,10 +292,12 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   @Override
   public boolean equals (final Object o)
   {
-    if (o == this)
+    if (o == this) {
       return true;
-    if (o == null || getClass () != o.getClass ())
+    }
+    if (o == null || getClass () != o.getClass ()) {
       return false;
+    }
     final JVar rhs = (JVar) o;
     return EqualsHelper.equals (m_sName, rhs.m_sName);
   }

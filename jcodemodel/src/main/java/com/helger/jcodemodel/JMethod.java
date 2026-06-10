@@ -236,7 +236,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public JVar param (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
-    final JVar aVar = new JVar (JMods.forVar (nMods), aType, sName, null);
+    final JVar aVar = new JVar (JMods.forVar (nMods), ValueEnforcer.notNull(aType, "type"), sName, null);
     m_aParams.add (aVar);
     return aVar;
   }
