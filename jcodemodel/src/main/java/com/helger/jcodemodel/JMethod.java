@@ -53,12 +53,14 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.modifiers.EMod;
+import com.helger.jcodemodel.modifiers.IJModified;
 import com.helger.jcodemodel.util.ClassNameComparator;
 
 /**
  * Java method.
  */
-public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable, IJDocCommentable
+public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable, IJDocCommentable, IJModified
 {
   /**
    * Modifiers for this method
@@ -647,5 +649,27 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public JCodeModel owner ()
   {
     return m_aOwningClass.owner ();
+  }
+
+  @Override
+  public JMethod emod(EMod emod, EMod... emods) {
+    mods().emod(EMod.ALLOWED_METHOD,emod,  emods);
+    return this;
+  }
+
+  @Override
+  public JMethod removeEMod(EMod... emods) {
+    mods().removeEMod(emods);
+    return this;
+  }
+
+  @Override
+  public Set<EMod> emods() {
+    return mods().emods();
+  }
+
+  @Override
+  public boolean isEMod(EMod... emods) {
+    return mods().isEMod(emods);
   }
 }

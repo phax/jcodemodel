@@ -51,6 +51,7 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.jcodemodel.exceptions.JClassAlreadyExistsException;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.modifiers.IJModified;
 
 /**
  * A generated Java class/interface/enum/annotation<br>
@@ -62,7 +63,7 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
  *        Implementation type
  */
 public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends AbstractJClass implements
-                                              IJClassContainer <CLASSTYPE>
+                                              IJClassContainer <CLASSTYPE>, IJModified
 {
   /**
    * If this is a package-member class, this is {@link JPackage}. If this is a
