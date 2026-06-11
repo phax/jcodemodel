@@ -298,8 +298,8 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable, I
   }
 
   @Override
-  public JVar addEMod(EMod... emods) {
-    mods().addEMod(EMod.ALLOWED_VAR, emods);
+  public JVar emod(EMod emod, EMod... emods) {
+    mods().emod(EMod.ALLOWED_VAR, emod, emods);
     return this;
   }
 

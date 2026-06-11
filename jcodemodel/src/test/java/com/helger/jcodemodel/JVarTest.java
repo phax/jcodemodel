@@ -18,10 +18,10 @@ public class JVarTest {
     Assert.assertTrue(jv.emods().isEmpty());
 
     // adding forbidden
-    jv.addEMod(EMod.PUBLIC, EMod.STATIC);
+    jv.emod(EMod.PUBLIC, EMod.STATIC);
     Assert.assertTrue(jv.emods().isEmpty());
 
-    jv.addEMod(EMod.PUBLIC, EMod.FINAL, EMod.STATIC);
+    jv.emod(EMod.PUBLIC, EMod.FINAL, EMod.STATIC);
     Assert.assertTrue(jv.isEMod(EMod.FINAL));
     Assert.assertEquals(1, jv.emods().size());
   }

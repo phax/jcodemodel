@@ -652,8 +652,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Override
-  public JMethod addEMod(EMod... emods) {
-    mods().addEMod(EMod.ALLOWED_METHOD, emods);
+  public JMethod emod(EMod emod, EMod... emods) {
+    mods().emod(EMod.ALLOWED_METHOD,emod,  emods);
     return this;
   }
 

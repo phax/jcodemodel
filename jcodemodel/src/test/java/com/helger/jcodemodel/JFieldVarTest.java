@@ -16,12 +16,12 @@ public class JFieldVarTest {
     Assert.assertTrue(jfv.isEMod(EMod.PUBLIC));
 
     // adding forbidden
-    jfv.addEMod(EMod.ABSTRACT, EMod.SEALED);
+    jfv.emod(EMod.ABSTRACT, EMod.SEALED);
     Assert.assertTrue(jfv.isEMod(EMod.PUBLIC));
     Assert.assertEquals(1, jfv.emods().size());
 
     // add exclusions
-    jfv.addEMod(EMod.PROTECTED, EMod.FINAL, EMod.STATIC, EMod.PRIVATE);
+    jfv.emod(EMod.PROTECTED, EMod.FINAL, EMod.STATIC, EMod.PRIVATE);
     Assert.assertTrue(jfv.isEMod(EMod.FINAL));
     Assert.assertTrue(jfv.isEMod(EMod.STATIC));
     Assert.assertTrue(jfv.isEMod(EMod.PRIVATE));

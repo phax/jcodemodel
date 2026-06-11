@@ -85,16 +85,16 @@ public final class JMethodTest
     Assert.assertEquals(Set.of(EMod.PUBLIC), jm.emods());
 
     // forbidden
-    jm.addEMod(EMod.VOLATILE);
-    jm.addEMod(EMod.NONSEALED);
+    jm.emod(EMod.VOLATILE);
+    jm.emod(EMod.NONSEALED);
     Assert.assertEquals(Set.of(EMod.PUBLIC), jm.emods());
 
     // mutual exclusion
-    jm.addEMod(EMod.PUBLIC, EMod.PROTECTED, EMod.PRIVATE);
+    jm.emod(EMod.PUBLIC, EMod.PROTECTED, EMod.PRIVATE);
     Assert.assertEquals(Set.of(EMod.PRIVATE), jm.emods());
 
     // adding a new one
-    jm.addEMod(EMod.STATIC);
+    jm.emod(EMod.STATIC);
     Assert.assertEquals(Set.of(EMod.PRIVATE, EMod.STATIC), jm.emods());
 
   }

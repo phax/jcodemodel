@@ -173,7 +173,7 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   }
 
   @Override
-  public JDirectClass addEMod(EMod... emods) {
+  public JDirectClass emod(EMod emod, EMod... emods) {
     return this;
   }
 

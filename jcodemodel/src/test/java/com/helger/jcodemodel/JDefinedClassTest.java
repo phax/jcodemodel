@@ -181,24 +181,24 @@ public final class JDefinedClassTest
     JDefinedClass jdc = jcm._class("TestEModsClass");
 
     // basic set
-    jdc.addEMod(EMod.SEALED, EMod.PUBLIC);
+    jdc.emod(EMod.SEALED, EMod.PUBLIC);
     Assert.assertTrue(jdc.isEMod(EMod.SEALED, EMod.PUBLIC));
 
     // remove exclusion
-    jdc.addEMod(EMod.NONSEALED, EMod.PRIVATE);
+    jdc.emod(EMod.NONSEALED, EMod.PRIVATE);
     Assert.assertTrue(jdc.isEMod(EMod.NONSEALED, EMod.PRIVATE));
     Assert.assertFalse(jdc.isEMod(EMod.SEALED));
     Assert.assertFalse(jdc.isEMod(EMod.PUBLIC));
 
     // forbidden for class
-    jdc.addEMod(EMod.TRANSIENT, EMod.VOLATILE);
+    jdc.emod(EMod.TRANSIENT, EMod.VOLATILE);
     Assert.assertFalse(jdc.isEMod(EMod.TRANSIENT));
     Assert.assertFalse(jdc.isEMod(EMod.VOLATILE));
     // same previous check to ensure no change at all
     Assert.assertTrue(jdc.isEMod(EMod.NONSEALED, EMod.PRIVATE));
 
     // mixed mutual exclusion and forbidden
-    jdc.addEMod(EMod.PUBLIC, EMod.TRANSIENT, EMod.PRIVATE, EMod.NONSEALED, EMod.SEALED);
+    jdc.emod(EMod.PUBLIC, EMod.TRANSIENT, EMod.PRIVATE, EMod.NONSEALED, EMod.SEALED);
     Assert.assertFalse(jdc.isEMod(EMod.TRANSIENT));
     Assert.assertTrue(jdc.isEMod(EMod.SEALED, EMod.PRIVATE));
   }

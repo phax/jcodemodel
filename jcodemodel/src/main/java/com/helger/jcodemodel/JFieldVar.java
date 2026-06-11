@@ -157,8 +157,8 @@ public class JFieldVar extends JVar implements IJDocCommentable
   }
   
   @Override
-  public JFieldVar addEMod(EMod... emods) {
-    mods().addEMod(EMod.ALLOWED_FIELD, emods);
+  public JFieldVar emod(EMod emod, EMod... emods) {
+    mods().emod(EMod.ALLOWED_FIELD, emod, emods);
     return this;
   }
 

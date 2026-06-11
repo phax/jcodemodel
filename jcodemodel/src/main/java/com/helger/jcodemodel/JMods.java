@@ -41,6 +41,7 @@
 package com.helger.jcodemodel;
 
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
 
@@ -327,18 +328,19 @@ public class JMods implements IJGenerable
       f.print ("default");
     }
 
-  public void addEMod(Set<EMod> allowed, EMod... emods) {
-    if (emods != null) {
-      for (EMod emod : emods) {
-        if (allowed.contains(emod)) {
-          for (EMod exc : emod.excludes()) {
-            m_nMods &= ~exc.m_nJMod;
-          }
-          m_nMods |= emod.m_nJMod;
-        }
-      }
+    public void emod(Set<EMod> allowed, EMod emod, EMod... emods) {
+      Stream.concat(
+          emod == null ? Stream.empty() : Stream.of(emod),
+          emods == null ? Stream.empty() : Stream.of(emods))
+          .forEach(em -> {
+            if (allowed.contains(em)) {
+              for (EMod exc : em.excludes()) {
+                m_nMods &= ~exc.m_nJMod;
+              }
+              m_nMods |= em.m_nJMod;
+            }
+          });
     }
-  }
 
   public void removeEMod(EMod... emods) {
     if (emods != null) {
