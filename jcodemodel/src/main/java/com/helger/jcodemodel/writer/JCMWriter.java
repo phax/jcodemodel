@@ -89,10 +89,7 @@ public class JCMWriter
   /** The newline string to be used. Defaults to system default */
   private String m_sNewLine = DEFAULT_NEW_LINE;
 
-  /**
-   * String to be used for each indentation. Defaults to four spaces.
-   */
-  private String m_sIndentString = DEFAULT_INDENT_STRING;
+  private final FormatterOptions m_oOptions = new FormatterOptions();
 
   /**
    * Java feature (major release version) the generated code is targeted at. A feature that requires
@@ -157,14 +154,14 @@ public class JCMWriter
   @NonNull
   public String getIndentString ()
   {
-    return m_sIndentString;
+    return m_oOptions.indent.string();
   }
 
   @NonNull
   public JCMWriter setIndentString (@NonNull final String sIndentString)
   {
     ValueEnforcer.notNull (sIndentString, "IndentString");
-    m_sIndentString = sIndentString;
+    m_oOptions.indent.withString(sIndentString);
     return this;
   }
 
@@ -297,13 +294,15 @@ public class JCMWriter
     {
       // Copy to avoid concurrent modification exception
       final List <JPackage> aPackages = m_aCM.getAllPackages ();
-      for (final JPackage aPackage : aPackages)
+      for (final JPackage aPackage : aPackages) {
         buildPackage (aSourceWriter, aPackage);
+      }
 
       // Write resources only
       final List <JResourceDir> aResourceDirs = m_aCM.getAllResourceDirs ();
-      for (final JResourceDir aResourceDir : aResourceDirs)
+      for (final JResourceDir aResourceDir : aResourceDirs) {
         buildResourceDir (aResourceWriter, aResourceDir);
+      }
     }
     finally
     {
@@ -318,7 +317,7 @@ public class JCMWriter
                                                   @NonNull final String sClassFilename) throws IOException
   {
     final SourcePrintWriter aWriter = aSrcWriter.openSource (aPackage, sClassFilename);
-    final JFormatter ret = new JFormatter (aWriter, m_sIndentString);
+    final JFormatter ret = new JFormatter(aWriter, m_oOptions);
     ret.setJavaFeature (m_nJavaFeature);
     // Add all classes to not be imported (may be empty)
     ret.addDontImportClasses (m_aCM.getAllDontImportClasses ());
@@ -353,12 +352,14 @@ public class JCMWriter
     {
       try (final IJFormatter f = _createJavaSourceFileWriter (aSourceWriter, aPackage, "package-info.java"))
       {
-        if (!aJavaDoc.isEmpty ())
+        if (!aJavaDoc.isEmpty ()) {
           f.generable (aJavaDoc);
+        }
 
         // TODO: think about importing
-        for (final JAnnotationUse a : aAnnotations)
+        for (final JAnnotationUse a : aAnnotations) {
           f.generable (a).newline ();
+        }
 
         f.declaration (aPackage);
       }
