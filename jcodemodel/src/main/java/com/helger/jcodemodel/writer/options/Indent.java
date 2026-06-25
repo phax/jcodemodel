@@ -1,22 +1,23 @@
 package com.helger.jcodemodel.writer.options;
 
+import java.util.function.Consumer;
+
 import org.jspecify.annotations.NonNull;
 
+import com.helger.jcodemodel.writer.JCMWriter;
+
 ///
-///
-/// The space/tab part is made by using different values for space and tab number.
-/// This means you can manually set spaces *plus* tabs.
-/// The recommended usage is with #useTabs or #useSpaces to also return this, for faster chaining.
+///  recommended way to set indentation is to call #useSpaces or  #useTabs ; but can directly set the string.
 ///
 public class Indent {
 
-  public int tabNb = 0;
+  public String string = JCMWriter.DEFAULT_INDENT_STRING;
 
-  public int spaceNb = 4;
+  /// how many spaces do we consider a tab to take
+  public int tabSize = 4;
 
   public Indent useSpaces(int nb) {
-    spaceNb = nb;
-    tabNb = 0;
+    string = " ".repeat(nb);
     return this;
   }
 
@@ -26,8 +27,7 @@ public class Indent {
   }
 
   public Indent useTabs(int nb) {
-    spaceNb = 0;
-    tabNb = nb;
+    string = "\t".repeat(nb);
     return this;
   }
 
@@ -37,17 +37,29 @@ public class Indent {
   }
 
   public String string() {
-    return " ".repeat(spaceNb) + "\t".repeat(tabNb);
+    return string;
   }
 
-  /// set the number of spaces/tabs to the one in the provided string.
   public Indent withString(@NonNull String string) {
     if (string == null || string.isEmpty()) {
-      spaceNb = tabNb = 0;
+      this.string = "";
     } else {
-      spaceNb = (int) string.chars().filter(c -> c == ' ').count();
-      tabNb = (int) string.chars().filter(c -> c == '\t').count();
+      this.string = string;
     }
+    return this;
+  }
+
+  public Indent tabSize(int size) {
+    tabSize = size;
+    return this;
+  }
+
+  public int tabSize() {
+    return tabSize;
+  }
+
+  public Indent configure(Consumer<Indent> conf) {
+    conf.accept(this);
     return this;
   }
 

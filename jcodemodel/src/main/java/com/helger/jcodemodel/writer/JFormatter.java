@@ -60,7 +60,6 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.NullWriter;
-import com.helger.jcodemodel.writer.options.Indent;
 
 /**
  * This is a utility class for managing indentation and other basic formatting
@@ -1060,7 +1059,7 @@ public class JFormatter implements IJFormatter
   {
     try (final JFormatter aFormatter =
         new JFormatter(new SourcePrintWriter(NullWriter.getInstance(), "\n"),
-            new FormatterOptions().confIndent(Indent::useTabs)))
+            new FormatterOptions().configure(o -> o.indent.useTabs())))
     {
       aFormatter.m_eMode = EMode.FIND_ERROR_TYPES;
       aFormatter.m_bContainsErrorTypes = false;
