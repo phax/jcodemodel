@@ -89,7 +89,7 @@ public class JCMWriter
   /** The newline string to be used. Defaults to system default */
   private String m_sNewLine = DEFAULT_NEW_LINE;
 
-  private final FormatterOptions m_oOptions = new FormatterOptions();
+  private FormatterOptions m_oOptions = new FormatterOptions();
 
   /**
    * Java feature (major release version) the generated code is targeted at. A feature that requires
@@ -151,17 +151,17 @@ public class JCMWriter
     return this;
   }
 
-  @NonNull
-  public String getIndentString ()
-  {
-    return m_oOptions.indent.string();
+  public FormatterOptions options() {
+    return m_oOptions;
   }
 
-  @NonNull
-  public JCMWriter setIndentString (@NonNull final String sIndentString)
-  {
-    ValueEnforcer.notNull (sIndentString, "IndentString");
-    m_oOptions.indent.withString(sIndentString);
+  /// set the options, only if params not null.
+  /// @param options if null, not set (no effect)
+  /// @return this
+  public JCMWriter withOptions(FormatterOptions options) {
+    if (options != null) {
+      m_oOptions = options;
+    }
     return this;
   }
 

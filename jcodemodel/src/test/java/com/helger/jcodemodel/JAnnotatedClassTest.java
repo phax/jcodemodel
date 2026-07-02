@@ -278,7 +278,7 @@ public final class JAnnotatedClassTest
 
     // Check the generated output contains the annotated type in parameter
     final String classOutput = CodeModelTestsHelper.declare (testClass);
-    assertTrue ("Expected java.util.List<@java.lang.Deprecated java.lang.String> in method parameter",
+    assertTrue ("Expected java.util.List<@java.lang.Deprecated java.lang.String> in method parameter ; got "+classOutput,
                 classOutput.contains ("java.util.List<@java.lang.Deprecated java.lang.String> items"));
 
     // Verify it parses

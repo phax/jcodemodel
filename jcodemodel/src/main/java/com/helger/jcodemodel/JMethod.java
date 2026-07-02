@@ -53,7 +53,9 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.IJFormatter.IContextCloser;
 import com.helger.jcodemodel.util.ClassNameComparator;
+import com.helger.jcodemodel.writer.options.Wrap.EWrapListStrategy;
 
 /**
  * Java method.
@@ -339,7 +341,10 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public JVar varParam (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
     ValueEnforcer.isFalse (hasVarArgs (),
-                           "Cannot have two varargs in a method,\n" + "Check if varParam method of JMethod is" + " invoked more than once");
+                           """
+                            Cannot have two varargs in a method,
+                            Check if varParam method of JMethod is\
+                             invoked more than once""");
 
     m_aVarParam = new JVar (JMods.forVar (nMods), aType.array (), sName, null);
     return m_aVarParam;
@@ -378,11 +383,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        The annotation class to annotate the field with
    * @return The created object. Never <code>null</code>.
    */
+  @Override
   @NonNull
   public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
-    if (m_aAnnotations == null)
+    if (m_aAnnotations == null) {
       m_aAnnotations = new ArrayList <> ();
+    }
     final JAnnotationUse a = new JAnnotationUse (aClazz);
     m_aAnnotations.add (a);
     return a;
@@ -395,6 +402,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        The annotation class to annotate the field with
    * @return The created object. Never <code>null</code>.
    */
+  @Override
   @NonNull
   public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
@@ -404,11 +412,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
-    if (m_aAnnotations == null)
+    if (m_aAnnotations == null) {
       return Collections.emptyList ();
+    }
     return m_aAnnotations;
   }
 
+  @Override
   @NonNull
   public Collection <JAnnotationUse> annotations ()
   {
@@ -462,8 +472,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public AbstractJType [] listParamTypes ()
   {
     final AbstractJType [] r = new AbstractJType [m_aParams.size ()];
-    for (int i = 0; i < r.length; i++)
+    for (int i = 0; i < r.length; i++) {
       r[i] = m_aParams.get (i).type ();
+    }
     return r;
   }
 
@@ -488,12 +499,15 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public boolean hasSignature (@NonNull final AbstractJType [] argTypes)
   {
     final JVar [] aParams = listParams ();
-    if (aParams.length != argTypes.length)
+    if (aParams.length != argTypes.length) {
       return false;
+    }
 
-    for (int i = 0; i < aParams.length; i++)
-      if (!aParams[i].type ().equals (argTypes[i]))
+    for (int i = 0; i < aParams.length; i++) {
+      if (!aParams[i].type ().equals (argTypes[i])) {
         return false;
+      }
+    }
 
     return true;
   }
@@ -506,8 +520,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public JBlock body ()
   {
-    if (m_aBody == null)
+    if (m_aBody == null) {
       m_aBody = new JBlock ();
+    }
     return m_aBody;
   }
 
@@ -522,11 +537,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     m_aDefaultValue = aDefaultValue;
   }
 
+  @Override
   @NonNull
   public JDocComment javadoc ()
   {
-    if (m_aJDoc == null)
+    if (m_aJDoc == null) {
       m_aJDoc = new JDocComment (owner ());
+    }
     return m_aJDoc;
   }
 
@@ -542,53 +559,31 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Override
   public void declare (@NonNull final IJFormatter f)
   {
-    if (m_aJDoc != null)
+    if (m_aJDoc != null) {
       f.generable (m_aJDoc);
+    }
 
-    if (m_aAnnotations != null)
-      for (final JAnnotationUse a : m_aAnnotations)
+    if (m_aAnnotations != null) {
+      for (final JAnnotationUse a : m_aAnnotations) {
         f.generable (a).newline ();
+      }
+    }
 
     f.generable (m_aMods);
 
     // declare the generics parameters
     super.declare (f);
 
-    if (!isConstructor ())
+    if (!isConstructor ()) {
       f.generable (m_aReturnType);
-    f.id (m_sName).print ('(').indent ();
-    // when parameters are printed in new lines, we want them to be indented.
-    // there's a good chance no newlines happen, too, but just in case it does.
-
-    boolean bFirst = true;
-    // break only if more than 3 variables are present
-    final boolean bNewLineAfterParam = (m_aParams.size () + (hasVarArgs () ? 1 : 0)) > 3;
-    for (final JVar var : m_aParams)
-    {
-      if (bFirst)
-        bFirst = false;
-      else
-      {
-        f.print (',');
-        if (bNewLineAfterParam)
-          f.newline ();
-      }
-      f.var (var);
     }
-    if (hasVarArgs ())
-    {
-      if (!bFirst)
-      {
-        f.print (',');
-        if (bNewLineAfterParam)
-          f.newline ();
-      }
-      for (final JAnnotationUse annotation : m_aVarParam.annotations ())
-        f.generable (annotation).print (' ');
-      f.generable (m_aVarParam.mods ()).generable (m_aVarParam.type ().elementType ()).print ("... ").id (m_aVarParam.name ());
+    f.id(m_sName).print('(');
+    if (f.options().wrap.disabled) {
+      appParamsWrapDisabled(f);
+    } else {
+      addParams(f);
     }
-
-    f.outdent ().print (')');
+    f.print(')');
     if (!m_aThrows.isEmpty ())
     {
       f.newline ().indent ().print ("throws").generable (m_aThrows).newline ().outdent ();
@@ -606,7 +601,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
     else
     {
-      final boolean bIsDeclarationOnly = (m_aOwningClass.isInterface () && !m_aMods.isDefault ()) ||
+      final boolean bIsDeclarationOnly = m_aOwningClass.isInterface () && !m_aMods.isDefault () ||
                                          m_aOwningClass.isAnnotationTypeDeclaration () ||
                                          m_aMods.isAbstract () ||
                                          m_aMods.isNative ();
@@ -620,6 +615,132 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
         // Print an empty body for non-native, non-abstract methods
         f.statement (new JBlock ());
       }
+    }
+  }
+
+  void appParamsWrapDisabled(@NonNull final IJFormatter f) {
+    f.indent();
+    // when parameters are printed in new lines, we want them to be indented.
+    // there's a good chance no newlines happen, too, but just in case it does.
+
+    boolean bFirst = true;
+    // break only if more than 3 variables are present
+    final boolean bNewLineAfterParam = m_aParams.size() + (hasVarArgs() ? 1 : 0) > 3;
+    for (final JVar var : m_aParams) {
+      if (bFirst) {
+        bFirst = false;
+      } else {
+        f.print(',');
+        if (bNewLineAfterParam) {
+          f.newline();
+        }
+      }
+      f.var(var);
+    }
+    if (hasVarArgs()) {
+      if (!bFirst) {
+        f.print(',');
+        if (bNewLineAfterParam) {
+          f.newline();
+        }
+      }
+      for (final JAnnotationUse annotation : m_aVarParam.annotations()) {
+        f.generable(annotation).print(' ');
+      }
+      f.generable(m_aVarParam.mods()).generable(m_aVarParam.type().elementType()).print("... ").id(m_aVarParam.name());
+    }
+    f.outdent();
+  }
+
+  /// add the method params
+  void addParams(@NonNull final IJFormatter f) {
+    f.indent(f.options().wrap.method.declaration.indent);
+    EWrapListStrategy wrapCondition = f.options().wrap.method.declaration.condition;
+    // if PAST3 and less equal 3 params, replace with NEVER.
+    if (wrapCondition == EWrapListStrategy.PAST3
+        && m_aParams.size() + (hasVarArgs() ? 1 : 0) <= 3) {
+      wrapCondition = EWrapListStrategy.NEVER;
+    }
+    // for BINARY, try NEVER ; then if the produced line size is too big or
+    // has newline, rollback and use ALWAYS instead.
+    if(wrapCondition==EWrapListStrategy.BINARY) {
+      try (IContextCloser o = f.addContextLayer().persistOnClose()) {
+        addParams(f, EWrapListStrategy.NEVER);
+        if (o.value().contains(f.getNewLine())
+            || f.currentLineSize() > f.options().wrap.lineWidth) {
+          o.rollback();
+          wrapCondition=EWrapListStrategy.ALWAYS;
+        } else {
+          f.outdent(f.options().wrap.method.declaration.indent);
+          return;
+        }
+      }
+    }
+    addParams(f, wrapCondition);
+    f.outdent(f.options().wrap.method.declaration.indent);
+  }
+
+  /// add the method params while sticking to the given wrapping condition
+  void addParams(@NonNull final IJFormatter f, @NonNull EWrapListStrategy selectedWrap) {
+    if (selectedWrap.twoPasses) {
+      throw new RuntimeException("this method can't accept two-passes config " + selectedWrap);
+    }
+
+    boolean bFirst = true;
+    for (final JVar var : m_aParams) {
+      if (bFirst) {
+        bFirst = false;
+        if (selectedWrap == EWrapListStrategy.ALWAYS) {
+          f.newline();
+        }
+        if (selectedWrap == EWrapListStrategy.PAST3) {
+          selectedWrap = EWrapListStrategy.ALWAYS;
+        }
+      } else {
+        f.print(',');
+        if (selectedWrap == EWrapListStrategy.REQUIRED) {
+          try (IContextCloser o = f.addContextLayer().persistOnClose()) {
+            f.var(var);
+            if (o.value().contains(f.getNewLine())
+                || f.currentLineSize() > f.options().wrap.lineWidth) {
+              o.rollback();
+              f.newline();
+            } else {
+              continue;
+            }
+          }
+        } else if (selectedWrap == EWrapListStrategy.ALWAYS) {
+          f.newline();
+        }
+      }
+      f.var(var);
+    }
+    if (hasVarArgs()) {
+      if (!bFirst) {
+        f.print(',');
+      }
+      if (selectedWrap == EWrapListStrategy.REQUIRED) {
+        try (IContextCloser o = f.addContextLayer().persistOnClose()) {
+          for (final JAnnotationUse annotation : m_aVarParam.annotations()) {
+            f.generable(annotation).print(' ');
+          }
+          f.generable(m_aVarParam.mods()).generable(m_aVarParam.type().elementType()).print("... ")
+              .id(m_aVarParam.name());
+          if (o.value().contains(f.getNewLine())
+              || f.currentLineSize() > f.options().wrap.lineWidth) {
+            o.rollback();
+            f.newline();
+          } else {
+            return;
+          }
+        }
+      } else if (selectedWrap == EWrapListStrategy.ALWAYS) {
+        f.newline();
+      }
+      for (final JAnnotationUse annotation : m_aVarParam.annotations()) {
+        f.generable(annotation).print(' ');
+      }
+      f.generable(m_aVarParam.mods()).generable(m_aVarParam.type().elementType()).print("... ").id(m_aVarParam.name());
     }
   }
 
@@ -643,6 +764,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     return m_aOwningClass;
   }
 
+  @Override
   @NonNull
   public JCodeModel owner ()
   {

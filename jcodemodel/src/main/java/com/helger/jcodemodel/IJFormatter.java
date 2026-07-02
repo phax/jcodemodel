@@ -45,6 +45,8 @@ import java.util.Collection;
 
 import org.jspecify.annotations.NonNull;
 
+import com.helger.jcodemodel.writer.FormatterOptions;
+
 /**
  * Base interface for JFormatter.
  *
@@ -72,7 +74,12 @@ public interface IJFormatter extends Closeable
    * @return this for chaining
    */
   @NonNull
-  IJFormatter indent ();
+  default IJFormatter indent() {
+    return indent(1);
+  }
+
+  @NonNull
+  IJFormatter indent(int nb);
 
   /**
    * Decrement the indentation level.
@@ -80,7 +87,12 @@ public interface IJFormatter extends Closeable
    * @return this for chaining
    */
   @NonNull
-  IJFormatter outdent ();
+  default IJFormatter outdent() {
+    return outdent(1);
+  }
+
+  @NonNull
+  IJFormatter outdent(int nb);
 
   /**
    * Print a new line into the stream
@@ -89,11 +101,16 @@ public interface IJFormatter extends Closeable
    */
   @NonNull
   IJFormatter newline ();
-  
+
   /**
    * @return the internal String used for new lines.
    */
   String getNewLine();
+
+  /**
+   * @return the size of the line written, so far.
+   */
+  int currentLineSize();
 
   /**
    * Print a char into the stream
@@ -137,8 +154,9 @@ public interface IJFormatter extends Closeable
   @NonNull
   default IJFormatter type (@NonNull final AbstractJType aType)
   {
-    if (aType.isReference ())
+    if (aType.isReference ()) {
       return type ((AbstractJClass) aType);
+    }
     return generable (aType);
   }
 
@@ -203,4 +221,36 @@ public interface IJFormatter extends Closeable
    */
   @NonNull
   IJFormatter declaration (@NonNull IJDeclaration aObj);
+
+  FormatterOptions options();
+
+  public interface IContextCloser extends AutoCloseable {
+    @Override
+    void close();
+
+    IContextCloser persistOnClose(boolean b);
+
+    IContextCloser persistOnClose();
+
+    /// shortcut to set the persist then close. Since the close is idempotent, this
+    /// call may have no result.
+    default void commit() {
+      persistOnClose().close();
+    }
+
+    /// shortcut to unset the persist then close. Since the close is idempotent,
+    /// this call may have no result.
+    default void rollback() {
+      persistOnClose(false).close();
+    }
+
+    /// @return true after #close has been called at least once.
+    boolean isClosed();
+
+    /// get the actual buffer's value
+    String value();
+  }
+
+  /// create a new buffer to write data into.
+  IContextCloser addContextLayer();
 }

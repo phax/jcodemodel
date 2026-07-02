@@ -29,6 +29,7 @@ import javax.annotation.processing.Generated;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JReferencedClass;
+import com.helger.jcodemodel.writer.FormatterOptions;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
@@ -70,8 +71,9 @@ public class GenerateTestFiles
   public static int extractJavaFeature ()
   {
     final String sValue = System.getProperty ("java.feature");
-    if (sValue == null || sValue.isBlank ())
+    if (sValue == null || sValue.isBlank ()) {
       return JCMWriter.DEFAULT_JAVA_FEATURE;
+    }
     try
     {
       // accept full version strings like "17.0.5" by taking the major component
@@ -86,9 +88,9 @@ public class GenerateTestFiles
 
   public GenerateTestFiles (final File outputDir, final File classScanDir)
   {
-    this.m_aOutputDir = outputDir;
-    this.m_aClassScanDir = classScanDir;
-    this.m_nJavaFeature = extractJavaFeature ();
+    m_aOutputDir = outputDir;
+    m_aClassScanDir = classScanDir;
+    m_nJavaFeature = extractJavaFeature ();
   }
 
   void apply ()
@@ -181,6 +183,7 @@ public class GenerateTestFiles
         boolean missingParam = false;
         JCodeModel produced = null;
         JPackage rootPackage = null;
+        FormatterOptions options = null;
         for (int i = 0; i < params.length; i++)
         {
           final Parameter param = m.getParameters ()[i];
@@ -208,6 +211,11 @@ public class GenerateTestFiles
               params[i] = rootPackage;
               requiresJCM = true;
 
+            } else if (param.getType() == FormatterOptions.class) {
+              if (options == null) {
+                options = new FormatterOptions();
+              }
+              params[i] = options;
             }
             else
             {
@@ -243,7 +251,10 @@ public class GenerateTestFiles
           if (produced != null)
           {
             postProcessJCM (produced);
-            new JCMWriter (produced).setJavaFeature (m_nJavaFeature).build (m_aOutputDir, (IProgressTracker) null);
+            new JCMWriter(produced)
+                .withOptions(options)
+                .setJavaFeature(m_nJavaFeature)
+                .build(m_aOutputDir, (IProgressTracker) null);
           }
         }
       }

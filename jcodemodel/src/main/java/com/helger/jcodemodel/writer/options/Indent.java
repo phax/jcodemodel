@@ -1,7 +1,5 @@
 package com.helger.jcodemodel.writer.options;
 
-import java.util.function.Consumer;
-
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.writer.JCMWriter;
@@ -56,11 +54,6 @@ public class Indent {
 
   public int tabSize() {
     return tabSize;
-  }
-
-  public Indent configure(Consumer<Indent> conf) {
-    conf.accept(this);
-    return this;
   }
 
 }

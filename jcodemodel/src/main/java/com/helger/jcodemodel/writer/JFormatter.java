@@ -382,6 +382,16 @@ public class JFormatter implements IJFormatter
    */
   private int m_nIndentLevel;
 
+  /// last line actually printed to the internal printwriter.
+  ///
+  /// This is mostly used to check current line's width, eg for wrapping. Since
+  /// the test for value is done much less than the addition, we keep a
+  /// StringBuilder.
+  ///
+  /// The buffers can be discarded at will, so they track their own currentLine
+  @NonNull
+  private StringBuilder currentLine = new StringBuilder();
+
   private final FormatterOptions m_oOptions;
 
   /**
@@ -389,8 +399,14 @@ public class JFormatter implements IJFormatter
    */
   private final SourcePrintWriter m_aPW;
 
+  /// contexts to write into instead of the printwriter.
+  ///
+  /// No context should be kept here while being closed.
+  private final List<FormatterContext> contextLayers = new ArrayList<>();
+
+  /// last char written to the writer, or 0 if none/newline.
   private char m_cLastChar = 0;
-  private boolean m_bAtBeginningOfLine = true;
+
   private JPackage m_aPckJavaLang;
 
   /**
@@ -472,6 +488,11 @@ public class JFormatter implements IJFormatter
   }
 
   @Override
+  public FormatterOptions options() {
+    return m_oOptions;
+  }
+
+  @Override
   public boolean isPrinting ()
   {
     return m_eMode == EMode.PRINTING;
@@ -479,17 +500,25 @@ public class JFormatter implements IJFormatter
 
   @Override
   @NonNull
-  public JFormatter indent ()
+  public JFormatter indent (int nb)
   {
-    m_nIndentLevel++;
+    if (contextLayers.isEmpty()) {
+      m_nIndentLevel += nb;
+    } else {
+      contextLayers.get(0).m_nIndentLevel += nb;
+    }
     return this;
   }
 
   @Override
   @NonNull
-  public JFormatter outdent ()
+  public JFormatter outdent (int nb)
   {
-    m_nIndentLevel--;
+    if (contextLayers.isEmpty()) {
+      m_nIndentLevel -= nb;
+    } else {
+      contextLayers.get(0).m_nIndentLevel -= nb;
+    }
     return this;
   }
 
@@ -565,18 +594,67 @@ public class JFormatter implements IJFormatter
     return false;
   }
 
+  /// print to the correct output : buffer or printwritter
+  void printDown(String sStr) {
+    if (sStr == null || sStr.isEmpty()) {
+      return;
+    }
+    char lastChar = 0;
+    boolean resetLine = false;
+    String appendLine = null;
+    if (sStr.contains(getNewLine())) {
+      resetLine = true;
+      int offset = sStr.lastIndexOf(getNewLine()) + getNewLine().length();
+      appendLine = sStr.substring(offset);
+      lastChar = appendLine.isEmpty() ? 0 : appendLine.charAt(appendLine.length() - 1);
+    } else {
+      appendLine = sStr;
+      lastChar = sStr.charAt(sStr.length() - 1);
+    }
+
+    if (contextLayers.isEmpty()) {
+      m_aPW.print(sStr);
+      m_cLastChar = lastChar;
+      if (resetLine) {
+        currentLine = new StringBuilder();
+      }
+      currentLine.append(appendLine);
+    } else {
+      FormatterContext br = contextLayers.get(0);
+      br.buffer.append(sStr);
+      br.m_cLastChar = lastChar;
+      if (resetLine) {
+        br.currentLine = new StringBuilder();
+      }
+      br.currentLine.append(appendLine);
+    }
+  }
+
+  /// print to the correct output : buffer or printwritter
+  void printDown(char c) {
+    char printedChar = c == CLOSE_TYPE_ARGS ? '>' : c;
+    if (contextLayers.isEmpty()) {
+      m_aPW.print(printedChar);
+      currentLine.append(printedChar);
+      m_cLastChar = c;
+    } else {
+      contextLayers.get(0).buffer.append(printedChar);
+      contextLayers.get(0).currentLine.append(printedChar);
+      contextLayers.get(0).m_cLastChar = c;
+    }
+  }
+
   private void _spaceIfNeeded (final char c)
   {
-    if (m_bAtBeginningOfLine)
+    if (atBeginningOfLine())
     {
-      for (int i = 0; i < m_nIndentLevel; i++) {
-        m_aPW.print(m_oOptions.indent.string());
+      for (int i = 0; i < indentLevel(); i++) {
+        printDown(m_oOptions.indent.string());
       }
-      m_bAtBeginningOfLine = false;
     }
     else
-      if (m_cLastChar != 0 && _needSpace (m_cLastChar, c)) {
-        m_aPW.print (' ');
+    if (lastChar() != 0 && _needSpace(lastChar(), c)) {
+        printDown(' ');
       }
   }
 
@@ -586,16 +664,11 @@ public class JFormatter implements IJFormatter
   {
     if (m_eMode == EMode.PRINTING)
     {
-      if (c == CLOSE_TYPE_ARGS)
-      {
-        m_aPW.print ('>');
-      }
-      else
+      if (c != CLOSE_TYPE_ARGS)
       {
         _spaceIfNeeded (c);
-        m_aPW.print (c);
       }
-      m_cLastChar = c;
+      printDown(c);
     }
     return this;
   }
@@ -606,9 +679,8 @@ public class JFormatter implements IJFormatter
   {
     if (m_eMode == EMode.PRINTING && sStr.length () > 0)
     {
-      _spaceIfNeeded (sStr.charAt (0));
-      m_aPW.print (sStr);
-      m_cLastChar = sStr.charAt (sStr.length () - 1);
+      _spaceIfNeeded(sStr.charAt(0));
+      printDown(sStr);
     }
     return this;
   }
@@ -699,9 +771,7 @@ public class JFormatter implements IJFormatter
   {
     if (m_eMode == EMode.PRINTING)
     {
-      m_aPW.println ();
-      m_cLastChar = 0;
-      m_bAtBeginningOfLine = true;
+      printDown(getNewLine());
     }
     return this;
   }
@@ -1066,5 +1136,149 @@ public class JFormatter implements IJFormatter
       aFormatter.declaration (aClass);
       return aFormatter.m_bContainsErrorTypes;
     }
+  }
+
+  /// @return the current line being written, in a buffer or in the printstream
+  public String currentLine() {
+    if (contextLayers.isEmpty()) {
+      return currentLine.toString();
+    }
+    return contextLayers.get(0).currentLine.toString();
+  }
+
+  public char lastChar() {
+    if (contextLayers.isEmpty()) {
+      return m_cLastChar;
+    }
+    return contextLayers.get(0).m_cLastChar;
+  }
+
+  public int indentLevel() {
+    if (contextLayers.isEmpty()) {
+      return m_nIndentLevel;
+    }
+    return contextLayers.get(0).m_nIndentLevel;
+  }
+
+
+  public boolean atBeginningOfLine() {
+    return currentLine().isEmpty();
+  }
+
+  @Override
+  public int currentLineSize() {
+    return sizeWithTabsExpanded(currentLine(), m_oOptions.indent.tabSize);
+  }
+
+  /// computes the size of a string when tabs are expanded to match column size.
+  /// @param s the string to expand
+  /// @param tabSize size of a column a tab expands into.
+  static int sizeWithTabsExpanded(String s, int columnSize) {
+    if(s==null || s.isEmpty()) {
+      return 0;
+    }
+    int tabIndent=0;
+    for( int i=0;i<s.length();i++) {
+      if(s.charAt(i)=='\t') {
+        int modtab = (i+1+tabIndent)%columnSize;
+        if(modtab>0) {
+          tabIndent+=columnSize-modtab;
+        }
+      }
+    }
+    return s.length()+tabIndent;
+
+  }
+
+  //
+  // buffers management
+  //
+
+  /// Represents a context layer that should be automatically removed outside of
+  /// its declaration scope, using try-with-resource syntax.
+  ///
+  /// Defaults to a discarding buffer, so data added to the formatter while
+  /// buffering is discarded once the resource is closed. This can be changed with
+  /// #persistOnClose or simply commiting the data wit #commit
+  ///
+  /// The #close method does not throw exception to have it simpler in the
+  /// try-declaration. It also only applies once, as encouraged by
+  /// [AutoCloseable#close] .
+  ///
+  /// This also contains a #currentLine that is copied from the underlying buffer
+  /// (or JFormatter if none), then updated like the JFormater is ; same for last
+  /// char and beginning of line
+  ///
+  /// This class is not thread safe.
+  // not static to directly access the fields
+  public class FormatterContext implements IContextCloser {
+
+    // public final, so no getter/setter
+    public final StringBuilder buffer;
+
+    public FormatterContext(StringBuilder buffer) {
+      this.buffer = buffer;
+    }
+
+    public FormatterContext() {
+      this(new StringBuilder());
+    }
+
+    StringBuilder currentLine = new StringBuilder(currentLine());
+
+    private char m_cLastChar = lastChar();
+
+    private int m_nIndentLevel = indentLevel();
+
+    boolean closed = false;
+
+    /// when set to true, upon first #close, the buffer is re written into the
+    /// formatter, potentially into another buffer.
+    boolean persistOnClose = false;
+
+    @Override
+    public FormatterContext persistOnClose(boolean b) {
+      persistOnClose = b;
+      return this;
+    }
+
+    @Override
+    public FormatterContext persistOnClose() {
+      return persistOnClose(true);
+    }
+
+    @Override
+    public void close() {
+      if (closed) {
+        return;
+      }
+      contextLayers.removeIf(sb -> sb == this);
+      if (persistOnClose) {
+        printDown(buffer.toString());
+        JFormatter.this.m_nIndentLevel = m_nIndentLevel;
+      }
+      closed = true;
+    }
+
+    /// @return true after #close has been called at least once.
+    @Override
+    public boolean isClosed() {
+      return closed;
+    }
+
+    @Override
+    public String value() {
+      return buffer.toString();
+    }
+  }
+
+  ///
+  /// @return a new [FormatterContext], put on top of the buffers to receive
+  /// incoming writes.
+  @Override
+  public FormatterContext addContextLayer() {
+    FormatterContext ret = new FormatterContext();
+    contextLayers.add(0, ret);
+    return ret;
   }
 }
