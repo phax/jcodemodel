@@ -56,6 +56,7 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.IJFormatter.IContextCloser;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.writer.options.Wrap.EWrapListStrategy;
+import com.helger.jcodemodel.writer.options.Wrap.EWrapWordStrategy;
 
 /**
  * Java method.
@@ -597,6 +598,20 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
     if (m_aBody != null)
     {
+      if (!f.options().wrap.disabled) {
+        EWrapWordStrategy bracketWrapStrat = f.options().wrap.method.bracket.condition;
+        boolean wrapBracket = switch (bracketWrapStrat) {
+        case ALWAYS -> true;
+        case NEVER -> false;
+        case REQUIRED -> f.currentLineSize() + 2 > f.options().wrap.lineWidth;
+        };
+        if (wrapBracket) {
+          f
+              .indent(f.options().wrap.method.bracket.indent)
+              .newline()
+              .outdent(f.options().wrap.method.bracket.indent);
+        }
+      }
       f.statement (m_aBody);
     }
     else
@@ -612,6 +627,20 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       }
       else
       {
+        if (!f.options().wrap.disabled) {
+          EWrapWordStrategy bracketWrapStrat = f.options().wrap.method.bracket.condition;
+          boolean wrapBracket = switch (bracketWrapStrat) {
+          case ALWAYS -> true;
+          case NEVER -> false;
+          case REQUIRED -> f.currentLineSize() + 2 > f.options().wrap.lineWidth;
+          };
+          if (wrapBracket) {
+            f
+                .indent(f.options().wrap.method.bracket.indent)
+                .newline()
+                .outdent(f.options().wrap.method.bracket.indent);
+          }
+        }
         // Print an empty body for non-native, non-abstract methods
         f.statement (new JBlock ());
       }
@@ -654,8 +683,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
   /// add the method params
   void addParams(@NonNull final IJFormatter f) {
-    f.indent(f.options().wrap.method.declaration.indent);
-    EWrapListStrategy wrapCondition = f.options().wrap.method.declaration.condition;
+    f.indent(f.options().wrap.method.params.indent);
+    EWrapListStrategy wrapCondition = f.options().wrap.method.params.condition;
     // if PAST3 and less equal 3 params, replace with NEVER.
     if (wrapCondition == EWrapListStrategy.PAST3
         && m_aParams.size() + (hasVarArgs() ? 1 : 0) <= 3) {
@@ -671,13 +700,13 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
           o.rollback();
           wrapCondition=EWrapListStrategy.ALWAYS;
         } else {
-          f.outdent(f.options().wrap.method.declaration.indent);
+          f.outdent(f.options().wrap.method.params.indent);
           return;
         }
       }
     }
     addParams(f, wrapCondition);
-    f.outdent(f.options().wrap.method.declaration.indent);
+    f.outdent(f.options().wrap.method.params.indent);
   }
 
   /// add the method params while sticking to the given wrapping condition

@@ -4,6 +4,39 @@ import com.helger.jcodemodel.writer.options.wrap.Method;
 
 public class Wrap {
 
+  public enum EWrapWordStrategy {
+    /// always wrap the element
+    ALWAYS(),
+    /// never wrap
+    NEVER(),
+    /// only wrap if otherwise would go over the line size.
+    REQUIRED();
+  }
+
+  /// complete configuration of a generated code's wrapping : when to wrap, how
+  /// many indent
+  public static class WrapWordMode {
+
+    /// when do we wrap this specific code generation
+    public EWrapWordStrategy condition = EWrapWordStrategy.NEVER;
+
+    /// when we wrap, how much do we indent the code
+    public int indent = 1;
+
+    public WrapWordMode condition(EWrapWordStrategy value) {
+      if (value != null) {
+        condition = value;
+      }
+      return this;
+    }
+
+    public WrapWordMode indent(int value) {
+      indent = value;
+      return this;
+    }
+
+  }
+
   public enum EWrapListStrategy {
     /// always wrap all the elements
     ALWAYS(false),
@@ -26,7 +59,7 @@ public class Wrap {
 
   /// complete configuration of a generated code's wrapping : when to wrap, how
   /// many indent
-  public static class WrapMode {
+  public static class WrapListMode {
 
     /// when do we wrap this specific code generation
     public EWrapListStrategy condition = EWrapListStrategy.PAST3;
@@ -34,14 +67,14 @@ public class Wrap {
     /// when we wrap, how much do we indent the code
     public int indent = 1;
 
-    public WrapMode condition(EWrapListStrategy value) {
+    public WrapListMode condition(EWrapListStrategy value) {
       if (value != null) {
         condition = value;
       }
       return this;
     }
 
-    public WrapMode indent(int value) {
+    public WrapListMode indent(int value) {
       indent = value;
       return this;
     }

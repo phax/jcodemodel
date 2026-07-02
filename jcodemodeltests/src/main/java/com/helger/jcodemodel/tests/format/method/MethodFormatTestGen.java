@@ -8,6 +8,7 @@ import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.writer.FormatterOptions;
 import com.helger.jcodemodel.writer.options.Wrap.EWrapListStrategy;
+import com.helger.jcodemodel.writer.options.Wrap.EWrapWordStrategy;
 
 @TestJCM
 public class MethodFormatTestGen {
@@ -50,28 +51,65 @@ public class MethodFormatTestGen {
     addMethods(root._class(className));
   }
 
-  public void testWithDefaultOptions(final JPackage root) throws JCodeModelException {
-    addClassMethod(root, "DefaultOptions");
-  }
-
   public void testWithWrapDisabled(final JPackage root, FormatterOptions options) throws JCodeModelException {
     options.wrap.disable();
     addClassMethod(root, "WrapDisabled");
   }
 
-  public void testWithBinary2Indent(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.declaration
-        .condition(EWrapListStrategy.BINARY)
-        .indent(2);
-    addClassMethod(root, "WrapBinaryI2");
+  public void testWithDefaultOptions(final JPackage root) throws JCodeModelException {
+    addClassMethod(root, "DefaultOptions");
   }
 
-  public void testWithBinary2IndentWidth50(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.declaration
+  public void testWithWrapParamsAlways(final JPackage root, FormatterOptions options) throws JCodeModelException {
+    options.wrap.method.params.condition(EWrapListStrategy.ALWAYS);
+    addClassMethod(root, "WrapParamsAlways");
+  }
+
+  public void testWithWrapParamsNever(final JPackage root, FormatterOptions options) throws JCodeModelException {
+    options.wrap.method.params.condition(EWrapListStrategy.NEVER);
+    addClassMethod(root, "WrapParamsNever");
+  }
+
+  public void testWithWrapParamsRequird(final JPackage root, FormatterOptions options) throws JCodeModelException {
+    options.wrap.method.params.condition(EWrapListStrategy.REQUIRED);
+    addClassMethod(root, "WrapParamsRequired");
+  }
+
+  public void testWithParamsBinaryIndent2(final JPackage root, FormatterOptions options) throws JCodeModelException {
+    options.wrap.method.params
+        .condition(EWrapListStrategy.BINARY)
+        .indent(2);
+    addClassMethod(root, "WrapParamsBinaryI2");
+  }
+
+  public void testWithParamsBinaryIndent2Width50(final JPackage root, FormatterOptions options)
+      throws JCodeModelException {
+    options.wrap.method.params
         .condition(EWrapListStrategy.BINARY)
         .indent(2);
     options.wrap.lineWidth(50);
-    addClassMethod(root, "WrapBinaryI2W50");
+    addClassMethod(root, "WrapParamsBinaryI2W50");
+  }
+
+  public void testWithBracketWrapAlways(final JPackage root, FormatterOptions options) throws JCodeModelException {
+    options.wrap.method.bracket
+        .condition(EWrapWordStrategy.ALWAYS)
+        .indent(0);
+    addClassMethod(root, "WrapBracketAlways");
+  }
+
+  public void testWithBracketWrapNever(final JPackage root, FormatterOptions options) throws JCodeModelException {
+    options.wrap.method.bracket
+        .condition(EWrapWordStrategy.NEVER)
+        .indent(0);
+    addClassMethod(root, "WrapBracketNever");
+  }
+
+  public void testWithBracketWrapRequired(final JPackage root, FormatterOptions options) throws JCodeModelException {
+    options.wrap.method.bracket
+        .condition(EWrapWordStrategy.REQUIRED)
+        .indent(0);
+    addClassMethod(root, "WrapBracketRequired");
   }
 
 }
