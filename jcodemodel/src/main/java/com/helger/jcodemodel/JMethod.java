@@ -55,8 +55,8 @@ import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.IJFormatter.IContextCloser;
 import com.helger.jcodemodel.util.ClassNameComparator;
-import com.helger.jcodemodel.writer.options.Wrap.EWrapListStrategy;
-import com.helger.jcodemodel.writer.options.Wrap.EWrapWordStrategy;
+import com.helger.jcodemodel.writer.options.Wrap.WrapList.EWrapListStrategy;
+import com.helger.jcodemodel.writer.options.Wrap.WrapWord.EWrapWordStrategy;
 
 /**
  * Java method.

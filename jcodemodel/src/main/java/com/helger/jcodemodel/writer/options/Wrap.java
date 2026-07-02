@@ -4,6 +4,14 @@ import com.helger.jcodemodel.writer.options.wrap.Method;
 
 public class Wrap {
 
+  /// configuration of a generated code's word wrapping : when to wrap it, how
+  /// many
+  /// indent.
+  ///
+  /// This is a generic idea for any one-time element, like the "implements" part
+  /// of a class, a method's return type, etc.
+  public static class WrapWord {
+
   public enum EWrapWordStrategy {
     /// always wrap the element
     ALWAYS(),
@@ -13,29 +21,33 @@ public class Wrap {
     REQUIRED();
   }
 
-  /// complete configuration of a generated code's wrapping : when to wrap, how
-  /// many indent
-  public static class WrapWordMode {
-
     /// when do we wrap this specific code generation
     public EWrapWordStrategy condition = EWrapWordStrategy.NEVER;
 
     /// when we wrap, how much do we indent the code
     public int indent = 1;
 
-    public WrapWordMode condition(EWrapWordStrategy value) {
+    public WrapWord condition(EWrapWordStrategy value) {
       if (value != null) {
         condition = value;
       }
       return this;
     }
 
-    public WrapWordMode indent(int value) {
+    public WrapWord indent(int value) {
       indent = value;
       return this;
     }
 
   }
+
+  /// configuration of a generated code's elements wrapping : when to wrap the
+  /// elements, how many indent.
+  ///
+  /// This is a generic idea for list of elements which can be wrapped
+  /// individually, like the list of interfaces implemented by a class, its list
+  /// of Generics, etc.
+  public static class WrapList {
 
   public enum EWrapListStrategy {
     /// always wrap all the elements
@@ -57,24 +69,20 @@ public class Wrap {
 
   }
 
-  /// complete configuration of a generated code's wrapping : when to wrap, how
-  /// many indent
-  public static class WrapListMode {
-
     /// when do we wrap this specific code generation
     public EWrapListStrategy condition = EWrapListStrategy.PAST3;
 
     /// when we wrap, how much do we indent the code
     public int indent = 1;
 
-    public WrapListMode condition(EWrapListStrategy value) {
+    public WrapList condition(EWrapListStrategy value) {
       if (value != null) {
         condition = value;
       }
       return this;
     }
 
-    public WrapListMode indent(int value) {
+    public WrapList indent(int value) {
       indent = value;
       return this;
     }

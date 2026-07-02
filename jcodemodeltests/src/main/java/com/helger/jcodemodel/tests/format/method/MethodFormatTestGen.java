@@ -7,8 +7,8 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.writer.FormatterOptions;
-import com.helger.jcodemodel.writer.options.Wrap.EWrapListStrategy;
-import com.helger.jcodemodel.writer.options.Wrap.EWrapWordStrategy;
+import com.helger.jcodemodel.writer.options.Wrap.WrapList.EWrapListStrategy;
+import com.helger.jcodemodel.writer.options.Wrap.WrapWord.EWrapWordStrategy;
 
 @TestJCM
 public class MethodFormatTestGen {
