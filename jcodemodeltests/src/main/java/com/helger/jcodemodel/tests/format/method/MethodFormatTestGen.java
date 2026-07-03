@@ -51,6 +51,10 @@ public class MethodFormatTestGen {
     addMethods(root._class(className));
   }
 
+  //
+  // generic wrapping : default, disabled
+  //
+
   public void testWithWrapDisabled(final JPackage root, FormatterOptions options) throws JCodeModelException {
     options.wrap.disable();
     addClassMethod(root, "WrapDisabled");
@@ -59,6 +63,36 @@ public class MethodFormatTestGen {
   public void testWithDefaultOptions(final JPackage root) throws JCodeModelException {
     addClassMethod(root, "DefaultOptions");
   }
+
+  //
+  // name
+  //
+
+  public void testWithWrapNameAlwaysIndent3(final JPackage root, FormatterOptions options)
+      throws JCodeModelException {
+    options.wrap.method.name
+        .condition(EWrapWordStrategy.ALWAYS)
+        .indent(3);
+    addClassMethod(root, "WrapNameAlwaysI3");
+  }
+
+  public void testWithWrapNameNever(final JPackage root, FormatterOptions options) throws JCodeModelException {
+    options.wrap.method.name.condition(EWrapWordStrategy.NEVER);
+    addClassMethod(root, "WrapNameNever");
+  }
+
+  public void testWithWrapNameRequiredIndent1Width70(final JPackage root, FormatterOptions options)
+      throws JCodeModelException {
+    options.wrap.method.name
+        .condition(EWrapWordStrategy.REQUIRED)
+        .indent(1);
+    options.wrap.lineWidth = 70;
+    addClassMethod(root, "WrapNameRequiredI1W70");
+  }
+
+  //
+  // params
+  //
 
   public void testWithWrapParamsAlways(final JPackage root, FormatterOptions options) throws JCodeModelException {
     options.wrap.method.params.condition(EWrapListStrategy.ALWAYS);
@@ -90,6 +124,10 @@ public class MethodFormatTestGen {
     options.wrap.lineWidth(50);
     addClassMethod(root, "WrapParamsBinaryI2W50");
   }
+
+  //
+  // bracket
+  //
 
   public void testWithBracketWrapAlways(final JPackage root, FormatterOptions options) throws JCodeModelException {
     options.wrap.method.bracket

@@ -578,7 +578,29 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     if (!isConstructor ()) {
       f.generable (m_aReturnType);
     }
-    f.id(m_sName).print('(');
+
+    if (!f.options().wrap.disabled) {
+      EWrapWordStrategy nameWrapStrat = f.options().wrap.method.name.condition;
+      boolean wrapName = switch (nameWrapStrat) {
+      case ALWAYS -> true;
+      case NEVER -> false;
+      case REQUIRED -> f.currentLineSize() + m_sName.length() + 1 > f.options().wrap.lineWidth;
+      };
+      if (wrapName) {
+        int nbi = f.options().wrap.method.name.indent;
+        f
+            .indent(nbi)
+            .newline()
+            .id(m_sName)
+            .outdent(nbi);
+      } else {
+        f.id(m_sName);
+      }
+    } else {
+      f.id(m_sName);
+    }
+
+    f.print('(');
     if (f.options().wrap.disabled) {
       appParamsWrapDisabled(f);
     } else {

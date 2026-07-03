@@ -7,6 +7,18 @@ import com.helger.jcodemodel.writer.options.Wrap.WrapWord.EWrapWordStrategy;
 
 public class Method {
 
+  /// wrapping of the method's return type
+  public final WrapWord type =
+      new WrapWord()
+          .condition(EWrapWordStrategy.NEVER)
+          .indent(1);
+
+  /// wrapping of the method's name
+  public final WrapWord name =
+      new WrapWord()
+          .condition(EWrapWordStrategy.NEVER)
+          .indent(1);
+
   /// declaration of the method's params
   public final WrapList params =
       new WrapList()
