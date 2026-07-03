@@ -17,7 +17,7 @@ package com.helger.jcodemodel.tests.format.method;
 import javax.annotation.processing.Generated;
 
 @Generated("com.helger.jcodemodel.JCodeModel")
-public class WrapDisabled {
+public class Disabled {
 
     public static void artificiallyVeryLongMethodNameWith2Args(int i1, int i2) {
     }

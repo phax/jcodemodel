@@ -55,9 +55,9 @@ public class MethodFormatTestGen {
   // generic wrapping : default, disabled
   //
 
-  public void testWithWrapDisabled(final JPackage root, FormatterOptions options) throws JCodeModelException {
+  public void testWithDisabled(final JPackage root, FormatterOptions options) throws JCodeModelException {
     options.wrap.disable();
-    addClassMethod(root, "WrapDisabled");
+    addClassMethod(root, "Disabled");
   }
 
   public void testWithDefaultOptions(final JPackage root) throws JCodeModelException {
