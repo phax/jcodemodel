@@ -51,7 +51,7 @@ import com.helger.base.equals.EqualsHelper;
 /**
  * A field that can have a {@link JDocComment} associated with it
  */
-public class JFieldVar extends JVar implements IJDocCommentable
+public class JFieldVar extends JVar implements IJDocCommentable, IJDeclaration
 {
   private final JDefinedClass m_aOwnerClass;
 
@@ -104,11 +104,13 @@ public class JFieldVar extends JVar implements IJDocCommentable
     m_aOwnerClass.internalRenameField (sOldName, sNewName, this);
   }
 
+  @Override
   @NonNull
   public JDocComment javadoc ()
   {
-    if (m_aJavaDoc == null)
+    if (m_aJavaDoc == null) {
       m_aJavaDoc = new JDocComment (m_aOwnerClass.owner ());
+    }
     return m_aJavaDoc;
   }
 
@@ -126,9 +128,10 @@ public class JFieldVar extends JVar implements IJDocCommentable
   public void declare (@NonNull final IJFormatter f)
   {
     // Declaration
-    if (m_aJavaDoc != null)
+    if (m_aJavaDoc != null) {
       f.generable (m_aJavaDoc);
-    super.declare (f);
+    }
+    super.declare(f);
   }
 
   @Override
@@ -141,10 +144,12 @@ public class JFieldVar extends JVar implements IJDocCommentable
   @Override
   public boolean equals (final Object o)
   {
-    if (o == this)
+    if (o == this) {
       return true;
-    if (!super.equals (o))
+    }
+    if (!super.equals (o)) {
       return false;
+    }
     final JFieldVar rhs = (JFieldVar) o;
     return EqualsHelper.equals (m_aOwnerClass, rhs.m_aOwnerClass);
   }

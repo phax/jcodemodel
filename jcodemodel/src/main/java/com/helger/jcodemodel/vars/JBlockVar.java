@@ -4,18 +4,24 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.jcodemodel.AbstractJType;
+import com.helger.jcodemodel.IJDeclaration;
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JMods;
 import com.helger.jcodemodel.JVar;
 
 ///
 /// A variable that is declared as part of a block.
 ///
-///
-public class JBlockVar extends JVar {
+public class JBlockVar extends JVar implements IJDeclaration {
 
   public JBlockVar(@NonNull JMods aMods, AbstractJType aType, @NonNull String sName, @Nullable IJExpression aInitExpr) {
     super(aMods, aType, sName, aInitExpr);
+  }
+
+  @Override
+  public void declare(@NonNull IJFormatter f) {
+    super.declare(f);
   }
 
 }

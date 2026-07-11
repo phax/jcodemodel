@@ -55,7 +55,7 @@ import com.helger.base.hashcode.HashCodeGenerator;
 /**
  * Variables and fields.
  */
-public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
+public class JVar implements IJAssignmentTarget, IJAnnotatable
 {
   /**
    * Modifiers.
@@ -277,10 +277,8 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
     }
   }
 
-  @Override
-  public void declare (@NonNull final IJFormatter f)
-  {
-    f.var (this).print (';').newline ();
+  protected void declare(@NonNull final IJFormatter f) {
+    f.var(this).print(';').newline();
   }
 
   @Override
