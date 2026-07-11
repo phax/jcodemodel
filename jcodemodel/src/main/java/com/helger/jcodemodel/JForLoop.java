@@ -48,6 +48,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.vars.JBlockVar;
 
 /**
  * For statement
@@ -63,18 +64,19 @@ public class JForLoop implements IJStatement
   {}
 
   @NonNull
-  public JVar init (final int nMods,
+  public JBlockVar init(final int nMods,
                     @NonNull final AbstractJType aType,
                     @NonNull final String sVarName,
                     @Nullable final IJExpression aInitExpr)
   {
-    final JVar aVar = new JVar (JMods.forVar (nMods), aType, sVarName, aInitExpr);
+    final JBlockVar aVar = new JBlockVar(JMods.forVar(nMods), aType, sVarName, aInitExpr);
     m_aInitExprs.add (aVar);
     return aVar;
   }
 
   @NonNull
-  public JVar init (@NonNull final AbstractJType aType, @NonNull final String sVarName, @Nullable final IJExpression aInitExpr)
+  public JBlockVar
+      init(@NonNull final AbstractJType aType, @NonNull final String sVarName, @Nullable final IJExpression aInitExpr)
   {
     return init (JMod.NONE, aType, sVarName, aInitExpr);
   }
@@ -135,29 +137,34 @@ public class JForLoop implements IJStatement
   @NonNull
   public JBlock body ()
   {
-    if (m_aBody == null)
+    if (m_aBody == null) {
       m_aBody = new JBlock ();
+    }
     return m_aBody;
   }
 
+  @Override
   public void state (@NonNull final IJFormatter f)
   {
     f.print ("for (");
     boolean bFirst = true;
     for (final Object o : m_aInitExprs)
     {
-      if (!bFirst)
+      if (!bFirst) {
         f.print (',');
-      if (o instanceof JVar)
+      }
+      if (o instanceof JVar) {
         f.var ((JVar) o);
-      else
+      } else {
         f.generable ((IJExpression) o);
+      }
       bFirst = false;
     }
     f.print (';').generable (m_aTestExpr).print (';').generable (m_aUpdateExprs).print (')');
-    if (m_aBody != null)
+    if (m_aBody != null) {
       f.generable (m_aBody).newline ();
-    else
+    } else {
       f.print (';').newline ();
+    }
   }
 }

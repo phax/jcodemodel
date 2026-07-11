@@ -13,7 +13,7 @@ public class Method {
           .condition(EWrapWordStrategy.NEVER)
           .indent(1);
 
-  /// wrapping of the method's name
+  /// wrapping of the method's name when declaring it
   public final WrapWord name =
       new WrapWord()
           .condition(EWrapWordStrategy.NEVER)
@@ -25,10 +25,16 @@ public class Method {
           .condition(EWrapListStrategy.PAST3)
           .indent(1);
 
-  /// wrapping of opening bracket ( '{' )
+  /// wrapping of opening bracket ( '{' ) when declaring
   public final WrapWord bracket =
       new WrapWord()
           .condition(EWrapWordStrategy.NEVER)
           .indent(0);
+
+  /// wrapping of the arguments when calling the method
+  public final WrapList args =
+      new WrapList()
+          .condition(EWrapListStrategy.PAST3)
+          .indent(1);
 
 }

@@ -55,6 +55,8 @@ import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.IJFormatter.IContextCloser;
 import com.helger.jcodemodel.util.ClassNameComparator;
+import com.helger.jcodemodel.vars.JArgVar;
+import com.helger.jcodemodel.vars.JVarArgVar;
 import com.helger.jcodemodel.writer.options.Wrap.WrapList.EWrapListStrategy;
 import com.helger.jcodemodel.writer.options.Wrap.WrapWord.EWrapWordStrategy;
 
@@ -105,7 +107,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * Variable parameter for this method's varargs declaration introduced in J2SE
    * 1.5
    */
-  private JVar m_aVarParam;
+  private JVarArgVar m_aVarParam;
 
   /**
    * Annotations on this variable. Lazily created.
@@ -237,9 +239,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @return New parameter variable of type {@link JVar}
    */
   @NonNull
-  public JVar param (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
+  public JArgVar param(final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
-    final JVar aVar = new JVar (JMods.forVar (nMods), ValueEnforcer.notNull(aType, "type"), sName, null);
+    final JArgVar aVar = new JArgVar((nMods | JMod.FINAL) > 0, ValueEnforcer.notNull(aType, "type"), sName);
     m_aParams.add (aVar);
     return aVar;
   }
@@ -276,7 +278,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *         once in the method signature.
    */
   @NonNull
-  public JVar varParam (@NonNull final Class <?> aType, @NonNull final String sName)
+  public JVarArgVar varParam(@NonNull final Class<?> aType, @NonNull final String sName)
   {
     return varParam (m_aOwningClass.owner ()._ref (aType), sName);
   }
@@ -295,7 +297,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *         once in the method signature.
    */
   @NonNull
-  public JVar varParam (@NonNull final AbstractJType aType, @NonNull final String sName)
+  public JVarArgVar varParam(@NonNull final AbstractJType aType, @NonNull final String sName)
   {
     return varParam (JMod.NONE, aType, sName);
   }
@@ -317,7 +319,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *         once in the method signature.
    */
   @NonNull
-  public JVar varParam (final int nMods, @NonNull final Class <?> aType, @NonNull final String sName)
+  public JVarArgVar varParam(final int nMods, @NonNull final Class<?> aType, @NonNull final String sName)
   {
     return varParam (nMods, m_aOwningClass.owner ()._ref (aType), sName);
   }
@@ -339,7 +341,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *         once in the method signature.
    */
   @NonNull
-  public JVar varParam (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
+  public JVarArgVar varParam(final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
     ValueEnforcer.isFalse (hasVarArgs (),
                            """
@@ -347,12 +349,12 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
                             Check if varParam method of JMethod is\
                              invoked more than once""");
 
-    m_aVarParam = new JVar (JMods.forVar (nMods), aType.array (), sName, null);
+    m_aVarParam = new JVarArgVar((nMods | JMod.FINAL) > 0, aType.array(), sName);
     return m_aVarParam;
   }
 
   @Nullable
-  public JVar varParam ()
+  public JVarArgVar varParam()
   {
     return m_aVarParam;
   }
@@ -695,10 +697,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
           f.newline();
         }
       }
-      for (final JAnnotationUse annotation : m_aVarParam.annotations()) {
-        f.generable(annotation).print(' ');
-      }
-      f.generable(m_aVarParam.mods()).generable(m_aVarParam.type().elementType()).print("... ").id(m_aVarParam.name());
+      f.var(m_aVarParam);
     }
     f.outdent();
   }
@@ -772,11 +771,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       }
       if (selectedWrap == EWrapListStrategy.REQUIRED) {
         try (IContextCloser o = f.addContextLayer().persistOnClose()) {
-          for (final JAnnotationUse annotation : m_aVarParam.annotations()) {
-            f.generable(annotation).print(' ');
-          }
-          f.generable(m_aVarParam.mods()).generable(m_aVarParam.type().elementType()).print("... ")
-              .id(m_aVarParam.name());
+          f.var(m_aVarParam);
           if (o.value().contains(f.getNewLine())
               || f.currentLineSize() > f.options().wrap.lineWidth) {
             o.rollback();
@@ -788,10 +783,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       } else if (selectedWrap == EWrapListStrategy.ALWAYS) {
         f.newline();
       }
-      for (final JAnnotationUse annotation : m_aVarParam.annotations()) {
-        f.generable(annotation).print(' ');
-      }
-      f.generable(m_aVarParam.mods()).generable(m_aVarParam.type().elementType()).print("... ").id(m_aVarParam.name());
+      f.var(m_aVarParam);
     }
   }
 

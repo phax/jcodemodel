@@ -43,13 +43,15 @@ package com.helger.jcodemodel;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.jcodemodel.vars.JCatchVar;
+
 /**
  * Catch block for a try/catch/finally statement
  */
 public class JCatchBlock implements IJGenerable
 {
   private final AbstractJClass m_aException;
-  private JVar m_aVar;
+  private JCatchVar m_aVar;
   private final JBlock m_aBody = new JBlock ();
 
   public JCatchBlock (@NonNull final AbstractJClass aException)
@@ -66,9 +68,10 @@ public class JCatchBlock implements IJGenerable
   @NonNull
   public JVar param (final String sName)
   {
-    if (m_aVar != null)
+    if (m_aVar != null) {
       throw new IllegalStateException ("A variable is already present!");
-    m_aVar = new JVar (JMods.forVar (JMod.FINAL), m_aException, sName, null);
+    }
+    m_aVar = new JCatchVar(true, m_aException, sName);
     return m_aVar;
   }
 
@@ -84,10 +87,12 @@ public class JCatchBlock implements IJGenerable
     return m_aBody;
   }
 
+  @Override
   public void generate (@NonNull final IJFormatter f)
   {
-    if (m_aVar == null)
-      m_aVar = new JVar (JMods.forVar (JMod.FINAL), m_aException, "ex", null);
+    if (m_aVar == null) {
+      m_aVar = new JCatchVar(true, m_aException, "ex");
+    }
     f.print ("catch (").var (m_aVar).print (')').generable (m_aBody);
   }
 }

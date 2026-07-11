@@ -41,8 +41,10 @@
 package com.helger.jcodemodel;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.vars.JForEachVar;
 
 /**
  * ForEach Statement This will generate the code for statement based on the new
@@ -52,28 +54,18 @@ import com.helger.base.enforce.ValueEnforcer;
  */
 public class JForEach implements IJStatement
 {
-  private final JMods m_aMods;
-  private final AbstractJType m_aType;
-  private final String m_sVarName;
   private JBlock m_aBody; // lazily created
-  private final IJExpression m_aCollection;
-  private final JVar m_aLoopVar;
+  private final JForEachVar m_aLoopVar;
 
   public JForEach (@NonNull final JMods aMods,
-                   @NonNull final AbstractJType aVarType,
+      @Nullable final AbstractJType aVarType,
                    @NonNull final String sVarName,
                    @NonNull final IJExpression aCollection)
   {
     ValueEnforcer.notNull (aMods, "Mods");
-    ValueEnforcer.notNull (aVarType, "VarType");
     ValueEnforcer.notNull (sVarName, "VarName");
     ValueEnforcer.notNull (aCollection, "Collection");
-
-    m_aMods = aMods;
-    m_aType = aVarType;
-    m_sVarName = sVarName;
-    m_aCollection = aCollection;
-    m_aLoopVar = new JVar (JMods.forVar (JMod.FINAL), m_aType, m_sVarName, aCollection);
+    m_aLoopVar = new JForEachVar((aMods.getValue() | JMod.FINAL) > 0, aVarType, sVarName, aCollection);
   }
 
   /**
@@ -83,13 +75,13 @@ public class JForEach implements IJStatement
   @NonNull
   public JMods mods ()
   {
-    return m_aMods;
+    return m_aLoopVar.mods();
   }
 
   @NonNull
   public AbstractJType type ()
   {
-    return m_aType;
+    return m_aLoopVar.type();
   }
 
   /**
@@ -104,26 +96,31 @@ public class JForEach implements IJStatement
   @NonNull
   public IJExpression collection ()
   {
-    return m_aCollection;
+    return m_aLoopVar.init();
   }
 
   @NonNull
   public JBlock body ()
   {
-    if (m_aBody == null)
+    if (m_aBody == null) {
       m_aBody = new JBlock ();
+    }
     return m_aBody;
   }
 
+  @Override
   public void state (@NonNull final IJFormatter f)
   {
     f.print ("for (");
-    f.generable (m_aMods).generable (m_aType).id (m_sVarName).print (": ").generable (m_aCollection);
+    f.var(m_aLoopVar);
+    // f.generable (m_aMods).generable (m_aType).id (m_sVarName).print (":
+    // ").generable (m_aCollection);
     f.print (')');
-    if (m_aBody != null)
+    if (m_aBody != null) {
       f.generable (m_aBody);
-    else
+    } else {
       f.print (';');
+    }
     f.newline ();
   }
 }

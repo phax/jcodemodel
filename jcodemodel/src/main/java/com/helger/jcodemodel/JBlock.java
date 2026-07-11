@@ -49,6 +49,7 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.vars.JBlockVar;
 
 /**
  * A block of Java code, which may contain statements and local declarations.
@@ -311,12 +312,12 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JVar}
    */
   @NonNull
-  public JVar decl (final int nMods,
+  public JBlockVar decl (final int nMods,
                     final AbstractJType aType,
                     @NonNull final String sName,
                     @Nullable final IJExpression aInit)
   {
-    final JVar v = new JVar (JMods.forVar (nMods), aType, sName, aInit);
+    final JBlockVar v = new JBlockVar (JMods.forVar (nMods), aType, sName, aInit);
     internalInsert (v);
     return v;
   }
