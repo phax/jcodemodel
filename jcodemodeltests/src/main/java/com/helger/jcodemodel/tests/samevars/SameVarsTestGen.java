@@ -20,6 +20,10 @@ public class SameVarsTestGen {
     fld.andVar("j");
     fld.andVar("k", JExpr.lit(1));
 
+    JFieldVar a1 = cl.field(JMod.PUBLIC | JMod.STATIC, cl.owner().CHAR.array(), "a1");
+    a1.andVar("a2");
+    a1.andVar("a3", null, 1);
+
     JMethod met = cl.method(JMod.PUBLIC | JMod.STATIC, cl.owner().VOID, "test");
     JBlockVar jvar = met.body().decl(cl.owner().INT, "i", JExpr.lit(11));
     jvar.andVar("j");

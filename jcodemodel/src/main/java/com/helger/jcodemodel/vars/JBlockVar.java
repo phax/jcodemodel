@@ -50,12 +50,29 @@ public class JBlockVar extends JVar implements IJDeclaration {
   }
 
   /// add and return a new var with same type and mods, but given name and init.
-  public JSameVar andVar(String name, IJExpression aInitExpr) {
-    JSameVar ret = new JSameVar(this, name, aInitExpr);
+  ///
+  /// Note that the dimension is added on top of this' type. For example
+  /// ```java
+  /// int [] i={0}, j[][], k;
+  /// ```
+  /// makes i an int[], j an int[][][] (dim 2), and k an int[] (dim 1).
+  ///
+  /// @param dim the dimension of the array, based on the flat type of this
+  public JSameVar andVar(String name, IJExpression aInitExpr, int dim) {
+    JSameVar ret = new JSameVar(this, name, aInitExpr, dim);
     childrenVar.add(ret);
     return ret;
   }
 
+  /// add and return a new var with same type and mods, but given name and init.
+  ///
+  /// dimension is set to 0, meaning the new variable type is the same as this.
+  public JSameVar andVar(String name, IJExpression aInitExpr) {
+    return andVar(name, aInitExpr, 0);
+  }
+
+  /// add and return a new var with same type, same mods, but no init and given
+  /// name. Also with dimension 0
   public JSameVar andVar(String name) {
     return andVar(name, null);
   }

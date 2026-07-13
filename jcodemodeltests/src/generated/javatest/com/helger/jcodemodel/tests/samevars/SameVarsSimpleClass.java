@@ -19,6 +19,7 @@ import javax.annotation.processing.Generated;
 @Generated("com.helger.jcodemodel.JCodeModel")
 public class SameVarsSimpleClass {
         public static int i = 3, j, k = 1;
+        public static char[] a1, a2, a3 [];
 
     public static void test() {
             int i = 11, j, k = 5;
