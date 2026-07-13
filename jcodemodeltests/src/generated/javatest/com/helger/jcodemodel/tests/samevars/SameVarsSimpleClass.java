@@ -12,34 +12,15 @@
  * limitations under the License.
  * 
  */
-package com.helger.jcodemodel.tests.format.method;
+package com.helger.jcodemodel.tests.samevars;
 
 import javax.annotation.processing.Generated;
 
 @Generated("com.helger.jcodemodel.JCodeModel")
-public class Disabled {
+public class SameVarsSimpleClass {
+        public static int i = 3, j, k = 1;
 
-    public static void artificiallyVeryLongMethodNameWith2Args(int i1, int i2) {
-    }
-
-    public static void artificiallyVeryLongMethodNameWith5Args(int i1,
-        int i2,
-        int i3,
-        int i4,
-        int i5) {
-    }
-
-    public static void artificiallyVeryLongMethodNameWithVarArgs(int... ints) {
-    }
-
-    public static void artificiallyVeryLongMethodNameWith2ArgsAndVarArgs(int i1, int i2, int... ints) {
-    }
-
-    public static void artificiallyVeryLongMethodNameWith5ArgsAndVarArgs(int i1,
-        int i2,
-        int i3,
-        int i4,
-        int i5,
-        int... ints) {
+    public static void test() {
+            int i = 11, j, k = 5;
     }
 }

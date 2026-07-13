@@ -305,4 +305,9 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
   {
     return new HashCodeGenerator (this).append (m_sName).getHashCode ();
   }
+
+  /// the separator when several jvars are declared at one.
+  public String separator() {
+    return ";";
+  }
 }

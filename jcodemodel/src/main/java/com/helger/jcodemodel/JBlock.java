@@ -256,7 +256,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JVar}
    */
   @NonNull
-  public JVar decl (final AbstractJType aType, @NonNull final String sName)
+  public JBlockVar decl(final AbstractJType aType, @NonNull final String sName)
   {
     return decl (JMod.NONE, aType, sName, null);
   }
@@ -274,7 +274,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JVar}
    */
   @NonNull
-  public JVar decl (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
+  public JBlockVar decl(final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
     return decl (nMods, aType, sName, null);
   }
@@ -292,7 +292,8 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JVar}
    */
   @NonNull
-  public JVar decl (@NonNull final AbstractJType aType, @NonNull final String sName, @Nullable final IJExpression aInit)
+  public JBlockVar
+      decl(@NonNull final AbstractJType aType, @NonNull final String sName, @Nullable final IJExpression aInit)
   {
     return decl (JMod.NONE, aType, sName, aInit);
   }
@@ -562,8 +563,9 @@ public class JBlock implements IJGenerable, IJStatement
   @NonNull
   public JBlock addSingleLineComment (@Nullable final String sComment)
   {
-    if (sComment != null)
+    if (sComment != null) {
       internalInsert (new JSingleLineCommentStatement (sComment));
+    }
     return this;
   }
 
@@ -745,9 +747,11 @@ public class JBlock implements IJGenerable, IJStatement
   public JThrow _throw (@NonNull final AbstractJClass aThrowClass, @NonNull final IJExpression @Nullable... aParams)
   {
     final JInvocation aCtor = JExpr._new (aThrowClass);
-    if (aParams != null)
-      for (final IJExpression aParam : aParams)
+    if (aParams != null) {
+      for (final IJExpression aParam : aParams) {
         aCtor.arg (aParam);
+      }
+    }
     return _throw (aCtor);
   }
 
@@ -946,6 +950,7 @@ public class JBlock implements IJGenerable, IJStatement
     return aStatement;
   }
 
+  @Override
   public void generate (@NonNull final IJFormatter f)
   {
     if (m_bVirtualBlock)
@@ -960,13 +965,16 @@ public class JBlock implements IJGenerable, IJStatement
         f.print ('{');
         f.newline ();
       }
-      if (m_bIndentRequired)
+      if (m_bIndentRequired) {
         f.indent ();
+      }
       generateBody (f);
-      if (m_bIndentRequired)
+      if (m_bIndentRequired) {
         f.outdent ();
-      if (m_bBracesRequired)
+      }
+      if (m_bBracesRequired) {
         f.print ('}');
+      }
       }
     }
 
@@ -974,12 +982,12 @@ public class JBlock implements IJGenerable, IJStatement
   {
     for (final IJObject aContentElement : m_aContentList)
     {
-      if (aContentElement instanceof IJDeclaration)
+      if (aContentElement instanceof IJDeclaration) {
         f.declaration ((IJDeclaration) aContentElement);
-      else
-        if (aContentElement instanceof IJStatement)
+      } else
+        if (aContentElement instanceof IJStatement) {
           f.statement ((IJStatement) aContentElement);
-        else
+        } else
         {
           // For lambda expressions in JLambdaBlock
           f.generable ((IJGenerable) aContentElement);
@@ -987,10 +995,12 @@ public class JBlock implements IJGenerable, IJStatement
     }
   }
 
+  @Override
   public void state (@NonNull final IJFormatter f)
   {
     f.generable (this);
-    if (m_bBracesRequired)
+    if (m_bBracesRequired) {
       f.newline ();
+    }
     }
   }

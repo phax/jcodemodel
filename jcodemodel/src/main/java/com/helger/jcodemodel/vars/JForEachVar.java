@@ -48,4 +48,9 @@ public class JForEachVar extends JVar {
         .generable(init());
   }
 
+  @Override
+  public String separator() {
+    throw new UnsupportedOperationException("can't declare two vars in a foreach loop");
+  }
+
 }

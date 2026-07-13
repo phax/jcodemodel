@@ -24,5 +24,10 @@ public class JVarArgVar extends JArgVar {
     f.print("... ");
   }
 
+  @Override
+  public String separator() {
+    throw new UnsupportedOperationException("can't declare two varargs as method signature");
+  }
+
 
 }

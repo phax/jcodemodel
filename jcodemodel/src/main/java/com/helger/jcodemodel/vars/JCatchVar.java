@@ -39,5 +39,9 @@ public class JCatchVar extends JArgVar {
     }
   }
 
+  @Override
+  public String separator() {
+    throw new UnsupportedOperationException("can't declare two vars in a catch block");
+  }
 
 }

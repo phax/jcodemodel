@@ -1,5 +1,9 @@
 package com.helger.jcodemodel.vars;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -9,11 +13,19 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JMods;
 import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.writer.options.Wrap.ListWrapping;
 
 ///
 /// A variable that is declared as part of a block.
 ///
+/// example :
+/// ```java
+/// int i=0;
+/// ```
+///
 public class JBlockVar extends JVar implements IJDeclaration {
+
+  private final List<JSameVar> childrenVar = new ArrayList<>();
 
   public JBlockVar(@NonNull JMods aMods, AbstractJType aType, @NonNull String sName, @Nullable IJExpression aInitExpr) {
     super(aMods, aType, sName, aInitExpr);
@@ -21,7 +33,36 @@ public class JBlockVar extends JVar implements IJDeclaration {
 
   @Override
   public void declare(@NonNull IJFormatter f) {
-    super.declare(f);
+    if (childrenVar.isEmpty()) {
+      super.declare(f);
+    } else {
+      f.vars(
+          Stream.concat(Stream.of(this), childrenVar.stream()).toList(),
+          extractWrappingOptions(f))
+          .print(';').newline();
+    }
+  }
+
+  /// extract the wrapping options for this type of var. Present here to be
+  /// overridden in the fieldVar
+  protected ListWrapping extractWrappingOptions(IJFormatter f) {
+    return null;
+  }
+
+  /// add and return a new var with same type and mods, but given name and init.
+  public JSameVar andVar(String name, IJExpression aInitExpr) {
+    JSameVar ret = new JSameVar(this, name, aInitExpr);
+    childrenVar.add(ret);
+    return ret;
+  }
+
+  public JSameVar andVar(String name) {
+    return andVar(name, null);
+  }
+
+  @Override
+  public String separator() {
+    return ",";
   }
 
 }

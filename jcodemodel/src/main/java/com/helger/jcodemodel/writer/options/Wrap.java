@@ -10,31 +10,31 @@ public class Wrap {
   ///
   /// This is a generic idea for any one-time element, like the "implements" part
   /// of a class, a method's return type, etc.
-  public static class WrapWord {
+  public static class WordWrapping {
 
-  public enum EWrapWordStrategy {
-    /// always wrap the element
-    ALWAYS(),
-    /// never wrap
-    NEVER(),
-    /// only wrap if otherwise would go over the line size.
-    REQUIRED();
-  }
+    public enum EWordWrapStrategy {
+      /// always wrap the element
+      ALWAYS(),
+      /// never wrap
+      NEVER(),
+      /// only wrap if otherwise would go over the line size.
+      REQUIRED();
+    }
 
     /// when do we wrap this specific code generation
-    public EWrapWordStrategy condition = EWrapWordStrategy.NEVER;
+    public EWordWrapStrategy condition = EWordWrapStrategy.NEVER;
 
     /// when we wrap, how much do we indent the code
     public int indent = 1;
 
-    public WrapWord condition(EWrapWordStrategy value) {
+    public WordWrapping condition(EWordWrapStrategy value) {
       if (value != null) {
         condition = value;
       }
       return this;
     }
 
-    public WrapWord indent(int value) {
+    public WordWrapping indent(int value) {
       indent = value;
       return this;
     }
@@ -47,44 +47,56 @@ public class Wrap {
   /// This is a generic idea for list of elements which can be wrapped
   /// individually, like the list of interfaces implemented by a class, its list
   /// of Generics, etc.
-  public static class WrapList {
+  public static class ListWrapping {
 
-  public enum EWrapListStrategy {
-    /// always wrap all the elements
-    ALWAYS(false),
-    /// never wrap any element. All on the same line
-    NEVER(false),
-    /// only the minimum number of elements.
-    REQUIRED(false),
-    /// once an element should be wrapped, all are.
-    BINARY(true),
-    /// wrap all if more than 3 elements ; first item never wrapped
-    PAST3(false);
+    public enum EListWrapStrategy {
+      /// always wrap all the elements
+      ALWAYS(false),
+      /// never wrap any element. All on the same line
+      NEVER(false),
+      /// only the minimum number of elements.
+      REQUIRED(false),
+      /// once an element should be wrapped, all are.
+      BINARY(true),
+      /// wrap all if more than 3 elements ; first item never wrapped
+      PAST3(false);
 
-    public final boolean twoPasses;
+      public final boolean twoPasses;
 
-    EWrapListStrategy(boolean twoPasses) {
-      this.twoPasses = twoPasses;
+      EListWrapStrategy(boolean twoPasses) {
+        this.twoPasses = twoPasses;
+      }
+
     }
 
-  }
-
     /// when do we wrap this specific code generation
-    public EWrapListStrategy condition = EWrapListStrategy.PAST3;
+    public EListWrapStrategy condition = EListWrapStrategy.PAST3;
 
     /// when we wrap, how much do we indent the code
     public int indent = 1;
 
-    public WrapList condition(EWrapListStrategy value) {
+    /// when false, we wrap before the separator
+    public boolean wrapAfterSep = true;
+
+    public ListWrapping condition(EListWrapStrategy value) {
       if (value != null) {
         condition = value;
       }
       return this;
     }
 
-    public WrapList indent(int value) {
+    public ListWrapping indent(int value) {
       indent = value;
       return this;
+    }
+
+    public ListWrapping wrapAfterSep(boolean value) {
+      wrapAfterSep = value;
+      return this;
+    }
+
+    public ListWrapping wrapBeforeSep() {
+      return wrapAfterSep(false);
     }
 
   }

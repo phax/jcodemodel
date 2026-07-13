@@ -48,6 +48,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -60,6 +62,8 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.NullWriter;
+import com.helger.jcodemodel.writer.options.Wrap.ListWrapping;
+import com.helger.jcodemodel.writer.options.Wrap.ListWrapping.EListWrapStrategy;
 
 /**
  * This is a utility class for managing indentation and other basic formatting
@@ -827,6 +831,98 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
+  @Override
+  public IJFormatter vars(@NonNull final Collection<? extends JVar> aList, ListWrapping wrapping) {
+    EListWrapStrategy wrapCondition = EListWrapStrategy.PAST3;
+    if (wrapping != null) {
+      wrapCondition = wrapping.condition;
+    }
+    int indentParam = 1;
+    if (wrapping != null) {
+      indentParam = wrapping.indent;
+    }
+    boolean wrapAfterSep = true;
+    if (wrapping != null) {
+      wrapAfterSep = wrapping.wrapAfterSep;
+    }
+
+    indent(indentParam);
+    // if PAST3 and less equal 3 params, replace with NEVER.
+    if (wrapCondition == EListWrapStrategy.PAST3
+        && aList.size() <= 3) {
+      wrapCondition = EListWrapStrategy.NEVER;
+    }
+    // for BINARY, try NEVER ; then if the produced line size is too big or
+    // has newline, rollback and use ALWAYS instead.
+    if (wrapCondition == EListWrapStrategy.BINARY) {
+      try (IContextCloser o = addContextLayer().persistOnClose()) {
+        genericPrints(aList, EListWrapStrategy.NEVER, wrapAfterSep,
+            JVar::separator,
+            this::var);
+        if (o.value().contains(getNewLine())
+            || currentLineSize() > options().wrap.lineWidth) {
+          o.rollback();
+          wrapCondition = EListWrapStrategy.ALWAYS;
+        } else {
+          outdent(indentParam);
+          return this;
+        }
+      }
+    }
+    genericPrints(aList, wrapCondition, wrapAfterSep,
+        JVar::separator,
+        this::var);
+    outdent(indentParam);
+    return this;
+  }
+
+  /// print several items
+  /// @param elementPrinter what should we do with each element
+  protected <T> void genericPrints(@NonNull final Iterable<? extends T> aList,
+      @NonNull EListWrapStrategy selectedWrap,
+      boolean wrapAFterSep,
+      Function<T, String> separator,
+      Consumer<T> elementPrinter) {
+    if (selectedWrap.twoPasses) {
+      throw new RuntimeException("this method can't accept two-passes config " + selectedWrap);
+    }
+    T last = null;
+    for (final T element : aList) {
+      if (last == null) {
+        last = element;
+        if (selectedWrap == EListWrapStrategy.ALWAYS) {
+          newline();
+        }
+        if (selectedWrap == EListWrapStrategy.PAST3) {
+          selectedWrap = EListWrapStrategy.ALWAYS;
+        }
+      } else {
+        String sep = separator.apply(last);
+        if (wrapAFterSep) {
+          print(sep);
+        }
+        if (selectedWrap == EListWrapStrategy.REQUIRED) {
+          try (IContextCloser o = addContextLayer().persistOnClose()) {
+            elementPrinter.accept(element);
+            if (o.value().contains(getNewLine())
+                || currentLineSize() > options().wrap.lineWidth) {
+              o.rollback();
+              newline();
+            } else {
+              continue;
+            }
+          }
+        } else if (selectedWrap == EListWrapStrategy.ALWAYS) {
+          newline();
+        }
+        if (!wrapAFterSep) {
+          print(sep);
+        }
+      }
+      elementPrinter.accept(element);
+    }
+  }
+
   private boolean _collectCausesNoAmbiguities (@NonNull final AbstractJClass aReference, @NonNull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport) {
@@ -1210,7 +1306,7 @@ public class JFormatter implements IJFormatter
   /// char and beginning of line
   ///
   /// This class is not thread safe.
-  // not static to directly access the fields
+  // not static to directly access the fields and methods
   public class FormatterContext implements IContextCloser {
 
     // public final, so no getter/setter
@@ -1240,11 +1336,6 @@ public class JFormatter implements IJFormatter
     public FormatterContext persistOnClose(boolean b) {
       persistOnClose = b;
       return this;
-    }
-
-    @Override
-    public FormatterContext persistOnClose() {
-      return persistOnClose(true);
     }
 
     @Override

@@ -47,18 +47,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
-import com.helger.jcodemodel.IJFormatter.IContextCloser;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.vars.JArgVar;
 import com.helger.jcodemodel.vars.JVarArgVar;
-import com.helger.jcodemodel.writer.options.Wrap.WrapList.EWrapListStrategy;
-import com.helger.jcodemodel.writer.options.Wrap.WrapWord.EWrapWordStrategy;
+import com.helger.jcodemodel.writer.options.Wrap.WordWrapping.EWordWrapStrategy;
 
 /**
  * Java method.
@@ -582,7 +581,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
 
     if (!f.options().wrap.disabled) {
-      EWrapWordStrategy nameWrapStrat = f.options().wrap.method.name.condition;
+      EWordWrapStrategy nameWrapStrat = f.options().wrap.method.name.condition;
       boolean wrapName = switch (nameWrapStrat) {
       case ALWAYS -> true;
       case NEVER -> false;
@@ -606,7 +605,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     if (f.options().wrap.disabled) {
       appParamsWrapDisabled(f);
     } else {
-      addParams(f);
+      f.vars(Stream.concat(m_aParams.stream(), Stream.ofNullable(m_aVarParam)).toList(),
+          f.options().wrap.method.params);
     }
     f.print(')');
     if (!m_aThrows.isEmpty ())
@@ -623,7 +623,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     if (m_aBody != null)
     {
       if (!f.options().wrap.disabled) {
-        EWrapWordStrategy bracketWrapStrat = f.options().wrap.method.bracket.condition;
+        EWordWrapStrategy bracketWrapStrat = f.options().wrap.method.bracket.condition;
         boolean wrapBracket = switch (bracketWrapStrat) {
         case ALWAYS -> true;
         case NEVER -> false;
@@ -652,7 +652,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       else
       {
         if (!f.options().wrap.disabled) {
-          EWrapWordStrategy bracketWrapStrat = f.options().wrap.method.bracket.condition;
+          EWordWrapStrategy bracketWrapStrat = f.options().wrap.method.bracket.condition;
           boolean wrapBracket = switch (bracketWrapStrat) {
           case ALWAYS -> true;
           case NEVER -> false;
@@ -671,6 +671,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
   }
 
+  /// legacy params printing.
   void appParamsWrapDisabled(@NonNull final IJFormatter f) {
     f.indent();
     // when parameters are printed in new lines, we want them to be indented.
@@ -700,91 +701,6 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       f.var(m_aVarParam);
     }
     f.outdent();
-  }
-
-  /// add the method params
-  void addParams(@NonNull final IJFormatter f) {
-    f.indent(f.options().wrap.method.params.indent);
-    EWrapListStrategy wrapCondition = f.options().wrap.method.params.condition;
-    // if PAST3 and less equal 3 params, replace with NEVER.
-    if (wrapCondition == EWrapListStrategy.PAST3
-        && m_aParams.size() + (hasVarArgs() ? 1 : 0) <= 3) {
-      wrapCondition = EWrapListStrategy.NEVER;
-    }
-    // for BINARY, try NEVER ; then if the produced line size is too big or
-    // has newline, rollback and use ALWAYS instead.
-    if(wrapCondition==EWrapListStrategy.BINARY) {
-      try (IContextCloser o = f.addContextLayer().persistOnClose()) {
-        addParams(f, EWrapListStrategy.NEVER);
-        if (o.value().contains(f.getNewLine())
-            || f.currentLineSize() > f.options().wrap.lineWidth) {
-          o.rollback();
-          wrapCondition=EWrapListStrategy.ALWAYS;
-        } else {
-          f.outdent(f.options().wrap.method.params.indent);
-          return;
-        }
-      }
-    }
-    addParams(f, wrapCondition);
-    f.outdent(f.options().wrap.method.params.indent);
-  }
-
-  /// add the method params while sticking to the given wrapping condition
-  void addParams(@NonNull final IJFormatter f, @NonNull EWrapListStrategy selectedWrap) {
-    if (selectedWrap.twoPasses) {
-      throw new RuntimeException("this method can't accept two-passes config " + selectedWrap);
-    }
-
-    boolean bFirst = true;
-    for (final JVar var : m_aParams) {
-      if (bFirst) {
-        bFirst = false;
-        if (selectedWrap == EWrapListStrategy.ALWAYS) {
-          f.newline();
-        }
-        if (selectedWrap == EWrapListStrategy.PAST3) {
-          selectedWrap = EWrapListStrategy.ALWAYS;
-        }
-      } else {
-        f.print(',');
-        if (selectedWrap == EWrapListStrategy.REQUIRED) {
-          try (IContextCloser o = f.addContextLayer().persistOnClose()) {
-            f.var(var);
-            if (o.value().contains(f.getNewLine())
-                || f.currentLineSize() > f.options().wrap.lineWidth) {
-              o.rollback();
-              f.newline();
-            } else {
-              continue;
-            }
-          }
-        } else if (selectedWrap == EWrapListStrategy.ALWAYS) {
-          f.newline();
-        }
-      }
-      f.var(var);
-    }
-    if (hasVarArgs()) {
-      if (!bFirst) {
-        f.print(',');
-      }
-      if (selectedWrap == EWrapListStrategy.REQUIRED) {
-        try (IContextCloser o = f.addContextLayer().persistOnClose()) {
-          f.var(m_aVarParam);
-          if (o.value().contains(f.getNewLine())
-              || f.currentLineSize() > f.options().wrap.lineWidth) {
-            o.rollback();
-            f.newline();
-          } else {
-            return;
-          }
-        }
-      } else if (selectedWrap == EWrapListStrategy.ALWAYS) {
-        f.newline();
-      }
-      f.var(m_aVarParam);
-    }
   }
 
   /**

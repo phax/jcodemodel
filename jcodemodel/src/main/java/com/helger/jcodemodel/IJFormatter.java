@@ -46,6 +46,7 @@ import java.util.Collection;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.writer.FormatterOptions;
+import com.helger.jcodemodel.writer.options.Wrap.ListWrapping;
 
 /**
  * Base interface for JFormatter.
@@ -171,6 +172,12 @@ public interface IJFormatter extends Closeable
   @NonNull
   IJFormatter var (@NonNull JVar aVar);
 
+  default IJFormatter vars(@NonNull final Collection<? extends JVar> aList) {
+    return vars(aList, null);
+  }
+
+  IJFormatter vars(@NonNull final Collection<? extends JVar> aList, ListWrapping wrapping);
+
   /**
    * Print an identifier
    *
@@ -230,7 +237,9 @@ public interface IJFormatter extends Closeable
 
     IContextCloser persistOnClose(boolean b);
 
-    IContextCloser persistOnClose();
+    default IContextCloser persistOnClose() {
+      return persistOnClose(true);
+    }
 
     /// shortcut to set the persist then close. Since the close is idempotent, this
     /// call may have no result.

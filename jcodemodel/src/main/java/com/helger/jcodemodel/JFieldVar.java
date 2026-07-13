@@ -47,11 +47,12 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.vars.JBlockVar;
 
 /**
  * A field that can have a {@link JDocComment} associated with it
  */
-public class JFieldVar extends JVar implements IJDocCommentable, IJDeclaration
+public class JFieldVar extends JBlockVar implements IJDocCommentable
 {
   private final JDefinedClass m_aOwnerClass;
 
@@ -132,13 +133,6 @@ public class JFieldVar extends JVar implements IJDocCommentable, IJDeclaration
       f.generable (m_aJavaDoc);
     }
     super.declare(f);
-  }
-
-  @Override
-  public void generate (@NonNull final IJFormatter f)
-  {
-    // Usage
-    super.generate (f);
   }
 
   @Override

@@ -38,4 +38,9 @@ public class JArgVar extends JVar {
     f.generable(type());
   }
 
+  @Override
+  public String separator() {
+    return ",";
+  }
+
 }
