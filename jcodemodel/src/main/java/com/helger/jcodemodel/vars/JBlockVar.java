@@ -57,7 +57,7 @@ public class JBlockVar extends JVar implements IJDeclaration {
   /// ```
   /// makes i an int[], j an int[][][] (dim 2), and k an int[] (dim 1).
   ///
-  /// @param dim the dimension of the array, based on the flat type of this
+  /// @param dim the additional dimension of the array, based on the type of this
   public JSameVar andVar(String name, IJExpression aInitExpr, int dim) {
     JSameVar ret = new JSameVar(this, name, aInitExpr, dim);
     childrenVar.add(ret);
