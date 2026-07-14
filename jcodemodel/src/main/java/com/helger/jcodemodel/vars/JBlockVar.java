@@ -31,13 +31,18 @@ public class JBlockVar extends JVar implements IJDeclaration {
     super(aMods, aType, sName, aInitExpr);
   }
 
+  /// @return a stream of this and children variables.
+  public Stream<JVar> streamVars() {
+    return Stream.concat(Stream.of(this), childrenVar.stream());
+  }
+
   @Override
   public void declare(@NonNull IJFormatter f) {
     if (childrenVar.isEmpty()) {
       super.declare(f);
     } else {
       f.vars(
-          Stream.concat(Stream.of(this), childrenVar.stream()).toList(),
+          streamVars().toList(),
           extractWrappingOptions(f))
           .print(';').newline();
     }
@@ -58,7 +63,7 @@ public class JBlockVar extends JVar implements IJDeclaration {
   /// makes i an int[], j an int[][][] (dim 2), and k an int[] (dim 1).
   ///
   /// @param dim the additional dimension of the array, based on the type of this
-  public JSameVar andVar(String name, IJExpression aInitExpr, int dim) {
+  public JSameVar andVar(String name, int dim, IJExpression aInitExpr) {
     JSameVar ret = new JSameVar(this, name, aInitExpr, dim);
     childrenVar.add(ret);
     return ret;
@@ -68,7 +73,15 @@ public class JBlockVar extends JVar implements IJDeclaration {
   ///
   /// dimension is set to 0, meaning the new variable type is the same as this.
   public JSameVar andVar(String name, IJExpression aInitExpr) {
-    return andVar(name, aInitExpr, 0);
+    return andVar(name, 0, aInitExpr);
+  }
+
+  /// add and return a new var with same type and mods, but given name and
+  /// dimension.
+  ///
+  /// init is set to null, so nonexistant assignment.
+  public JSameVar andVar(String name, int dim) {
+    return andVar(name, dim, null);
   }
 
   /// add and return a new var with same type, same mods, but no init and given

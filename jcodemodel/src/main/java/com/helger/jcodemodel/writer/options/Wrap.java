@@ -1,5 +1,6 @@
 package com.helger.jcodemodel.writer.options;
 
+import com.helger.jcodemodel.writer.options.wrap.ForLoop;
 import com.helger.jcodemodel.writer.options.wrap.Method;
 
 public class Wrap {
@@ -124,5 +125,7 @@ public class Wrap {
   }
 
   public final Method method = new Method();
+
+  public final ForLoop forLoop = new ForLoop();
 
 }

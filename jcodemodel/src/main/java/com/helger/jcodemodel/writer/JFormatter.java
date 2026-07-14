@@ -788,9 +788,8 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  @Override
   @NonNull
-  public JFormatter generable (@NonNull final Collection <? extends IJGenerable> list)
+  public JFormatter generableLegacy(@NonNull final Collection<? extends IJGenerable> list)
   {
     if (!list.isEmpty ())
     {
@@ -804,6 +803,30 @@ public class JFormatter implements IJFormatter
         bFirst = false;
       }
     }
+    return this;
+  }
+
+  @Override
+  public @NonNull IJFormatter
+      generable(@NonNull Collection<? extends IJGenerable> aList, String separator, ListWrapping wrapping) {
+    if (options().wrap.disabled) {
+      return generableLegacy(aList);
+    }
+    EListWrapStrategy selectedWrap = EListWrapStrategy.NEVER;
+    if (wrapping != null) {
+      selectedWrap = wrapping.condition;
+    }
+    int indentParam = 1;
+    if (wrapping != null) {
+      indentParam = wrapping.indent;
+    }
+    boolean wrapAfterSep = true;
+    if (wrapping != null) {
+      wrapAfterSep = wrapping.wrapAfterSep;
+    }
+    indent(indentParam);
+    genericPrints(aList, selectedWrap, wrapAfterSep, o -> separator, this::generable);
+    outdent(indentParam);
     return this;
   }
 
@@ -847,28 +870,6 @@ public class JFormatter implements IJFormatter
     }
 
     indent(indentParam);
-    // if PAST3 and less equal 3 params, replace with NEVER.
-    if (wrapCondition == EListWrapStrategy.PAST3
-        && aList.size() <= 3) {
-      wrapCondition = EListWrapStrategy.NEVER;
-    }
-    // for BINARY, try NEVER ; then if the produced line size is too big or
-    // has newline, rollback and use ALWAYS instead.
-    if (wrapCondition == EListWrapStrategy.BINARY) {
-      try (IContextCloser o = addContextLayer().persistOnClose()) {
-        genericPrints(aList, EListWrapStrategy.NEVER, wrapAfterSep,
-            JVar::separator,
-            this::var);
-        if (o.value().contains(getNewLine())
-            || currentLineSize() > options().wrap.lineWidth) {
-          o.rollback();
-          wrapCondition = EListWrapStrategy.ALWAYS;
-        } else {
-          outdent(indentParam);
-          return this;
-        }
-      }
-    }
     genericPrints(aList, wrapCondition, wrapAfterSep,
         JVar::separator,
         this::var);
@@ -876,9 +877,44 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  /// print several items
+  /// print a collection with wrapping strategy
+  ///
+  /// The indent/outdent must be called before.
+  protected <T> JFormatter genericPrints(@NonNull final Collection<? extends T> aList,
+      @NonNull EListWrapStrategy selectedWrap,
+      boolean wrapAFterSep,
+      Function<T, String> separator,
+      Consumer<T> elementPrinter) {
+    // if PAST3 and less equal 3 params, replace with NEVER.
+    if (selectedWrap == EListWrapStrategy.PAST3
+        && aList.size() <= 3) {
+      selectedWrap = EListWrapStrategy.NEVER;
+    }
+    // for BINARY, try NEVER ; then if the produced line size is too big or
+    // has newline, rollback and use ALWAYS instead.
+    if (selectedWrap == EListWrapStrategy.BINARY) {
+      try (IContextCloser o = addContextLayer().persistOnClose()) {
+        genericPrintsStatic(aList, EListWrapStrategy.NEVER, wrapAFterSep,
+            separator,
+            elementPrinter);
+        if (o.value().contains(getNewLine())
+            || currentLineSize() > options().wrap.lineWidth) {
+          o.rollback();
+          selectedWrap = EListWrapStrategy.ALWAYS;
+        } else {
+          return this;
+        }
+      }
+    }
+    genericPrintsStatic(aList, selectedWrap, wrapAFterSep,
+        separator,
+        elementPrinter);
+    return this;
+  }
+
+  /// print several items with one-pass strategy.
   /// @param elementPrinter what should we do with each element
-  protected <T> void genericPrints(@NonNull final Iterable<? extends T> aList,
+  protected <T> JFormatter genericPrintsStatic(@NonNull final Iterable<? extends T> aList,
       @NonNull EListWrapStrategy selectedWrap,
       boolean wrapAFterSep,
       Function<T, String> separator,
@@ -921,6 +957,7 @@ public class JFormatter implements IJFormatter
       }
       elementPrinter.accept(element);
     }
+    return this;
   }
 
   private boolean _collectCausesNoAmbiguities (@NonNull final AbstractJClass aReference, @NonNull final JDefinedClass aClassToBeWritten)

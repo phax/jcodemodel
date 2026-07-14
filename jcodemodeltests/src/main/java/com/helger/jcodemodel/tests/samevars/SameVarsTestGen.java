@@ -22,7 +22,7 @@ public class SameVarsTestGen {
 
     JFieldVar a1 = cl.field(JMod.PUBLIC | JMod.STATIC, cl.owner().CHAR.array(), "a1");
     a1.andVar("a2");
-    a1.andVar("a3", null, 1);
+    a1.andVar("a3", 1, null);
 
     JMethod met = cl.method(JMod.PUBLIC | JMod.STATIC, cl.owner().VOID, "test");
     JBlockVar jvar = met.body().decl(cl.owner().INT, "i", JExpr.lit(11));

@@ -207,7 +207,13 @@ public interface IJFormatter extends Closeable
    * @return this for chaining
    */
   @NonNull
-  IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList);
+  default IJFormatter generable(@NonNull final Collection<? extends IJGenerable> aList) {
+    return generable(aList, ",", null);
+  }
+
+  @NonNull
+  IJFormatter
+      generable(@NonNull final Collection<? extends IJGenerable> aList, String separator, ListWrapping wrapping);
 
   /**
    * Cause the {@link IJStatement} to generate source for itself
