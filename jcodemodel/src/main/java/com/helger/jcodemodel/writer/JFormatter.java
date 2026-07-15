@@ -1306,6 +1306,7 @@ public class JFormatter implements IJFormatter
   /// computes the size of a string when tabs are expanded to match column size.
   /// @param s the string to expand
   /// @param tabSize size of a column a tab expands into.
+  // package-protected for tests
   static int sizeWithTabsExpanded(String s, int columnSize) {
     if(s==null || s.isEmpty()) {
       return 0;
@@ -1324,23 +1325,23 @@ public class JFormatter implements IJFormatter
   }
 
   //
-  // buffers management
+  // contexts management
   //
 
-  /// Represents a context layer that should be automatically removed outside of
+  /// Represents a context layer that *should* be automatically removed outside of
   /// its declaration scope, using try-with-resource syntax.
   ///
-  /// Defaults to a discarding buffer, so data added to the formatter while
-  /// buffering is discarded once the resource is closed. This can be changed with
-  /// #persistOnClose or simply commiting the data wit #commit
+  /// Defaults to a discarding context, so any data added to the formatter while
+  /// context active is discarded once the resource is closed. This can be changed
+  /// with #persistOnClose or simply committing the data wit #commit
   ///
   /// The #close method does not throw exception to have it simpler in the
   /// try-declaration. It also only applies once, as encouraged by
   /// [AutoCloseable#close] .
   ///
   /// This also contains a #currentLine that is copied from the underlying buffer
-  /// (or JFormatter if none), then updated like the JFormater is ; same for last
-  /// char and beginning of line
+  /// (or JFormatter if none), then updated like the JFormater is ; same for
+  /// lastchar and beginning of line
   ///
   /// This class is not thread safe.
   // not static to directly access the fields and methods
@@ -1365,8 +1366,8 @@ public class JFormatter implements IJFormatter
 
     boolean closed = false;
 
-    /// when set to true, upon first #close, the buffer is re written into the
-    /// formatter, potentially into another buffer.
+    /// when set to true, upon first #close, the context is re written into the
+    /// formatter, or into the next context if any.
     boolean persistOnClose = false;
 
     @Override
@@ -1380,8 +1381,10 @@ public class JFormatter implements IJFormatter
       if (closed) {
         return;
       }
-      contextLayers.removeIf(sb -> sb == this);
+      contextLayers.remove(this);
       if (persistOnClose) {
+        // printing the buffer will update the last chart, current line in the next
+        // layer.
         printDown(buffer.toString());
         JFormatter.this.m_nIndentLevel = m_nIndentLevel;
       }
@@ -1401,7 +1404,7 @@ public class JFormatter implements IJFormatter
   }
 
   ///
-  /// @return a new [FormatterContext], put on top of the buffers to receive
+  /// @return a new [FormatterContext], put on top of the previous ones to receive
   /// incoming writes.
   @Override
   public FormatterContext addContextLayer() {
