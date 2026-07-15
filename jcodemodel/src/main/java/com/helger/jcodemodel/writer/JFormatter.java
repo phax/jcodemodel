@@ -789,7 +789,7 @@ public class JFormatter implements IJFormatter
   }
 
   @NonNull
-  public JFormatter generableLegacy(@NonNull final Collection<? extends IJGenerable> list)
+  public JFormatter generableLegacy(@NonNull final Collection<? extends IJGenerable> list, String separator)
   {
     if (!list.isEmpty ())
     {
@@ -797,7 +797,7 @@ public class JFormatter implements IJFormatter
       for (final IJGenerable item : list)
       {
         if (!bFirst) {
-          print (',');
+          print(separator);
         }
         generable (item);
         bFirst = false;
@@ -810,7 +810,7 @@ public class JFormatter implements IJFormatter
   public @NonNull IJFormatter
       generable(@NonNull Collection<? extends IJGenerable> aList, String separator, ListWrapping wrapping) {
     if (settings().wrap.disabled) {
-      return generableLegacy(aList);
+      return generableLegacy(aList, separator);
     }
     EListWrapStrategy selectedWrap = EListWrapStrategy.NEVER;
     if (wrapping != null) {

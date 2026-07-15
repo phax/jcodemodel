@@ -1,5 +1,6 @@
 package com.helger.jcodemodel.writer.settings;
 
+import com.helger.jcodemodel.writer.settings.wrap.CatchClause;
 import com.helger.jcodemodel.writer.settings.wrap.ForLoop;
 import com.helger.jcodemodel.writer.settings.wrap.Method;
 
@@ -127,5 +128,7 @@ public class Wrap {
   public final Method method = new Method();
 
   public final ForLoop forLoop = new ForLoop();
+
+  public final CatchClause catchClause = new CatchClause();
 
 }

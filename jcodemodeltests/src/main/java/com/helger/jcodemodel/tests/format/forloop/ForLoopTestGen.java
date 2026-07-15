@@ -16,7 +16,7 @@ import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping.EListWrapStrategy
 public class ForLoopTestGen {
 
   public static void addForMethod(JDefinedClass jdc) {
-
+    // multiple blocks to avoid variables colliding
     {
       JMethod m = jdc.method(JMod.PUBLIC_STATIC_FINAL, jdc.owner().VOID, "initExpressions");
       JBlockVar vi = m.body().decl(jdc.owner().INT, "i");

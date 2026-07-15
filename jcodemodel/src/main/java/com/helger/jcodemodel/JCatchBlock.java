@@ -43,40 +43,38 @@ package com.helger.jcodemodel;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import com.helger.jcodemodel.vars.JCatchVar;
+import com.helger.jcodemodel.vars.JCatchFormalParameter;
 
 /**
  * Catch block for a try/catch/finally statement
  */
 public class JCatchBlock implements IJGenerable
 {
-  private final AbstractJClass m_aException;
-  private JCatchVar m_aVar;
+  @NonNull
+  private final JCatchFormalParameter m_aVar;
   private final JBlock m_aBody = new JBlock ();
 
   public JCatchBlock (@NonNull final AbstractJClass aException)
   {
-    m_aException = aException;
+    m_aVar = new JCatchFormalParameter(true, aException, "ex");
   }
 
   @NonNull
   public AbstractJClass exception ()
   {
-    return m_aException;
+    return m_aVar.type();
   }
 
+  /// shortcut to change the name of the variable and return it.
   @NonNull
-  public JVar param (final String sName)
+  public JCatchFormalParameter param(final String sName)
   {
-    if (m_aVar != null) {
-      throw new IllegalStateException ("A variable is already present!");
-    }
-    m_aVar = new JCatchVar(true, m_aException, sName);
+    m_aVar.name(sName);
     return m_aVar;
   }
 
   @Nullable
-  public JVar param ()
+  public JCatchFormalParameter param()
   {
     return m_aVar;
   }
@@ -90,9 +88,9 @@ public class JCatchBlock implements IJGenerable
   @Override
   public void generate (@NonNull final IJFormatter f)
   {
-    if (m_aVar == null) {
-      m_aVar = new JCatchVar(true, m_aException, "ex");
-    }
-    f.print ("catch (").var (m_aVar).print (')').generable (m_aBody);
+    f.print("catch (")
+        .var(m_aVar)
+        .print(')')
+        .generable(m_aBody);
   }
 }

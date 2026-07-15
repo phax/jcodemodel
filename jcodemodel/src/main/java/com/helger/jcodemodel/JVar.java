@@ -179,7 +179,6 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
    */
   public AbstractJType type (final AbstractJType aNewType)
   {
-    ValueEnforcer.notNull (aNewType, "NewType");
     final AbstractJType aOldType = m_aType;
     m_aType = aNewType;
     return aOldType;
