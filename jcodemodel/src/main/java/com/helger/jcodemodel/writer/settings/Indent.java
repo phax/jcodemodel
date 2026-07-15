@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.writer.options;
+package com.helger.jcodemodel.writer.settings;
 
 import org.jspecify.annotations.NonNull;
 

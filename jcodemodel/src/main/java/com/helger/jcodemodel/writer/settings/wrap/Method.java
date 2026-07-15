@@ -1,9 +1,9 @@
-package com.helger.jcodemodel.writer.options.wrap;
+package com.helger.jcodemodel.writer.settings.wrap;
 
-import com.helger.jcodemodel.writer.options.Wrap.ListWrapping;
-import com.helger.jcodemodel.writer.options.Wrap.ListWrapping.EListWrapStrategy;
-import com.helger.jcodemodel.writer.options.Wrap.WordWrapping;
-import com.helger.jcodemodel.writer.options.Wrap.WordWrapping.EWordWrapStrategy;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
+import com.helger.jcodemodel.writer.settings.Wrap.WordWrapping;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping.EListWrapStrategy;
+import com.helger.jcodemodel.writer.settings.Wrap.WordWrapping.EWordWrapStrategy;
 
 public class Method {
 

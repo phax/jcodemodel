@@ -9,8 +9,8 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.vars.JBlockVar;
-import com.helger.jcodemodel.writer.FormatterOptions;
-import com.helger.jcodemodel.writer.options.Wrap.ListWrapping.EListWrapStrategy;
+import com.helger.jcodemodel.writer.FormatterSettings;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping.EListWrapStrategy;
 
 @TestJCM
 public class ForLoopTestGen {
@@ -40,8 +40,8 @@ public class ForLoopTestGen {
     addForMethod(root._class(className));
   }
 
-  public void testWithDisabled(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.disable();
+  public void testWithDisabled(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.disable();
     addClassMethod(root, "DisabledWrap");
   }
 
@@ -49,13 +49,13 @@ public class ForLoopTestGen {
     addClassMethod(root, "DefaultWrapOptions");
   }
 
-  public void testWithWrapInitBinary(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.forLoop.init.condition(EListWrapStrategy.BINARY);
+  public void testWithWrapInitBinary(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.forLoop.init.condition(EListWrapStrategy.BINARY);
     addClassMethod(root, "WrapInitBinary");
   }
 
-  public void testWithWrapInitRequired(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.forLoop.init.condition(EListWrapStrategy.REQUIRED);
+  public void testWithWrapInitRequired(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.forLoop.init.condition(EListWrapStrategy.REQUIRED);
     addClassMethod(root, "WrapInitRequired");
   }
 

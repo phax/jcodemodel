@@ -57,7 +57,7 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.vars.JArgVar;
 import com.helger.jcodemodel.vars.JVarArgVar;
-import com.helger.jcodemodel.writer.options.Wrap.WordWrapping.EWordWrapStrategy;
+import com.helger.jcodemodel.writer.settings.Wrap.WordWrapping.EWordWrapStrategy;
 
 /**
  * Java method.
@@ -580,15 +580,15 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       f.generable (m_aReturnType);
     }
 
-    if (!f.options().wrap.disabled) {
-      EWordWrapStrategy nameWrapStrat = f.options().wrap.method.name.condition;
+    if (!f.settings().wrap.disabled) {
+      EWordWrapStrategy nameWrapStrat = f.settings().wrap.method.name.condition;
       boolean wrapName = switch (nameWrapStrat) {
       case ALWAYS -> true;
       case NEVER -> false;
-      case REQUIRED -> f.currentLineSize() + m_sName.length() + 1 > f.options().wrap.lineWidth;
+      case REQUIRED -> f.currentLineSize() + m_sName.length() + 1 > f.settings().wrap.lineWidth;
       };
       if (wrapName) {
-        int nbi = f.options().wrap.method.name.indent;
+        int nbi = f.settings().wrap.method.name.indent;
         f
             .indent(nbi)
             .newline()
@@ -602,11 +602,11 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
 
     f.print('(');
-    if (f.options().wrap.disabled) {
+    if (f.settings().wrap.disabled) {
       appParamsWrapDisabled(f);
     } else {
       f.vars(Stream.concat(m_aParams.stream(), Stream.ofNullable(m_aVarParam)).toList(),
-          f.options().wrap.method.params);
+          f.settings().wrap.method.params);
     }
     f.print(')');
     if (!m_aThrows.isEmpty ())
@@ -622,18 +622,18 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
     if (m_aBody != null)
     {
-      if (!f.options().wrap.disabled) {
-        EWordWrapStrategy bracketWrapStrat = f.options().wrap.method.bracket.condition;
+      if (!f.settings().wrap.disabled) {
+        EWordWrapStrategy bracketWrapStrat = f.settings().wrap.method.bracket.condition;
         boolean wrapBracket = switch (bracketWrapStrat) {
         case ALWAYS -> true;
         case NEVER -> false;
-        case REQUIRED -> f.currentLineSize() + 2 > f.options().wrap.lineWidth;
+        case REQUIRED -> f.currentLineSize() + 2 > f.settings().wrap.lineWidth;
         };
         if (wrapBracket) {
           f
-              .indent(f.options().wrap.method.bracket.indent)
+              .indent(f.settings().wrap.method.bracket.indent)
               .newline()
-              .outdent(f.options().wrap.method.bracket.indent);
+              .outdent(f.settings().wrap.method.bracket.indent);
         }
       }
       f.statement (m_aBody);
@@ -651,18 +651,18 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       }
       else
       {
-        if (!f.options().wrap.disabled) {
-          EWordWrapStrategy bracketWrapStrat = f.options().wrap.method.bracket.condition;
+        if (!f.settings().wrap.disabled) {
+          EWordWrapStrategy bracketWrapStrat = f.settings().wrap.method.bracket.condition;
           boolean wrapBracket = switch (bracketWrapStrat) {
           case ALWAYS -> true;
           case NEVER -> false;
-          case REQUIRED -> f.currentLineSize() + 2 > f.options().wrap.lineWidth;
+          case REQUIRED -> f.currentLineSize() + 2 > f.settings().wrap.lineWidth;
           };
           if (wrapBracket) {
             f
-                .indent(f.options().wrap.method.bracket.indent)
+                .indent(f.settings().wrap.method.bracket.indent)
                 .newline()
-                .outdent(f.options().wrap.method.bracket.indent);
+                .outdent(f.settings().wrap.method.bracket.indent);
           }
         }
         // Print an empty body for non-native, non-abstract methods

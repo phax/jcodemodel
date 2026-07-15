@@ -1,7 +1,7 @@
-package com.helger.jcodemodel.writer.options;
+package com.helger.jcodemodel.writer.settings;
 
-import com.helger.jcodemodel.writer.options.wrap.ForLoop;
-import com.helger.jcodemodel.writer.options.wrap.Method;
+import com.helger.jcodemodel.writer.settings.wrap.ForLoop;
+import com.helger.jcodemodel.writer.settings.wrap.Method;
 
 public class Wrap {
 

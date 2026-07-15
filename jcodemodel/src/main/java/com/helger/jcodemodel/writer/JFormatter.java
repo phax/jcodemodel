@@ -62,8 +62,8 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.NullWriter;
-import com.helger.jcodemodel.writer.options.Wrap.ListWrapping;
-import com.helger.jcodemodel.writer.options.Wrap.ListWrapping.EListWrapStrategy;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping.EListWrapStrategy;
 
 /**
  * This is a utility class for managing indentation and other basic formatting
@@ -396,7 +396,7 @@ public class JFormatter implements IJFormatter
   @NonNull
   private StringBuilder currentLine = new StringBuilder();
 
-  private final FormatterOptions m_oOptions;
+  private final FormatterSettings m_oSettings;
 
   /**
    * Writer associated with this {@link IJFormatter}
@@ -434,13 +434,13 @@ public class JFormatter implements IJFormatter
    *        <code>null</code>.
    */
   public JFormatter(@NonNull @WillCloseWhenClosed final SourcePrintWriter aPW,
-      @NonNull final FormatterOptions formatterOptions)
+      @NonNull final FormatterSettings formatterSettings)
   {
     ValueEnforcer.notNull (aPW, "PrintWriter");
-    ValueEnforcer.notNull(formatterOptions, "formatterOptions");
+    ValueEnforcer.notNull(formatterSettings, "formatterOptions");
 
     m_aPW = aPW;
-    m_oOptions = formatterOptions;
+    m_oSettings = formatterSettings;
   }
 
   /**
@@ -492,8 +492,8 @@ public class JFormatter implements IJFormatter
   }
 
   @Override
-  public FormatterOptions options() {
-    return m_oOptions;
+  public FormatterSettings settings() {
+    return m_oSettings;
   }
 
   @Override
@@ -653,7 +653,7 @@ public class JFormatter implements IJFormatter
     if (atBeginningOfLine())
     {
       for (int i = 0; i < indentLevel(); i++) {
-        printDown(m_oOptions.indent.string());
+        printDown(m_oSettings.indent.string());
       }
     }
     else
@@ -809,7 +809,7 @@ public class JFormatter implements IJFormatter
   @Override
   public @NonNull IJFormatter
       generable(@NonNull Collection<? extends IJGenerable> aList, String separator, ListWrapping wrapping) {
-    if (options().wrap.disabled) {
+    if (settings().wrap.disabled) {
       return generableLegacy(aList);
     }
     EListWrapStrategy selectedWrap = EListWrapStrategy.NEVER;
@@ -898,7 +898,7 @@ public class JFormatter implements IJFormatter
             separator,
             elementPrinter);
         if (o.value().contains(getNewLine())
-            || currentLineSize() > options().wrap.lineWidth) {
+            || currentLineSize() > settings().wrap.lineWidth) {
           o.rollback();
           selectedWrap = EListWrapStrategy.ALWAYS;
         } else {
@@ -941,7 +941,7 @@ public class JFormatter implements IJFormatter
           try (IContextCloser o = addContextLayer().persistOnClose()) {
             elementPrinter.accept(element);
             if (o.value().contains(getNewLine())
-                || currentLineSize() > options().wrap.lineWidth) {
+                || currentLineSize() > settings().wrap.lineWidth) {
               o.rollback();
               newline();
             } else {
@@ -1262,7 +1262,7 @@ public class JFormatter implements IJFormatter
   {
     try (final JFormatter aFormatter =
         new JFormatter(new SourcePrintWriter(NullWriter.getInstance(), "\n"),
-            new FormatterOptions().configure(o -> o.indent.useTabs())))
+            new FormatterSettings().configure(o -> o.indent.useTabs())))
     {
       aFormatter.m_eMode = EMode.FIND_ERROR_TYPES;
       aFormatter.m_bContainsErrorTypes = false;
@@ -1300,7 +1300,7 @@ public class JFormatter implements IJFormatter
 
   @Override
   public int currentLineSize() {
-    return sizeWithTabsExpanded(currentLine(), m_oOptions.indent.tabSize);
+    return sizeWithTabsExpanded(currentLine(), m_oSettings.indent.tabSize);
   }
 
   /// computes the size of a string when tabs are expanded to match column size.

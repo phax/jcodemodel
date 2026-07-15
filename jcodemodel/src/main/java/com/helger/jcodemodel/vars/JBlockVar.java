@@ -13,7 +13,7 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JMods;
 import com.helger.jcodemodel.JVar;
-import com.helger.jcodemodel.writer.options.Wrap.ListWrapping;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
 
 ///
 /// A variable that is declared as part of a block.

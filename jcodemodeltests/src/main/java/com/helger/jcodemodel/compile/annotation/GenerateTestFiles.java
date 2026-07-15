@@ -29,7 +29,7 @@ import javax.annotation.processing.Generated;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JReferencedClass;
-import com.helger.jcodemodel.writer.FormatterOptions;
+import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
@@ -183,7 +183,7 @@ public class GenerateTestFiles
         boolean missingParam = false;
         JCodeModel produced = null;
         JPackage rootPackage = null;
-        FormatterOptions options = null;
+        FormatterSettings settings = null;
         for (int i = 0; i < params.length; i++)
         {
           final Parameter param = m.getParameters ()[i];
@@ -211,11 +211,11 @@ public class GenerateTestFiles
               params[i] = rootPackage;
               requiresJCM = true;
 
-            } else if (param.getType() == FormatterOptions.class) {
-              if (options == null) {
-                options = new FormatterOptions();
+            } else if (param.getType() == FormatterSettings.class) {
+              if (settings == null) {
+                settings = new FormatterSettings();
               }
-              params[i] = options;
+              params[i] = settings;
             }
             else
             {
@@ -252,7 +252,7 @@ public class GenerateTestFiles
           {
             postProcessJCM (produced);
             new JCMWriter(produced)
-                .withOptions(options)
+                .withSettings(settings)
                 .setJavaFeature(m_nJavaFeature)
                 .build(m_aOutputDir, (IProgressTracker) null);
           }

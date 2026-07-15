@@ -6,9 +6,9 @@ import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
-import com.helger.jcodemodel.writer.FormatterOptions;
-import com.helger.jcodemodel.writer.options.Wrap.ListWrapping.EListWrapStrategy;
-import com.helger.jcodemodel.writer.options.Wrap.WordWrapping.EWordWrapStrategy;
+import com.helger.jcodemodel.writer.FormatterSettings;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping.EListWrapStrategy;
+import com.helger.jcodemodel.writer.settings.Wrap.WordWrapping.EWordWrapStrategy;
 
 @TestJCM
 public class MethodFormatTestGen {
@@ -55,8 +55,8 @@ public class MethodFormatTestGen {
   // generic wrapping : default, disabled
   //
 
-  public void testWithDisabled(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.disable();
+  public void testWithDisabled(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.disable();
     addClassMethod(root, "DisabledWrap");
   }
 
@@ -68,25 +68,25 @@ public class MethodFormatTestGen {
   // name
   //
 
-  public void testWithWrapNameAlwaysIndent3(final JPackage root, FormatterOptions options)
+  public void testWithWrapNameAlwaysIndent3(final JPackage root, FormatterSettings settings)
       throws JCodeModelException {
-    options.wrap.method.name
+    settings.wrap.method.name
         .condition(EWordWrapStrategy.ALWAYS)
         .indent(3);
     addClassMethod(root, "WrapNameAlwaysI3");
   }
 
-  public void testWithWrapNameNever(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.name.condition(EWordWrapStrategy.NEVER);
+  public void testWithWrapNameNever(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.method.name.condition(EWordWrapStrategy.NEVER);
     addClassMethod(root, "WrapNameNever");
   }
 
-  public void testWithWrapNameRequiredIndent1Width70(final JPackage root, FormatterOptions options)
+  public void testWithWrapNameRequiredIndent1Width70(final JPackage root, FormatterSettings settings)
       throws JCodeModelException {
-    options.wrap.method.name
+    settings.wrap.method.name
         .condition(EWordWrapStrategy.REQUIRED)
         .indent(1);
-    options.wrap.lineWidth = 70;
+    settings.wrap.lineWidth = 70;
     addClassMethod(root, "WrapNameRequiredI1W70");
   }
 
@@ -94,41 +94,41 @@ public class MethodFormatTestGen {
   // params
   //
 
-  public void testWithWrapParamsAlways(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.params.condition(EListWrapStrategy.ALWAYS);
+  public void testWithWrapParamsAlways(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.method.params.condition(EListWrapStrategy.ALWAYS);
     addClassMethod(root, "WrapParamsAlways");
   }
 
-  public void testWithWrapParamsAlwaysBeforeSep(final JPackage root, FormatterOptions options)
+  public void testWithWrapParamsAlwaysBeforeSep(final JPackage root, FormatterSettings settings)
       throws JCodeModelException {
-    options.wrap.method.params.condition(EListWrapStrategy.ALWAYS)
+    settings.wrap.method.params.condition(EListWrapStrategy.ALWAYS)
         .wrapBeforeSep();
     addClassMethod(root, "WrapParamsAlwaysBeforeSep");
   }
 
-  public void testWithWrapParamsNever(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.params.condition(EListWrapStrategy.NEVER);
+  public void testWithWrapParamsNever(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.method.params.condition(EListWrapStrategy.NEVER);
     addClassMethod(root, "WrapParamsNever");
   }
 
-  public void testWithWrapParamsRequird(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.params.condition(EListWrapStrategy.REQUIRED);
+  public void testWithWrapParamsRequird(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.method.params.condition(EListWrapStrategy.REQUIRED);
     addClassMethod(root, "WrapParamsRequired");
   }
 
-  public void testWithParamsBinaryIndent2(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.params
+  public void testWithParamsBinaryIndent2(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.method.params
         .condition(EListWrapStrategy.BINARY)
         .indent(2);
     addClassMethod(root, "WrapParamsBinaryI2");
   }
 
-  public void testWithParamsBinaryIndent2Width50(final JPackage root, FormatterOptions options)
+  public void testWithParamsBinaryIndent2Width50(final JPackage root, FormatterSettings settings)
       throws JCodeModelException {
-    options.wrap.method.params
+    settings.wrap.method.params
         .condition(EListWrapStrategy.BINARY)
         .indent(2);
-    options.wrap.lineWidth(50);
+    settings.wrap.lineWidth(50);
     addClassMethod(root, "WrapParamsBinaryI2W50");
   }
 
@@ -136,22 +136,22 @@ public class MethodFormatTestGen {
   // bracket
   //
 
-  public void testWithBracketWrapAlways(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.bracket
+  public void testWithBracketWrapAlways(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.method.bracket
         .condition(EWordWrapStrategy.ALWAYS)
         .indent(0);
     addClassMethod(root, "WrapBracketAlways");
   }
 
-  public void testWithBracketWrapNever(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.bracket
+  public void testWithBracketWrapNever(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.method.bracket
         .condition(EWordWrapStrategy.NEVER)
         .indent(0);
     addClassMethod(root, "WrapBracketNever");
   }
 
-  public void testWithBracketWrapRequired(final JPackage root, FormatterOptions options) throws JCodeModelException {
-    options.wrap.method.bracket
+  public void testWithBracketWrapRequired(final JPackage root, FormatterSettings settings) throws JCodeModelException {
+    settings.wrap.method.bracket
         .condition(EWordWrapStrategy.REQUIRED)
         .indent(0);
     addClassMethod(root, "WrapBracketRequired");

@@ -89,7 +89,7 @@ public class JCMWriter
   /** The newline string to be used. Defaults to system default */
   private String m_sNewLine = DEFAULT_NEW_LINE;
 
-  private FormatterOptions m_oOptions = new FormatterOptions();
+  private FormatterSettings m_oSettings = new FormatterSettings();
 
   /**
    * Java feature (major release version) the generated code is targeted at. A feature that requires
@@ -151,16 +151,16 @@ public class JCMWriter
     return this;
   }
 
-  public FormatterOptions options() {
-    return m_oOptions;
+  public FormatterSettings settings() {
+    return m_oSettings;
   }
 
   /// set the options, only if params not null.
   /// @param options if null, not set (no effect)
   /// @return this
-  public JCMWriter withOptions(FormatterOptions options) {
-    if (options != null) {
-      m_oOptions = options;
+  public JCMWriter withSettings(FormatterSettings settings) {
+    if (settings != null) {
+      m_oSettings = settings;
     }
     return this;
   }
@@ -317,7 +317,7 @@ public class JCMWriter
                                                   @NonNull final String sClassFilename) throws IOException
   {
     final SourcePrintWriter aWriter = aSrcWriter.openSource (aPackage, sClassFilename);
-    final JFormatter ret = new JFormatter(aWriter, m_oOptions);
+    final JFormatter ret = new JFormatter(aWriter, m_oSettings);
     ret.setJavaFeature (m_nJavaFeature);
     // Add all classes to not be imported (may be empty)
     ret.addDontImportClasses (m_aCM.getAllDontImportClasses ());

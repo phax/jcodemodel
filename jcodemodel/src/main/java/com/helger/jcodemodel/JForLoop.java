@@ -186,7 +186,7 @@ public class JForLoop implements IJStatement {
   protected void stateInit(@NonNull final IJFormatter f) {
     if (initVar != null) {
       // init a variable
-      if (f.options().wrap.disabled) {
+      if (f.settings().wrap.disabled) {
         boolean bFirst = true;
         for (final JVar o : initVar.streamVars().toList()) {
           if (!bFirst) {
@@ -196,11 +196,11 @@ public class JForLoop implements IJStatement {
           bFirst = false;
         }
       } else {
-        f.vars(initVar.streamVars().toList(), f.options().wrap.forLoop.init);
+        f.vars(initVar.streamVars().toList(), f.settings().wrap.forLoop.init);
       }
     } else
     // init a list of expressions
-    if (f.options().wrap.disabled) {
+    if (f.settings().wrap.disabled) {
       boolean bFirst = true;
       for (final IJExpression o : m_aInitExprs) {
         if (!bFirst) {
@@ -210,7 +210,7 @@ public class JForLoop implements IJStatement {
         bFirst = false;
       }
     } else {
-      f.generable(m_aInitExprs, ",", f.options().wrap.forLoop.init);
+      f.generable(m_aInitExprs, ",", f.settings().wrap.forLoop.init);
     }
 
   }

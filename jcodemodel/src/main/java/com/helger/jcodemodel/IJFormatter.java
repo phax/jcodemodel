@@ -45,8 +45,8 @@ import java.util.Collection;
 
 import org.jspecify.annotations.NonNull;
 
-import com.helger.jcodemodel.writer.FormatterOptions;
-import com.helger.jcodemodel.writer.options.Wrap.ListWrapping;
+import com.helger.jcodemodel.writer.FormatterSettings;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
 
 /**
  * Base interface for JFormatter.
@@ -235,7 +235,7 @@ public interface IJFormatter extends Closeable
   @NonNull
   IJFormatter declaration (@NonNull IJDeclaration aObj);
 
-  FormatterOptions options();
+  FormatterSettings settings();
 
   public interface IContextCloser extends AutoCloseable {
     @Override

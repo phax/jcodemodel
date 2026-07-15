@@ -78,7 +78,7 @@ import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.compile.DynamicClassLoader;
 import com.helger.jcodemodel.compile.MemoryCodeWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
-import com.helger.jcodemodel.writer.FormatterOptions;
+import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.JFormatter;
 import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
@@ -100,7 +100,7 @@ public final class CodeModelTestsHelper
   private static IJFormatter _createFormatter (@NonNull final NonBlockingStringWriter aWriter)
   {
     return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.DEFAULT_NEW_LINE),
-        new FormatterOptions());
+        new FormatterSettings());
   }
 
   /** Hidden constructor. */
