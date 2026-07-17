@@ -982,11 +982,11 @@ public class JBlock implements IJGenerable, IJStatement
   {
     for (final IJObject aContentElement : m_aContentList)
     {
-      if (aContentElement instanceof IJDeclaration) {
-        f.declaration ((IJDeclaration) aContentElement);
+      if (aContentElement instanceof IJDeclaration ijd) {
+          f.declaration(ijd);
       } else
-        if (aContentElement instanceof IJStatement) {
-          f.statement ((IJStatement) aContentElement);
+      if (aContentElement instanceof IJStatement ijs) {
+        f.statement(ijs);
         } else
         {
           // For lambda expressions in JLambdaBlock

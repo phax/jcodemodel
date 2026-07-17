@@ -3,6 +3,7 @@ package com.helger.jcodemodel.writer.settings;
 import com.helger.jcodemodel.writer.settings.wrap.CatchClause;
 import com.helger.jcodemodel.writer.settings.wrap.ForLoop;
 import com.helger.jcodemodel.writer.settings.wrap.Method;
+import com.helger.jcodemodel.writer.settings.wrap.Variables;
 
 public class Wrap {
 
@@ -125,10 +126,12 @@ public class Wrap {
     return disable(true);
   }
 
-  public final Method method = new Method();
+  public final CatchClause catchClause = new CatchClause();
 
   public final ForLoop forLoop = new ForLoop();
 
-  public final CatchClause catchClause = new CatchClause();
+  public final Method method = new Method();
+
+  public final Variables variables = new Variables();
 
 }

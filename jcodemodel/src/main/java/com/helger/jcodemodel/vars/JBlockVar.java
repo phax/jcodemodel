@@ -50,8 +50,8 @@ public class JBlockVar extends JVar implements IJDeclaration {
 
   /// extract the wrapping options for this type of var. Present here to be
   /// overridden in the fieldVar
-  protected ListWrapping extractWrappingOptions(IJFormatter f) {
-    return null;
+  protected ListWrapping extractWrappingOptions(@NonNull IJFormatter f) {
+    return f.settings().wrap.variables.block;
   }
 
   /// add and return a new var with same type and mods, but given name and init.

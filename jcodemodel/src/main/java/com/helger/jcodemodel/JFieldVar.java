@@ -48,6 +48,7 @@ import org.jspecify.annotations.Nullable;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
 import com.helger.jcodemodel.vars.JBlockVar;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
 
 /**
  * A field that can have a {@link JDocComment} associated with it
@@ -152,5 +153,10 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   public int hashCode ()
   {
     return getHashCode (super.hashCode (), new Object [] { m_aOwnerClass });
+  }
+
+  @Override
+  protected ListWrapping extractWrappingOptions(@NonNull IJFormatter f) {
+    return f.settings().wrap.variables.field;
   }
 }

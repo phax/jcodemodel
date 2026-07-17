@@ -824,9 +824,7 @@ public class JFormatter implements IJFormatter
     if (wrapping != null) {
       wrapAfterSep = wrapping.wrapAfterSep;
     }
-    indent(indentParam);
-    genericPrints(aList, selectedWrap, wrapAfterSep, o -> separator, this::generable);
-    outdent(indentParam);
+    genericPrints(aList, selectedWrap, wrapAfterSep, o -> separator, indentParam, this::generable);
     return this;
   }
 
@@ -869,21 +867,19 @@ public class JFormatter implements IJFormatter
       wrapAfterSep = wrapping.wrapAfterSep;
     }
 
-    indent(indentParam);
     genericPrints(aList, wrapCondition, wrapAfterSep,
         JVar::separator,
+        indentParam,
         this::var);
-    outdent(indentParam);
     return this;
   }
 
   /// print a collection with wrapping strategy
-  ///
-  /// The indent/outdent must be called before.
   protected <T> JFormatter genericPrints(@NonNull final Collection<? extends T> aList,
       @NonNull EListWrapStrategy selectedWrap,
       boolean wrapAFterSep,
       Function<T, String> separator,
+      int indentValue,
       Consumer<T> elementPrinter) {
     // if PAST3 and less equal 3 params, replace with NEVER.
     if (selectedWrap == EListWrapStrategy.PAST3
@@ -895,7 +891,7 @@ public class JFormatter implements IJFormatter
     if (selectedWrap == EListWrapStrategy.BINARY) {
       try (IContextCloser o = addContextLayer().persistOnClose()) {
         genericPrintsStatic(aList, EListWrapStrategy.NEVER, wrapAFterSep,
-            separator,
+            separator, indentValue,
             elementPrinter);
         if (o.value().contains(getNewLine())
             || currentLineSize() > settings().wrap.lineWidth) {
@@ -907,7 +903,7 @@ public class JFormatter implements IJFormatter
       }
     }
     genericPrintsStatic(aList, selectedWrap, wrapAFterSep,
-        separator,
+        separator, indentValue,
         elementPrinter);
     return this;
   }
@@ -918,16 +914,20 @@ public class JFormatter implements IJFormatter
       @NonNull EListWrapStrategy selectedWrap,
       boolean wrapAFterSep,
       Function<T, String> separator,
+      int indentValue,
       Consumer<T> elementPrinter) {
     if (selectedWrap.twoPasses) {
       throw new RuntimeException("this method can't accept two-passes config " + selectedWrap);
     }
     T last = null;
+    boolean indented = false;
     for (final T element : aList) {
       if (last == null) {
         last = element;
-        if (selectedWrap == EListWrapStrategy.ALWAYS) {
+        if (selectedWrap == EListWrapStrategy.ALWAYS && !currentLine().isBlank()) {
           newline();
+          indented = true;
+          indent(indentValue);
         }
         if (selectedWrap == EListWrapStrategy.PAST3) {
           selectedWrap = EListWrapStrategy.ALWAYS;
@@ -956,6 +956,13 @@ public class JFormatter implements IJFormatter
         }
       }
       elementPrinter.accept(element);
+      if (!indented) {
+        indented = true;
+        indent(indentValue);
+      }
+    }
+    if (indented) {
+      outdent(indentValue);
     }
     return this;
   }

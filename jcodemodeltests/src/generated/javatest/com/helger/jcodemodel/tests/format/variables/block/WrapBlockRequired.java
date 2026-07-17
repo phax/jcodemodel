@@ -12,16 +12,17 @@
  * limitations under the License.
  * 
  */
-package com.helger.jcodemodel.tests.samevars;
+package com.helger.jcodemodel.tests.format.variables.block;
 
 import javax.annotation.processing.Generated;
 
 @Generated("com.helger.jcodemodel.JCodeModel")
-public class SameVarsSimpleClass {
-    public static int i = 3, j, k = 1;
-    public static char[] a1, a2, a3 [];
+public class WrapBlockRequired {
 
-    public static void test() {
-        int i = 11, j, k = 5;
+    public static void tst() {
+        char a;
+        char[] b = null, c[] = null, variable_2 = null, variable_3 = null,
+            variable_4 = null, variable_5 = null, variable_6 = null,
+            variable_7 = null, variable_8 = null, variable_9 = null;
     }
 }
