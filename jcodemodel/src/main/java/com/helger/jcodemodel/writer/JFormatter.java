@@ -405,8 +405,37 @@ public class JFormatter implements IJFormatter
 
   /// contexts to write into instead of the printwriter.
   ///
-  /// No context should be kept here while being closed.
+  /// No context should be kept here after closed.
   private final List<FormatterContext> contextLayers = new ArrayList<>();
+
+  /// internal field to have this as a writer context.
+  private final WriteContext asContext = new WriteContext() {
+
+    @Override
+    public void indent(int nb) {
+      m_nIndentLevel += nb;
+    }
+
+    @Override
+    public void outdent(int nb) {
+      m_nIndentLevel -= nb;
+    }
+
+    @Override
+    public String getNewLine() {
+      return getNewLine();
+    }
+
+    @Override
+    public void append(String fullString, boolean resetLine, String appendLine, char lastChar) {
+      m_aPW.print(fullString);
+      m_cLastChar = lastChar;
+      if (resetLine) {
+        currentLine = new StringBuilder();
+      }
+      currentLine.append(appendLine);
+    }
+  };
 
   /// last char written to the writer, or 0 if none/newline.
   private char m_cLastChar = 0;
@@ -506,11 +535,7 @@ public class JFormatter implements IJFormatter
   @NonNull
   public JFormatter indent (int nb)
   {
-    if (contextLayers.isEmpty()) {
-      m_nIndentLevel += nb;
-    } else {
-      contextLayers.get(0).m_nIndentLevel += nb;
-    }
+    topContext().indent(nb);
     return this;
   }
 
@@ -518,11 +543,7 @@ public class JFormatter implements IJFormatter
   @NonNull
   public JFormatter outdent (int nb)
   {
-    if (contextLayers.isEmpty()) {
-      m_nIndentLevel -= nb;
-    } else {
-      contextLayers.get(0).m_nIndentLevel -= nb;
-    }
+    topContext().outdent(nb);
     return this;
   }
 
@@ -1335,6 +1356,49 @@ public class JFormatter implements IJFormatter
   // contexts management
   //
 
+  /// internal notion of writer context
+  private interface WriteContext {
+
+    void indent(int nb);
+
+    void outdent(int nb);
+
+    String getNewLine();
+
+    default void append(String sStr) {
+      if (sStr == null || sStr.isEmpty()) {
+        return;
+      }
+      char lastChar = 0;
+      boolean resetLine = false;
+      String appendLine = null;
+      if (sStr.contains(getNewLine())) {
+        resetLine = true;
+        int offset = sStr.lastIndexOf(getNewLine()) + getNewLine().length();
+        appendLine = sStr.substring(offset);
+        lastChar = appendLine.isEmpty() ? 0 : appendLine.charAt(appendLine.length() - 1);
+      } else {
+        appendLine = sStr;
+        lastChar = sStr.charAt(sStr.length() - 1);
+      }
+
+      append(sStr, resetLine, appendLine, lastChar);
+    }
+
+    void append(String fullString, boolean resetLine, String appendLine, char lastChar);
+
+    default void append(char c) {
+
+    }
+
+  }
+
+  /// @return the top (last) context, if any ; or this as a writer context if
+  /// none.
+  protected WriteContext topContext() {
+    return contextLayers.isEmpty() ? asContext : contextLayers.get(0);
+  }
+
   /// Represents a context layer that *should* be automatically removed outside of
   /// its declaration scope, using try-with-resource syntax.
   ///
@@ -1352,7 +1416,7 @@ public class JFormatter implements IJFormatter
   ///
   /// This class is not thread safe.
   // not static to directly access the fields and methods
-  public class FormatterContext implements IContextCloser {
+  public class FormatterContext implements IContextCloser, WriteContext {
 
     // public final, so no getter/setter
     public final StringBuilder buffer;
@@ -1408,13 +1472,38 @@ public class JFormatter implements IJFormatter
     public String value() {
       return buffer.toString();
     }
+
+    @Override
+    public void indent(int nb) {
+      m_nIndentLevel += nb;
+    }
+
+    @Override
+    public void outdent(int nb) {
+      m_nIndentLevel -= nb;
+    }
+
+    @Override
+    public String getNewLine() {
+      return getNewLine();
+    }
+
+    @Override
+    public void append(String fullString, boolean resetLine, String appendLine, char lastChar) {
+      buffer.append(fullString);
+      m_cLastChar = lastChar;
+      if (resetLine) {
+        currentLine = new StringBuilder();
+      }
+      currentLine.append(appendLine);
+    }
   }
 
   ///
   /// @return a new [FormatterContext], put on top of the previous ones to receive
   /// incoming writes.
   @Override
-  public FormatterContext addContextLayer() {
+  public IContextCloser addContextLayer() {
     FormatterContext ret = new FormatterContext();
     contextLayers.add(0, ret);
     return ret;
