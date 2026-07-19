@@ -347,21 +347,6 @@ public class JFormatter implements IJFormatter {
    */
   private EMode m_eMode = EMode.PRINTING;
 
-  /**
-   * Current number of indentation strings to print
-   */
-  private int m_nIndentLevel;
-
-  /// last line actually printed to the internal printwriter.
-  ///
-  /// This is mostly used to check current line's width, eg for wrapping. Since
-  /// the test for value is done much less than the addition, we keep a
-  /// StringBuilder.
-  ///
-  /// The buffers can be discarded at will, so they track their own currentLine
-  @NonNull
-  private StringBuilder currentLine = new StringBuilder();
-
   private final FormatterSettings m_oSettings;
 
   /**
@@ -377,14 +362,34 @@ public class JFormatter implements IJFormatter {
   /// internal field to have this as a writer context.
   private final WriteContext asContext = new WriteContext() {
 
+    /**
+     * Current number of indentation strings to print
+     */
+    private int m_nIndentLevel;
+
+    private char m_cLastChar = 0;
+
+    @NonNull
+    private StringBuilder currentLine = new StringBuilder();
+
     @Override
-    public void indent(int nb) {
-      m_nIndentLevel += nb;
+    public int getIndentLevel() {
+      return m_nIndentLevel;
     }
 
     @Override
-    public void outdent(int nb) {
-      m_nIndentLevel -= nb;
+    public void setIndentLevel(int nb) {
+      m_nIndentLevel = nb;
+    }
+
+    @Override
+    public char getLastChar() {
+      return m_cLastChar;
+    }
+
+    @Override
+    public String getCurrentLine() {
+      return currentLine.toString();
     }
 
     @Override
@@ -409,15 +414,7 @@ public class JFormatter implements IJFormatter {
       currentLine.append(printedChar);
       m_cLastChar = c;
     }
-
-    @Override
-    public String getCurrentLine() {
-      return currentLine.toString();
-    }
   };
-
-  /// last char written to the writer, or 0 if none/newline.
-  private char m_cLastChar = 0;
 
   private JPackage m_aPckJavaLang;
 
@@ -1162,17 +1159,11 @@ public class JFormatter implements IJFormatter {
   }
 
   public char lastChar() {
-    if (contextLayers.isEmpty()) {
-      return m_cLastChar;
-    }
-    return contextLayers.get(0).m_cLastChar;
+    return topContext().getLastChar();
   }
 
   public int indentLevel() {
-    if (contextLayers.isEmpty()) {
-      return m_nIndentLevel;
-    }
-    return contextLayers.get(0).m_nIndentLevel;
+    return topContext().getIndentLevel();
   }
 
 
@@ -1213,11 +1204,21 @@ public class JFormatter implements IJFormatter {
   /// internal notion of writer context
   private interface WriteContext {
 
-    void indent(int nb);
+    int getIndentLevel();
+
+    void setIndentLevel(int nb);
+
+    char getLastChar();
+
+    default void indent(int nb) {
+      setIndentLevel(getIndentLevel() + nb);
+    }
+
+    default void outdent(int nb) {
+      setIndentLevel(getIndentLevel() - nb);
+    }
 
     String getCurrentLine();
-
-    void outdent(int nb);
 
     String getNewLine();
 
@@ -1246,12 +1247,6 @@ public class JFormatter implements IJFormatter {
     void append(char c);
   }
 
-  /// @return the top (last) context, if any ; or this as a writer context if
-  /// none.
-  protected WriteContext topContext() {
-    return contextLayers.isEmpty() ? asContext : contextLayers.get(0);
-  }
-
   /// Represents a context layer that *should* be automatically removed outside of
   /// its declaration scope, using try-with-resource syntax.
   ///
@@ -1274,6 +1269,20 @@ public class JFormatter implements IJFormatter {
     // public final, so no getter/setter
     public final StringBuilder buffer;
 
+    StringBuilder currentLine = new StringBuilder(currentLine());
+
+    private char m_cLastChar = lastChar();
+
+    private int m_nIndentLevel = indentLevel();
+
+    /// when set to true, upon first #close, the context is re written into the
+    /// formatter, or into the next context if any.
+    boolean persistOnClose = false;
+
+    boolean closed = false;
+
+    // construct
+
     public FormatterContext(StringBuilder buffer) {
       this.buffer = buffer;
     }
@@ -1282,17 +1291,45 @@ public class JFormatter implements IJFormatter {
       this(new StringBuilder());
     }
 
-    StringBuilder currentLine = new StringBuilder(currentLine());
+    // getters/setters
 
-    private char m_cLastChar = lastChar();
+    @Override
+    public String value() {
+      return buffer.toString();
+    }
 
-    private int m_nIndentLevel = indentLevel();
+    @Override
+    public String getCurrentLine() {
+      return currentLine.toString();
+    }
 
-    boolean closed = false;
+    @Override
+    public char getLastChar() {
+      return m_cLastChar;
+    }
 
-    /// when set to true, upon first #close, the context is re written into the
-    /// formatter, or into the next context if any.
-    boolean persistOnClose = false;
+    @Override
+    public int getIndentLevel() {
+      return m_nIndentLevel;
+    }
+
+    @Override
+    public void setIndentLevel(int nb) {
+      m_nIndentLevel = nb;
+    }
+
+    /// @return true after #close has been called at least once.
+    @Override
+    public boolean isClosed() {
+      return closed;
+    }
+
+    @Override
+    public String getNewLine() {
+      return JFormatter.this.getNewLine();
+    }
+
+    // other methods
 
     @Override
     public FormatterContext persistOnClose(boolean b) {
@@ -1307,38 +1344,12 @@ public class JFormatter implements IJFormatter {
       }
       contextLayers.remove(this);
       if (persistOnClose) {
-        // printing the buffer will update the last chart, current line in the next
-        // layer.
+        // printing the buffer will update the last char and current line in the next
+        // context.
         topContext().append(buffer.toString());
-        JFormatter.this.m_nIndentLevel = m_nIndentLevel;
+        topContext().setIndentLevel(getIndentLevel());
       }
       closed = true;
-    }
-
-    /// @return true after #close has been called at least once.
-    @Override
-    public boolean isClosed() {
-      return closed;
-    }
-
-    @Override
-    public String value() {
-      return buffer.toString();
-    }
-
-    @Override
-    public void indent(int nb) {
-      m_nIndentLevel += nb;
-    }
-
-    @Override
-    public void outdent(int nb) {
-      m_nIndentLevel -= nb;
-    }
-
-    @Override
-    public String getNewLine() {
-      return JFormatter.this.getNewLine();
     }
 
     @Override
@@ -1358,11 +1369,12 @@ public class JFormatter implements IJFormatter {
       currentLine.append(printedChar);
       m_cLastChar = c;
     }
+  }
 
-    @Override
-    public String getCurrentLine() {
-      return currentLine.toString();
-    }
+  /// @return the top (last) context, if any ; or this as a writer context if
+  /// none.
+  protected WriteContext topContext() {
+    return contextLayers.isEmpty() ? asContext : contextLayers.get(0);
   }
 
   ///
