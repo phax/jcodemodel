@@ -1,0 +1,17 @@
+package com.helger.jcodemodel.tests.arrayinit;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+public class ArrayInitTest {
+
+  @Test
+  public void simpleClass() {
+    Assert.assertArrayEquals(new int[] { 0, 1, 2, 3, 4, 5 }, ArrayInitSimpleClass.i);
+    Assert.assertArrayEquals(new int[] {}, ArrayInitSimpleClass.i0);
+    Assert.assertArrayEquals(new char[] { 'a' }, ArrayInitSimpleClass.c);
+    Assert.assertArrayEquals(new double[] { .0, .1, .2, .3 }, ArrayInitSimpleClass.d, 0.01);
+    Assert.assertArrayEquals(new String[] { null, "s", "sss" }, ArrayInitSimpleClass.s);
+  }
+
+}
