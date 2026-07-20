@@ -19,7 +19,7 @@ import javax.annotation.processing.Generated;
 @Generated("com.helger.jcodemodel.JCodeModel")
 public class DefaultWrapOptions {
     public static final char[] a = null;
-    public static final char[] b = null, c[] = null, variable_2 = null,
+    public static final char[] b = {'b'}, c[] = null, variable_2 = null,
         variable_3 = null, variable_4 = null, variable_5 = null,
         variable_6 = null, variable_7 = null, variable_8 = null,
         variable_9 = null;

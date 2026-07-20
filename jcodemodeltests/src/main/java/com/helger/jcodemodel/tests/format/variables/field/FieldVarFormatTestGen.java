@@ -15,7 +15,8 @@ public class FieldVarFormatTestGen {
 
   protected static void addField(JDefinedClass clazz) {
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().CHAR.array(), "a", JExpr._null());
-    JFieldVar b = clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().CHAR.array(), "b", JExpr._null());
+    JFieldVar b =
+        clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().CHAR.array(), "b", JExpr.arrayInit(JExpr.lit('b')));
     b.andVar("c", 1, JExpr._null());
     for (int i = 2; i < 10; i++) {
       b.andVar("variable_" + i, JExpr._null());

@@ -19,10 +19,10 @@ import javax.annotation.processing.Generated;
 @Generated("com.helger.jcodemodel.JCodeModel")
 public class WrapBlockRequired {
 
-    public static void tst() {
+    public static void test() {
         char a;
-        char[] b = null, c[] = null, variable_2 = null, variable_3 = null,
-            variable_4 = null, variable_5 = null, variable_6 = null,
-            variable_7 = null, variable_8 = null, variable_9 = null;
+        char[] b = null, c[] = {{}}, variable_d = {'d'}, variable_e = {'e'},
+            variable_f = {'f'}, variable_g = {'g'}, variable_h = {'h'},
+            variable_i = {'i'}, variable_j = {'j'}, variable_k = {'k'};
     }
 }

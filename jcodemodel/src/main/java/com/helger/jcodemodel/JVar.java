@@ -75,7 +75,7 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
   /**
    * Initialization of the variable in its declaration
    */
-  private IJExpression m_aInitExpr;
+  private IVariableInitializer m_aInitExpr;
 
   /**
    * Annotations on this variable. Lazily created.
@@ -97,7 +97,7 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
   public JVar (@NonNull final JMods aMods,
       final AbstractJType aType,
       @NonNull final String sName,
-      @Nullable final IJExpression aInitExpr)
+      @Nullable final IVariableInitializer aInitExpr)
   {
     ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_aMods = aMods;
@@ -124,7 +124,7 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
    * @return The init expression. May be <code>null</code>.
    */
   @Nullable
-  public IJExpression init ()
+  public IVariableInitializer init()
   {
     return m_aInitExpr;
   }

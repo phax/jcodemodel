@@ -19,7 +19,7 @@ import javax.annotation.processing.Generated;
 @Generated("com.helger.jcodemodel.JCodeModel")
 public class WrapFieldBinary {
     public static final char[] a = null;
-    public static final char[] b = null,
+    public static final char[] b = {'b'},
         c[] = null,
         variable_2 = null,
         variable_3 = null,

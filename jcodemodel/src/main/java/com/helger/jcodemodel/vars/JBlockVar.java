@@ -9,8 +9,8 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.IJDeclaration;
-import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
+import com.helger.jcodemodel.IVariableInitializer;
 import com.helger.jcodemodel.JMods;
 import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
@@ -27,7 +27,10 @@ public class JBlockVar extends JVar implements IJDeclaration {
 
   private final List<JSameVar> childrenVar = new ArrayList<>();
 
-  public JBlockVar(@NonNull JMods aMods, AbstractJType aType, @NonNull String sName, @Nullable IJExpression aInitExpr) {
+  public JBlockVar(@NonNull JMods aMods,
+      AbstractJType aType,
+      @NonNull String sName,
+      @Nullable IVariableInitializer aInitExpr) {
     super(aMods, aType, sName, aInitExpr);
   }
 
@@ -63,7 +66,7 @@ public class JBlockVar extends JVar implements IJDeclaration {
   /// makes i an int[], j an int[][][] (dim 2), and k an int[] (dim 1).
   ///
   /// @param dim the additional dimension of the array, based on the type of this
-  public JSameVar andVar(String name, int dim, IJExpression aInitExpr) {
+  public JSameVar andVar(String name, int dim, IVariableInitializer aInitExpr) {
     JSameVar ret = new JSameVar(this, name, aInitExpr, dim);
     childrenVar.add(ret);
     return ret;
@@ -72,7 +75,7 @@ public class JBlockVar extends JVar implements IJDeclaration {
   /// add and return a new var with same type and mods, but given name and init.
   ///
   /// dimension is set to 0, meaning the new variable type is the same as this.
-  public JSameVar andVar(String name, IJExpression aInitExpr) {
+  public JSameVar andVar(String name, IVariableInitializer aInitExpr) {
     return andVar(name, 0, aInitExpr);
   }
 

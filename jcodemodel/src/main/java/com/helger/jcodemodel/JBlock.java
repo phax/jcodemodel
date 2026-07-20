@@ -316,7 +316,7 @@ public class JBlock implements IJGenerable, IJStatement
   public JBlockVar decl (final int nMods,
                     final AbstractJType aType,
                     @NonNull final String sName,
-                    @Nullable final IJExpression aInit)
+      @Nullable final IVariableInitializer aInit)
   {
     final JBlockVar v = new JBlockVar (JMods.forVar (nMods), aType, sName, aInit);
     internalInsert (v);

@@ -52,7 +52,7 @@ import org.jspecify.annotations.NonNull;
  * (by often taking other {@link IJExpression}s as parameters. For example, you can build "5+2" by
  * <code>JExpr.lit(5).add(JExpr.lit(2))</code>
  */
-public interface IJExpression extends IJGenerable
+public interface IJExpression extends IVariableInitializer
 {
   /**
    * @return <code>-[this]" from "[this]</code>.

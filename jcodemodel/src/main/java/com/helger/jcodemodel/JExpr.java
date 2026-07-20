@@ -46,6 +46,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
+import com.helger.jcodemodel.expression.JArrayInit;
 
 /**
  * Factory methods that generate various {@link IJExpression}s.
@@ -377,6 +378,15 @@ public final class JExpr
   public static JArray newArray (@NonNull final AbstractJType aType, @Nonnegative final int nSize)
   {
     return newArray (aType, lit (nSize));
+  }
+  
+  /**
+   * Generates static array init for variables
+   * @return a new array static init
+   */
+  public static JArrayInit arrayInit(IVariableInitializer ...initializers)
+  {
+    return new JArrayInit(initializers);
   }
 
   /**

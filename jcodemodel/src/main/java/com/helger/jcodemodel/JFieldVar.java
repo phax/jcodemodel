@@ -80,7 +80,7 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
                        @NonNull final JMods aMods,
                        @NonNull final AbstractJType aType,
                        @NonNull final String sName,
-                       @Nullable final IJExpression aInit)
+                       @Nullable final IVariableInitializer aInit)
   {
     super(aMods, ValueEnforcer.notNull(aType, "type"), sName, aInit);
     m_aOwnerClass = ValueEnforcer.notNull (aOwnerClass, "OwnerClass");

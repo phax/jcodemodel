@@ -16,12 +16,13 @@ public class BlockVarFormatTestGen {
 
   protected static void addMethods(JDefinedClass clazz) {
     JMethod meth =
-        clazz.method(JMod.PUBLIC | JMod.STATIC, clazz.owner().VOID, "tst");
+        clazz.method(JMod.PUBLIC | JMod.STATIC, clazz.owner().VOID, "test");
     meth.body().decl(clazz.owner().CHAR, "a");
     JBlockVar b = meth.body().decl(clazz.owner().CHAR.array(), "b", JExpr._null());
-    b.andVar("c", 1, JExpr._null());
+    b.andVar("c", 1, JExpr.arrayInit(JExpr.arrayInit()));
     for (int i = 2; i < 10; i++) {
-      b.andVar("variable_"+i, JExpr._null());
+      char charidx = (char) ('b' + i);
+      b.andVar("variable_" + charidx, JExpr.arrayInit(JExpr.lit(charidx)));
     }
   }
 

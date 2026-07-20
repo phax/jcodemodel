@@ -3,8 +3,8 @@ package com.helger.jcodemodel.vars;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.AbstractJType;
-import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
+import com.helger.jcodemodel.IVariableInitializer;
 import com.helger.jcodemodel.JVar;
 
 /// vars that are the same as another one.
@@ -21,13 +21,13 @@ public class JSameVar extends JVar {
   /// number of additional array dimension on top of the parent.
   private final int dim;
 
-  public JSameVar(JVar parent, String sName, IJExpression aInitExpr, int dim) {
+  public JSameVar(JVar parent, String sName, IVariableInitializer aInitExpr, int dim) {
     super(parent.mods(), typeArray(parent.type(), dim), sName, aInitExpr);
     this.parent = parent;
     this.dim = dim;
   }
 
-  public JSameVar(JVar parent, String sName, IJExpression aInitExpr) {
+  public JSameVar(JVar parent, String sName, IVariableInitializer aInitExpr) {
     this(parent, sName, aInitExpr, 0);
   }
 

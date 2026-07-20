@@ -96,7 +96,7 @@ public class JForEach implements IJStatement
   @NonNull
   public IJExpression collection ()
   {
-    return m_aLoopVar.init();
+    return m_aLoopVar.collection();
   }
 
   @NonNull

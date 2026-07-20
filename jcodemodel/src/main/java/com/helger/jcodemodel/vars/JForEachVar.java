@@ -19,15 +19,31 @@ import com.helger.jcodemodel.JVar;
 ///  - only allowed mod is final.
 ///  - type can be null. In that case, "var" is used.
 ///  - name needs be provided. Can be relaxed later for "_"
-///  - The init expression **must** be non-null
+///  - The init expression **must** be null
+///  - a new **collection** property is used instead to store the iteration
 ///
 public class JForEachVar extends JVar {
+
+  protected IJExpression collection;
 
   public JForEachVar(boolean final_,
       @Nullable AbstractJType aType,
       @NonNull String sName,
-      @NonNull IJExpression aInitExpr) {
-    super(JMods.forVar(final_ ? JMod.FINAL : JMod.NONE), aType, sName, aInitExpr);
+      @NonNull IJExpression aCollection) {
+    super(JMods.forVar(final_ ? JMod.FINAL : JMod.NONE), aType, sName, null);
+    collection = aCollection;
+  }
+
+  public IJExpression collection() {
+    return collection;
+  }
+
+  @Override
+  public @NonNull JForEachVar init(@Nullable IJExpression aInitExpr) {
+    if (aInitExpr != null) {
+      throw new UnsupportedOperationException(getClass().getSimpleName() + " can't receive a non-null init");
+    }
+    return this;
   }
 
   @Override
@@ -45,7 +61,7 @@ public class JForEachVar extends JVar {
     f
         .id(name())
         .print(':')
-        .generable(init());
+        .generable(collection());
   }
 
   @Override
