@@ -360,7 +360,7 @@ public class JFormatter implements IJFormatter {
   private final List<FormatterContext> contextLayers = new ArrayList<>();
 
   /// internal field to have this as a writer context.
-  private final WriteContext asContext = new WriteContext() {
+  final WriteContext asContext = new WriteContext() {
 
     /**
      * Current number of indentation strings to print
@@ -1202,7 +1202,7 @@ public class JFormatter implements IJFormatter {
   //
 
   /// internal notion of writer context
-  private interface WriteContext {
+  interface WriteContext {
 
     int getIndentLevel();
 
@@ -1264,7 +1264,7 @@ public class JFormatter implements IJFormatter {
   ///
   /// This class is not thread safe.
   // not static to directly access the fields and methods
-  public class FormatterContext implements IContextCloser, WriteContext {
+  class FormatterContext implements IContextCloser, WriteContext {
 
     // public final, so no getter/setter
     public final StringBuilder buffer;

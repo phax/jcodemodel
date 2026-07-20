@@ -139,6 +139,10 @@ public interface IJFormatter extends Closeable
   @NonNull
   IJFormatter print (@NonNull String sStr);
 
+  default IJFormatter println(@NonNull String sStr) {
+    return print(sStr).print(getNewLine());
+  }
+
   /**
    * Print a type name.
    * <p>
