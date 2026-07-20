@@ -21,8 +21,10 @@ public class WrapBlockRequired {
 
     public static void test() {
         char a;
-        char[] b = null, c[] = {{}}, variable_d = {'d'}, variable_e = {'e'},
-            variable_f = {'f'}, variable_g = {'g'}, variable_h = {'h'},
-            variable_i = {'i'}, variable_j = {'j'}, variable_k = {'k'};
+        char[] b = {'b', 'b'}, c[] = {{}}, variable_d = {'d'},
+            variable_e = {'e'}, variable_f = {'f'}, variable_g = {'g'},
+            variable_h = {'h'}, variable_i = {'i'}, variable_j = {'j'},
+            variable_k = {'k'};
+        String[] s = {null, null };
     }
 }

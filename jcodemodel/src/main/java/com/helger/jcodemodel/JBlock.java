@@ -293,7 +293,9 @@ public class JBlock implements IJGenerable, IJStatement
    */
   @NonNull
   public JBlockVar
-      decl(@NonNull final AbstractJType aType, @NonNull final String sName, @Nullable final IJExpression aInit)
+      decl(@NonNull final AbstractJType aType,
+          @NonNull final String sName,
+          @Nullable final IVariableInitializer aInit)
   {
     return decl (JMod.NONE, aType, sName, aInit);
   }

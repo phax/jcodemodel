@@ -1,5 +1,6 @@
 package com.helger.jcodemodel.expression;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
@@ -27,9 +28,7 @@ public class JArrayInit implements IVariableInitializer {
   @Override
   public void generate(@NonNull IJFormatter f) {
     f.print('{');
-    for (IVariableInitializer e : elements) {
-      f.generable(e);
-    }
+    f.generable(List.of(elements), ",", null);
     f.print('}');
   }
 

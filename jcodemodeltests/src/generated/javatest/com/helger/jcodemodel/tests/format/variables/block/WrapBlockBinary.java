@@ -21,7 +21,7 @@ public class WrapBlockBinary {
 
     public static void test() {
         char a;
-        char[] b = null,
+        char[] b = {'b', 'b'},
             c[] = {{}},
             variable_d = {'d'},
             variable_e = {'e'},
@@ -31,5 +31,6 @@ public class WrapBlockBinary {
             variable_i = {'i'},
             variable_j = {'j'},
             variable_k = {'k'};
+        String[] s = {null, null };
     }
 }

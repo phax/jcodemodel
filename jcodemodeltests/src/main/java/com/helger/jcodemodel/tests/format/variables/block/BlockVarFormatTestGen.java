@@ -18,12 +18,13 @@ public class BlockVarFormatTestGen {
     JMethod meth =
         clazz.method(JMod.PUBLIC | JMod.STATIC, clazz.owner().VOID, "test");
     meth.body().decl(clazz.owner().CHAR, "a");
-    JBlockVar b = meth.body().decl(clazz.owner().CHAR.array(), "b", JExpr._null());
+    JBlockVar b = meth.body().decl(clazz.owner().CHAR.array(), "b", JExpr.arrayInit(JExpr.lit('b'), JExpr.lit('b')));
     b.andVar("c", 1, JExpr.arrayInit(JExpr.arrayInit()));
     for (int i = 2; i < 10; i++) {
       char charidx = (char) ('b' + i);
       b.andVar("variable_" + charidx, JExpr.arrayInit(JExpr.lit(charidx)));
     }
+    meth.body().decl(clazz.owner()._ref(String.class).array(), "s", JExpr.arrayInit(null, null));
   }
 
   protected static void addClassMethod(JPackage root, String className) throws JCodeModelException {
