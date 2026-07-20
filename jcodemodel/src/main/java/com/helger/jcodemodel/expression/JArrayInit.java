@@ -28,7 +28,7 @@ public class JArrayInit implements IVariableInitializer {
   @Override
   public void generate(@NonNull IJFormatter f) {
     f.print('{');
-    f.generable(List.of(elements), ",", null);
+    f.generable(List.of(elements), ",", f.settings().wrap.variables.array);
     f.print('}');
   }
 
