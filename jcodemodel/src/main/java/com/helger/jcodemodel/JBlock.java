@@ -220,8 +220,8 @@ public class JBlock implements IJGenerable, IJStatement
   @Nonnegative
   public int pos (@Nonnegative final int nNewPos)
   {
-    ValueEnforcer.isTrue (nNewPos >= 0 && nNewPos <= m_aContentList.size (),
-                          () -> "Illegal position provided: " + nNewPos);
+    ValueEnforcer.isTrue ( (nNewPos >= 0) && (nNewPos <= m_aContentList.size ()),
+        () -> "Illegal position provided: " + nNewPos);
 
     final int nOldPos = m_nPos;
     m_nPos = nNewPos;
@@ -256,7 +256,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JVar}
    */
   @NonNull
-  public JBlockVar decl(final AbstractJType aType, @NonNull final String sName)
+  public JBlockVar decl (final AbstractJType aType, @NonNull final String sName)
   {
     return decl (JMod.NONE, aType, sName, null);
   }
@@ -274,7 +274,7 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JVar}
    */
   @NonNull
-  public JBlockVar decl(final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
+  public JBlockVar decl (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
     return decl (nMods, aType, sName, null);
   }
@@ -292,10 +292,10 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JVar}
    */
   @NonNull
-  public JBlockVar
-      decl(@NonNull final AbstractJType aType,
-          @NonNull final String sName,
-          @Nullable final IVariableInitializer aInit)
+  public JBlockVar decl (
+      @NonNull final AbstractJType aType,
+      @NonNull final String sName,
+      @Nullable final IVariableInitializer aInit)
   {
     return decl (JMod.NONE, aType, sName, aInit);
   }
@@ -315,9 +315,10 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JVar}
    */
   @NonNull
-  public JBlockVar decl (final int nMods,
-                    final AbstractJType aType,
-                    @NonNull final String sName,
+  public JBlockVar decl (
+      final int nMods,
+      final AbstractJType aType,
+      @NonNull final String sName,
       @Nullable final IVariableInitializer aInit)
   {
     final JBlockVar v = new JBlockVar (JMods.forVar (nMods), aType, sName, aInit);
@@ -565,7 +566,8 @@ public class JBlock implements IJGenerable, IJStatement
   @NonNull
   public JBlock addSingleLineComment (@Nullable final String sComment)
   {
-    if (sComment != null) {
+    if (sComment != null)
+    {
       internalInsert (new JSingleLineCommentStatement (sComment));
     }
     return this;
@@ -613,9 +615,10 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated {@link JConditional} statement
    */
   @NonNull
-  public JConditional _if (@NonNull final IJExpression aTestExpr,
-                           @NonNull final IJStatement aThen,
-                           @NonNull final IJStatement aElse)
+  public JConditional _if (
+      @NonNull final IJExpression aTestExpr,
+      @NonNull final IJStatement aThen,
+      @NonNull final IJStatement aElse)
   {
     final JConditional aCond = new JConditional (aTestExpr);
     aCond._then ().add (aThen);
@@ -749,8 +752,10 @@ public class JBlock implements IJGenerable, IJStatement
   public JThrow _throw (@NonNull final AbstractJClass aThrowClass, @NonNull final IJExpression @Nullable... aParams)
   {
     final JInvocation aCtor = JExpr._new (aThrowClass);
-    if (aParams != null) {
-      for (final IJExpression aParam : aParams) {
+    if (aParams != null)
+    {
+      for (final IJExpression aParam : aParams)
+      {
         aCtor.arg (aParam);
       }
     }
@@ -890,9 +895,10 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
   @NonNull
-  public JForEach forEach (@NonNull final AbstractJType aVarType,
-                           @NonNull final String sName,
-                           @NonNull final IJExpression aCollection)
+  public JForEach forEach (
+      @NonNull final AbstractJType aVarType,
+      @NonNull final String sName,
+      @NonNull final IJExpression aCollection)
   {
     return forEach (0, aVarType, sName, aCollection);
   }
@@ -911,10 +917,11 @@ public class JBlock implements IJGenerable, IJStatement
    * @return Newly generated enhanced For statement per j2se 1.5 specification
    */
   @NonNull
-  public JForEach forEach (final int nMods,
-                           @NonNull final AbstractJType aVarType,
-                           @NonNull final String sName,
-                           @NonNull final IJExpression aCollection)
+  public JForEach forEach (
+      final int nMods,
+      @NonNull final AbstractJType aVarType,
+      @NonNull final String sName,
+      @NonNull final IJExpression aCollection)
   {
     return internalInsert (new JForEach (JMods.forVar (nMods), aVarType, sName, aCollection));
   }
@@ -967,33 +974,39 @@ public class JBlock implements IJGenerable, IJStatement
         f.print ('{');
         f.newline ();
       }
-      if (m_bIndentRequired) {
+      if (m_bIndentRequired)
+      {
         f.indent ();
       }
       generateBody (f);
-      if (m_bIndentRequired) {
+      if (m_bIndentRequired)
+      {
         f.outdent ();
       }
-      if (m_bBracesRequired) {
+      if (m_bBracesRequired)
+      {
         f.print ('}');
       }
-      }
     }
+  }
 
   protected void generateBody (@NonNull final IJFormatter f)
   {
     for (final IJObject aContentElement : m_aContentList)
     {
-      if (aContentElement instanceof IJDeclaration ijd) {
-          f.declaration(ijd);
-      } else
-      if (aContentElement instanceof IJStatement ijs) {
-        f.statement(ijs);
-        } else
-        {
-          // For lambda expressions in JLambdaBlock
-          f.generable ((IJGenerable) aContentElement);
-        }
+      if (aContentElement instanceof IJDeclaration ijd)
+      {
+        f.declaration (ijd);
+      }
+      else if (aContentElement instanceof IJStatement ijs)
+      {
+        f.statement (ijs);
+      }
+      else
+      {
+        // For lambda expressions in JLambdaBlock
+        f.generable ((IJGenerable) aContentElement);
+      }
     }
   }
 
@@ -1001,8 +1014,9 @@ public class JBlock implements IJGenerable, IJStatement
   public void state (@NonNull final IJFormatter f)
   {
     f.generable (this);
-    if (m_bBracesRequired) {
+    if (m_bBracesRequired)
+    {
       f.newline ();
     }
-    }
   }
+}

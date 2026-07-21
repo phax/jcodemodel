@@ -215,9 +215,10 @@ public final class JExpr
   }
 
   @NonNull
-  public static JInvocation invoke (@Nullable final JCodeModel aOwner,
-                                    @Nullable final IJExpression aLhs,
-                                    @NonNull final String sMethod)
+  public static JInvocation invoke (
+      @Nullable final JCodeModel aOwner,
+      @Nullable final IJExpression aLhs,
+      @NonNull final String sMethod)
   {
     return new JInvocation (aOwner, aLhs, sMethod);
   }
@@ -329,7 +330,8 @@ public final class JExpr
   @NonNull
   public static IJExpression dotClass (@NonNull final AbstractJType aClass)
   {
-    return (@NonNull final IJFormatter f) -> {
+    return (@NonNull final IJFormatter f) ->
+    {
       final AbstractJType c = aClass instanceof final JNarrowedClass j ? j.basis () : aClass;
       f.generable (c).print (".class");
     };
@@ -388,40 +390,44 @@ public final class JExpr
    * Generates static array init for variables
    * @return a new array static init
    */
-  public static JArrayInit arrayInit(IVariableInitializer ...initializers)
+  public static JArrayInit arrayInit (IVariableInitializer... initializers)
   {
-    return new JArrayInit(initializers);
+    return new JArrayInit (initializers);
   }
 
-  static <T> JArrayInit arrayInit(Stream<T> stream, Function<T, IVariableInitializer> converter) {
-    return new JArrayInit(stream.map(converter).toArray(IVariableInitializer[]::new));
+  static <T> JArrayInit arrayInit (Stream <T> stream, Function <T, IVariableInitializer> converter)
+  {
+    return new JArrayInit (stream.map (converter).toArray (IVariableInitializer[]::new));
   }
 
-  public static JArrayInit arrayInit(int start, int... rest) {
-    return arrayInit(
-        IntStream.concat(
-            IntStream.of(start),
-            rest == null ? IntStream.empty() : IntStream.of(rest))
-            .boxed(),
+  public static JArrayInit arrayInit (int start, int... rest)
+  {
+    return arrayInit (
+        IntStream.concat (
+            IntStream.of (start),
+            rest == null ? IntStream.empty () : IntStream.of (rest))
+            .boxed (),
         JExpr::lit);
   }
 
-  public static JArrayInit arrayInit(char start, char... rest) {
-    return arrayInit(
-        IntStream.concat(
-            IntStream.of(start),
-            rest == null ? IntStream.empty() : CharBuffer.wrap(rest).chars())
-            .boxed(),
-        i -> lit((char) (int) i));
+  public static JArrayInit arrayInit (char start, char... rest)
+  {
+    return arrayInit (
+        IntStream.concat (
+            IntStream.of (start),
+            rest == null ? IntStream.empty () : CharBuffer.wrap (rest).chars ())
+            .boxed (),
+        i -> lit ((char) (int) i));
   }
 
-  public static JArrayInit arrayInit(double start, double... rest) {
-    return arrayInit(
-        DoubleStream.concat(
-            DoubleStream.of(start),
-            rest == null ? DoubleStream.empty() : DoubleStream.of(rest))
-            .boxed(),
-        (Function<Double, IVariableInitializer>) JExpr::lit);
+  public static JArrayInit arrayInit (double start, double... rest)
+  {
+    return arrayInit (
+        DoubleStream.concat (
+            DoubleStream.of (start),
+            rest == null ? DoubleStream.empty () : DoubleStream.of (rest))
+            .boxed (),
+        (Function <Double, IVariableInitializer>) JExpr::lit);
   }
 
   /**
@@ -501,7 +507,7 @@ public final class JExpr
       final int j = CHAR_ESCAPE.indexOf (c);
       if (j >= 0)
       {
-        if (cQuote == '"' && c == '\'' || cQuote == '\'' && c == '"')
+        if ( ( (cQuote == '"') && (c == '\'')) || ( (cQuote == '\'') && (c == '"')))
         {
           sb.append (c);
         }
@@ -510,7 +516,8 @@ public final class JExpr
           sb.append ('\\');
           sb.append (CHAR_MACRO.charAt (j));
         }
-      } else // technically Unicode escape shouldn't be done here,
+      }
+      else // technically Unicode escape shouldn't be done here,
       // for it's a lexical level handling.
       //
       // However, various tools are so broken around this area,
@@ -518,12 +525,13 @@ public final class JExpr
       // the escaping here (regardless of the actual file encoding)
       //
       // see bug
-      if (c < 0x20 || c > 0x7E)
+      if ( (c < 0x20) || (c > 0x7E))
       {
         // not printable. use Unicode escape
         sb.append ("\\u");
         final String hex = Integer.toHexString (c & 0xFFFF);
-        for (int k = hex.length (); k < 4; k++) {
+        for (int k = hex.length (); k < 4; k++)
+        {
           sb.append ('0');
         }
         sb.append (hex);
@@ -550,11 +558,12 @@ public final class JExpr
   }
 
   @NonNull
-  public static JTextBlock textBlock (@NonNull final String ... lines)
+  public static JTextBlock textBlock (@NonNull final String... lines)
   {
-    JTextBlock ret = new JTextBlock();
-    if(lines!=null && lines.length!=0) {
-      Stream.of(lines).forEach(ret::add);
+    JTextBlock ret = new JTextBlock ();
+    if ( (lines != null) && (lines.length != 0))
+    {
+      Stream.of (lines).forEach (ret::add);
     }
     return ret;
   }
@@ -590,9 +599,10 @@ public final class JExpr
    * @return The created aExpr
    */
   @NonNull
-  public static JOpTernary cond (@NonNull final IJExpression aCond,
-                                 @NonNull final IJExpression aIfTrue,
-                                 @NonNull final IJExpression aIfFalse)
+  public static JOpTernary cond (
+      @NonNull final IJExpression aCond,
+      @NonNull final IJExpression aIfTrue,
+      @NonNull final IJExpression aIfFalse)
   {
     return JOp.cond (aCond, aIfTrue, aIfFalse);
   }

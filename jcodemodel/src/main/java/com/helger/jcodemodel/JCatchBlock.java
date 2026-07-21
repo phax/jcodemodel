@@ -56,25 +56,25 @@ public class JCatchBlock implements IJGenerable
 
   public JCatchBlock (@NonNull final AbstractJClass aException)
   {
-    m_aVar = new JCatchFormalParameter(true, aException, "ex");
+    m_aVar = new JCatchFormalParameter (true, aException, "ex");
   }
 
   @NonNull
   public AbstractJClass exception ()
   {
-    return m_aVar.type();
+    return m_aVar.type ();
   }
 
   /// shortcut to change the name of the variable and return it.
   @NonNull
-  public JCatchFormalParameter param(final String sName)
+  public JCatchFormalParameter param (final String sName)
   {
-    m_aVar.name(sName);
+    m_aVar.name (sName);
     return m_aVar;
   }
 
   @Nullable
-  public JCatchFormalParameter param()
+  public JCatchFormalParameter param ()
   {
     return m_aVar;
   }
@@ -88,9 +88,9 @@ public class JCatchBlock implements IJGenerable
   @Override
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print("catch (")
-        .var(m_aVar)
-        .print(')')
-        .generable(m_aBody);
+    f.print ("catch (")
+        .var (m_aVar)
+        .print (')')
+        .generable (m_aBody);
   }
 }
