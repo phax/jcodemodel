@@ -89,7 +89,7 @@ public class JCMWriter
   /** The newline string to be used. Defaults to system default */
   private String m_sNewLine = DEFAULT_NEW_LINE;
 
-  private FormatterSettings m_oSettings = new FormatterSettings();
+  private FormatterSettings m_oSettings = new FormatterSettings ();
 
   /**
    * Java feature (major release version) the generated code is targeted at. A feature that requires
@@ -151,15 +151,18 @@ public class JCMWriter
     return this;
   }
 
-  public FormatterSettings settings() {
+  public FormatterSettings settings ()
+  {
     return m_oSettings;
   }
 
   /// set the options, only if params not null.
   /// @param options if null, not set (no effect)
   /// @return this
-  public JCMWriter withSettings(FormatterSettings settings) {
-    if (settings != null) {
+  public JCMWriter withSettings (FormatterSettings settings)
+  {
+    if (settings != null)
+    {
       m_oSettings = settings;
     }
     return this;
@@ -219,9 +222,10 @@ public class JCMWriter
    * @throws IOException
    *         on IO error if non-null, progress indication will be sent to this stream.
    */
-  public void build (@NonNull final File aSrcDir,
-                     @NonNull final File aResourceDir,
-                     @Nullable final IProgressTracker aStatusPT) throws IOException
+  public void build (
+      @NonNull final File aSrcDir,
+      @NonNull final File aResourceDir,
+      @Nullable final IProgressTracker aStatusPT) throws IOException
   {
     AbstractCodeWriter aSrcWriter = new FileCodeWriter (aSrcDir, m_aCharset, m_sNewLine);
     AbstractCodeWriter aResWriter = new FileCodeWriter (aResourceDir, m_aCharset, m_sNewLine);
@@ -285,7 +289,7 @@ public class JCMWriter
    *         on IO error
    */
   public void build (@NonNull final AbstractCodeWriter aSourceWriter, @NonNull final AbstractCodeWriter aResourceWriter)
-                                                                                                                         throws IOException
+      throws IOException
   {
     ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
     ValueEnforcer.notNull (aResourceWriter, "ResourceWriter");
@@ -294,13 +298,15 @@ public class JCMWriter
     {
       // Copy to avoid concurrent modification exception
       final List <JPackage> aPackages = m_aCM.getAllPackages ();
-      for (final JPackage aPackage : aPackages) {
+      for (final JPackage aPackage : aPackages)
+      {
         buildPackage (aSourceWriter, aPackage);
       }
 
       // Write resources only
       final List <JResourceDir> aResourceDirs = m_aCM.getAllResourceDirs ();
-      for (final JResourceDir aResourceDir : aResourceDirs) {
+      for (final JResourceDir aResourceDir : aResourceDirs)
+      {
         buildResourceDir (aResourceWriter, aResourceDir);
       }
     }
@@ -312,12 +318,13 @@ public class JCMWriter
   }
 
   @NonNull
-  private JFormatter _createJavaSourceFileWriter (@NonNull final AbstractCodeWriter aSrcWriter,
-                                                  @NonNull final JPackage aPackage,
-                                                  @NonNull final String sClassFilename) throws IOException
+  private JFormatter _createJavaSourceFileWriter (
+      @NonNull final AbstractCodeWriter aSrcWriter,
+      @NonNull final JPackage aPackage,
+      @NonNull final String sClassFilename) throws IOException
   {
     final SourcePrintWriter aWriter = aSrcWriter.openSource (aPackage, sClassFilename);
-    final JFormatter ret = new JFormatter(aWriter, m_oSettings);
+    final JFormatter ret = new JFormatter (aWriter, m_oSettings);
     ret.setJavaFeature (m_nJavaFeature);
     // Add all classes to not be imported (may be empty)
     ret.addDontImportClasses (m_aCM.getAllDontImportClasses ());
@@ -325,7 +332,7 @@ public class JCMWriter
   }
 
   public void buildPackage (@NonNull final AbstractCodeWriter aSourceWriter, @NonNull final JPackage aPackage)
-                                                                                                               throws IOException
+      throws IOException
   {
     ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
     ValueEnforcer.notNull (aPackage, "Package");
@@ -352,12 +359,14 @@ public class JCMWriter
     {
       try (final IJFormatter f = _createJavaSourceFileWriter (aSourceWriter, aPackage, "package-info.java"))
       {
-        if (!aJavaDoc.isEmpty ()) {
+        if (!aJavaDoc.isEmpty ())
+        {
           f.generable (aJavaDoc);
         }
 
         // TODO: think about importing
-        for (final JAnnotationUse a : aAnnotations) {
+        for (final JAnnotationUse a : aAnnotations)
+        {
           f.generable (a).newline ();
         }
 
@@ -366,8 +375,9 @@ public class JCMWriter
     }
   }
 
-  public void buildResourceDir (@NonNull final AbstractCodeWriter aResourceWriter,
-                                @NonNull final JResourceDir aResourceDir) throws IOException
+  public void buildResourceDir (
+      @NonNull final AbstractCodeWriter aResourceWriter,
+      @NonNull final JResourceDir aResourceDir) throws IOException
   {
     ValueEnforcer.notNull (aResourceWriter, "ResourceWriter");
     ValueEnforcer.notNull (aResourceDir, "ResourceDir");
@@ -376,7 +386,7 @@ public class JCMWriter
     for (final AbstractJResourceFile rsrc : aResourceDir.getAllResourceFiles ())
     {
       try (final OutputStream os = aResourceWriter.openBinary (aResourceDir.name (), rsrc.name ());
-           final OutputStream bos = new BufferedOutputStream (os))
+          final OutputStream bos = new BufferedOutputStream (os))
       {
         rsrc.build (bos);
       }
