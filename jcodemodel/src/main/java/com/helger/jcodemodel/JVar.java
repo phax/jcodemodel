@@ -55,7 +55,7 @@ import com.helger.base.hashcode.HashCodeGenerator;
 /**
  * Variables and fields.
  */
-public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
+public class JVar implements IJAssignmentTarget, IJAnnotatable
 {
   /**
    * Modifiers.
@@ -75,7 +75,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   /**
    * Initialization of the variable in its declaration
    */
-  private IJExpression m_aInitExpr;
+  private IVariableInitializer m_aInitExpr;
 
   /**
    * Annotations on this variable. Lazily created.
@@ -97,7 +97,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   public JVar (@NonNull final JMods aMods,
       final AbstractJType aType,
       @NonNull final String sName,
-      @Nullable final IJExpression aInitExpr)
+      @Nullable final IVariableInitializer aInitExpr)
   {
     ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_aMods = aMods;
@@ -124,7 +124,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    * @return The init expression. May be <code>null</code>.
    */
   @Nullable
-  public IJExpression init ()
+  public IVariableInitializer init()
   {
     return m_aInitExpr;
   }
@@ -179,7 +179,6 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
    */
   public AbstractJType type (final AbstractJType aNewType)
   {
-    ValueEnforcer.notNull (aNewType, "NewType");
     final AbstractJType aOldType = m_aType;
     m_aType = aNewType;
     return aOldType;
@@ -277,10 +276,8 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
     }
   }
 
-  @Override
-  public void declare (@NonNull final IJFormatter f)
-  {
-    f.var (this).print (';').newline ();
+  protected void declare(@NonNull final IJFormatter f) {
+    f.var(this).print(';').newline();
   }
 
   @Override
@@ -306,5 +303,10 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable
   public int hashCode ()
   {
     return new HashCodeGenerator (this).append (m_sName).getHashCode ();
+  }
+
+  /// the separator when several jvars are declared at one.
+  public String separator() {
+    return ";";
   }
 }

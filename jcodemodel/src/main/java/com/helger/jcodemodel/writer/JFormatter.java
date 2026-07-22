@@ -6,11 +6,11 @@
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
- * and Distribution License("CDDL") (collectively, the "License").  You
- * may not use this file except in compliance with the License.  You can
+ * and Distribution License("CDDL") (collectively, the "License"). You
+ * may not use this file except in compliance with the License. You can
  * obtain a copy of the License at
  * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
- * or packager/legal/LICENSE.txt.  See the License for the specific
+ * or packager/legal/LICENSE.txt. See the License for the specific
  * language governing permissions and limitations under the License.
  *
  * When distributing the software, include this License Header Notice in each
@@ -30,10 +30,10 @@
  * If you wish your version of this file to be governed by only the CDDL or
  * only the GPL Version 2, indicate your decision by adding "[Contributor]
  * elects to include this software in this distribution under the [CDDL or GPL
- * Version 2] license."  If you don't indicate a single choice of license, a
+ * Version 2] license." If you don't indicate a single choice of license, a
  * recipient has the option to distribute your version of this file under
  * either the CDDL, the GPL Version 2 or to extend the choice of license to
- * its licensees as provided above.  However, if you add GPL Version 2 code
+ * its licensees as provided above. However, if you add GPL Version 2 code
  * and therefore, elected the GPL Version 2 license, then the option applies
  * only if the new code is made subject to such option by the copyright
  * holder.
@@ -48,6 +48,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -57,18 +59,11 @@ import org.slf4j.LoggerFactory;
 import com.helger.annotation.WillCloseWhenClosed;
 import com.helger.annotation.concurrent.NotThreadSafe;
 import com.helger.base.enforce.ValueEnforcer;
-import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.IJDeclaration;
-import com.helger.jcodemodel.IJFormatter;
-import com.helger.jcodemodel.IJGenerable;
-import com.helger.jcodemodel.IJStatement;
-import com.helger.jcodemodel.JAnonymousClass;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JNarrowedClass;
-import com.helger.jcodemodel.JPackage;
-import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.NullWriter;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping.EListWrapStrategy;
 
 /**
  * This is a utility class for managing indentation and other basic formatting
@@ -128,21 +123,17 @@ public class JFormatter implements IJFormatter
 
       // special case where a generated type collides with a type in package
       // java.lang
-      if (aSingleRef._package () == JFormatter.this.m_aPckJavaLang)
+      if (aSingleRef._package () == m_aPckJavaLang)
       {
         // make sure that there's no other class with this name within the
         // same package
         for (final JDefinedClass aClass : aEnclosingClass._package ().classes ())
-        {
           // even if this is the only "String" class we use,
           // if the class called "String" is in the same package,
           // we still need to import it.
           if (aClass.name ().equals (aSingleRef.name ()))
-          {
             // collision -> ambiguous
             return true;
-          }
-        }
       }
 
       return false;
@@ -151,7 +142,9 @@ public class JFormatter implements IJFormatter
     public boolean addReferencedType (@NonNull final AbstractJClass aClazz)
     {
       if (false)
+      {
         LOGGER.info ("Adding referenced type[" + m_sName + "]: " + aClazz.fullName ());
+      }
       if (m_aReferencedClasses.contains (aClazz))
         return false;
       return m_aReferencedClasses.add (aClazz);
@@ -253,7 +246,7 @@ public class JFormatter implements IJFormatter
 
     final Boolean ret = RESERVERD_JAVA_LANG_NAME.get (sSimpleClassName);
     if (ret != null)
-      return ret.booleanValue ();
+      return ret;
 
     boolean bIsJavaLang = true;
     try
@@ -264,7 +257,7 @@ public class JFormatter implements IJFormatter
     {
       bIsJavaLang = false;
     }
-    RESERVERD_JAVA_LANG_NAME.put (sSimpleClassName, Boolean.valueOf (bIsJavaLang));
+    RESERVERD_JAVA_LANG_NAME.put (sSimpleClassName, bIsJavaLang);
     return bIsJavaLang;
   }
 
@@ -282,10 +275,8 @@ public class JFormatter implements IJFormatter
     {
       AbstractJClass aRealClass = aClass;
       if (aRealClass instanceof JAnonymousClass)
-      {
         // get the super class of the anonymous class
-        return _getClassForImport (((JAnonymousClass) aRealClass).base ());
-      }
+        return _getClassForImport ( ((JAnonymousClass) aRealClass).base ());
       if (aRealClass instanceof JNarrowedClass)
       {
         // Never imported narrowed class but the erasure only
@@ -308,7 +299,9 @@ public class JFormatter implements IJFormatter
       if (m_aDontImportClasses.contains (aRealClass))
       {
         if (m_bDebugImport)
+        {
           LOGGER.info ("The class '" + aRealClass.fullName () + "' should not be imported!");
+        }
         return false;
       }
 
@@ -316,19 +309,25 @@ public class JFormatter implements IJFormatter
       if (!m_aNames.add (sSimpleName))
       {
         if (m_bDebugImport)
+        {
           LOGGER.info ("A class with local name '" + sSimpleName + "' is already in the import list.");
+        }
         return false;
       }
 
       if (!m_aClasses.add (aRealClass))
       {
         if (m_bDebugImport)
+        {
           LOGGER.info ("The class '" + aRealClass.fullName () + "' is already in the import list.");
+        }
         return false;
       }
 
       if (m_bDebugImport)
+      {
         LOGGER.info ("Added import class '" + aClass.fullName () + "'");
+      }
       return true;
     }
 
@@ -374,23 +373,84 @@ public class JFormatter implements IJFormatter
    */
   private EMode m_eMode = EMode.PRINTING;
 
-  /**
-   * Current number of indentation strings to print
-   */
-  private int m_nIndentLevel;
-
-  /**
-   * String to be used for each indentation. Defaults to four spaces.
-   */
-  private final String m_sIndentString;
+  private final FormatterSettings m_oSettings;
 
   /**
    * Writer associated with this {@link IJFormatter}
    */
   private final SourcePrintWriter m_aPW;
 
-  private char m_cLastChar = 0;
-  private boolean m_bAtBeginningOfLine = true;
+  /// contexts to write into instead of the printwriter.
+  ///
+  /// No context should be kept here after closed.
+  private final List <FormatterContext> m_aContextLayers = new ArrayList <> ();
+
+  /// internal field to have this as a writer context.
+  final WriteContext asContext = new WriteContext ()
+  {
+
+    /**
+     * Current number of indentation strings to print
+     */
+    private int m_nIndentLevel;
+
+    private char m_cLastChar = 0;
+
+    @NonNull
+    private StringBuilder currentLine = new StringBuilder ();
+
+    @Override
+    public int getIndentLevel ()
+    {
+      return m_nIndentLevel;
+    }
+
+    @Override
+    public void setIndentLevel (int nb)
+    {
+      m_nIndentLevel = nb;
+    }
+
+    @Override
+    public char getLastChar ()
+    {
+      return m_cLastChar;
+    }
+
+    @Override
+    public String getCurrentLine ()
+    {
+      return currentLine.toString ();
+    }
+
+    @Override
+    public String getNewLine ()
+    {
+      return JFormatter.this.getNewLine ();
+    }
+
+    @Override
+    public void append (String fullString, boolean resetLine, String appendLine, char lastChar)
+    {
+      m_aPW.print (fullString);
+      m_cLastChar = lastChar;
+      if (resetLine)
+      {
+        currentLine = new StringBuilder ();
+      }
+      currentLine.append (appendLine);
+    }
+
+    @Override
+    public void append (char c)
+    {
+      char printedChar = c == CLOSE_TYPE_ARGS ? '>' : c;
+      m_aPW.print (printedChar);
+      currentLine.append (printedChar);
+      m_cLastChar = c;
+    }
+  };
+
   private JPackage m_aPckJavaLang;
 
   /**
@@ -413,18 +473,20 @@ public class JFormatter implements IJFormatter
    *        Incremental indentation string, similar to tab value. May not be
    *        <code>null</code>.
    */
-  public JFormatter (@NonNull @WillCloseWhenClosed final SourcePrintWriter aPW, @NonNull final String sIndentString)
+  public JFormatter (@NonNull @WillCloseWhenClosed final SourcePrintWriter aPW,
+      @NonNull final FormatterSettings formatterSettings)
   {
     ValueEnforcer.notNull (aPW, "PrintWriter");
-    ValueEnforcer.notNull (sIndentString, "IndentString");
+    ValueEnforcer.notNull (formatterSettings, "formatterSettings");
 
     m_aPW = aPW;
-    m_sIndentString = sIndentString;
+    m_oSettings = formatterSettings;
   }
 
   /**
    * Closes this formatter.
    */
+  @Override
   public void close ()
   {
     m_aPW.close ();
@@ -462,28 +524,38 @@ public class JFormatter implements IJFormatter
     m_nJavaFeature = nJavaFeature;
     return this;
   }
-  
-  public String getNewLine()
+
+  @Override
+  public String getNewLine ()
   {
-    return m_aPW.getNewLine();
+    return m_aPW.getNewLine ();
   }
 
+  @Override
+  public FormatterSettings settings ()
+  {
+    return m_oSettings;
+  }
+
+  @Override
   public boolean isPrinting ()
   {
     return m_eMode == EMode.PRINTING;
   }
 
+  @Override
   @NonNull
-  public JFormatter indent ()
+  public JFormatter indent (int nb)
   {
-    m_nIndentLevel++;
+    topContext ().indent (nb);
     return this;
   }
 
+  @Override
   @NonNull
-  public JFormatter outdent ()
+  public JFormatter outdent (int nb)
   {
-    m_nIndentLevel--;
+    topContext ().outdent (nb);
     return this;
   }
 
@@ -497,10 +569,8 @@ public class JFormatter implements IJFormatter
     {
       // e.g., "public Foo<Bar> test;"
       if (c2 == '(')
-      {
         // but not "new Foo<Bar>()"
         return false;
-      }
       return true;
     }
     if ((c1 == ')') && (c2 == '{'))
@@ -519,28 +589,28 @@ public class JFormatter implements IJFormatter
     {
       switch (c2)
       {
-        case '{':
-        case '}':
-        case '+':
-        case '-':
-        case '>':
-        case '@':
-          return true;
-        default:
-          return Character.isJavaIdentifierStart (c2);
+      case '{':
+      case '}':
+      case '+':
+      case '-':
+      case '>':
+      case '@':
+        return true;
+      default:
+        return Character.isJavaIdentifierStart (c2);
       }
     }
     if (Character.isJavaIdentifierStart (c2))
     {
       switch (c1)
       {
-        case ']':
-        case ')':
-        case '}':
-        case '+':
-          return true;
-        default:
-          return false;
+      case ']':
+      case ')':
+      case '}':
+      case '+':
+        return true;
+      default:
+        return false;
       }
     }
     if (Character.isDigit (c2))
@@ -554,136 +624,144 @@ public class JFormatter implements IJFormatter
 
   private void _spaceIfNeeded (final char c)
   {
-    if (m_bAtBeginningOfLine)
+    if (atBeginningOfLine ())
     {
-      for (int i = 0; i < m_nIndentLevel; i++)
-        m_aPW.print (m_sIndentString);
-      m_bAtBeginningOfLine = false;
+      for (int i = 0; i < indentLevel (); i++)
+      {
+        topContext ().append (m_oSettings.indent.string ());
+      }
     }
-    else
-      if (m_cLastChar != 0 && _needSpace (m_cLastChar, c))
-        m_aPW.print (' ');
+    else if ((lastChar () != 0) && _needSpace (lastChar (), c))
+    {
+      topContext ().append (' ');
+    }
   }
 
+  @Override
   @NonNull
   public JFormatter print (final char c)
   {
     if (m_eMode == EMode.PRINTING)
     {
-      if (c == CLOSE_TYPE_ARGS)
-      {
-        m_aPW.print ('>');
-      }
-      else
+      if (c != CLOSE_TYPE_ARGS)
       {
         _spaceIfNeeded (c);
-        m_aPW.print (c);
       }
-      m_cLastChar = c;
+      topContext ().append (c);
     }
     return this;
   }
 
+  @Override
   @NonNull
   public JFormatter print (@NonNull final String sStr)
   {
-    if (m_eMode == EMode.PRINTING && sStr.length () > 0)
+    if ((m_eMode == EMode.PRINTING) && (sStr.length () > 0))
     {
       _spaceIfNeeded (sStr.charAt (0));
-      m_aPW.print (sStr);
-      m_cLastChar = sStr.charAt (sStr.length () - 1);
+      topContext ().append (sStr);
     }
     return this;
   }
 
+  @Override
   @NonNull
   public JFormatter type (@NonNull final AbstractJClass aType)
   {
     switch (m_eMode)
     {
-      case COLLECTING:
-        if (!aType.isError ())
+    case COLLECTING:
+      if (!aType.isError ())
+      {
+        final String sShortName = aType.name ();
+        m_aCollectedReferences.computeIfAbsent (sShortName, k -> new NameUsage (sShortName)).addReferencedType (aType);
+      }
+      break;
+    case PRINTING:
+      if (aType.isError ())
+      {
+        print ("Object");
+      }
+      else
+      {
+        // many of the JTypes in this list are either primitive or belong to
+        // package java so we don't need a FQCN
+        final boolean bCanUseShortName;
+        if (m_aImportedClasses.contains (aType))
         {
-          final String sShortName = aType.name ();
-          m_aCollectedReferences.computeIfAbsent (sShortName, k -> new NameUsage (sShortName)).addReferencedType (aType);
+          bCanUseShortName = true;
         }
-        break;
-      case PRINTING:
-        if (aType.isError ())
+        else if (aType._package () == m_aPckJavaLang)
         {
-          print ("Object");
+          bCanUseShortName = _isUnambiguousJavaLangImport (aType);
         }
         else
         {
-          // many of the JTypes in this list are either primitive or belong to
-          // package java so we don't need a FQCN
-          final boolean bCanUseShortName;
-          if (m_aImportedClasses.contains (aType))
-            bCanUseShortName = true;
-          else
-            if (aType._package () == m_aPckJavaLang)
-              bCanUseShortName = _isUnambiguousJavaLangImport (aType);
-            else
-              bCanUseShortName = false;
+          bCanUseShortName = false;
+        }
 
-          if (bCanUseShortName)
+        if (bCanUseShortName)
+        {
+          // FQCN imported or not necessary, so generate short name
+          print (aType.name ());
+        }
+        else
+        {
+          final AbstractJClass aOuter = aType.outer ();
+          if (aOuter != null)
           {
-            // FQCN imported or not necessary, so generate short name
-            print (aType.name ());
+            type (aOuter).print ('.').print (aType.name ());
           }
           else
+          // collision was detected, so generate FQCN
           {
-            final AbstractJClass aOuter = aType.outer ();
-            if (aOuter != null)
-            {
-              type (aOuter).print ('.').print (aType.name ());
-            }
-            else
-            {
-              // collision was detected, so generate FQCN
-              print (aType.fullName ());
-            }
+            // collision was detected, so generate FQCN
+            print (aType.fullName ());
           }
         }
-        break;
-      case FIND_ERROR_TYPES:
-        if (aType.isError ())
-          m_bContainsErrorTypes = true;
-        break;
+      }
+      break;
+    case FIND_ERROR_TYPES:
+      if (aType.isError ())
+      {
+        m_bContainsErrorTypes = true;
+      }
+      break;
     }
     return this;
   }
 
+  @Override
   @NonNull
   public JFormatter id (@NonNull final String sID)
   {
     switch (m_eMode)
     {
-      case COLLECTING:
-        // see if there is a type name that collides with this id
-        // not a type, but we need to create a place holder to
-        // see if there might be a collision with a type
-        m_aCollectedReferences.computeIfAbsent (sID, NameUsage::new).setVariableName ();
-        break;
-      case PRINTING:
-        print (sID);
-        break;
+    case COLLECTING:
+      // see if there is a type name that collides with this id
+      // not a type, but we need to create a place holder to
+      // see if there might be a collision with a type
+      m_aCollectedReferences.computeIfAbsent (sID, NameUsage::new).setVariableName ();
+      break;
+    case PRINTING:
+      print (sID);
+      break;
     }
     return this;
   }
 
+  @Override
   @NonNull
   public JFormatter newline ()
   {
     if (m_eMode == EMode.PRINTING)
     {
-      m_aPW.println ();
-      m_cLastChar = 0;
-      m_bAtBeginningOfLine = true;
+      topContext ().append (getNewLine ());
     }
     return this;
   }
 
+  @Override
   @NonNull
   public JFormatter generable (@NonNull final IJGenerable g)
   {
@@ -692,7 +770,7 @@ public class JFormatter implements IJFormatter
   }
 
   @NonNull
-  public JFormatter generable (@NonNull final Collection <? extends IJGenerable> list)
+  public JFormatter generableLegacy (@NonNull final Collection <? extends IJGenerable> list, String separator)
   {
     if (!list.isEmpty ())
     {
@@ -700,7 +778,9 @@ public class JFormatter implements IJFormatter
       for (final IJGenerable item : list)
       {
         if (!bFirst)
-          print (',');
+        {
+          print (separator);
+        }
         generable (item);
         bFirst = false;
       }
@@ -708,6 +788,34 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
+  @Override
+  public @NonNull IJFormatter generable (
+      @NonNull Collection <? extends IJGenerable> aList,
+      String separator,
+      ListWrapping wrapping)
+  {
+    if (settings ().wrap.disabled)
+      return generableLegacy (aList, separator);
+    EListWrapStrategy selectedWrap = EListWrapStrategy.NEVER;
+    if (wrapping != null)
+    {
+      selectedWrap = wrapping.condition;
+    }
+    int indentParam = 1;
+    if (wrapping != null)
+    {
+      indentParam = wrapping.indent;
+    }
+    boolean wrapAfterSep = true;
+    if (wrapping != null)
+    {
+      wrapAfterSep = wrapping.wrapAfterSep;
+    }
+    genericPrints (aList, selectedWrap, wrapAfterSep, o -> separator, indentParam, this::generable);
+    return this;
+  }
+
+  @Override
   @NonNull
   public JFormatter declaration (@NonNull final IJDeclaration d)
   {
@@ -715,6 +823,7 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
+  @Override
   @NonNull
   public JFormatter statement (@NonNull final IJStatement aStmt)
   {
@@ -722,6 +831,7 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
+  @Override
   @NonNull
   public JFormatter var (@NonNull final JVar aVar)
   {
@@ -729,10 +839,148 @@ public class JFormatter implements IJFormatter
     return this;
   }
 
-  private boolean _collectCausesNoAmbiguities (@NonNull final AbstractJClass aReference, @NonNull final JDefinedClass aClassToBeWritten)
+  @Override
+  public IJFormatter vars (@NonNull final Collection <? extends JVar> aList, ListWrapping wrapping)
+  {
+    EListWrapStrategy wrapCondition = EListWrapStrategy.PAST3;
+    if (wrapping != null)
+    {
+      wrapCondition = wrapping.condition;
+    }
+    int indentParam = 1;
+    if (wrapping != null)
+    {
+      indentParam = wrapping.indent;
+    }
+    boolean wrapAfterSep = true;
+    if (wrapping != null)
+    {
+      wrapAfterSep = wrapping.wrapAfterSep;
+    }
+
+    genericPrints (aList, wrapCondition, wrapAfterSep, JVar::separator, indentParam, this::var);
+    return this;
+  }
+
+  /// print a collection with wrapping strategy
+  protected <T> JFormatter genericPrints (
+      @NonNull final Collection <? extends T> aList,
+      @NonNull EListWrapStrategy selectedWrap,
+      boolean wrapAFterSep,
+      Function <T, String> separator,
+      int indentValue,
+      Consumer <T> elementPrinter)
+  {
+    // if PAST3 and less equal 3 params, replace with NEVER.
+    if ((selectedWrap == EListWrapStrategy.PAST3) && (aList.size () <= 3))
+    {
+      selectedWrap = EListWrapStrategy.NEVER;
+    }
+    // for BINARY, try NEVER ; then if the produced line size is too big or
+    // has newline, rollback and use ALWAYS instead.
+    if (selectedWrap == EListWrapStrategy.BINARY)
+    {
+      try (IContextCloser o = addContextLayer ().persistOnClose ())
+      {
+        genericPrintsStatic (aList, EListWrapStrategy.NEVER, wrapAFterSep, separator, indentValue, elementPrinter);
+        if (o.value ().contains (getNewLine ()) || (currentLineSize () > settings ().wrap.lineWidth))
+        {
+          o.rollback ();
+          selectedWrap = EListWrapStrategy.ALWAYS;
+        }
+        else
+          return this;
+      }
+    }
+    genericPrintsStatic (aList, selectedWrap, wrapAFterSep, separator, indentValue, elementPrinter);
+    return this;
+  }
+
+  /// print several items with one-pass strategy.
+  /// @param elementPrinter what should we do with each element
+  protected <T> JFormatter genericPrintsStatic (
+      @NonNull final Iterable <? extends T> aList,
+      @NonNull EListWrapStrategy selectedWrap,
+      boolean wrapAFterSep,
+      Function <T, String> separator,
+      int indentValue,
+      Consumer <T> elementPrinter)
+  {
+    if (selectedWrap.twoPasses)
+      throw new RuntimeException ("this method can't accept two-passes config " + selectedWrap);
+    T last = null;
+    boolean indented = false;
+    for (final T element : aList)
+    {
+      if (last == null)
+      {
+        last = element;
+        if ((selectedWrap == EListWrapStrategy.ALWAYS) && !currentLine ().isBlank ())
+        {
+          newline ();
+          indented = true;
+          indent (indentValue);
+        }
+        if (selectedWrap == EListWrapStrategy.PAST3)
+        {
+          selectedWrap = EListWrapStrategy.ALWAYS;
+        }
+      }
+      else
+      {
+        String sep = separator.apply (last);
+        if (wrapAFterSep)
+        {
+          print (sep);
+        }
+        if (selectedWrap == EListWrapStrategy.REQUIRED)
+        {
+          try (IContextCloser o = addContextLayer ().persistOnClose ())
+          {
+            elementPrinter.accept (element);
+            if (o.value ().contains (getNewLine ()) || (currentLineSize () > settings ().wrap.lineWidth))
+            {
+              o.rollback ();
+              newline ();
+            }
+            else
+            {
+              continue;
+            }
+          }
+        }
+        else if (selectedWrap == EListWrapStrategy.ALWAYS)
+        {
+          newline ();
+        }
+        if (!wrapAFterSep)
+        {
+          print (sep);
+        }
+      }
+      elementPrinter.accept (element);
+      if (!indented)
+      {
+        indented = true;
+        indent (indentValue);
+      }
+    }
+    if (indented)
+    {
+      outdent (indentValue);
+    }
+    return this;
+  }
+
+  private boolean _collectCausesNoAmbiguities (
+      @NonNull final AbstractJClass aReference,
+      @NonNull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
-      LOGGER.info ("_collectCausesNoAmbiguities(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
+    {
+      LOGGER
+          .info ("_collectCausesNoAmbiguities(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
+    }
 
     final NameUsage aUsages = m_aCollectedReferences.get (aReference.name ());
     if (aUsages == null)
@@ -751,10 +999,14 @@ public class JFormatter implements IJFormatter
    * @return <code>true</code> if an import statement can be used to shorten
    *         references to referenced class
    */
-  private boolean _collectShouldBeImported (@NonNull final AbstractJClass aReference, @NonNull final JDefinedClass aClassToBeWritten)
+  private boolean _collectShouldBeImported (
+      @NonNull final AbstractJClass aReference,
+      @NonNull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
+    {
       LOGGER.info ("_collectShouldBeImported(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
+    }
 
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)
@@ -777,11 +1029,9 @@ public class JFormatter implements IJFormatter
       // In such case no information is lost when we refer to inner class
       // without mentioning it's enclosing class
       if (aRealReference.name ().contains (aOuter.name ()))
-      {
         // Recurse
         if (_collectShouldBeImported (aOuter, aClassToBeWritten))
           return true;
-      }
 
       // Do not import inner classes in all other cases to aid
       // understandability/readability.
@@ -799,25 +1049,29 @@ public class JFormatter implements IJFormatter
    * @param aClassToBeWritten
    *        {@link AbstractJClass} that is the current class being processed
    */
-  private void _collectImportOuterClassIfCausesNoAmbiguities (@NonNull final AbstractJClass aReference,
-                                                              @NonNull final JDefinedClass aClassToBeWritten)
+  private void _collectImportOuterClassIfCausesNoAmbiguities (
+      @NonNull final AbstractJClass aReference,
+      @NonNull final JDefinedClass aClassToBeWritten)
   {
     if (m_bDebugImport)
-      LOGGER.info ("_collectImportOuterClassIfCausesNoAmbiguities(" + aReference.fullName () + ", " + aClassToBeWritten.fullName () + ")");
+    {
+      LOGGER.info ("_collectImportOuterClassIfCausesNoAmbiguities(" + aReference.fullName () + ", "
+          + aClassToBeWritten.fullName () + ")");
+    }
 
     final AbstractJClass aOuter = aReference.outer ();
     if (aOuter != null)
-    {
-      if (_collectCausesNoAmbiguities (aOuter, aClassToBeWritten) && _collectShouldBeImported (aOuter, aClassToBeWritten))
+      if (_collectCausesNoAmbiguities (aOuter, aClassToBeWritten)
+          && _collectShouldBeImported (aOuter, aClassToBeWritten))
       {
         m_aImportedClasses.add (aOuter);
       }
       else
+      // Recursive call
       {
         // Recursive call
         _collectImportOuterClassIfCausesNoAmbiguities (aOuter, aClassToBeWritten);
       }
-    }
   }
 
   private boolean _isUnambiguousJavaLangImport (@NonNull final AbstractJClass aJavaLangReference)
@@ -838,15 +1092,21 @@ public class JFormatter implements IJFormatter
    * determine if an import statement should be suppressed
    *
    * @param aReference
-   *        {@link AbstractJClass} that may or may not have an import
+   *        {@link AbstractJClass} that may or may not have an
+   *        import
    * @param aClassToBeWrittem
-   *        {@link AbstractJClass} that is the current class being processed
+   *        {@link AbstractJClass} that is the current class
+   *        being processed
    * @return true if an import statement should be suppressed, false otherwise
    */
-  private boolean _printIsImplicitlyImported (@NonNull final AbstractJClass aReference, @NonNull final AbstractJClass aClassToBeWrittem)
+  private boolean _printIsImplicitlyImported (
+      @NonNull final AbstractJClass aReference,
+      @NonNull final AbstractJClass aClassToBeWrittem)
   {
     if (m_bDebugImport)
+    {
       LOGGER.info ("_printIsImplicitlyImported(" + aReference.fullName () + ", " + aClassToBeWrittem.fullName () + ")");
+    }
 
     AbstractJClass aRealReference = aReference;
     if (aRealReference instanceof JAnonymousClass)
@@ -862,33 +1122,25 @@ public class JFormatter implements IJFormatter
 
     final JPackage aPackage = aRealReference._package ();
     if (aPackage == null)
-    {
       // May be null for JTypeVar and JTypeWildcard
       return true;
-    }
 
     if (aPackage.isUnnamed ())
-    {
       // Root package - no need to import something
       return true;
-    }
 
     if (aPackage == m_aPckJavaLang)
-    {
       // no need to explicitly import java.lang classes
       return true;
-    }
 
     // All pkg local classes do not need an
     // import stmt for ref, except for inner classes
     if (aPackage == aClassToBeWrittem._package ())
     {
       AbstractJClass aOuter = aRealReference.outer ();
-      if (aOuter == null) // top-level class
-      {
+      if (aOuter == null)
         // top-level package-local class needs no explicit import
         return true;
-      }
 
       // inner-class
       AbstractJClass aTopLevelClass = aOuter;
@@ -925,7 +1177,9 @@ public class JFormatter implements IJFormatter
     declaration (aClassToBeWritten);
 
     if (m_bDebugImport)
+    {
       LOGGER.info ("***Start collecting***");
+    }
 
     // the class itself that we will be generating is always accessible and must
     // be the first import
@@ -934,7 +1188,6 @@ public class JFormatter implements IJFormatter
     // collate type names and identifiers to determine which types can be
     // imported
     for (final NameUsage aUsage : m_aCollectedReferences.values ())
-    {
       if (!aUsage.isAmbiguousIn (aClassToBeWritten) && !aUsage.isVariableName ())
       {
         final AbstractJClass aReferencedClass = aUsage.getSingleReferencedType ();
@@ -948,18 +1201,18 @@ public class JFormatter implements IJFormatter
           _collectImportOuterClassIfCausesNoAmbiguities (aReferencedClass, aClassToBeWritten);
         }
       }
-      else
+      else if (aUsage.isTypeName ())
       {
-        if (aUsage.isTypeName ())
-          for (final AbstractJClass reference : aUsage.getReferencedTypes ())
-          {
-            _collectImportOuterClassIfCausesNoAmbiguities (reference, aClassToBeWritten);
-          }
+        for (final AbstractJClass reference : aUsage.getReferencedTypes ())
+        {
+          _collectImportOuterClassIfCausesNoAmbiguities (reference, aClassToBeWritten);
+        }
       }
-    }
 
     if (m_bDebugImport)
+    {
       LOGGER.info ("***Finished collecting***");
+    }
 
     // then print the declaration
     m_eMode = EMode.PRINTING;
@@ -968,7 +1221,9 @@ public class JFormatter implements IJFormatter
 
     // Header before package
     if (aClassToBeWritten.hasHeaderComment ())
+    {
       generable (aClassToBeWritten.headerComment ());
+    }
 
     // Emit the package name (if not empty)
     final JPackage aPackage = (JPackage) aClassToBeWritten.parentContainer ();
@@ -980,7 +1235,6 @@ public class JFormatter implements IJFormatter
     // generate import statements
     boolean bAnyImport = false;
     for (final AbstractJClass aImportClass : m_aImportedClasses.getAllSorted ())
-    {
       // suppress import statements for primitive types, built-in types,
       // types in the root package, and types in
       // the same package as the current type
@@ -990,12 +1244,15 @@ public class JFormatter implements IJFormatter
         bAnyImport = true;
 
         if (m_bDebugImport)
+        {
           LOGGER.info ("  import " + aImportClass.fullName ());
+        }
       }
-    }
 
     if (bAnyImport)
+    {
       newline ();
+    }
 
     declaration (aClassToBeWritten);
   }
@@ -1010,18 +1267,285 @@ public class JFormatter implements IJFormatter
   void addDontImportClasses (@Nullable final Iterable <? extends AbstractJClass> aClasses)
   {
     if (aClasses != null)
+    {
       for (final AbstractJClass aClass : aClasses)
+      {
         m_aImportedClasses.addDontImportClass (aClass);
+      }
+    }
   }
 
   public static boolean containsErrorTypes (@NonNull final JDefinedClass aClass)
   {
-    try (final JFormatter aFormatter = new JFormatter (new SourcePrintWriter (NullWriter.getInstance (), "\n"), "\t"))
+    try (final JFormatter aFormatter = new JFormatter (new SourcePrintWriter (NullWriter.getInstance (), "\n"),
+        new FormatterSettings ().configure (o -> o.indent.useTabs ())))
     {
       aFormatter.m_eMode = EMode.FIND_ERROR_TYPES;
       aFormatter.m_bContainsErrorTypes = false;
       aFormatter.declaration (aClass);
       return aFormatter.m_bContainsErrorTypes;
     }
+  }
+
+  /// @return the current line being written, in a buffer or in the printstream
+  public String currentLine ()
+  {
+    return topContext ().getCurrentLine ();
+  }
+
+  public char lastChar ()
+  {
+    return topContext ().getLastChar ();
+  }
+
+  public int indentLevel ()
+  {
+    return topContext ().getIndentLevel ();
+  }
+
+  public boolean atBeginningOfLine ()
+  {
+    return currentLine ().isEmpty ();
+  }
+
+  @Override
+  public int currentLineSize ()
+  {
+    return sizeWithTabsExpanded (currentLine (), m_oSettings.indent.tabSize);
+  }
+
+  /// computes the size of a string when tabs are expanded to match column size.
+  /// @param s the string to expand
+  /// @param tabSize size of a column a tab expands into.
+  // package-protected for tests
+  static int sizeWithTabsExpanded (String s, int columnSize)
+  {
+    if ((s == null) || s.isEmpty ())
+      return 0;
+    int tabIndent = 0;
+    for (int i = 0; i < s.length (); i++)
+      if (s.charAt (i) == '\t')
+      {
+        int modtab = (i + 1 + tabIndent) % columnSize;
+        if (modtab > 0)
+        {
+          tabIndent += columnSize - modtab;
+        }
+      }
+    return s.length () + tabIndent;
+
+  }
+
+  //
+  // contexts management
+  //
+
+  /// internal notion of writer context
+  interface WriteContext
+  {
+
+    int getIndentLevel ();
+
+    void setIndentLevel (int nb);
+
+    char getLastChar ();
+
+    default void indent (int nb)
+    {
+      setIndentLevel (getIndentLevel () + nb);
+    }
+
+    default void outdent (int nb)
+    {
+      setIndentLevel (getIndentLevel () - nb);
+    }
+
+    String getCurrentLine ();
+
+    String getNewLine ();
+
+    default void append (String sStr)
+    {
+      if ((sStr == null) || sStr.isEmpty ())
+        return;
+      char lastChar = 0;
+      boolean resetLine = false;
+      String appendLine = null;
+      if (sStr.contains (getNewLine ()))
+      {
+        resetLine = true;
+        int offset = sStr.lastIndexOf (getNewLine ()) + getNewLine ().length ();
+        appendLine = sStr.substring (offset);
+        lastChar = appendLine.isEmpty () ? 0 : appendLine.charAt (appendLine.length () - 1);
+      }
+      else
+      {
+        appendLine = sStr;
+        lastChar = sStr.charAt (sStr.length () - 1);
+      }
+
+      append (sStr, resetLine, appendLine, lastChar);
+    }
+
+    void append (String fullString, boolean resetLine, String appendLine, char lastChar);
+
+    void append (char c);
+  }
+
+  /// Represents a context layer that *should* be automatically removed outside of
+  /// its declaration scope, using try-with-resource syntax.
+  ///
+  /// Defaults to a discarding context, so any data added to the formatter while
+  /// context active is discarded once the resource is closed. This can be changed
+  /// with #persistOnClose or simply committing the data wit #commit
+  ///
+  /// The #close method does not throw exception to have it simpler in the
+  /// try-declaration. It also only applies once, as encouraged by
+  /// [AutoCloseable#close] .
+  ///
+  /// This also contains a #currentLine that is copied from the underlying buffer
+  /// (or JFormatter if none), then updated like the JFormater is ; same for
+  /// lastchar and beginning of line
+  ///
+  /// This class is not thread safe.
+  // not static to directly access the fields and methods
+  class FormatterContext implements IContextCloser, WriteContext
+  {
+
+    // public final, so no getter/setter
+    public final StringBuilder buffer;
+
+    StringBuilder currentLine = new StringBuilder (currentLine ());
+
+    private char m_cLastChar = lastChar ();
+
+    private int m_nIndentLevel = indentLevel ();
+
+    /// when set to true, upon first #close, the context is re written into the
+    /// formatter, or into the next context if any.
+    boolean persistOnClose = false;
+
+    boolean closed = false;
+
+    // construct
+
+    public FormatterContext (StringBuilder buffer)
+    {
+      this.buffer = buffer;
+    }
+
+    public FormatterContext ()
+    {
+      this (new StringBuilder ());
+    }
+
+    // getters/setters
+
+    @Override
+    public String value ()
+    {
+      return buffer.toString ();
+    }
+
+    @Override
+    public String getCurrentLine ()
+    {
+      return currentLine.toString ();
+    }
+
+    @Override
+    public char getLastChar ()
+    {
+      return m_cLastChar;
+    }
+
+    @Override
+    public int getIndentLevel ()
+    {
+      return m_nIndentLevel;
+    }
+
+    @Override
+    public void setIndentLevel (int nb)
+    {
+      m_nIndentLevel = nb;
+    }
+
+    /// @return true after #close has been called at least once.
+    @Override
+    public boolean isClosed ()
+    {
+      return closed;
+    }
+
+    @Override
+    public String getNewLine ()
+    {
+      return JFormatter.this.getNewLine ();
+    }
+
+    // other methods
+
+    @Override
+    public FormatterContext persistOnClose (boolean b)
+    {
+      persistOnClose = b;
+      return this;
+    }
+
+    @Override
+    public void close ()
+    {
+      if (closed)
+        return;
+      m_aContextLayers.remove (this);
+      if (persistOnClose)
+      {
+        // printing the buffer will update the last char and current line in the next
+        // context.
+        topContext ().append (buffer.toString ());
+        topContext ().setIndentLevel (getIndentLevel ());
+      }
+      closed = true;
+    }
+
+    @Override
+    public void append (String fullString, boolean resetLine, String lastLine, char lastChar)
+    {
+      buffer.append (fullString);
+      m_cLastChar = lastChar;
+      if (resetLine)
+      {
+        currentLine = new StringBuilder ();
+      }
+      currentLine.append (lastLine);
+    }
+
+    @Override
+    public void append (char c)
+    {
+      char printedChar = c == CLOSE_TYPE_ARGS ? '>' : c;
+      buffer.append (printedChar);
+      currentLine.append (printedChar);
+      m_cLastChar = c;
+    }
+  }
+
+  /// @return the top (last) context, if any ; or this as a writer context if
+  /// none.
+  protected WriteContext topContext ()
+  {
+    return m_aContextLayers.isEmpty () ? asContext : m_aContextLayers.get (0);
+  }
+
+  ///
+  /// @return a new [FormatterContext], put on top of the previous ones to receive
+  /// incoming writes.
+  @Override
+  public IContextCloser addContextLayer ()
+  {
+    FormatterContext ret = new FormatterContext ();
+    m_aContextLayers.add (0, ret);
+    return ret;
   }
 }
