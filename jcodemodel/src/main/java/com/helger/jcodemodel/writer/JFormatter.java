@@ -477,7 +477,7 @@ public class JFormatter implements IJFormatter
       @NonNull final FormatterSettings formatterSettings)
   {
     ValueEnforcer.notNull (aPW, "PrintWriter");
-    ValueEnforcer.notNull (formatterSettings, "formatterOptions");
+    ValueEnforcer.notNull (formatterSettings, "formatterSettings");
 
     m_aPW = aPW;
     m_oSettings = formatterSettings;
