@@ -15,8 +15,8 @@ public class FormatterSettings {
 
   public static final Consumer<FormatterSettings> CONF_PHELGER = settings -> {
     settings.indent
-        .useSpaces(4)
-        .tabSize(4);
+        .useSpaces (2)
+        .tabSize (2);
     settings.wrap.method.args
         .condition(EListWrapStrategy.REQUIRED);
     settings.wrap.method.bracket
