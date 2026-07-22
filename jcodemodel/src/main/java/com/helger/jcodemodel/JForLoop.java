@@ -72,16 +72,16 @@ public class JForLoop implements IJStatement {
   /// thow an exception if can't create a new var
   protected void checkInitVar() {
     if (m_aInitVar != null)
-      throw new RuntimeException("a for loop can only have one type variable, this already has one");
+      throw new IllegalStateException ("a for loop can only have one type variable, this already has one");
     if (!m_aInitExprs.isEmpty())
-      throw new RuntimeException(
+      throw new IllegalStateException (
           "a for loop must have either variable declaration or expressions, this already has expressions");
   }
 
   /// @return true if we can init using expressions
   protected void checkInitExpr() {
     if (m_aInitVar != null)
-      throw new RuntimeException(
+      throw new IllegalStateException (
           "a for loop must have either variable declaration or expressions, this already has variable");
   }
 
