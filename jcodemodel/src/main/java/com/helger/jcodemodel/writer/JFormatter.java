@@ -383,7 +383,7 @@ public class JFormatter implements IJFormatter
   /// contexts to write into instead of the printwriter.
   ///
   /// No context should be kept here after closed.
-  private final List <FormatterContext> contextLayers = new ArrayList <> ();
+  private final List <FormatterContext> m_aContextLayers = new ArrayList <> ();
 
   /// internal field to have this as a writer context.
   final WriteContext asContext = new WriteContext ()
@@ -1498,7 +1498,7 @@ public class JFormatter implements IJFormatter
     {
       if (closed)
         return;
-      contextLayers.remove (this);
+      m_aContextLayers.remove (this);
       if (persistOnClose)
       {
         // printing the buffer will update the last char and current line in the next
@@ -1535,7 +1535,7 @@ public class JFormatter implements IJFormatter
   /// none.
   protected WriteContext topContext ()
   {
-    return contextLayers.isEmpty () ? asContext : contextLayers.get (0);
+    return m_aContextLayers.isEmpty () ? asContext : m_aContextLayers.get (0);
   }
 
   ///
@@ -1545,7 +1545,7 @@ public class JFormatter implements IJFormatter
   public IContextCloser addContextLayer ()
   {
     FormatterContext ret = new FormatterContext ();
-    contextLayers.add (0, ret);
+    m_aContextLayers.add (0, ret);
     return ret;
   }
 }
