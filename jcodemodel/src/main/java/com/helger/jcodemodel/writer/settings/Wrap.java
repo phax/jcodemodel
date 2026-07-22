@@ -102,6 +102,11 @@ public class Wrap {
       return wrapAfterSep(false);
     }
 
+    public ListWrapping wrapAfterSep ()
+    {
+      return wrapAfterSep (true);
+    }
+
   }
 
   /// wrapping is required if an element would increase the line above
