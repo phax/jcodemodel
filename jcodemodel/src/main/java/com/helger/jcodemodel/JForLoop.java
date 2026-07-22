@@ -56,7 +56,7 @@ import com.helger.jcodemodel.vars.JBlockVar;
 public class JForLoop implements IJStatement {
 
   // either a init var, or expressions
-  private JBlockVar initVar = null;
+  private JBlockVar m_aInitVar;
   private final List<IJExpression> m_aInitExprs = new ArrayList<>();
   private IJExpression m_aTestExpr;
   private final List<IJExpression> m_aUpdateExprs = new ArrayList<>();
@@ -66,26 +66,23 @@ public class JForLoop implements IJStatement {
   }
 
   public JBlockVar getInitVar() {
-    return initVar;
+    return m_aInitVar;
   }
 
   /// thow an exception if can't create a new var
   protected void checkInitVar() {
-    if (initVar != null) {
+    if (m_aInitVar != null)
       throw new RuntimeException("a for loop can only have one type variable, this already has one");
-    }
-    if (!m_aInitExprs.isEmpty()) {
+    if (!m_aInitExprs.isEmpty())
       throw new RuntimeException(
           "a for loop must have either variable declaration or expressions, this already has expressions");
-    }
   }
 
   /// @return true if we can init using expressions
   protected void checkInitExpr() {
-    if (initVar != null) {
+    if (m_aInitVar != null)
       throw new RuntimeException(
           "a for loop must have either variable declaration or expressions, this already has variable");
-    }
   }
 
   @NonNull
@@ -95,7 +92,7 @@ public class JForLoop implements IJStatement {
       @Nullable final IJExpression aInitExpr) {
     checkInitVar();
     final JBlockVar aVar = new JBlockVar(JMods.forVar(nMods), aType, sVarName, aInitExpr);
-    initVar = aVar;
+    m_aInitVar = aVar;
     return aVar;
   }
 
@@ -184,11 +181,13 @@ public class JForLoop implements IJStatement {
   }
 
   protected void stateInit(@NonNull final IJFormatter f) {
-    if (initVar != null) {
+    if (m_aInitVar != null)
+    {
       // init a variable
       if (f.settings().wrap.disabled) {
         boolean bFirst = true;
-        for (final JVar o : initVar.streamVars().toList()) {
+        for (final JVar o : m_aInitVar.streamVars ().toList ())
+        {
           if (!bFirst) {
             f.print(',');
           }
@@ -196,7 +195,7 @@ public class JForLoop implements IJStatement {
           bFirst = false;
         }
       } else {
-        f.vars(initVar.streamVars().toList(), f.settings().wrap.forLoop.init);
+        f.vars (m_aInitVar.streamVars ().toList (), f.settings ().wrap.forLoop.init);
       }
     } else
     // init a list of expressions
