@@ -65,7 +65,7 @@ public class JForEach implements IJStatement
     ValueEnforcer.notNull (aMods, "Mods");
     ValueEnforcer.notNull (sVarName, "VarName");
     ValueEnforcer.notNull (aCollection, "Collection");
-    m_aLoopVar = new JForEachVar((aMods.getValue() | JMod.FINAL) > 0, aVarType, sVarName, aCollection);
+    m_aLoopVar = new JForEachVar (aMods.isFinal (), aVarType, sVarName, aCollection);
   }
 
   /**
