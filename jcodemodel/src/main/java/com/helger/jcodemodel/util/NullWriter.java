@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel.util;
 
+import java.io.IOException;
 import java.io.Writer;
 
 import org.jspecify.annotations.NonNull;
@@ -63,14 +64,14 @@ public class NullWriter extends Writer
   {}
 
   @Override
-  public void write(final char[] cbuf, final int off, final int len)
+  public void write (final char[] cbuf, final int off, final int len) throws IOException
   {}
 
   @Override
-  public void flush()
+  public void flush () throws IOException
   {}
 
   @Override
-  public void close()
+  public void close () throws IOException
   {}
 }
