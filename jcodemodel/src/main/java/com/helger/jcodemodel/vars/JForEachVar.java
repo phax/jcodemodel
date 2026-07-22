@@ -26,11 +26,11 @@ public class JForEachVar extends JVar {
 
   protected IJExpression collection;
 
-  public JForEachVar(boolean final_,
+  public JForEachVar(boolean isFinal,
       @Nullable AbstractJType aType,
       @NonNull String sName,
       @NonNull IJExpression aCollection) {
-    super(JMods.forVar(final_ ? JMod.FINAL : JMod.NONE), aType, sName, null);
+    super(JMods.forVar(isFinal ? JMod.FINAL : JMod.NONE), aType, sName, null);
     collection = aCollection;
   }
 
