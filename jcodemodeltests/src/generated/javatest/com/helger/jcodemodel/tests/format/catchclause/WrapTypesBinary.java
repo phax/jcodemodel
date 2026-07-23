@@ -23,9 +23,9 @@ public class WrapTypesBinary {
 
     public static final void multiplecatch() {
         try {
-        } catch (ClassCastException ex) {
-        } catch (ArithmeticException exception1) {
-        } catch (
+        } catch (final ClassCastException ex) {
+        } catch (final ArithmeticException exception1) {
+        } catch (final
             ArrayIndexOutOfBoundsException | 
             ArrayStoreException | 
             BufferOverflowException | 

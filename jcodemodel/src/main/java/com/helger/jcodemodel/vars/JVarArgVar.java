@@ -45,8 +45,7 @@ import org.jspecify.annotations.NonNull;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.IJFormatter;
 
-///
-/// A variable that is the last argument of a method signature, with variable length.
+/// A variable last argument of a method signature, with variable length (array).
 ///
 /// same constraints as for the [JArgVar]
 ///

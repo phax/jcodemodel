@@ -242,7 +242,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public JArgVar param(final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
-    final JArgVar aVar = new JArgVar((nMods | JMod.FINAL) > 0, ValueEnforcer.notNull(aType, "type"), sName);
+    final JArgVar aVar = new JArgVar ( (nMods & JMod.FINAL) > 0, ValueEnforcer.notNull (aType, "type"), sName);
     m_aParams.add (aVar);
     return aVar;
   }
@@ -350,7 +350,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
                             Check if varParam method of JMethod is\
                              invoked more than once""");
 
-    m_aVarParam = new JVarArgVar((nMods | JMod.FINAL) > 0, aType.array(), sName);
+    m_aVarParam = new JVarArgVar ( (nMods & JMod.FINAL) > 0, aType.array (), sName);
     return m_aVarParam;
   }
 
@@ -416,9 +416,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
-    if (m_aAnnotations == null) {
+    if (m_aAnnotations == null)
       return Collections.emptyList ();
-    }
     return m_aAnnotations;
   }
 
@@ -503,14 +502,12 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public boolean hasSignature (@NonNull final AbstractJType [] argTypes)
   {
     final JVar [] aParams = listParams ();
-    if (aParams.length != argTypes.length) {
+    if (aParams.length != argTypes.length)
       return false;
-    }
 
     for (int i = 0; i < aParams.length; i++) {
-      if (!aParams[i].type ().equals (argTypes[i])) {
+      if (!aParams[i].type ().equals (argTypes[i]))
         return false;
-      }
     }
 
     return true;
@@ -587,7 +584,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       boolean wrapName = switch (nameWrapStrat) {
       case ALWAYS -> true;
       case NEVER -> false;
-      case REQUIRED -> f.currentLineSize() + m_sName.length() + 1 > f.settings().wrap.lineWidth;
+      case REQUIRED -> (f.currentLineSize() + m_sName.length() + 1) > f.settings().wrap.lineWidth;
       };
       if (wrapName) {
         int nbi = f.settings().wrap.method.name.indent;
@@ -629,7 +626,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
         boolean wrapBracket = switch (bracketWrapStrat) {
         case ALWAYS -> true;
         case NEVER -> false;
-        case REQUIRED -> f.currentLineSize() + 2 > f.settings().wrap.lineWidth;
+        case REQUIRED -> (f.currentLineSize() + 2) > f.settings().wrap.lineWidth;
         };
         if (wrapBracket) {
           f
@@ -642,7 +639,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
     else
     {
-      final boolean bIsDeclarationOnly = m_aOwningClass.isInterface () && !m_aMods.isDefault () ||
+      final boolean bIsDeclarationOnly = (m_aOwningClass.isInterface () && !m_aMods.isDefault ()) ||
                                          m_aOwningClass.isAnnotationTypeDeclaration () ||
                                          m_aMods.isAbstract () ||
                                          m_aMods.isNative ();
@@ -658,7 +655,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
           boolean wrapBracket = switch (bracketWrapStrat) {
           case ALWAYS -> true;
           case NEVER -> false;
-          case REQUIRED -> f.currentLineSize() + 2 > f.settings().wrap.lineWidth;
+          case REQUIRED -> (f.currentLineSize() + 2) > f.settings().wrap.lineWidth;
           };
           if (wrapBracket) {
             f
@@ -681,7 +678,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
     boolean bFirst = true;
     // break only if more than 3 variables are present
-    final boolean bNewLineAfterParam = m_aParams.size() + (hasVarArgs() ? 1 : 0) > 3;
+    final boolean bNewLineAfterParam = (m_aParams.size() + (hasVarArgs() ? 1 : 0)) > 3;
     for (final JVar var : m_aParams) {
       if (bFirst) {
         bFirst = false;

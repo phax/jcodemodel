@@ -38,7 +38,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel.expression;
+package com.helger.jcodemodel.expressions;
 
 import java.util.List;
 import java.util.stream.Stream;

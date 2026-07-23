@@ -45,32 +45,34 @@ import org.jspecify.annotations.NonNull;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
-import com.helger.jcodemodel.JMods;
-import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.vars.JPatternVar;
 
+/// test if an expression is instance of a type, and produce a new pattern variable when so.
 public class JInstanceOfVar implements IJExpression {
 
-  private final IJExpression m_oExpr;
-  private final JVar m_oVar;
+  private final IJExpression m_aExpr;
+
+  private final JPatternVar m_aVar;
 
   public JInstanceOfVar(@NonNull final IJExpression expr,
       @NonNull final AbstractJType type,
       @NonNull final String name) {
-    m_oExpr = expr;
-    m_oVar = new JVar(JMods.forVar(0), type, name, null);
+    m_aExpr = expr;
+    m_aVar = new JPatternVar (false, type, name);
   }
 
   public IJExpression expr() {
-    return m_oExpr;
+    return m_aExpr;
   }
 
-  public JVar var() {
-    return m_oVar;
+  public JPatternVar var ()
+  {
+    return m_aVar;
   }
 
   @Override
   public void generate(@NonNull IJFormatter f) {
-    f.print('(').generable(m_oExpr).print("instanceof").var(m_oVar).print(')');
+    f.print('(').generable(m_aExpr).print("instanceof").var(m_aVar).print(')');
   }
 
 }

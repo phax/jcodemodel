@@ -54,7 +54,7 @@ import com.helger.jcodemodel.JVar;
 /// ```java
 /// int i=0, j, k=1;
 /// ```
-/// Here i is a block variable, j and k are "same" var.
+/// Here i is a block variable, j and k are "same" vars.
 public class JSameVar extends JVar
 {
   private final JVar m_aParent;
@@ -68,8 +68,8 @@ public class JSameVar extends JVar
                    @Nonnegative final int nDim)
   {
     super (parent.mods (), typeArray (parent.type (), nDim), sName, aInitExpr);
-    this.m_aParent = parent;
-    this.m_nDim = nDim;
+    m_aParent = parent;
+    m_nDim = nDim;
   }
 
   public JSameVar (final JVar parent, final String sName, final IVariableInitializer aInitExpr)
