@@ -57,27 +57,25 @@ import com.helger.jcodemodel.JSwitchExpression;
 /// case 1,3 ->
 /// case MyEnum.OPT1 ->
 /// ```
-@SuppressWarnings ("serial")
 public class JCaseStatic extends JCaseArrow <JCaseStatic>
 {
+  private final List <IJExpression> m_aLabels;
 
-  private final List <IJExpression> labels;
-
-  public JCaseStatic (@NonNull JSwitchExpression parent, IJExpression aLabel)
+  public JCaseStatic (@NonNull final JSwitchExpression parent, final IJExpression aLabel)
   {
     super (parent);
-    labels = new ArrayList <> (List.of (aLabel));
+    m_aLabels = new ArrayList <> (List.of (aLabel));
   }
 
   /// add a label to the list of existing ones
-  public JCaseStatic or (IJExpression aLabel)
+  public JCaseStatic or (final IJExpression aLabel)
   {
-    labels.add (aLabel);
+    m_aLabels.add (aLabel);
     return this;
   }
 
   /// alias for [#or]
-  public JCaseStatic _case (IJExpression aLabel)
+  public JCaseStatic _case (final IJExpression aLabel)
   {
     return or (aLabel);
   }
@@ -89,25 +87,26 @@ public class JCaseStatic extends JCaseArrow <JCaseStatic>
     f.indent ();
     f.print ("case ");
     boolean first = true;
-    for (IJExpression ije : labels)
+    for (final IJExpression aLabel : m_aLabels)
     {
-      IJExpression aLabelName;
+      final IJExpression aLabelName;
       // Hack for #41 :)
-      if (ije instanceof JEnumConstant)
+      if (aLabel instanceof final JEnumConstant jec)
       {
         // Just use the name, but not the type of the enum
-        aLabelName = f1 -> f1.print (((JEnumConstant) ije).name ());
+        aLabelName = f1 -> f1.print (jec.name ());
       }
       else
-        if (ije instanceof JEnumConstantRef)
+        if (aLabel instanceof final JEnumConstantRef jecr)
         {
           // Just use the name, but not the type of the enum
-          aLabelName = f1 -> f1.print (((JEnumConstantRef) ije).name ());
+          aLabelName = f1 -> f1.print (jecr.name ());
         }
         else
         {
-          aLabelName = ije;
+          aLabelName = aLabel;
         }
+
       if (!first)
       {
         f.print (", ");

@@ -45,7 +45,6 @@ import java.util.Set;
 /// Something that is modified using [EMod]
 public interface IJModified
 {
-
   /// sequentially apply each mod. If the class can't be modified, then an
   /// [UnsupportedOperationException] should be thrown
   ///
@@ -69,5 +68,4 @@ public interface IJModified
   /// @param emods if null or empty, return true
   /// @return true if no mods is absent from the internal emods
   boolean isEMod (EMod... emods);
-
 }

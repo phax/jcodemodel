@@ -51,23 +51,20 @@ import com.helger.jcodemodel.JSwitchExpression;
 
 public class JCaseSpecialSelector implements BlockSelection <JCaseSpecialSelector>
 {
+  private boolean m_bSetDefault = false;
+  private boolean m_bSetNull = false;
+  private final JSwitchExpression m_aParent;
 
-  private boolean setDefault = false;
-
-  private boolean setNull = false;
-
-  private final JSwitchExpression parent;
-
-  public JCaseSpecialSelector (JSwitchExpression parent, boolean isNull)
+  public JCaseSpecialSelector (final JSwitchExpression parent, final boolean isNull)
   {
-    this.parent = parent;
-    setDefault = !isNull;
-    setNull = isNull;
+    this.m_aParent = parent;
+    m_bSetDefault = !isNull;
+    m_bSetNull = isNull;
   }
 
   public JCaseSpecialSelector andDefault ()
   {
-    setDefault = true;
+    m_bSetDefault = true;
     return this;
   }
 
@@ -80,8 +77,7 @@ public class JCaseSpecialSelector implements BlockSelection <JCaseSpecialSelecto
   @Override
   public List <JBlock> blocks ()
   {
-    return setDefault && setNull ? List.of (parent.defaultBlock (), parent.nullBlock ())
-                                 : List.of (setDefault ? parent.defaultBlock () : parent.nullBlock ());
+    return m_bSetDefault && m_bSetNull ? List.of (m_aParent.defaultBlock (), m_aParent.nullBlock ())
+                                       : List.of (m_bSetDefault ? m_aParent.defaultBlock () : m_aParent.nullBlock ());
   }
-
 }
