@@ -40,12 +40,17 @@
  */
 package com.helger.jcodemodel;
 
+import java.nio.CharBuffer;
+import java.util.function.Function;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
+import com.helger.jcodemodel.expression.JArrayInit;
 
 /**
  * Factory methods that generate various {@link IJExpression}s.
@@ -380,6 +385,43 @@ public final class JExpr
   }
 
   /**
+   * Generates static array init for variables
+   *
+   * @param initializers
+   *        The existing variable initializers to use.
+   * @return a new array static init
+   */
+  public static JArrayInit arrayInit (@Nullable final IVariableInitializer... initializers)
+  {
+    return new JArrayInit (initializers);
+  }
+
+  static <T> JArrayInit arrayInit (@NonNull final Stream <T> stream, final Function <T, IVariableInitializer> converter)
+  {
+    return new JArrayInit (stream.map (converter).toArray (IVariableInitializer []::new));
+  }
+
+  public static JArrayInit arrayInit (final int start, final int... rest)
+  {
+    return arrayInit (IntStream.concat (IntStream.of (start), rest == null ? IntStream.empty () : IntStream.of (rest))
+                               .boxed (), JExpr::lit);
+  }
+
+  public static JArrayInit arrayInit (final char start, final char... rest)
+  {
+    return arrayInit (IntStream.concat (IntStream.of (start),
+                                        rest == null ? IntStream.empty () : CharBuffer.wrap (rest).chars ()).boxed (),
+                      i -> lit ((char) i.intValue ()));
+  }
+
+  public static JArrayInit arrayInit (final double start, final double... rest)
+  {
+    return arrayInit (DoubleStream.concat (DoubleStream.of (start),
+                                           rest == null ? DoubleStream.empty () : DoubleStream.of (rest)).boxed (),
+                      (Function <Double, IVariableInitializer>) JExpr::lit);
+  }
+
+  /**
    * @return a reference to "this", an implicit reference to the current object.
    */
   @NonNull
@@ -466,9 +508,7 @@ public final class JExpr
           sb.append (CHAR_MACRO.charAt (j));
         }
       }
-      else
-      {
-        // technically Unicode escape shouldn't be done here,
+      else // technically Unicode escape shouldn't be done here,
         // for it's a lexical level handling.
         //
         // However, various tools are so broken around this area,
@@ -482,14 +522,15 @@ public final class JExpr
           sb.append ("\\u");
           final String hex = Integer.toHexString (c & 0xFFFF);
           for (int k = hex.length (); k < 4; k++)
+          {
             sb.append ('0');
+          }
           sb.append (hex);
         }
         else
         {
           sb.append (c);
         }
-      }
     }
     sb.append (cQuote);
     return sb.toString ();
@@ -506,13 +547,15 @@ public final class JExpr
   {
     return new JStringLiteral (sStr);
   }
-  
+
   @NonNull
-  public static JTextBlock textBlock (@NonNull final String ... lines)
+  public static JTextBlock textBlock (@NonNull final String... lines)
   {
-    JTextBlock ret = new JTextBlock();
-    if(lines!=null && lines.length!=0)
-      Stream.of(lines).forEach(ret::add);
+    final JTextBlock ret = new JTextBlock ();
+    if ((lines != null) && (lines.length != 0))
+    {
+      Stream.of (lines).forEach (ret::add);
+    }
     return ret;
   }
 

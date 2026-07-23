@@ -598,7 +598,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   public JFieldVar field (final int nMods,
                           @NonNull final AbstractJType aType,
                           @NonNull final String sName,
-                          @Nullable final IJExpression aInit)
+                          @Nullable final IVariableInitializer aInit)
   {
     ValueEnforcer.isFalse (m_aFields.containsKey (sName), () -> "trying to create the same field twice: " + sName);
 

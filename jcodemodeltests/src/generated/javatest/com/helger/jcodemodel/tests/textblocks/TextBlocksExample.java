@@ -19,28 +19,28 @@ import javax.annotation.processing.Generated;
 @Generated("com.helger.jcodemodel.JCodeModel")
 public class TextBlocksExample {
     public static final String EMPTY = """
-    """;
+""";
     public static final String ONE_LINE = """
-    a""";
+a""";
     public static final String TWO_LINES = """
-    a
-    b""";
+a
+b""";
     public static final String TWO_DOUBLE_DQUOTES_LINES = """
-    ""
-    "\"""";
+""
+"\"""";
     public static final String TWO_TRIPLE_DQUOTES_LINES = """
-    ""\"
-    ""\"""";
+""\"
+""\"""";
     public static final String FIVE_DQUOTES = """
-    ""\""\"""";
+""\""\"""";
     public static final String TWO_FIVE_DQUOTES_LINES = """
-    ""\"""
-    ""\""\"""";
+""\"""
+""\""\"""";
     public static final String ONE_LINE_ENDSPACE = """
-    a  """;
+a  """;
     public static final String ONE_LINE_ENDTAB = """
-    a		""";
+a		""";
     public static final String TWO_LINES_ENDTAB = """
-    a		
-    b		""";
+a		
+b		""";
 }

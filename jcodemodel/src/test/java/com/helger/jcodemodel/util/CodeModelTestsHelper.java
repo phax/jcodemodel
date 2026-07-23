@@ -78,6 +78,7 @@ import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.compile.DynamicClassLoader;
 import com.helger.jcodemodel.compile.MemoryCodeWriter;
 import com.helger.jcodemodel.writer.AbstractCodeWriter;
+import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.JFormatter;
 import com.helger.jcodemodel.writer.OutputStreamCodeWriter;
@@ -99,7 +100,7 @@ public final class CodeModelTestsHelper
   private static IJFormatter _createFormatter (@NonNull final NonBlockingStringWriter aWriter)
   {
     return new JFormatter (new SourcePrintWriter (aWriter, JCMWriter.DEFAULT_NEW_LINE),
-                           JCMWriter.DEFAULT_INDENT_STRING);
+        new FormatterSettings());
   }
 
   /** Hidden constructor. */
@@ -269,15 +270,18 @@ public final class CodeModelTestsHelper
 
     final IProgressMonitor aPM = null;
     final org.eclipse.jdt.core.dom.CompilationUnit astRoot = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST (aPM);
-    if (astRoot == null)
+    if (astRoot == null) {
       throw new IllegalStateException ("Failed to compile:\n" + new String (aCode));
+    }
 
-    if (false)
+    if (false) {
       LOGGER.info (astRoot.toString ());
+    }
 
     final IProblem [] aProblems = astRoot.getProblems ();
-    if (aProblems != null && aProblems.length > 0)
+    if (aProblems != null && aProblems.length > 0) {
       throw new IllegalStateException ("Compilation problems " + Arrays.toString (aProblems));
+    }
 
     return astRoot;
   }
