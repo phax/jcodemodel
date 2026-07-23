@@ -11,10 +11,12 @@ import com.helger.jcodemodel.writer.JCMWriter;
 ///
 public class Indent
 {
-  public String m_sStr = JCMWriter.DEFAULT_INDENT_STRING;
+  // Variable name is used externally
+  public String string = JCMWriter.DEFAULT_INDENT_STRING;
 
   /// how many spaces do we consider a tab to take
-  public int m_nTabSize = 4;
+  // Variable name is used externally
+  public int tabSize = 4;
 
   public Indent ()
   {}
@@ -22,7 +24,7 @@ public class Indent
   @NonNull
   public Indent useSpaces (@Nonnegative final int nb)
   {
-    m_sStr = " ".repeat (nb);
+    string = " ".repeat (nb);
     return this;
   }
 
@@ -36,7 +38,7 @@ public class Indent
   @NonNull
   public Indent useTabs (@Nonnegative final int nb)
   {
-    m_sStr = "\t".repeat (nb);
+    string = "\t".repeat (nb);
     return this;
   }
 
@@ -50,19 +52,19 @@ public class Indent
   @NonNull
   public String string ()
   {
-    return m_sStr;
+    return string;
   }
 
   @NonNull
-  public Indent withString (@Nullable final String string)
+  public Indent withString (@Nullable final String str)
   {
-    if (string == null || string.isEmpty ())
+    if (str == null || str.isEmpty ())
     {
-      this.m_sStr = "";
+      this.string = "";
     }
     else
     {
-      this.m_sStr = string;
+      this.string = str;
     }
     return this;
   }
@@ -70,13 +72,12 @@ public class Indent
   @NonNull
   public Indent tabSize (@Nonnegative final int size)
   {
-    m_nTabSize = size;
+    tabSize = size;
     return this;
   }
 
   public int tabSize ()
   {
-    return m_nTabSize;
+    return tabSize;
   }
-
 }

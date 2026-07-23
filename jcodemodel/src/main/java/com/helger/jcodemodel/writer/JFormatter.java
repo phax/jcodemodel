@@ -1297,7 +1297,7 @@ public class JFormatter implements IJFormatter
   @Override
   public int currentLineSize ()
   {
-    return sizeWithTabsExpanded (currentLine (), m_aFormatterSettings.indent.m_nTabSize);
+    return sizeWithTabsExpanded (currentLine (), m_aFormatterSettings.indent.tabSize);
   }
 
   /// computes the size of a string when tabs are expanded to match column size.
