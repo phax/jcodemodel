@@ -45,8 +45,8 @@ import org.jspecify.annotations.NonNull;
 import com.helger.base.enforce.ValueEnforcer;
 
 /**
- * This class represents a single direct statement. A direct statement is a
- * statement that is neither parsed not evaluated! Handle with care!
+ * This class represents a single direct statement. A direct statement is a statement that is
+ * neither parsed not evaluated! Handle with care!
  *
  * @author Philip Helger
  * @since 2.7.10

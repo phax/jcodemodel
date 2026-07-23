@@ -1,10 +1,26 @@
 package com.helger.jcodemodel.patterns;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
-import com.helger.jcodemodel.*;
-
+import com.helger.jcodemodel.AbstractJClass;
+import com.helger.jcodemodel.IJDeclaration;
+import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.IJExpressionStatement;
+import com.helger.jcodemodel.IJFormatter;
+import com.helger.jcodemodel.IJOwned;
+import com.helger.jcodemodel.JBlock;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JFieldRef;
+import com.helger.jcodemodel.JFieldVar;
+import com.helger.jcodemodel.JJavaName;
+import com.helger.jcodemodel.JMethod;
+import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JMods;
+import com.helger.jcodemodel.JVar;
 
 /// Create an expression initialized at most once from another expression.
 ///
@@ -21,153 +37,174 @@ import com.helger.jcodemodel.*;
 /// Upon creation, this class adds itself in the target [JDefinedClass] as an
 /// extra declaration
 ///
-@SuppressWarnings("serial")
-public class JLazy implements IJDeclaration, IJOwned {
-
+public class JLazy implements IJDeclaration, IJOwned
+{
   /// the class this is inserted into.
-  private final JDefinedClass clazz;
+  private final JDefinedClass m_aClazz;
 
-  private final AbstractJClass expressionType;
+  private final AbstractJClass m_aExpressionType;
 
   /// the name of the method to call
-  private final String methodName;
+  private final String m_sMethodName;
 
   /// the expression to call the lazy init, typically the method name
-  private final IJExpressionStatement expr;
+  private final IJExpressionStatement m_aExpr;
 
   /// when static, the field and methods are made static
-  private boolean _static = false;
+  private boolean m_bStatic = false;
 
   /// when synchronized (default), the init is synchronized to avoid
   /// multiple calls.
-  private boolean sync = true;
+  private boolean m_bSync = true;
 
   /// initialization of the value
-  private IJExpression init = null;
+  private IJExpression m_aInit;
 
   private static final String GETTER_PREFIX = "get";
 
-  static String extractFieldName(String methodName) {
-    if (methodName == null || methodName.isBlank()) {
+  @Nullable
+  static String extractFieldName (@Nullable final String methodName)
+  {
+    if (methodName == null)
+    {
       return methodName;
     }
-    if (methodName.startsWith(GETTER_PREFIX) && methodName.length() > GETTER_PREFIX.length()) {
-      methodName =
-          Character.toString(Character.toLowerCase(methodName.charAt(GETTER_PREFIX.length())))
-              + methodName.substring(GETTER_PREFIX.length() + 1);
+
+    String sMethodName = methodName.trim ();
+    if (sMethodName.isEmpty ())
+      return methodName;
+
+    if (sMethodName.startsWith (GETTER_PREFIX) && sMethodName.length () > GETTER_PREFIX.length ())
+    {
+      sMethodName = Character.toString (Character.toLowerCase (sMethodName.charAt (GETTER_PREFIX.length ()))) +
+                    sMethodName.substring (GETTER_PREFIX.length () + 1);
     }
-    if (!JJavaName.isJavaIdentifier(methodName)) {
-      methodName += "_";
+    if (!JJavaName.isJavaIdentifier (sMethodName))
+    {
+      sMethodName = "_" + sMethodName;
     }
-    return methodName;
+    return sMethodName;
   }
 
-  public JLazy(JDefinedClass clazz, AbstractJClass expressionType, String methodName) {
-    ValueEnforcer.isTrue(JJavaName.isJavaIdentifier(methodName), () -> "Illegal variable name '" + methodName + "'");
-    this.clazz = clazz;
-    this.expressionType = expressionType;
-    this.methodName = methodName;
-    expr = JExpr.invoke(methodName);
-    clazz.getExtraDeclarations().add(this);
+  public JLazy (final JDefinedClass clazz, final AbstractJClass expressionType, final String methodName)
+  {
+    ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (methodName), () -> "Illegal variable name '" + methodName + "'");
+    m_aClazz = clazz;
+    m_aExpressionType = expressionType;
+    m_sMethodName = methodName;
+    m_aExpr = JExpr.invoke (methodName);
+    clazz.getExtraDeclarations ().add (this);
   }
 
-  public JLazy(JDefinedClass clazz, Class<?> expressionType, String methodName) {
-    this(clazz, clazz.owner().ref(expressionType), methodName);
+  public JLazy (final JDefinedClass clazz, final Class <?> expressionType, final String methodName)
+  {
+    this (clazz, clazz.owner ().ref (expressionType), methodName);
   }
 
   @Override
-  public @NonNull JCodeModel owner() {
-    return clazz.owner();
+  public @NonNull JCodeModel owner ()
+  {
+    return m_aClazz.owner ();
   }
 
-  public IJExpression expr() {
-    return expr;
-  }
-
-  /// @return this for chaining
-  public JLazy _static() {
-    return _static(true);
+  public IJExpression expr ()
+  {
+    return m_aExpr;
   }
 
   /// @return this for chaining
-  public JLazy _static(boolean value) {
-    _static = value;
+  public JLazy _static ()
+  {
+    return _static (true);
+  }
+
+  /// @return this for chaining
+  public JLazy _static (final boolean value)
+  {
+    m_bStatic = value;
     return this;
   }
 
-  public boolean isStatic() {
-    return _static;
+  public boolean isStatic ()
+  {
+    return m_bStatic;
   }
 
   /// @return this for chaining
-  public JLazy sync(boolean value) {
-    sync = value;
+  public JLazy sync (final boolean value)
+  {
+    m_bSync = value;
     return this;
   }
 
   /// @return this for chaining
-  public JLazy async() {
-    return sync(false);
+  public JLazy async ()
+  {
+    return sync (false);
   }
 
-  public boolean sync() {
-    return sync;
+  public boolean sync ()
+  {
+    return m_bSync;
   }
 
   /// @return this for chaining
-  public JLazy init(IJExpression value) {
-    init = value;
+  public JLazy init (final IJExpression value)
+  {
+    m_aInit = value;
     return this;
   }
 
-  public IJExpression init() {
-    return init;
+  public IJExpression init ()
+  {
+    return m_aInit;
   }
 
   @Override
-  public String toString() {
-    return "lazy init " + methodName;
+  public String toString ()
+  {
+    return "lazy init " + m_sMethodName;
   }
 
   @Override
-  public void declare(@NonNull IJFormatter f) {
-    if (init == null) {
-      throw new NullPointerException("init of " + this + " is null");
+  public void declare (@NonNull final IJFormatter f)
+  {
+    if (m_aInit == null)
+    {
+      throw new NullPointerException ("init of " + this + " is null");
     }
 
-    int fieldMods = JMod.PRIVATE|JMod.VOLATILE;
-    if (_static) {
+    int fieldMods = JMod.PRIVATE | JMod.VOLATILE;
+    if (m_bStatic)
+    {
       fieldMods |= JMod.STATIC;
     }
-    JFieldVar jfv =
-        new JFieldVar(clazz, JMods.forField(fieldMods), expressionType, extractFieldName(methodName), null);
-    f.declaration(jfv);
-    f.newline();
-    JFieldRef fieldRef = _static ? clazz.staticRef(jfv) : JExpr.refthis(jfv);
+    final JFieldVar jfv = new JFieldVar (m_aClazz,
+                                         JMods.forField (fieldMods),
+                                         m_aExpressionType,
+                                         extractFieldName (m_sMethodName),
+                                         null);
+    f.declaration (jfv);
+    f.newline ();
+    final JFieldRef fieldRef = m_bStatic ? m_aClazz.staticRef (jfv) : JExpr.refthis (jfv);
 
     int methodMods = JMod.PUBLIC;
-    if (_static) {
+    if (m_bStatic)
+    {
       methodMods |= JMod.STATIC;
     }
-    JMethod jm = new JMethod(clazz, methodMods, expressionType, methodName);
-    JBlock methodBody = jm.body();
-    JVar jv = methodBody.decl(expressionType, "ret").init(fieldRef);
-    JBlock initBlock = methodBody._if(jv.eqNull())._then();
-    if (sync) {
-      initBlock =
-          initBlock.synchronizedBlock(
-              _static
-                  ? clazz.dotclass()
-                  : JExpr._this())
-              .body();
+    final JMethod jm = new JMethod (m_aClazz, methodMods, m_aExpressionType, m_sMethodName);
+    final JBlock methodBody = jm.body ();
+    final JVar jv = methodBody.decl (m_aExpressionType, "ret").init (fieldRef);
+    JBlock initBlock = methodBody._if (jv.eqNull ())._then ();
+    if (m_bSync)
+    {
+      initBlock = initBlock.synchronizedBlock (m_bStatic ? m_aClazz.dotclass () : JExpr._this ()).body ();
     }
-    initBlock.assign(jv, fieldRef);
-    initBlock._if(jv.eqNull())._then()
-        .assign(jv, init)
-        .assign(fieldRef, jv);
-    methodBody._return(jv);
+    initBlock.assign (jv, fieldRef);
+    initBlock._if (jv.eqNull ())._then ().assign (jv, m_aInit).assign (fieldRef, jv);
+    methodBody._return (jv);
 
-    f.declaration(jm);
+    f.declaration (jm);
   }
-
 }

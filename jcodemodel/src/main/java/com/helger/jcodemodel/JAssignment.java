@@ -78,7 +78,9 @@ public class JAssignment implements IJExpressionStatement
    * @param sOperator
    *        additional operator
    */
-  protected JAssignment (@NonNull final IJAssignmentTarget lhs, @NonNull final IJExpression rhs, @NonNull final String sOperator)
+  protected JAssignment (@NonNull final IJAssignmentTarget lhs,
+                         @NonNull final IJExpression rhs,
+                         @NonNull final String sOperator)
   {
     m_aLhs = lhs;
     m_aRhs = rhs;
@@ -134,8 +136,8 @@ public class JAssignment implements IJExpressionStatement
       return false;
     final JAssignment rhs = (JAssignment) o;
     return EqualsHelper.equals (m_aLhs, rhs.m_aLhs) &&
-           EqualsHelper.equals (m_aRhs, rhs.m_aRhs) &&
-           EqualsHelper.equals (m_sOperator, rhs.m_sOperator);
+      EqualsHelper.equals (m_aRhs, rhs.m_aRhs) &&
+      EqualsHelper.equals (m_sOperator, rhs.m_sOperator);
   }
 
   @Override

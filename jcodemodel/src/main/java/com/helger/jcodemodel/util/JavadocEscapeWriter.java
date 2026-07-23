@@ -49,16 +49,14 @@ import org.jspecify.annotations.NonNull;
 import com.helger.annotation.Nonnegative;
 
 /**
- * {@link Writer} that escapes characters that are unsafe as Javadoc comments.
- * Such characters include '&lt;' and '&amp;'.
+ * {@link Writer} that escapes characters that are unsafe as Javadoc comments. Such characters
+ * include '&lt;' and '&amp;'.
  * <p>
- * Note that this class doesn't escape other Unicode characters that are
- * typically unsafe. For example, \u611B (A kanji that means "love") can be
- * considered as unsafe because javac with English Windows cannot accept this
- * character in the source code.
+ * Note that this class doesn't escape other Unicode characters that are typically unsafe. For
+ * example, \u611B (A kanji that means "love") can be considered as unsafe because javac with
+ * English Windows cannot accept this character in the source code.
  * <p>
- * If the application needs to escape such characters as well, then they are on
- * their own.
+ * If the application needs to escape such characters as well, then they are on their own.
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
@@ -82,7 +80,8 @@ public class JavadocEscapeWriter extends FilterWriter
   }
 
   @Override
-  public void write (@NonNull final char [] aBuf, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
+  public void write (@NonNull final char [] aBuf, @Nonnegative final int nOfs, @Nonnegative final int nLen)
+                                                                                                            throws IOException
   {
     final int nMax = nOfs + nLen;
     for (int i = nOfs; i < nMax; i++)
@@ -96,7 +95,8 @@ public class JavadocEscapeWriter extends FilterWriter
   }
 
   @Override
-  public void write (@NonNull final String sStr, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
+  public void write (@NonNull final String sStr, @Nonnegative final int nOfs, @Nonnegative final int nLen)
+                                                                                                           throws IOException
   {
     write (sStr.toCharArray (), nOfs, nLen);
   }

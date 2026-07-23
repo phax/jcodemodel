@@ -46,8 +46,8 @@ import java.net.URI;
 import javax.tools.SimpleJavaFileObject;
 
 /**
- * represent a compilation object to be given to java compiler, based on a the
- * name of the .java file and its content.
+ * represent a compilation object to be given to java compiler, based on a the name of the .java
+ * file and its content.
  *
  * @author glelouet
  */

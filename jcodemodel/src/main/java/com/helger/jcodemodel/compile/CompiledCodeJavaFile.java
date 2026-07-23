@@ -49,9 +49,8 @@ import javax.tools.SimpleJavaFileObject;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
 /**
- * represents java file object that is produced by the javac compiler. Holds the
- * name of the class (with '.' to separate packages) and the binary file
- * produces by the compiler.
+ * represents java file object that is produced by the javac compiler. Holds the name of the class
+ * (with '.' to separate packages) and the binary file produces by the compiler.
  *
  * @author glelouet
  * @author trung

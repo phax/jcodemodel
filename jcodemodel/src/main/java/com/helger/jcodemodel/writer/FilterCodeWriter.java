@@ -48,8 +48,7 @@ import org.jspecify.annotations.NonNull;
 import com.helger.jcodemodel.JPackage;
 
 /**
- * {@link AbstractCodeWriter} that delegates to another
- * {@link AbstractCodeWriter}.
+ * {@link AbstractCodeWriter} that delegates to another {@link AbstractCodeWriter}.
  *
  * @author Kohsuke Kawaguchi
  */

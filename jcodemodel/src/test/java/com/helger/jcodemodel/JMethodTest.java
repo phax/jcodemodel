@@ -76,26 +76,26 @@ public final class JMethodTest
   }
 
   @Test
-  public void testEmods() throws JCodeModelException {
-    JCodeModel jcm = new JCodeModel();
-    JDefinedClass jdc = jcm._class("TestClass");
-    JMethod jm = jdc.method(JMod.PUBLIC, jcm.VOID, "testmethod");
-    Assert.assertTrue(jm.isEMod(EMod.PUBLIC));
-    Assert.assertEquals(1, jm.emods().size());
-    Assert.assertEquals(Set.of(EMod.PUBLIC), jm.emods());
+  public void testEmods () throws JCodeModelException
+  {
+    JCodeModel jcm = new JCodeModel ();
+    JDefinedClass jdc = jcm._class ("TestClass");
+    JMethod jm = jdc.method (JMod.PUBLIC, jcm.VOID, "testmethod");
+    Assert.assertTrue (jm.isEMod (EMod.PUBLIC));
+    Assert.assertEquals (1, jm.emods ().size ());
+    Assert.assertEquals (Set.of (EMod.PUBLIC), jm.emods ());
 
     // forbidden
-    jm.emod(EMod.VOLATILE);
-    jm.emod(EMod.NONSEALED);
-    Assert.assertEquals(Set.of(EMod.PUBLIC), jm.emods());
+    jm.emod (EMod.VOLATILE);
+    jm.emod (EMod.NONSEALED);
+    Assert.assertEquals (Set.of (EMod.PUBLIC), jm.emods ());
 
     // mutual exclusion
-    jm.emod(EMod.PUBLIC, EMod.PROTECTED, EMod.PRIVATE);
-    Assert.assertEquals(Set.of(EMod.PRIVATE), jm.emods());
+    jm.emod (EMod.PUBLIC, EMod.PROTECTED, EMod.PRIVATE);
+    Assert.assertEquals (Set.of (EMod.PRIVATE), jm.emods ());
 
     // adding a new one
-    jm.emod(EMod.STATIC);
-    Assert.assertEquals(Set.of(EMod.PRIVATE, EMod.STATIC), jm.emods());
-
+    jm.emod (EMod.STATIC);
+    Assert.assertEquals (Set.of (EMod.PRIVATE, EMod.STATIC), jm.emods ());
   }
 }

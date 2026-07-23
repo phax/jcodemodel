@@ -44,9 +44,9 @@ import java.lang.annotation.Annotation;
 
 /**
  * Base interface for typed annotation writer. <br>
- * Annotation compiler can generate a strongly typed annotation writer to assist
- * applications to write uses of annotations. Such typed annotation writer
- * interfaces all derive from this common interface.
+ * Annotation compiler can generate a strongly typed annotation writer to assist applications to
+ * write uses of annotations. Such typed annotation writer interfaces all derive from this common
+ * interface.
  *
  * @author Kohsuke Kawaguchi
  * @param <A>

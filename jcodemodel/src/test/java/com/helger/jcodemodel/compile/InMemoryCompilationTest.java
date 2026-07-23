@@ -68,9 +68,8 @@ import com.helger.jcodemodel.writer.JCMWriter;
 public final class InMemoryCompilationTest
 {
   /**
-   * create a new class in JCM that has toString() return a fixed value. check
-   * if getting that class for the in-memory compiler allows to create a clas
-   * with such a toString() value.
+   * create a new class in JCM that has toString() return a fixed value. check if getting that class
+   * for the in-memory compiler allows to create a clas with such a toString() value.
    *
    * @throws Exception
    *         If something fails
@@ -115,9 +114,9 @@ public final class InMemoryCompilationTest
   }
 
   /**
-   * create a new file text that contains a fixed value. Check if getting that
-   * file from the in-memory platform returns the correct value, and if getting
-   * it from the class loader also does.
+   * create a new file text that contains a fixed value. Check if getting that file from the
+   * in-memory platform returns the correct value, and if getting it from the class loader also
+   * does.
    *
    * @throws Exception
    *         If something fails

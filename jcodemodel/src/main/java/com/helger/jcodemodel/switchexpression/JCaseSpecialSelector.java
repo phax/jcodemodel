@@ -49,35 +49,35 @@ import com.helger.jcodemodel.JSwitchExpression;
 /// specify the special `case null` and `default` in a switch expression
 ///
 
-public class JCaseSpecialSelector implements BlockSelection<JCaseSpecialSelector> {
+public class JCaseSpecialSelector implements BlockSelection <JCaseSpecialSelector>
+{
+  private boolean m_bSetDefault = false;
+  private boolean m_bSetNull = false;
+  private final JSwitchExpression m_aParent;
 
-  private boolean setDefault = false;
-
-  private boolean setNull = false;
-
-  private final JSwitchExpression parent;
-
-  public JCaseSpecialSelector(JSwitchExpression parent, boolean isNull) {
-    this.parent = parent;
-    setDefault = !isNull;
-    setNull = isNull;
+  public JCaseSpecialSelector (final JSwitchExpression parent, final boolean isNull)
+  {
+    this.m_aParent = parent;
+    m_bSetDefault = !isNull;
+    m_bSetNull = isNull;
   }
 
-  public JCaseSpecialSelector andDefault() {
-    setDefault = true;
+  public JCaseSpecialSelector andDefault ()
+  {
+    m_bSetDefault = true;
     return this;
   }
 
-// requires j21
-//	public JCaseSpecialSelector andNull() {
-//		setNull = true;
-//		return this;
-//	}
+  // requires j21
+  // public JCaseSpecialSelector andNull() {
+  // setNull = true;
+  // return this;
+  // }
 
   @Override
-  public List<JBlock> blocks() {
-    return setDefault && setNull ? List.of(parent.defaultBlock(), parent.nullBlock())
-        : List.of(setDefault ? parent.defaultBlock() : parent.nullBlock());
+  public List <JBlock> blocks ()
+  {
+    return m_bSetDefault && m_bSetNull ? List.of (m_aParent.defaultBlock (), m_aParent.nullBlock ())
+                                       : List.of (m_bSetDefault ? m_aParent.defaultBlock () : m_aParent.nullBlock ());
   }
-
 }

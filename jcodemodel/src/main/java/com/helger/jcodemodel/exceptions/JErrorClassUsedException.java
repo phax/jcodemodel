@@ -43,8 +43,7 @@ package com.helger.jcodemodel.exceptions;
 import com.helger.jcodemodel.JErrorClass;
 
 /**
- * This exception purely indicates, that the {@link JErrorClass} is used which
- * is never intended.
+ * This exception purely indicates, that the {@link JErrorClass} is used which is never intended.
  *
  * @author Victor Nazarov &lt;asviraspossible@gmail.com&gt;
  */

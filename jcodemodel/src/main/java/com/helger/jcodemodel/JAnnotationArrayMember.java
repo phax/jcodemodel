@@ -53,8 +53,8 @@ import com.helger.base.enforce.ValueEnforcer;
 /**
  * Represents an arrays as annotation members
  * <p>
- * This class implements {@link IJAnnotatable} to allow new annotations to be
- * added as a member of the array.
+ * This class implements {@link IJAnnotatable} to allow new annotations to be added as a member of
+ * the array.
  *
  * @author Bhakti Mehta (bhakti.mehta@sun.com)
  */
@@ -80,8 +80,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param sValue
    *        Adds a string value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (@NonNull final String sValue)
@@ -103,8 +103,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param bValue
    *        Adds a boolean value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final boolean bValue)
@@ -126,8 +126,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param nValue
    *        Adds a byte value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final byte nValue)
@@ -149,8 +149,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param cValue
    *        Adds a char value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final char cValue)
@@ -172,8 +172,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param dValue
    *        Adds a double value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final double dValue)
@@ -195,8 +195,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param nValue
    *        Adds a long value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final long nValue)
@@ -218,8 +218,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param nValue
    *        Adds a short value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final short nValue)
@@ -241,8 +241,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param nValue
    *        Adds an int value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final int nValue)
@@ -264,8 +264,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param fValue
    *        Adds a float value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final float fValue)
@@ -287,8 +287,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param aEnumConstant
    *        Adds a enum value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (@NonNull final Enum <?> aEnumConstant)
@@ -310,8 +310,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param aValue
    *        Adds a enum value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final JEnumConstant aValue)
@@ -333,8 +333,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param aValue
    *        Adds an expression value to the array member
-   * @return The JAnnotationArrayMember. More elements can be added by calling
-   *         the same method multiple times
+   * @return The JAnnotationArrayMember. More elements can be added by calling the same method
+   *         multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final IJExpression aValue)
@@ -356,8 +356,8 @@ public class JAnnotationArrayMember extends AbstractJAnnotationValueOwned implem
    *
    * @param aValue
    *        Adds a class value to the array member
-   * @return The {@link JAnnotationArrayMember}. More elements can be added by
-   *         calling the same method multiple times
+   * @return The {@link JAnnotationArrayMember}. More elements can be added by calling the same
+   *         method multiple times
    */
   @NonNull
   public JAnnotationArrayMember param (final Class <?> aValue)

@@ -168,8 +168,8 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
         final JarEntry jarEntry = entryEnum.nextElement ();
         final String name = jarEntry.getName ();
         if (name.startsWith (rootEntryName) &&
-            name.indexOf ('/', rootEnd) == -1 &&
-            name.endsWith (CLASS_FILE_EXTENSION))
+          name.indexOf ('/', rootEnd) == -1 &&
+          name.endsWith (CLASS_FILE_EXTENSION))
         {
           final URI uri = URI.create (jarUri + "!/" + name);
           String binaryName = StringReplace.replaceAll (name, '/', '.');

@@ -56,8 +56,7 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
   private final JCodeModel m_aOwner;
 
   /**
-   * Object expression upon which this field will be accessed, or null for the
-   * implicit 'this'.
+   * Object expression upon which this field will be accessed, or null for the implicit 'this'.
    */
   private final IJGenerable m_aObject;
 
@@ -77,13 +76,12 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
   private boolean m_bExplicitThis;
 
   /**
-   * Field reference constructor given an object expression and field name.
-   * <code>object.name</code> or just <code>name</code> if object is
-   * <code>null</code>.
+   * Field reference constructor given an object expression and field name. <code>object.name</code>
+   * or just <code>name</code> if object is <code>null</code>.
    *
    * @param aObject
-   *        JExpression for the object upon which the named field will be
-   *        accessed. May be <code>null</code>.
+   *        JExpression for the object upon which the named field will be accessed. May be
+   *        <code>null</code>.
    * @param sName
    *        Name of field to access. May not be <code>null</code>.
    */
@@ -215,8 +213,8 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
       return false;
     final JFieldRef rhs = (JFieldRef) o;
     return EqualsHelper.equals (m_aObject, rhs.m_aObject) &&
-           EqualsHelper.equals (name (), rhs.name ()) &&
-           EqualsHelper.equals (m_bExplicitThis, rhs.m_bExplicitThis);
+      EqualsHelper.equals (name (), rhs.name ()) &&
+      EqualsHelper.equals (m_bExplicitThis, rhs.m_bExplicitThis);
   }
 
   @Override

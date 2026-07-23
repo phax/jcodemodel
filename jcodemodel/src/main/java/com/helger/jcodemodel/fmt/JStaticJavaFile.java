@@ -69,20 +69,18 @@ import com.helger.jcodemodel.util.JCSecureLoader;
 /**
  * Statically generated Java source file.
  * <p>
- * This {@link AbstractJResourceFile} implementation will generate a Java source
- * file by copying the source code from a resource.
+ * This {@link AbstractJResourceFile} implementation will generate a Java source file by copying the
+ * source code from a resource.
  * <p>
- * While copying a resource, we look for a package declaration and replace it
- * with the target package name. This allows the static Java source code to have
- * an arbitrary package declaration.
+ * While copying a resource, we look for a package declaration and replace it with the target
+ * package name. This allows the static Java source code to have an arbitrary package declaration.
  * <p>
- * You can also use the getJClass method to obtain a {@link AbstractJClass}
- * object that represents the static file. This allows the client code to refer
- * to the class from other CodeModel generated code.
+ * You can also use the getJClass method to obtain a {@link AbstractJClass} object that represents
+ * the static file. This allows the client code to refer to the class from other CodeModel generated
+ * code.
  * <p>
- * Note that because we don't parse the static Java source code, the returned
- * {@link AbstractJClass} object doesn't respond to methods like "isInterface"
- * or "_extends",
+ * Note that because we don't parse the static Java source code, the returned {@link AbstractJClass}
+ * object doesn't respond to methods like "isInterface" or "_extends",
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
@@ -102,7 +100,11 @@ public class JStaticJavaFile extends AbstractJResourceFile
                           @NonNull final String sResourceName,
                           @NonNull final Charset aEncoding)
   {
-    this (aPkg, sClassName, JCSecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (sResourceName), null, aEncoding);
+    this (aPkg,
+          sClassName,
+          JCSecureLoader.getClassClassLoader (JStaticJavaFile.class).getResource (sResourceName),
+          null,
+          aEncoding);
   }
 
   public JStaticJavaFile (@NonNull final JPackage aPkg,
@@ -149,7 +151,8 @@ public class JStaticJavaFile extends AbstractJResourceFile
 
     try (final InputStream aIS = m_aSource.openStream ();
          final NonBlockingBufferedReader r = new NonBlockingBufferedReader (new InputStreamReader (aIS, m_aEncoding));
-         final PrintWriter w = new PrintWriter (new NonBlockingBufferedWriter (new OutputStreamWriter (aOS, m_aEncoding))))
+         final PrintWriter w = new PrintWriter (new NonBlockingBufferedWriter (new OutputStreamWriter (aOS,
+                                                                                                       m_aEncoding))))
     {
       String sLine;
       while ((sLine = r.readLine ()) != null)
@@ -169,8 +172,7 @@ public class JStaticJavaFile extends AbstractJResourceFile
   /**
    * Creates a {@link ILineFilter}.
    * <p>
-   * A derived class can override this method to process the contents of the
-   * source file.
+   * A derived class can override this method to process the contents of the source file.
    */
   @NonNull
   private Function <String, String> _createLineFilter ()
@@ -261,7 +263,8 @@ public class JStaticJavaFile extends AbstractJResourceFile
     }
 
     @Override
-    protected AbstractJClass substituteParams (final JTypeVar [] variables, final List <? extends AbstractJClass> bindings)
+    protected AbstractJClass substituteParams (final JTypeVar [] variables,
+                                               final List <? extends AbstractJClass> bindings)
     {
       return this;
     }

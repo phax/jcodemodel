@@ -56,30 +56,35 @@ import com.helger.jcodemodel.JVar;
 ///  - type is required
 ///  - No init expression
 ///
-public class JArgVar extends JVar {
+public class JArgVar extends JVar
+{
 
   public JArgVar(boolean final_, @NonNull AbstractJType aType, @NonNull String sName) {
     super (JMods.forVar (final_ ? JMod.FINAL : JMod.NONE), aType, sName, null);
   }
 
   @Override
-  public void bind(@NonNull final IJFormatter f) {
-    for (final JAnnotationUse annotation : annotations()) {
-      f.generable(annotation);
-      f.print(' ');
+  public void bind (@NonNull final IJFormatter f)
+  {
+    for (final JAnnotationUse annotation : annotations ())
+    {
+      f.generable (annotation);
+      f.print (' ');
     }
-    f.generable(mods());
-    bindType(f);
-    f.id(name());
+    f.generable (mods ());
+    bindType (f);
+    f.id (name ());
   }
 
   // just here to be overridden for varargs
-  protected void bindType(@NonNull final IJFormatter f) {
-    f.generable(type());
+  protected void bindType (@NonNull final IJFormatter f)
+  {
+    f.generable (type ());
   }
 
   @Override
-  public String separator() {
+  public String separator ()
+  {
     return ",";
   }
 

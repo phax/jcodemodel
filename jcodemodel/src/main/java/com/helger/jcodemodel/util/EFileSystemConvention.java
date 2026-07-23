@@ -62,7 +62,8 @@ public enum EFileSystemConvention implements IFileSystemConvention
   /**
    * The default file system convention follows the known rules.
    */
-  public static final EFileSystemConvention DEFAULT = EOperatingSystem.getCurrentOS ().isWindowsBased () ? WINDOWS : LINUX;
+  public static final EFileSystemConvention DEFAULT = EOperatingSystem.getCurrentOS ().isWindowsBased () ? WINDOWS
+                                                                                                         : LINUX;
 
   private final boolean m_bIsCaseSensitive;
   private final Predicate <String> m_aDirNameCheck;

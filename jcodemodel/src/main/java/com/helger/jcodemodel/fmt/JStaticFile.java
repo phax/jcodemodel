@@ -76,10 +76,12 @@ public class JStaticFile extends AbstractJResourceFile
    * @param sResourceName
    *        Path to use for loading via resource. May not be <code>null</code>.
    * @param bIsResource
-   *        <code>false</code> if this is a Java source file. <code>true</code>
-   *        if this is other resource files.
+   *        <code>false</code> if this is a Java source file. <code>true</code> if this is other
+   *        resource files.
    */
-  public JStaticFile (@NonNull final ClassLoader aClassLoader, @NonNull final String sResourceName, final boolean bIsResource)
+  public JStaticFile (@NonNull final ClassLoader aClassLoader,
+                      @NonNull final String sResourceName,
+                      final boolean bIsResource)
   {
     super (sResourceName.substring (sResourceName.lastIndexOf ('/') + 1));
     m_aClassLoader = aClassLoader;

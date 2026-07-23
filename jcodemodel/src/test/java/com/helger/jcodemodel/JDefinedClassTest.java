@@ -150,7 +150,8 @@ public final class JDefinedClassTest
     final CompilationUnit aCU = CodeModelTestsHelper.parseAndGetSingleClassCodeModel (cm);
     final TypeDeclaration <?> typeDeclaration = aCU.getTypes ().get (0);
     final ClassOrInterfaceDeclaration classDeclaration = (ClassOrInterfaceDeclaration) typeDeclaration;
-    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ().get (1);
+    final InitializerDeclaration initializerDeclaration = (InitializerDeclaration) classDeclaration.getMembers ()
+                                                                                                   .get (1);
     assertNotNull (initializerDeclaration);
   }
 
@@ -163,7 +164,8 @@ public final class JDefinedClassTest
     final JDefinedClass c1 = cm._package ("myPackage")._class (0, "BaseClass");
     final JMethod con1 = c1.constructor (JMod.PUBLIC);
     final JVar p1 = con1.param (JMod.FINAL, cm.ref (String.class), "str");
-    con1.body ().add (new JFieldRef (cm.ref (System.class), "out").invoke ("println").arg (JExpr.lit ("Got ").plus (p1)));
+    con1.body ()
+        .add (new JFieldRef (cm.ref (System.class), "out").invoke ("println").arg (JExpr.lit ("Got ").plus (p1)));
 
     // Derived class
     final JDefinedClass c2 = cm._package ("myPackage")._class (0, "DerivedClass");
@@ -176,31 +178,32 @@ public final class JDefinedClassTest
   }
 
   @Test
-  public void testEMods() throws JCodeModelException {
-    JCodeModel jcm = new JCodeModel();
-    JDefinedClass jdc = jcm._class("TestEModsClass");
+  public void testEMods () throws JCodeModelException
+  {
+    JCodeModel jcm = new JCodeModel ();
+    JDefinedClass jdc = jcm._class ("TestEModsClass");
 
     // basic set
-    jdc.emod(EMod.SEALED, EMod.PUBLIC);
-    Assert.assertTrue(jdc.isEMod(EMod.SEALED, EMod.PUBLIC));
+    jdc.emod (EMod.SEALED, EMod.PUBLIC);
+    Assert.assertTrue (jdc.isEMod (EMod.SEALED, EMod.PUBLIC));
 
     // remove exclusion
-    jdc.emod(EMod.NONSEALED, EMod.PRIVATE);
-    Assert.assertTrue(jdc.isEMod(EMod.NONSEALED, EMod.PRIVATE));
-    Assert.assertFalse(jdc.isEMod(EMod.SEALED));
-    Assert.assertFalse(jdc.isEMod(EMod.PUBLIC));
+    jdc.emod (EMod.NONSEALED, EMod.PRIVATE);
+    Assert.assertTrue (jdc.isEMod (EMod.NONSEALED, EMod.PRIVATE));
+    Assert.assertFalse (jdc.isEMod (EMod.SEALED));
+    Assert.assertFalse (jdc.isEMod (EMod.PUBLIC));
 
     // forbidden for class
-    jdc.emod(EMod.TRANSIENT, EMod.VOLATILE);
-    Assert.assertFalse(jdc.isEMod(EMod.TRANSIENT));
-    Assert.assertFalse(jdc.isEMod(EMod.VOLATILE));
+    jdc.emod (EMod.TRANSIENT, EMod.VOLATILE);
+    Assert.assertFalse (jdc.isEMod (EMod.TRANSIENT));
+    Assert.assertFalse (jdc.isEMod (EMod.VOLATILE));
     // same previous check to ensure no change at all
-    Assert.assertTrue(jdc.isEMod(EMod.NONSEALED, EMod.PRIVATE));
+    Assert.assertTrue (jdc.isEMod (EMod.NONSEALED, EMod.PRIVATE));
 
     // mixed mutual exclusion and forbidden
-    jdc.emod(EMod.PUBLIC, EMod.TRANSIENT, EMod.PRIVATE, EMod.NONSEALED, EMod.SEALED);
-    Assert.assertFalse(jdc.isEMod(EMod.TRANSIENT));
-    Assert.assertTrue(jdc.isEMod(EMod.SEALED, EMod.PRIVATE));
+    jdc.emod (EMod.PUBLIC, EMod.TRANSIENT, EMod.PRIVATE, EMod.NONSEALED, EMod.SEALED);
+    Assert.assertFalse (jdc.isEMod (EMod.TRANSIENT));
+    Assert.assertTrue (jdc.isEMod (EMod.SEALED, EMod.PRIVATE));
   }
 
 }

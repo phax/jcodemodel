@@ -69,8 +69,7 @@ public class JTextFile extends AbstractJResourceFile
   }
 
   /**
-   * @return The encoding as provided in the constructor. Never
-   *         <code>null</code>.
+   * @return The encoding as provided in the constructor. Never <code>null</code>.
    */
   @NonNull
   public final Charset encoding ()
@@ -120,7 +119,9 @@ public class JTextFile extends AbstractJResourceFile
   }
 
   @NonNull
-  public static JTextFile createFully (@NonNull final String sName, @NonNull final Charset aEncoding, @Nullable final String sContents)
+  public static JTextFile createFully (@NonNull final String sName,
+                                       @NonNull final Charset aEncoding,
+                                       @Nullable final String sContents)
   {
     return new JTextFile (sName, aEncoding).contents (sContents);
   }

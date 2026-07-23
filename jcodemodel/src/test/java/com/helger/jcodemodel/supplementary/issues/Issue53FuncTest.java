@@ -73,7 +73,10 @@ public final class Issue53FuncTest
 
     JMethod method = aInterface.method (JMod.DEFAULT, cm.ref (Supplier.class).narrowAny (), "description");
     {
-      final JLambda lambda = JLambda.simple (JExpr._this ().invoke ("getValueProvider").invoke ("andThen").arg (methodLambda));
+      final JLambda lambda = JLambda.simple (JExpr._this ()
+                                                  .invoke ("getValueProvider")
+                                                  .invoke ("andThen")
+                                                  .arg (methodLambda));
       method.body ()._return (lambda);
     }
 
@@ -90,7 +93,10 @@ public final class Issue53FuncTest
       final JVar l1 = method.body ()
                             .decl (cm.ref (Supplier.class).narrowAny (),
                                    "x1",
-                                   JLambda.simple (JExpr._this ().invoke ("getValueProvider").invoke ("andThen").arg (methodLambda)));
+                                   JLambda.simple (JExpr._this ()
+                                                        .invoke ("getValueProvider")
+                                                        .invoke ("andThen")
+                                                        .arg (methodLambda)));
 
       final JLambda lambda = new JLambda ();
       final JLambdaParam aParam = lambda.addParam ("xx");

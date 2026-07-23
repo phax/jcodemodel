@@ -61,8 +61,8 @@ public class JResourceAlreadyExistsException extends JCodeModelException
   }
 
   /**
-   * @return The existing filename that already exists as a resource. Neither
-   *         <code>null</code> nor empty.
+   * @return The existing filename that already exists as a resource. Neither <code>null</code> nor
+   *         empty.
    */
   @NonNull
   public String getExistingFilename ()

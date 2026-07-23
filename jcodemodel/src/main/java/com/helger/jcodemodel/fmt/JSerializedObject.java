@@ -50,8 +50,8 @@ import org.jspecify.annotations.NonNull;
 import com.helger.annotation.WillNotClose;
 
 /**
- * A simple class that takes an object and serializes it into a file in the
- * parent package with the given name.
+ * A simple class that takes an object and serializes it into a file in the parent package with the
+ * given name.
  */
 public class JSerializedObject extends AbstractJResourceFile
 {

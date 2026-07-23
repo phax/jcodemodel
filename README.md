@@ -36,6 +36,18 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 
 # News and noteworthy
 
+v4.3.0 - 2026-07-23
+* Added support for switch expressions (Java 14+) via new classes `JSwitchExpression`, `JYield` and arrow-style cases. See [#144](https://github.com/phax/jcodemodel/pull/144) - thx @glelouet
+* Added support for pattern matching with `instanceof` via new class `JInstanceOfVar`, invoked through `JExpr.instanceOf (...)`. See [#162](https://github.com/phax/jcodemodel/pull/162) - thx @glelouet
+* Added support for the `sealed` and `non-sealed` modifiers and the `permits` clause on `JDefinedClass`. See [#150](https://github.com/phax/jcodemodel/pull/150) - thx @glelouet
+* Added support for local variable type inference (`var`); `JVar` no longer requires an explicit type. See [#161](https://github.com/phax/jcodemodel/pull/161) - thx @glelouet
+* Added the lazy initialization pattern via new class `JLazy`. See [#160](https://github.com/phax/jcodemodel/pull/160) - thx @glelouet
+* Added a concise try-with-resources syntax. See [#142](https://github.com/phax/jcodemodel/pull/142) - thx @glelouet
+* Added new interface `IJModified` and the `emod (EMod...)` API (with new enum `EMod`), implemented by `JMods`, `JDefinedClass`, `JVar`, `JFieldVar` and `JMethod`. See [#155](https://github.com/phax/jcodemodel/pull/155) - thx @glelouet
+* Added configurable formatter settings via `FormatterSettings` to control indentation and line wrapping. See [#163](https://github.com/phax/jcodemodel/pull/163) - thx @glelouet
+* Added `JCMWriter.setJavaFeature (int)` to target a specific Java feature version; features requiring a higher level may be replaced with fallback code. See [#143](https://github.com/phax/jcodemodel/issues/143)
+* Fixed text block (`JTextBlock`) indentation handling. See [#148](https://github.com/phax/jcodemodel/issues/148) and [#158](https://github.com/phax/jcodemodel/pull/158) - thx @glelouet
+
 v4.2.1 - 2026-05-29
 * Added support for annotations with parameters on type annotations and fixed `@since` tags. See [#130](https://github.com/phax/jcodemodel/pull/130) - thx @joelittlejohn
 * Added support for Java text blocks via [#145](https://github.com/phax/jcodemodel/pull/145) and [#147](https://github.com/phax/jcodemodel/pull/147), including a `keepWhiteSpaces` option - thx @glelouet

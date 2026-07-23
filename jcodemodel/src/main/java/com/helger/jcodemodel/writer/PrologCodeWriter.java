@@ -48,8 +48,8 @@ import org.jspecify.annotations.Nullable;
 import com.helger.jcodemodel.JPackage;
 
 /**
- * Writes all the source files under the specified file folder and inserts a
- * file prolog comment in each java source file.
+ * Writes all the source files under the specified file folder and inserts a file prolog comment in
+ * each java source file.
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
@@ -60,14 +60,12 @@ public class PrologCodeWriter extends FilterCodeWriter
 
   /**
    * @param aCore
-   *        This CodeWriter will be used to actually create a storage for files.
-   *        PrologCodeWriter simply decorates this underlying CodeWriter by
-   *        adding prolog comments.
+   *        This CodeWriter will be used to actually create a storage for files. PrologCodeWriter
+   *        simply decorates this underlying CodeWriter by adding prolog comments.
    * @param prolog
-   *        Strings that will be added as comments. This string may contain
-   *        newlines to produce multi-line comments. '//' will be inserted at
-   *        the beginning of each line to make it a valid Java comment, so the
-   *        caller can just pass strings like "abc\ndef"
+   *        Strings that will be added as comments. This string may contain newlines to produce
+   *        multi-line comments. '//' will be inserted at the beginning of each line to make it a
+   *        valid Java comment, so the caller can just pass strings like "abc\ndef"
    */
   public PrologCodeWriter (@NonNull final AbstractCodeWriter aCore, @Nullable final String prolog)
   {

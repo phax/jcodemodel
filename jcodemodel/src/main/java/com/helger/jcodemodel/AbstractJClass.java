@@ -322,25 +322,27 @@ public abstract class AbstractJClass extends AbstractJType
    * Creates a new type with a type-use annotation (JSR 308, Java 8+).
    * <p>
    * This is different from {@link IJAnnotatable#annotate(Class)} which adds annotations to
-   * <em>declarations</em> (classes, methods, fields). This method creates a new <em>type</em>
-   * that includes the annotation, for use in contexts like generic type arguments.
+   * <em>declarations</em> (classes, methods, fields). This method creates a new <em>type</em> that
+   * includes the annotation, for use in contexts like generic type arguments.
    * <p>
    * <b>Comparison:</b>
+   * 
    * <pre>
    * // Declaration annotation using annotate() - annotates the field itself:
    * // Generates: @NotNull private List&lt;String&gt; items;
-   * field.annotate(NotNull.class);
+   * field.annotate (NotNull.class);
    *
    * // Type-use annotation using annotated() - annotates the type argument:
    * // Generates: private List&lt;@NotNull String&gt; items;
-   * cm.ref(List.class).narrow(cm.ref(String.class).annotated(NotNull.class));
+   * cm.ref (List.class).narrow (cm.ref (String.class).annotated (NotNull.class));
    * </pre>
    * <p>
    * <b>Example usage:</b>
+   * 
    * <pre>
-   * AbstractJClass itemClass = codeModel.ref(Item.class);
-   * AbstractJClass annotatedItem = itemClass.annotated(Valid.class);
-   * AbstractJClass listType = codeModel.ref(List.class).narrow(annotatedItem);
+   * AbstractJClass itemClass = codeModel.ref (Item.class);
+   * AbstractJClass annotatedItem = itemClass.annotated (Valid.class);
+   * AbstractJClass listType = codeModel.ref (List.class).narrow (annotatedItem);
    * // Generates: List&lt;@Valid Item&gt;
    * </pre>
    *
@@ -361,26 +363,28 @@ public abstract class AbstractJClass extends AbstractJType
    * Creates a new type with a type-use annotation (JSR 308, Java 8+).
    * <p>
    * This is different from {@link IJAnnotatable#annotate(AbstractJClass)} which adds annotations to
-   * <em>declarations</em> (classes, methods, fields). This method creates a new <em>type</em>
-   * that includes the annotation, for use in contexts like generic type arguments.
+   * <em>declarations</em> (classes, methods, fields). This method creates a new <em>type</em> that
+   * includes the annotation, for use in contexts like generic type arguments.
    * <p>
    * <b>Comparison:</b>
+   * 
    * <pre>
    * // Declaration annotation using annotate() - annotates the field itself:
    * // Generates: @NotNull private List&lt;String&gt; items;
-   * field.annotate(NotNull.class);
+   * field.annotate (NotNull.class);
    *
    * // Type-use annotation using annotated() - annotates the type argument:
    * // Generates: private List&lt;@NotNull String&gt; items;
-   * cm.ref(List.class).narrow(cm.ref(String.class).annotated(NotNull.class));
+   * cm.ref (List.class).narrow (cm.ref (String.class).annotated (NotNull.class));
    * </pre>
    * <p>
    * <b>Example usage:</b>
+   * 
    * <pre>
-   * AbstractJClass itemClass = codeModel.ref(Item.class);
-   * AbstractJClass validAnnotation = codeModel.ref(Valid.class);
-   * AbstractJClass annotatedItem = itemClass.annotated(validAnnotation);
-   * AbstractJClass listType = codeModel.ref(List.class).narrow(annotatedItem);
+   * AbstractJClass itemClass = codeModel.ref (Item.class);
+   * AbstractJClass validAnnotation = codeModel.ref (Valid.class);
+   * AbstractJClass annotatedItem = itemClass.annotated (validAnnotation);
+   * AbstractJClass listType = codeModel.ref (List.class).narrow (annotatedItem);
    * // Generates: List&lt;@Valid Item&gt;
    * </pre>
    *
@@ -400,12 +404,13 @@ public abstract class AbstractJClass extends AbstractJType
   /**
    * Creates a new type with a type-use annotation (JSR 308, Java 8+).
    * <p>
-   * This overload accepts a pre-configured {@link JAnnotationUse}, allowing annotations
-   * with parameters:
+   * This overload accepts a pre-configured {@link JAnnotationUse}, allowing annotations with
+   * parameters:
+   * 
    * <pre>
-   * JAnnotationUse sizeAnnotation = new JAnnotationUse(codeModel.ref(Size.class));
-   * sizeAnnotation.param("min", 1).param("max", 10);
-   * AbstractJClass annotatedString = stringClass.annotated(sizeAnnotation);
+   * JAnnotationUse sizeAnnotation = new JAnnotationUse (codeModel.ref (Size.class));
+   * sizeAnnotation.param ("min", 1).param ("max", 10);
+   * AbstractJClass annotatedString = stringClass.annotated (sizeAnnotation);
    * // Generates: @Size(min = 1, max = 10) String
    * </pre>
    *

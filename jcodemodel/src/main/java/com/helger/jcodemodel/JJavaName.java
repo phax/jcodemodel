@@ -57,68 +57,21 @@ public final class JJavaName
   {
     // see
     // http://java.sun.com/docs/books/tutorial/java/nutsandbolts/_keywords.html
-    final String [] aKeyWords = new String [] { "abstract",
-                                                "assert",
-                                                "boolean",
-                                                "break",
-                                                "byte",
-                                                "case",
-                                                "catch",
-                                                "char",
-                                                "class",
-                                                "const",
-                                                "continue",
-                                                "default",
-                                                "do",
-                                                "double",
-                                                "else",
-                                                "enum",
-                                                "extends",
-                                                "final",
-                                                "finally",
-                                                "float",
-                                                "for",
-                                                "goto",
-                                                "if",
-                                                "implements",
-                                                "import",
-                                                "instanceof",
-                                                "int",
-                                                "interface",
-                                                "long",
-                                                "native",
-                                                "new",
-                                                "package",
-                                                "private",
-                                                "protected",
-                                                "public",
-                                                "return",
-                                                "short",
-                                                "static",
-                                                "strictfp",
-                                                "super",
-                                                "switch",
-                                                "synchronized",
-                                                "this",
-                                                "throw",
-                                                "throws",
-                                                "transient",
-                                                "try",
+    final String [] aKeyWords = new String [] { "abstract", "assert", "boolean", "break", "byte", "case", "catch",
+                                                "char", "class", "const", "continue", "default", "do", "double", "else",
+                                                "enum", "extends", "final", "finally", "float", "for", "goto", "if",
+                                                "implements", "import", "instanceof", "int", "interface", "long",
+                                                "native", "new", "package", "private", "protected", "public", "return",
+                                                "short", "static", "strictfp", "super", "switch", "synchronized",
+                                                "this", "throw", "throws", "transient", "try",
                                                 // var is not a keyword
                                                 /* "var", */
-                                                "void",
-                                                "volatile",
-                                                "while",
+                                                "void", "volatile", "while",
                                                 /*
-                                                 * technically these are not
-                                                 * reserved words but they
-                                                 * cannot be used as
-                                                 * identifiers.
+                                                 * technically these are not reserved words but they
+                                                 * cannot be used as identifiers.
                                                  */
-                                                "true",
-                                                "false",
-                                                "null",
-                                                "_" };
+                                                "true", "false", "null", "_" };
     for (final String sKeyword : aKeyWords)
       RESERVED_KEYWORDS.add (sKeyword);
   }
@@ -131,8 +84,7 @@ public final class JJavaName
    *
    * @param sStr
    *        The string to be checked.
-   * @return <code>true</code> if the string is a Java keyword,
-   *         <code>false</code> if not.
+   * @return <code>true</code> if the string is a Java keyword, <code>false</code> if not.
    */
   public static boolean isJavaReservedKeyword (@NonNull final String sStr)
   {
@@ -144,9 +96,8 @@ public final class JJavaName
    *
    * @param sStr
    *        Source string. May not be <code>null</code>.
-   * @return <code>true</code> if the string is a valid Java identifier,
-   *         <code>false</code> if this is a reserved keyword or if it contains
-   *         invalid characters.
+   * @return <code>true</code> if the string is a valid Java identifier, <code>false</code> if this
+   *         is a reserved keyword or if it contains invalid characters.
    */
   public static boolean isJavaIdentifier (@NonNull final String sStr)
   {

@@ -51,11 +51,10 @@ import com.helger.base.enforce.ValueEnforcer;
 /**
  * Represents a wildcard type like "? extends Foo" or "? super Foo".
  * <p>
- * Instances of this class can be obtained from
- * {@link AbstractJClass#wildcard(EWildcardBoundMode)}
+ * Instances of this class can be obtained from {@link AbstractJClass#wildcard(EWildcardBoundMode)}
  * <p>
- * Our modeling of types are starting to look really ugly. ideally it should
- * have been done somewhat like APT, but it's too late now.
+ * Our modeling of types are starting to look really ugly. ideally it should have been done somewhat
+ * like APT, but it's too late now.
  *
  * @author Kohsuke Kawaguchi
  */

@@ -53,7 +53,9 @@ public class JOpBinary implements IJExpression
   private final String m_sOperator;
   private final IJGenerable m_aRight;
 
-  protected JOpBinary (@NonNull final IJExpression aLeft, @NonNull final String sOperator, @NonNull final IJGenerable aRight)
+  protected JOpBinary (@NonNull final IJExpression aLeft,
+                       @NonNull final String sOperator,
+                       @NonNull final IJGenerable aRight)
   {
     m_aLeft = ValueEnforcer.notNull (aLeft, "Left");
     m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
@@ -92,8 +94,8 @@ public class JOpBinary implements IJExpression
       return false;
     final JOpBinary rhs = (JOpBinary) o;
     return EqualsHelper.equals (m_aLeft, rhs.m_aLeft) &&
-           EqualsHelper.equals (m_sOperator, rhs.m_sOperator) &&
-           EqualsHelper.equals (m_aRight, rhs.m_aRight);
+      EqualsHelper.equals (m_sOperator, rhs.m_sOperator) &&
+      EqualsHelper.equals (m_aRight, rhs.m_aRight);
   }
 
   @Override

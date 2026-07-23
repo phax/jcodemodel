@@ -44,8 +44,6 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
@@ -55,6 +53,8 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.AbstractJType;
@@ -67,6 +67,8 @@ import com.helger.jcodemodel.JAnnotationUse;
  */
 class Annotator
 {
+  private static final Logger LOGGER = LoggerFactory.getLogger (Annotator.class);
+
   private final DecidedErrorTypesModelsAdapter m_aModelsAdapter;
   private final IJAnnotatable m_aAnnotatable;
   private final TypeEnvironment m_aTypeEnvironment;
@@ -109,7 +111,9 @@ class Annotator
       m_aAnnotationUse = annotationUse;
     }
 
-    void addArguments (final AnnotationMirror annotation) throws CodeModelBuildingException, IllegalStateException, ErrorTypeFound
+    void addArguments (final AnnotationMirror annotation) throws CodeModelBuildingException,
+                                                          IllegalStateException,
+                                                          ErrorTypeFound
     {
       final Map <? extends ExecutableElement, ? extends AnnotationValue> annotationArguments = m_aModelsAdapter.getElementValuesWithDefaults (annotation);
       for (final Map.Entry <? extends ExecutableElement, ? extends AnnotationValue> annotationValueAssignment : annotationArguments.entrySet ())
@@ -120,63 +124,63 @@ class Annotator
       }
     }
 
-    private void _addArgument (final String name,
-                               final Object value) throws IllegalStateException, CodeModelBuildingException, ErrorTypeFound
+    private void _addArgument (final String name, final Object value) throws IllegalStateException,
+                                                                      CodeModelBuildingException,
+                                                                      ErrorTypeFound
     {
-      if (value instanceof String)
-        m_aAnnotationUse.param (name, (String) value);
+      if (value instanceof final String a)
+        m_aAnnotationUse.param (name, a);
       else
-        if (value instanceof Integer)
-          m_aAnnotationUse.param (name, ((Integer) value).intValue ());
+        if (value instanceof final Integer a)
+          m_aAnnotationUse.param (name, a.intValue ());
         else
-          if (value instanceof Long)
-            m_aAnnotationUse.param (name, ((Long) value).longValue ());
+          if (value instanceof final Long a)
+            m_aAnnotationUse.param (name, a.longValue ());
           else
-            if (value instanceof Short)
-              m_aAnnotationUse.param (name, ((Short) value).shortValue ());
+            if (value instanceof final Short a)
+              m_aAnnotationUse.param (name, a.shortValue ());
             else
-              if (value instanceof Float)
-                m_aAnnotationUse.param (name, ((Float) value).floatValue ());
+              if (value instanceof final Float a)
+                m_aAnnotationUse.param (name, a.floatValue ());
               else
-                if (value instanceof Double)
-                  m_aAnnotationUse.param (name, ((Double) value).doubleValue ());
+                if (value instanceof final Double a)
+                  m_aAnnotationUse.param (name, a.doubleValue ());
                 else
-                  if (value instanceof Byte)
-                    m_aAnnotationUse.param (name, ((Byte) value).byteValue ());
+                  if (value instanceof final Byte a)
+                    m_aAnnotationUse.param (name, a.byteValue ());
                   else
-                    if (value instanceof Character)
-                      m_aAnnotationUse.param (name, ((Character) value).charValue ());
+                    if (value instanceof final Character a)
+                      m_aAnnotationUse.param (name, a.charValue ());
                     else
-                      if (value instanceof Boolean)
-                        m_aAnnotationUse.param (name, ((Boolean) value).booleanValue ());
+                      if (value instanceof final Boolean a)
+                        m_aAnnotationUse.param (name, a.booleanValue ());
                       else
-                        if (value instanceof Class)
-                          m_aAnnotationUse.param (name, (Class <?>) value);
+                        if (value instanceof final Class a)
+                          m_aAnnotationUse.param (name, a);
                         else
-                          if (value instanceof DeclaredType)
+                          if (value instanceof final DeclaredType a)
                           {
-                            m_aAnnotationUse.param (name, m_aModelsAdapter.toJType ((DeclaredType) value, m_aTypeEnvironment));
+                            m_aAnnotationUse.param (name, m_aModelsAdapter.toJType (a, m_aTypeEnvironment));
                           }
                           else
-                            if (value instanceof VariableElement)
+                            if (value instanceof final VariableElement a)
                             {
                               try
                               {
-                                m_aAnnotationUse.param (name, _actualEnumConstantValue ((VariableElement) value));
+                                m_aAnnotationUse.param (name, _actualEnumConstantValue (a));
                               }
                               catch (final ClassNotFoundException ex)
                               {
-                                Logger.getLogger (Annotator.class.getName ())
-                                      .log (Level.WARNING, "Not processing annotation argument: " + name + ": " + value);
+                                LOGGER.warn ("Not processing annotation argument: " + name + ": " + value);
                               }
                             }
                             else
-                              if (value instanceof AnnotationMirror)
+                              if (value instanceof final AnnotationMirror annotation)
                               {
-                                final AnnotationMirror annotation = (AnnotationMirror) value;
                                 final AbstractJClass annotationClass = (AbstractJClass) m_aModelsAdapter.toJType (annotation.getAnnotationType (),
                                                                                                                   m_aTypeEnvironment);
-                                final JAnnotationUse annotationParam = m_aAnnotationUse.annotationParam (name, annotationClass);
+                                final JAnnotationUse annotationParam = m_aAnnotationUse.annotationParam (name,
+                                                                                                         annotationClass);
                                 final ArgumentAdder adder = new ArgumentAdder (annotationParam);
                                 adder.addArguments (annotation);
                               }
@@ -338,9 +342,10 @@ class Annotator
                                                             }
                                                             catch (final ClassNotFoundException ex)
                                                             {
-                                                              Logger.getLogger (Annotator.class.getName ())
-                                                                    .log (Level.WARNING,
-                                                                          "Not processing annotation argument: " + name + ": " + list);
+                                                              LOGGER.warn ("Not processing annotation argument: " +
+                                                                           name +
+                                                                           ": " +
+                                                                           list);
                                                             }
                                                           }
                                                           else
@@ -379,7 +384,7 @@ class Annotator
                                                                    ")");
     }
 
-    private Enum <?> _actualEnumConstantValue (final VariableElement variableElement) throws ClassNotFoundException
+    private Enum <?> _actualEnumConstantValue (@NonNull final VariableElement variableElement) throws ClassNotFoundException
     {
       final TypeElement enumClassElement = (TypeElement) variableElement.getEnclosingElement ();
       final Class <?> enumClass = Class.forName (enumClassElement.getQualifiedName ().toString ());
@@ -388,15 +393,7 @@ class Annotator
       {
         enumConstantField = enumClass.getField (variableElement.getSimpleName ().toString ());
       }
-      catch (final NoSuchFieldException ex)
-      {
-        throw new IllegalStateException ("Unable to load enum constant: " +
-                                         enumClassElement.getQualifiedName ().toString () +
-                                         "." +
-                                         variableElement.getSimpleName ().toString (),
-                                         ex);
-      }
-      catch (final SecurityException ex)
+      catch (final NoSuchFieldException | SecurityException ex)
       {
         throw new IllegalStateException ("Unable to load enum constant: " +
                                          enumClassElement.getQualifiedName ().toString () +

@@ -43,8 +43,7 @@ package com.helger.jcodemodel;
 import org.jspecify.annotations.NonNull;
 
 /**
- * Common interface for code components that can generate declarations of
- * themselves.
+ * Common interface for code components that can generate declarations of themselves.
  */
 
 public interface IJDeclaration extends IJObject

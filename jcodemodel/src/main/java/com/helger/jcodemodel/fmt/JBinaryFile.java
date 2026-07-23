@@ -49,8 +49,7 @@ import com.helger.annotation.WillNotClose;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayOutputStream;
 
 /**
- * Allows the application to use OutputStream to define data that will be stored
- * into a file.
+ * Allows the application to use OutputStream to define data that will be stored into a file.
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
@@ -64,8 +63,7 @@ public class JBinaryFile extends AbstractJResourceFile
   }
 
   /**
-   * @return Data written to the returned output stream will be written to the
-   *         file.
+   * @return Data written to the returned output stream will be written to the file.
    */
   @NonNull
   public OutputStream getDataStore ()

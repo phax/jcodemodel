@@ -54,8 +54,8 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
 
 /**
- * Enum Constant. When used as an {@link IJExpression}, this object represents a
- * reference to the enum constant.
+ * Enum Constant. When used as an {@link IJExpression}, this object represents a reference to the
+ * enum constant.
  *
  * @author Bhakti Mehta (Bhakti.Mehta@sun.com)
  */
@@ -233,7 +233,8 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
     if (o == null || getClass () != o.getClass ())
       return false;
     final JEnumConstant rhs = (JEnumConstant) o;
-    return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) && EqualsHelper.equals (m_sName, rhs.m_sName);
+    return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) &&
+      EqualsHelper.equals (m_sName, rhs.m_sName);
   }
 
   @Override

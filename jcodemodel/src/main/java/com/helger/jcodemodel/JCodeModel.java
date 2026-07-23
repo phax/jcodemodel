@@ -732,12 +732,12 @@ public class JCodeModel implements Serializable
     }
     return aRefClass;
   }
-  
+
   ///
   /// reference a existing enum value
-  public @NonNull JEnumConstantRef ref(Enum<?> e)
+  public @NonNull JEnumConstantRef ref (Enum <?> e)
   {
-    return JExpr.enumConstantRef(ref(e.getDeclaringClass()), e.name());
+    return JExpr.enumConstantRef (ref (e.getDeclaringClass ()), e.name ());
   }
 
   /**

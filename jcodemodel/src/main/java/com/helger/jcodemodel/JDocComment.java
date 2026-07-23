@@ -51,11 +51,10 @@ import com.helger.base.enforce.ValueEnforcer;
 /**
  * JavaDoc comment.
  * <p>
- * A javadoc comment consists of multiple parts. There's the main part (that
- * comes the first in in the comment section), then the parameter parts
- * (@param), the return part (@return), and the throws parts (@throws).<br>
- * TODO: it would be nice if we have JComment class and we can derive this class
- * from there.
+ * A javadoc comment consists of multiple parts. There's the main part (that comes the first in in
+ * the comment section), then the parameter parts (@param), the return part (@return), and the
+ * throws parts (@throws).<br>
+ * TODO: it would be nice if we have JComment class and we can derive this class from there.
  */
 public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 {
@@ -104,12 +103,11 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * Change whether multi line comments or single line comments should be
-   * emitted.
+   * Change whether multi line comments or single line comments should be emitted.
    *
    * @param bSingleLineMode
-   *        <code>true</code> to enable single line mode, <code>false</code> for
-   *        multi line mode (which is the default).
+   *        <code>true</code> to enable single line mode, <code>false</code> for multi line mode
+   *        (which is the default).
    * @return this for chaining
    */
   @NonNull
@@ -120,9 +118,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * @return <code>true</code> if single line mode is enabled,
-   *         <code>false</code> if multi line mode is enabled. Multi line mode
-   *         is the default.
+   * @return <code>true</code> if single line mode is enabled, <code>false</code> if multi line mode
+   *         is enabled. Multi line mode is the default.
    */
   public boolean isSingleLineMode ()
   {
@@ -318,8 +315,7 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * add a <code>@deprecated</code> tag to the javadoc, with the associated
-   * message.
+   * add a <code>@deprecated</code> tag to the javadoc, with the associated message.
    *
    * @return Always the same {@link JCommentPart}
    * @see #addTag(String)
@@ -369,8 +365,8 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   }
 
   /**
-   * add an xdoclet with <code>@name attribute = "value"</code>. If value is
-   * <code>null</code> than it will be <code>@name attribute</code>.
+   * add an xdoclet with <code>@name attribute = "value"</code>. If value is <code>null</code> than
+   * it will be <code>@name attribute</code>.
    *
    * @param sName
    *        xdoclet name
@@ -381,7 +377,9 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
    * @return Map with the key/value pairs
    */
   @NonNull
-  public Map <String, String> addXdoclet (@NonNull final String sName, @NonNull final String sAttribute, @Nullable final String sValue)
+  public Map <String, String> addXdoclet (@NonNull final String sName,
+                                          @NonNull final String sAttribute,
+                                          @Nullable final String sValue)
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.notNull (sAttribute, "Attribute");
@@ -405,10 +403,10 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   {
     // Is any "@" comment present?
     final boolean bHasAt = !m_aAtParams.isEmpty () ||
-                           m_aAtReturn != null ||
-                           !m_aAtThrows.isEmpty () ||
-                           !m_aAtTags.isEmpty () ||
-                           !m_aAtXdoclets.isEmpty ();
+      m_aAtReturn != null ||
+      !m_aAtThrows.isEmpty () ||
+      !m_aAtTags.isEmpty () ||
+      !m_aAtXdoclets.isEmpty ();
     if (!isEmpty () || bHasAt)
     {
       final String sIndent = m_bIsSingleLineMode ? "// " : " * ";

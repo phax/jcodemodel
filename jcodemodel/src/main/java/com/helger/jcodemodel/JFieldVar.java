@@ -78,12 +78,12 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
    *        Value to initialize this variable to
    */
   public JFieldVar (@NonNull final JDefinedClass aOwnerClass,
-                       @NonNull final JMods aMods,
-                       @NonNull final AbstractJType aType,
-                       @NonNull final String sName,
-                       @Nullable final IVariableInitializer aInit)
+                    @NonNull final JMods aMods,
+                    @NonNull final AbstractJType aType,
+                    @NonNull final String sName,
+                    @Nullable final IVariableInitializer aInit)
   {
-    super(aMods, ValueEnforcer.notNull(aType, "type"), sName, aInit);
+    super (aMods, ValueEnforcer.notNull (aType, "type"), sName, aInit);
     m_aOwnerClass = ValueEnforcer.notNull (aOwnerClass, "OwnerClass");
   }
 
@@ -100,7 +100,8 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   public void name (@NonNull final String sNewName)
   {
     // make sure that the new name is available
-    ValueEnforcer.isFalse (m_aOwnerClass.containsField (sNewName), () -> "Field name '" + sNewName + "' is already in use");
+    ValueEnforcer.isFalse (m_aOwnerClass.containsField (sNewName),
+                           () -> "Field name '" + sNewName + "' is already in use");
 
     final String sOldName = name ();
     super.name (sNewName);
@@ -111,15 +112,16 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   @NonNull
   public JDocComment javadoc ()
   {
-    if (m_aJavaDoc == null) {
+    if (m_aJavaDoc == null)
+    {
       m_aJavaDoc = new JDocComment (m_aOwnerClass.owner ());
     }
     return m_aJavaDoc;
   }
 
   /**
-   * @return A field reference to this field variable. May be used for public
-   *         static final constants.
+   * @return A field reference to this field variable. May be used for public static final
+   *         constants.
    */
   @NonNull
   public JFieldRef fieldRef ()
@@ -131,19 +133,22 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   public void declare (@NonNull final IJFormatter f)
   {
     // Declaration
-    if (m_aJavaDoc != null) {
+    if (m_aJavaDoc != null)
+    {
       f.generable (m_aJavaDoc);
     }
-    super.declare(f);
+    super.declare (f);
   }
 
   @Override
   public boolean equals (final Object o)
   {
-    if (o == this) {
+    if (o == this)
+    {
       return true;
     }
-    if (!super.equals (o)) {
+    if (!super.equals (o))
+    {
       return false;
     }
     final JFieldVar rhs = (JFieldVar) o;
@@ -155,22 +160,24 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   {
     return getHashCode (super.hashCode (), new Object [] { m_aOwnerClass });
   }
-  
+
   @Override
-  public JFieldVar emod(EMod emod, EMod... emods) {
-    mods().emod(EMod.ALLOWED_FIELD, emod, emods);
+  public JFieldVar emod (EMod emod, EMod... emods)
+  {
+    mods ().emod (EMod.ALLOWED_FIELD, emod, emods);
     return this;
   }
 
   @Override
-  public JFieldVar removeEMod(EMod... emods) {
-    mods().removeEMod(emods);
+  public JFieldVar removeEMod (EMod... emods)
+  {
+    mods ().removeEMod (emods);
     return this;
   }
-  
 
   @Override
-  protected ListWrapping extractWrappingOptions(@NonNull IJFormatter f) {
-    return f.settings().wrap.variables.field;
+  protected ListWrapping extractWrappingOptions (@NonNull IJFormatter f)
+  {
+    return f.settings ().wrap.variables.field;
   }
 }

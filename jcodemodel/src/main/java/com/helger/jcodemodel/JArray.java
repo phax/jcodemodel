@@ -166,8 +166,8 @@ public class JArray implements IJExpression
       return false;
     final JArray rhs = (JArray) o;
     return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) &&
-           EqualsHelper.equals (m_aSize, rhs.m_aSize) &&
-           EqualsHelper.equals (m_aExprs, rhs.m_aExprs);
+      EqualsHelper.equals (m_aSize, rhs.m_aSize) &&
+      EqualsHelper.equals (m_aExprs, rhs.m_aExprs);
   }
 
   @Override

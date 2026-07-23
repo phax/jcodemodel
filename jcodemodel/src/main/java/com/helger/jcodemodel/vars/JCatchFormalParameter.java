@@ -62,37 +62,44 @@ import com.helger.jcodemodel.IJFormatter;
 ///
 /// @see https://docs.oracle.com/javase/specs/jls/se25/html/jls-14.html#jls-14.20-510
 ///
-public class JCatchFormalParameter extends JArgVar {
+public class JCatchFormalParameter extends JArgVar
+{
 
   /// list of types for the variable
-  private List<AbstractJType> m_lTypes = new ArrayList<>();
+  private List <AbstractJType> m_lTypes = new ArrayList <> ();
 
-  public JCatchFormalParameter(boolean final_, @NonNull AbstractJClass aType, @NonNull String sName) {
-    super(final_, aType, sName);
-    m_lTypes.add(aType);
+  public JCatchFormalParameter (boolean final_, @NonNull AbstractJClass aType, @NonNull String sName)
+  {
+    super (final_, aType, sName);
+    m_lTypes.add (aType);
   }
 
-  public JCatchFormalParameter addType(AbstractJClass type) {
-    if (type != null) {
-      type(type);
-      m_lTypes.add(type);
+  public JCatchFormalParameter addType (AbstractJClass type)
+  {
+    if (type != null)
+    {
+      type (type);
+      m_lTypes.add (type);
     }
     return this;
   }
 
   @Override
-  public AbstractJClass type() {
-    return (AbstractJClass) super.type();
+  public AbstractJClass type ()
+  {
+    return (AbstractJClass) super.type ();
   }
 
   @Override
-  protected void bindType(@NonNull IJFormatter f) {
-    f.generable(m_lTypes, " | ", f.settings().wrap.catchClause.types);
+  protected void bindType (@NonNull IJFormatter f)
+  {
+    f.generable (m_lTypes, " | ", f.settings ().wrap.catchClause.types);
   }
 
   @Override
-  public String separator() {
-    throw new UnsupportedOperationException("can't declare two vars in a catch block");
+  public String separator ()
+  {
+    throw new UnsupportedOperationException ("can't declare two vars in a catch block");
   }
 
 }

@@ -80,12 +80,8 @@ public class JMods implements IJGenerable
                                    JMod.FINAL |
                                    JMod.ABSTRACT |
                                    JMod.SEALED |
-                                   JMod.NONSEALED ;
-  private static final int INTERFACE = JMod.PUBLIC |
-                      JMod.PRIVATE |
-                      JMod.PROTECTED |
-                      JMod.SEALED |
-                      JMod.NONSEALED;
+                                   JMod.NONSEALED;
+  private static final int INTERFACE = JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED | JMod.SEALED | JMod.NONSEALED;
 
   /** bit-packed representation of modifiers. */
   private int m_nMods;
@@ -172,7 +168,7 @@ public class JMods implements IJGenerable
 
   public boolean isPackagePrivate ()
   {
-    return (m_nMods & (JMod.PUBLIC|JMod.PRIVATE|JMod.PROTECTED) ) == 0;
+    return (m_nMods & (JMod.PUBLIC | JMod.PRIVATE | JMod.PROTECTED)) == 0;
   }
 
   public boolean isPublic ()
@@ -326,38 +322,47 @@ public class JMods implements IJGenerable
 
     if ((m_nMods & JMod.DEFAULT) != 0)
       f.print ("default");
-    }
+  }
 
-    public void emod(Set<EMod> allowed, EMod emod, EMod... emods) {
-      Stream.concat(
-          emod == null ? Stream.empty() : Stream.of(emod),
-          emods == null ? Stream.empty() : Stream.of(emods))
-          .forEach(em -> {
-            if (allowed.contains(em)) {
-              for (EMod exc : em.excludes()) {
-                m_nMods &= ~exc.m_nJMod;
-              }
-              m_nMods |= em.m_nJMod;
-            }
-          });
-    }
+  public void emod (Set <EMod> allowed, EMod emod, EMod... emods)
+  {
+    Stream.concat (emod == null ? Stream.empty () : Stream.of (emod),
+                   emods == null ? Stream.empty () : Stream.of (emods)).forEach (em -> {
+                     if (allowed.contains (em))
+                     {
+                       for (EMod exc : em.excludes ())
+                       {
+                         m_nMods &= ~exc.m_nJMod;
+                       }
+                       m_nMods |= em.m_nJMod;
+                     }
+                   });
+  }
 
-  public void removeEMod(EMod... emods) {
-    if (emods != null) {
-      for (EMod emod : emods) {
+  public void removeEMod (EMod... emods)
+  {
+    if (emods != null)
+    {
+      for (EMod emod : emods)
+      {
         m_nMods &= ~emod.m_nJMod;
       }
     }
   }
 
-  public Set<EMod> emods() {
-    return EMod.ofJMods(m_nMods);
+  public Set <EMod> emods ()
+  {
+    return EMod.ofJMods (m_nMods);
   }
 
-  public boolean isEMod(EMod... emods) {
-    if (emods != null) {
-      for (EMod emod : emods) {
-        if (!emod.isPresentJMod(m_nMods)) {
+  public boolean isEMod (EMod... emods)
+  {
+    if (emods != null)
+    {
+      for (EMod emod : emods)
+      {
+        if (!emod.isPresentJMod (m_nMods))
+        {
           return false;
         }
       }

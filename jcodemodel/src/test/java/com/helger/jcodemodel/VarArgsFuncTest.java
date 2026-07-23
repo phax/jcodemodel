@@ -52,15 +52,13 @@ import com.helger.jcodemodel.util.CodeModelTestsHelper;
  * @author Bhakti Mehta Bhakti.Mehta@sun.com
  */
 /*
- * ====================================================== This is how the output
- * from this program looks like Still need to learn how to work on instantiation
- * and args ========================================================= public
- * class Test { public void foo(java.lang.String param1, java.lang.Integer
- * param2, java.lang.String param5, java.lang.Object... param3) { for (int count
- * = 0; (count<(param3.length)); count ++) {
- * java.lang.System.out.println((param3[count])); } } public static void
- * main(java.lang.String[] args) { } }
- * ==========================================================
+ * ====================================================== This is how the output from this program
+ * looks like Still need to learn how to work on instantiation and args
+ * ========================================================= public class Test { public void
+ * foo(java.lang.String param1, java.lang.Integer param2, java.lang.String param5,
+ * java.lang.Object... param3) { for (int count = 0; (count<(param3.length)); count ++) {
+ * java.lang.System.out.println((param3[count])); } } public static void main(java.lang.String[]
+ * args) { } } ==========================================================
  */
 
 public final class VarArgsFuncTest

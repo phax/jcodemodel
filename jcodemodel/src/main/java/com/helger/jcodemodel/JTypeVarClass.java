@@ -44,8 +44,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A special type variable that is used inside {@link JInvocation} objects if
- * the parameter type is an {@link AbstractJClass}
+ * A special type variable that is used inside {@link JInvocation} objects if the parameter type is
+ * an {@link AbstractJClass}
  *
  * @author Philip Helger
  */
