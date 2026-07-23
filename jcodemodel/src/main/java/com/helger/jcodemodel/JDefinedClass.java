@@ -123,6 +123,11 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * Set of methods that are members of this class
    */
   private final List <JMethod> m_aMethods = new ArrayList <> ();
+  
+  /**
+   * set of the extra declarations. Those are kept in the order of addition, removing duplicates, and are added at the end of the body declaration. 
+   */
+  private final LinkedHashSet<IJDeclaration> m_sExtraDeclarations = new LinkedHashSet<>();
 
   /**
    * Flag that controls whether this class should be really generated or not. Sometimes it is useful
@@ -780,7 +785,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   /**
-   * @return the set of methods defined in this class.
+   * @return the methods defined in this class.
    */
   @NonNull
   public Collection <JMethod> methods ()
@@ -808,6 +813,11 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
       }
     }
     return null;
+  }
+  
+  public LinkedHashSet<IJDeclaration> getExtraDeclarations()
+  {
+    return m_sExtraDeclarations;
   }
 
   /**
@@ -1008,6 +1018,11 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     // Hacks...
     if (m_sDirectBlock != null) {
       f.print (m_sDirectBlock);
+    }
+
+    // extra declarations
+    for (final IJDeclaration ijd : m_sExtraDeclarations) {
+      f.newline ().declaration (ijd);
     }
 
     f.outdent ().print ('}').newline ();
