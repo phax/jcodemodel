@@ -112,7 +112,10 @@ public final class JCodeModelTest
     final JCodeModel cm = JCodeModel.createUnified ();
     final JDefinedClass jClass = cm._class ("EmptyNarrowed", EClassType.CLASS);
     final AbstractJClass hashMap = cm.ref (java.util.HashMap.class).narrowEmpty ();
-    jClass.field (JMod.PRIVATE, cm.ref (Map.class).narrow (String.class).narrow (String.class), "strMap", JExpr._new (hashMap));
+    jClass.field (JMod.PRIVATE,
+                  cm.ref (Map.class).narrow (String.class).narrow (String.class),
+                  "strMap",
+                  JExpr._new (hashMap));
 
     CodeModelTestsHelper.parseCodeModel (cm);
     CodeModelTestsHelper.compileCodeModel (cm);

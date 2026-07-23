@@ -70,7 +70,8 @@ public class Issue61FuncTest
 
     try (final NonBlockingByteArrayOutputStream resOut = new NonBlockingByteArrayOutputStream ())
     {
-      new JCMWriter (cm).build (new SingleStreamCodeWriter (new NonBlockingByteArrayOutputStream ()), new SingleStreamCodeWriter (resOut));
+      new JCMWriter (cm).build (new SingleStreamCodeWriter (new NonBlockingByteArrayOutputStream ()),
+                                new SingleStreamCodeWriter (resOut));
       final String txtRes = ascii.decode (ByteBuffer.wrap (resOut.toByteArray ())).toString ();
       assertTrue (txtRes.contains ("Testing"));
     }

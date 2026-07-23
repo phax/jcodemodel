@@ -101,7 +101,11 @@ public final class JInvocationTest
                       .arg ("jippie")
                       .arg (JExpr._this ())
                       .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
-    minvoke.body ().add (JExpr.invoke (m2).arg ("jippie").arg (JExpr._this ()).arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
+    minvoke.body ()
+           .add (JExpr.invoke (m2)
+                      .arg ("jippie")
+                      .arg (JExpr._this ())
+                      .arg (cm.ref (ArrayList.class).narrow (Long.class)._new ()));
 
     CodeModelTestsHelper.parseCodeModel (cm);
     CodeModelTestsHelper.compileCodeModel (cm);

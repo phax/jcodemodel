@@ -63,7 +63,8 @@ public final class ForEachFuncTest
     final JMethod m = cls.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "foo");
 
     final AbstractJClass jClassList = cm.ref (List.class).narrow (Integer.class);
-    final JVar jVarList = m.body ().decl (JMod.FINAL, jClassList, "alist", cm.ref (ArrayList.class).narrowEmpty ()._new ());
+    final JVar jVarList = m.body ()
+                           .decl (JMod.FINAL, jClassList, "alist", cm.ref (ArrayList.class).narrowEmpty ()._new ());
     m.body ().add (jVarList.invoke ("add").arg (1));
     m.body ().add (jVarList.invoke ("add").arg (2));
 

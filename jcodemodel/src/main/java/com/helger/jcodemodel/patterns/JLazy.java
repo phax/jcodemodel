@@ -72,7 +72,7 @@ public class JLazy implements IJDeclaration, IJOwned
 
     String sMethodName = methodName.trim ();
     if (sMethodName.isEmpty ())
-      return null;
+      return methodName;
 
     if (sMethodName.startsWith (GETTER_PREFIX) && sMethodName.length () > GETTER_PREFIX.length ())
     {

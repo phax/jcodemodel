@@ -52,9 +52,8 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
- * A test program for the annotation use features Note: Not all the generated
- * code would make sense but just checking in all the different ways you can use
- * an annotation
+ * A test program for the annotation use features Note: Not all the generated code would make sense
+ * but just checking in all the different ways you can use an annotation
  *
  * @author Bhakti Mehta
  */
@@ -75,8 +74,7 @@ public final class AnnotationUseFuncTest
   }
 
   /**
-   * *********************************************************************
-   * Generates this
+   * ********************************************************************* Generates this
    * **********************************************************************
    *
    * <pre>

@@ -41,7 +41,16 @@
 package com.helger.jcodemodel;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
@@ -363,24 +372,23 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   /**
    * This class permits the specified class.
    *
-   * @param aClass
-   *        class that this class permits
+   * @param aClasses
+   *        classes that this class permits
    * @return This class
    */
   @NonNull
-  public JDefinedClass permits (@NonNull final AbstractJClass... aClasses)
+  public JDefinedClass permits (@NonNull final AbstractJClass @NonNull... aClasses)
   {
     if (aClasses != null)
     {
-      for (@NonNull
-      AbstractJClass ajc : aClasses)
+      for (final AbstractJClass ajc : aClasses)
       {
-        if (ajc instanceof JDefinedClass jdc)
+        if (ajc instanceof final JDefinedClass jdc)
         {
           m_aPermited.add (jdc);
         }
         else
-          if (ajc instanceof JReferencedClass jrc)
+          if (ajc instanceof final JReferencedClass jrc)
           {
             m_aPermited.add (jrc);
           }
@@ -970,7 +978,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     {
       f.print ("permits");
       boolean first = true;
-      for (AbstractJClass ajc : m_aPermited)
+      for (final AbstractJClass ajc : m_aPermited)
       {
         if (!first)
         {
@@ -1231,14 +1239,14 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   @Override
-  public JDefinedClass emod (EMod emod, EMod... emods)
+  public JDefinedClass emod (final EMod emod, final EMod... emods)
   {
     mods ().emod (isInterface () ? EMod.ALLOWED_INTERFACE : EMod.ALLOWED_CLASS, emod, emods);
     return this;
   }
 
   @Override
-  public JDefinedClass removeEMod (EMod... emods)
+  public JDefinedClass removeEMod (final EMod... emods)
   {
     mods ().removeEMod (emods);
     return this;
@@ -1251,7 +1259,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   }
 
   @Override
-  public boolean isEMod (EMod... emods)
+  public boolean isEMod (final EMod... emods)
   {
     return mods ().isEMod (emods);
   }

@@ -1,3 +1,4 @@
+
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -45,14 +46,16 @@ import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.writer.JCMWriter;
 
-public class JCMFirstProgram {
+public class JCMFirstProgram
+{
 
-  public static void main(String... args) throws JCodeModelException, IOException {
-    var jcm = new JCodeModel();
-    jcm._class("JCMFirstClass");
-    File outFile = new File("src/generated/java/");
-    outFile.mkdirs();
-    new JCMWriter(jcm).build(outFile);
+  public static void main (String... args) throws JCodeModelException, IOException
+  {
+    var jcm = new JCodeModel ();
+    jcm._class ("JCMFirstClass");
+    File outFile = new File ("src/generated/java/");
+    outFile.mkdirs ();
+    new JCMWriter (jcm).build (outFile);
   }
 
 }
