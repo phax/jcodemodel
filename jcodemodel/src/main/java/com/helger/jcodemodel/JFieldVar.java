@@ -47,6 +47,7 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.modifiers.EMod;
 import com.helger.jcodemodel.vars.JBlockVar;
 import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
 
@@ -154,6 +155,19 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   {
     return getHashCode (super.hashCode (), new Object [] { m_aOwnerClass });
   }
+  
+  @Override
+  public JFieldVar emod(EMod emod, EMod... emods) {
+    mods().emod(EMod.ALLOWED_FIELD, emod, emods);
+    return this;
+  }
+
+  @Override
+  public JFieldVar removeEMod(EMod... emods) {
+    mods().removeEMod(emods);
+    return this;
+  }
+  
 
   @Override
   protected ListWrapping extractWrappingOptions(@NonNull IJFormatter f) {

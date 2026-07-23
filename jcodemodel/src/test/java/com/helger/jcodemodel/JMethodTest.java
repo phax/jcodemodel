@@ -43,8 +43,13 @@ package com.helger.jcodemodel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
+import java.util.Set;
+
+import org.junit.Assert;
 import org.junit.Test;
 
+import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.modifiers.EMod;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
 
 /**
@@ -68,5 +73,29 @@ public final class JMethodTest
 
     CodeModelTestsHelper.parseCodeModel (cm);
     CodeModelTestsHelper.compileCodeModel (cm);
+  }
+
+  @Test
+  public void testEmods() throws JCodeModelException {
+    JCodeModel jcm = new JCodeModel();
+    JDefinedClass jdc = jcm._class("TestClass");
+    JMethod jm = jdc.method(JMod.PUBLIC, jcm.VOID, "testmethod");
+    Assert.assertTrue(jm.isEMod(EMod.PUBLIC));
+    Assert.assertEquals(1, jm.emods().size());
+    Assert.assertEquals(Set.of(EMod.PUBLIC), jm.emods());
+
+    // forbidden
+    jm.emod(EMod.VOLATILE);
+    jm.emod(EMod.NONSEALED);
+    Assert.assertEquals(Set.of(EMod.PUBLIC), jm.emods());
+
+    // mutual exclusion
+    jm.emod(EMod.PUBLIC, EMod.PROTECTED, EMod.PRIVATE);
+    Assert.assertEquals(Set.of(EMod.PRIVATE), jm.emods());
+
+    // adding a new one
+    jm.emod(EMod.STATIC);
+    Assert.assertEquals(Set.of(EMod.PRIVATE, EMod.STATIC), jm.emods());
+
   }
 }

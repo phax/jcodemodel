@@ -44,6 +44,7 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -51,11 +52,13 @@ import org.jspecify.annotations.Nullable;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
 import com.helger.base.hashcode.HashCodeGenerator;
+import com.helger.jcodemodel.modifiers.EMod;
+import com.helger.jcodemodel.modifiers.IJModified;
 
 /**
  * Variables and fields.
  */
-public class JVar implements IJAssignmentTarget, IJAnnotatable
+public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable, IJModified
 {
   /**
    * Modifiers.
@@ -324,6 +327,26 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
     return new HashCodeGenerator (this).append (m_sName).getHashCode ();
   }
 
+  @Override
+  public JVar emod(EMod emod, EMod... emods) {
+    mods().emod(EMod.ALLOWED_VAR, emod, emods);
+    return this;
+  }
+
+  @Override
+  public JVar removeEMod(EMod... emods) {
+    mods().removeEMod(emods);
+    return this;
+  }
+
+  @Override
+  public Set<EMod> emods() {
+    return mods().emods();
+  }
+
+  @Override
+  public boolean isEMod(EMod... emods) {
+    return mods().isEMod(emods);
   /// the separator when several jvars are declared at one.
   public String separator ()
   {
