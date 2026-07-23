@@ -50,8 +50,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
-import com.helger.jcodemodel.expressions.JInstanceOfVar;
 import com.helger.jcodemodel.expression.JArrayInit;
+import com.helger.jcodemodel.expressions.JInstanceOfVar;
 
 /**
  * Factory methods that generate various {@link IJExpression}s.
@@ -597,11 +597,18 @@ public final class JExpr
   {
     return JOp.cond (aCond, aIfTrue, aIfFalse);
   }
-  
-  public static JInstanceOfVar instanceOf(@NonNull IJExpression expr, @NonNull AbstractJType type, @NonNull String name) {
-    return new JInstanceOfVar(expr, type, name);
 
-  public static JSwitchExpression _switch(IJExpression exp) {
-    return new JSwitchExpression(exp);
+  @NonNull
+  public static JInstanceOfVar instanceOf (@NonNull final IJExpression expr,
+                                           @NonNull final AbstractJType type,
+                                           @NonNull final String name)
+  {
+    return new JInstanceOfVar (expr, type, name);
+  }
+
+  @NonNull
+  public static JSwitchExpression _switch (@NonNull final IJExpression exp)
+  {
+    return new JSwitchExpression (exp);
   }
 }
