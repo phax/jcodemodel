@@ -78,8 +78,9 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
    *        Name of this variable
    * @param aInit
    *        Value to initialize this variable to
+   * @deprecated use {@link com.helger.jcodemodel.vars.JFieldVar#JFieldVar(JDefinedClass, JMods, AbstractJType, String, IVariableInitializer)} instead
    */
-  @Deprecated(forRemoval = true, since = "4.3.0")
+  @Deprecated (forRemoval = true, since = "4.3.0")
   public JFieldVar (@NonNull final JDefinedClass aOwnerClass,
                     @NonNull final JMods aMods,
                     @NonNull final AbstractJType aType,
@@ -93,14 +94,12 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   /**
    * @return The owning class. Never <code>null</code>.
    */
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @NonNull
-  public JDefinedClass owner ()
+  public JDefinedClass owner () 
   {
     return m_aOwnerClass;
   }
 
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @Override
   public void name (@NonNull final String sNewName)
   {
@@ -113,7 +112,6 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
     m_aOwnerClass.internalRenameField (sOldName, sNewName, this);
   }
 
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @Override
   @NonNull
   public JDocComment javadoc ()
@@ -129,14 +127,12 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
    * @return A field reference to this field variable. May be used for public static final
    *         constants.
    */
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @NonNull
   public JFieldRef fieldRef ()
   {
     return new JFieldRef (m_aOwnerClass, this);
   }
 
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @Override
   public void declare (@NonNull final IJFormatter f)
   {
@@ -148,7 +144,6 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
     super.declare (f);
   }
 
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @Override
   public boolean equals (final Object o)
   {
@@ -160,14 +155,12 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
     return EqualsHelper.equals (m_aOwnerClass, rhs.m_aOwnerClass);
   }
 
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @Override
   public int hashCode ()
   {
     return getHashCode (super.hashCode (), new Object [] { m_aOwnerClass });
   }
 
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @Override
   public JFieldVar emod (EMod emod, EMod... emods)
   {
@@ -175,7 +168,6 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
     return this;
   }
 
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @Override
   public JFieldVar removeEMod (EMod... emods)
   {
@@ -183,7 +175,6 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
     return this;
   }
 
-  @Deprecated(forRemoval = true, since = "4.3.0")
   @Override
   protected ListWrapping extractWrappingOptions (@NonNull IJFormatter f)
   {
