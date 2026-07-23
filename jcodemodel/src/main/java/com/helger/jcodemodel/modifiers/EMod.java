@@ -99,7 +99,9 @@ public enum EMod
   TRANSIENT (JMod.TRANSIENT, Modifier.TRANSIENT, "transient"),
   VOLATILE (JMod.VOLATILE, Modifier.VOLATILE, "volatile");
 
+  /** The {@link JMod} corresponding int value **/
   public final int m_nJMod;
+  /** The {@link Modifier} corresponding int value, if any ; can be 0 if none.*/
   public final int m_nModifier;
   public final String m_sFormat;
 
@@ -110,7 +112,7 @@ public enum EMod
 
   // cached map of JMod -> Emod
   private static final Map <Integer, EMod> JMOD_CACHE = Stream.of (values ())
-                                                              .collect (Collectors.toMap (em -> Integer.valueOf (em.m_nJMod),
+                                                              .collect (Collectors.toMap (em -> em.m_nJMod,
                                                                                           Function.identity ()));
 
   /**
@@ -213,7 +215,7 @@ public enum EMod
 
   /**
    * transforms a set, typically an enumset, into a JMod bits-int.
-   * 
+   *
    * @param set
    *        mod set
    * @return int value
@@ -267,7 +269,7 @@ public enum EMod
   /**
    * test whether this mod is present. The {@link AbstractJClass} is tested as instance of defined,
    * referenced, annotated, narrowed class.
-   * 
+   *
    * @param ajc
    *        Abstract class
    * @return Otherwise returns false.
@@ -291,6 +293,31 @@ public enum EMod
       return isPresent (jnc.basis ());
     }
     return false;
+  }
+
+  //
+  // static tools for the [IJModified] implementations
+  //
+
+  public static void addEmod(Set<EMod> allowed, Set<EMod> emodifiers, EMod... emods) {
+    if (emods != null) {
+      for (EMod emod : emods) {
+        if (allowed.contains(emod)) {
+          emodifiers.removeAll(emod.excludes());
+          emodifiers.add(emod);
+        }
+      }
+    }
+  }
+
+  public static boolean isEmod(Set<EMod> emodifiers, EMod... emods) {
+    if (emods != null) {
+      return Stream.of(emods)
+          .filter(em->!emodifiers.contains(em))
+          .findAny()
+          .isEmpty();
+    }
+    return true;
   }
 
 }

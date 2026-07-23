@@ -40,6 +40,9 @@
  */
 package com.helger.jcodemodel;
 
+import java.util.Set;
+import java.util.stream.Stream;
+
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
@@ -160,7 +163,7 @@ public class JMods implements IJGenerable
   public boolean isNonSealed ()
   {
     return (m_nMods & JMod.NONSEALED) != 0;
-  }	
+  }
 
   public boolean isNative ()
   {
@@ -323,27 +326,43 @@ public class JMods implements IJGenerable
 
     if ((m_nMods & JMod.DEFAULT) != 0)
       f.print ("default");
+    }
+
+    public void emod(Set<EMod> allowed, EMod emod, EMod... emods) {
+      Stream.concat(
+          emod == null ? Stream.empty() : Stream.of(emod),
+          emods == null ? Stream.empty() : Stream.of(emods))
+          .forEach(em -> {
+            if (allowed.contains(em)) {
+              for (EMod exc : em.excludes()) {
+                m_nMods &= ~exc.m_nJMod;
+              }
+              m_nMods |= em.m_nJMod;
+            }
+          });
+    }
+
+  public void removeEMod(EMod... emods) {
+    if (emods != null) {
+      for (EMod emod : emods) {
+        m_nMods &= ~emod.m_nJMod;
+      }
+    }
   }
 
-  public static int toModifier (final int jmod)
-  {
-    int ret = 0;
-    for (final EMod e : EMod.values ())
-    {
-      if (e.isPresentJMod (jmod))
-        ret |= e.m_nModifier;
-    }
-    return ret;
+  public Set<EMod> emods() {
+    return EMod.ofJMods(m_nMods);
   }
 
-  public static int fromModifier (final int modifier)
-  {
-    int ret = 0;
-    for (final EMod e : EMod.values ())
-    {
-      if (e.isPresentModifiers (modifier))
-        ret |= e.m_nJMod;
+  public boolean isEMod(EMod... emods) {
+    if (emods != null) {
+      for (EMod emod : emods) {
+        if (!emod.isPresentJMod(m_nMods)) {
+          return false;
+        }
+      }
     }
-    return ret;
+    return true;
   }
+
 }
