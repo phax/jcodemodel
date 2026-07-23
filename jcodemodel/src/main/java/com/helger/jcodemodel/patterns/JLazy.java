@@ -4,23 +4,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
-import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.IJDeclaration;
-import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.IJExpressionStatement;
-import com.helger.jcodemodel.IJFormatter;
-import com.helger.jcodemodel.IJOwned;
-import com.helger.jcodemodel.JBlock;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldRef;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JJavaName;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JMods;
-import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.*;
+import com.helger.jcodemodel.vars.JFieldVar;
 
 /// Create an expression initialized at most once from another expression.
 ///
@@ -66,15 +51,13 @@ public class JLazy implements IJDeclaration, IJOwned
   static String extractFieldName (@Nullable final String methodName)
   {
     if (methodName == null)
-    {
       return methodName;
-    }
 
     String sMethodName = methodName.trim ();
     if (sMethodName.isEmpty ())
       return methodName;
 
-    if (sMethodName.startsWith (GETTER_PREFIX) && sMethodName.length () > GETTER_PREFIX.length ())
+    if (sMethodName.startsWith (GETTER_PREFIX) && (sMethodName.length () > GETTER_PREFIX.length ()))
     {
       sMethodName = Character.toString (Character.toLowerCase (sMethodName.charAt (GETTER_PREFIX.length ()))) +
                     sMethodName.substring (GETTER_PREFIX.length () + 1);
@@ -170,9 +153,7 @@ public class JLazy implements IJDeclaration, IJOwned
   public void declare (@NonNull final IJFormatter f)
   {
     if (m_aInit == null)
-    {
       throw new NullPointerException ("init of " + this + " is null");
-    }
 
     int fieldMods = JMod.PRIVATE | JMod.VOLATILE;
     if (m_bStatic)
