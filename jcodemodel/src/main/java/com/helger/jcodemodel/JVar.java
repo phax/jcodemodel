@@ -295,7 +295,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable, I
     }
   }
 
-  protected void declare (@NonNull final IJFormatter f)
+  public void declare (@NonNull final IJFormatter f)
   {
     f.var (this).print (';').newline ();
   }
@@ -328,25 +328,31 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable, I
   }
 
   @Override
-  public JVar emod(EMod emod, EMod... emods) {
-    mods().emod(EMod.ALLOWED_VAR, emod, emods);
+  public JVar emod (final EMod emod, final EMod... emods)
+  {
+    mods ().emod (EMod.ALLOWED_VAR, emod, emods);
     return this;
   }
 
   @Override
-  public JVar removeEMod(EMod... emods) {
-    mods().removeEMod(emods);
+  public JVar removeEMod (final EMod... emods)
+  {
+    mods ().removeEMod (emods);
     return this;
   }
 
   @Override
-  public Set<EMod> emods() {
-    return mods().emods();
+  public Set <EMod> emods ()
+  {
+    return mods ().emods ();
   }
 
   @Override
-  public boolean isEMod(EMod... emods) {
-    return mods().isEMod(emods);
+  public boolean isEMod (final EMod... emods)
+  {
+    return mods ().isEMod (emods);
+  }
+
   /// the separator when several jvars are declared at one.
   public String separator ()
   {
