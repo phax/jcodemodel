@@ -14,8 +14,8 @@ import com.helger.jcodemodel.switchexpression.JCaseStatic;
 /// A switch whose result can be used as an expression or a statement.
 /// basically a copy of [JSwitch]
 /// It has two specific blocks : null and default. When writing those, they should be tested for equality.
-@SuppressWarnings("serial")
-public class JSwitchExpression implements IJExpressionStatement {
+public class JSwitchExpression implements IJExpressionStatement
+{
 
   /**
    * Test part of switch statement.
@@ -25,123 +25,145 @@ public class JSwitchExpression implements IJExpressionStatement {
   /**
    * vector of JCases.
    */
-  private final List<JCaseArrow<?>> m_aCases = new ArrayList<>();
+  private final List <JCaseArrow <?>> m_aCases = new ArrayList <> ();
 
   /**
    * a single default block
    */
   private JBlock m_aDefaultBlock;
 
-  @NonNull
-  public JBlock defaultBlock() {
-    if (m_aDefaultBlock == null) {
-      m_aDefaultBlock = new JLambdaBlock();
-    }
-    return m_aDefaultBlock;
-  }
-
   /**
    * a single null block
    */
   private JBlock m_aNullBlock;
 
-  @NonNull
-  public JBlock nullBlock() {
-    if (m_aNullBlock == null) {
-      m_aNullBlock = new JLambdaBlock();
-    }
-    return m_aNullBlock;
-  }
-
   /**
    * Construct a switch statement
    *
    * @param aTestExpr
-   *                  expression
+   *        expression
    */
-  public JSwitchExpression(@NonNull final IJExpression aTestExpr) {
+  public JSwitchExpression (@NonNull final IJExpression aTestExpr)
+  {
     m_aTestExpr = aTestExpr;
   }
 
   @NonNull
-  public IJExpression test() {
+  public IJExpression test ()
+  {
     return m_aTestExpr;
   }
 
   @NonNull
-  public Iterator<JCaseArrow<?>> cases() {
-    return m_aCases.iterator();
-  }
-
-  public JCaseStatic _case(@NonNull final JEnumConstant constantRef) {
-    return _case(JExpr.enumConstantRef(constantRef.type(), constantRef.name()));
+  public Iterator <JCaseArrow <?>> cases ()
+  {
+    return m_aCases.iterator ();
   }
 
   @NonNull
-  public JCaseStatic _case(@NonNull final IJExpression aLabel) {
-    JCaseStatic c = new JCaseStatic(this, aLabel);
-    m_aCases.add(c);
+  public JCaseStatic _case (@NonNull final JEnumConstant constantRef)
+  {
+    return _case (JExpr.enumConstantRef (constantRef.type (), constantRef.name ()));
+  }
+
+  @NonNull
+  public JCaseStatic _case (@NonNull final IJExpression aLabel)
+  {
+    final JCaseStatic c = new JCaseStatic (this, aLabel);
+    m_aCases.add (c);
     return c;
   }
 
-// requires j25
-//	@NonNull
-//	public JCasePattern _case(AbstractJType type, String varName) {
-//		JCasePattern c = new JCasePattern(this, type, varName);
-//		m_aCases.add(c);
-//		return c;
-//	}
+  // requires j25
+  // @NonNull
+  // public JCasePattern _case(AbstractJType type, String varName) {
+  // JCasePattern c = new JCasePattern(this, type, varName);
+  // m_aCases.add(c);
+  // return c;
+  // }
 
-// requires j25
-//	@NonNull
-//	public JCasePattern _case(JCodeModel jcm, Class<?> cl, String varName) {
-//		return _case(jcm.ref(cl), varName);
-//	}
+  // requires j25
+  // @NonNull
+  // public JCasePattern _case(JCodeModel jcm, Class<?> cl, String varName) {
+  // return _case(jcm.ref(cl), varName);
+  // }
 
-// requires j21
-//	public JCaseSpecialSelector _null() {
-//		return new JCaseSpecialSelector(this, true);
-//	}
+  // requires j21
+  // public JCaseSpecialSelector _null() {
+  // return new JCaseSpecialSelector(this, true);
+  // }
 
-  public JCaseSpecialSelector _default() {
-    return new JCaseSpecialSelector(this, false);
+  public JCaseSpecialSelector _default ()
+  {
+    return new JCaseSpecialSelector (this, false);
+  }
+
+  @NonNull
+  public JBlock defaultBlock ()
+  {
+    if (m_aDefaultBlock == null)
+    {
+      m_aDefaultBlock = new JLambdaBlock ();
+    }
+    return m_aDefaultBlock;
+  }
+
+  @NonNull
+  public JBlock nullBlock ()
+  {
+    if (m_aNullBlock == null)
+    {
+      m_aNullBlock = new JLambdaBlock ();
+    }
+    return m_aNullBlock;
   }
 
   @Override
-  public void generate(@NonNull IJFormatter f) {
-    generate25(f);
+  public void generate (@NonNull final IJFormatter f)
+  {
+    generate25 (f);
   }
 
-  protected void generate25(@NonNull IJFormatter f) {
-    f.print("switch (").generable(m_aTestExpr).print(')').print(" {").newline();
-    for (final JCaseArrow<?> c : m_aCases) {
-      f.statement(c);
+  protected void generate25 (@NonNull final IJFormatter f)
+  {
+    f.print ("switch (").generable (m_aTestExpr).print (')').print (" {").newline ();
+    for (final JCaseArrow <?> c : m_aCases)
+    {
+      f.statement (c);
     }
-    f.indent();
-    if (m_aNullBlock != null && m_aDefaultBlock != null
-        && m_aNullBlock.getContents().equals(m_aDefaultBlock.getContents())) {
-      f.print("case null, default -> ").statement(m_aNullBlock);
-    } else {
-      if (m_aNullBlock != null) {
-        f.print("case null -> ").statement(m_aNullBlock);
+    f.indent ();
+    if (m_aNullBlock != null &&
+      m_aDefaultBlock != null &&
+      m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
+    {
+      f.print ("case null, default -> ").statement (m_aNullBlock);
+    }
+    else
+    {
+      if (m_aNullBlock != null)
+      {
+        f.print ("case null -> ").statement (m_aNullBlock);
       }
-      if (m_aDefaultBlock != null) {
-        f.print("default -> ").statement(m_aDefaultBlock);
+      if (m_aDefaultBlock != null)
+      {
+        f.print ("default -> ").statement (m_aDefaultBlock);
       }
     }
-    f.outdent();
-    f.print('}').newline();
+    f.outdent ();
+    f.print ('}').newline ();
   }
 
-  protected void generatePre25(@NonNull IJFormatter f) {
+  protected void generatePre25 (@NonNull final IJFormatter f)
+  {
     // TODO in that case we generate only the static ones ; the pattern cases must
     // be added on top of the default.
-    throw new UnsupportedOperationException("not implemented yet.");
+    throw new UnsupportedOperationException ("not implemented yet.");
   }
 
   @Override
-  public void state(@NonNull final IJFormatter f) {
-    f.generable(this).print(';').newline();
+  public void state (@NonNull final IJFormatter f)
+  {
+    f.generable (this).print (';').newline ();
   }
 
 }

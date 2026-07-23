@@ -101,7 +101,7 @@ public enum EMod
 
   /** The {@link JMod} corresponding int value **/
   public final int m_nJMod;
-  /** The {@link Modifier} corresponding int value, if any ; can be 0 if none.*/
+  /** The {@link Modifier} corresponding int value, if any ; can be 0 if none. */
   public final int m_nModifier;
   public final String m_sFormat;
 
@@ -112,7 +112,7 @@ public enum EMod
 
   // cached map of JMod -> Emod
   private static final Map <Integer, EMod> JMOD_CACHE = Stream.of (values ())
-                                                              .collect (Collectors.toMap (em -> em.m_nJMod,
+                                                              .collect (Collectors.toMap (em -> Integer.valueOf (em.m_nJMod),
                                                                                           Function.identity ()));
 
   /**
@@ -245,7 +245,7 @@ public enum EMod
                                                                     .filter (s -> s.contains (e))
                                                                     .flatMap (Set::stream)
                                                                     .filter (e2 -> e2 != e)
-                                                                    .collect (Collectors.toCollection ( () -> EnumSet.noneOf (EMod.class))));
+                                                                    .collect (Collectors.toCollection (() -> EnumSet.noneOf (EMod.class))));
       }
     }
     return ret;
@@ -299,23 +299,26 @@ public enum EMod
   // static tools for the [IJModified] implementations
   //
 
-  public static void addEmod(Set<EMod> allowed, Set<EMod> emodifiers, EMod... emods) {
-    if (emods != null) {
-      for (EMod emod : emods) {
-        if (allowed.contains(emod)) {
-          emodifiers.removeAll(emod.excludes());
-          emodifiers.add(emod);
+  public static void addEmod (final Set <EMod> allowed, final Set <EMod> emodifiers, final EMod... emods)
+  {
+    if (emods != null)
+    {
+      for (final EMod emod : emods)
+      {
+        if (allowed.contains (emod))
+        {
+          emodifiers.removeAll (emod.excludes ());
+          emodifiers.add (emod);
         }
       }
     }
   }
 
-  public static boolean isEmod(Set<EMod> emodifiers, EMod... emods) {
-    if (emods != null) {
-      return Stream.of(emods)
-          .filter(em->!emodifiers.contains(em))
-          .findAny()
-          .isEmpty();
+  public static boolean isEmod (final Set <EMod> emodifiers, final EMod... emods)
+  {
+    if (emods != null)
+    {
+      return Stream.of (emods).filter (em -> !emodifiers.contains (em)).findAny ().isEmpty ();
     }
     return true;
   }
