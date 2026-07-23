@@ -146,9 +146,14 @@ public class JMods implements IJGenerable
     return (m_nMods & JMod.ABSTRACT) != 0;
   }
 
+  public static boolean isFinal (final int nMods)
+  {
+    return (nMods & JMod.FINAL) != 0;
+  }
+
   public boolean isFinal ()
   {
-    return (m_nMods & JMod.FINAL) != 0;
+    return isFinal (m_nMods);
   }
 
   public boolean isSealed ()
@@ -324,13 +329,13 @@ public class JMods implements IJGenerable
       f.print ("default");
   }
 
-  public void emod (Set <EMod> allowed, EMod emod, EMod... emods)
+  public void emod (final Set <EMod> allowed, final EMod emod, final EMod... emods)
   {
     Stream.concat (emod == null ? Stream.empty () : Stream.of (emod),
                    emods == null ? Stream.empty () : Stream.of (emods)).forEach (em -> {
                      if (allowed.contains (em))
                      {
-                       for (EMod exc : em.excludes ())
+                       for (final EMod exc : em.excludes ())
                        {
                          m_nMods &= ~exc.m_nJMod;
                        }
@@ -339,11 +344,11 @@ public class JMods implements IJGenerable
                    });
   }
 
-  public void removeEMod (EMod... emods)
+  public void removeEMod (final EMod... emods)
   {
     if (emods != null)
     {
-      for (EMod emod : emods)
+      for (final EMod emod : emods)
       {
         m_nMods &= ~emod.m_nJMod;
       }
@@ -355,11 +360,11 @@ public class JMods implements IJGenerable
     return EMod.ofJMods (m_nMods);
   }
 
-  public boolean isEMod (EMod... emods)
+  public boolean isEMod (final EMod... emods)
   {
     if (emods != null)
     {
-      for (EMod emod : emods)
+      for (final EMod emod : emods)
       {
         if (!emod.isPresentJMod (m_nMods))
         {

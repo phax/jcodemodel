@@ -31,9 +31,10 @@ import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 
 @TestJCM
-public class JRecordTestGen {
+public class JRecordTestGen
+{
 
-  public final String rootPackage=getClass().getPackageName();
+  public final String rootPackage = getClass ().getPackageName ();
 
   /**
    * Test: Basic record with two components Expected output:
@@ -41,14 +42,14 @@ public class JRecordTestGen {
    * <pre>
    * package org.example;
    *
-   * public record Point(int x, int y) {
-   * }
+   * public record Point (int x, int y)
+   * {}
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testBasicRecord() throws JCodeModelException
+  public JCodeModel testBasicRecord () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass rec = cm._package (rootPackage)._record ("BasicPoint");
@@ -68,10 +69,10 @@ public class JRecordTestGen {
    * @throws JCodeModelException
    *         In case of error
    */
-  public JCodeModel testEmptyRecord() throws JCodeModelException
+  public JCodeModel testEmptyRecord () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
-    cm._package(rootPackage)._record("Empty");
+    cm._package (rootPackage)._record ("Empty");
     return cm;
   }
 
@@ -86,7 +87,7 @@ public class JRecordTestGen {
    * @throws JCodeModelException
    *         In case of error
    */
-  public JCodeModel testRecordWithObjectComponents() throws JCodeModelException
+  public JCodeModel testRecordWithObjectComponents () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass rec = cm._package (rootPackage)._record ("Person");
@@ -106,7 +107,7 @@ public class JRecordTestGen {
    * @throws JCodeModelException
    *         In case of error
    */
-  public JCodeModel testRecordImplementsInterface() throws JCodeModelException
+  public JCodeModel testRecordImplementsInterface () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
     final JDefinedClass rec = cm._package (rootPackage)._record ("NamedPoint");
@@ -114,9 +115,9 @@ public class JRecordTestGen {
     rec.recordComponent (cm.INT, "y");
     rec.recordComponent (cm.ref (String.class), "name");
     rec._implements (cm.ref (Comparable.class).narrow (rec));
-    JMethod cmp = rec.method(JMod.PUBLIC, cm.INT, "compareTo");
-    cmp.param(rec, "other");
-    cmp.body()._return(JExpr.lit(0));
+    final JMethod cmp = rec.method (JMod.PUBLIC, cm.INT, "compareTo");
+    cmp.param (rec, "other");
+    cmp.body ()._return (JExpr.lit (0));
     return cm;
   }
 
@@ -124,21 +125,21 @@ public class JRecordTestGen {
    * Test: Generic record with type parameters Expected output:
    *
    * <pre>
-   * public record Pair&lt;T, U&gt;(T first, U second) {
-   * }
+   * public record Pair &lt;T, U&gt; (T first, U second)
+   * {}
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testGenericRecord() throws JCodeModelException
+  public JCodeModel testGenericRecord () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass rec = cm._package(rootPackage)._record("Pair");
-    final JTypeVar t = rec.generify("T");
-    final JTypeVar u = rec.generify("U");
-    rec.recordComponent(t, "first");
-    rec.recordComponent(u, "second");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass rec = cm._package (rootPackage)._record ("Pair");
+    final JTypeVar t = rec.generify ("T");
+    final JTypeVar u = rec.generify ("U");
+    rec.recordComponent (t, "first");
+    rec.recordComponent (u, "second");
     return cm;
   }
 
@@ -146,20 +147,20 @@ public class JRecordTestGen {
    * Test: Record with bounded generic type parameter Expected output:
    *
    * <pre>
-   * public record NumberPair&lt;T extends Number&gt;(T first, T second) {
-   * }
+   * public record NumberPair &lt;T extends Number&gt; (T first, T second)
+   * {}
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testRecordWithBoundedTypeParameter() throws JCodeModelException
+  public JCodeModel testRecordWithBoundedTypeParameter () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass rec = cm._package(rootPackage)._record("PairNumber");
-    final JTypeVar t = rec.generify("T", Number.class);
-    rec.recordComponent(t, "first");
-    rec.recordComponent(t, "second");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass rec = cm._package (rootPackage)._record ("PairNumber");
+    final JTypeVar t = rec.generify ("T", Number.class);
+    rec.recordComponent (t, "first");
+    rec.recordComponent (t, "second");
     return cm;
   }
 
@@ -167,61 +168,63 @@ public class JRecordTestGen {
    * Test: Record with annotated component Expected output:
    *
    * <pre>
-   * public record Person(@NonNull String name, int age) {
-   * }
+   * public record Person (@NonNull String name, int age)
+   * {}
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testRecordWithAnnotatedComponent() throws JCodeModelException
+  public JCodeModel testRecordWithAnnotatedComponent () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass rec = cm._package(rootPackage)._record("AnnotatedPerson");
-    final JRecordComponent nameComponent = rec.recordComponent(cm.ref(String.class), "name");
-    nameComponent.annotate(RecordAnnotationExample.class);
-    rec.recordComponent(cm.INT, "age");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass rec = cm._package (rootPackage)._record ("AnnotatedPerson");
+    final JRecordComponent nameComponent = rec.recordComponent (cm.ref (String.class), "name");
+    nameComponent.annotate (RecordAnnotationExample.class);
+    rec.recordComponent (cm.INT, "age");
     return cm;
   }
 
   /**
    * we need a specific record annotation to be kept
    */
-  @Retention(RetentionPolicy.RUNTIME)
-  @Target(ElementType.RECORD_COMPONENT)
+  @Retention (RetentionPolicy.RUNTIME)
+  @Target (ElementType.RECORD_COMPONENT)
   public @interface RecordAnnotationExample
-  {
-  }
+  {}
 
   /**
    * Test: Record with compact constructor (validation) Expected output:
    *
    * <pre>
-   * public record Range(int lo, int hi) {
-   * 	public Range {
-   * 		if (lo > hi) {
-   * 			throw new IllegalArgumentException();
-   * 		}
-   * 	}
+   * public record Range (int lo, int hi)
+   * {
+   *   public Range
+   *   {
+   *     if (lo > hi)
+   *     {
+   *       throw new IllegalArgumentException ();
+   *     }
+   *   }
    * }
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testRecordWithCompactConstructor() throws JCodeModelException
+  public JCodeModel testRecordWithCompactConstructor () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass rec = cm._package(rootPackage)._record("Range");
-    final JRecordComponent rcLo = rec.recordComponent(cm.INT, "lo");
-    final JRecordComponent rcHi = rec.recordComponent(cm.INT, "hi");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass rec = cm._package (rootPackage)._record ("Range");
+    final JRecordComponent rcLo = rec.recordComponent (cm.INT, "lo");
+    final JRecordComponent rcHi = rec.recordComponent (cm.INT, "hi");
 
     // Compact constructor - no parameter list, just validation logic
-    final JMethod compactCtor = rec.compactConstructor(JMod.PUBLIC);
-    compactCtor.body()
-        ._if(JExpr.ref(rcLo).gt(JExpr.ref(rcHi)))
-        ._then()
-        ._throw(cm.ref(IllegalArgumentException.class), JExpr.lit("High must be greater or equal to Low"));
+    final JMethod compactCtor = rec.compactConstructor (JMod.PUBLIC);
+    compactCtor.body ()
+               ._if (JExpr.ref (rcLo).gt (JExpr.ref (rcHi)))
+               ._then ()
+               ._throw (cm.ref (IllegalArgumentException.class), JExpr.lit ("High must be greater or equal to Low"));
     return cm;
   }
 
@@ -229,36 +232,40 @@ public class JRecordTestGen {
    * Test: Record with explicit canonical constructor Expected output:
    *
    * <pre>
-   * public record Range(int lo, int hi) {
-   * 	public Range(int lo, int hi) {
-   * 		if (lo > hi) {
-   * 			throw new IllegalArgumentException();
-   * 		}
-   * 		this.lo = lo;
-   * 		this.hi = hi;
-   * 	}
+   * public record Range (int lo, int hi)
+   * {
+   *   public Range (int lo, int hi)
+   *   {
+   *     if (lo > hi)
+   *     {
+   *       throw new IllegalArgumentException ();
+   *     }
+   *     this.lo = lo;
+   *     this.hi = hi;
+   *   }
    * }
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testRecordWithCanonicalConstructor() throws JCodeModelException
+  public JCodeModel testRecordWithCanonicalConstructor () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass rec = cm._package(rootPackage)._record("RangeCanonical");
-    final JRecordComponent rcLo = rec.recordComponent(cm.INT, "lo");
-    final JRecordComponent rcHi = rec.recordComponent(cm.INT, "hi");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass rec = cm._package (rootPackage)._record ("RangeCanonical");
+    final JRecordComponent rcLo = rec.recordComponent (cm.INT, "lo");
+    final JRecordComponent rcHi = rec.recordComponent (cm.INT, "hi");
 
     // Canonical constructor - must have same parameters as record components
-    final JMethod ctor = rec.constructor(JMod.PUBLIC);
-    final JVar loParam = ctor.param(cm.INT, "lo");
-    final JVar hiParam = ctor.param(cm.INT, "hi");
-    ctor.body()._if(loParam.gt(hiParam))._then()
-        ._throw(cm.ref(IllegalArgumentException.class),
-            JExpr.lit("lo must be < hi"));
-    ctor.body().assign(JExpr.refthis(rcLo), loParam);
-    ctor.body().assign(JExpr.refthis(rcHi), hiParam);
+    final JMethod ctor = rec.constructor (JMod.PUBLIC);
+    final JVar loParam = ctor.param (cm.INT, "lo");
+    final JVar hiParam = ctor.param (cm.INT, "hi");
+    ctor.body ()
+        ._if (loParam.gt (hiParam))
+        ._then ()
+        ._throw (cm.ref (IllegalArgumentException.class), JExpr.lit ("lo must be < hi"));
+    ctor.body ().assign (JExpr.refthis (rcLo), loParam);
+    ctor.body ().assign (JExpr.refthis (rcHi), hiParam);
     return cm;
   }
 
@@ -281,7 +288,7 @@ public class JRecordTestGen {
   public JCodeModel testRecordWithMethod () throws JCodeModelException
   {
     final JCodeModel cm = new JCodeModel ();
-    final JDefinedClass rec = cm._package(rootPackage)._record("PointDistance");
+    final JDefinedClass rec = cm._package (rootPackage)._record ("PointDistance");
     final JRecordComponent rcX = rec.recordComponent (cm.INT, "x");
     final JRecordComponent rcY = rec.recordComponent (cm.INT, "y");
 
@@ -297,36 +304,35 @@ public class JRecordTestGen {
    * Test: Record with static field and method Expected output:
    *
    * <pre>
-   * public record Point(int x, int y) {
-   * 	public static final Point ORIGIN = new Point(0, 0);
+   * public record Point (int x, int y)
+   * {
+   *   public static final Point ORIGIN = new Point (0, 0);
    *
-   * 	public static Point of(int x, int y) {
-   * 		return new Point(x, y);
-   * 	}
+   *   public static Point of (int x, int y)
+   *   {
+   *     return new Point (x, y);
+   *   }
    * }
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testRecordWithStaticMembers() throws JCodeModelException
+  public JCodeModel testRecordWithStaticMembers () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass rec = cm._package(rootPackage)._record("PointStatic");
-    rec.recordComponent(cm.INT, "x");
-    rec.recordComponent(cm.INT, "y");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass rec = cm._package (rootPackage)._record ("PointStatic");
+    rec.recordComponent (cm.INT, "x");
+    rec.recordComponent (cm.INT, "y");
 
     // Static field
-    rec.field(JMod.PUBLIC | JMod.STATIC | JMod.FINAL,
-        rec,
-        "ORIGIN",
-        JExpr._new(rec).arg(JExpr.lit(0)).arg(JExpr.lit(0)));
+    rec.field (JMod.PUBLIC_STATIC_FINAL, rec, "ORIGIN", JExpr._new (rec).arg (JExpr.lit (0)).arg (JExpr.lit (0)));
 
     // Static factory method
-    final JMethod factory = rec.method(JMod.PUBLIC | JMod.STATIC, rec, "of");
-    final JVar xParam = factory.param(cm.INT, "x");
-    final JVar yParam = factory.param(cm.INT, "y");
-    factory.body()._return(JExpr._new(rec).arg(xParam).arg(yParam));
+    final JMethod factory = rec.method (JMod.PUBLIC | JMod.STATIC, rec, "of");
+    final JVar xParam = factory.param (cm.INT, "x");
+    final JVar yParam = factory.param (cm.INT, "y");
+    factory.body ()._return (JExpr._new (rec).arg (xParam).arg (yParam));
     return cm;
   }
 
@@ -334,21 +340,22 @@ public class JRecordTestGen {
    * Test: Nested record inside a class Expected output:
    *
    * <pre>
-   * public class Outer {
-   * 	public record Inner(String value) {
-   * 	}
+   * public class Outer
+   * {
+   *   public record Inner (String value)
+   *   {}
    * }
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testNestedRecord() throws JCodeModelException
+  public JCodeModel testNestedRecord () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass outer = cm._package(rootPackage)._class("Outer");
-    final JDefinedClass inner = outer._record(JMod.PUBLIC, "Inner");
-    inner.recordComponent(cm.ref(String.class), "value");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass outer = cm._package (rootPackage)._class ("Outer");
+    final JDefinedClass inner = outer._record (JMod.PUBLIC, "Inner");
+    inner.recordComponent (cm.ref (String.class), "value");
     return cm;
   }
 
@@ -367,38 +374,37 @@ public class JRecordTestGen {
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testRecordWithJavadoc() throws JCodeModelException
+  public JCodeModel testRecordWithJavadoc () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass rec = cm._package(rootPackage)._record("PointJavadoc");
-    final JRecordComponent rcX = rec.recordComponent(cm.INT, "x");
-    final JRecordComponent rcY = rec.recordComponent(cm.INT, "y");
-    rec.javadoc().add("Represents a 2D point.");
-    rec.javadoc().addParam(rcX).add("the x coordinate");
-    rec.javadoc().addParam(rcY).add("the y coordinate");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass rec = cm._package (rootPackage)._record ("PointJavadoc");
+    final JRecordComponent rcX = rec.recordComponent (cm.INT, "x");
+    final JRecordComponent rcY = rec.recordComponent (cm.INT, "y");
+    rec.javadoc ().add ("Represents a 2D point.");
+    rec.javadoc ().addParam (rcX).add ("the x coordinate");
+    rec.javadoc ().addParam (rcY).add ("the y coordinate");
     return cm;
   }
 
   /**
-   * Test: Record with varargs component (last component can be varargs) Expected
-   * output:
+   * Test: Record with varargs component (last component can be varargs) Expected output:
    *
    * <pre>
-   * public record VarArgsRecord(String name, int... values) {
-   * }
+   * public record VarArgsRecord (String name, int... values)
+   * {}
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testRecordWithVarargsComponent() throws JCodeModelException
+  public JCodeModel testRecordWithVarargsComponent () throws JCodeModelException
   {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass rec = cm._package(rootPackage)._record("SeriesVarArgs");
-    rec.recordComponent(cm.ref(String.class), "name");
-    rec.recordComponentVararg(cm.INT, "values");
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass rec = cm._package (rootPackage)._record ("SeriesVarArgs");
+    rec.recordComponent (cm.ref (String.class), "name");
+    rec.recordComponentVararg (cm.INT, "values");
     return cm;
   }
 
@@ -406,18 +412,19 @@ public class JRecordTestGen {
    * Test: Record with array component Expected output:
    *
    * <pre>
-   * public record ArrayRecord(String[] names, int[][] matrix) {
-   * }
+   * public record ArrayRecord (String [] names, int [] [] matrix)
+   * {}
    * </pre>
    *
    * @throws JCodeModelException
-   *                             In case of error
+   *         In case of error
    */
-  public JCodeModel testRecordWithArrayComponent() throws JCodeModelException {
-    final JCodeModel cm = new JCodeModel();
-    final JDefinedClass rec = cm._package(rootPackage)._record("ArrayRecord");
-    rec.recordComponent(cm.ref(String.class).array(), "names");
-    rec.recordComponent(cm.INT.array().array(), "matrix");
+  public JCodeModel testRecordWithArrayComponent () throws JCodeModelException
+  {
+    final JCodeModel cm = new JCodeModel ();
+    final JDefinedClass rec = cm._package (rootPackage)._record ("ArrayRecord");
+    rec.recordComponent (cm.ref (String.class).array (), "names");
+    rec.recordComponent (cm.INT.array ().array (), "matrix");
     return cm;
   }
 

@@ -54,9 +54,9 @@ public class JVarArgVar extends JArgVar
 
   ///
   /// @param aType the array type that this variable has.
-  public JVarArgVar (boolean final_, AbstractJType aType, @NonNull String sName)
+  public JVarArgVar (boolean isFinal, AbstractJType aType, @NonNull String sName)
   {
-    super (final_, aType, sName);
+    super (isFinal, aType, sName);
   }
 
   @Override
