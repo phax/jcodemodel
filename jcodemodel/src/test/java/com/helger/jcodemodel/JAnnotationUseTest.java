@@ -51,6 +51,7 @@ import org.junit.Test;
 
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.vars.JFieldVar;
 import com.helger.jcodemodel.writer.JCMWriter;
 
 /**

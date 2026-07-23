@@ -51,6 +51,7 @@ import org.jspecify.annotations.NonNull;
 import org.junit.Test;
 
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.vars.JFieldVar;
 import com.helger.jcodemodel.writer.StringCodeWriter;
 
 /**
@@ -84,7 +85,9 @@ public class ModelCopyTest
       assertNotEquals (represent (cm), represent (copy));
     }
     for (final Consumer <JCodeModel> m : modifications ())
+    {
       m.accept (copy);
+    }
     assertEquals (represent (cm), represent (copy));
   }
 

@@ -91,11 +91,12 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   /** list of generic xdoclets */
   private final Map <String, Map <String, String>> m_aAtXdoclets = new LinkedHashMap <> ();
 
-  protected JDocComment (@NonNull final JCodeModel owner)
+  public JDocComment (@NonNull final JCodeModel owner)
   {
     m_aOwner = ValueEnforcer.notNull (owner, "Owner");
   }
 
+  @Override
   @NonNull
   public JCodeModel owner ()
   {
@@ -209,7 +210,9 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   public JCommentPart addReturn ()
   {
     if (m_aAtReturn == null)
+    {
       m_aAtReturn = new JCommentPart ();
+    }
     return m_aAtReturn;
   }
 
@@ -399,11 +402,12 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
     m_aAtXdoclets.clear ();
   }
 
+  @Override
   public void generate (@NonNull final IJFormatter f)
   {
     // Is any "@" comment present?
     final boolean bHasAt = !m_aAtParams.isEmpty () ||
-      m_aAtReturn != null ||
+      (m_aAtReturn != null) ||
       !m_aAtThrows.isEmpty () ||
       !m_aAtTags.isEmpty () ||
       !m_aAtXdoclets.isEmpty ();
@@ -414,12 +418,16 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
       // Start comment
       if (!m_bIsSingleLineMode)
+      {
         f.print (true ? "/**" : "/*").newline ();
+      }
 
       // Print all simple text elements
       format (f, sIndent);
       if (!isEmpty () && bHasAt)
+      {
         f.print (sIndent).newline ();
+      }
 
       for (final Map.Entry <String, JCommentPart> aEntry : m_aAtParams.entrySet ())
       {
@@ -453,8 +461,10 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
             // Print value only if present
             final String sValue = aEntry2.getValue ();
-            if (sValue != null && sValue.length () > 0)
+            if ((sValue != null) && (sValue.length () > 0))
+            {
               f.print ("= \"").print (sValue).print ("\"");
+            }
           }
         }
         f.newline ();
@@ -462,7 +472,9 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
 
       // End comment
       if (!m_bIsSingleLineMode)
+      {
         f.print (" */").newline ();
+      }
     }
   }
 }

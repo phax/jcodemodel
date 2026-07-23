@@ -52,6 +52,7 @@ import com.helger.annotation.style.ReturnsMutableObject;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.modifiers.EMod;
 import com.helger.jcodemodel.util.ClassNameComparator;
+import com.helger.jcodemodel.vars.JFieldVar;
 import com.helger.jcodemodel.writer.JFormatter;
 
 /**
@@ -671,7 +672,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     return (sName != null) && m_aFields.containsKey (sName);
   }
 
-  void internalRenameField (@NonNull final String sOldName,
+  public void internalRenameField (
+      @NonNull final String sOldName,
                             @NonNull final String sNewName,
                             @NonNull final JFieldVar aField)
   {
