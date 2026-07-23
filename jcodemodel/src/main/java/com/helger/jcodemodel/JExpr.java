@@ -50,6 +50,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
+import com.helger.jcodemodel.expressions.JInstanceOfVar;
 import com.helger.jcodemodel.expression.JArrayInit;
 
 /**
@@ -596,6 +597,9 @@ public final class JExpr
   {
     return JOp.cond (aCond, aIfTrue, aIfFalse);
   }
+  
+  public static JInstanceOfVar instanceOf(@NonNull IJExpression expr, @NonNull AbstractJType type, @NonNull String name) {
+    return new JInstanceOfVar(expr, type, name);
 
   public static JSwitchExpression _switch(IJExpression exp) {
     return new JSwitchExpression(exp);
