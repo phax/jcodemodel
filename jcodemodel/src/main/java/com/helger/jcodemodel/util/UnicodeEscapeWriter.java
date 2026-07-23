@@ -50,9 +50,8 @@ import org.jspecify.annotations.NonNull;
 import com.helger.annotation.Nonnegative;
 
 /**
- * {@link Writer} that escapes non US-ASCII characters into Java Unicode escape
- * \\uXXXX. This process is necessary if the method names or field names contain
- * non US-ASCII characters.
+ * {@link Writer} that escapes non US-ASCII characters into Java Unicode escape \\uXXXX. This
+ * process is necessary if the method names or field names contain non US-ASCII characters.
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */
@@ -73,8 +72,7 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   /**
-   * Check if a character needs escaping or not. Can be overridden in
-   * subclasses.
+   * Check if a character needs escaping or not. Can be overridden in subclasses.
    *
    * @param ch
    *        Character to check
@@ -104,7 +102,8 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   @Override
-  public final void write (@NonNull final char [] aBuf, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
+  public final void write (@NonNull final char [] aBuf, @Nonnegative final int nOfs, @Nonnegative final int nLen)
+                                                                                                                  throws IOException
   {
     final int nMax = nOfs + nLen;
     for (int i = nOfs; i < nMax; i++)
@@ -118,7 +117,8 @@ public class UnicodeEscapeWriter extends FilterWriter
   }
 
   @Override
-  public final void write (@NonNull final String sStr, @Nonnegative final int nOfs, @Nonnegative final int nLen) throws IOException
+  public final void write (@NonNull final String sStr, @Nonnegative final int nOfs, @Nonnegative final int nLen)
+                                                                                                                 throws IOException
   {
     write (sStr.toCharArray (), nOfs, nLen);
   }

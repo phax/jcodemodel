@@ -56,16 +56,15 @@ import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
 public interface IJFormatter extends Closeable
 {
   /**
-   * Special character token we use to differentiate '&gt;' as an operator and
-   * '&gt;' as the end of the type arguments. The former uses '&gt;' and it
-   * requires a preceding whitespace. The latter uses this, and it does not have
-   * a preceding whitespace.
+   * Special character token we use to differentiate '&gt;' as an operator and '&gt;' as the end of
+   * the type arguments. The former uses '&gt;' and it requires a preceding whitespace. The latter
+   * uses this, and it does not have a preceding whitespace.
    */
   char CLOSE_TYPE_ARGS = '\uFFFF';
 
   /**
-   * @return <code>true</code> if we are in the printing mode, where we actually
-   *         produce text. The other (internal) mode is the "collecting mode".
+   * @return <code>true</code> if we are in the printing mode, where we actually produce text. The
+   *         other (internal) mode is the "collecting mode".
    */
   boolean isPrinting ();
 
@@ -149,8 +148,7 @@ public interface IJFormatter extends Closeable
   /**
    * Print a type name.
    * <p>
-   * In the collecting mode we use this information to decide what types to
-   * import and what not to.
+   * In the collecting mode we use this information to decide what types to import and what not to.
    *
    * @param aType
    *        Type to be emitted
@@ -168,8 +166,8 @@ public interface IJFormatter extends Closeable
   }
 
   /**
-   * Cause the {@link JVar} to generate source for itself. With annotations,
-   * type, name and init expression.
+   * Cause the {@link JVar} to generate source for itself. With annotations, type, name and init
+   * expression.
    *
    * @param aVar
    *        the {@link JVar} object
@@ -209,8 +207,7 @@ public interface IJFormatter extends Closeable
    * Produces {@link IJGenerable}s separated by ','
    *
    * @param aList
-   *        List of {@link IJGenerable} objects that will be separated by a
-   *        comma
+   *        List of {@link IJGenerable} objects that will be separated by a comma
    * @return this for chaining
    */
   @NonNull
@@ -220,7 +217,9 @@ public interface IJFormatter extends Closeable
   }
 
   @NonNull
-  IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList, String separator, ListWrapping wrapping);
+  IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList,
+                         String separator,
+                         ListWrapping wrapping);
 
   /**
    * Cause the {@link IJStatement} to generate source for itself

@@ -50,24 +50,27 @@ import com.helger.jcodemodel.IJFormatter;
 ///
 /// same constraints as for the [JArgVar]
 ///
-public class JVarArgVar extends JArgVar {
+public class JVarArgVar extends JArgVar
+{
 
   ///
   /// @param aType the array type that this variable has.
-  public JVarArgVar(boolean final_, AbstractJType aType, @NonNull String sName) {
-    super(final_, aType, sName);
+  public JVarArgVar (boolean final_, AbstractJType aType, @NonNull String sName)
+  {
+    super (final_, aType, sName);
   }
 
   @Override
-  protected void bindType(@NonNull IJFormatter f) {
-    f.generable(type().elementType());
-    f.print("... ");
+  protected void bindType (@NonNull IJFormatter f)
+  {
+    f.generable (type ().elementType ());
+    f.print ("... ");
   }
 
   @Override
-  public String separator() {
-    throw new UnsupportedOperationException("can't declare two varargs as method signature");
+  public String separator ()
+  {
+    throw new UnsupportedOperationException ("can't declare two varargs as method signature");
   }
-
 
 }

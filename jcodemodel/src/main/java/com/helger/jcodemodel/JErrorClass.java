@@ -51,21 +51,18 @@ import com.helger.jcodemodel.exceptions.JErrorClassUsedException;
 /**
  * A special {@link AbstractJClass} that represents an error class.
  * <p>
- * Error-types represents holes or placeholders that can't be filled.
- * {@code JErrorClass} differs from {@code JDirectClass} class in that it should
- * never be used in generated code. References to error-classes can be used in
- * hidden class-models. Such classes should never be actually written but can be
- * somehow used during code generation. Use
- * {@code JCodeModel#buildsErrorTypeRefs} method to test if your generated
- * Java-sources contains references to error-types.
+ * Error-types represents holes or placeholders that can't be filled. {@code JErrorClass} differs
+ * from {@code JDirectClass} class in that it should never be used in generated code. References to
+ * error-classes can be used in hidden class-models. Such classes should never be actually written
+ * but can be somehow used during code generation. Use {@code JCodeModel#buildsErrorTypeRefs} method
+ * to test if your generated Java-sources contains references to error-types.
  * <p>
- * You should probably always check generated code with
- * {@code JCodeModel#buildsErrorTypeRefs} method if you use any error-types.
+ * You should probably always check generated code with {@code JCodeModel#buildsErrorTypeRefs}
+ * method if you use any error-types.
  * <p>
- * Most of {@code JErrorClass} methods throws {@code JErrorClassUsedException}
- * unchecked exceptions. Be careful and use {@link AbstractJType#isError()
- * AbstractJType#isError} method to check for error-types before actually using
- * it's methods.
+ * Most of {@code JErrorClass} methods throws {@code JErrorClassUsedException} unchecked exceptions.
+ * Be careful and use {@link AbstractJType#isError() AbstractJType#isError} method to check for
+ * error-types before actually using it's methods.
  *
  * @see JCodeModel#buildsErrorTypeRefs()
  * @see JCodeModel#errorClass(String)

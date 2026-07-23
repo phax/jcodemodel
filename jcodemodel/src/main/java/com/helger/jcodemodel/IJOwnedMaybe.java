@@ -43,8 +43,7 @@ package com.helger.jcodemodel;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Base interface for objects optionally having a relation to a
- * {@link JCodeModel}.
+ * Base interface for objects optionally having a relation to a {@link JCodeModel}.
  *
  * @author Philip Helger
  */

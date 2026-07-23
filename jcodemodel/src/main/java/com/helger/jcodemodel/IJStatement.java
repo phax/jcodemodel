@@ -43,8 +43,7 @@ package com.helger.jcodemodel;
 import org.jspecify.annotations.NonNull;
 
 /**
- * Common interface for code components that can generate uses of themselves as
- * statements.
+ * Common interface for code components that can generate uses of themselves as statements.
  */
 public interface IJStatement extends IJObject
 {

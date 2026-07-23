@@ -49,7 +49,8 @@ import com.helger.jcodemodel.JSwitchExpression;
 /// specify the special `case null` and `default` in a switch expression
 ///
 
-public class JCaseSpecialSelector implements BlockSelection<JCaseSpecialSelector> {
+public class JCaseSpecialSelector implements BlockSelection <JCaseSpecialSelector>
+{
 
   private boolean setDefault = false;
 
@@ -57,27 +58,30 @@ public class JCaseSpecialSelector implements BlockSelection<JCaseSpecialSelector
 
   private final JSwitchExpression parent;
 
-  public JCaseSpecialSelector(JSwitchExpression parent, boolean isNull) {
+  public JCaseSpecialSelector (JSwitchExpression parent, boolean isNull)
+  {
     this.parent = parent;
     setDefault = !isNull;
     setNull = isNull;
   }
 
-  public JCaseSpecialSelector andDefault() {
+  public JCaseSpecialSelector andDefault ()
+  {
     setDefault = true;
     return this;
   }
 
-// requires j21
-//	public JCaseSpecialSelector andNull() {
-//		setNull = true;
-//		return this;
-//	}
+  // requires j21
+  // public JCaseSpecialSelector andNull() {
+  // setNull = true;
+  // return this;
+  // }
 
   @Override
-  public List<JBlock> blocks() {
-    return setDefault && setNull ? List.of(parent.defaultBlock(), parent.nullBlock())
-        : List.of(setDefault ? parent.defaultBlock() : parent.nullBlock());
+  public List <JBlock> blocks ()
+  {
+    return setDefault && setNull ? List.of (parent.defaultBlock (), parent.nullBlock ())
+                                 : List.of (setDefault ? parent.defaultBlock () : parent.nullBlock ());
   }
 
 }

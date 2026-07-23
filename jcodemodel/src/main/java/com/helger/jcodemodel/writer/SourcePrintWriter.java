@@ -49,8 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A special version of {@link java.io.PrintWriter} that has a customizable new
- * line string.
+ * A special version of {@link java.io.PrintWriter} that has a customizable new line string.
  *
  * @author Philip Helger
  */
@@ -65,8 +64,8 @@ public final class SourcePrintWriter extends FilterWriter
     super (aWrappedWriter);
     m_sNewLine = sNewLine;
   }
-  
-  public String getNewLine()
+
+  public String getNewLine ()
   {
     return m_sNewLine;
   }

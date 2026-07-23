@@ -100,7 +100,8 @@ public class JCast implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JCast rhs = (JCast) o;
-    return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) && EqualsHelper.equals (m_aObject, rhs.m_aObject);
+    return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) &&
+      EqualsHelper.equals (m_aObject, rhs.m_aObject);
   }
 
   @Override

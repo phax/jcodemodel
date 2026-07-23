@@ -52,8 +52,7 @@ import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.jcodemodel.modifiers.EMod;
 
 /**
- * A special {@link AbstractJClass} that represents an unknown class (except its
- * name.)
+ * A special {@link AbstractJClass} that represents an unknown class (except its name.)
  *
  * @author Kohsuke Kawaguchi
  * @see JCodeModel#directClass(String)
@@ -141,7 +140,8 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
 
   @Override
   @NonNull
-  protected AbstractJClass substituteParams (final JTypeVar [] aVariables, final List <? extends AbstractJClass> aBindings)
+  protected AbstractJClass substituteParams (final JTypeVar [] aVariables,
+                                             final List <? extends AbstractJClass> aBindings)
   {
     return this;
   }
@@ -173,22 +173,26 @@ public class JDirectClass extends AbstractJClassContainer <JDirectClass>
   }
 
   @Override
-  public JDirectClass emod(EMod emod, EMod... emods) {
+  public JDirectClass emod (EMod emod, EMod... emods)
+  {
     return this;
   }
 
   @Override
-  public JDirectClass removeEMod(EMod... emods) {
+  public JDirectClass removeEMod (EMod... emods)
+  {
     return this;
   }
 
   @Override
-  public Set<EMod> emods() {
-    return Set.of();
+  public Set <EMod> emods ()
+  {
+    return Set.of ();
   }
 
   @Override
-  public boolean isEMod(EMod... emods) {
-    return emods==null || emods.length==0;
+  public boolean isEMod (EMod... emods)
+  {
+    return emods == null || emods.length == 0;
   }
 }

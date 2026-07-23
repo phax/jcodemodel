@@ -87,8 +87,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   private final List <JVar> m_aParams = new ArrayList <> ();
 
   /**
-   * Set of exceptions that this method may throw. A set instance lazily
-   * created.
+   * Set of exceptions that this method may throw. A set instance lazily created.
    */
   private final Set <AbstractJClass> m_aThrows = new TreeSet <> (ClassNameComparator.getInstance ());
 
@@ -105,8 +104,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   private JDocComment m_aJDoc;
 
   /**
-   * Variable parameter for this method's varargs declaration introduced in J2SE
-   * 1.5
+   * Variable parameter for this method's varargs declaration introduced in J2SE 1.5
    */
   private JVarArgVar m_aVarParam;
 
@@ -132,9 +130,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        Name of this method. May neither be <code>null</code> nor empty.
    */
   public JMethod (@NonNull final JDefinedClass aOwningClass,
-                     final int nMods,
-                     @NonNull final AbstractJType aReturnType,
-                     @NonNull final String sName)
+                  final int nMods,
+                  @NonNull final AbstractJType aReturnType,
+                  @NonNull final String sName)
   {
     ValueEnforcer.notNull (aOwningClass, "OwningClass");
     ValueEnforcer.notNull (aReturnType, "ReturnType");
@@ -228,8 +226,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
-   * Add the specified variable to the list of parameters for this method
-   * signature.
+   * Add the specified variable to the list of parameters for this method signature.
    *
    * @param nMods
    *        Java modifiers to be used
@@ -240,9 +237,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * @return New parameter variable of type {@link JVar}
    */
   @NonNull
-  public JArgVar param(final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
+  public JArgVar param (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
-    final JArgVar aVar = new JArgVar((nMods | JMod.FINAL) > 0, ValueEnforcer.notNull(aType, "type"), sName);
+    final JArgVar aVar = new JArgVar ((nMods | JMod.FINAL) > 0, ValueEnforcer.notNull (aType, "type"), sName);
     m_aParams.add (aVar);
     return aVar;
   }
@@ -266,8 +263,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
-   * Add the specified variable argument to the list of parameters for this
-   * method signature.
+   * Add the specified variable argument to the list of parameters for this method signature.
    *
    * @param aType
    *        Type of the parameter being added.
@@ -275,18 +271,17 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        Name of the parameter being added
    * @return the variable parameter
    * @throws IllegalStateException
-   *         If this method is called twice. varargs in J2SE 1.5 can appear only
-   *         once in the method signature.
+   *         If this method is called twice. varargs in J2SE 1.5 can appear only once in the method
+   *         signature.
    */
   @NonNull
-  public JVarArgVar varParam(@NonNull final Class<?> aType, @NonNull final String sName)
+  public JVarArgVar varParam (@NonNull final Class <?> aType, @NonNull final String sName)
   {
     return varParam (m_aOwningClass.owner ()._ref (aType), sName);
   }
 
   /**
-   * Add the specified variable argument to the list of parameters for this
-   * method signature.
+   * Add the specified variable argument to the list of parameters for this method signature.
    *
    * @param aType
    *        Type of the parameter being added.
@@ -294,75 +289,69 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    *        Name of the parameter being added
    * @return the variable parameter
    * @throws IllegalStateException
-   *         If this method is called twice. varargs in J2SE 1.5 can appear only
-   *         once in the method signature.
+   *         If this method is called twice. varargs in J2SE 1.5 can appear only once in the method
+   *         signature.
    */
   @NonNull
-  public JVarArgVar varParam(@NonNull final AbstractJType aType, @NonNull final String sName)
+  public JVarArgVar varParam (@NonNull final AbstractJType aType, @NonNull final String sName)
   {
     return varParam (JMod.NONE, aType, sName);
   }
 
   /**
-   * Add the specified variable argument to the list of parameters for this
-   * method signature.
+   * Add the specified variable argument to the list of parameters for this method signature.
    *
    * @param nMods
    *        nMods to use
    * @param aType
-   *        Type of the parameter being added. Is automatically converted to an
-   *        array.
+   *        Type of the parameter being added. Is automatically converted to an array.
    * @param sName
    *        Name of the parameter being added
    * @return the created variable parameter
    * @throws IllegalStateException
-   *         If this method is called twice. varargs in J2SE 1.5 can appear only
-   *         once in the method signature.
+   *         If this method is called twice. varargs in J2SE 1.5 can appear only once in the method
+   *         signature.
    */
   @NonNull
-  public JVarArgVar varParam(final int nMods, @NonNull final Class<?> aType, @NonNull final String sName)
+  public JVarArgVar varParam (final int nMods, @NonNull final Class <?> aType, @NonNull final String sName)
   {
     return varParam (nMods, m_aOwningClass.owner ()._ref (aType), sName);
   }
 
   /**
-   * Add the specified variable argument to the list of parameters for this
-   * method signature.
+   * Add the specified variable argument to the list of parameters for this method signature.
    *
    * @param nMods
    *        nMods to use
    * @param aType
-   *        Type of the parameter being added. Is automatically converted to an
-   *        array.
+   *        Type of the parameter being added. Is automatically converted to an array.
    * @param sName
    *        Name of the parameter being added
    * @return the created variable parameter
    * @throws IllegalStateException
-   *         If this method is called twice. varargs in J2SE 1.5 can appear only
-   *         once in the method signature.
+   *         If this method is called twice. varargs in J2SE 1.5 can appear only once in the method
+   *         signature.
    */
   @NonNull
-  public JVarArgVar varParam(final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
+  public JVarArgVar varParam (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
-    ValueEnforcer.isFalse (hasVarArgs (),
-                           """
-                            Cannot have two varargs in a method,
-                            Check if varParam method of JMethod is\
-                             invoked more than once""");
+    ValueEnforcer.isFalse (hasVarArgs (), """
+        Cannot have two varargs in a method,
+        Check if varParam method of JMethod is\
+         invoked more than once""");
 
-    m_aVarParam = new JVarArgVar((nMods | JMod.FINAL) > 0, aType.array(), sName);
+    m_aVarParam = new JVarArgVar ((nMods | JMod.FINAL) > 0, aType.array (), sName);
     return m_aVarParam;
   }
 
   @Nullable
-  public JVarArgVar varParam()
+  public JVarArgVar varParam ()
   {
     return m_aVarParam;
   }
 
   /**
-   * @return <code>true</code> if there are any varargs declared for this method
-   *         signature.
+   * @return <code>true</code> if there are any varargs declared for this method signature.
    */
   public boolean hasVarArgs ()
   {
@@ -391,7 +380,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
-    if (m_aAnnotations == null) {
+    if (m_aAnnotations == null)
+    {
       m_aAnnotations = new ArrayList <> ();
     }
     final JAnnotationUse a = new JAnnotationUse (aClazz);
@@ -416,7 +406,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
-    if (m_aAnnotations == null) {
+    if (m_aAnnotations == null)
+    {
       return Collections.emptyList ();
     }
     return m_aAnnotations;
@@ -459,8 +450,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
    * Overrides the return type.
    *
    * @param aReturnType
-   *        The type to set. Set to <code>null</code> to make this method a
-   *        constructor.
+   *        The type to set. Set to <code>null</code> to make this method a constructor.
    */
   public void type (@Nullable final AbstractJType aReturnType)
   {
@@ -476,7 +466,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public AbstractJType [] listParamTypes ()
   {
     final AbstractJType [] r = new AbstractJType [m_aParams.size ()];
-    for (int i = 0; i < r.length; i++) {
+    for (int i = 0; i < r.length; i++)
+    {
       r[i] = m_aParams.get (i).type ();
     }
     return r;
@@ -503,12 +494,15 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public boolean hasSignature (@NonNull final AbstractJType [] argTypes)
   {
     final JVar [] aParams = listParams ();
-    if (aParams.length != argTypes.length) {
+    if (aParams.length != argTypes.length)
+    {
       return false;
     }
 
-    for (int i = 0; i < aParams.length; i++) {
-      if (!aParams[i].type ().equals (argTypes[i])) {
+    for (int i = 0; i < aParams.length; i++)
+    {
+      if (!aParams[i].type ().equals (argTypes[i]))
+      {
         return false;
       }
     }
@@ -524,7 +518,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public JBlock body ()
   {
-    if (m_aBody == null) {
+    if (m_aBody == null)
+    {
       m_aBody = new JBlock ();
     }
     return m_aBody;
@@ -545,7 +540,8 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public JDocComment javadoc ()
   {
-    if (m_aJDoc == null) {
+    if (m_aJDoc == null)
+    {
       m_aJDoc = new JDocComment (owner ());
     }
     return m_aJDoc;
@@ -563,12 +559,15 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @Override
   public void declare (@NonNull final IJFormatter f)
   {
-    if (m_aJDoc != null) {
+    if (m_aJDoc != null)
+    {
       f.generable (m_aJDoc);
     }
 
-    if (m_aAnnotations != null) {
-      for (final JAnnotationUse a : m_aAnnotations) {
+    if (m_aAnnotations != null)
+    {
+      for (final JAnnotationUse a : m_aAnnotations)
+      {
         f.generable (a).newline ();
       }
     }
@@ -578,39 +577,46 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     // declare the generics parameters
     super.declare (f);
 
-    if (!isConstructor ()) {
+    if (!isConstructor ())
+    {
       f.generable (m_aReturnType);
     }
 
-    if (!f.settings().wrap.disabled) {
-      EWordWrapStrategy nameWrapStrat = f.settings().wrap.method.name.condition;
-      boolean wrapName = switch (nameWrapStrat) {
-      case ALWAYS -> true;
-      case NEVER -> false;
-      case REQUIRED -> f.currentLineSize() + m_sName.length() + 1 > f.settings().wrap.lineWidth;
+    if (!f.settings ().wrap.disabled)
+    {
+      EWordWrapStrategy nameWrapStrat = f.settings ().wrap.method.name.condition;
+      boolean wrapName = switch (nameWrapStrat)
+      {
+        case ALWAYS -> true;
+        case NEVER -> false;
+        case REQUIRED -> f.currentLineSize () + m_sName.length () + 1 > f.settings ().wrap.lineWidth;
       };
-      if (wrapName) {
-        int nbi = f.settings().wrap.method.name.indent;
-        f
-            .indent(nbi)
-            .newline()
-            .id(m_sName)
-            .outdent(nbi);
-      } else {
-        f.id(m_sName);
+      if (wrapName)
+      {
+        int nbi = f.settings ().wrap.method.name.indent;
+        f.indent (nbi).newline ().id (m_sName).outdent (nbi);
       }
-    } else {
-      f.id(m_sName);
+      else
+      {
+        f.id (m_sName);
+      }
+    }
+    else
+    {
+      f.id (m_sName);
     }
 
-    f.print('(');
-    if (f.settings().wrap.disabled) {
-      appParamsWrapDisabled(f);
-    } else {
-      f.vars(Stream.concat(m_aParams.stream(), Stream.ofNullable(m_aVarParam)).toList(),
-          f.settings().wrap.method.params);
+    f.print ('(');
+    if (f.settings ().wrap.disabled)
+    {
+      appParamsWrapDisabled (f);
     }
-    f.print(')');
+    else
+    {
+      f.vars (Stream.concat (m_aParams.stream (), Stream.ofNullable (m_aVarParam)).toList (),
+              f.settings ().wrap.method.params);
+    }
+    f.print (')');
     if (!m_aThrows.isEmpty ())
     {
       f.newline ().indent ().print ("throws").generable (m_aThrows).newline ().outdent ();
@@ -624,18 +630,20 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
     if (m_aBody != null)
     {
-      if (!f.settings().wrap.disabled) {
-        EWordWrapStrategy bracketWrapStrat = f.settings().wrap.method.bracket.condition;
-        boolean wrapBracket = switch (bracketWrapStrat) {
-        case ALWAYS -> true;
-        case NEVER -> false;
-        case REQUIRED -> f.currentLineSize() + 2 > f.settings().wrap.lineWidth;
+      if (!f.settings ().wrap.disabled)
+      {
+        EWordWrapStrategy bracketWrapStrat = f.settings ().wrap.method.bracket.condition;
+        boolean wrapBracket = switch (bracketWrapStrat)
+        {
+          case ALWAYS -> true;
+          case NEVER -> false;
+          case REQUIRED -> f.currentLineSize () + 2 > f.settings ().wrap.lineWidth;
         };
-        if (wrapBracket) {
-          f
-              .indent(f.settings().wrap.method.bracket.indent)
-              .newline()
-              .outdent(f.settings().wrap.method.bracket.indent);
+        if (wrapBracket)
+        {
+          f.indent (f.settings ().wrap.method.bracket.indent)
+           .newline ()
+           .outdent (f.settings ().wrap.method.bracket.indent);
         }
       }
       f.statement (m_aBody);
@@ -643,9 +651,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     else
     {
       final boolean bIsDeclarationOnly = m_aOwningClass.isInterface () && !m_aMods.isDefault () ||
-                                         m_aOwningClass.isAnnotationTypeDeclaration () ||
-                                         m_aMods.isAbstract () ||
-                                         m_aMods.isNative ();
+        m_aOwningClass.isAnnotationTypeDeclaration () ||
+        m_aMods.isAbstract () ||
+        m_aMods.isNative ();
 
       if (bIsDeclarationOnly)
       {
@@ -653,18 +661,20 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       }
       else
       {
-        if (!f.settings().wrap.disabled) {
-          EWordWrapStrategy bracketWrapStrat = f.settings().wrap.method.bracket.condition;
-          boolean wrapBracket = switch (bracketWrapStrat) {
-          case ALWAYS -> true;
-          case NEVER -> false;
-          case REQUIRED -> f.currentLineSize() + 2 > f.settings().wrap.lineWidth;
+        if (!f.settings ().wrap.disabled)
+        {
+          EWordWrapStrategy bracketWrapStrat = f.settings ().wrap.method.bracket.condition;
+          boolean wrapBracket = switch (bracketWrapStrat)
+          {
+            case ALWAYS -> true;
+            case NEVER -> false;
+            case REQUIRED -> f.currentLineSize () + 2 > f.settings ().wrap.lineWidth;
           };
-          if (wrapBracket) {
-            f
-                .indent(f.settings().wrap.method.bracket.indent)
-                .newline()
-                .outdent(f.settings().wrap.method.bracket.indent);
+          if (wrapBracket)
+          {
+            f.indent (f.settings ().wrap.method.bracket.indent)
+             .newline ()
+             .outdent (f.settings ().wrap.method.bracket.indent);
           }
         }
         // Print an empty body for non-native, non-abstract methods
@@ -674,40 +684,48 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /// legacy params printing.
-  void appParamsWrapDisabled(@NonNull final IJFormatter f) {
-    f.indent();
+  void appParamsWrapDisabled (@NonNull final IJFormatter f)
+  {
+    f.indent ();
     // when parameters are printed in new lines, we want them to be indented.
     // there's a good chance no newlines happen, too, but just in case it does.
 
     boolean bFirst = true;
     // break only if more than 3 variables are present
-    final boolean bNewLineAfterParam = m_aParams.size() + (hasVarArgs() ? 1 : 0) > 3;
-    for (final JVar var : m_aParams) {
-      if (bFirst) {
+    final boolean bNewLineAfterParam = m_aParams.size () + (hasVarArgs () ? 1 : 0) > 3;
+    for (final JVar var : m_aParams)
+    {
+      if (bFirst)
+      {
         bFirst = false;
-      } else {
-        f.print(',');
-        if (bNewLineAfterParam) {
-          f.newline();
+      }
+      else
+      {
+        f.print (',');
+        if (bNewLineAfterParam)
+        {
+          f.newline ();
         }
       }
-      f.var(var);
+      f.var (var);
     }
-    if (hasVarArgs()) {
-      if (!bFirst) {
-        f.print(',');
-        if (bNewLineAfterParam) {
-          f.newline();
+    if (hasVarArgs ())
+    {
+      if (!bFirst)
+      {
+        f.print (',');
+        if (bNewLineAfterParam)
+        {
+          f.newline ();
         }
       }
-      f.var(m_aVarParam);
+      f.var (m_aVarParam);
     }
-    f.outdent();
+    f.outdent ();
   }
 
   /**
-   * @return the current modifiers of this method. Always return non-null valid
-   *         object.
+   * @return the current modifiers of this method. Always return non-null valid object.
    */
   @NonNull
   public JMods mods ()
@@ -716,8 +734,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   /**
-   * @return The {@link JDefinedClass} to which this methods belongs. Never
-   *         <code>null</code>.
+   * @return The {@link JDefinedClass} to which this methods belongs. Never <code>null</code>.
    */
   @NonNull
   public JDefinedClass owningClass ()
@@ -733,24 +750,28 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   }
 
   @Override
-  public JMethod emod(EMod emod, EMod... emods) {
-    mods().emod(EMod.ALLOWED_METHOD,emod,  emods);
+  public JMethod emod (EMod emod, EMod... emods)
+  {
+    mods ().emod (EMod.ALLOWED_METHOD, emod, emods);
     return this;
   }
 
   @Override
-  public JMethod removeEMod(EMod... emods) {
-    mods().removeEMod(emods);
+  public JMethod removeEMod (EMod... emods)
+  {
+    mods ().removeEMod (emods);
     return this;
   }
 
   @Override
-  public Set<EMod> emods() {
-    return mods().emods();
+  public Set <EMod> emods ()
+  {
+    return mods ().emods ();
   }
 
   @Override
-  public boolean isEMod(EMod... emods) {
-    return mods().isEMod(emods);
+  public boolean isEMod (EMod... emods)
+  {
+    return mods ().isEMod (emods);
   }
 }

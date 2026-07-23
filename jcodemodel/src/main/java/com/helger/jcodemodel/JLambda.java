@@ -50,9 +50,9 @@ import org.jspecify.annotations.Nullable;
 import com.helger.annotation.Nonnegative;
 
 /**
- * This is a single Java 8 lambda expression. It consists of 0-n parameters and
- * a body statement. For example in <code>(a, b) -&gt; a + b</code> "a" and "b"
- * are parameters and "a + b" is the body statement.
+ * This is a single Java 8 lambda expression. It consists of 0-n parameters and a body statement.
+ * For example in <code>(a, b) -&gt; a + b</code> "a" and "b" are parameters and "a + b" is the body
+ * statement.
  *
  * @author Philip Helger
  * @since 2.7.10
@@ -101,8 +101,7 @@ public class JLambda implements IJExpression
   }
 
   /**
-   * @return An modifiable list with all parameters present. Never
-   *         <code>null</code>.
+   * @return An modifiable list with all parameters present. Never <code>null</code>.
    */
   @NonNull
   public List <JLambdaParam> paramsMutable ()
@@ -111,8 +110,7 @@ public class JLambda implements IJExpression
   }
 
   /**
-   * @return An unmodifiable list with all parameters present. Never
-   *         <code>null</code>.
+   * @return An unmodifiable list with all parameters present. Never <code>null</code>.
    */
   @NonNull
   public List <JLambdaParam> params ()
@@ -168,7 +166,8 @@ public class JLambda implements IJExpression
     f.print (" -> ");
 
     // Print body
-    final boolean bBraces = m_aBodyStatement.size () != 1 || !(m_aBodyStatement.getContents ().get (0) instanceof IJExpression);
+    final boolean bBraces = m_aBodyStatement.size () != 1 ||
+      !(m_aBodyStatement.getContents ().get (0) instanceof IJExpression);
     m_aBodyStatement.bracesRequired (bBraces);
     f.statement (m_aBodyStatement);
   }

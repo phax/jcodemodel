@@ -59,16 +59,15 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   private final JCodeModel m_aOwner;
 
   /**
-   * Object expression upon which this method will be invoked, or null if this
-   * is a constructor invocation
+   * Object expression upon which this method will be invoked, or null if this is a constructor
+   * invocation
    */
   private final IJGenerable m_aObject;
 
   /**
-   * Name of the method to be invoked. Either this field is set, or
-   * {@link #m_aMethod}, or {@link #m_aConstructorType} (in which case it's a
-   * constructor invocation.) This allows {@link JMethod#name(String) the name
-   * of the method to be changed later}.
+   * Name of the method to be invoked. Either this field is set, or {@link #m_aMethod}, or
+   * {@link #m_aConstructorType} (in which case it's a constructor invocation.) This allows
+   * {@link JMethod#name(String) the name of the method to be changed later}.
    */
   private final String m_sMethodName;
 
@@ -91,7 +90,9 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    */
   private List <JTypeVar> m_aTypeVariables;
 
-  protected JInvocation (@Nullable final JCodeModel aOwner, @Nullable final IJGenerable aObject, @NonNull final String sName)
+  protected JInvocation (@Nullable final JCodeModel aOwner,
+                         @Nullable final IJGenerable aObject,
+                         @NonNull final String sName)
   {
     ValueEnforcer.notNull (sName, "Name");
     ValueEnforcer.isFalse (sName.indexOf ('.') >= 0, () -> "method name contains '.': " + sName);
@@ -103,7 +104,9 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     m_aConstructorType = null;
   }
 
-  protected JInvocation (@NonNull final JCodeModel aOwner, @Nullable final IJGenerable aObject, @NonNull final JMethod aMethod)
+  protected JInvocation (@NonNull final JCodeModel aOwner,
+                         @Nullable final IJGenerable aObject,
+                         @NonNull final JMethod aMethod)
   {
     ValueEnforcer.notNull (aOwner, "Owner");
     ValueEnforcer.notNull (aMethod, "Method");
@@ -119,9 +122,9 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
    * Invokes a constructor of an object (i.e., creates a new object.)
    *
    * @param aConstructorType
-   *        Type of the object to be created. If this type is an array type,
-   *        added arguments are treated as array initializer. Thus you can
-   *        create an expression like <code>new int[]{1,2,3,4,5}</code>.
+   *        Type of the object to be created. If this type is an array type, added arguments are
+   *        treated as array initializer. Thus you can create an expression like
+   *        <code>new int[]{1,2,3,4,5}</code>.
    */
   protected JInvocation (@NonNull final AbstractJType aConstructorType)
   {
@@ -296,8 +299,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   }
 
   /**
-   * Add a type variable. This method requires a {@link JCodeModel} to be
-   * provided in the constructor!
+   * Add a type variable. This method requires a {@link JCodeModel} to be provided in the
+   * constructor!
    *
    * @param sName
    *        Bound type name. May neither be <code>null</code> nor empty.
@@ -314,8 +317,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   }
 
   /**
-   * Add a type variable. This method requires a {@link JCodeModel} to be
-   * provided in the constructor!
+   * Add a type variable. This method requires a {@link JCodeModel} to be provided in the
+   * constructor!
    *
    * @param aBound
    *        Bound class. May not be <code>null</code>.
@@ -450,10 +453,10 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
       return false;
     final JInvocation rhs = (JInvocation) o;
     if (!(EqualsHelper.equals (m_aObject, rhs.m_aObject) &&
-          EqualsHelper.equals (m_bIsConstructor, rhs.m_bIsConstructor) &&
-          (m_bIsConstructor || EqualsHelper.equals (_methodName (), rhs._methodName ())) &&
-          EqualsHelper.equals (m_aArgs, rhs.m_aArgs) &&
-          EqualsHelper.equals (_typeFullName (), rhs._typeFullName ())))
+      EqualsHelper.equals (m_bIsConstructor, rhs.m_bIsConstructor) &&
+      (m_bIsConstructor || EqualsHelper.equals (_methodName (), rhs._methodName ())) &&
+      EqualsHelper.equals (m_aArgs, rhs.m_aArgs) &&
+      EqualsHelper.equals (_typeFullName (), rhs._typeFullName ())))
     {
       return false;
     }
@@ -490,9 +493,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   }
 
   /**
-   * Create a special <code>super()</code> invocation. It may only be used as
-   * the first statement inside a constructor - but this is not enforced by this
-   * API!
+   * Create a special <code>super()</code> invocation. It may only be used as the first statement
+   * inside a constructor - but this is not enforced by this API!
    *
    * @return A new non-<code>null</code> {@link JInvocation}
    * @since 3.0.1
@@ -504,9 +506,8 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   }
 
   /**
-   * Create a special <code>this()</code> invocation. It may only be used as the
-   * first statement inside a constructor - but this is not enforced by this
-   * API!
+   * Create a special <code>this()</code> invocation. It may only be used as the first statement
+   * inside a constructor - but this is not enforced by this API!
    *
    * @return A new non-<code>null</code> {@link JInvocation}
    * @since 3.2.1

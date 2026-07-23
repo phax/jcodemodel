@@ -43,8 +43,7 @@ package com.helger.jcodemodel;
 import org.jspecify.annotations.NonNull;
 
 /**
- * Declarations that can have type variables. Something that can be made into a
- * generic.
+ * Declarations that can have type variables. Something that can be made into a generic.
  *
  * @author Kohsuke Kawaguchi (kohsuke.kawaguchi@sun.com)
  */

@@ -47,8 +47,7 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.vars.JForEachVar;
 
 /**
- * ForEach Statement This will generate the code for statement based on the new
- * j2se 1.5 j.l.s.
+ * ForEach Statement This will generate the code for statement based on the new j2se 1.5 j.l.s.
  *
  * @author Bhakti
  */
@@ -58,7 +57,7 @@ public class JForEach implements IJStatement
   private final JForEachVar m_aLoopVar;
 
   public JForEach (@NonNull final JMods aMods,
-      @Nullable final AbstractJType aVarType,
+                   @Nullable final AbstractJType aVarType,
                    @NonNull final String sVarName,
                    @NonNull final IJExpression aCollection)
   {
@@ -69,19 +68,18 @@ public class JForEach implements IJStatement
   }
 
   /**
-   * @return the current modifiers of this method. Always return non-null valid
-   *         object.
+   * @return the current modifiers of this method. Always return non-null valid object.
    */
   @NonNull
   public JMods mods ()
   {
-    return m_aLoopVar.mods();
+    return m_aLoopVar.mods ();
   }
 
   @NonNull
   public AbstractJType type ()
   {
-    return m_aLoopVar.type();
+    return m_aLoopVar.type ();
   }
 
   /**
@@ -96,13 +94,14 @@ public class JForEach implements IJStatement
   @NonNull
   public IJExpression collection ()
   {
-    return m_aLoopVar.collection();
+    return m_aLoopVar.collection ();
   }
 
   @NonNull
   public JBlock body ()
   {
-    if (m_aBody == null) {
+    if (m_aBody == null)
+    {
       m_aBody = new JBlock ();
     }
     return m_aBody;
@@ -112,13 +111,16 @@ public class JForEach implements IJStatement
   public void state (@NonNull final IJFormatter f)
   {
     f.print ("for (");
-    f.var(m_aLoopVar);
+    f.var (m_aLoopVar);
     // f.generable (m_aMods).generable (m_aType).id (m_sVarName).print (":
     // ").generable (m_aCollection);
     f.print (')');
-    if (m_aBody != null) {
+    if (m_aBody != null)
+    {
       f.generable (m_aBody);
-    } else {
+    }
+    else
+    {
       f.print (';');
     }
     f.newline ();

@@ -100,7 +100,13 @@ public class JOpTernary implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print ('(').generable (m_aExpr1).print (m_sOperator1).generable (m_aExpr2).print (m_sOperator2).generable (m_aExpr3).print (')');
+    f.print ('(')
+     .generable (m_aExpr1)
+     .print (m_sOperator1)
+     .generable (m_aExpr2)
+     .print (m_sOperator2)
+     .generable (m_aExpr3)
+     .print (')');
   }
 
   @Override
@@ -112,10 +118,10 @@ public class JOpTernary implements IJExpression
       return false;
     final JOpTernary rhs = (JOpTernary) o;
     return EqualsHelper.equals (m_aExpr1, rhs.m_aExpr1) &&
-           EqualsHelper.equals (m_sOperator1, rhs.m_sOperator1) &&
-           EqualsHelper.equals (m_aExpr2, rhs.m_aExpr2) &&
-           EqualsHelper.equals (m_sOperator2, rhs.m_sOperator2) &&
-           EqualsHelper.equals (m_aExpr3, rhs.m_aExpr3);
+      EqualsHelper.equals (m_sOperator1, rhs.m_sOperator1) &&
+      EqualsHelper.equals (m_aExpr2, rhs.m_aExpr2) &&
+      EqualsHelper.equals (m_sOperator2, rhs.m_sOperator2) &&
+      EqualsHelper.equals (m_aExpr3, rhs.m_aExpr3);
   }
 
   @Override

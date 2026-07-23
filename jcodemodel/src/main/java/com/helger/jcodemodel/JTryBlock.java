@@ -123,13 +123,12 @@ public class JTryBlock implements IJStatement
   }
 
   /**
-   * Add a new catch block for the specification exception class. The variable
-   * name is automatically created.
+   * Add a new catch block for the specification exception class. The variable name is automatically
+   * created.
    *
    * @param aException
    *        The exception class to catch. May not be <code>null</code>.
-   * @return the created catch block for further customization and never
-   *         <code>null</code>.
+   * @return the created catch block for further customization and never <code>null</code>.
    * @see #catches()
    */
   @NonNull
@@ -142,15 +141,16 @@ public class JTryBlock implements IJStatement
 
   /// create a catch block with given name
   @NonNull
-  public JCatchBlock _catch(@NonNull final AbstractJClass aException, String name) {
-    final JCatchBlock cb = _catch(aException);
-    cb.param(name);
+  public JCatchBlock _catch (@NonNull final AbstractJClass aException, String name)
+  {
+    final JCatchBlock cb = _catch (aException);
+    cb.param (name);
     return cb;
   }
 
   /**
-   * Get a list of all catch blocks. Since v3.2.3 the returned list is mutable.
-   * Previously it was immutable.
+   * Get a list of all catch blocks. Since v3.2.3 the returned list is mutable. Previously it was
+   * immutable.
    *
    * @return A mutable list of all contained catch blocks.
    */
@@ -161,8 +161,7 @@ public class JTryBlock implements IJStatement
   }
 
   /**
-   * @return <code>true</code> if at least one catch block is present,
-   *         <code>false</code> if not.
+   * @return <code>true</code> if at least one catch block is present, <code>false</code> if not.
    * @since 3.2.3
    */
   public boolean hasCatchBlock ()
@@ -171,21 +170,22 @@ public class JTryBlock implements IJStatement
   }
 
   /**
-   * @return A non-<code>null</code> finally block. The block is automatically
-   *         created the first time you call this method.
+   * @return A non-<code>null</code> finally block. The block is automatically created the first
+   *         time you call this method.
    */
   @NonNull
   public JBlock _finally ()
   {
-    if (m_aFinally == null) {
+    if (m_aFinally == null)
+    {
       m_aFinally = new JBlock ();
     }
     return m_aFinally;
   }
 
   /**
-   * Remove the finally block - this allows to reset an eventually accidentally
-   * created finally block.
+   * Remove the finally block - this allows to reset an eventually accidentally created finally
+   * block.
    *
    * @since 3.2.3
    */
@@ -195,8 +195,7 @@ public class JTryBlock implements IJStatement
   }
 
   /**
-   * @return <code>true</code> if a finally block is present, <code>false</code>
-   *         if not.
+   * @return <code>true</code> if a finally block is present, <code>false</code> if not.
    * @since 3.2.3
    */
   public boolean hasFinally ()
@@ -214,9 +213,12 @@ public class JTryBlock implements IJStatement
       boolean bFirst = true;
       for (final JTryResource aResource : m_aResources)
       {
-        if (bFirst) {
+        if (bFirst)
+        {
           bFirst = false;
-        } else {
+        }
+        else
+        {
           f.print (';').newline ();
         }
         f.generable (aResource);
@@ -224,10 +226,12 @@ public class JTryBlock implements IJStatement
       f.print (')');
     }
     f.generable (m_aBody);
-    for (final JCatchBlock cb : m_aCatches) {
+    for (final JCatchBlock cb : m_aCatches)
+    {
       f.generable (cb);
     }
-    if (m_aFinally != null) {
+    if (m_aFinally != null)
+    {
       f.print ("finally").generable (m_aFinally);
     }
     f.newline ();

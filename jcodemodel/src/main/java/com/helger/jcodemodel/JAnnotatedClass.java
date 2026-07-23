@@ -56,6 +56,7 @@ import com.helger.base.enforce.ValueEnforcer;
  * <p>
  * This class wraps an {@link AbstractJClass} and adds type-use annotations that are rendered
  * directly before the type name. This enables generating code like:
+ * 
  * <pre>
  * List&lt;@Valid Item&gt;
  * Map&lt;@NonNull String, @Nullable Object&gt;
@@ -65,22 +66,23 @@ import com.helger.base.enforce.ValueEnforcer;
  * <ul>
  * <li>{@link IJAnnotatable#annotate(Class)} adds annotations to <em>declarations</em> (the field,
  * method, or class itself). Example: {@code @NotNull private List<String> items;}</li>
- * <li>{@link AbstractJClass#annotated(Class)} creates a new <em>type</em> with embedded annotations.
- * Example: {@code private List<@NotNull String> items;}</li>
+ * <li>{@link AbstractJClass#annotated(Class)} creates a new <em>type</em> with embedded
+ * annotations. Example: {@code private List<@NotNull String> items;}</li>
  * </ul>
  * <p>
  * <b>Annotations with parameters:</b>
  * <p>
  * For annotations that require parameters, use {@link AbstractJClass#annotated(JAnnotationUse)}:
+ * 
  * <pre>
- * JAnnotationUse sizeAnnotation = new JAnnotationUse(codeModel.ref(Size.class));
- * sizeAnnotation.param("min", 1).param("max", 10);
- * AbstractJClass annotatedString = stringClass.annotated(sizeAnnotation);
+ * JAnnotationUse sizeAnnotation = new JAnnotationUse (codeModel.ref (Size.class));
+ * sizeAnnotation.param ("min", 1).param ("max", 10);
+ * AbstractJClass annotatedString = stringClass.annotated (sizeAnnotation);
  * // Generates: @Size(min = 1, max = 10) String
  * </pre>
  * <p>
- * Use {@link AbstractJClass#annotated(Class)}, {@link AbstractJClass#annotated(AbstractJClass)},
- * or {@link AbstractJClass#annotated(JAnnotationUse)} to create instances of this class.
+ * Use {@link AbstractJClass#annotated(Class)}, {@link AbstractJClass#annotated(AbstractJClass)}, or
+ * {@link AbstractJClass#annotated(JAnnotationUse)} to create instances of this class.
  *
  * @since 4.2.0
  */

@@ -62,8 +62,7 @@ import com.helger.base.enforce.ValueEnforcer;
 public class JAnnotationUse extends AbstractJAnnotationValueOwned
 {
   /**
-   * The special parameter name that can be optimized away if used without any
-   * other parameter
+   * The special parameter name that can be optimized away if used without any other parameter
    */
   public static final String SPECIAL_KEY_VALUE = "value";
 
@@ -152,16 +151,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Return annotation argument represented as required type. Return type is
-   * chosen to conform to given klass argument.
+   * Return annotation argument represented as required type. Return type is chosen to conform to
+   * given klass argument.
    * <p>
-   * For example, you can have annotation parameter named 'value' of type
-   * String.
+   * For example, you can have annotation parameter named 'value' of type String.
    * <p>
-   * You can write {@code getParam("value", String.class)} to get raw
-   * string-value. You can write
-   * {@code getParam("value", AbstractJAnnotationValue.class)} to get
-   * AbstractJAnnotationValue for this argument.
+   * You can write {@code getParam("value", String.class)} to get raw string-value. You can write
+   * {@code getParam("value", AbstractJAnnotationValue.class)} to get AbstractJAnnotationValue for
+   * this argument.
    * <p>
    * Arrays are supported as a result type.
    *
@@ -197,7 +194,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   @NonNull
-  private JAnnotationUse _addValue (@NonNull final String sName, @NonNull final AbstractJAnnotationValue aAnnotationValue)
+  private JAnnotationUse _addValue (@NonNull final String sName,
+                                    @NonNull final AbstractJAnnotationValue aAnnotationValue)
   {
     ValueEnforcer.notEmpty (sName, "Name");
     ValueEnforcer.notNull (aAnnotationValue, "AnnotationValue");
@@ -210,8 +208,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param bValue
    *        The value for this annotation
@@ -247,8 +244,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param nValue
    *        The value for this annotation
@@ -284,8 +280,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param cValue
    *        The value for this annotation
@@ -321,8 +316,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param dValue
    *        The value for this annotation
@@ -358,8 +352,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param fValue
    *        The value for this annotation
@@ -395,8 +388,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param nValue
    *        The value for this annotation
@@ -432,8 +424,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param nValue
    *        The value for this annotation
@@ -469,8 +460,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param nValue
    *        The value for this annotation
@@ -506,8 +496,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param sValue
    *        The value for this annotation
@@ -543,8 +532,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param aValue
    *        The value for this annotation
@@ -580,8 +568,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param aValue
    *        The value for this annotation
@@ -617,15 +604,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}. This can be used for e.g to specify
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}. This
+   * can be used for e.g to specify
    *
    * <pre>
    * &#64;Anno(value=Integer.class);
    * </pre>
    *
-   * For adding a value of Class&lt;? extends Annotation&gt;
-   * {@link #annotationParam(String, Class)}
+   * For adding a value of Class&lt;? extends Annotation&gt; {@link #annotationParam(String, Class)}
    *
    * @param aValue
    *        The value for this annotation
@@ -639,15 +625,13 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation. This can be used for e.g to
-   * specify
+   * Adds a member value pair to this annotation. This can be used for e.g to specify
    *
    * <pre>
    * &#64;XmlCollectionItem(type=Integer.class);
    * </pre>
    *
-   * For adding a value of Class&lt;? extends Annotation&gt;
-   * {@link #annotationParam(String, Class)}
+   * For adding a value of Class&lt;? extends Annotation&gt; {@link #annotationParam(String, Class)}
    *
    * @param sName
    *        The simple name for this annotation param
@@ -669,8 +653,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param aValue
    *        The value for this annotation
@@ -684,8 +667,8 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation based on the type represented
-   * by the given {@link AbstractJType}
+   * Adds a member value pair to this annotation based on the type represented by the given
+   * {@link AbstractJType}
    *
    * @param sName
    *        The simple name for this annotation param
@@ -707,8 +690,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation using the name
-   * {@value #SPECIAL_KEY_VALUE}.
+   * Adds a member value pair to this annotation using the name {@value #SPECIAL_KEY_VALUE}.
    *
    * @param aValue
    *        The value for this annotation
@@ -760,8 +742,7 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
   }
 
   /**
-   * Adds a member value pair to this annotation for adding class values as
-   * param
+   * Adds a member value pair to this annotation for adding class values as param
    *
    * @see #param(String, Class)
    * @param sName
@@ -771,14 +752,14 @@ public class JAnnotationUse extends AbstractJAnnotationValueOwned
    * @return <code>this</code> for chaining
    */
   @NonNull
-  public JAnnotationUse annotationParam (@NonNull final String sName, @NonNull final Class <? extends Annotation> aValue)
+  public JAnnotationUse annotationParam (@NonNull final String sName,
+                                         @NonNull final Class <? extends Annotation> aValue)
   {
     return annotationParam (sName, owner ().ref (aValue));
   }
 
   /**
-   * Adds a member value pair to this annotation for adding class values as
-   * param
+   * Adds a member value pair to this annotation for adding class values as param
    *
    * @see #param(String, Class)
    * @param sName

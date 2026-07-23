@@ -57,53 +57,66 @@ import com.helger.jcodemodel.JSwitchExpression;
 /// case 1,3 ->
 /// case MyEnum.OPT1 ->
 /// ```
-@SuppressWarnings("serial")
-public class JCaseStatic extends JCaseArrow<JCaseStatic> {
+@SuppressWarnings ("serial")
+public class JCaseStatic extends JCaseArrow <JCaseStatic>
+{
 
-  private final List<IJExpression> labels;
+  private final List <IJExpression> labels;
 
-  public JCaseStatic(@NonNull JSwitchExpression parent, IJExpression aLabel) {
-    super(parent);
-    labels = new ArrayList<>(List.of(aLabel));
+  public JCaseStatic (@NonNull JSwitchExpression parent, IJExpression aLabel)
+  {
+    super (parent);
+    labels = new ArrayList <> (List.of (aLabel));
   }
 
   /// add a label to the list of existing ones
-  public JCaseStatic or(IJExpression aLabel) {
-    labels.add(aLabel);
+  public JCaseStatic or (IJExpression aLabel)
+  {
+    labels.add (aLabel);
     return this;
   }
 
   /// alias for [#or]
-  public JCaseStatic _case(IJExpression aLabel) {
-    return or(aLabel);
+  public JCaseStatic _case (IJExpression aLabel)
+  {
+    return or (aLabel);
   }
 
   /// copy of [JCase]
   @Override
-  public void state(@NonNull final IJFormatter f) {
-    f.indent();
-    f.print("case ");
+  public void state (@NonNull final IJFormatter f)
+  {
+    f.indent ();
+    f.print ("case ");
     boolean first = true;
-    for (IJExpression ije : labels) {
+    for (IJExpression ije : labels)
+    {
       IJExpression aLabelName;
       // Hack for #41 :)
-      if (ije instanceof JEnumConstant) {
+      if (ije instanceof JEnumConstant)
+      {
         // Just use the name, but not the type of the enum
-        aLabelName = f1 -> f1.print(((JEnumConstant) ije).name());
-      } else if (ije instanceof JEnumConstantRef) {
-        // Just use the name, but not the type of the enum
-        aLabelName = f1 -> f1.print(((JEnumConstantRef) ije).name());
-      } else {
-        aLabelName = ije;
+        aLabelName = f1 -> f1.print (((JEnumConstant) ije).name ());
       }
-      if (!first) {
-        f.print(", ");
+      else
+        if (ije instanceof JEnumConstantRef)
+        {
+          // Just use the name, but not the type of the enum
+          aLabelName = f1 -> f1.print (((JEnumConstantRef) ije).name ());
+        }
+        else
+        {
+          aLabelName = ije;
+        }
+      if (!first)
+      {
+        f.print (", ");
       }
-      f.generable(aLabelName);
+      f.generable (aLabelName);
       first = false;
     }
-    stateBody(f);
-    f.outdent();
+    stateBody (f);
+    f.outdent ();
   }
 
 }

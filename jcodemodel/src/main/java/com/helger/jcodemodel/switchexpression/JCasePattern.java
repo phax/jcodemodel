@@ -58,64 +58,76 @@ import com.helger.jcodemodel.JThrow;
 /// ```
 /// 	case char c when c>='&' && c<='z'-> {countChars++; yield 1+c-'a';}
 /// ```
-@SuppressWarnings("serial")
-public class JCasePattern extends JCaseArrow<JCasePattern> {
+@SuppressWarnings ("serial")
+public class JCasePattern extends JCaseArrow <JCasePattern>
+{
 
   private final AbstractJType type;
 
   private final String varName;
 
-  public JCasePattern(JSwitchExpression parent, AbstractJType type, String varName) {
-    super(parent);
+  public JCasePattern (JSwitchExpression parent, AbstractJType type, String varName)
+  {
+    super (parent);
     this.type = type;
     this.varName = varName;
   }
 
-  private final List<IJExpression> guards = new ArrayList<>();
+  private final List <IJExpression> guards = new ArrayList <> ();
 
-  public JCasePattern when(Function<JLambdaParam, IJExpression> maker) {
-    guards.add(maker.apply(param()));
+  public JCasePattern when (Function <JLambdaParam, IJExpression> maker)
+  {
+    guards.add (maker.apply (param ()));
     return this;
   }
 
   private JLambdaParam param = null;
 
-  public JLambdaParam param() {
-    if (param == null) {
-      param = new JLambdaParam(type, varName);
+  public JLambdaParam param ()
+  {
+    if (param == null)
+    {
+      param = new JLambdaParam (type, varName);
     }
     return param;
   }
 
-  public JCasePattern addOn(Function<JLambdaParam, IJStatement> maker) {
-    return add(maker.apply(param()));
+  public JCasePattern addOn (Function <JLambdaParam, IJStatement> maker)
+  {
+    return add (maker.apply (param ()));
   }
 
-  public JCasePattern _throwsOn(Function<JLambdaParam, IJExpression> maker) {
-    return add(new JThrow(maker.apply(param())));
+  public JCasePattern _throwsOn (Function <JLambdaParam, IJExpression> maker)
+  {
+    return add (new JThrow (maker.apply (param ())));
   }
 
-  public JCasePattern yieldOn(Function<JLambdaParam, IJExpression> maker) {
-    return super.yield(maker.apply(param()));
+  public JCasePattern yieldOn (Function <JLambdaParam, IJExpression> maker)
+  {
+    return super.yield (maker.apply (param ()));
   }
 
   @Override
-  public void state(@NonNull IJFormatter f) {
-    f.indent();
-    f.print("case ").declaration(param);
+  public void state (@NonNull IJFormatter f)
+  {
+    f.indent ();
+    f.print ("case ").declaration (param);
     boolean first = true;
-    for (IJExpression ije : guards) {
-      if (first) {
-        f.print(" when ");
-      } else {
-        f.print(" && ");
+    for (IJExpression ije : guards)
+    {
+      if (first)
+      {
+        f.print (" when ");
       }
-      f.generable(ije);
+      else
+      {
+        f.print (" && ");
+      }
+      f.generable (ije);
       first = false;
     }
-    stateBody(f);
-    f.outdent();
+    stateBody (f);
+    f.outdent ();
   }
-
 
 }

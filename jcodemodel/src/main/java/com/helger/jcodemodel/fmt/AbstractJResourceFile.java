@@ -71,10 +71,9 @@ public abstract class AbstractJResourceFile
   }
 
   /**
-   * @return <code>true</code> if this file should be generated into the
-   *         directory that the resource files go into. <code>false</code> if
-   *         this file should be generated into the directory where other source
-   *         files go.
+   * @return <code>true</code> if this file should be generated into the directory that the resource
+   *         files go into. <code>false</code> if this file should be generated into the directory
+   *         where other source files go.
    */
   public boolean isResource ()
   {
@@ -85,8 +84,8 @@ public abstract class AbstractJResourceFile
    * called by JCMWriter to produce the file image.
    *
    * @param aOS
-   *        OutputStream to write to. May not be <code>null</code> and will not
-   *        be closed afterwards.
+   *        OutputStream to write to. May not be <code>null</code> and will not be closed
+   *        afterwards.
    * @throws IOException
    *         If writing on the stream throws an error
    */

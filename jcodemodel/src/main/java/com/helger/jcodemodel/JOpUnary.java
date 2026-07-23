@@ -96,8 +96,8 @@ public class JOpUnary implements IJExpression
   }
 
   /**
-   * @return <code>true</code> if the operator comes first, <code>false</code>
-   *         if the operator comes last
+   * @return <code>true</code> if the operator comes first, <code>false</code> if the operator comes
+   *         last
    */
   public boolean opFirst ()
   {
@@ -121,8 +121,8 @@ public class JOpUnary implements IJExpression
       return false;
     final JOpUnary rhs = (JOpUnary) o;
     return EqualsHelper.equals (m_sOperator, rhs.m_sOperator) &&
-           EqualsHelper.equals (m_aExpr, rhs.m_aExpr) &&
-           EqualsHelper.equals (m_bOperatorComesFirst, rhs.m_bOperatorComesFirst);
+      EqualsHelper.equals (m_aExpr, rhs.m_aExpr) &&
+      EqualsHelper.equals (m_bOperatorComesFirst, rhs.m_bOperatorComesFirst);
   }
 
   @Override

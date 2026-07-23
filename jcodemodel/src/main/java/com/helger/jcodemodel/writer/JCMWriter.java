@@ -222,10 +222,9 @@ public class JCMWriter
    * @throws IOException
    *         on IO error if non-null, progress indication will be sent to this stream.
    */
-  public void build (
-      @NonNull final File aSrcDir,
-      @NonNull final File aResourceDir,
-      @Nullable final IProgressTracker aStatusPT) throws IOException
+  public void build (@NonNull final File aSrcDir,
+                     @NonNull final File aResourceDir,
+                     @Nullable final IProgressTracker aStatusPT) throws IOException
   {
     AbstractCodeWriter aSrcWriter = new FileCodeWriter (aSrcDir, m_aCharset, m_sNewLine);
     AbstractCodeWriter aResWriter = new FileCodeWriter (aResourceDir, m_aCharset, m_sNewLine);
@@ -289,7 +288,7 @@ public class JCMWriter
    *         on IO error
    */
   public void build (@NonNull final AbstractCodeWriter aSourceWriter, @NonNull final AbstractCodeWriter aResourceWriter)
-      throws IOException
+                                                                                                                         throws IOException
   {
     ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
     ValueEnforcer.notNull (aResourceWriter, "ResourceWriter");
@@ -318,10 +317,9 @@ public class JCMWriter
   }
 
   @NonNull
-  private JFormatter _createJavaSourceFileWriter (
-      @NonNull final AbstractCodeWriter aSrcWriter,
-      @NonNull final JPackage aPackage,
-      @NonNull final String sClassFilename) throws IOException
+  private JFormatter _createJavaSourceFileWriter (@NonNull final AbstractCodeWriter aSrcWriter,
+                                                  @NonNull final JPackage aPackage,
+                                                  @NonNull final String sClassFilename) throws IOException
   {
     final SourcePrintWriter aWriter = aSrcWriter.openSource (aPackage, sClassFilename);
     final JFormatter ret = new JFormatter (aWriter, m_aSettings);
@@ -332,7 +330,7 @@ public class JCMWriter
   }
 
   public void buildPackage (@NonNull final AbstractCodeWriter aSourceWriter, @NonNull final JPackage aPackage)
-      throws IOException
+                                                                                                               throws IOException
   {
     ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
     ValueEnforcer.notNull (aPackage, "Package");
@@ -375,9 +373,8 @@ public class JCMWriter
     }
   }
 
-  public void buildResourceDir (
-      @NonNull final AbstractCodeWriter aResourceWriter,
-      @NonNull final JResourceDir aResourceDir) throws IOException
+  public void buildResourceDir (@NonNull final AbstractCodeWriter aResourceWriter,
+                                @NonNull final JResourceDir aResourceDir) throws IOException
   {
     ValueEnforcer.notNull (aResourceWriter, "ResourceWriter");
     ValueEnforcer.notNull (aResourceDir, "ResourceDir");
@@ -386,7 +383,7 @@ public class JCMWriter
     for (final AbstractJResourceFile rsrc : aResourceDir.getAllResourceFiles ())
     {
       try (final OutputStream os = aResourceWriter.openBinary (aResourceDir.name (), rsrc.name ());
-          final OutputStream bos = new BufferedOutputStream (os))
+           final OutputStream bos = new BufferedOutputStream (os))
       {
         rsrc.build (bos);
       }

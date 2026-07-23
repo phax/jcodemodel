@@ -46,8 +46,8 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.util.JCNameUtilities;
 
 /**
- * Things that can be values of an annotation element and have an owning code
- * model (see {@link IJOwned}).
+ * Things that can be values of an annotation element and have an owning code model (see
+ * {@link IJOwned}).
  *
  * @author Philip Helger
  */

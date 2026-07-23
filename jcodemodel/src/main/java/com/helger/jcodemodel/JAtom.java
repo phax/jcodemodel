@@ -61,8 +61,8 @@ public class JAtom implements IJExpression
   }
 
   /**
-   * @return The text representation of this atom content. The same as what as
-   *         passed in the constructor.
+   * @return The text representation of this atom content. The same as what as passed in the
+   *         constructor.
    */
   @NonNull
   public String what ()

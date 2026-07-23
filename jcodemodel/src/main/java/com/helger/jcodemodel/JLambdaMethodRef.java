@@ -61,8 +61,8 @@ public class JLambdaMethodRef implements IJExpression
   private final String m_sMethodName;
 
   /**
-   * Constructor to reference the passed static method. It uses the name of the
-   * owning class as base (<code>owning::method</code>).
+   * Constructor to reference the passed static method. It uses the name of the owning class as base
+   * (<code>owning::method</code>).
    *
    * @param aMethod
    *        The static method to reference. May not be <code>null</code>.
@@ -84,14 +84,12 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * Constructor for an arbitrary static method reference
-   * (<code>type::name</code>).
+   * Constructor for an arbitrary static method reference (<code>type::name</code>).
    *
    * @param aType
    *        Type the method belongs to. May not be <code>null</code>.
    * @param sMethod
-   *        Name of the static method to reference. May neither be
-   *        <code>null</code> nor empty.
+   *        Name of the static method to reference. May neither be <code>null</code> nor empty.
    */
   public JLambdaMethodRef (@NonNull final AbstractJType aType, @NonNull final String sMethod)
   {
@@ -107,14 +105,12 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * Constructor for an arbitrary instance method reference
-   * (<code>var::name</code>).
+   * Constructor for an arbitrary instance method reference (<code>var::name</code>).
    *
    * @param aVar
    *        Variable containing the instance. May not be <code>null</code>.
    * @param sMethod
-   *        Name of the method to reference. May neither be <code>null</code>
-   *        nor empty.
+   *        Name of the method to reference. May neither be <code>null</code> nor empty.
    */
   public JLambdaMethodRef (@NonNull final JVar aVar, @NonNull final String sMethod)
   {
@@ -130,8 +126,7 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * Constructor for an arbitrary instance method reference
-   * (<code>var::name</code>).
+   * Constructor for an arbitrary instance method reference (<code>var::name</code>).
    *
    * @param aVar
    *        Variable containing the instance. May not be <code>null</code>.
@@ -155,15 +150,12 @@ public class JLambdaMethodRef implements IJExpression
 
   /**
    * Constructor for an arbitrary invocation method reference.<br>
-   * Note: in v3.3.0 the parameter type changed from {@link JInvocation} to
-   * {@link IJExpression}.
+   * Note: in v3.3.0 the parameter type changed from {@link JInvocation} to {@link IJExpression}.
    *
    * @param aLhsExpr
-   *        Left hand side of the lambda expression. May not be
-   *        <code>null</code>.
+   *        Left hand side of the lambda expression. May not be <code>null</code>.
    * @param sMethod
-   *        Name of the method to reference. May neither be <code>null</code>
-   *        nor empty.
+   *        Name of the method to reference. May neither be <code>null</code> nor empty.
    */
   public JLambdaMethodRef (@NonNull final IJExpression aLhsExpr, @NonNull final String sMethod)
   {
@@ -180,12 +172,10 @@ public class JLambdaMethodRef implements IJExpression
 
   /**
    * Constructor for an arbitrary invocation method reference.<br>
-   * Note: in v3.3.0 the parameter type changed from {@link JInvocation} to
-   * {@link IJExpression}.
+   * Note: in v3.3.0 the parameter type changed from {@link JInvocation} to {@link IJExpression}.
    *
    * @param aLhsExpr
-   *        Left hand side of the lambda expression. May not be
-   *        <code>null</code>.
+   *        Left hand side of the lambda expression. May not be <code>null</code>.
    * @param aMethod
    *        The instance method to reference. May not be <code>null</code>.
    */
@@ -205,8 +195,8 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * @return <code>true</code> if this is a static reference, <code>false</code>
-   *         if this is an instance reference.
+   * @return <code>true</code> if this is a static reference, <code>false</code> if this is an
+   *         instance reference.
    */
   public boolean isStaticRef ()
   {
@@ -214,8 +204,8 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * @return The type owning the method. May be <code>null</code> if invoked
-   *         with another JInvocation.
+   * @return The type owning the method. May be <code>null</code> if invoked with another
+   *         JInvocation.
    */
   @Nullable
   public AbstractJType type ()
@@ -224,8 +214,8 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * @return The variable for the instance reference. May be <code>null</code>
-   *         if this is a static or invocation reference.
+   * @return The variable for the instance reference. May be <code>null</code> if this is a static
+   *         or invocation reference.
    */
   @Nullable
   public JVar var ()
@@ -234,8 +224,8 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * @return The left hand side expression. May be <code>null</code> if this is
-   *         a static or variable reference.
+   * @return The left hand side expression. May be <code>null</code> if this is a static or variable
+   *         reference.
    * @since 3.3.0
    */
   @Nullable
@@ -245,8 +235,7 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * @return The owning method. May be <code>null</code> if a constructor with
-   *         method name was used.
+   * @return The owning method. May be <code>null</code> if a constructor with method name was used.
    */
   @Nullable
   public JMethod method ()
@@ -277,12 +266,10 @@ public class JLambdaMethodRef implements IJExpression
   }
 
   /**
-   * Factory method for a static constructor method reference
-   * (<code>type::new</code>).
+   * Factory method for a static constructor method reference (<code>type::new</code>).
    *
    * @param aType
-   *        Type to reference the constructor from. May not be <code>null</code>
-   *        .
+   *        Type to reference the constructor from. May not be <code>null</code> .
    * @return The created object. Never <code>null</code>.
    * @since 3.2.4
    */

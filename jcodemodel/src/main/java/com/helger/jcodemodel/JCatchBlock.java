@@ -88,9 +88,6 @@ public class JCatchBlock implements IJGenerable
   @Override
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print ("catch (")
-        .var (m_aVar)
-        .print (')')
-        .generable (m_aBody);
+    f.print ("catch (").var (m_aVar).print (')').generable (m_aBody);
   }
 }

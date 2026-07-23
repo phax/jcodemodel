@@ -45,9 +45,8 @@ import org.jspecify.annotations.NonNull;
 import com.helger.base.enforce.ValueEnforcer;
 
 /**
- * This class represents a special single-comment "statement"! This is not an
- * ideal solution but it gives you an easy way to add single line comments to
- * generated code.
+ * This class represents a special single-comment "statement"! This is not an ideal solution but it
+ * gives you an easy way to add single line comments to generated code.
  *
  * @author Philip Helger
  * @since 2.8.3
@@ -60,8 +59,7 @@ public class JSingleLineCommentStatement implements IJStatement
    * Constructor.
    *
    * @param sComment
-   *        The new comment string. May not be <code>null</code> but maybe
-   *        empty.
+   *        The new comment string. May not be <code>null</code> but maybe empty.
    */
   public JSingleLineCommentStatement (@NonNull final String sComment)
   {
@@ -81,8 +79,7 @@ public class JSingleLineCommentStatement implements IJStatement
    * Set a new comment string.
    *
    * @param sComment
-   *        The new comment string. May not be <code>null</code> but maybe
-   *        empty.
+   *        The new comment string. May not be <code>null</code> but maybe empty.
    */
   public final void comment (@NonNull final String sComment)
   {

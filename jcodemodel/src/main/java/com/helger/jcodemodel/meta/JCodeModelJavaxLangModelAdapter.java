@@ -74,11 +74,9 @@ public class JCodeModelJavaxLangModelAdapter
    *        element to convert to class definition
    * @return jcodemodel class definition for given element
    * @throws ErrorTypeFound
-   *         if {@code element} argument contains references to so called
-   *         "error"-types.
+   *         if {@code element} argument contains references to so called "error"-types.
    * @throws CodeModelBuildingException
-   *         when operation can't be performed. For example, when given class
-   *         already exists.
+   *         when operation can't be performed. For example, when given class already exists.
    */
   @NonNull
   public JDefinedClass getClass (@NonNull final TypeElement element) throws ErrorTypeFound, CodeModelBuildingException
@@ -90,16 +88,14 @@ public class JCodeModelJavaxLangModelAdapter
   /**
    * Returns jcodemodel class definition for given element.
    * <p>
-   * This method result-class definition can include references to
-   * "error"-types. Error-types are used only if they are present in
-   * {@code element} argument
+   * This method result-class definition can include references to "error"-types. Error-types are
+   * used only if they are present in {@code element} argument
    *
    * @param element
    *        element to convert to class definition
    * @return jcodemodel class definition for given element.
    * @throws CodeModelBuildingException
-   *         when operation can't be performed. For example, when given class
-   *         already exists.
+   *         when operation can't be performed. For example, when given class already exists.
    */
   @NonNull
   public JDefinedClass getClassWithErrorTypes (@NonNull final TypeElement element) throws CodeModelBuildingException
@@ -118,9 +114,8 @@ public class JCodeModelJavaxLangModelAdapter
   /**
    * Returns jcodemodel class definition for given element.
    * <p>
-   * This method result-class definition can include references to
-   * "error"-types. Error-types are used only if they are present in
-   * {@code element} argument
+   * This method result-class definition can include references to "error"-types. Error-types are
+   * used only if they are present in {@code element} argument
    *
    * @param element
    *        element to convert to class definition
@@ -128,18 +123,19 @@ public class JCodeModelJavaxLangModelAdapter
    *        error type policy
    * @return jcodemodel class definition for given element.
    * @throws ErrorTypeFound
-   *         if error type {@code policy} is configured to throw exceptions and
-   *         {@code element} argument contains references to so called
-   *         "error"-types
+   *         if error type {@code policy} is configured to throw exceptions and {@code element}
+   *         argument contains references to so called "error"-types
    * @throws CodeModelBuildingException
-   *         when operation can't be performed. For example, when given class
-   *         already exists.
+   *         when operation can't be performed. For example, when given class already exists.
    */
   @NonNull
-  public JDefinedClass getClass (@NonNull final TypeElement element, @NonNull final ErrorTypePolicy policy) throws ErrorTypeFound,
+  public JDefinedClass getClass (@NonNull final TypeElement element, @NonNull final ErrorTypePolicy policy)
+                                                                                                            throws ErrorTypeFound,
                                                                                                             CodeModelBuildingException
   {
-    final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (m_aCodeModel, m_aElementUtils, policy);
+    final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (m_aCodeModel,
+                                                                                                 m_aElementUtils,
+                                                                                                 policy);
     return errorTypeDecision.getClass (element);
   }
 }

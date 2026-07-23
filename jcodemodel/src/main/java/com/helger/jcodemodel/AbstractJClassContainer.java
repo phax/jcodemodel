@@ -55,20 +55,22 @@ import com.helger.jcodemodel.modifiers.IJModified;
 
 /**
  * A generated Java class/interface/enum/annotation<br>
- * This class models a declaration, and since a declaration can be always used
- * as a reference, it inherits {@link AbstractJClass}.
+ * This class models a declaration, and since a declaration can be always used as a reference, it
+ * inherits {@link AbstractJClass}.
  *
  * @author Philip Helger
  * @param <CLASSTYPE>
  *        Implementation type
  */
-public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends AbstractJClass implements
-                                              IJClassContainer <CLASSTYPE>, IJModified
+public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassContainer <CLASSTYPE>> extends
+                                              AbstractJClass implements
+                                              IJClassContainer <CLASSTYPE>,
+                                              IJModified
 {
   /**
-   * If this is a package-member class, this is {@link JPackage}. If this is a
-   * nested class, this is {@link AbstractJClassContainer}. If this is an
-   * anonymous class, this constructor shouldn't be used.
+   * If this is a package-member class, this is {@link JPackage}. If this is a nested class, this is
+   * {@link AbstractJClassContainer}. If this is an anonymous class, this constructor shouldn't be
+   * used.
    */
   private final IJClassContainer <?> m_aOuter;
 
@@ -83,9 +85,8 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   private final String m_sName;
 
   /**
-   * Nested classes as a map from name to a defined class. The name is all
-   * capitalized in a case sensitive file system to avoid conflicts. Lazily
-   * created to save footprint.
+   * Nested classes as a map from name to a defined class. The name is all capitalized in a case
+   * sensitive file system to avoid conflicts. Lazily created to save footprint.
    */
   protected Map <String, CLASSTYPE> m_aClasses;
 
@@ -151,8 +152,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
 
   /**
    * Class name accessor. <br>
-   * For example, for <code>java.util.List</code>, this method returns
-   * <code>"List"</code>"
+   * For example, for <code>java.util.List</code>, this method returns <code>"List"</code>"
    *
    * @return Name of this class
    */
@@ -180,8 +180,7 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   }
 
   /**
-   * @return <code>true</code> if this is an anonymous class. Note: this applies
-   *         only to classes.
+   * @return <code>true</code> if this is an anonymous class. Note: this applies only to classes.
    */
   public final boolean isAnonymous ()
   {
@@ -217,12 +216,13 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   }
 
   @NonNull
-  protected abstract CLASSTYPE createInnerClass (final int nMods, @NonNull final EClassType eClassType, @NonNull final String sName);
+  protected abstract CLASSTYPE createInnerClass (final int nMods,
+                                                 @NonNull final EClassType eClassType,
+                                                 @NonNull final String sName);
 
   @NonNull
-  public final CLASSTYPE _class (final int nMods,
-                                 @NonNull final String sName,
-                                 @NonNull final EClassType eClassType) throws JCodeModelException
+  public final CLASSTYPE _class (final int nMods, @NonNull final String sName, @NonNull final EClassType eClassType)
+                                                                                                                     throws JCodeModelException
   {
     final String sRealName;
     if (owner ().getFileSystemConvention ().isCaseSensistive ())
@@ -247,8 +247,8 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
   }
 
   /**
-   * Returns an iterator that walks the nested classes defined in this class.
-   * Don't modify the returned collection!
+   * Returns an iterator that walks the nested classes defined in this class. Don't modify the
+   * returned collection!
    */
   @NonNull
   public final Collection <CLASSTYPE> classes ()
