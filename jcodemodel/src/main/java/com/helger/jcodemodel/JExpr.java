@@ -215,10 +215,9 @@ public final class JExpr
   }
 
   @NonNull
-  public static JInvocation invoke (
-      @Nullable final JCodeModel aOwner,
-      @Nullable final IJExpression aLhs,
-      @NonNull final String sMethod)
+  public static JInvocation invoke (@Nullable final JCodeModel aOwner,
+                                    @Nullable final IJExpression aLhs,
+                                    @NonNull final String sMethod)
   {
     return new JInvocation (aOwner, aLhs, sMethod);
   }
@@ -330,8 +329,7 @@ public final class JExpr
   @NonNull
   public static IJExpression dotClass (@NonNull final AbstractJType aClass)
   {
-    return (@NonNull final IJFormatter f) ->
-    {
+    return (@NonNull final IJFormatter f) -> {
       final AbstractJType c = aClass instanceof final JNarrowedClass j ? j.basis () : aClass;
       f.generable (c).print (".class");
     };
@@ -388,46 +386,39 @@ public final class JExpr
 
   /**
    * Generates static array init for variables
+   *
+   * @param initializers
+   *        The existing variable initializers to use.
    * @return a new array static init
    */
-  public static JArrayInit arrayInit (IVariableInitializer... initializers)
+  public static JArrayInit arrayInit (@Nullable final IVariableInitializer... initializers)
   {
     return new JArrayInit (initializers);
   }
 
-  static <T> JArrayInit arrayInit (Stream <T> stream, Function <T, IVariableInitializer> converter)
+  static <T> JArrayInit arrayInit (@NonNull final Stream <T> stream, final Function <T, IVariableInitializer> converter)
   {
-    return new JArrayInit (stream.map (converter).toArray (IVariableInitializer[]::new));
+    return new JArrayInit (stream.map (converter).toArray (IVariableInitializer []::new));
   }
 
-  public static JArrayInit arrayInit (int start, int... rest)
+  public static JArrayInit arrayInit (final int start, final int... rest)
   {
-    return arrayInit (
-        IntStream.concat (
-            IntStream.of (start),
-            rest == null ? IntStream.empty () : IntStream.of (rest))
-            .boxed (),
-        JExpr::lit);
+    return arrayInit (IntStream.concat (IntStream.of (start), rest == null ? IntStream.empty () : IntStream.of (rest))
+                               .boxed (), JExpr::lit);
   }
 
-  public static JArrayInit arrayInit (char start, char... rest)
+  public static JArrayInit arrayInit (final char start, final char... rest)
   {
-    return arrayInit (
-        IntStream.concat (
-            IntStream.of (start),
-            rest == null ? IntStream.empty () : CharBuffer.wrap (rest).chars ())
-            .boxed (),
-        i -> lit ((char) (int) i));
+    return arrayInit (IntStream.concat (IntStream.of (start),
+                                        rest == null ? IntStream.empty () : CharBuffer.wrap (rest).chars ()).boxed (),
+                      i -> lit ((char) i.intValue ()));
   }
 
-  public static JArrayInit arrayInit (double start, double... rest)
+  public static JArrayInit arrayInit (final double start, final double... rest)
   {
-    return arrayInit (
-        DoubleStream.concat (
-            DoubleStream.of (start),
-            rest == null ? DoubleStream.empty () : DoubleStream.of (rest))
-            .boxed (),
-        (Function <Double, IVariableInitializer>) JExpr::lit);
+    return arrayInit (DoubleStream.concat (DoubleStream.of (start),
+                                           rest == null ? DoubleStream.empty () : DoubleStream.of (rest)).boxed (),
+                      (Function <Double, IVariableInitializer>) JExpr::lit);
   }
 
   /**
@@ -507,7 +498,7 @@ public final class JExpr
       final int j = CHAR_ESCAPE.indexOf (c);
       if (j >= 0)
       {
-        if ( ( (cQuote == '"') && (c == '\'')) || ( (cQuote == '\'') && (c == '"')))
+        if ((cQuote == '"' && c == '\'') || (cQuote == '\'' && c == '"'))
         {
           sb.append (c);
         }
@@ -518,28 +509,28 @@ public final class JExpr
         }
       }
       else // technically Unicode escape shouldn't be done here,
-      // for it's a lexical level handling.
-      //
-      // However, various tools are so broken around this area,
-      // so just to be on the safe side, it's better to do
-      // the escaping here (regardless of the actual file encoding)
-      //
-      // see bug
-      if ( (c < 0x20) || (c > 0x7E))
-      {
-        // not printable. use Unicode escape
-        sb.append ("\\u");
-        final String hex = Integer.toHexString (c & 0xFFFF);
-        for (int k = hex.length (); k < 4; k++)
+        // for it's a lexical level handling.
+        //
+        // However, various tools are so broken around this area,
+        // so just to be on the safe side, it's better to do
+        // the escaping here (regardless of the actual file encoding)
+        //
+        // see bug
+        if (c < 0x20 || c > 0x7E)
         {
-          sb.append ('0');
+          // not printable. use Unicode escape
+          sb.append ("\\u");
+          final String hex = Integer.toHexString (c & 0xFFFF);
+          for (int k = hex.length (); k < 4; k++)
+          {
+            sb.append ('0');
+          }
+          sb.append (hex);
         }
-        sb.append (hex);
-      }
-      else
-      {
-        sb.append (c);
-      }
+        else
+        {
+          sb.append (c);
+        }
     }
     sb.append (cQuote);
     return sb.toString ();
@@ -560,8 +551,8 @@ public final class JExpr
   @NonNull
   public static JTextBlock textBlock (@NonNull final String... lines)
   {
-    JTextBlock ret = new JTextBlock ();
-    if ( (lines != null) && (lines.length != 0))
+    final JTextBlock ret = new JTextBlock ();
+    if ((lines != null) && (lines.length != 0))
     {
       Stream.of (lines).forEach (ret::add);
     }
@@ -599,10 +590,9 @@ public final class JExpr
    * @return The created aExpr
    */
   @NonNull
-  public static JOpTernary cond (
-      @NonNull final IJExpression aCond,
-      @NonNull final IJExpression aIfTrue,
-      @NonNull final IJExpression aIfFalse)
+  public static JOpTernary cond (@NonNull final IJExpression aCond,
+                                 @NonNull final IJExpression aIfTrue,
+                                 @NonNull final IJExpression aIfFalse)
   {
     return JOp.cond (aCond, aIfTrue, aIfFalse);
   }

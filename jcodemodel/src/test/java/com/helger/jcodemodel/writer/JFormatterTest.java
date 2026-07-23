@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.helger.jcodemodel.util.NullWriter;
 import com.helger.jcodemodel.writer.JFormatter.FormatterContext;
-import com.helger.jcodemodel.writer.JFormatter.WriteContext;
+import com.helger.jcodemodel.writer.JFormatter.IWriteContext;
 
 public class JFormatterTest {
 
@@ -31,7 +31,7 @@ public class JFormatterTest {
     settings.indent.useSpaces(1);
     try (JFormatter test =
         new JFormatter(new SourcePrintWriter(NullWriter.getInstance(), JCMWriter.DEFAULT_NEW_LINE), settings);) {
-      WriteContext root = test.asContext;
+      IWriteContext root = test.asContext;
 
       Assert.assertEquals(0, test.indentLevel());
       Assert.assertEquals(0, root.getIndentLevel());

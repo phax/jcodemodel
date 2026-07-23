@@ -88,16 +88,16 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
    * @param aMods
    *        Modifiers to use
    * @param aType
-   *        Data type of this variable, or null to use var.
+   *        Data type of this variable, or <code>null</code> to use var.
    * @param sName
    *        Name of this variable
    * @param aInitExpr
    *        Value to initialize this variable to
    */
   public JVar (@NonNull final JMods aMods,
-      final AbstractJType aType,
-      @NonNull final String sName,
-      @Nullable final IVariableInitializer aInitExpr)
+               @Nullable final AbstractJType aType,
+               @NonNull final String sName,
+               @Nullable final IVariableInitializer aInitExpr)
   {
     ValueEnforcer.isTrue (JJavaName.isJavaIdentifier (sName), () -> "Illegal variable name '" + sName + "'");
     m_aMods = aMods;
@@ -124,7 +124,7 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
    * @return The init expression. May be <code>null</code>.
    */
   @Nullable
-  public IVariableInitializer init()
+  public IVariableInitializer init ()
   {
     return m_aInitExpr;
   }
@@ -153,21 +153,12 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
   }
 
   /**
-   * @return the type of this variable, or null if the variable type is infered.
+   * @return the type of this variable, or null if the variable type is inferred.
    */
+  @Nullable
   public AbstractJType type ()
   {
     return m_aType;
-  }
-
-  /**
-   * @return the current modifiers of this method. Always return non-null valid
-   *         object.
-   */
-  @NonNull
-  public JMods mods ()
-  {
-    return m_aMods;
   }
 
   /**
@@ -175,15 +166,26 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
    *
    * @param aNewType
    *        must not be null.
-   * @return the old type value. always non-null.
+   * @return the old type value. May be <code>null</code> if "var" is used
    */
-  public AbstractJType type (final AbstractJType aNewType)
+  @Nullable
+  public AbstractJType type (@Nullable final AbstractJType aNewType)
   {
     final AbstractJType aOldType = m_aType;
     m_aType = aNewType;
     return aOldType;
   }
 
+  /**
+   * @return the current modifiers of this method. Always return non-null valid object.
+   */
+  @NonNull
+  public JMods mods ()
+  {
+    return m_aMods;
+  }
+
+  @NonNull
   public List <JAnnotationUse> getAnnotations ()
   {
     return m_aAnnotations == null ? Collections.emptyList () : m_aAnnotations;
@@ -200,7 +202,8 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
   @NonNull
   public JAnnotationUse annotate (@NonNull final AbstractJClass aClazz)
   {
-    if (m_aAnnotations == null) {
+    if (m_aAnnotations == null)
+    {
       m_aAnnotations = new ArrayList <> ();
     }
     final JAnnotationUse a = new JAnnotationUse (aClazz);
@@ -219,8 +222,11 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
   @NonNull
   public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
-    if(m_aType==null) {
-      throw new UnsupportedOperationException("can't reference class "+aClazz.getCanonicalName()+" without a JCM owner, use JVar::annotate(AbstractJClass) instead");
+    if (m_aType == null)
+    {
+      throw new UnsupportedOperationException ("can't reference class " +
+                                               aClazz.getCanonicalName () +
+                                               " without a JCM owner, use JVar::annotate(AbstractJClass) instead");
     }
     return annotate (m_aType.owner ().ref (aClazz));
   }
@@ -228,7 +234,8 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
   @NonNull
   public List <JAnnotationUse> annotationsMutable ()
   {
-    if (m_aAnnotations == null) {
+    if (m_aAnnotations == null)
+    {
       m_aAnnotations = new ArrayList <> ();
     }
     return m_aAnnotations;
@@ -248,36 +255,46 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
 
   public void bind (@NonNull final IJFormatter f)
   {
-    if(m_aType==null && m_aInitExpr==null) {
-      throw new RuntimeException("can't declare a variable with no type and no init");
+    if (m_aType == null && m_aInitExpr == null)
+    {
+      throw new IllegalStateException ("can't declare a variable with no type and no init");
     }
+
     if (m_aAnnotations != null)
     {
       final boolean bNewLine = this instanceof JFieldVar;
       for (final JAnnotationUse annotation : m_aAnnotations)
       {
         f.generable (annotation);
-        if (bNewLine) {
+        if (bNewLine)
+        {
           f.newline ();
-        } else {
+        }
+        else
+        {
           f.print (' ');
         }
       }
     }
-    f.generable(m_aMods);
-    if (m_aType != null) {
-      f.generable(m_aType);
-    } else {
-      f.print("var");
+    f.generable (m_aMods);
+    if (m_aType != null)
+    {
+      f.generable (m_aType);
     }
-    f.id(m_sName);
-    if (m_aInitExpr != null) {
+    else
+    {
+      f.print ("var");
+    }
+    f.id (m_sName);
+    if (m_aInitExpr != null)
+    {
       f.print ('=').generable (m_aInitExpr);
     }
   }
 
-  protected void declare(@NonNull final IJFormatter f) {
-    f.var(this).print(';').newline();
+  protected void declare (@NonNull final IJFormatter f)
+  {
+    f.var (this).print (';').newline ();
   }
 
   @Override
@@ -289,10 +306,12 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
   @Override
   public boolean equals (final Object o)
   {
-    if (o == this) {
+    if (o == this)
+    {
       return true;
     }
-    if (o == null || getClass () != o.getClass ()) {
+    if (o == null || getClass () != o.getClass ())
+    {
       return false;
     }
     final JVar rhs = (JVar) o;
@@ -306,7 +325,8 @@ public class JVar implements IJAssignmentTarget, IJAnnotatable
   }
 
   /// the separator when several jvars are declared at one.
-  public String separator() {
+  public String separator ()
+  {
     return ";";
   }
 }

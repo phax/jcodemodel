@@ -2,6 +2,7 @@ package com.helger.jcodemodel.vars;
 
 import org.jspecify.annotations.NonNull;
 
+import com.helger.annotation.Nonnegative;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.IVariableInitializer;
@@ -14,49 +15,63 @@ import com.helger.jcodemodel.JVar;
 /// int i=0, j, k=1;
 /// ```
 /// Here i is a block variable, j and k are "same" var.
-public class JSameVar extends JVar {
-
-  private final JVar parent;
+public class JSameVar extends JVar
+{
+  private final JVar m_aParent;
 
   /// number of additional array dimension on top of the parent.
-  private final int dim;
+  private final int m_nDim;
 
-  public JSameVar(JVar parent, String sName, IVariableInitializer aInitExpr, int dim) {
-    super(parent.mods(), typeArray(parent.type(), dim), sName, aInitExpr);
-    this.parent = parent;
-    this.dim = dim;
+  public JSameVar (@NonNull final JVar parent,
+                   final String sName,
+                   final IVariableInitializer aInitExpr,
+                   @Nonnegative final int nDim)
+  {
+    super (parent.mods (), typeArray (parent.type (), nDim), sName, aInitExpr);
+    this.m_aParent = parent;
+    this.m_nDim = nDim;
   }
 
-  public JSameVar(JVar parent, String sName, IVariableInitializer aInitExpr) {
-    this(parent, sName, aInitExpr, 0);
+  public JSameVar (final JVar parent, final String sName, final IVariableInitializer aInitExpr)
+  {
+    this (parent, sName, aInitExpr, 0);
   }
 
-  public JVar parentVar() {
-    return parent;
-  }
-
-  @Override
-  public void bind(@NonNull IJFormatter f) {
-    f.id(name());
-    for (int i = 0; i < dim; i++) {
-      f.print("[]");
-    }
-    if (init() != null) {
-      f.print('=').generable(init());
-    }
+  public JVar parentVar ()
+  {
+    return m_aParent;
   }
 
   @Override
-  public String separator() {
+  public void bind (@NonNull final IJFormatter f)
+  {
+    f.id (name ());
+    for (int i = 0; i < m_nDim; i++)
+    {
+      f.print ("[]");
+    }
+    if (init () != null)
+    {
+      f.print ('=').generable (init ());
+    }
+  }
+
+  @Override
+  public String separator ()
+  {
     return ",";
   }
 
-  static AbstractJType typeArray(AbstractJType type, int dim) {
-    while (dim > 0) {
-      type = type.array();
-      dim--;
+  @NonNull
+  static AbstractJType typeArray (@NonNull final AbstractJType type, @Nonnegative final int dim)
+  {
+    var aCurType = type;
+    int nRestDim = dim;
+    while (nRestDim > 0)
+    {
+      aCurType = aCurType.array ();
+      nRestDim--;
     }
-    return type;
+    return aCurType;
   }
-
 }
