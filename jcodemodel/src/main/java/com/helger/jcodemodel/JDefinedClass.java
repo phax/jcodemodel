@@ -50,6 +50,7 @@ import org.jspecify.annotations.Nullable;
 import com.helger.annotation.style.ReturnsImmutableObject;
 import com.helger.annotation.style.ReturnsMutableObject;
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.modifiers.EMod;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.writer.JFormatter;
 
@@ -597,7 +598,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   public JFieldVar field (final int nMods,
                           @NonNull final AbstractJType aType,
                           @NonNull final String sName,
-                          @Nullable final IJExpression aInit)
+                          @Nullable final IVariableInitializer aInit)
   {
     ValueEnforcer.isFalse (m_aFields.containsKey (sName), () -> "trying to create the same field twice: " + sName);
 
@@ -1147,5 +1148,27 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   public boolean containsErrorTypes ()
   {
     return JFormatter.containsErrorTypes (this);
+  }
+
+  @Override
+  public JDefinedClass emod(EMod emod, EMod... emods) {
+    mods().emod(isInterface() ? EMod.ALLOWED_INTERFACE : EMod.ALLOWED_CLASS, emod, emods);
+    return this;
+  }
+
+  @Override
+  public JDefinedClass removeEMod(EMod... emods) {
+    mods().removeEMod(emods);
+    return this;
+  }
+
+  @Override
+  public Set<EMod> emods() {
+    return mods().emods();
+  }
+
+  @Override
+  public boolean isEMod(EMod... emods) {
+    return mods().isEMod(emods);
   }
 }

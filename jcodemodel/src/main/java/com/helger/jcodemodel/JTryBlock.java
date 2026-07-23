@@ -140,6 +140,14 @@ public class JTryBlock implements IJStatement
     return cb;
   }
 
+  /// create a catch block with given name
+  @NonNull
+  public JCatchBlock _catch(@NonNull final AbstractJClass aException, String name) {
+    final JCatchBlock cb = _catch(aException);
+    cb.param(name);
+    return cb;
+  }
+
   /**
    * Get a list of all catch blocks. Since v3.2.3 the returned list is mutable.
    * Previously it was immutable.
@@ -169,8 +177,9 @@ public class JTryBlock implements IJStatement
   @NonNull
   public JBlock _finally ()
   {
-    if (m_aFinally == null)
+    if (m_aFinally == null) {
       m_aFinally = new JBlock ();
+    }
     return m_aFinally;
   }
 
@@ -195,6 +204,7 @@ public class JTryBlock implements IJStatement
     return m_aFinally != null;
   }
 
+  @Override
   public void state (@NonNull final IJFormatter f)
   {
     f.print ("try");
@@ -204,19 +214,22 @@ public class JTryBlock implements IJStatement
       boolean bFirst = true;
       for (final JTryResource aResource : m_aResources)
       {
-        if (bFirst)
+        if (bFirst) {
           bFirst = false;
-        else
+        } else {
           f.print (';').newline ();
+        }
         f.generable (aResource);
       }
       f.print (')');
     }
     f.generable (m_aBody);
-    for (final JCatchBlock cb : m_aCatches)
+    for (final JCatchBlock cb : m_aCatches) {
       f.generable (cb);
-    if (m_aFinally != null)
+    }
+    if (m_aFinally != null) {
       f.print ("finally").generable (m_aFinally);
+    }
     f.newline ();
   }
 }

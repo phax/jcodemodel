@@ -47,11 +47,14 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.modifiers.EMod;
+import com.helger.jcodemodel.vars.JBlockVar;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
 
 /**
  * A field that can have a {@link JDocComment} associated with it
  */
-public class JFieldVar extends JVar implements IJDocCommentable
+public class JFieldVar extends JBlockVar implements IJDocCommentable
 {
   private final JDefinedClass m_aOwnerClass;
 
@@ -78,7 +81,7 @@ public class JFieldVar extends JVar implements IJDocCommentable
                        @NonNull final JMods aMods,
                        @NonNull final AbstractJType aType,
                        @NonNull final String sName,
-                       @Nullable final IJExpression aInit)
+                       @Nullable final IVariableInitializer aInit)
   {
     super(aMods, ValueEnforcer.notNull(aType, "type"), sName, aInit);
     m_aOwnerClass = ValueEnforcer.notNull (aOwnerClass, "OwnerClass");
@@ -104,11 +107,13 @@ public class JFieldVar extends JVar implements IJDocCommentable
     m_aOwnerClass.internalRenameField (sOldName, sNewName, this);
   }
 
+  @Override
   @NonNull
   public JDocComment javadoc ()
   {
-    if (m_aJavaDoc == null)
+    if (m_aJavaDoc == null) {
       m_aJavaDoc = new JDocComment (m_aOwnerClass.owner ());
+    }
     return m_aJavaDoc;
   }
 
@@ -126,25 +131,21 @@ public class JFieldVar extends JVar implements IJDocCommentable
   public void declare (@NonNull final IJFormatter f)
   {
     // Declaration
-    if (m_aJavaDoc != null)
+    if (m_aJavaDoc != null) {
       f.generable (m_aJavaDoc);
-    super.declare (f);
-  }
-
-  @Override
-  public void generate (@NonNull final IJFormatter f)
-  {
-    // Usage
-    super.generate (f);
+    }
+    super.declare(f);
   }
 
   @Override
   public boolean equals (final Object o)
   {
-    if (o == this)
+    if (o == this) {
       return true;
-    if (!super.equals (o))
+    }
+    if (!super.equals (o)) {
       return false;
+    }
     final JFieldVar rhs = (JFieldVar) o;
     return EqualsHelper.equals (m_aOwnerClass, rhs.m_aOwnerClass);
   }
@@ -153,5 +154,23 @@ public class JFieldVar extends JVar implements IJDocCommentable
   public int hashCode ()
   {
     return getHashCode (super.hashCode (), new Object [] { m_aOwnerClass });
+  }
+  
+  @Override
+  public JFieldVar emod(EMod emod, EMod... emods) {
+    mods().emod(EMod.ALLOWED_FIELD, emod, emods);
+    return this;
+  }
+
+  @Override
+  public JFieldVar removeEMod(EMod... emods) {
+    mods().removeEMod(emods);
+    return this;
+  }
+  
+
+  @Override
+  protected ListWrapping extractWrappingOptions(@NonNull IJFormatter f) {
+    return f.settings().wrap.variables.field;
   }
 }

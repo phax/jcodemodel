@@ -17,7 +17,7 @@ import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JCatchBlock;
-import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.vars.JCatchFormalParameter;
 
 public class Redirected {
     private ABC abc;
@@ -73,11 +73,11 @@ public class Redirected {
         jCatchBlock.generate(arg0);
     }
 
-    public JVar param() {
+    public JCatchFormalParameter param() {
         return jCatchBlock.param();
     }
 
-    public JVar param(String arg0) {
+    public JCatchFormalParameter param(String arg0) {
         return jCatchBlock.param(arg0);
     }
 }

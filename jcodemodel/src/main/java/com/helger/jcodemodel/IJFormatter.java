@@ -45,6 +45,9 @@ import java.util.Collection;
 
 import org.jspecify.annotations.NonNull;
 
+import com.helger.jcodemodel.writer.FormatterSettings;
+import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
+
 /**
  * Base interface for JFormatter.
  *
@@ -72,7 +75,13 @@ public interface IJFormatter extends Closeable
    * @return this for chaining
    */
   @NonNull
-  IJFormatter indent ();
+  default IJFormatter indent ()
+  {
+    return indent (1);
+  }
+
+  @NonNull
+  IJFormatter indent (int nb);
 
   /**
    * Decrement the indentation level.
@@ -80,7 +89,13 @@ public interface IJFormatter extends Closeable
    * @return this for chaining
    */
   @NonNull
-  IJFormatter outdent ();
+  default IJFormatter outdent ()
+  {
+    return outdent (1);
+  }
+
+  @NonNull
+  IJFormatter outdent (int nb);
 
   /**
    * Print a new line into the stream
@@ -89,11 +104,16 @@ public interface IJFormatter extends Closeable
    */
   @NonNull
   IJFormatter newline ();
-  
+
   /**
    * @return the internal String used for new lines.
    */
-  String getNewLine();
+  String getNewLine ();
+
+  /**
+   * @return the size of the line written, so far.
+   */
+  int currentLineSize ();
 
   /**
    * Print a char into the stream
@@ -120,6 +140,11 @@ public interface IJFormatter extends Closeable
    */
   @NonNull
   IJFormatter print (@NonNull String sStr);
+
+  default IJFormatter println (@NonNull String sStr)
+  {
+    return print (sStr).print (getNewLine ());
+  }
 
   /**
    * Print a type name.
@@ -153,6 +178,13 @@ public interface IJFormatter extends Closeable
   @NonNull
   IJFormatter var (@NonNull JVar aVar);
 
+  default IJFormatter vars (@NonNull final Collection <? extends JVar> aList)
+  {
+    return vars (aList, null);
+  }
+
+  IJFormatter vars (@NonNull final Collection <? extends JVar> aList, ListWrapping wrapping);
+
   /**
    * Print an identifier
    *
@@ -182,7 +214,13 @@ public interface IJFormatter extends Closeable
    * @return this for chaining
    */
   @NonNull
-  IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList);
+  default IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList)
+  {
+    return generable (aList, ",", null);
+  }
+
+  @NonNull
+  IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList, String separator, ListWrapping wrapping);
 
   /**
    * Cause the {@link IJStatement} to generate source for itself
@@ -203,4 +241,42 @@ public interface IJFormatter extends Closeable
    */
   @NonNull
   IJFormatter declaration (@NonNull IJDeclaration aObj);
+
+  FormatterSettings settings ();
+
+  public interface IContextCloser extends AutoCloseable
+  {
+    @Override
+    void close ();
+
+    IContextCloser persistOnClose (boolean b);
+
+    default IContextCloser persistOnClose ()
+    {
+      return persistOnClose (true);
+    }
+
+    /// shortcut to set the persist then close. Since the close is idempotent, this
+    /// call may have no result.
+    default void commit ()
+    {
+      persistOnClose ().close ();
+    }
+
+    /// shortcut to unset the persist then close. Since the close is idempotent,
+    /// this call may have no result.
+    default void rollback ()
+    {
+      persistOnClose (false).close ();
+    }
+
+    /// @return true after #close has been called at least once.
+    boolean isClosed ();
+
+    /// get the actual buffer's value
+    String value ();
+  }
+
+  /// create a new buffer to write data into.
+  IContextCloser addContextLayer ();
 }

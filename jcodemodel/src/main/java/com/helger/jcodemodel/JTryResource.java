@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import org.jspecify.annotations.NonNull;
 
+import com.helger.jcodemodel.vars.JBlockVar;
+
 /**
  * This class represents a single resources that is used in try-with-resources
  * statement. See {@link JTryBlock}.
@@ -68,7 +70,7 @@ public class JTryResource implements IJGenerable
                        @NonNull final String sName,
                        @NonNull final IJExpression aInitExpr)
   {
-    m_aVar = new JVar (JMods.forVar (nMods), aType, sName, aInitExpr);
+    m_aVar = new JBlockVar(JMods.forVar(nMods), aType, sName, aInitExpr);
     m_bReuse = false;
   }
 
@@ -84,11 +86,13 @@ public class JTryResource implements IJGenerable
     return m_aVar;
   }
 
+  @Override
   public void generate (@NonNull final IJFormatter aFormatter)
   {
-    if (m_bReuse)
+    if (m_bReuse) {
       aFormatter.generable (m_aVar);
-    else
+    } else {
       aFormatter.var (m_aVar);
+    }
   }
 }

@@ -79,21 +79,21 @@ public class DynamicClassLoader extends ClassLoader
     {
       return new URLConnection (u)
       {
-        final NonBlockingByteArrayOutputStream aBAOS = m_aCustomResources.get (u.getFile ());
+        final NonBlockingByteArrayOutputStream m_aBAOS = m_aCustomResources.get (u.getFile ());
 
         @Override
         public void connect () throws IOException
         {
-          if (aBAOS == null)
+          if (m_aBAOS == null)
             throw new FileNotFoundException (u.getFile ());
         }
 
         @Override
         public InputStream getInputStream () throws IOException
         {
-          if (aBAOS == null)
+          if (m_aBAOS == null)
             throw new FileNotFoundException (u.getFile ());
-          return aBAOS.getAsInputStream ();
+          return m_aBAOS.getAsInputStream ();
         }
       };
     }
