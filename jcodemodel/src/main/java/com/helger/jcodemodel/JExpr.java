@@ -50,7 +50,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
-import com.helger.jcodemodel.expression.JArrayInit;
+import com.helger.jcodemodel.expressions.JArrayInit;
 import com.helger.jcodemodel.expressions.JInstanceOfVar;
 
 /**

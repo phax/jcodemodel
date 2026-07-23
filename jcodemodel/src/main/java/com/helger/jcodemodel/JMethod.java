@@ -239,7 +239,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   @NonNull
   public JArgVar param (final int nMods, @NonNull final AbstractJType aType, @NonNull final String sName)
   {
-    final JArgVar aVar = new JArgVar ((nMods | JMod.FINAL) > 0, ValueEnforcer.notNull (aType, "type"), sName);
+    final JArgVar aVar = new JArgVar ( (nMods & JMod.FINAL) > 0, ValueEnforcer.notNull (aType, "type"), sName);
     m_aParams.add (aVar);
     return aVar;
   }
@@ -340,7 +340,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
         Check if varParam method of JMethod is\
          invoked more than once""");
 
-    m_aVarParam = new JVarArgVar ((nMods | JMod.FINAL) > 0, aType.array (), sName);
+    m_aVarParam = new JVarArgVar ( (nMods & JMod.FINAL) > 0, aType.array (), sName);
     return m_aVarParam;
   }
 
@@ -407,9 +407,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public List <JAnnotationUse> annotationsMutable ()
   {
     if (m_aAnnotations == null)
-    {
       return Collections.emptyList ();
-    }
     return m_aAnnotations;
   }
 
@@ -495,16 +493,11 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   {
     final JVar [] aParams = listParams ();
     if (aParams.length != argTypes.length)
-    {
       return false;
-    }
 
-    for (int i = 0; i < aParams.length; i++)
-    {
+    for (int i = 0; i < aParams.length; i++) {
       if (!aParams[i].type ().equals (argTypes[i]))
-      {
         return false;
-      }
     }
 
     return true;
@@ -582,14 +575,12 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       f.generable (m_aReturnType);
     }
 
-    if (!f.settings ().wrap.disabled)
-    {
-      EWordWrapStrategy nameWrapStrat = f.settings ().wrap.method.name.condition;
-      boolean wrapName = switch (nameWrapStrat)
-      {
-        case ALWAYS -> true;
-        case NEVER -> false;
-        case REQUIRED -> f.currentLineSize () + m_sName.length () + 1 > f.settings ().wrap.lineWidth;
+    if (!f.settings().wrap.disabled) {
+      EWordWrapStrategy nameWrapStrat = f.settings().wrap.method.name.condition;
+      boolean wrapName = switch (nameWrapStrat) {
+      case ALWAYS -> true;
+      case NEVER -> false;
+      case REQUIRED -> (f.currentLineSize() + m_sName.length() + 1) > f.settings().wrap.lineWidth;
       };
       if (wrapName)
       {
@@ -630,14 +621,12 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
     if (m_aBody != null)
     {
-      if (!f.settings ().wrap.disabled)
-      {
-        EWordWrapStrategy bracketWrapStrat = f.settings ().wrap.method.bracket.condition;
-        boolean wrapBracket = switch (bracketWrapStrat)
-        {
-          case ALWAYS -> true;
-          case NEVER -> false;
-          case REQUIRED -> f.currentLineSize () + 2 > f.settings ().wrap.lineWidth;
+      if (!f.settings().wrap.disabled) {
+        EWordWrapStrategy bracketWrapStrat = f.settings().wrap.method.bracket.condition;
+        boolean wrapBracket = switch (bracketWrapStrat) {
+        case ALWAYS -> true;
+        case NEVER -> false;
+        case REQUIRED -> (f.currentLineSize() + 2) > f.settings().wrap.lineWidth;
         };
         if (wrapBracket)
         {
@@ -650,10 +639,10 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     }
     else
     {
-      final boolean bIsDeclarationOnly = m_aOwningClass.isInterface () && !m_aMods.isDefault () ||
-        m_aOwningClass.isAnnotationTypeDeclaration () ||
-        m_aMods.isAbstract () ||
-        m_aMods.isNative ();
+      final boolean bIsDeclarationOnly = (m_aOwningClass.isInterface () && !m_aMods.isDefault ()) ||
+                                         m_aOwningClass.isAnnotationTypeDeclaration () ||
+                                         m_aMods.isAbstract () ||
+                                         m_aMods.isNative ();
 
       if (bIsDeclarationOnly)
       {
@@ -661,14 +650,12 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
       }
       else
       {
-        if (!f.settings ().wrap.disabled)
-        {
-          EWordWrapStrategy bracketWrapStrat = f.settings ().wrap.method.bracket.condition;
-          boolean wrapBracket = switch (bracketWrapStrat)
-          {
-            case ALWAYS -> true;
-            case NEVER -> false;
-            case REQUIRED -> f.currentLineSize () + 2 > f.settings ().wrap.lineWidth;
+        if (!f.settings().wrap.disabled) {
+          EWordWrapStrategy bracketWrapStrat = f.settings().wrap.method.bracket.condition;
+          boolean wrapBracket = switch (bracketWrapStrat) {
+          case ALWAYS -> true;
+          case NEVER -> false;
+          case REQUIRED -> (f.currentLineSize() + 2) > f.settings().wrap.lineWidth;
           };
           if (wrapBracket)
           {
@@ -692,11 +679,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
 
     boolean bFirst = true;
     // break only if more than 3 variables are present
-    final boolean bNewLineAfterParam = m_aParams.size () + (hasVarArgs () ? 1 : 0) > 3;
-    for (final JVar var : m_aParams)
-    {
-      if (bFirst)
-      {
+    final boolean bNewLineAfterParam = (m_aParams.size() + (hasVarArgs() ? 1 : 0)) > 3;
+    for (final JVar var : m_aParams) {
+      if (bFirst) {
         bFirst = false;
       }
       else

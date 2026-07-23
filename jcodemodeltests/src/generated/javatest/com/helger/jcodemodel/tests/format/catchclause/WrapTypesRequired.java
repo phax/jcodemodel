@@ -23,9 +23,9 @@ public class WrapTypesRequired {
 
     public static final void multiplecatch() {
         try {
-        } catch (ClassCastException ex) {
-        } catch (ArithmeticException exception1) {
-        } catch (ArrayIndexOutOfBoundsException | ArrayStoreException | 
+        } catch (final ClassCastException ex) {
+        } catch (final ArithmeticException exception1) {
+        } catch (final ArrayIndexOutOfBoundsException | ArrayStoreException | 
             BufferOverflowException | BufferUnderflowException ex) {
         }
     }

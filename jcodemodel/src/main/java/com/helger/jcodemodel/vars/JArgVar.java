@@ -59,9 +59,8 @@ import com.helger.jcodemodel.JVar;
 public class JArgVar extends JVar
 {
 
-  public JArgVar (boolean final_, @NonNull AbstractJType aType, @NonNull String sName)
-  {
-    super (JMods.forVar (final_ ? JMod.NONE : JMod.FINAL), aType, sName, null);
+  public JArgVar(boolean final_, @NonNull AbstractJType aType, @NonNull String sName) {
+    super (JMods.forVar (final_ ? JMod.FINAL : JMod.NONE), aType, sName, null);
   }
 
   @Override
