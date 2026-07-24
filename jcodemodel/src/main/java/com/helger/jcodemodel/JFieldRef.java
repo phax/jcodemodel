@@ -116,7 +116,7 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
    * @param aVar
    *        Referenced variable
    */
-  protected JFieldRef (@NonNull final AbstractJType aType, @NonNull final JVar aVar)
+  public JFieldRef (@NonNull final AbstractJType aType, @NonNull final JVar aVar)
   {
     this (aType.owner (), aType, (String) null, aVar, false);
   }
@@ -137,8 +137,8 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
                      @Nullable final JVar aVar,
                      final boolean bExplicitThis)
   {
-    ValueEnforcer.isTrue (sName == null || sName.indexOf ('.') < 0, () -> "Field name contains '.': " + sName);
-    ValueEnforcer.isFalse (sName == null && aVar == null, "name or var must be present");
+    ValueEnforcer.isTrue ((sName == null) || (sName.indexOf ('.') < 0), () -> "Field name contains '.': " + sName);
+    ValueEnforcer.isFalse ((sName == null) && (aVar == null), "name or var must be present");
     m_aOwner = aOwner;
     m_aObject = aObject;
     m_sName = sName;
@@ -146,6 +146,7 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
     m_bExplicitThis = bExplicitThis;
   }
 
+  @Override
   @Nullable
   public JCodeModel owner ()
   {
@@ -163,7 +164,9 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
   {
     String sName = m_sName;
     if (sName == null)
+    {
       sName = m_aVar.name ();
+    }
     return sName;
   }
 
@@ -185,6 +188,7 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
     return this;
   }
 
+  @Override
   public void generate (@NonNull final IJFormatter f)
   {
     final String name = name ();
@@ -192,16 +196,24 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
     if (m_aObject != null)
     {
       if (m_aObject instanceof AbstractJType)
+      {
         f.type ((AbstractJType) m_aObject);
+      }
       else
+      {
         f.generable (m_aObject);
+      }
       f.print ('.').print (name);
     }
     else
       if (m_bExplicitThis)
+      {
         f.print ("this.").print (name);
+      }
       else
+      {
         f.id (name);
+      }
   }
 
   @Override
@@ -209,7 +221,7 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
   {
     if (o == this)
       return true;
-    if (o == null || getClass () != o.getClass ())
+    if ((o == null) || (getClass () != o.getClass ()))
       return false;
     final JFieldRef rhs = (JFieldRef) o;
     return EqualsHelper.equals (m_aObject, rhs.m_aObject) &&

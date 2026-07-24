@@ -47,12 +47,12 @@ import com.helger.jcodemodel.JAnonymousClass;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.supplementary.issues.issue31.MockFieldInstanceImpl;
 import com.helger.jcodemodel.supplementary.issues.issue31.MockFieldInstanceImpl.ValueHolderInstanceImpl;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.vars.JFieldVar;
 
 /**
  * Test for https://github.com/phax/jcodemodel/issues/31
@@ -81,6 +81,8 @@ public final class Issue31FuncTest
     CodeModelTestsHelper.parseCodeModel (cm);
     // Won't do
     if (false)
+    {
       CodeModelTestsHelper.compileCodeModel (cm);
+    }
   }
 }

@@ -35,20 +35,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.base.string.StringHelper;
-import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.AbstractJType;
-import com.helger.jcodemodel.JBlock;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JInvocation;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JNarrowedClass;
-import com.helger.jcodemodel.JPrimitiveType;
-import com.helger.jcodemodel.JReferencedClass;
-import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.ICodeModelBuilder;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.ConcreteTypes;
@@ -62,6 +49,7 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.IFieldCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.SimpleField;
+import com.helger.jcodemodel.vars.JFieldVar;
 
 public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilder
 {
@@ -97,21 +85,24 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     return m_sClassHeader;
   }
 
-  public boolean hasClassHeader ()
+  public boolean hasClassHeader() 
   {
     return StringHelper.isNotEmpty (m_sClassHeader);
   }
 
+  @Override
   public void setClassHeader (@Nullable final String header)
   {
     m_sClassHeader = header;
   }
 
+  @Override
   public @Nullable String getRootPackage ()
   {
     return m_sRootPackage;
   }
 
+  @Override
   public void setRootPackage (@Nullable final String rootPackage)
   {
     m_sRootPackage = rootPackage;
@@ -170,8 +161,9 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
       try
       {
         final JDefinedClass ret = model._class (expandClassName (n));
-        if (hasClassHeader ())
+        if (hasClassHeader ()) {
           ret.headerComment ().add (getClassHeader ());
+        }
         return ret;
       }
       catch (final JCodeModelException e)
@@ -182,10 +174,11 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
 
     final String simpleName = localName.replaceAll (".*\\.", "");
     simpleDefinedClasses.computeIfAbsent (simpleName, n -> new HashSet <> ()).add (clazz);
-    if (options == null)
+    if (options == null) {
       pathOptions.computeIfAbsent (localName, cn -> new FieldOptions ());
-    else
+    } else {
       pathOptions.put (localName, options);
+    }
     return clazz;
   }
 
@@ -194,9 +187,11 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
    */
   protected void updateParentOptions (final List <IFlatStructRecord> records)
   {
-    for (final Map.Entry <String, FieldOptions> e : pathOptions.entrySet ())
-      if (StringHelper.isNotEmpty (e.getKey ()))
+    for (final Map.Entry <String, FieldOptions> e : pathOptions.entrySet ()) {
+      if (StringHelper.isNotEmpty (e.getKey ())) {
         e.getValue ().setParent (findParentOption (e.getKey ()));
+      }
+    }
   }
 
   /*
@@ -216,8 +211,9 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
       found = pathOptions.get (search);
     } while (found == null && search != null && !search.isBlank ());
 
-    if (found == null)
+    if (found == null) {
       found = pathOptions.get ("");
+    }
     return found;
   }
 
@@ -249,10 +245,11 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
 
           final AbstractJClass aParentJClass = (AbstractJClass) parentType;
           final JDefinedClass aOwnerClass = definedClasses.get (cc.localName ());
-          if (aParentJClass.isInterface ())
+          if (aParentJClass.isInterface ()) {
             aOwnerClass._implements (aParentJClass);
-          else
+          } else {
             aOwnerClass._extends (aParentJClass);
+          }
         }
       }
     }
@@ -352,8 +349,9 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     Class <?> staticResolved = staticAlias (typeName);
     for (final String prefix : new String [] { null, "java.lang", "java.util" })
     {
-      if (staticResolved != null)
+      if (staticResolved != null) {
         break;
+      }
 
       try
       {
@@ -817,8 +815,9 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
     else
     {
       final EFieldOption fa = EFieldOption.of (sCleanOptStr);
-      if (fa == null)
+      if (fa == null) {
         throw new UnsupportedOperationException ("can't deduce option from '" + sCleanOptStr + "'");
+      }
 
       fa.apply (options);
     }

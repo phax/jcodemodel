@@ -16,13 +16,13 @@ package com.helger.jcodemodel.tests.samevars;
 
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.vars.JBlockVar;
+import com.helger.jcodemodel.vars.JFieldVar;
 
 @TestJCM
 public class SameVarsTestGen {

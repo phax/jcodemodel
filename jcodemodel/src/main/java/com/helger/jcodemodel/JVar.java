@@ -54,6 +54,7 @@ import com.helger.base.equals.EqualsHelper;
 import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.jcodemodel.modifiers.EMod;
 import com.helger.jcodemodel.modifiers.IJModified;
+import com.helger.jcodemodel.vars.JFieldVar;
 
 /**
  * Variables and fields.
@@ -226,11 +227,9 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable, I
   public JAnnotationUse annotate (@NonNull final Class <? extends Annotation> aClazz)
   {
     if (m_aType == null)
-    {
       throw new UnsupportedOperationException ("can't reference class " +
                                                aClazz.getCanonicalName () +
                                                " without a JCM owner, use JVar::annotate(AbstractJClass) instead");
-    }
     return annotate (m_aType.owner ().ref (aClazz));
   }
 
@@ -258,10 +257,8 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable, I
 
   public void bind (@NonNull final IJFormatter f)
   {
-    if (m_aType == null && m_aInitExpr == null)
-    {
+    if ((m_aType == null) && (m_aInitExpr == null))
       throw new IllegalStateException ("can't declare a variable with no type and no init");
-    }
 
     if (m_aAnnotations != null)
     {
@@ -295,6 +292,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable, I
     }
   }
 
+  @Override
   public void declare (@NonNull final IJFormatter f)
   {
     f.var (this).print (';').newline ();
@@ -310,13 +308,9 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable, I
   public boolean equals (final Object o)
   {
     if (o == this)
-    {
       return true;
-    }
-    if (o == null || getClass () != o.getClass ())
-    {
+    if ((o == null) || (getClass () != o.getClass ()))
       return false;
-    }
     final JVar rhs = (JVar) o;
     return EqualsHelper.equals (m_sName, rhs.m_sName);
   }
