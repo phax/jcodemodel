@@ -114,7 +114,7 @@ public class JAtomInt implements IJExpression
     {
       if (qtty <= body.length ())
         return body;
-      return String.format ("%" + qtty + "s", body).replace (' ', '0');
+      return "0".repeat (qtty - body.length ()) + body;
     }
   }
 
