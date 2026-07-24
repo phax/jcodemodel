@@ -116,6 +116,20 @@ public final class JJavaName
     return true;
   }
 
+  /// verifies that a name is valid type identifier
+  ///
+  /// https://docs.oracle.com/javase/specs/jls/se17/html/jls-3.html#jls-3.8
+  ///
+  /// > A type identifier is an identifier that is not the character sequence var.
+  ///
+  /// > Type identifiers are used in certain contexts involving the declaration or use of types. For
+  /// > example, the name of a class must be a TypeIdentifier, so it is illegal to declare a class
+  /// > named var.
+  public static boolean isTypeIdentifier (@NonNull final String sStr)
+  {
+    return isJavaIdentifier (sStr) && !"var".equals (sStr);
+  }
+
   /**
    * Checks if the given string is a valid fully qualified name.
    *
