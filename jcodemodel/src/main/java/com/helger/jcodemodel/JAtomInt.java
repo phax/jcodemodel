@@ -42,6 +42,8 @@ package com.helger.jcodemodel;
 
 import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 
+import java.util.function.IntFunction;
+
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
@@ -51,11 +53,71 @@ import com.helger.base.equals.EqualsHelper;
  */
 public class JAtomInt implements IJExpression
 {
+
+  /// @see https://docs.oracle.com/javase/specs/jls/se17/html/jls-3.html#jls-3.10.1
+  public static enum Representation
+  {
+    BINARY ("0b", Integer::toBinaryString),
+    DECIMAL ("", Integer::toString),
+    HEX ("0x", Integer::toHexString),
+    OCTAL ("0", Integer::toOctalString);
+
+    @NonNull
+    final IntFunction <String> representer;
+
+    @NonNull
+    final String prefix;
+
+    Representation (String prefix, IntFunction <String> representer)
+    {
+      this.prefix = prefix;
+      this.representer = representer;
+    }
+
+    public String represent (int i)
+    {
+      if (i < 0)
+        return "-" + represent (-i);
+      return prefix + representer.apply (i);
+    }
+  }
+
   private final int m_nValue;
+
+  @NonNull
+  private Representation representation = Representation.DECIMAL;
 
   protected JAtomInt (final int nWhat)
   {
     m_nValue = nWhat;
+  }
+
+  public JAtomInt representation (Representation representation)
+  {
+    if (representation != null)
+      this.representation = representation;
+    int i = 07;
+    return this;
+  }
+
+  public JAtomInt binary ()
+  {
+    return representation (Representation.BINARY);
+  }
+
+  public JAtomInt decimal ()
+  {
+    return representation (Representation.DECIMAL);
+  }
+
+  public JAtomInt hex ()
+  {
+    return representation (Representation.HEX);
+  }
+
+  public JAtomInt octal ()
+  {
+    return representation (Representation.OCTAL);
   }
 
   public int what ()
@@ -65,7 +127,7 @@ public class JAtomInt implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print (Integer.toString (m_nValue));
+    f.print (representation.represent (m_nValue));
   }
 
   @Override
