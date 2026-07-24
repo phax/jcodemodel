@@ -40,8 +40,7 @@
  */
 package com.helger.jcodemodel;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.lang.model.SourceVersion;
 
 import org.jspecify.annotations.NonNull;
 
@@ -50,31 +49,6 @@ import org.jspecify.annotations.NonNull;
  */
 public final class JJavaName
 {
-  /** All reserved keywords of Java. */
-  private static final Set <String> RESERVED_KEYWORDS = new HashSet <> ();
-
-  static
-  {
-    // see
-    // http://java.sun.com/docs/books/tutorial/java/nutsandbolts/_keywords.html
-    final String [] aKeyWords = new String [] { "abstract", "assert", "boolean", "break", "byte", "case", "catch",
-                                                "char", "class", "const", "continue", "default", "do", "double", "else",
-                                                "enum", "extends", "final", "finally", "float", "for", "goto", "if",
-                                                "implements", "import", "instanceof", "int", "interface", "long",
-                                                "native", "new", "package", "private", "protected", "public", "return",
-                                                "short", "static", "strictfp", "super", "switch", "synchronized",
-                                                "this", "throw", "throws", "transient", "try",
-                                                // var is not a keyword
-                                                /* "var", */
-                                                "void", "volatile", "while",
-                                                /*
-                                                 * technically these are not reserved words but they
-                                                 * cannot be used as identifiers.
-                                                 */
-                                                "true", "false", "null", "_" };
-    for (final String sKeyword : aKeyWords)
-      RESERVED_KEYWORDS.add (sKeyword);
-  }
 
   private JJavaName ()
   {}
@@ -88,7 +62,7 @@ public final class JJavaName
    */
   public static boolean isJavaReservedKeyword (@NonNull final String sStr)
   {
-    return sStr.length () > 0 && RESERVED_KEYWORDS.contains (sStr);
+    return sStr.length () > 0 && SourceVersion.isKeyword (sStr);
   }
 
   /**
@@ -101,19 +75,7 @@ public final class JJavaName
    */
   public static boolean isJavaIdentifier (@NonNull final String sStr)
   {
-    if (sStr.length () == 0)
-      return false;
-    if (RESERVED_KEYWORDS.contains (sStr))
-      return false;
-
-    if (!Character.isJavaIdentifierStart (sStr.charAt (0)))
-      return false;
-
-    for (int i = 1; i < sStr.length (); i++)
-      if (!Character.isJavaIdentifierPart (sStr.charAt (i)))
-        return false;
-
-    return true;
+    return SourceVersion.isName (sStr);
   }
 
   /**
