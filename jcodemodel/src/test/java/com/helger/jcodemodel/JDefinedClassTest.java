@@ -210,12 +210,12 @@ public final class JDefinedClassTest
   public void testTypeNameVar () throws JCodeModelException
   {
     JCodeModel jcm = new JCodeModel ();
-    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, 0, "double"));
-    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, 0, "package"));
-    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, 0, "var"));
-    new JDefinedClass (jcm, 0, "Double");
-    new JDefinedClass (jcm, 0, "Package");
-    new JDefinedClass (jcm, 0, "Var");
+    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, JMod.NONE, "double"));
+    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, JMod.NONE, "package"));
+    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, JMod.NONE, "var"));
+    new JDefinedClass (jcm, JMod.NONE, "Double");
+    new JDefinedClass (jcm, JMod.NONE, "Package");
+    new JDefinedClass (jcm, JMod.NONE, "Var");
   }
 
 }
