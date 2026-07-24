@@ -41,7 +41,16 @@
 package com.helger.jcodemodel;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
@@ -177,7 +186,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     }
   };
 
-  JDefinedClass (@NonNull final IJClassContainer <?> aParent,
+  protected JDefinedClass (@NonNull final IJClassContainer <?> aParent,
                            final int nMods,
                            @Nullable final String sName,
                            @NonNull final EClassType eClassType)
@@ -195,7 +204,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @param sName
    *        Name of this class
    */
-  JDefinedClass (@NonNull final JCodeModel aOwner, final int nMods, @Nullable final String sName)
+  protected JDefinedClass (@NonNull final JCodeModel aOwner, final int nMods, @Nullable final String sName)
   {
     this (aOwner, null, nMods, EClassType.CLASS, sName);
   }
@@ -214,7 +223,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @param sName
    *        Name of this class
    */
-  JDefinedClass (@NonNull final JCodeModel aOwner,
+  private JDefinedClass (@NonNull final JCodeModel aOwner,
                          @Nullable final IJClassContainer <?> aOuter,
                          final int nMods,
                          @NonNull final EClassType eClassType,

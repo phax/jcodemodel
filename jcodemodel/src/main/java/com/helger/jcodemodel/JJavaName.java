@@ -57,21 +57,20 @@ public final class JJavaName
   {
     // see
     // http://java.sun.com/docs/books/tutorial/java/nutsandbolts/_keywords.html
-    final String [] aKeyWords = new String [] { "abstract", "assert", "boolean", "break", "byte", "case", "catch",
-                                                "char", "class", "const", "continue", "default", "do", "double", "else",
-                                                "enum", "extends", "final", "finally", "float", "for", "goto", "if",
-                                                "implements", "import", "instanceof", "int", "interface", "long",
-                                                "native", "new", "package", "private", "protected", "public", "return",
-                                                "short", "static", "strictfp", "super", "switch", "synchronized",
-                                                "this", "throw", "throws", "transient", "try",
-                                                // var is not a keyword
-                                                /* "var", */
-                                                "void", "volatile", "while",
-                                                /*
-                                                 * technically these are not reserved words but they
-                                                 * cannot be used as identifiers.
-                                                 */
-                                                "true", "false", "null", "_" };
+    final String [] aKeyWords = { "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class",
+                                  "const", "continue", "default", "do", "double", "else", "enum", "extends", "final",
+                                  "finally", "float", "for", "goto", "if", "implements", "import", "instanceof", "int",
+                                  "interface", "long", "native", "new", "package", "private", "protected", "public",
+                                  "return", "short", "static", "strictfp", "super", "switch", "synchronized", "this",
+                                  "throw", "throws", "transient", "try",
+                                  // var is not a keyword
+                                  /* "var", */
+                                  "void", "volatile", "while",
+                                  /*
+                                   * technically these are not reserved words but they cannot be
+                                   * used as identifiers.
+                                   */
+                                  "true", "false", "null", "_" };
     for (final String sKeyword : aKeyWords)
       RESERVED_KEYWORDS.add (sKeyword);
   }
@@ -103,6 +102,7 @@ public final class JJavaName
   {
     if (sStr.length () == 0)
       return false;
+
     if (RESERVED_KEYWORDS.contains (sStr))
       return false;
 
