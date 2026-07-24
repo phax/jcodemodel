@@ -18,6 +18,13 @@ public class JAtomIntTest
       Assert.assertEquals ("052", CodeModelTestsHelper.toString (i42.octal ()));
     }
     {
+      JAtomInt i0 = new JAtomInt (0);
+      Assert.assertEquals ("0b0", CodeModelTestsHelper.toString (i0.binary ()));
+      Assert.assertEquals ("0", CodeModelTestsHelper.toString (i0.decimal ()));
+      Assert.assertEquals ("0x0", CodeModelTestsHelper.toString (i0.hex ()));
+      Assert.assertEquals ("00", CodeModelTestsHelper.toString (i0.octal ()));
+    }
+    {
       JAtomInt iNeg2 = new JAtomInt (-2);
       Assert.assertEquals ("-0b10", CodeModelTestsHelper.toString (iNeg2.binary ()));
       Assert.assertEquals ("-2", CodeModelTestsHelper.toString (iNeg2.decimal ()));
@@ -25,16 +32,24 @@ public class JAtomIntTest
       Assert.assertEquals ("-02", CodeModelTestsHelper.toString (iNeg2.octal ()));
     }
     {
-      JAtomInt ia = new JAtomInt (-1234567).separatorSize (2).separateEvery (2);
-      Assert.assertEquals ("-1__23__45__67", CodeModelTestsHelper.toString (ia.decimal ()));
+      JAtomInt ia = new JAtomInt (-1234567).separatorSize (2).separateEvery (2).decimal ();
+      Assert.assertEquals ("-1__23__45__67", CodeModelTestsHelper.toString (ia));
     }
     {
-      JAtomInt ia = new JAtomInt (-12345678).separatorSize (2).separateEvery (2);
-      Assert.assertEquals ("-12__34__56__78", CodeModelTestsHelper.toString (ia.decimal ()));
+      JAtomInt ia = new JAtomInt (-12345678).separatorSize (2).separateEvery (2).decimal ();
+      Assert.assertEquals ("-12__34__56__78", CodeModelTestsHelper.toString (ia));
     }
     {
-      JAtomInt ia = new JAtomInt (-10).separatorSize (1).separateEvery (3);
-      Assert.assertEquals ("-0b1_010", CodeModelTestsHelper.toString (ia.binary ()));
+      JAtomInt ia = new JAtomInt (-10).separatorSize (1).separateEvery (3).binary ();
+      Assert.assertEquals ("-0b1_010", CodeModelTestsHelper.toString (ia));
+    }
+    {
+      JAtomInt ia = new JAtomInt (4).separatorSize (1).separateEvery (3).binary ();
+      Assert.assertEquals ("0b100", CodeModelTestsHelper.toString (ia));
+    }
+    {
+      JAtomInt ia = new JAtomInt (8).separatorSize (1).separateEvery (3).binary ();
+      Assert.assertEquals ("0b1_000", CodeModelTestsHelper.toString (ia));
     }
   }
 
