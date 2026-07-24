@@ -53,7 +53,9 @@ import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
 
 /**
  * A field that can have a {@link JDocComment} associated with it
+ * @deprecated use {@link com.helger.jcodemodel.vars.JFieldVar} instead
  */
+@Deprecated (forRemoval = true, since = "4.3.0")
 public class JFieldVar extends JBlockVar implements IJDocCommentable
 {
   private final JDefinedClass m_aOwnerClass;
@@ -76,7 +78,9 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
    *        Name of this variable
    * @param aInit
    *        Value to initialize this variable to
+   * @deprecated use {@link com.helger.jcodemodel.vars.JFieldVar#JFieldVar(JDefinedClass, JMods, AbstractJType, String, IVariableInitializer)} instead
    */
+  @Deprecated (forRemoval = true, since = "4.3.0")
   public JFieldVar (@NonNull final JDefinedClass aOwnerClass,
                     @NonNull final JMods aMods,
                     @NonNull final AbstractJType aType,
@@ -91,7 +95,7 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
    * @return The owning class. Never <code>null</code>.
    */
   @NonNull
-  public JDefinedClass owner ()
+  public JDefinedClass owner () 
   {
     return m_aOwnerClass;
   }
@@ -144,13 +148,9 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   public boolean equals (final Object o)
   {
     if (o == this)
-    {
       return true;
-    }
     if (!super.equals (o))
-    {
       return false;
-    }
     final JFieldVar rhs = (JFieldVar) o;
     return EqualsHelper.equals (m_aOwnerClass, rhs.m_aOwnerClass);
   }
