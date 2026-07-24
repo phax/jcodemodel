@@ -96,7 +96,6 @@ public class JAtomInt implements IJExpression
   {
     if (representation != null)
       this.representation = representation;
-    int i = 07;
     return this;
   }
 
