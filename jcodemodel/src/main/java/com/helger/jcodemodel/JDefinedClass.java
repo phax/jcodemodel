@@ -177,7 +177,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     }
   };
 
-  protected JDefinedClass (@NonNull final IJClassContainer <?> aParent,
+  JDefinedClass (@NonNull final IJClassContainer <?> aParent,
                            final int nMods,
                            @Nullable final String sName,
                            @NonNull final EClassType eClassType)
@@ -195,7 +195,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @param sName
    *        Name of this class
    */
-  protected JDefinedClass (@NonNull final JCodeModel aOwner, final int nMods, @Nullable final String sName)
+  JDefinedClass (@NonNull final JCodeModel aOwner, final int nMods, @Nullable final String sName)
   {
     this (aOwner, null, nMods, EClassType.CLASS, sName);
   }
@@ -214,7 +214,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @param sName
    *        Name of this class
    */
-  private JDefinedClass (@NonNull final JCodeModel aOwner,
+  JDefinedClass (@NonNull final JCodeModel aOwner,
                          @Nullable final IJClassContainer <?> aOuter,
                          final int nMods,
                          @NonNull final EClassType eClassType,
@@ -226,24 +226,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     {
       ValueEnforcer.notEmpty (sName, "Name");
 
-      if (!Character.isJavaIdentifierStart (sName.charAt (0)))
-      {
-        final String msg = "JDefinedClass name " +
-                           sName +
-                           " contains illegal character" +
-                           " for beginning of identifier: " +
-                           sName.charAt (0);
-        throw new IllegalArgumentException (msg);
-      }
-      for (int i = 1; i < sName.length (); i++)
-      {
-        final char c = sName.charAt (i);
-        if (!Character.isJavaIdentifierPart (c))
-        {
-          final String msg = "JDefinedClass name " + sName + " contains illegal character " + c;
-          throw new IllegalArgumentException (msg);
-        }
-      }
+      if (!JJavaName.isTypeIdentifier (sName))
+        throw new IllegalArgumentException ("JDefinedClass name " + sName + " is invalid type name");
     }
 
     if (isInterface ())

@@ -206,4 +206,16 @@ public final class JDefinedClassTest
     Assert.assertTrue (jdc.isEMod (EMod.SEALED, EMod.PRIVATE));
   }
 
+  @Test
+  public void testTypeNameVar () throws JCodeModelException
+  {
+    JCodeModel jcm = new JCodeModel ();
+    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, 0, "double"));
+    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, 0, "package"));
+    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, 0, "var"));
+    new JDefinedClass (jcm, 0, "Double");
+    new JDefinedClass (jcm, 0, "Package");
+    new JDefinedClass (jcm, 0, "Var");
+  }
+
 }
