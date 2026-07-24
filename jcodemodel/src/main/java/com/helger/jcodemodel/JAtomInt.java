@@ -74,11 +74,32 @@ public class JAtomInt implements IJExpression
       this.representer = representer;
     }
 
-    public String represent (int i)
+    public String represent (int i, int every, int sepSize)
     {
-      if (i < 0)
-        return "-" + represent (-i);
-      return prefix + representer.apply (i);
+      boolean neg = i < 0;
+      i = neg ? -i : i;
+      StringBuilder sb = new StringBuilder ();
+      if (neg)
+        sb.append ('-');
+      sb.append (prefix);
+      addSep (representer.apply (i), every, sepSize, sb);
+      return sb.toString ();
+    }
+
+    /// @param source unsigned non-prefixed representation , eg a5 for -0xa5 .
+    static void addSep(@NonNull String source, int every, int sepSize, StringBuilder sb) {
+      if (every < 1 || every >= source.length () || sepSize < 1)
+      {
+        sb.append (source);
+        return;
+      }
+      String sep = "_".repeat (sepSize);
+      for (int start = 0, end = source.length () % every; end <= source.length (); start = end, end += every)
+      {
+        if (start != 0)
+          sb.append (sep);
+        sb.append (source.substring (start, end));
+      }
     }
   }
 
@@ -124,9 +145,37 @@ public class JAtomInt implements IJExpression
     return m_nValue;
   }
 
+  /// how many underscores per separation
+  private int separatorSize = 1;
+
+  public int separatorSize ()
+  {
+    return separatorSize;
+  }
+
+  public JAtomInt separatorSize (int size)
+  {
+    this.separatorSize = size;
+    return this;
+  }
+
+  /// how many underscores per separation
+  private int separateEvery = 0;
+
+  public int separateEvery ()
+  {
+    return separateEvery;
+  }
+
+  public JAtomInt separateEvery (int every)
+  {
+    this.separateEvery = every;
+    return this;
+  }
+
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print (representation.represent (m_nValue));
+    f.print (representation.represent (m_nValue, separateEvery, separatorSize));
   }
 
   @Override
