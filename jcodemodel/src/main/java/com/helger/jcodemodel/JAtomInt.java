@@ -58,7 +58,14 @@ public class JAtomInt implements IJExpression
   public static enum Representation
   {
     BINARY ("0b", Integer::toBinaryString),
-    DECIMAL ("", Integer::toString),
+    DECIMAL ("", Integer::toString)
+    {
+      @Override
+      protected String pad (@NonNull String body, int qtty)
+      {
+        return body;
+      }
+    },
     HEX ("0x", Integer::toHexString),
     OCTAL ("0", Integer::toOctalString);
 
@@ -74,7 +81,7 @@ public class JAtomInt implements IJExpression
       this.representer = representer;
     }
 
-    public String represent (int i, int every, int sepSize)
+    public String represent (int i, int sepEvery, int sepSize, int padding)
     {
       boolean neg = i < 0;
       i = neg ? -i : i;
@@ -82,24 +89,32 @@ public class JAtomInt implements IJExpression
       if (neg)
         sb.append ('-');
       sb.append (prefix);
-      addSep (representer.apply (i), every, sepSize, sb);
+      addSep (pad (representer.apply (i), padding), sepEvery, sepSize, sb);
       return sb.toString ();
     }
 
     /// @param source unsigned non-prefixed representation , eg a5 for -0xa5 .
-    static void addSep(@NonNull String source, int every, int sepSize, StringBuilder sb) {
-      if (every < 1 || every >= source.length () || sepSize < 1)
+    static void addSep (@NonNull String source, int sepEvery, int sepSize, StringBuilder sb)
+    {
+      if (sepEvery < 1 || sepEvery >= source.length () || sepSize < 1)
       {
         sb.append (source);
         return;
       }
       String sep = "_".repeat (sepSize);
-      for (int start = 0, end = source.length () % every; end <= source.length (); start = end, end += every)
+      for (int start = 0, end = source.length () % sepEvery; end <= source.length (); start = end, end += sepEvery)
       {
         if (start != 0)
           sb.append (sep);
         sb.append (source.substring (start, end));
       }
+    }
+
+    protected String pad (@NonNull String body, int qtty)
+    {
+      if (qtty <= body.length ())
+        return body;
+      return String.format ("%" + qtty + "s", body).replace (' ', '0');
     }
   }
 
@@ -159,7 +174,7 @@ public class JAtomInt implements IJExpression
     return this;
   }
 
-  /// how many underscores per separation
+  /// how many character before underscore separation
   private int separateEvery = 0;
 
   public int separateEvery ()
@@ -173,9 +188,25 @@ public class JAtomInt implements IJExpression
     return this;
   }
 
+  /// how many character minimum must the body have. ignored for decimal representation.
+  ///
+  /// for example, the binary representation for 0 with padding 4 is 0b0000 .
+  private int padding = 0;
+
+  public int padding ()
+  {
+    return padding;
+  }
+
+  public JAtomInt padding (int padding)
+  {
+    this.padding = padding;
+    return this;
+  }
+
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print (representation.represent (m_nValue, separateEvery, separatorSize));
+    f.print (representation.represent (m_nValue, separateEvery, separatorSize, padding));
   }
 
   @Override
