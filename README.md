@@ -39,7 +39,7 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 v4.3.0 - 2026-07-24
 * Naming a class `var` now throws an exception, as `var` is no longer a valid type identifier (`Var` is still allowed). See [#180](https://github.com/phax/jcodemodel/pull/180) - thx @glelouet
 * Added support for pattern matching variables via new class `JPatternVar` in the `vars` package. See [#169](https://github.com/phax/jcodemodel/issues/169) and [#170](https://github.com/phax/jcodemodel/pull/170) - thx @glelouet
-* Moved `JFieldVar` into the `vars` package. See [#172](https://github.com/phax/jcodemodel/issues/172) and [#175](https://github.com/phax/jcodemodel/pull/175) - thx @glelouet
+* Started moving `JFieldVar` into the `vars` package. See [#172](https://github.com/phax/jcodemodel/issues/172) and [#175](https://github.com/phax/jcodemodel/pull/175) - thx @glelouet
 * Renamed the `expression` package to `expressions` (affects `JArrayInit` and `JInstanceOfVar`). See [#170](https://github.com/phax/jcodemodel/pull/170) - thx @glelouet
 * Fixed the `final` modifier detection in `JMethod.param (...)` and `JMethod.varParam (...)` (used `|` instead of `&`). See [#169](https://github.com/phax/jcodemodel/issues/169) - thx @glelouet
 * Added support for switch expressions (Java 14+) via new classes `JSwitchExpression`, `JYield` and arrow-style cases. See [#144](https://github.com/phax/jcodemodel/pull/144) - thx @glelouet

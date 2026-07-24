@@ -87,6 +87,12 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
     m_aOwnerClass = ValueEnforcer.notNull (aOwnerClass, "OwnerClass");
   }
 
+  @Override
+  protected ListWrapping extractWrappingOptions (@NonNull final IJFormatter f)
+  {
+    return f.settings ().wrap.variables.field;
+  }
+
   /**
    * @return The owning class. Never <code>null</code>.
    */
@@ -94,6 +100,20 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   public JDefinedClass owner ()
   {
     return m_aOwnerClass;
+  }
+
+  @Override
+  public JFieldVar emod (final EMod emod, final EMod... emods)
+  {
+    mods ().emod (EMod.ALLOWED_FIELD, emod, emods);
+    return this;
+  }
+
+  @Override
+  public JFieldVar removeEMod (final EMod... emods)
+  {
+    mods ().removeEMod (emods);
+    return this;
   }
 
   @Override
@@ -159,25 +179,5 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
   public int hashCode ()
   {
     return getHashCode (super.hashCode (), new Object [] { m_aOwnerClass });
-  }
-
-  @Override
-  public JFieldVar emod (EMod emod, EMod... emods)
-  {
-    mods ().emod (EMod.ALLOWED_FIELD, emod, emods);
-    return this;
-  }
-
-  @Override
-  public JFieldVar removeEMod (EMod... emods)
-  {
-    mods ().removeEMod (emods);
-    return this;
-  }
-
-  @Override
-  protected ListWrapping extractWrappingOptions (@NonNull IJFormatter f)
-  {
-    return f.settings ().wrap.variables.field;
   }
 }
