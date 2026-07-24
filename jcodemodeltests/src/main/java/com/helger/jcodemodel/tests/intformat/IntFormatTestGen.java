@@ -37,6 +37,15 @@ public class IntFormatTestGen {
         JExpr.lit(-1024).hex().separateEvery(separateEvery).separatorSize(sepSize));
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "iNeg1ko",
         JExpr.lit(-1024).octal().separateEvery(separateEvery).separatorSize(sepSize));
+
+    clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i42p5b",
+        JExpr.lit(42).binary().separateEvery(separateEvery).separatorSize(sepSize).padding(5));
+    clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i42p5d",
+        JExpr.lit(42).decimal().separateEvery(separateEvery).separatorSize(sepSize).padding(5));
+    clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i42p5h",
+        JExpr.lit(42).hex().separateEvery(separateEvery).separatorSize(sepSize).padding(5));
+    clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i42p5o",
+        JExpr.lit(42).octal().separateEvery(separateEvery).separatorSize(sepSize).padding(5));
   }
 
   static void generate(JPackage root, int separateEvery, int sepSize) throws JCodeModelException {

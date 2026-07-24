@@ -30,4 +30,8 @@ public class FormatIntWithSeparatorEvery2Size2 {
     public static final int iNeg1kd = -10__24;
     public static final int iNeg1kh = -0x4__00;
     public static final int iNeg1ko = -020__00;
+    public static final int i42p5b = 0b10__10__10;
+    public static final int i42p5d = 42;
+    public static final int i42p5h = 0x0__00__2a;
+    public static final int i42p5o = 00__00__52;
 }

@@ -54,6 +54,15 @@ public class JAtomIntTest
       JAtomInt ia = new JAtomInt (8).separatorSize (1).separateEvery (3).binary ();
       Assert.assertEquals ("0b1_000", CodeModelTestsHelper.toString (ia));
     }
+
+    // padding
+    {
+      JAtomInt ia = new JAtomInt (42).separateEvery (0).padding (5);
+      Assert.assertEquals ("0b101010", CodeModelTestsHelper.toString (ia.binary ()));
+      Assert.assertEquals ("42", CodeModelTestsHelper.toString (ia.decimal ()));
+      Assert.assertEquals ("0x0002a", CodeModelTestsHelper.toString (ia.hex ()));
+      Assert.assertEquals ("000052", CodeModelTestsHelper.toString (ia.octal ()));
+    }
   }
 
 }
