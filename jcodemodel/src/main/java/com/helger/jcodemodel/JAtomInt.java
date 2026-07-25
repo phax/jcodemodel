@@ -46,6 +46,7 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
 import com.helger.jcodemodel.literals.AIntegerRepresented;
+import com.helger.jcodemodel.literals.IntegerRepresentation;
 
 /**
  * A special atom for int values
@@ -58,6 +59,12 @@ public class JAtomInt extends AIntegerRepresented <JAtomInt> implements IJExpres
   protected JAtomInt (final int nWhat)
   {
     m_nValue = nWhat;
+  }
+
+  protected JAtomInt (final int nWhat, IntegerRepresentation representation)
+  {
+    m_nValue = nWhat;
+    representation (representation);
   }
 
   public int what ()
