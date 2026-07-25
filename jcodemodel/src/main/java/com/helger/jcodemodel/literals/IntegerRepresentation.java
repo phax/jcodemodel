@@ -4,9 +4,10 @@ import java.util.Objects;
 
 import org.jspecify.annotations.NonNull;
 
-/// record containing the params to represent an int/long. This is mostly a carrier, the actual behavior is in the base.
+/// record containing the params to represent an int/long. This is mostly a data carrier, the actual behavior is in the base.
 /// 
-/// a representation is made of a prefix, a body, and a suffix 
+/// A representation is made using a base, of a prefix, a body, and a suffix, with :
+///  
 ///  - The prefix is absent for decimal, but discriminant for other bases.
 ///  - The prefix can be set upper or lower (as prefix "0x" is same as "0X" )
 ///  - The body is never empty, the actual representation depends on the base
@@ -32,24 +33,45 @@ public record IntegerRepresentation (
 {
 
   // validation
+
   public IntegerRepresentation
   {
     Objects.requireNonNull (base);
   }
 
-  /// Default options are
+  // default values
+
+  /// Default options are :
+  ///
+  /// - use decimal base.
   /// - lowercase the prefix, so "0x" instead of "0X"
-  /// - use decimal representation
   /// - no padding of the body
   /// - no separator
   /// - if adding separators, use size 1
   /// - for long type, uppercase the terminal "L"
+  ///
+  /// from spec :
+  /// > The suffix L is preferred, because the letter l (ell) is often hard to distinguish from the
+  /// > digit 1 (one).
+  ///
   public static final IntegerRepresentation DEFAULT = new IntegerRepresentation (false,
                                                                                  EIntegerBase.DECIMAL,
                                                                                  0,
                                                                                  0,
                                                                                  1,
                                                                                  true);
+
+  /// print decimals with 3-chars separations, eg "1_000" or "1_234_567L"
+  public static final IntegerRepresentation DEC = DEFAULT.separateEvery (3);
+
+  /// print binary with 8-chars separations, eg "1_00000000" or "1_00000000_00000000L"
+  public static final IntegerRepresentation BIN = DEFAULT.with (null, EIntegerBase.BINARY, null, 8, null, null);
+
+  /// bits with padding to 8 chars
+  public static final IntegerRepresentation BIN8 = BIN.padding (8);
+
+  // print hexa with 2-chars separations, eg "0xAA_BB"
+  public static final IntegerRepresentation HEX = DEFAULT.with (null, EIntegerBase.HEX, null, 2, null, null);
 
   //
   // mutators
