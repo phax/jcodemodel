@@ -63,6 +63,21 @@ public class JAtomIntTest
       Assert.assertEquals ("0x0002a", CodeModelTestsHelper.toString (ia.hex ()));
       Assert.assertEquals ("000052", CodeModelTestsHelper.toString (ia.octal ()));
     }
+
+    // +sign , check that prefix/suffix lower/upper does not change a thing
+    {
+      JAtomInt ja = new JAtomInt (42);
+      for (boolean positiveSign : new boolean [] { true, false })
+        for (boolean prefixUpper : new boolean [] { true, false })
+        {
+          for (boolean suffixUpper : new boolean [] { true, false })
+          {
+            ja.representation (ja.representation ()
+                                 .with (positiveSign, prefixUpper, null, null, null, null, suffixUpper));
+            Assert.assertEquals (positiveSign ? "+42" : "42", CodeModelTestsHelper.toString (ja));
+          }
+        }
+    }
   }
 
 }

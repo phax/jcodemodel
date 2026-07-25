@@ -36,6 +36,15 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   ///
   /// @return this
   /// @see [IntegerRepresentation] for the meaning of individual fields
+  public T positiveSign (boolean positiveSign)
+  {
+    return representation (representation.positiveSign (positiveSign));
+  }
+
+  /// change the internal representation to match the request
+  ///
+  /// @return this
+  /// @see [IntegerRepresentation] for the meaning of individual fields
   public T binary ()
   {
     return representation (representation.base (EIntegerBase.BINARY));

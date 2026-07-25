@@ -45,24 +45,43 @@ public enum EIntegerBase
   }
 
   /// @return sb
-  public StringBuilder represent (int i, StringBuilder sb, boolean prefixUpper, int padding, int sepEvery, int sepSize)
+  public StringBuilder represent (int i,
+                                  StringBuilder sb,
+                                  boolean positiveSign,
+                                  boolean prefixUpper,
+                                  int padding,
+                                  int sepEvery,
+                                  int sepSize)
   {
     boolean neg = i < 0;
     i = neg ? -i : i;
     if (neg)
       sb.append ('-');
+    else
+      if (positiveSign)
+        sb.append ('+');
     sb.append (prefixUpper ? prefixUpperCased : prefixLowerCased);
     addSep (pad (intFormat.apply (i), padding), sepEvery, sepSize, sb);
     return sb;
   }
 
   /// @return sb
-  public StringBuilder represent (long l, StringBuilder sb, boolean prefixUpper, int padding, int sepEvery, int sepSize, boolean suffixUpper)
+  public StringBuilder represent (long l,
+                                  StringBuilder sb,
+                                  boolean positiveSign,
+                                  boolean prefixUpper,
+                                  int padding,
+                                  int sepEvery,
+                                  int sepSize,
+                                  boolean suffixUpper)
   {
     boolean neg = l < 0;
     l = neg ? -l : l;
     if (neg)
       sb.append ('-');
+    else
+      if (positiveSign)
+        sb.append ('+');
     sb.append (prefixUpper ? prefixUpperCased : prefixLowerCased);
     addSep (pad (longFormat.apply (l), padding), sepEvery, sepSize, sb);
     sb.append (suffixUpper ? 'L' : 'l');
