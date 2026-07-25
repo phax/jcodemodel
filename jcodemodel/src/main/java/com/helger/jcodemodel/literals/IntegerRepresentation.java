@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import org.jspecify.annotations.NonNull;
 
-/// record containing the params to represent an int/long 
+/// record containing the params to represent an int/long. This is mostly a carrier, the actual behavior is in the base.
 /// 
 /// a representation is made of a prefix, a body, and a suffix 
 ///  - The prefix is absent for decimal, but discriminant for other bases.
@@ -18,7 +18,7 @@ public record IntegerRepresentation (
                                      boolean prefixUpper,
                                      /// the base in which we want to represent the number, eg octal, binary
                                      @NonNull
-                                     IntegerBase base,
+                                     EIntegerBase base,
                                      /// if possible (not dec base), append 0 to make the representation's body at least   
                                      int padding,
                                      /// how many characters to skip in the body before adding a
@@ -45,7 +45,7 @@ public record IntegerRepresentation (
   /// - if adding separators, use size 1
   /// - for long type, uppercase the terminal "L"
   public static final IntegerRepresentation DEFAULT = new IntegerRepresentation (false,
-                                                                                 IntegerBase.DECIMAL,
+                                                                                 EIntegerBase.DECIMAL,
                                                                                  0,
                                                                                  0,
                                                                                  1,
@@ -60,7 +60,7 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (prefixUpper, base, padding, separateEvery, separatorSize, sufixUpper);
   }
 
-  public IntegerRepresentation base (IntegerBase base)
+  public IntegerRepresentation base (EIntegerBase base)
   {
     return new IntegerRepresentation (prefixUpper, base, padding, separateEvery, separatorSize, sufixUpper);
   }
@@ -85,10 +85,10 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (prefixUpper, base, padding, separateEvery, separatorSize, sufixUpper);
   }
 
-  /// @return new record with fields overwritten by non-null params.
   /// This is present to avoid long chains of configuration when updating from a base model
+  /// @return new record with fields overwritten by non-null params.
   public IntegerRepresentation with (Boolean newPrefixUpper,
-                                     IntegerBase newBase,
+                                     EIntegerBase newBase,
                                      Integer newPadding,
                                      Integer newSepEvery,
                                      Integer newSepSize,

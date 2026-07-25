@@ -38,7 +38,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @see [IntegerRepresentation] for the meaning of individual fields
   public T binary ()
   {
-    return representation (representation.base (IntegerBase.BINARY));
+    return representation (representation.base (EIntegerBase.BINARY));
   }
 
   /// change the internal representation to match the request
@@ -47,7 +47,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @see [IntegerRepresentation] for the meaning of individual fields
   public T decimal ()
   {
-    return representation (representation.base (IntegerBase.DECIMAL));
+    return representation (representation.base (EIntegerBase.DECIMAL));
   }
 
   /// change the internal representation to match the request
@@ -56,7 +56,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @see [IntegerRepresentation] for the meaning of individual fields
   public T hex ()
   {
-    return representation (representation.base (IntegerBase.HEX));
+    return representation (representation.base (EIntegerBase.HEX));
   }
 
   /// change the internal representation to match the request
@@ -65,7 +65,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @see [IntegerRepresentation] for the meaning of individual fields
   public T octal ()
   {
-    return representation (representation.base (IntegerBase.OCTAL));
+    return representation (representation.base (EIntegerBase.OCTAL));
   }
 
   /// change the internal representation to match the request

@@ -11,7 +11,7 @@ import org.jspecify.annotations.NonNull;
 /// Those also contain the way to apply parameters when representing, in the corresponding represent methods 
 ///
 /// @see https://docs.oracle.com/javase/specs/jls/se17/html/jls-3.html#jls-3.10.1
-public enum IntegerBase
+public enum EIntegerBase
 {
   BINARY ("0b", Integer::toBinaryString, Long::toBinaryString),
   DECIMAL ("", Integer::toString, Long::toString)
@@ -36,7 +36,7 @@ public enum IntegerBase
   @NonNull
   final String prefixUpperCased;
 
-  IntegerBase (String prefix, IntFunction <String> intFormat, LongFunction <String> longFormat)
+  EIntegerBase (String prefix, IntFunction <String> intFormat, LongFunction <String> longFormat)
   {
     this.prefixLowerCased = prefix.toLowerCase (Locale.ROOT);
     this.prefixUpperCased = prefix.toUpperCase (Locale.ROOT);
@@ -44,6 +44,7 @@ public enum IntegerBase
     this.longFormat = longFormat;
   }
 
+  /// @return sb
   public StringBuilder represent (int i, StringBuilder sb, boolean prefixUpper, int padding, int sepEvery, int sepSize)
   {
     boolean neg = i < 0;
@@ -55,6 +56,7 @@ public enum IntegerBase
     return sb;
   }
 
+  /// @return sb
   public StringBuilder represent (long l, StringBuilder sb, boolean prefixUpper, int padding, int sepEvery, int sepSize, boolean suffixUpper)
   {
     boolean neg = l < 0;
