@@ -1,5 +1,9 @@
 package com.helger.jcodemodel.literals;
 
+import java.util.Objects;
+
+import org.jspecify.annotations.NonNull;
+
 /// record containing the params to represent an int/long 
 /// 
 /// a representation is made of a prefix, a body, and a suffix 
@@ -13,6 +17,7 @@ public record IntegerRepresentation (
                                      /// if the base needs a prefix, should we uppercase it ?
                                      boolean prefixUpper,
                                      /// the base in which we want to represent the number, eg octal, binary
+                                     @NonNull
                                      IntegerBase base,
                                      /// if possible (not dec base), append 0 to make the representation's body at least   
                                      int padding,
@@ -22,8 +27,15 @@ public record IntegerRepresentation (
                                      /// number of "_" characters a separator string is made of.
                                      int separatorSize,
                                      /// if representing long, should we uppercase the terminal "l"
+                                     /// ?
                                      boolean sufixUpper)
 {
+
+  // validation
+  public IntegerRepresentation
+  {
+    Objects.requireNonNull (base);
+  }
 
   /// Default options are
   /// - lowercase the prefix, so "0x" instead of "0X"
@@ -71,6 +83,23 @@ public record IntegerRepresentation (
   public IntegerRepresentation sufixUpper (boolean sufixUpper)
   {
     return new IntegerRepresentation (prefixUpper, base, padding, separateEvery, separatorSize, sufixUpper);
+  }
+
+  /// @return new record with fields overwritten by non-null params.
+  /// This is present to avoid long chains of configuration when updating from a base model
+  public IntegerRepresentation with (Boolean newPrefixUpper,
+                                     IntegerBase newBase,
+                                     Integer newPadding,
+                                     Integer newSepEvery,
+                                     Integer newSepSize,
+                                     Boolean newSuffixUpper)
+  {
+    return new IntegerRepresentation (newPrefixUpper == null ? prefixUpper : newPrefixUpper,
+                                      newBase == null ? base : newBase,
+                                      newPadding == null ? padding : newPadding,
+                                      newSepEvery == null ? separateEvery : newSepEvery,
+                                      newSepSize == null ? separatorSize : newSepSize,
+                                      newSuffixUpper == null ? sufixUpper : newSuffixUpper);
   }
 
   //
