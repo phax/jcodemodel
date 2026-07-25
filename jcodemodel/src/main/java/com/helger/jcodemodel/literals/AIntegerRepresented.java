@@ -65,7 +65,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @see [IntegerRepresentation] for the meaning of individual fields
   public T hex ()
   {
-    return representation (representation.base (EIntegerBase.HEX));
+    return representation (representation.base (EIntegerBase.HEXADECIMAL));
   }
 
   /// change the internal representation to match the request

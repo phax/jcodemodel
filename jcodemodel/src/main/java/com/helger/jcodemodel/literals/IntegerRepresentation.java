@@ -19,10 +19,11 @@ public record IntegerRepresentation (
                                      boolean positiveSign,
                                      /// if the base needs a prefix, should we uppercase it ?
                                      boolean prefixUpper,
-                                     /// the base in which we want to represent the number, eg octal, binary
-                                     @NonNull
-                                     EIntegerBase base,
-                                     /// if possible (not dec base), append 0 to make the representation's body at least   
+                                     /// the base in which we want to represent the number, eg
+                                     /// octal, binary
+                                     @NonNull EIntegerBase base,
+                                     /// if possible (not dec base), append 0 to make the
+                                     /// representation's body at least
                                      int padding,
                                      /// how many characters to skip in the body before adding a
                                      /// separator String.
@@ -64,17 +65,26 @@ public record IntegerRepresentation (
                                                                                  1,
                                                                                  true);
 
-  /// print decimals with 3-chars separations, eg "1_000" or "1_234_567L"
-  public static final IntegerRepresentation DEC = DEFAULT.separateEvery (3);
-
   /// print binary with 8-chars separations, eg "1_00000000" or "1_00000000_00000000L"
   public static final IntegerRepresentation BIN = DEFAULT.with (null, null, EIntegerBase.BINARY, null, 8, null, null);
 
   /// bits with padding to 8 chars
   public static final IntegerRepresentation BIN8 = BIN.padding (8);
 
+  /// print decimals with 3-chars separations, eg "1_000" or "1_234_567L"
+  public static final IntegerRepresentation DEC = DEFAULT.separateEvery (3);
+
   // print hexa with 2-chars separations, eg "0xAA_BB"
-  public static final IntegerRepresentation HEX = DEFAULT.with (null, null, EIntegerBase.HEX, null, 2, null, null);
+  public static final IntegerRepresentation HEX = DEFAULT.with (null,
+                                                                null,
+                                                                EIntegerBase.HEXADECIMAL,
+                                                                null,
+                                                                2,
+                                                                null,
+                                                                null);
+
+  // print octal with 4-chars separations, eg "01_0000"
+  public static final IntegerRepresentation OCT = DEFAULT.with (null, null, EIntegerBase.OCTAL, null, 4, null, null);
 
   //
   // mutators
@@ -167,6 +177,16 @@ public record IntegerRepresentation (
                                      Integer newSepSize,
                                      Boolean newSuffixUpper)
   {
+    if ((newPositiveSign == null || newPositiveSign == positiveSign) &&
+      (newPrefixUpper == null || newPrefixUpper == prefixUpper) &&
+      (newBase == null || newBase == base) &&
+      (newPadding == null || newPadding == padding) &&
+      (newSepEvery == null || newSepEvery == separateEvery) &&
+      (newSepSize == null || newSepSize == separatorSize) &&
+      (newSuffixUpper == null || newSuffixUpper == sufixUpper))
+    {
+      return this;
+    }
     return new IntegerRepresentation (newPositiveSign == null ? positiveSign : newPositiveSign,
                                       newPrefixUpper == null ? prefixUpper : newPrefixUpper,
                                       newBase == null ? base : newBase,
@@ -195,8 +215,7 @@ public record IntegerRepresentation (
                            padding,
                            separateEvery,
                            separatorSize,
-                           sufixUpper)
-               .toString ();
+                           sufixUpper).toString ();
   }
 
 }

@@ -46,6 +46,7 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
 import com.helger.jcodemodel.literals.AIntegerRepresented;
+import com.helger.jcodemodel.literals.IntegerRepresentation;
 
 /**
  * A special atom for long values
@@ -58,6 +59,12 @@ public class JAtomLong extends AIntegerRepresented <JAtomLong> implements IJExpr
   protected JAtomLong (final long nWhat)
   {
     m_nValue = nWhat;
+  }
+
+  public JAtomLong (final long nWhat, IntegerRepresentation representation)
+  {
+    m_nValue = nWhat;
+    representation (representation);
   }
 
   public long what ()

@@ -22,7 +22,7 @@ public enum EIntegerBase
       return body;
     }
   },
-  HEX ("0x", Integer::toHexString, Long::toHexString),
+  HEXADECIMAL ("0x", Integer::toHexString, Long::toHexString),
   OCTAL ("0", Integer::toOctalString, Long::toOctalString);
 
   @NonNull
