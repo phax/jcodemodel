@@ -1,6 +1,7 @@
 package com.helger.jcodemodel.literals;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
 
@@ -25,6 +26,13 @@ public record IntegerRepresentation (
                                      /// if possible (not dec base), append 0 to make the
                                      /// representation's body at least
                                      int padding,
+                                     /// when non null, specifies where to put underscores in the
+                                     /// body.
+                                     /// For example, " _ __ " requires to add 2 underscores before
+                                     /// the last char and 1 before the one before. Note that
+                                     /// leading underscores may be discarded, depending on the
+                                     /// base.
+                                     String separateFormat,
                                      /// how many characters to skip in the body before adding a
                                      /// separator String.
                                      int separateEvery,
@@ -61,12 +69,20 @@ public record IntegerRepresentation (
                                                                                  false,
                                                                                  EIntegerBase.DECIMAL,
                                                                                  0,
+                                                                                 null,
                                                                                  0,
                                                                                  1,
                                                                                  true);
 
   /// print binary with 8-chars separations, eg "1_00000000" or "1_00000000_00000000L"
-  public static final IntegerRepresentation BIN = DEFAULT.with (null, null, EIntegerBase.BINARY, null, 8, null, null);
+  public static final IntegerRepresentation BIN = DEFAULT.with (null,
+                                                                null,
+                                                                EIntegerBase.BINARY,
+                                                                null,
+                                                                null,
+                                                                8,
+                                                                null,
+                                                                null);
 
   /// bits with padding to 8 chars
   public static final IntegerRepresentation BIN8 = BIN.padding (8);
@@ -79,12 +95,20 @@ public record IntegerRepresentation (
                                                                 null,
                                                                 EIntegerBase.HEXADECIMAL,
                                                                 null,
+                                                                null,
                                                                 2,
                                                                 null,
                                                                 null);
 
   // print octal with 4-chars separations, eg "01_0000"
-  public static final IntegerRepresentation OCT = DEFAULT.with (null, null, EIntegerBase.OCTAL, null, 4, null, null);
+  public static final IntegerRepresentation OCT = DEFAULT.with (null,
+                                                                null,
+                                                                EIntegerBase.OCTAL,
+                                                                null,
+                                                                null,
+                                                                4,
+                                                                null,
+                                                                null);
 
   //
   // mutators
@@ -96,6 +120,7 @@ public record IntegerRepresentation (
                                       prefixUpper,
                                       base,
                                       padding,
+                                      separateFormat,
                                       separateEvery,
                                       separatorSize,
                                       sufixUpper);
@@ -107,6 +132,7 @@ public record IntegerRepresentation (
                                       prefixUpper,
                                       base,
                                       padding,
+                                      separateFormat,
                                       separateEvery,
                                       separatorSize,
                                       sufixUpper);
@@ -118,6 +144,7 @@ public record IntegerRepresentation (
                                       prefixUpper,
                                       base,
                                       padding,
+                                      separateFormat,
                                       separateEvery,
                                       separatorSize,
                                       sufixUpper);
@@ -129,6 +156,7 @@ public record IntegerRepresentation (
                                       prefixUpper,
                                       base,
                                       padding,
+                                      separateFormat,
                                       separateEvery,
                                       separatorSize,
                                       sufixUpper);
@@ -140,6 +168,7 @@ public record IntegerRepresentation (
                                       prefixUpper,
                                       base,
                                       padding,
+                                      separateFormat,
                                       separateEvery,
                                       separatorSize,
                                       sufixUpper);
@@ -151,6 +180,7 @@ public record IntegerRepresentation (
                                       prefixUpper,
                                       base,
                                       padding,
+                                      separateFormat,
                                       separateEvery,
                                       separatorSize,
                                       sufixUpper);
@@ -162,17 +192,20 @@ public record IntegerRepresentation (
                                       prefixUpper,
                                       base,
                                       padding,
+                                      separateFormat,
                                       separateEvery,
                                       separatorSize,
                                       sufixUpper);
   }
 
   /// This is present to avoid long chains of configuration when updating from a base model
+  ///
   /// @return new record with fields overwritten by non-null params.
   public IntegerRepresentation with (Boolean newPositiveSign,
                                      Boolean newPrefixUpper,
                                      EIntegerBase newBase,
                                      Integer newPadding,
+                                     Optional <String> newSeparateFormat,
                                      Integer newSepEvery,
                                      Integer newSepSize,
                                      Boolean newSuffixUpper)
@@ -181,6 +214,7 @@ public record IntegerRepresentation (
       (newPrefixUpper == null || newPrefixUpper == prefixUpper) &&
       (newBase == null || newBase == base) &&
       (newPadding == null || newPadding == padding) &&
+      (newSeparateFormat == null || newSeparateFormat.orElse (null) == separateFormat) &&
       (newSepEvery == null || newSepEvery == separateEvery) &&
       (newSepSize == null || newSepSize == separatorSize) &&
       (newSuffixUpper == null || newSuffixUpper == sufixUpper))
@@ -191,6 +225,7 @@ public record IntegerRepresentation (
                                       newPrefixUpper == null ? prefixUpper : newPrefixUpper,
                                       newBase == null ? base : newBase,
                                       newPadding == null ? padding : newPadding,
+                                      newSeparateFormat == null ? separateFormat : newSeparateFormat.orElse (null),
                                       newSepEvery == null ? separateEvery : newSepEvery,
                                       newSepSize == null ? separatorSize : newSepSize,
                                       newSuffixUpper == null ? sufixUpper : newSuffixUpper);
@@ -202,7 +237,14 @@ public record IntegerRepresentation (
 
   public String format (int i)
   {
-    return base.represent (i, new StringBuilder (), positiveSign, prefixUpper, padding, separateEvery, separatorSize)
+    return base.represent (i,
+                           new StringBuilder (),
+                           positiveSign,
+                           prefixUpper,
+                           padding,
+                           separateFormat,
+                           separateEvery,
+                           separatorSize)
                .toString ();
   }
 
@@ -213,6 +255,7 @@ public record IntegerRepresentation (
                            positiveSign,
                            prefixUpper,
                            padding,
+                           separateFormat,
                            separateEvery,
                            separatorSize,
                            sufixUpper).toString ();

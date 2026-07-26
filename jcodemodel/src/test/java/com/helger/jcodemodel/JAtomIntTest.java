@@ -76,7 +76,7 @@ public class JAtomIntTest
         for (boolean suffixUpper : new boolean [] { true, false })
         {
           ja.representation (ja.representation ()
-                               .with (positiveSign, prefixUpper, null, null, null, null, suffixUpper));
+                               .with (positiveSign, prefixUpper, null, null, null, null, null, suffixUpper));
           Assert.assertEquals (positiveSign ? "+42" : "42", CodeModelTestsHelper.toString (ja));
         }
       }
