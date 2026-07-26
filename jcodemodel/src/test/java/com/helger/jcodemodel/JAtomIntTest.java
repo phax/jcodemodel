@@ -17,21 +17,21 @@ public class JAtomIntTest
       JAtomInt i42 = new JAtomInt (42);
       Assert.assertEquals ("0b101010", CodeModelTestsHelper.toString (i42.binary ()));
       Assert.assertEquals ("42", CodeModelTestsHelper.toString (i42.decimal ()));
-      Assert.assertEquals ("0x2a", CodeModelTestsHelper.toString (i42.hex ()));
+      Assert.assertEquals ("0x2a", CodeModelTestsHelper.toString (i42.hexadecimal ()));
       Assert.assertEquals ("052", CodeModelTestsHelper.toString (i42.octal ()));
     }
     {
       JAtomInt i0 = new JAtomInt (0);
       Assert.assertEquals ("0b0", CodeModelTestsHelper.toString (i0.binary ()));
       Assert.assertEquals ("0", CodeModelTestsHelper.toString (i0.decimal ()));
-      Assert.assertEquals ("0x0", CodeModelTestsHelper.toString (i0.hex ()));
+      Assert.assertEquals ("0x0", CodeModelTestsHelper.toString (i0.hexadecimal ()));
       Assert.assertEquals ("00", CodeModelTestsHelper.toString (i0.octal ()));
     }
     {
       JAtomInt iNeg2 = new JAtomInt (-2);
       Assert.assertEquals ("-0b10", CodeModelTestsHelper.toString (iNeg2.binary ()));
       Assert.assertEquals ("-2", CodeModelTestsHelper.toString (iNeg2.decimal ()));
-      Assert.assertEquals ("-0x2", CodeModelTestsHelper.toString (iNeg2.hex ()));
+      Assert.assertEquals ("-0x2", CodeModelTestsHelper.toString (iNeg2.hexadecimal ()));
       Assert.assertEquals ("-02", CodeModelTestsHelper.toString (iNeg2.octal ()));
     }
   }
@@ -62,7 +62,7 @@ public class JAtomIntTest
     JAtomInt ia = new JAtomInt (42).separateEvery (0).padding (5);
     Assert.assertEquals ("0b101010", CodeModelTestsHelper.toString (ia.binary ()));
     Assert.assertEquals ("42", CodeModelTestsHelper.toString (ia.decimal ()));
-    Assert.assertEquals ("0x0002a", CodeModelTestsHelper.toString (ia.hex ()));
+    Assert.assertEquals ("0x0002a", CodeModelTestsHelper.toString (ia.hexadecimal ()));
     Assert.assertEquals ("000052", CodeModelTestsHelper.toString (ia.octal ()));
   }
 

@@ -16,7 +16,7 @@ public class IntFormatTestGen {
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i32d",
         JExpr.lit(32).decimal().separateEvery(separateEvery).separatorSize(sepSize));
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i32h",
-        JExpr.lit(32).hex().separateEvery(separateEvery).separatorSize(sepSize));
+        JExpr.lit(32).hexadecimal().separateEvery(separateEvery).separatorSize(sepSize));
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i32o",
         JExpr.lit(32).octal().separateEvery(separateEvery).separatorSize(sepSize));
 
@@ -25,7 +25,7 @@ public class IntFormatTestGen {
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i1Md",
         JExpr.lit(1024 * 1024).decimal().separateEvery(separateEvery).separatorSize(sepSize));
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i1Mh",
-        JExpr.lit(1024 * 1024).hex().separateEvery(separateEvery).separatorSize(sepSize));
+        JExpr.lit(1024 * 1024).hexadecimal().separateEvery(separateEvery).separatorSize(sepSize));
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i1Mo",
         JExpr.lit(1024 * 1024).octal().separateEvery(separateEvery).separatorSize(sepSize));
 
@@ -34,7 +34,7 @@ public class IntFormatTestGen {
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "iNeg1kd",
         JExpr.lit(-1024).decimal().separateEvery(separateEvery).separatorSize(sepSize));
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "iNeg1kh",
-        JExpr.lit(-1024).hex().separateEvery(separateEvery).separatorSize(sepSize));
+        JExpr.lit(-1024).hexadecimal().separateEvery(separateEvery).separatorSize(sepSize));
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "iNeg1ko",
         JExpr.lit(-1024).octal().separateEvery(separateEvery).separatorSize(sepSize));
 
@@ -43,7 +43,7 @@ public class IntFormatTestGen {
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i42p5d",
         JExpr.lit(42).decimal().separateEvery(separateEvery).separatorSize(sepSize).padding(5));
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i42p5h",
-        JExpr.lit(42).hex().separateEvery(separateEvery).separatorSize(sepSize).padding(5));
+        JExpr.lit(42).hexadecimal().separateEvery(separateEvery).separatorSize(sepSize).padding(5));
     clazz.field(JMod.PUBLIC_STATIC_FINAL, clazz.owner().INT, "i42p5o",
         JExpr.lit(42).octal().separateEvery(separateEvery).separatorSize(sepSize).padding(5));
   }
