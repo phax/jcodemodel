@@ -14,10 +14,10 @@ import org.jspecify.annotations.Nullable;
 /// @see https://docs.oracle.com/javase/specs/jls/se17/html/jls-3.html#jls-3.10.1
 public enum EIntegerBase
 {
-  BINARY ("0b", Integer::toBinaryString, Long::toBinaryString, true, false),
-  DECIMAL ("", Integer::toString, Long::toString, false, false),
-  HEXADECIMAL ("0x", Integer::toHexString, Long::toHexString, true, false),
-  OCTAL ("0", Integer::toOctalString, Long::toOctalString, true, true);
+  BINARY ("0b", Integer::toBinaryString, Long::toBinaryString, false, true, false),
+  DECIMAL ("", Integer::toString, Long::toString, false, false, false),
+  HEXADECIMAL ("0x", Integer::toHexString, Long::toHexString, true, true, false),
+  OCTAL ("0", Integer::toOctalString, Long::toOctalString, false, true, true);
 
   @NonNull
   final IntFunction <String> intFormat;
@@ -34,8 +34,11 @@ public enum EIntegerBase
   final String prefixUpperCased;
 
   /// when true, the base allows padding. Only decimal does not allow padding, as a non-single
-  /// leading 0 means base octal.
+  /// leading 0 digit means base octal.
   final boolean enablePadding;
+
+  /// when true (only hex), this base can produce different uppercase and lowercase body.
+  final boolean enableBodyUpper;
 
   /// when true, the separator format can produce leading separators in the body ; when false, the
   /// body will always start with a base char.
@@ -44,6 +47,7 @@ public enum EIntegerBase
   EIntegerBase (String prefix,
                 IntFunction <String> intFormat,
                 LongFunction <String> longFormat,
+                boolean enableBodyUpper,
                 boolean enablePadding,
                 boolean allowBodyLeadingSep)
   {
@@ -51,6 +55,7 @@ public enum EIntegerBase
     this.prefixUpperCased = prefix.toUpperCase (Locale.ROOT);
     this.intFormat = intFormat;
     this.longFormat = longFormat;
+    this.enableBodyUpper = enableBodyUpper;
     this.enablePadding = enablePadding;
     this.allowBodyLeadingSep = allowBodyLeadingSep;
   }
@@ -60,6 +65,7 @@ public enum EIntegerBase
                                   StringBuilder sb,
                                   boolean positiveSign,
                                   boolean prefixUpper,
+                                  boolean bodyUpper,
                                   int padding,
                                   String sepFormat,
                                   int sepEvery,
@@ -73,7 +79,12 @@ public enum EIntegerBase
       if (positiveSign)
         sb.append ('+');
     sb.append (prefixUpper ? prefixUpperCased : prefixLowerCased);
-    addSep (padBody (intFormat.apply (i), padding), sepFormat, allowBodyLeadingSep, sepEvery, sepSize, sb);
+    addSep (padBody (caseBody (intFormat.apply (i), bodyUpper), padding),
+            sepFormat,
+            allowBodyLeadingSep,
+            sepEvery,
+            sepSize,
+            sb);
     return sb;
   }
 
@@ -82,6 +93,7 @@ public enum EIntegerBase
                                   StringBuilder sb,
                                   boolean positiveSign,
                                   boolean prefixUpper,
+                                  boolean bodyUpper,
                                   int padding,
                                   String sepFormat,
                                   int sepEvery,
@@ -96,9 +108,33 @@ public enum EIntegerBase
       if (positiveSign)
         sb.append ('+');
     sb.append (prefixUpper ? prefixUpperCased : prefixLowerCased);
-    addSep (padBody (longFormat.apply (l), padding), sepFormat, allowBodyLeadingSep, sepEvery, sepSize, sb);
+    addSep (padBody (caseBody (longFormat.apply (l), bodyUpper), padding),
+            sepFormat,
+            allowBodyLeadingSep,
+            sepEvery,
+            sepSize,
+            sb);
     sb.append (suffixUpper ? 'L' : 'l');
     return sb;
+  }
+
+  /// if the base differentiates upper and lower body, put it in the corresponding case.
+  protected @NonNull String caseBody (@NonNull String body, boolean upper)
+  {
+    if (enableBodyUpper)
+      return upper ? body.toUpperCase (Locale.ROOT) : body.toLowerCase (Locale.ROOT);
+    return body;
+  }
+
+  private static final char PAD_CHAR = '0';
+  private static final String PAD_STRING = String.valueOf (PAD_CHAR);
+
+  /// if the base is padding enabled (so not decimal), prefix the body to match given length
+  protected @NonNull String padBody (@NonNull String body, int qtty)
+  {
+    if (!enablePadding || qtty <= body.length ())
+      return body;
+    return PAD_STRING.repeat (qtty - body.length ()) + body;
   }
 
   private static final char SEP_CHAR = '_';
@@ -199,21 +235,5 @@ public enum EIntegerBase
         sb.append (source.substring (start, end));
       }
     }
-  }
-
-  private static final char PAD_CHAR = '0';
-  private static final String PAD_STRING = String.valueOf (PAD_CHAR);
-
-  /// only for bases with padding enabled (so not decimal)
-  protected String padBody (@NonNull String body, int qtty)
-  {
-    if (!enablePadding || qtty <= body.length ())
-      return body;
-    return PAD_STRING.repeat (qtty - body.length ()) + body;
-  }
-
-  protected String trimSeparators (@NonNull String body)
-  {
-    return body;
   }
 }

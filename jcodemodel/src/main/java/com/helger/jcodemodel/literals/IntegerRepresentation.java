@@ -23,6 +23,8 @@ public record IntegerRepresentation (
                                      /// the base in which we want to represent the number, eg
                                      /// octal, binary
                                      @NonNull EIntegerBase base,
+                                     // if using hex, should we uppercase the body ?
+                                     boolean bodyUpper,
                                      /// if possible (not dec base), append 0 to make the
                                      /// representation's body at least
                                      int padding,
@@ -68,6 +70,7 @@ public record IntegerRepresentation (
   public static final IntegerRepresentation DEFAULT = new IntegerRepresentation (false,
                                                                                  false,
                                                                                  EIntegerBase.DECIMAL,
+                                                                                 true,
                                                                                  0,
                                                                                  null,
                                                                                  0,
@@ -78,6 +81,7 @@ public record IntegerRepresentation (
   public static final IntegerRepresentation BIN = DEFAULT.with (null,
                                                                 null,
                                                                 EIntegerBase.BINARY,
+                                                                null,
                                                                 null,
                                                                 null,
                                                                 8,
@@ -96,6 +100,7 @@ public record IntegerRepresentation (
                                                                 EIntegerBase.HEXADECIMAL,
                                                                 null,
                                                                 null,
+                                                                null,
                                                                 2,
                                                                 null,
                                                                 null);
@@ -104,6 +109,7 @@ public record IntegerRepresentation (
   public static final IntegerRepresentation OCT = DEFAULT.with (null,
                                                                 null,
                                                                 EIntegerBase.OCTAL,
+                                                                null,
                                                                 null,
                                                                 null,
                                                                 4,
@@ -119,6 +125,7 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (positiveSign,
                                       prefixUpper,
                                       base,
+                                      bodyUpper,
                                       padding,
                                       separateFormat,
                                       separateEvery,
@@ -131,6 +138,7 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (positiveSign,
                                       prefixUpper,
                                       base,
+                                      bodyUpper,
                                       padding,
                                       separateFormat,
                                       separateEvery,
@@ -143,6 +151,7 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (positiveSign,
                                       prefixUpper,
                                       base,
+                                      bodyUpper,
                                       padding,
                                       separateFormat,
                                       separateEvery,
@@ -155,6 +164,7 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (positiveSign,
                                       prefixUpper,
                                       base,
+                                      bodyUpper,
                                       padding,
                                       separateFormat,
                                       separateEvery,
@@ -167,6 +177,7 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (positiveSign,
                                       prefixUpper,
                                       base,
+                                      bodyUpper,
                                       padding,
                                       separateFormat,
                                       separateEvery,
@@ -179,6 +190,7 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (positiveSign,
                                       prefixUpper,
                                       base,
+                                      bodyUpper,
                                       padding,
                                       separateFormat,
                                       separateEvery,
@@ -191,6 +203,7 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (positiveSign,
                                       prefixUpper,
                                       base,
+                                      bodyUpper,
                                       padding,
                                       separateFormat,
                                       separateEvery,
@@ -204,6 +217,7 @@ public record IntegerRepresentation (
   public IntegerRepresentation with (Boolean newPositiveSign,
                                      Boolean newPrefixUpper,
                                      EIntegerBase newBase,
+                                     Boolean newBodyUpper,
                                      Integer newPadding,
                                      Optional <String> newSeparateFormat,
                                      Integer newSepEvery,
@@ -213,6 +227,7 @@ public record IntegerRepresentation (
     if ((newPositiveSign == null || newPositiveSign == positiveSign) &&
       (newPrefixUpper == null || newPrefixUpper == prefixUpper) &&
       (newBase == null || newBase == base) &&
+      (newBodyUpper == null || newBodyUpper == bodyUpper) &&
       (newPadding == null || newPadding == padding) &&
       (newSeparateFormat == null || newSeparateFormat.orElse (null) == separateFormat) &&
       (newSepEvery == null || newSepEvery == separateEvery) &&
@@ -224,6 +239,7 @@ public record IntegerRepresentation (
     return new IntegerRepresentation (newPositiveSign == null ? positiveSign : newPositiveSign,
                                       newPrefixUpper == null ? prefixUpper : newPrefixUpper,
                                       newBase == null ? base : newBase,
+                                      newBodyUpper == null ? bodyUpper : newBodyUpper,
                                       newPadding == null ? padding : newPadding,
                                       newSeparateFormat == null ? separateFormat : newSeparateFormat.orElse (null),
                                       newSepEvery == null ? separateEvery : newSepEvery,
@@ -241,6 +257,7 @@ public record IntegerRepresentation (
                            new StringBuilder (),
                            positiveSign,
                            prefixUpper,
+                           bodyUpper,
                            padding,
                            separateFormat,
                            separateEvery,
@@ -254,6 +271,7 @@ public record IntegerRepresentation (
                            new StringBuilder (),
                            positiveSign,
                            prefixUpper,
+                           bodyUpper,
                            padding,
                            separateFormat,
                            separateEvery,

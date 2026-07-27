@@ -17,7 +17,7 @@ public class JAtomIntTest
       JAtomInt i42 = new JAtomInt (42);
       Assert.assertEquals ("0b101010", CodeModelTestsHelper.toString (i42.binary ()));
       Assert.assertEquals ("42", CodeModelTestsHelper.toString (i42.decimal ()));
-      Assert.assertEquals ("0x2a", CodeModelTestsHelper.toString (i42.hexadecimal ()));
+      Assert.assertEquals ("0x2A", CodeModelTestsHelper.toString (i42.hexadecimal ()));
       Assert.assertEquals ("052", CodeModelTestsHelper.toString (i42.octal ()));
     }
     {
@@ -62,7 +62,7 @@ public class JAtomIntTest
     JAtomInt ia = new JAtomInt (42).separateEvery (0).padding (5);
     Assert.assertEquals ("0b101010", CodeModelTestsHelper.toString (ia.binary ()));
     Assert.assertEquals ("42", CodeModelTestsHelper.toString (ia.decimal ()));
-    Assert.assertEquals ("0x0002a", CodeModelTestsHelper.toString (ia.hexadecimal ()));
+    Assert.assertEquals ("0x0002A", CodeModelTestsHelper.toString (ia.hexadecimal ()));
     Assert.assertEquals ("000052", CodeModelTestsHelper.toString (ia.octal ()));
   }
 
@@ -76,7 +76,7 @@ public class JAtomIntTest
         for (boolean suffixUpper : new boolean [] { true, false })
         {
           ja.representation (ja.representation ()
-                               .with (positiveSign, prefixUpper, null, null, null, null, null, suffixUpper));
+                               .with (positiveSign, prefixUpper, null, null, null, null, null, null, suffixUpper));
           Assert.assertEquals (positiveSign ? "+42" : "42", CodeModelTestsHelper.toString (ja));
         }
       }

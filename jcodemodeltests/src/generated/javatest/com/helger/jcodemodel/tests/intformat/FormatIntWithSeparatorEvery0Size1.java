@@ -32,6 +32,6 @@ public class FormatIntWithSeparatorEvery0Size1 {
     public static final int iNeg1ko = -02000;
     public static final int i42p5b = 0b101010;
     public static final int i42p5d = 42;
-    public static final int i42p5h = 0x0002a;
+    public static final int i42p5h = 0x0002A;
     public static final int i42p5o = 000052;
 }
