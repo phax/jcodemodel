@@ -63,27 +63,21 @@ public enum EIntegerBase
   /// @return sb
   public StringBuilder represent (int i,
                                   StringBuilder sb,
-                                  boolean positiveSign,
-                                  boolean prefixUpper,
-                                  boolean bodyUpper,
-                                  int padding,
-                                  String sepFormat,
-                                  int sepEvery,
-                                  int sepSize)
+                                  IntegerRepresentation f)
   {
     boolean neg = i < 0;
     i = neg ? -i : i;
     if (neg)
       sb.append ('-');
     else
-      if (positiveSign)
+      if (f.positiveSign ())
         sb.append ('+');
-    sb.append (prefixUpper ? prefixUpperCased : prefixLowerCased);
-    addSep (padBody (caseBody (intFormat.apply (i), bodyUpper), padding),
-            sepFormat,
+    sb.append (f.prefixUpper () ? prefixUpperCased : prefixLowerCased);
+    addSep (padBody (caseBody (intFormat.apply (i), f.bodyUpper ()), f.padding ()),
+            f.separateFormat (),
             allowBodyLeadingSep,
-            sepEvery,
-            sepSize,
+            f.separateEvery (),
+            f.separatorSize (),
             sb);
     return sb;
   }
@@ -91,30 +85,23 @@ public enum EIntegerBase
   /// @return sb
   public StringBuilder represent (long l,
                                   StringBuilder sb,
-                                  boolean positiveSign,
-                                  boolean prefixUpper,
-                                  boolean bodyUpper,
-                                  int padding,
-                                  String sepFormat,
-                                  int sepEvery,
-                                  int sepSize,
-                                  boolean suffixUpper)
+                                  IntegerRepresentation f)
   {
     boolean neg = l < 0;
     l = neg ? -l : l;
     if (neg)
       sb.append ('-');
     else
-      if (positiveSign)
+      if (f.positiveSign ())
         sb.append ('+');
-    sb.append (prefixUpper ? prefixUpperCased : prefixLowerCased);
-    addSep (padBody (caseBody (longFormat.apply (l), bodyUpper), padding),
-            sepFormat,
+    sb.append (f.prefixUpper () ? prefixUpperCased : prefixLowerCased);
+    addSep (padBody (caseBody (longFormat.apply (l), f.bodyUpper ()), f.padding ()),
+            f.separateFormat (),
             allowBodyLeadingSep,
-            sepEvery,
-            sepSize,
+            f.separateEvery (),
+            f.separatorSize (),
             sb);
-    sb.append (suffixUpper ? 'L' : 'l');
+    sb.append (f.suffixUpper () ? 'L' : 'l');
     return sb;
   }
 

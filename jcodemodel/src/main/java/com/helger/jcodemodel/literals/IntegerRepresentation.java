@@ -1,7 +1,7 @@
 package com.helger.jcodemodel.literals;
 
 import java.util.Objects;
-import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.jspecify.annotations.NonNull;
 
@@ -42,7 +42,7 @@ public record IntegerRepresentation (
                                      int separatorSize,
                                      /// if representing long, should we uppercase the terminal "l"
                                      /// ?
-                                     boolean sufixUpper)
+                                     boolean suffixUpper)
 {
 
   // validation
@@ -50,6 +50,64 @@ public record IntegerRepresentation (
   public IntegerRepresentation
   {
     Objects.requireNonNull (base);
+  }
+
+  // copier
+
+  /// Intermediate mutable class for mutate a record. Waiting for java withers …
+  public static class Copier
+  {
+    public boolean positiveSign;
+    public boolean prefixUpper;
+    public EIntegerBase base;
+    public boolean bodyUpper;
+    public int padding;
+    public String separateFormat;
+    public int separateEvery;
+    public int separatorSize;
+    public boolean suffixUpper;
+
+    Copier(IntegerRepresentation ir){
+      positiveSign=ir.positiveSign;
+      prefixUpper = ir.prefixUpper;
+      base=ir.base;
+      bodyUpper=ir.bodyUpper;
+      padding=ir.padding;
+      separateFormat=ir.separateFormat;
+      separateEvery=ir.separateEvery;
+      separatorSize=ir.separatorSize;
+      suffixUpper = ir.suffixUpper;
+    }
+
+    IntegerRepresentation toRecord ()
+    {
+      return new IntegerRepresentation (positiveSign,
+                                        prefixUpper,
+                                        base,
+                                        bodyUpper,
+                                        padding,
+                                        separateFormat,
+                                        separateEvery,
+                                        separatorSize,
+                                        suffixUpper);
+    }
+
+    public Copier apply (Consumer <Copier> c)
+    {
+      c.accept (this);
+      return this;
+    }
+
+  }
+
+  public Copier copier ()
+  {
+    return new Copier (this);
+  }
+
+  public IntegerRepresentation with (Consumer <Copier> change)
+  {
+    return copier ().apply (change).toRecord ();
   }
 
   // default values
@@ -78,15 +136,10 @@ public record IntegerRepresentation (
                                                                                  true);
 
   /// print binary with 8-chars separations, eg "1_00000000" or "1_00000000_00000000L"
-  public static final IntegerRepresentation BIN = DEFAULT.with (null,
-                                                                null,
-                                                                EIntegerBase.BINARY,
-                                                                null,
-                                                                null,
-                                                                null,
-                                                                8,
-                                                                null,
-                                                                null);
+  public static final IntegerRepresentation BIN = DEFAULT.with (ir -> {
+    ir.base = EIntegerBase.BINARY;
+    ir.separateEvery = 8;
+  });
 
   /// bits with padding to 8 chars
   public static final IntegerRepresentation BIN8 = BIN.padding (8);
@@ -95,26 +148,16 @@ public record IntegerRepresentation (
   public static final IntegerRepresentation DEC = DEFAULT.separateEvery (3);
 
   // print hexa with 2-chars separations, eg "0xAA_BB"
-  public static final IntegerRepresentation HEX = DEFAULT.with (null,
-                                                                null,
-                                                                EIntegerBase.HEXADECIMAL,
-                                                                null,
-                                                                null,
-                                                                null,
-                                                                2,
-                                                                null,
-                                                                null);
+  public static final IntegerRepresentation HEX = DEFAULT.with (ir -> {
+    ir.base = EIntegerBase.HEXADECIMAL;
+    ir.separateEvery = 2;
+  });
 
   // print octal with 4-chars separations, eg "01_0000"
-  public static final IntegerRepresentation OCT = DEFAULT.with (null,
-                                                                null,
-                                                                EIntegerBase.OCTAL,
-                                                                null,
-                                                                null,
-                                                                null,
-                                                                4,
-                                                                null,
-                                                                null);
+  public static final IntegerRepresentation OCT = DEFAULT.with (ir -> {
+    ir.base = EIntegerBase.OCTAL;
+    ir.separateEvery = 4;
+  });
 
   //
   // mutators
@@ -122,129 +165,37 @@ public record IntegerRepresentation (
 
   public IntegerRepresentation positiveSign (boolean positiveSign)
   {
-    return new IntegerRepresentation (positiveSign,
-                                      prefixUpper,
-                                      base,
-                                      bodyUpper,
-                                      padding,
-                                      separateFormat,
-                                      separateEvery,
-                                      separatorSize,
-                                      sufixUpper);
+    return with (ir -> { ir.positiveSign = positiveSign; });
   }
 
   public IntegerRepresentation prefixUpper (boolean prefixUpper)
   {
-    return new IntegerRepresentation (positiveSign,
-                                      prefixUpper,
-                                      base,
-                                      bodyUpper,
-                                      padding,
-                                      separateFormat,
-                                      separateEvery,
-                                      separatorSize,
-                                      sufixUpper);
+    return with (ir -> { ir.prefixUpper = prefixUpper; });
   }
 
   public IntegerRepresentation base (EIntegerBase base)
   {
-    return new IntegerRepresentation (positiveSign,
-                                      prefixUpper,
-                                      base,
-                                      bodyUpper,
-                                      padding,
-                                      separateFormat,
-                                      separateEvery,
-                                      separatorSize,
-                                      sufixUpper);
+    return with (ir -> { ir.base = base; });
   }
 
   public IntegerRepresentation padding (int padding)
   {
-    return new IntegerRepresentation (positiveSign,
-                                      prefixUpper,
-                                      base,
-                                      bodyUpper,
-                                      padding,
-                                      separateFormat,
-                                      separateEvery,
-                                      separatorSize,
-                                      sufixUpper);
+    return with (ir -> { ir.padding = padding; });
   }
 
   public IntegerRepresentation separateEvery (int separateEvery)
   {
-    return new IntegerRepresentation (positiveSign,
-                                      prefixUpper,
-                                      base,
-                                      bodyUpper,
-                                      padding,
-                                      separateFormat,
-                                      separateEvery,
-                                      separatorSize,
-                                      sufixUpper);
+    return with (ir -> { ir.separateEvery = separateEvery; });
   }
 
   public IntegerRepresentation separatorSize (int separatorSize)
   {
-    return new IntegerRepresentation (positiveSign,
-                                      prefixUpper,
-                                      base,
-                                      bodyUpper,
-                                      padding,
-                                      separateFormat,
-                                      separateEvery,
-                                      separatorSize,
-                                      sufixUpper);
+    return with (ir -> { ir.separatorSize = separatorSize; });
   }
 
   public IntegerRepresentation sufixUpper (boolean sufixUpper)
   {
-    return new IntegerRepresentation (positiveSign,
-                                      prefixUpper,
-                                      base,
-                                      bodyUpper,
-                                      padding,
-                                      separateFormat,
-                                      separateEvery,
-                                      separatorSize,
-                                      sufixUpper);
-  }
-
-  /// This is present to avoid long chains of configuration when updating from a base model
-  ///
-  /// @return new record with fields overwritten by non-null params.
-  public IntegerRepresentation with (Boolean newPositiveSign,
-                                     Boolean newPrefixUpper,
-                                     EIntegerBase newBase,
-                                     Boolean newBodyUpper,
-                                     Integer newPadding,
-                                     Optional <String> newSeparateFormat,
-                                     Integer newSepEvery,
-                                     Integer newSepSize,
-                                     Boolean newSuffixUpper)
-  {
-    if ((newPositiveSign == null || newPositiveSign == positiveSign) &&
-      (newPrefixUpper == null || newPrefixUpper == prefixUpper) &&
-      (newBase == null || newBase == base) &&
-      (newBodyUpper == null || newBodyUpper == bodyUpper) &&
-      (newPadding == null || newPadding == padding) &&
-      (newSeparateFormat == null || newSeparateFormat.orElse (null) == separateFormat) &&
-      (newSepEvery == null || newSepEvery == separateEvery) &&
-      (newSepSize == null || newSepSize == separatorSize) &&
-      (newSuffixUpper == null || newSuffixUpper == sufixUpper))
-    {
-      return this;
-    }
-    return new IntegerRepresentation (newPositiveSign == null ? positiveSign : newPositiveSign,
-                                      newPrefixUpper == null ? prefixUpper : newPrefixUpper,
-                                      newBase == null ? base : newBase,
-                                      newBodyUpper == null ? bodyUpper : newBodyUpper,
-                                      newPadding == null ? padding : newPadding,
-                                      newSeparateFormat == null ? separateFormat : newSeparateFormat.orElse (null),
-                                      newSepEvery == null ? separateEvery : newSepEvery,
-                                      newSepSize == null ? separatorSize : newSepSize,
-                                      newSuffixUpper == null ? sufixUpper : newSuffixUpper);
+    return with (ir -> { ir.suffixUpper = sufixUpper; });
   }
 
   //
@@ -253,30 +204,12 @@ public record IntegerRepresentation (
 
   public String format (int i)
   {
-    return base.represent (i,
-                           new StringBuilder (),
-                           positiveSign,
-                           prefixUpper,
-                           bodyUpper,
-                           padding,
-                           separateFormat,
-                           separateEvery,
-                           separatorSize)
-               .toString ();
+    return base.represent (i, new StringBuilder (), this).toString ();
   }
 
   public String format (long l)
   {
-    return base.represent (l,
-                           new StringBuilder (),
-                           positiveSign,
-                           prefixUpper,
-                           bodyUpper,
-                           padding,
-                           separateFormat,
-                           separateEvery,
-                           separatorSize,
-                           sufixUpper).toString ();
+    return base.represent (l, new StringBuilder (), this).toString ();
   }
 
 }
