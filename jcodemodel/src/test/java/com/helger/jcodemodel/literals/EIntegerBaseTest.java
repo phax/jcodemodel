@@ -6,26 +6,31 @@ import org.junit.Test;
 public class EIntegerBaseTest
 {
 
-  void testFormat (String expected, String source, String format, boolean allowLeadingSep)
+  static void checkFormat (String expected, String source, String format, boolean allowLeadingSep)
   {
     StringBuilder sb = new StringBuilder ();
     EIntegerBase.addSep (source, format, allowLeadingSep, 0, 0, sb);
     Assert.assertEquals (expected, sb.toString ());
   }
 
+  /// some tests on adding separators to an int representation using [EIntegerBase#addSep]
   @Test
-  public void addSep ()
+  public void testAddSep ()
   {
     {
-      testFormat ("_0", "0", "_ ", true);
-      testFormat ("__0", "0", "__ ", true);
-      testFormat ("0", "0", "__ ", false);
-      testFormat ("012__3", "0123", "__ ", true);
-      testFormat ("_0_12_3", "0123", "_c_cc_c", true);
-      testFormat ("0_12_3", "0123", "_c_cc_c", false);
-      testFormat ("01__2_3", "0123", "__ _ ", true);
-      testFormat ("01__2_3", "0123", "__ __", true);
-      testFormat ("01234_56_789", "0123456789", "_  _   ", true);
+      checkFormat ("_0", "0", "_ ", true);
+      checkFormat ("__0", "0", "__ ", true);
+      checkFormat ("0", "0", "__ ", false);
+      checkFormat ("012__3", "0123", "__ ", true);
+
+      checkFormat ("_0_12_3", "0123", "_c_cc_c", true);
+      checkFormat ("0_12_3", "0123", "_c_cc_c", false);
+      checkFormat ("___0_12_3", "0123", "___c_cc_c", true);
+      checkFormat ("0_12_3", "0123", "___c_cc_c", false);
+
+      checkFormat ("01__2_3", "0123", "__d_d", true);
+      checkFormat ("01__2_3", "0123", "__d__", true);
+      checkFormat ("01234_56_789", "0123456789", "_dd_ddd", true);
     }
   }
 

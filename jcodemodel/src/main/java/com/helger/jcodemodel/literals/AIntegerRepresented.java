@@ -1,6 +1,8 @@
 package com.helger.jcodemodel.literals;
 
-/// Something that has an IntegerRepresentation to update.
+import org.jspecify.annotations.NonNull;
+
+/// Something that has an IntegerRepresentation to update, in practice only JAtomInt and JAtomLong
 /// 
 /// Its abstract because it's just a tooling class to extend.
 /// 
@@ -8,6 +10,7 @@ package com.helger.jcodemodel.literals;
 public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
 {
 
+  @NonNull
   protected IntegerRepresentation representation = IntegerRepresentation.DEFAULT;
 
   @SuppressWarnings ("unchecked")
@@ -24,7 +27,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// change the internal representation to the provided one
   ///
   /// @return this
-  /// @see [IntegerRepresentation] for the meaning of individual fields
+  /// @param representation if null, nothing changes.
   public T representation (IntegerRepresentation representation)
   {
     if (representation != null)
@@ -32,73 +35,70 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
     return self ();
   }
 
-  /// change the internal representation to match the request
+  /// change the internal representation to show positive sign
   ///
   /// @return this
-  /// @see [IntegerRepresentation] for the meaning of individual fields
   public T positiveSign (boolean positiveSign)
   {
     return representation (representation.positiveSign (positiveSign));
   }
 
-  /// change the internal representation to match the request
+  /// change the internal representation to use binary base
   ///
   /// @return this
-  /// @see [IntegerRepresentation] for the meaning of individual fields
   public T binary ()
   {
     return representation (representation.base (EIntegerBase.BINARY));
   }
 
-  /// change the internal representation to match the request
+  /// change the internal representation to use decimal base
   ///
   /// @return this
-  /// @see [IntegerRepresentation] for the meaning of individual fields
   public T decimal ()
   {
     return representation (representation.base (EIntegerBase.DECIMAL));
   }
 
-  /// change the internal representation to match the request
+  /// change the internal representation to use hexadecimal base
   ///
   /// @return this
-  /// @see [IntegerRepresentation] for the meaning of individual fields
   public T hexadecimal ()
   {
     return representation (representation.base (EIntegerBase.HEXADECIMAL));
   }
 
-  /// change the internal representation to match the request
+  /// change the internal representation to use octal base
   ///
   /// @return this
-  /// @see [IntegerRepresentation] for the meaning of individual fields
   public T octal ()
   {
     return representation (representation.base (EIntegerBase.OCTAL));
   }
 
-  /// change the internal representation to match the request
+  /// change the internal representation to use a fixed separator size (the number of character
+  /// BETWEEN
+  /// each separated group), used only when **NO** separator format is provided
   ///
   /// @return this
-  /// @see [IntegerRepresentation] for the meaning of individual fields
   public T separatorSize (int size)
   {
     return representation (representation.separatorSize (size));
   }
 
-  /// change the internal representation to match the request
+  /// change the internal representation to use a fixed separator distance (the maximum number of
+  /// character IN
+  /// a separated group), used only when **NO** separator format is provided
   ///
   /// @return this
-  /// @see [IntegerRepresentation] for the meaning of individual fields
   public T separateEvery (int every)
   {
     return representation (representation.separateEvery (every));
   }
 
-  /// change the internal representation to match the request
+  /// change the internal representation to use a padding value. The padding is not used for decimal
+  /// base, since leading "0" makes an octal.
   ///
   /// @return this
-  /// @see [IntegerRepresentation] for the meaning of individual fields
   public T padding (int padding)
   {
     return representation (representation.padding (padding));

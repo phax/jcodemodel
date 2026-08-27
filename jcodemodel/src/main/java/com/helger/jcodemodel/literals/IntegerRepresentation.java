@@ -59,6 +59,7 @@ public record IntegerRepresentation (
   {
     public boolean positiveSign;
     public boolean prefixUpper;
+    @NonNull
     public EIntegerBase base;
     public boolean bodyUpper;
     public int padding;
@@ -173,7 +174,7 @@ public record IntegerRepresentation (
     return with (ir -> { ir.prefixUpper = prefixUpper; });
   }
 
-  public IntegerRepresentation base (EIntegerBase base)
+  public IntegerRepresentation base (@NonNull EIntegerBase base)
   {
     return with (ir -> { ir.base = base; });
   }

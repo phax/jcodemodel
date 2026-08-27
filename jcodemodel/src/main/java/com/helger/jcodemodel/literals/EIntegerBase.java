@@ -173,6 +173,8 @@ public enum EIntegerBase
       }
       else
       {
+        // since we use separators, we start from the last chars, so we reverse the separator format
+        // and build the reversed formatted representation.
         StringBuilder reversed = new StringBuilder ();
         // body must always end with non-sep, so here assume last format is non-sep
         reversed.append (source.charAt (source.length () - 1));
