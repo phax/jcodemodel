@@ -166,37 +166,37 @@ public record IntegerRepresentation (
 
   public IntegerRepresentation positiveSign (boolean positiveSign)
   {
-    return with (ir -> { ir.positiveSign = positiveSign; });
+    return positiveSign == this.positiveSign ? this : with (ir -> { ir.positiveSign = positiveSign; });
   }
 
   public IntegerRepresentation prefixUpper (boolean prefixUpper)
   {
-    return with (ir -> { ir.prefixUpper = prefixUpper; });
+    return prefixUpper == this.prefixUpper ? this : with (ir -> { ir.prefixUpper = prefixUpper; });
   }
 
   public IntegerRepresentation base (@NonNull EIntegerBase base)
   {
-    return with (ir -> { ir.base = base; });
+    return base == this.base ? this : with (ir -> { ir.base = base; });
   }
 
   public IntegerRepresentation padding (int padding)
   {
-    return with (ir -> { ir.padding = padding; });
+    return padding == this.padding ? this : with (ir -> { ir.padding = padding; });
   }
 
   public IntegerRepresentation separateEvery (int separateEvery)
   {
-    return with (ir -> { ir.separateEvery = separateEvery; });
+    return separateEvery == this.separateEvery ? this : with (ir -> { ir.separateEvery = separateEvery; });
   }
 
   public IntegerRepresentation separatorSize (int separatorSize)
   {
-    return with (ir -> { ir.separatorSize = separatorSize; });
+    return separatorSize == this.separatorSize ? this : with (ir -> { ir.separatorSize = separatorSize; });
   }
 
-  public IntegerRepresentation sufixUpper (boolean sufixUpper)
+  public IntegerRepresentation sufixUpper (boolean suffixUpper)
   {
-    return with (ir -> { ir.suffixUpper = sufixUpper; });
+    return suffixUpper == this.suffixUpper ? this : with (ir -> { ir.suffixUpper = suffixUpper; });
   }
 
   //
