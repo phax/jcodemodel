@@ -66,14 +66,14 @@ public enum EIntegerBase
                                   IntegerRepresentation f)
   {
     boolean neg = i < 0;
-    i = neg ? -i : i;
+    int posI = neg ? -i : i;
     if (neg)
       sb.append ('-');
     else
       if (f.positiveSign ())
         sb.append ('+');
     sb.append (f.prefixUpper () ? prefixUpperCased : prefixLowerCased);
-    addSep (padBody (caseBody (intFormat.apply (i), f.bodyUpper ()), f.padding ()),
+    addSep (padBody (caseBody (intFormat.apply (posI), f.bodyUpper ()), f.padding ()),
             f.separateFormat (),
             allowBodyLeadingSep,
             f.separateEvery (),
@@ -88,14 +88,14 @@ public enum EIntegerBase
                                   IntegerRepresentation f)
   {
     boolean neg = l < 0;
-    l = neg ? -l : l;
+    long posL = neg ? -l : l;
     if (neg)
       sb.append ('-');
     else
       if (f.positiveSign ())
         sb.append ('+');
     sb.append (f.prefixUpper () ? prefixUpperCased : prefixLowerCased);
-    addSep (padBody (caseBody (longFormat.apply (l), f.bodyUpper ()), f.padding ()),
+    addSep (padBody (caseBody (longFormat.apply (posL), f.bodyUpper ()), f.padding ()),
             f.separateFormat (),
             allowBodyLeadingSep,
             f.separateEvery (),
