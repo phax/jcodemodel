@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -69,6 +70,11 @@ public class GenerateSourceMojo extends AbstractMojo
    */
   @Parameter (name = "source", property = "jcodemodel.source")
   private String m_sSource;
+
+  /// if the source is a directory, and this param is not null/empty, then only files with a last
+  /// name containing this (ignoring case) will be selected as generator sources
+  @Parameter (name = "sourcesFilter", property = "jcodemodel.sourcesFilter", required = false)
+  private String sourcesFilter;
 
   /**
    * Java feature (major release version) the generated class files are targeted at. When unset the
@@ -144,7 +150,7 @@ public class GenerateSourceMojo extends AbstractMojo
     {
       getLog ().warn ("discarding source param " + m_sSource + " as data is already set");
     }
-    Stream <? extends InputStream> sis = (StringHelper.isEmpty (m_sData)) ? findSource ()
+    Stream <? extends InputStream> sis = (StringHelper.isEmpty (m_sData)) ? findSources ()
                                                                           : Stream.of (new NonBlockingByteArrayInputStream (m_sData.getBytes (StandardCharsets.UTF_8)));
     for (InputStream is : sis.toList ())
     {
@@ -224,7 +230,7 @@ public class GenerateSourceMojo extends AbstractMojo
   /// @return extracted input streams if success, Stream of null if no source.
   /// @throws MojoExecutionException if can't open the source as a file nor an url.
   @NonNull
-  protected Stream <InputStream> findSource () throws MojoExecutionException
+  protected Stream <InputStream> findSources () throws MojoExecutionException
   {
     if (m_sSource == null || m_sSource.isBlank ())
       return Stream.of ((InputStream) null);
@@ -236,7 +242,6 @@ public class GenerateSourceMojo extends AbstractMojo
     {
       final File aTargetFile = m_sSource.startsWith ("/") ? new File (m_sSource)
                                                           : new File (m_aProject.getBasedir (), m_sSource);
-
       return streamFiles (aTargetFile);
     }
     catch (final Exception e)
@@ -288,6 +293,9 @@ public class GenerateSourceMojo extends AbstractMojo
       }
       else // file is directory
         return Stream.of (rootFile.listFiles ())
+                     .filter (f -> sourcesFilter == null ||
+                       sourcesFilter.isBlank () ||
+                       f.getName ().toLowerCase (Locale.getDefault ()).contains (sourcesFilter.toLowerCase ()))
                      .sorted (Comparator.comparing (File::getPath))
                      .flatMap (this::streamFiles);
   }

@@ -66,6 +66,7 @@ limitations under the License.
             </goals>
             <configuration>
               <source>concreteYaml</source>
+              <sourcesFilter>.yaml</sourcesFilter>
               <rootPackage>com.helger.jcodemodel.examples.plugin.yaml.concrete</rootPackage>
               <params>
                 <concrete.list>LinkedList</concrete.list>
