@@ -295,7 +295,9 @@ public class GenerateSourceMojo extends AbstractMojo
         return Stream.of (rootFile.listFiles ())
                      .filter (f -> sourcesFilter == null ||
                        sourcesFilter.isBlank () ||
-                       f.getName ().toLowerCase (Locale.getDefault ()).contains (sourcesFilter.toLowerCase ()))
+                       f.getName ()
+                        .toLowerCase (Locale.ROOT)
+                        .contains (sourcesFilter.toLowerCase (Locale.ROOT)))
                      .sorted (Comparator.comparing (File::getPath))
                      .flatMap (this::streamFiles);
   }
