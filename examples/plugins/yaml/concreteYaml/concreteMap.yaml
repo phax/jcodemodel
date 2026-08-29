@@ -1,0 +1,6 @@
+package: # we add getters and setters on all field of the package
+   - get
+   - set
+    
+ConcreteMap:
+   extends: "string map" 

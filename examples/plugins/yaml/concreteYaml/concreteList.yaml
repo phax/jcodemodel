@@ -21,9 +21,3 @@ package: # we add getters and setters on all field of the package
     
 ConcreteList:
    extends: "object list list" 
-    
-ConcreteMap:
-   extends: "string map" 
-    
-ConcreteSet:
-   extends: "object list set" 

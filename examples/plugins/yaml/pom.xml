@@ -65,7 +65,7 @@ limitations under the License.
               <goal>generate-source</goal>
             </goals>
             <configuration>
-              <source>sourceConcrete.yaml</source>
+              <source>concreteYaml</source>
               <rootPackage>com.helger.jcodemodel.examples.plugin.yaml.concrete</rootPackage>
               <params>
                 <concrete.list>LinkedList</concrete.list>
