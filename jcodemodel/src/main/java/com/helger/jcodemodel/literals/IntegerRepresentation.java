@@ -199,18 +199,4 @@ public record IntegerRepresentation (
     return suffixUpper == this.suffixUpper ? this : with (ir -> { ir.suffixUpper = suffixUpper; });
   }
 
-  //
-  // actual formatting is delegated to the base
-  //
-
-  public String format (int i)
-  {
-    return base.represent (i, new StringBuilder (), this).toString ();
-  }
-
-  public String format (long l)
-  {
-    return base.represent (l, new StringBuilder (), this).toString ();
-  }
-
 }

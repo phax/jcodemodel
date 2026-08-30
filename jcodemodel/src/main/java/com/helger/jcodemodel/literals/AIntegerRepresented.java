@@ -11,7 +11,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
 {
 
   @NonNull
-  protected IntegerRepresentation representation = IntegerRepresentation.DEFAULT;
+  protected IntegerRepresentation m_aRepresentation = IntegerRepresentation.DEFAULT;
 
   @SuppressWarnings ("unchecked")
   protected T self ()
@@ -22,7 +22,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   @NonNull
   public IntegerRepresentation representation ()
   {
-    return representation;
+    return m_aRepresentation;
   }
 
   /// change the internal representation to the provided one
@@ -32,7 +32,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   public @NonNull T representation (IntegerRepresentation representation)
   {
     if (representation != null)
-      this.representation = representation;
+      this.m_aRepresentation = representation;
     return self ();
   }
 
@@ -41,7 +41,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @return this
   public @NonNull T positiveSign (boolean positiveSign)
   {
-    return representation (representation.positiveSign (positiveSign));
+    return representation (representation ().positiveSign (positiveSign));
   }
 
   /// change the internal representation to use binary base
@@ -49,7 +49,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @return this
   public @NonNull T binary ()
   {
-    return representation (representation.base (EIntegerBase.BINARY));
+    return representation (representation ().base (EIntegerBase.BINARY));
   }
 
   /// change the internal representation to use decimal base
@@ -57,7 +57,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @return this
   public @NonNull T decimal ()
   {
-    return representation (representation.base (EIntegerBase.DECIMAL));
+    return representation (representation ().base (EIntegerBase.DECIMAL));
   }
 
   /// change the internal representation to use hexadecimal base
@@ -65,7 +65,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @return this
   public @NonNull T hexadecimal ()
   {
-    return representation (representation.base (EIntegerBase.HEXADECIMAL));
+    return representation (representation ().base (EIntegerBase.HEXADECIMAL));
   }
 
   /// change the internal representation to use octal base
@@ -73,7 +73,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @return this
   public @NonNull T octal ()
   {
-    return representation (representation.base (EIntegerBase.OCTAL));
+    return representation (representation ().base (EIntegerBase.OCTAL));
   }
 
   /// change the internal representation to use a fixed separator size (the number of character
@@ -83,7 +83,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @return this
   public @NonNull T separatorSize (int size)
   {
-    return representation (representation.separatorSize (size));
+    return representation (representation ().separatorSize (size));
   }
 
   /// change the internal representation to use a fixed separator distance (the maximum number of
@@ -93,7 +93,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @return this
   public @NonNull T separateEvery (int every)
   {
-    return representation (representation.separateEvery (every));
+    return representation (representation ().separateEvery (every));
   }
 
   /// change the internal representation to use a padding value. The padding is not used for decimal
@@ -102,7 +102,7 @@ public abstract class AIntegerRepresented <T extends AIntegerRepresented <T>>
   /// @return this
   public @NonNull T padding (int padding)
   {
-    return representation (representation.padding (padding));
+    return representation (representation ().padding (padding));
   }
 
 }

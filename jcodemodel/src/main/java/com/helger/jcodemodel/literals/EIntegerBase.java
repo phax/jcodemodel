@@ -61,7 +61,7 @@ public enum EIntegerBase
   }
 
   /// @return sb
-  public StringBuilder represent (int i,
+  public StringBuilder format (int i,
                                   StringBuilder sb,
                                   IntegerRepresentation f)
   {
@@ -83,7 +83,7 @@ public enum EIntegerBase
   }
 
   /// @return sb
-  public StringBuilder represent (long l,
+  public StringBuilder format (long l,
                                   StringBuilder sb,
                                   IntegerRepresentation f)
   {
