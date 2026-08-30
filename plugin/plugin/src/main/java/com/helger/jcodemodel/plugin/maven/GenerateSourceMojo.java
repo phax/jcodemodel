@@ -283,7 +283,7 @@ public class GenerateSourceMojo extends AbstractMojo
       catch (FileNotFoundException e)
       {
         // should never happens since isFile checks for existence
-        throw new IllegalArgumentException (e);
+        throw new IllegalStateException (e);
       }
     }
     else
