@@ -39,7 +39,7 @@ This part focuses on how to add a new generator in this project, generic enough 
 #### Creating the generator itself
 
 To create a new Generator, you must
-1. create a new module in the the `plugin/generators` directory
+1. create a new module in the `plugin/generators` directory
 2. add it to the [generators pom](../plugin/generators/pom.xml) modules list
 3. In your module, create a class that implements `ICodeModelBuilder` and is annotated with `@JCMGen`
 4. In that class, implement your generator logic in the `void build (JCodeModel model, @Nullable InputStream source) throws JCodeModelException` method.
