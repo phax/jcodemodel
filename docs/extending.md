@@ -89,8 +89,8 @@ Then create three modules under the *base* one :
 
  - *commons* lists the dependencies used by the generator that also need to be imported in the generated code.
  - *generator* contains the code of the generator to be used by the plugin
- - * generated* contains the result of the execution of the plugin.
- 
+ - *generated* contains the result of the execution of the plugin.
+
 Don't forget to add them to the *base* modules list !
 
 #### The *commons* module
@@ -137,7 +137,7 @@ Be sure to import the *commons* module. Then add the following to the pom :
 
  - the dependency assumes you defined the version in your *root* module. If that's not the case, add a `<version>${jcodemodel.version}</version>` line to it - assuming you specified `jcodemodel.version` as a property of the *root* module. If not, add one ! Or even a property of the *base* module.
  - the compiler plugin configuration is required otherwise the generator won't get its file processed correctly, and won't be loaded by the plugin. this would result in either a failure `Annotation processor 'com.helger.jcodemodel.plugin.maven.generators.JCMGenProcessor' not found` in the *generator* execution, or a `could not load the generator class` in the *generated* execution.
- 
+
 #### The *generated* module
 
 In this module, in the pom, you need to 
@@ -181,13 +181,14 @@ In this module, in the pom, you need to
 	</build>
 ```
 
-4. invoke the plugin to generate the code using the generator : 
+4. configure the JCM plugin to generate the code using the generator : 
 
 ```xml
 		<plugin>
 			<groupId>com.helger.jcodemodel</groupId>
 			<artifactId>jcodemodel-maven-plugin</artifactId>
 			<configuration>
+			  <!-- add here the configuration shared by all executions, if any -->
 			</configuration>
 			<executions>
 				<execution>
