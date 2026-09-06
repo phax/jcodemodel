@@ -2,7 +2,7 @@
 
 JCM ships a Maven plugin that runs a code generator at build time and writes the resulting sources into your project.
 
-## JCodeModel maven plugin
+## JCodeModel maven plugin
 
 This maven plugin is proposed as a part of the project. It allows to be executed at specific maven phases ; however it does not generate data by itself, as it needs to be specified a generator. For example, the [helloworld plugin example](../examples/plugins/helloworld/pom.xml) extensively configures that plugin in various ways.
 
@@ -36,7 +36,7 @@ This is the class that the yaml, json and csv generators are based on.
 
 This part focuses on how to add a new generator in this project, generic enough to be used by other projects. 
 
-### Creating the generator itself
+### Creating the generator itself
 
 To create a new Generator, you must
 1. create a new module in the `plugin/generators` directory
