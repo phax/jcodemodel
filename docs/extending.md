@@ -195,7 +195,9 @@ In this module, in the pom, you need to
 			<groupId>com.helger.jcodemodel</groupId>
 			<artifactId>jcodemodel-maven-plugin</artifactId>
 			<configuration>
-			  <!-- add here the configuration shared by all executions, if any -->
+			  	<!-- add here the configuration shared by all executions, if any -->
+				<!-- default package is root one. this sets the rot package to the module's -->
+				<rootPackage>${project.groupId}.${project.artifactId}</rootPackage>
 			</configuration>
 			<executions>
 				<execution>
@@ -269,7 +271,9 @@ In that case, the pom would look like
 						<groupId>com.helger.jcodemodel</groupId>
 						<artifactId>jcodemodel-maven-plugin</artifactId>
 						<configuration>
-						  <!-- add here the configuration shared by all executions, if any -->
+						  	<!-- add here the configuration shared by all executions, if any -->
+							<!-- default package is root one. this sets the rot package to the module's -->
+							<rootPackage>${project.groupId}.${project.artifactId}</rootPackage>
 						</configuration>
 						<executions>
 							<execution>
