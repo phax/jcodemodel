@@ -15,13 +15,13 @@
 package com.helger.jcodemodel.plugin.maven;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -41,6 +41,9 @@ import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream.DirectSourced;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream.FileSourced;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream.URLSourced;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
@@ -167,16 +170,17 @@ public class GenerateSourceMojo extends AbstractMojo
 
     final JCodeModel cm = new JCodeModel ();
 
-    Stream <? extends InputStream> sis = findSources ();
-    for (InputStream is : sis.toList ())
+    List <ISourcedInputStream> sourcesList = findSources ().toList ();
+    for (ISourcedInputStream sourced : sourcesList)
     {
-      try (is)
+      // specification accepts null closable, in that case it's not closed.
+      try (InputStream is = sourced.inputStream ())
       {
-        cmb.build (cm, is);
+        cmb.build (cm, sourced);
       }
       catch (JCodeModelException | IOException e)
       {
-        throw new MojoFailureException (e);
+        throw new MojoFailureException ("while applying source " + sourced, e);
       }
     }
     try
@@ -185,7 +189,7 @@ public class GenerateSourceMojo extends AbstractMojo
     }
     catch (IOException e)
     {
-      throw new MojoFailureException (e);
+      throw new MojoFailureException ("after applying sources " + sourcesList, e);
     }
   }
 
@@ -248,12 +252,12 @@ public class GenerateSourceMojo extends AbstractMojo
   /// @return extracted input streams if success, Stream of null if no source.
   /// @throws MojoExecutionException if can't open the source as a file nor an url.
   @NonNull
-  protected Stream <InputStream> findSources () throws MojoExecutionException
+  protected Stream <ISourcedInputStream> findSources () throws MojoExecutionException
   {
-    InputStream fromRawData = (StringHelper.isEmpty (m_sData)) ? null
-                                                               : new NonBlockingByteArrayInputStream (m_sData.getBytes (StandardCharsets.UTF_8));
+    ISourcedInputStream fromRawData = (StringHelper.isEmpty (m_sData)) ? null
+                                                               : new DirectSourced(new NonBlockingByteArrayInputStream (m_sData.getBytes (StandardCharsets.UTF_8)));
     if (m_sSource == null || m_sSource.isBlank ())
-      return Stream.of (fromRawData);
+      return Stream.of (fromRawData==null?ISourcedInputStream.NULL:fromRawData);
 
     //
     // dumb checking the source : is it a file ? a URL ?
@@ -276,7 +280,7 @@ public class GenerateSourceMojo extends AbstractMojo
     try
     {
       final URL aURL = new URL (m_sSource);
-      return fromRawData == null ? Stream.of (aURL.openStream ()) : Stream.of (fromRawData, aURL.openStream ());
+      return fromRawData == null ? Stream.of (new URLSourced (m_sSource, aURL.openStream ())) : Stream.of (fromRawData, new URLSourced (m_sSource, aURL.openStream ()));
     }
     catch (final IOException e)
     {
@@ -296,13 +300,13 @@ public class GenerateSourceMojo extends AbstractMojo
    *         if it is a dir. Otherwise, return empty stream.
    */
   @NonNull
-  protected Stream <InputStream> streamFiles (File rootFile)
+  protected Stream <ISourcedInputStream> streamFiles (File rootFile)
   {
     if (rootFile.isFile ())
     {
       try
       {
-        return Stream.of (new FileInputStream (rootFile));
+        return Stream.of (new FileSourced (rootFile));
       }
       catch (FileNotFoundException e)
       {
