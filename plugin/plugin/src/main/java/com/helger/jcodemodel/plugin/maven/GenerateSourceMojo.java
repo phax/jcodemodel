@@ -44,9 +44,29 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
+/// This mojo does the following :
+/// 
+/// 1. deduce the output folder and ensure it is present. If [m_sOutputDir] is null or blank then default "src/generated/java" is used.
+/// 2. deduce the generator to be used. If [m_sGenerator] is null or blank, then loads the resource [GENERATOR_CLASS_FILE] instead.
+/// 3. instantiate the generator class and configure it, create a new JCM to modify.
+/// 4. list the data to apply the generator to.
+///    If provided, [m_sData] is passed.
+///    If [m_sSource] is a file, it is opened ; if it is a directory, its children are opened, after being filtered by [sourcesFilter] if non null.
+///    If [m_sSource] is a url, it is opened.
+///    If no data and no source provided, then null is returned as data.
+/// 5. apply the generator on each data separately, modifying the JCM.
+/// 6. export the JCM
+/// 
+/// Note that the plugin does not actually generate code by itself : the generator used is responsible for modifying the JCM.
+/// 
+/// The simplest way to make it work as a plugin, is to add a single auto executing generator as a dependency.
+/// This way the generator will be discovered and loaded automatically, you just need to configure its data/source, if any.  
+/// 
 @Mojo (name = "generate-source", threadSafe = true, defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateSourceMojo extends AbstractMojo
 {
+
+  /// generated/parsed generator description file
   public static final String GENERATOR_CLASS_FILE = "jcodemodel/plugin/generator";
 
   /**
@@ -146,12 +166,8 @@ public class GenerateSourceMojo extends AbstractMojo
       cmb.configure (m_aParams);
 
     final JCodeModel cm = new JCodeModel ();
-    if (m_sData != null && !m_sData.isBlank () && m_sSource != null && !m_sSource.isBlank ())
-    {
-      getLog ().warn ("discarding source param " + m_sSource + " as data is already set");
-    }
-    Stream <? extends InputStream> sis = (StringHelper.isEmpty (m_sData)) ? findSources ()
-                                                                          : Stream.of (new NonBlockingByteArrayInputStream (m_sData.getBytes (StandardCharsets.UTF_8)));
+
+    Stream <? extends InputStream> sis = findSources ();
     for (InputStream is : sis.toList ())
     {
       try (is)
@@ -219,22 +235,29 @@ public class GenerateSourceMojo extends AbstractMojo
     }
   }
 
-  /// Extract the inputstreams from the specified source.
+  /// Extract the inputstreams from the specified data/source. At least one inputstream is
+  /// contained, unless an error happens.
   ///
-  /// - null is returned as a stream containing null
+  /// - if data is set, it is appended at the top ; then the source is processed
+  /// - null/blank source produces null inputstream, if data is not set ; ignored otherwise.
   /// - A directory string is recursively streamed over its files
   /// - A single file String is opened as a single-element stream
-  /// - A url string is opened it as a stream
-  /// - otherwise, as for example file not found, exception is thrown
+  /// - A url string is opened as a stream
+  /// - otherwise, as for example url not found, an exception is thrown
   ///
   /// @return extracted input streams if success, Stream of null if no source.
   /// @throws MojoExecutionException if can't open the source as a file nor an url.
   @NonNull
   protected Stream <InputStream> findSources () throws MojoExecutionException
   {
+    InputStream fromRawData = (StringHelper.isEmpty (m_sData)) ? null
+                                                               : new NonBlockingByteArrayInputStream (m_sData.getBytes (StandardCharsets.UTF_8));
     if (m_sSource == null || m_sSource.isBlank ())
-      return Stream.of ((InputStream) null);
-    // dumb checking : is it a file ? a URL ?
+      return Stream.of (fromRawData);
+
+    //
+    // dumb checking the source : is it a file ? a URL ?
+    //
 
     // store the file exception, only show it if url also fails
     Exception fileException = null;
@@ -242,7 +265,8 @@ public class GenerateSourceMojo extends AbstractMojo
     {
       final File aTargetFile = m_sSource.startsWith ("/") ? new File (m_sSource)
                                                           : new File (m_aProject.getBasedir (), m_sSource);
-      return streamFiles (aTargetFile);
+      if (aTargetFile.exists ())
+        return Stream.concat (fromRawData == null ? Stream.of () : Stream.of (fromRawData), streamFiles (aTargetFile));
     }
     catch (final Exception e)
     {
@@ -252,14 +276,14 @@ public class GenerateSourceMojo extends AbstractMojo
     try
     {
       final URL aURL = new URL (m_sSource);
-      return Stream.of (aURL.openStream ());
+      return fromRawData == null ? Stream.of (aURL.openStream ()) : Stream.of (fromRawData, aURL.openStream ());
     }
     catch (final IOException e)
     {
-      getLog ().error ("while trying to open " + m_sSource + " as a file", fileException);
+      if (fileException != null)
+        getLog ().error ("while trying to open " + m_sSource + " as a file", fileException);
       getLog ().error ("while trying to open " + m_sSource + " as a url", e);
     }
-
     throw new MojoExecutionException ("could not open provided source " + m_sSource + " as a file or url");
   }
 
@@ -295,9 +319,7 @@ public class GenerateSourceMojo extends AbstractMojo
         return Stream.of (rootFile.listFiles ())
                      .filter (f -> sourcesFilter == null ||
                        sourcesFilter.isBlank () ||
-                       f.getName ()
-                        .toLowerCase (Locale.ROOT)
-                        .contains (sourcesFilter.toLowerCase (Locale.ROOT)))
+                       f.getName ().toLowerCase (Locale.ROOT).contains (sourcesFilter.toLowerCase (Locale.ROOT)))
                      .sorted (Comparator.comparing (File::getPath))
                      .flatMap (this::streamFiles);
   }
