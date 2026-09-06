@@ -196,7 +196,7 @@ In this module, in the pom, you need to
 			<artifactId>jcodemodel-maven-plugin</artifactId>
 			<configuration>
 			  	<!-- add here the configuration shared by all executions, if any -->
-				<!-- default package is root one. this sets the rot package to the module's -->
+				<!-- default package is root one. this sets the root package to the module's -->
 				<rootPackage>${project.groupId}.${project.artifactId}</rootPackage>
 			</configuration>
 			<executions>
@@ -272,7 +272,7 @@ In that case, the pom would look like
 						<artifactId>jcodemodel-maven-plugin</artifactId>
 						<configuration>
 						  	<!-- add here the configuration shared by all executions, if any -->
-							<!-- default package is root one. this sets the rot package to the module's -->
+							<!-- default package is root one. this sets the root package to the module's -->
 							<rootPackage>${project.groupId}.${project.artifactId}</rootPackage>
 						</configuration>
 						<executions>
