@@ -15,13 +15,13 @@
 package com.helger.jcodemodel.plugin.generators.json;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.helger.jcodemodel.plugin.generators.json.parser.JsonField;
 import com.helger.jcodemodel.plugin.generators.json.parser.JsonPackage;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
 import com.helger.jcodemodel.plugin.maven.generators.AbstractFlatStructureGenerator;
 import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
@@ -36,7 +36,7 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
 {
 
   @Override
-  protected Stream <IFlatStructRecord> loadSource (InputStream source)
+  protected Stream <IFlatStructRecord> loadSource (ISourcedInputStream source)
   {
     try
     {
@@ -48,10 +48,10 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
     }
   }
 
-  protected JsonPackage load (InputStream source) throws IOException
+  protected JsonPackage load (ISourcedInputStream source) throws IOException
   {
     ObjectMapper mapper = new ObjectMapper ();
-    return mapper.readerFor (JsonPackage.class).readValue (source);
+    return mapper.readerFor (JsonPackage.class).readValue (source.inputStream ());
   }
 
   protected Stream <IFlatStructRecord> visitPackage (JsonPackage pck, String path)
