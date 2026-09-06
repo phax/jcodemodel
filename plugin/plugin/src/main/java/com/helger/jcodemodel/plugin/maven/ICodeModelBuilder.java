@@ -58,19 +58,6 @@ public interface ICodeModelBuilder
    */
   void build (JCodeModel model, @NonNull ISourcedInputStream source) throws JCodeModelException;
 
-  /**
-   * shortcut to {@link #build(JCodeModel, ISourcedInputStream)} with null values.
-   *
-   * @param model
-   *        the model to build into.
-   * @throws JCodeModelException
-   *         in case of creation error
-   */
-  default void build (final JCodeModel model) throws JCodeModelException
-  {
-    build (model, null);
-  }
-
   @Nullable
   String getRootPackage ();
 
