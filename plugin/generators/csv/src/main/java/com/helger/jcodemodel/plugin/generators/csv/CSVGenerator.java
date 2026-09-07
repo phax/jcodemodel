@@ -15,6 +15,7 @@
 package com.helger.jcodemodel.plugin.generators.csv;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -59,9 +60,9 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
 
   @SuppressWarnings ("resource")
   @Override
-  protected Stream <IFlatStructRecord> loadSource (@Nullable final ISourcedInputStream source)
+  protected Stream <IFlatStructRecord> loadSource (@NonNull final ISourcedInputStream source)
   {
-    final InputStream is = source == null ? null : source.inputStream ();
+    final InputStream is = source.inputStream ();
     if (is == null)
       return Stream.empty ();
 

@@ -15,6 +15,7 @@
 package com.helger.jcodemodel.plugin.maven.generators;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.io.Writer;
 import java.util.Set;
 
@@ -85,7 +86,7 @@ public class JCMGenProcessor extends AbstractProcessor
         }
         catch (final IOException e1)
         {
-          throw new RuntimeException (e1);
+          throw new UncheckedIOException (e1);
         }
       }
     }

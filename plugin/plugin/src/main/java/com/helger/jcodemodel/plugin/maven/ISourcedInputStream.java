@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 
 /// an inputstream and its source when it has one
-/// 
+///
 /// implementations are :
 ///  - from a file
 ///  - from a url
@@ -31,16 +31,15 @@ import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 ///  - no source was provided, so null
 public sealed interface ISourcedInputStream
 {
-  public InputStream inputStream ();
+  InputStream inputStream ();
 
   /// when the inputstream is generated from a file
   public static record FileSourced (File sourceFile, InputStream inputStream) implements ISourcedInputStream
   {
-    public FileSourced (File sourceFile) throws FileNotFoundException
+    public FileSourced (final File sourceFile) throws FileNotFoundException
     {
       this (sourceFile, new FileInputStream (sourceFile));
     }
-
   }
 
   /// when the inputstream is generated from a url
@@ -50,7 +49,7 @@ public sealed interface ISourcedInputStream
   /// when the data was transmitted directly
   public static record DirectSourced (InputStream inputStream) implements ISourcedInputStream
   {
-    public DirectSourced (String data)
+    public DirectSourced (final String data)
     {
       this (new NonBlockingByteArrayInputStream (data.getBytes (StandardCharsets.UTF_8)));
     }
@@ -66,6 +65,5 @@ public sealed interface ISourcedInputStream
     }
   }
 
-  public static NullSourced NULL = new NullSourced ();
-
+  NullSourced NULL = new NullSourced ();
 }

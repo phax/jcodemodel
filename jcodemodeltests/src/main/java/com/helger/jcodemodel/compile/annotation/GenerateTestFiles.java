@@ -71,7 +71,8 @@ public class GenerateTestFiles
   public static int extractJavaFeature ()
   {
     final String sValue = System.getProperty ("java.feature");
-    if (sValue == null || sValue.isBlank ()) {
+    if (sValue == null || sValue.isBlank ())
+    {
       return JCMWriter.DEFAULT_JAVA_FEATURE;
     }
     try
@@ -123,14 +124,13 @@ public class GenerateTestFiles
     final List <String> newFound = new ArrayList <> ();
     if (!dir.isDirectory ())
     {
-      throw new RuntimeException ("file " + dir.getAbsolutePath () + " expected to be a dir");
+      throw new IllegalArgumentException ("file " + dir.getAbsolutePath () + " expected to be a dir");
     }
     for (final File child : dir.listFiles ())
     {
       if (child.isDirectory ())
       {
         ret = scanClasses (child, (packageName.isEmpty () ? "" : packageName + ".") + child.getName (), ret);
-
       }
       else
         if (child.isFile () && child.getName ().endsWith (".java"))
@@ -159,7 +159,7 @@ public class GenerateTestFiles
     catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException |
            InstantiationException | NoSuchMethodException | SecurityException | IOException e)
     {
-      throw new RuntimeException (e);
+      throw new IllegalStateException ("Failed to run generation", e);
     }
   }
 
@@ -211,16 +211,20 @@ public class GenerateTestFiles
               params[i] = rootPackage;
               requiresJCM = true;
 
-            } else if (param.getType() == FormatterSettings.class) {
-              if (settings == null) {
-                settings = new FormatterSettings();
-              }
-              params[i] = settings;
             }
             else
-            {
-              missingParam = true;
-            }
+              if (param.getType () == FormatterSettings.class)
+              {
+                if (settings == null)
+                {
+                  settings = new FormatterSettings ();
+                }
+                params[i] = settings;
+              }
+              else
+              {
+                missingParam = true;
+              }
         }
         if (!missingParam && (returnsJCM || requiresJCM))
         {
@@ -251,10 +255,9 @@ public class GenerateTestFiles
           if (produced != null)
           {
             postProcessJCM (produced);
-            new JCMWriter(produced)
-                .withSettings(settings)
-                .setJavaFeature(m_nJavaFeature)
-                .build(m_aOutputDir, (IProgressTracker) null);
+            new JCMWriter (produced).withSettings (settings)
+                                    .setJavaFeature (m_nJavaFeature)
+                                    .build (m_aOutputDir, (IProgressTracker) null);
           }
         }
       }

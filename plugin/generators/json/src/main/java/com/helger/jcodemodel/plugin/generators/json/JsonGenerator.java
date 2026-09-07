@@ -16,12 +16,13 @@ package com.helger.jcodemodel.plugin.generators.json;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
-import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.helger.jcodemodel.plugin.generators.json.parser.JsonField;
@@ -41,9 +42,9 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
 {
 
   @Override
-  protected Stream <IFlatStructRecord> loadSource (@Nullable ISourcedInputStream source)
+  protected Stream <IFlatStructRecord> loadSource (@NonNull final ISourcedInputStream source)
   {
-    final InputStream is = source == null ? null : source.inputStream ();
+    final InputStream is = source.inputStream ();
     if (is == null)
       return Stream.empty ();
 
@@ -53,28 +54,28 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
       visitPackageRecursive (load (source), null, ret);
       return ret.stream ();
     }
-    catch (IOException e)
+    catch (final IOException e)
     {
-      throw new RuntimeException (e);
+      throw new UncheckedIOException (e);
     }
   }
 
-  protected JsonPackage load (ISourcedInputStream source) throws IOException
+  protected JsonPackage load (final ISourcedInputStream source) throws IOException
   {
-    ObjectMapper mapper = new ObjectMapper ();
+    final ObjectMapper mapper = new ObjectMapper ();
     return mapper.readerFor (JsonPackage.class).readValue (source.inputStream ());
   }
 
-  protected void visitPackageRecursive (JsonPackage pck, String path, List <IFlatStructRecord> target)
+  protected void visitPackageRecursive (final JsonPackage pck, final String path, final List <IFlatStructRecord> target)
   {
     if (pck.isClassInfo ())
     {
       if (pck.clazz != null || pck.parentClassName != null)
       {
-        FieldOptions options = new FieldOptions ();
+        final FieldOptions options = new FieldOptions ();
         if (pck.clazz != null)
         {
-          for (String optStr : pck.clazz)
+          for (final String optStr : pck.clazz)
           {
             applyToFieldOptions (optStr, options);
           }
@@ -83,7 +84,7 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
       }
       if (pck.fields != null)
       {
-        for (Entry <String, JsonField> e : pck.fields.entrySet ())
+        for (final Entry <String, JsonField> e : pck.fields.entrySet ())
         {
           visitField (e.getValue (), path, e.getKey (), target);
         }
@@ -93,37 +94,38 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
     {
       if (pck.isPackageInfo ())
       {
-        FieldOptions options = new FieldOptions ();
+        final FieldOptions options = new FieldOptions ();
         if (pck.pck != null)
         {
-          for (String optStr : pck.pck)
+          for (final String optStr : pck.pck)
           {
             applyToFieldOptions (optStr, options);
           }
         }
         target.add (new PackageCreation (path, options));
       }
-      for (Entry <String, JsonPackage> e : pck.subPackages ().entrySet ())
+      for (final Entry <String, JsonPackage> e : pck.subPackages ().entrySet ())
       {
-        String subPath = (path == null ? "" : path + ".") + e.getKey ();
+        final String subPath = (path == null ? "" : path + ".") + e.getKey ();
         visitPackageRecursive (e.getValue (), subPath, target);
       }
-
     }
   }
 
-  protected void visitField (JsonField field, String path, String fieldName, List <IFlatStructRecord> target)
+  protected void visitField (final JsonField field,
+                             final String path,
+                             final String fieldName,
+                             final List <IFlatStructRecord> target)
   {
-    FieldOptions options = new FieldOptions ();
+    final FieldOptions options = new FieldOptions ();
     if (field.options != null)
     {
-      for (String optStr : field.options)
+      for (final String optStr : field.options)
       {
         applyToFieldOptions (optStr, options);
       }
     }
-    Encapsulated enc = Encapsulated.parse (field.type);
+    final Encapsulated enc = Encapsulated.parse (field.type);
     target.add (new SimpleField (path, fieldName, enc, options));
   }
-
 }
