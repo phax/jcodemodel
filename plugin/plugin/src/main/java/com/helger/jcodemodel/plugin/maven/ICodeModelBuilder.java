@@ -14,7 +14,6 @@
  */
 package com.helger.jcodemodel.plugin.maven;
 
-import java.io.InputStream;
 import java.util.Map;
 
 import org.jspecify.annotations.NonNull;
@@ -57,20 +56,7 @@ public interface ICodeModelBuilder
    * @throws JCodeModelException
    *         in case of creation error
    */
-  void build (JCodeModel model, @Nullable InputStream source) throws JCodeModelException;
-
-  /**
-   * shortcut to {@link #build(JCodeModel, InputStream)} with null values.
-   *
-   * @param model
-   *        the model to build into.
-   * @throws JCodeModelException
-   *         in case of creation error
-   */
-  default void build (final JCodeModel model) throws JCodeModelException
-  {
-    build (model, null);
-  }
+  void build (JCodeModel model, @NonNull ISourcedInputStream source) throws JCodeModelException;
 
   @Nullable
   String getRootPackage ();

@@ -15,7 +15,6 @@
 package com.helger.jcodemodel.plugin.generators.csv;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -24,6 +23,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.base.string.StringHelper;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
 import com.helger.jcodemodel.plugin.maven.generators.AbstractFlatStructureGenerator;
 import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
@@ -44,11 +44,14 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
     fldSep = params.getOrDefault ("field_sep", fldSep);
   }
 
+  @SuppressWarnings ("resource")
   @Override
-  protected Stream <IFlatStructRecord> loadSource (final InputStream source)
+  protected Stream <IFlatStructRecord> loadSource (final ISourcedInputStream source)
   {
     // What charset to use?
-    return new BufferedReader (new InputStreamReader (source)).lines ().map (this::convertLine).filter (r -> r != null);
+    return new BufferedReader (new InputStreamReader (source.inputStream ())).lines ()
+                                                                             .map (this::convertLine)
+                                                                             .filter (r -> r != null);
   }
 
   @Nullable
@@ -61,7 +64,9 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
     final String [] spl = line.trim ().split (fldSep);
     final String className = spl[0].trim ();
     if (StringHelper.isEmpty (className))
+    {
       return null;
+    }
 
     // field name for fields. Absent for non-fields
 
@@ -92,7 +97,9 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
     if (StringHelper.isEmpty (fieldName))
     {
       if (className.contains (" "))
+      {
         return new PackageCreation (className.replaceAll (".* ", ""), options);
+      }
 
       return new ClassCreation (className, ec, options);
     }

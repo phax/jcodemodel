@@ -14,7 +14,6 @@
  */
 package com.helger.jcodemodel.plugin.generators.helloworld;
 
-import java.io.InputStream;
 import java.util.Map;
 
 import com.helger.jcodemodel.JCodeModel;
@@ -23,6 +22,7 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.ICodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
 import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 
 @JCMGen
@@ -46,7 +46,7 @@ public class HelloWorldGenerator implements ICodeModelBuilder
   }
 
   @Override
-  public void build (final JCodeModel model, final InputStream source) throws JCodeModelException
+  public void build (final JCodeModel model, final ISourcedInputStream source) throws JCodeModelException
   {
     final JDefinedClass cl = model._class (expandClassName (className));
     if (m_sClassHeader != null && !m_sClassHeader.isBlank ())

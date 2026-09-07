@@ -14,7 +14,6 @@
  */
 package com.helger.jcodemodel.plugin.maven.generators;
 
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -35,22 +34,10 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.base.string.StringHelper;
-import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.AbstractJType;
-import com.helger.jcodemodel.JBlock;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JInvocation;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JNarrowedClass;
-import com.helger.jcodemodel.JPrimitiveType;
-import com.helger.jcodemodel.JReferencedClass;
-import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.ICodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.ConcreteTypes;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.EFieldOption;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.EFieldVisibility;
@@ -90,7 +77,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
    */
   private final Map <String, JFieldVar> classLastUpdated = new HashMap <> ();
 
-  protected abstract Stream <IFlatStructRecord> loadSource (@Nullable InputStream source);
+  protected abstract Stream <IFlatStructRecord> loadSource (@Nullable ISourcedInputStream source);
 
   public @Nullable String getClassHeader ()
   {
@@ -125,7 +112,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
   }
 
   @Override
-  public void build (final JCodeModel model, final InputStream source) throws JCodeModelException
+  public void build (final JCodeModel model, final ISourcedInputStream source) throws JCodeModelException
   {
     final List <IFlatStructRecord> records = loadSource (source).toList ();
     createClasses (model, records);
