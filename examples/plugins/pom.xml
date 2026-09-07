@@ -34,4 +34,15 @@
     <module>json</module>
     <module>yaml</module>
   </modules>
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.6.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>
