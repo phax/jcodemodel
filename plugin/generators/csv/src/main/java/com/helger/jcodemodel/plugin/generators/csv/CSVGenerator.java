@@ -16,7 +16,10 @@ package com.helger.jcodemodel.plugin.generators.csv;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
@@ -36,22 +39,35 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 @JCMGen
 public class CSVGenerator extends AbstractFlatStructureGenerator
 {
+  /// charset the source is read with, when the "charset" parameter is not set
+  public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+
   private String fldSep = ",";
+  private Pattern fldSepPattern = Pattern.compile (Pattern.quote (","));
+  private Charset charset = DEFAULT_CHARSET;
 
   @Override
   public void configure (@NonNull final Map <String, String> params)
   {
+    super.configure (params);
     fldSep = params.getOrDefault ("field_sep", fldSep);
+    // the separator is a literal, not a regular expression
+    fldSepPattern = Pattern.compile (Pattern.quote (fldSep));
+    final String charsetName = params.get ("charset");
+    charset = StringHelper.isEmpty (charsetName) ? DEFAULT_CHARSET : Charset.forName (charsetName);
   }
 
   @SuppressWarnings ("resource")
   @Override
-  protected Stream <IFlatStructRecord> loadSource (final ISourcedInputStream source)
+  protected Stream <IFlatStructRecord> loadSource (@Nullable final ISourcedInputStream source)
   {
-    // What charset to use?
-    return new BufferedReader (new InputStreamReader (source.inputStream ())).lines ()
-                                                                             .map (this::convertLine)
-                                                                             .filter (r -> r != null);
+    final InputStream is = source == null ? null : source.inputStream ();
+    if (is == null)
+      return Stream.empty ();
+
+    return new BufferedReader (new InputStreamReader (is, charset)).lines ()
+                                                                   .map (this::convertLine)
+                                                                   .filter (r -> r != null);
   }
 
   @Nullable
@@ -61,7 +77,12 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
     {
       return null;
     }
-    final String [] spl = line.trim ().split (fldSep);
+    final String [] spl = fldSepPattern.split (line.trim ());
+    if (spl.length == 0)
+    {
+      // the line only contains separators
+      return null;
+    }
     final String className = spl[0].trim ();
     if (StringHelper.isEmpty (className))
     {

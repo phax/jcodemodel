@@ -36,6 +36,20 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 
 # News and noteworthy
 
+v4.3.1 - work in progress
+* Maven plugin: the `data` and the `source` parameters are now both applied, instead of `data` superseeding `source`. The generators receive the new `ISourcedInputStream`, that keeps the source an inputstream was created from. See [#186](https://github.com/phax/jcodemodel/issues/186) and [#190](https://github.com/phax/jcodemodel/pull/190) - thx @glelouet
+* Maven plugin: the source files are opened one at a time and always closed, even if the generation fails
+* Maven plugin: directories are no longer skipped by `sourcesFilter` - the filter applies to the files only, as documented
+* Maven plugin: symbolic link loops inside a source directory no longer lead to an endless recursion
+* Maven plugin: the generator is now always configured, so that it gets its default parameters even if no `params` are set
+* CSV generator: the source is now read as UTF-8 by default, instead of the platform default charset. Use the new `charset` parameter to change it
+* CSV generator: the `field_sep` parameter is now used as a literal separator and no longer as a regular expression
+* CSV generator: a line containing only separators no longer throws an `ArrayIndexOutOfBoundsException`
+* CSV generator: the `concrete.list`, `concrete.map` and `concrete.set` parameters are now taken into account
+* CSV and JSON generators: a source without inputstream is handled as an empty source instead of throwing a `NullPointerException`
+* JSON generator: large sources no longer lead to a `StackOverflowError` when collecting the records
+* Flat structure generators: the classes referenced by the source are no longer initialized when they are resolved
+
 v4.3.0 - 2026-07-24
 * Naming a class `var` now throws an exception, as `var` is no longer a valid type identifier (`Var` is still allowed). See [#180](https://github.com/phax/jcodemodel/pull/180) - thx @glelouet
 * Added support for pattern matching variables via new class `JPatternVar` in the `vars` package. See [#169](https://github.com/phax/jcodemodel/issues/169) and [#170](https://github.com/phax/jcodemodel/pull/170) - thx @glelouet

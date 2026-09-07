@@ -54,7 +54,9 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
 {
   private String m_sClassHeader = "";
   private String m_sRootPackage = "";
-  protected ConcreteTypes concrete;
+  /// concrete types used for the encapsulations. Replaced by the ones of the parameters in
+  /// [#configure(Map)]
+  protected ConcreteTypes concrete = ConcreteTypes.from (Map.of ());
 
   /**
    * all the classes we created, by local name
@@ -344,7 +346,10 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
 
       try
       {
-        staticResolved = Class.forName ((prefix == null || prefix.isBlank () ? "" : prefix + ".") + typeName);
+        // don't initialize the class, only its structure is needed
+        staticResolved = Class.forName ((prefix == null || prefix.isBlank () ? "" : prefix + ".") + typeName,
+                                        false,
+                                        getClass ().getClassLoader ());
       }
       catch (final ClassNotFoundException e)
       {

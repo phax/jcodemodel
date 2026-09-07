@@ -51,25 +51,14 @@ public interface ICodeModelBuilder
    * @param model
    *        the model to build into.
    * @param source
-   *        inputstream deduced by the plugin. May be <code>null</code>, in which case most
-   *        generators would do nothing ; but this allows to have static generators.
+   *        inputstream deduced by the plugin, with the source it was created from. When neither
+   *        data nor source is configured, this is {@link ISourcedInputStream#NULL} and its
+   *        inputstream is <code>null</code> : most generators would then do nothing, but this
+   *        allows to have static generators.
    * @throws JCodeModelException
    *         in case of creation error
    */
   void build (JCodeModel model, @NonNull ISourcedInputStream source) throws JCodeModelException;
-
-  /**
-   * shortcut to {@link #build(JCodeModel, ISourcedInputStream)} with null values.
-   *
-   * @param model
-   *        the model to build into.
-   * @throws JCodeModelException
-   *         in case of creation error
-   */
-  default void build (final JCodeModel model) throws JCodeModelException
-  {
-    build (model, null);
-  }
 
   @Nullable
   String getRootPackage ();
