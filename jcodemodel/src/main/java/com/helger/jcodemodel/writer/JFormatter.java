@@ -896,7 +896,7 @@ public class JFormatter implements IJFormatter
   {
     EListWrapStrategy selectedWrap = eWrap;
     if (selectedWrap.twoPasses)
-      throw new RuntimeException ("this method can't accept two-passes config " + selectedWrap);
+      throw new IllegalArgumentException ("this method can't accept two-passes config " + selectedWrap);
     T last = null;
     boolean indented = false;
     for (final T element : aList)

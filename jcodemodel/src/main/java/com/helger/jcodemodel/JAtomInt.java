@@ -74,7 +74,7 @@ public class JAtomInt extends AIntegerRepresented <JAtomInt> implements IJExpres
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print (representation.format (m_nValue));
+    f.print (representation ().base ().format (m_nValue, new StringBuilder (), representation ()).toString ());
   }
 
   @Override

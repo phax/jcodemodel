@@ -26,4 +26,12 @@
   <artifactId>csv</artifactId>
   <name>GEN CSV</name>
   <description>generates a structure tree from a csv file</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
