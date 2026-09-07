@@ -15,8 +15,13 @@
 package com.helger.jcodemodel.plugin.generators.json;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
+
+import org.jspecify.annotations.Nullable;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.helger.jcodemodel.plugin.generators.json.parser.JsonField;
@@ -36,11 +41,17 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
 {
 
   @Override
-  protected Stream <IFlatStructRecord> loadSource (ISourcedInputStream source)
+  protected Stream <IFlatStructRecord> loadSource (@Nullable ISourcedInputStream source)
   {
+    final InputStream is = source == null ? null : source.inputStream ();
+    if (is == null)
+      return Stream.empty ();
+
     try
     {
-      return visitPackage (load (source), null);
+      final List <IFlatStructRecord> ret = new ArrayList <> ();
+      visitPackageRecursive (load (source), null, ret);
+      return ret.stream ();
     }
     catch (IOException e)
     {
@@ -54,9 +65,8 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
     return mapper.readerFor (JsonPackage.class).readValue (source.inputStream ());
   }
 
-  protected Stream <IFlatStructRecord> visitPackage (JsonPackage pck, String path)
+  protected void visitPackageRecursive (JsonPackage pck, String path, List <IFlatStructRecord> target)
   {
-    Stream <IFlatStructRecord> ret = Stream.empty ();
     if (pck.isClassInfo ())
     {
       if (pck.clazz != null || pck.parentClassName != null)
@@ -69,14 +79,13 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
             applyToFieldOptions (optStr, options);
           }
         }
-        ret = Stream.concat (ret,
-                             Stream.of (new ClassCreation (path, Encapsulated.parse (pck.parentClassName), options)));
+        target.add (new ClassCreation (path, Encapsulated.parse (pck.parentClassName), options));
       }
       if (pck.fields != null)
       {
         for (Entry <String, JsonField> e : pck.fields.entrySet ())
         {
-          ret = Stream.concat (ret, visitField (e.getValue (), path, e.getKey ()));
+          visitField (e.getValue (), path, e.getKey (), target);
         }
       }
     }
@@ -92,19 +101,18 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
             applyToFieldOptions (optStr, options);
           }
         }
-        ret = Stream.concat (ret, Stream.of (new PackageCreation (path, options)));
+        target.add (new PackageCreation (path, options));
       }
       for (Entry <String, JsonPackage> e : pck.subPackages ().entrySet ())
       {
         String subPath = (path == null ? "" : path + ".") + e.getKey ();
-        ret = Stream.concat (ret, visitPackage (e.getValue (), subPath));
+        visitPackageRecursive (e.getValue (), subPath, target);
       }
 
     }
-    return ret;
   }
 
-  protected Stream <IFlatStructRecord> visitField (JsonField field, String path, String fieldName)
+  protected void visitField (JsonField field, String path, String fieldName, List <IFlatStructRecord> target)
   {
     FieldOptions options = new FieldOptions ();
     if (field.options != null)
@@ -115,7 +123,7 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
       }
     }
     Encapsulated enc = Encapsulated.parse (field.type);
-    return Stream.of (new SimpleField (path, fieldName, enc, options));
+    target.add (new SimpleField (path, fieldName, enc, options));
   }
 
 }

@@ -18,13 +18,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Set;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -37,7 +42,6 @@ import org.apache.maven.project.MavenProject;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
 import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
@@ -165,24 +169,12 @@ public class GenerateSourceMojo extends AbstractMojo
     if (StringHelper.isNotEmpty (m_sRootPackage))
       cmb.setRootPackage (m_sRootPackage);
 
-    if (m_aParams != null)
-      cmb.configure (m_aParams);
+    // always configure, so that the generator can setup its defaults
+    cmb.configure (m_aParams == null ? Map.of () : m_aParams);
 
     final JCodeModel cm = new JCodeModel ();
 
-    List <ISourcedInputStream> sourcesList = findSources ().toList ();
-    for (ISourcedInputStream sourced : sourcesList)
-    {
-      // specification accepts null closable, in that case it's not closed.
-      try (InputStream is = sourced.inputStream ())
-      {
-        cmb.build (cm, sourced);
-      }
-      catch (JCodeModelException | IOException e)
-      {
-        throw new MojoFailureException ("while applying source " + sourced, e);
-      }
-    }
+    final List <ISourcedInputStream> sourcesList = buildSources (cmb, cm);
     try
     {
       new JCMWriter (cm).setJavaFeature (findJavaFeature ()).build (dir, (IProgressTracker) null);
@@ -230,7 +222,7 @@ public class GenerateSourceMojo extends AbstractMojo
     {
       if (is != null)
       {
-        final String className = new String (is.readAllBytes (), StandardCharsets.UTF_8);
+        final String className = new String (is.readAllBytes (), StandardCharsets.UTF_8).trim ();
         getLog ().debug ("using generator class " + className);
         return className;
       }
@@ -239,93 +231,198 @@ public class GenerateSourceMojo extends AbstractMojo
     }
   }
 
-  /// Extract the inputstreams from the specified data/source. At least one inputstream is
-  /// contained, unless an error happens.
+  /// Apply the generator to the data and to the source, one after the other.
   ///
-  /// - if data is set, it is appended at the top ; then the source is processed
-  /// - null/blank source produces null inputstream, if data is not set ; ignored otherwise.
-  /// - A directory string is recursively streamed over its files
-  /// - A single file String is opened as a single-element stream
-  /// - A url string is opened as a stream
-  /// - otherwise, as for example url not found, an exception is thrown
+  /// - if data is set, it is applied first ; then the source is processed
+  /// - a directory source is recursively browsed over its files
+  /// - a single file source is applied alone
+  /// - a url source is opened and applied
+  /// - if neither data nor source is set, the generator is applied to [ISourcedInputStream#NULL],
+  ///   so that a generator which does not need data still works, while a generator that requires
+  ///   data fails rather than being silently skipped.
   ///
-  /// @return extracted input streams if success, Stream of null if no source.
-  /// @throws MojoExecutionException if can't open the source as a file nor an url.
+  /// The sources are opened one after the other, so that only one stream is open at a time and each
+  /// of them is closed, even if the generation fails.
+  ///
+  /// @param cmb generator to apply
+  /// @param cm model to build into
+  /// @return the sources that were applied, in the order they were applied.
+  /// @throws MojoExecutionException if the source can be opened neither as a file nor as an url.
+  /// @throws MojoFailureException if the generation of a source failed.
   @NonNull
-  protected Stream <ISourcedInputStream> findSources () throws MojoExecutionException
+  protected List <ISourcedInputStream> buildSources (@NonNull final ICodeModelBuilder cmb,
+                                                     @NonNull final JCodeModel cm) throws MojoExecutionException,
+                                                                                   MojoFailureException
   {
-    ISourcedInputStream fromRawData = (StringHelper.isEmpty (m_sData)) ? null
-                                                               : new DirectSourced(new NonBlockingByteArrayInputStream (m_sData.getBytes (StandardCharsets.UTF_8)));
-    if (m_sSource == null || m_sSource.isBlank ())
-      return Stream.of (fromRawData==null?ISourcedInputStream.NULL:fromRawData);
+    final List <ISourcedInputStream> ret = new ArrayList <> ();
+    if (StringHelper.isEmpty (m_sData) && StringHelper.isEmpty (m_sSource))
+    {
+      // no data and no source at all
+      ret.add (buildSource (cmb, cm, ISourcedInputStream.NULL));
+      return ret;
+    }
 
-    //
-    // dumb checking the source : is it a file ? a URL ?
-    //
+    if (StringHelper.isNotEmpty (m_sData))
+      ret.add (buildSource (cmb, cm, new DirectSourced (m_sData)));
 
-    // store the file exception, only show it if url also fails
-    Exception fileException = null;
-    try
+    if (StringHelper.isNotEmpty (m_sSource))
     {
       final File aTargetFile = m_sSource.startsWith ("/") ? new File (m_sSource)
                                                           : new File (m_aProject.getBasedir (), m_sSource);
       if (aTargetFile.exists ())
-        return Stream.concat (fromRawData == null ? Stream.of () : Stream.of (fromRawData), streamFiles (aTargetFile));
-    }
-    catch (final Exception e)
-    {
-      fileException = e;
-    }
+      {
+        final List <File> aSourceFiles = findSourceFiles (aTargetFile);
+        if (aSourceFiles.isEmpty ())
+          getLog ().warn ("no source file found in " + aTargetFile.getAbsolutePath ());
 
+        for (final File aSourceFile : aSourceFiles)
+        {
+          getLog ().debug ("applying source file " + aSourceFile.getAbsolutePath ());
+          final FileSourced aSourced;
+          try
+          {
+            aSourced = new FileSourced (aSourceFile);
+          }
+          catch (final FileNotFoundException e)
+          {
+            // should never happen since the file was just listed
+            throw new MojoFailureException ("could not open source file " + aSourceFile.getAbsolutePath (), e);
+          }
+          ret.add (buildSource (cmb, cm, aSourced));
+        }
+      }
+      else
+      {
+        // not an existing file nor directory : the last chance is a url
+        ret.add (buildSource (cmb, cm, openURLSource ()));
+      }
+    }
+    return ret;
+  }
+
+  /// Apply the generator to a single source, and close its stream afterwards.
+  ///
+  /// @param cmb generator to apply
+  /// @param cm model to build into
+  /// @param sourced the source to apply
+  /// @return the applied source
+  /// @throws MojoFailureException if the generation failed
+  @NonNull
+  protected ISourcedInputStream buildSource (@NonNull final ICodeModelBuilder cmb,
+                                             @NonNull final JCodeModel cm,
+                                             @NonNull final ISourcedInputStream sourced) throws MojoFailureException
+  {
+    // specification accepts null closable, in that case it's not closed.
+    try (InputStream is = sourced.inputStream ())
+    {
+      cmb.build (cm, sourced);
+    }
+    catch (JCodeModelException | IOException e)
+    {
+      throw new MojoFailureException ("while applying source " + sourced, e);
+    }
+    return sourced;
+  }
+
+  /// Open the source as a url.
+  ///
+  /// @return the opened url source
+  /// @throws MojoExecutionException if the source is not a valid url, or can't be opened.
+  @NonNull
+  protected URLSourced openURLSource () throws MojoExecutionException
+  {
     try
     {
-      final URL aURL = new URL (m_sSource);
-      return fromRawData == null ? Stream.of (new URLSourced (m_sSource, aURL.openStream ())) : Stream.of (fromRawData, new URLSourced (m_sSource, aURL.openStream ()));
+      final URL aURL = new URI (m_sSource).toURL ();
+      return new URLSourced (m_sSource, aURL.openStream ());
     }
-    catch (final IOException e)
+    catch (final URISyntaxException | IllegalArgumentException | IOException e)
     {
-      if (fileException != null)
-        getLog ().error ("while trying to open " + m_sSource + " as a file", fileException);
+      getLog ().error ("source " + m_sSource + " is neither an existing file nor a directory");
       getLog ().error ("while trying to open " + m_sSource + " as a url", e);
+      throw new MojoExecutionException ("could not open provided source " + m_sSource + " as a file or url");
     }
-    throw new MojoExecutionException ("could not open provided source " + m_sSource + " as a file or url");
+  }
+
+  /// List the files to be used as generator sources.
+  ///
+  /// @param aRootFile file or directory to browse
+  /// @return the file itself if it is a normal file ; the matching files it contains, recursively,
+  ///         if it is a directory. Never null.
+  @NonNull
+  protected List <File> findSourceFiles (@NonNull final File aRootFile)
+  {
+    final List <File> ret = new ArrayList <> ();
+    collectSourceFilesRecursive (aRootFile, new HashSet <> (), ret);
+    return ret;
   }
 
   /**
-   * recursively stream the files inside the file.
-   * 
-   * @param rootFile
+   * recursively collect the files inside the file.
+   *
+   * @param aRootFile
    *        file to browse
-   * @return a single inputstream of the file if it is a normal file. inputstreams of its children
-   *         if it is a dir. Otherwise, return empty stream.
+   * @param aVisitedDirs
+   *        canonical paths of the directories already visited, to avoid an endless recursion on
+   *        symbolic link loops
+   * @param aTarget
+   *        list the found files are added to
    */
-  @NonNull
-  protected Stream <ISourcedInputStream> streamFiles (File rootFile)
+  protected void collectSourceFilesRecursive (@NonNull final File aRootFile,
+                                              @NonNull final Set <String> aVisitedDirs,
+                                              @NonNull final List <File> aTarget)
   {
-    if (rootFile.isFile ())
+    if (aRootFile.isFile ())
     {
-      try
-      {
-        return Stream.of (new FileSourced (rootFile));
-      }
-      catch (FileNotFoundException e)
-      {
-        // should never happens since isFile checks for existence
-        throw new IllegalStateException (e);
-      }
+      aTarget.add (aRootFile);
+      return;
     }
-    else
-      if (!rootFile.isDirectory ())
-      {
-        return Stream.of ();
-      }
-      else // file is directory
-        return Stream.of (rootFile.listFiles ())
-                     .filter (f -> sourcesFilter == null ||
-                       sourcesFilter.isBlank () ||
-                       f.getName ().toLowerCase (Locale.ROOT).contains (sourcesFilter.toLowerCase (Locale.ROOT)))
-                     .sorted (Comparator.comparing (File::getPath))
-                     .flatMap (this::streamFiles);
+
+    if (!aRootFile.isDirectory ())
+      return;
+
+    // isDirectory() follows the symbolic links, so a link loop would recurse forever
+    String sCanonicalPath;
+    try
+    {
+      sCanonicalPath = aRootFile.getCanonicalPath ();
+    }
+    catch (final IOException e)
+    {
+      sCanonicalPath = aRootFile.getAbsolutePath ();
+    }
+    if (!aVisitedDirs.add (sCanonicalPath))
+    {
+      getLog ().warn ("skipping the already visited directory " + aRootFile.getAbsolutePath ());
+      return;
+    }
+
+    final File [] aChildren = aRootFile.listFiles ();
+    if (aChildren == null)
+    {
+      getLog ().warn ("can't list the content of the directory " + aRootFile.getAbsolutePath ());
+      return;
+    }
+
+    Arrays.stream (aChildren)
+          // the filter applies to the files, the sub directories are always browsed
+          .filter (f -> f.isDirectory () || matchesSourcesFilter (f))
+          .sorted (Comparator.comparing (File::getPath))
+          .forEach (f -> collectSourceFilesRecursive (f, aVisitedDirs, aTarget));
+  }
+
+  /**
+   * @param aFile
+   *        file to check
+   * @return <code>true</code> if the file name matches the {@link #sourcesFilter}, or if no filter
+   *         is set.
+   */
+  protected boolean matchesSourcesFilter (@NonNull final File aFile)
+  {
+    if (sourcesFilter == null || sourcesFilter.isBlank ())
+      return true;
+
+    return aFile.getName ().toLowerCase (Locale.ROOT).contains (sourcesFilter.toLowerCase (Locale.ROOT));
   }
 
   /**
@@ -354,6 +451,11 @@ public class GenerateSourceMojo extends AbstractMojo
   public void setSource (@Nullable final String sSource)
   {
     m_sSource = sSource;
+  }
+
+  public void setSourcesFilter (@Nullable final String sSourcesFilter)
+  {
+    sourcesFilter = sSourcesFilter;
   }
 
   public void setJavaFeature (@Nullable final String sJavaFeature)
