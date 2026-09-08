@@ -23,6 +23,8 @@ import java.util.Map.Entry;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.helger.jcodemodel.plugin.generators.json.parser.JsonField;
@@ -41,15 +43,21 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 public class JsonGenerator extends AbstractFlatStructureGenerator
 {
 
+  private static final Logger log = LoggerFactory.getLogger (JsonGenerator.class);
+
   @Override
   protected Stream <IFlatStructRecord> loadSource (@NonNull final ISourcedInputStream source)
   {
     final InputStream is = source.inputStream ();
     if (is == null)
-      throw new IllegalArgumentException ("generator " +
-                                          getClass ().getSimpleName () +
-                                          " needs to receive inputstream, received " +
-                                          source);
+    {
+      log.warn ("generator " +
+                getClass ().getSimpleName () +
+                " did not receive a valid source, received " +
+                source +
+                " instead");
+      return Stream.empty ();
+    }
 
     try
     {

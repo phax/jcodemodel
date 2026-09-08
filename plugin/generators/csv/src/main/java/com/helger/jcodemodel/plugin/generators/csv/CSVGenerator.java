@@ -25,6 +25,8 @@ import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
@@ -40,6 +42,9 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 @JCMGen
 public class CSVGenerator extends AbstractFlatStructureGenerator
 {
+
+  private static final Logger log = LoggerFactory.getLogger (CSVGenerator.class);
+
   /// charset the source is read with, when the "charset" parameter is not set
   public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
@@ -64,10 +69,14 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
   {
     final InputStream is = source.inputStream ();
     if (is == null)
-      throw new IllegalArgumentException ("generator " +
-                                          getClass ().getSimpleName () +
-                                          " needs to receive inputstream, received " +
-                                          source);
+    {
+      log.warn ("generator " +
+                getClass ().getSimpleName () +
+                " did not receive a valid source, received " +
+                source +
+                " instead");
+      return Stream.empty ();
+    }
 
     return new BufferedReader (new InputStreamReader (is, charset)).lines ()
                                                                    .map (this::convertLine)
