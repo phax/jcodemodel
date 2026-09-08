@@ -25,7 +25,7 @@
   <artifactId>jcodemodel-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
   <name>MVN JCodeModel Maven Plugin</name>
-  <description>Maven plugin to generate classes using JCodeModel. This plugin requires a dedicated data loader to feed the JCodeModel the classes.</description>
+  <description>Maven plugin to call jcodemodel.</description>
   <url>https://github.com/phax/jcodemodel/plugin</url>
   <inceptionYear>2025</inceptionYear>
 
@@ -73,12 +73,15 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
+        <configuration>
+          <goalPrefix>jcm</goalPrefix>
+        </configuration>
       </plugin>
     </plugins>
   </build>
