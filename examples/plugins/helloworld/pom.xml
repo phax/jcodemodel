@@ -64,6 +64,7 @@ limitations under the License.
             <configuration>
               <generator>com.helger.jcodemodel.plugin.generators.helloworld.HelloWorldGenerator2</generator>
               <outputDir>src/generated/java2</outputDir>
+              <data>useless data</data>
               <params>
                 <name>Hello2</name>
                 <value>world2</value>

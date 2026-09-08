@@ -297,6 +297,8 @@ public class GenerateSourceMojo extends AbstractMojo
         ret.add (buildSource (cmb, cm, openURLSource ()));
       }
     }
+    if (ret.isEmpty ())
+      ret.add (buildSource (cmb, cm, ISourcedInputStream.NULL));
     return ret;
   }
 

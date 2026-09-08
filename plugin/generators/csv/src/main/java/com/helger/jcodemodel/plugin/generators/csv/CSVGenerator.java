@@ -64,7 +64,10 @@ public class CSVGenerator extends AbstractFlatStructureGenerator
   {
     final InputStream is = source.inputStream ();
     if (is == null)
-      return Stream.empty ();
+      throw new IllegalArgumentException ("generator " +
+                                          getClass ().getSimpleName () +
+                                          " needs to receive inputstream, received " +
+                                          source);
 
     return new BufferedReader (new InputStreamReader (is, charset)).lines ()
                                                                    .map (this::convertLine)
