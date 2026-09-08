@@ -37,7 +37,13 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 # News and noteworthy
 
 v4.3.1 - work in progress
+* Added the new package `literals` with `EIntegerBase`, `IntegerRepresentation` and `AIntegerRepresented` to define how `int` and `long` literals are emitted: base (binary, decimal, hexadecimal or octal), padding, `_` separators, positive sign and prefix/body/suffix casing. The predefined representations `BIN`, `BIN8`, `DEC`, `HEX` and `OCT` are available; the default output is unchanged plain decimal. See [#181](https://github.com/phax/jcodemodel/pull/181) and [#182](https://github.com/phax/jcodemodel/pull/182) - thx @glelouet
+* `JAtomInt` and `JAtomLong` extend the new class `AIntegerRepresented` and offer a fluent API to select the representation per instance: `binary ()`, `decimal ()`, `hexadecimal ()`, `octal ()`, `padding (int)`, `separateEvery (int)`, `separatorSize (int)` and `positiveSign (boolean)`. See [#188](https://github.com/phax/jcodemodel/pull/188) - thx @glelouet
+* `IllegalStateException` and `IllegalArgumentException` are thrown instead of the generic `RuntimeException`. See [#185](https://github.com/phax/jcodemodel/issues/185) and [#187](https://github.com/phax/jcodemodel/pull/187) - thx @glelouet
+* Also fixes the plugin not trying to fetch the source as an url, and showing errors when no error happened.
+* Also fixes the plugin silently skipping when the source could not be loaded.
 * Maven plugin: the `data` and the `source` parameters are now both applied, instead of `data` superseeding `source`. The generators receive the new `ISourcedInputStream`, that keeps the source an inputstream was created from. See [#186](https://github.com/phax/jcodemodel/issues/186) and [#190](https://github.com/phax/jcodemodel/pull/190) - thx @glelouet
+* Maven plugin: the `source` parameter may now also point to a directory - all contained files are then processed one after the other, optionally limited by the new `sourcesFilter` parameter. See [#184](https://github.com/phax/jcodemodel/pull/184) - thx @glelouet
 * Maven plugin: the source files are opened one at a time and always closed, even if the generation fails
 * Maven plugin: directories are no longer skipped by `sourcesFilter` - the filter applies to the files only, as documented
 * Maven plugin: symbolic link loops inside a source directory no longer lead to an endless recursion
@@ -49,6 +55,7 @@ v4.3.1 - work in progress
 * CSV and JSON generators: a source without inputstream is handled as an empty source instead of throwing a `NullPointerException`
 * JSON generator: large sources no longer lead to a `StackOverflowError` when collecting the records
 * Flat structure generators: the classes referenced by the source are no longer initialized when they are resolved
+* Extended the documentation on how to write own generators. See [#189](https://github.com/phax/jcodemodel/pull/189) - thx @glelouet
 
 v4.3.0 - 2026-07-24
 * Naming a class `var` now throws an exception, as `var` is no longer a valid type identifier (`Var` is still allowed). See [#180](https://github.com/phax/jcodemodel/pull/180) - thx @glelouet
