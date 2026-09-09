@@ -55,7 +55,7 @@ import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
  * A field that can have a {@link JDocComment} associated with it
  * @deprecated use {@link com.helger.jcodemodel.vars.JFieldVar} instead
  */
-@Deprecated (forRemoval = true, since = "4.3.0")
+@Deprecated (forRemoval = true, since = "4.4.0")
 public class JFieldVar extends JBlockVar implements IJDocCommentable
 {
   private final JDefinedClass m_aOwnerClass;
@@ -80,7 +80,7 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
    *        Value to initialize this variable to
    * @deprecated use {@link com.helger.jcodemodel.vars.JFieldVar#JFieldVar(JDefinedClass, JMods, AbstractJType, String, IVariableInitializer)} instead
    */
-  @Deprecated (forRemoval = true, since = "4.3.0")
+  @Deprecated (forRemoval = true, since = "4.4.0")
   public JFieldVar (@NonNull final JDefinedClass aOwnerClass,
                     @NonNull final JMods aMods,
                     @NonNull final AbstractJType aType,
