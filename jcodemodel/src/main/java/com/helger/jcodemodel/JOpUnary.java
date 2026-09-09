@@ -116,7 +116,7 @@ public class JOpUnary implements IJExpression
   public void generate (@NonNull final IJFormatter f)
   {
     boolean parentheses = true;
-    switch (f.settings ().parentheses.operators)
+    switch (f.settings ().parentheses.global)
     {
       case ALWAYS ->
       {
@@ -130,7 +130,7 @@ public class JOpUnary implements IJExpression
       {
         parentheses = m_aOperator.precedence.higherThan (m_aExpr.operatorPrecedence ());
       }
-      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.operators);
+      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
     }
     if (m_aOperator.prefix)
       f.print (m_aOperator.print);

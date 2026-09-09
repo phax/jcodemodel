@@ -94,7 +94,7 @@ public class JArrayCompRef implements IJAssignmentTarget
   public void generate (@NonNull final IJFormatter f)
   {
     boolean parentheses = true;
-    switch (f.settings ().parentheses.operators)
+    switch (f.settings ().parentheses.global)
     {
       case ALWAYS ->
       {
@@ -108,7 +108,7 @@ public class JArrayCompRef implements IJAssignmentTarget
       {
         parentheses = Precedence.DEREF.higherThan (m_aArray.operatorPrecedence ());
       }
-      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.operators);
+      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
     }
 
     if (parentheses)

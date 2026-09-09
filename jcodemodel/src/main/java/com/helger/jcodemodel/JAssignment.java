@@ -122,7 +122,7 @@ public class JAssignment implements IJExpressionStatement
   {
     // only right side may need parentheses
     boolean parentheses = true;
-    switch (f.settings ().parentheses.operators)
+    switch (f.settings ().parentheses.global)
     {
       case ALWAYS ->
       {
@@ -137,7 +137,7 @@ public class JAssignment implements IJExpressionStatement
         // basically only lambdas need to be parenthesized
         parentheses = Precedence.ASSIGNMENT.higherThan (m_aRhs.operatorPrecedence ());
       }
-      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.operators);
+      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
     }
     f.generable (m_aLhs).print (opFull ());
     if (parentheses)

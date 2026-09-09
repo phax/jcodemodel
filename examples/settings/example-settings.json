@@ -4,7 +4,7 @@
     "tabSize" : 4
   },
   "parentheses" : {
-    "operators" : "REQUIRED"
+    "global" : "REQUIRED"
   },
   "wrap" : {
     "lineWidth" : 80,

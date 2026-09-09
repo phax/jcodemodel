@@ -119,7 +119,7 @@ public class JOpTernary implements IJExpression
   public void generate (@NonNull final IJFormatter f)
   {
     boolean leftParentheses = true, midParentheses = true, rightParentheses = true;
-    switch (f.settings ().parentheses.operators)
+    switch (f.settings ().parentheses.global)
     {
       case ALWAYS ->
       {

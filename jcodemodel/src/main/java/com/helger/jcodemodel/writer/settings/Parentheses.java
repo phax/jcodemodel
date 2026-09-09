@@ -16,6 +16,8 @@ public class Parentheses
     REQUIRED
   }
 
-  public EParenthesesStrategy operators = EParenthesesStrategy.REQUIRED;
+  /// default strategy for parenthesis. Expressions can use a more precise one but should fall back
+  /// to this when null.
+  public EParenthesesStrategy global = EParenthesesStrategy.REQUIRED;
 
 }

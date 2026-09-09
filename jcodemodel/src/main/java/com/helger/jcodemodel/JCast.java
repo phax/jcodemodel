@@ -91,7 +91,7 @@ public class JCast implements IJExpression
   public void generate (@NonNull final IJFormatter f)
   {
     boolean parentheses = true;
-    switch (f.settings ().parentheses.operators)
+    switch (f.settings ().parentheses.global)
     {
       case ALWAYS ->
       {
@@ -105,7 +105,7 @@ public class JCast implements IJExpression
       {
         parentheses = Precedence.CAST.higherThan (m_aObject.operatorPrecedence ());
       }
-      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.operators);
+      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
     }
 
     f.print ("(").generable (m_aType).print (')');

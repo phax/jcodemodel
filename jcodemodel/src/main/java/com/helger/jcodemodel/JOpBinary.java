@@ -122,7 +122,7 @@ public class JOpBinary implements IJExpression
   public void generate (@NonNull final IJFormatter f)
   {
     boolean leftParentheses = true, rightParentheses = true;
-    switch(f.settings ().parentheses.operators) {
+    switch(f.settings ().parentheses.global) {
       case ALWAYS ->
       {
         leftParentheses = true;
@@ -138,7 +138,7 @@ public class JOpBinary implements IJExpression
             leftParentheses = m_aOperator.precedence.higherThan (m_aLeft.operatorPrecedence ());
             rightParentheses = m_aOperator.precedence.higherThan (m_aRight.operatorPrecedence ());
           }
-          default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.operators);
+          default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
     }
     if (leftParentheses)
       f.print ('(');

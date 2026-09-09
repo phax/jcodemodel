@@ -99,17 +99,17 @@ public class OperatorTestGen {
   }
 
   public void testWithParenthesesAlways(final JPackage root, FormatterSettings settings) throws JCodeModelException {
-    settings.parentheses.operators = EParenthesesStrategy.ALWAYS;
+    settings.parentheses.global = EParenthesesStrategy.ALWAYS;
     addClassMethod(root, "OperatorParenthesesAlways");
   }
 
   public void testWithParenthesesNoToken(final JPackage root, FormatterSettings settings) throws JCodeModelException {
-    settings.parentheses.operators = EParenthesesStrategy.NOTOKEN;
+    settings.parentheses.global = EParenthesesStrategy.NOTOKEN;
     addClassMethod(root, "OperatorParenthesesNoToken");
   }
 
   public void testWithParenthesesRequired(final JPackage root, FormatterSettings settings) throws JCodeModelException {
-    settings.parentheses.operators = EParenthesesStrategy.REQUIRED;
+    settings.parentheses.global = EParenthesesStrategy.REQUIRED;
     addClassMethod(root, "OperatorParenthesesRequired");
   }
 
