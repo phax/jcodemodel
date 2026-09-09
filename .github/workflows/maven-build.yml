@@ -21,6 +21,6 @@ jobs:
       uses: actions/setup-java@v6
       with:
         java-version: ${{ matrix.java }}
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Maven Build
       run: mvn --batch-mode --update-snapshots -ntp install
