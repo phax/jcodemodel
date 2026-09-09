@@ -107,7 +107,7 @@ public class JCodeModelJavaxLangModelAdapter
     }
     catch (final ErrorTypeFound ex)
     {
-      throw new RuntimeException ("ErrorTypeFound exception is disabled and shouldn't be thrown here", ex);
+      throw new IllegalStateException ("ErrorTypeFound exception is disabled and shouldn't be thrown here", ex);
     }
   }
 

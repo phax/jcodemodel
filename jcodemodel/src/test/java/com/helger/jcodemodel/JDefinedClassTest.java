@@ -180,8 +180,8 @@ public final class JDefinedClassTest
   @Test
   public void testEMods () throws JCodeModelException
   {
-    JCodeModel jcm = new JCodeModel ();
-    JDefinedClass jdc = jcm._class ("TestEModsClass");
+    final JCodeModel jcm = new JCodeModel ();
+    final JDefinedClass jdc = jcm._class ("TestEModsClass");
 
     // basic set
     jdc.emod (EMod.SEALED, EMod.PUBLIC);
@@ -206,4 +206,15 @@ public final class JDefinedClassTest
     Assert.assertTrue (jdc.isEMod (EMod.SEALED, EMod.PRIVATE));
   }
 
+  @Test
+  public void testTypeNameVar ()
+  {
+    final JCodeModel jcm = new JCodeModel ();
+    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, JMod.NONE, "double"));
+    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, JMod.NONE, "package"));
+    Assert.assertThrows (IllegalArgumentException.class, () -> new JDefinedClass (jcm, JMod.NONE, "var"));
+    new JDefinedClass (jcm, JMod.NONE, "Double");
+    new JDefinedClass (jcm, JMod.NONE, "Package");
+    new JDefinedClass (jcm, JMod.NONE, "Var");
+  }
 }

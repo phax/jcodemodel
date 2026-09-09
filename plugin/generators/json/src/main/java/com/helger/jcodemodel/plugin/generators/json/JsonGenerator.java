@@ -16,12 +16,20 @@ package com.helger.jcodemodel.plugin.generators.json;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
+
+import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.helger.jcodemodel.plugin.generators.json.parser.JsonField;
 import com.helger.jcodemodel.plugin.generators.json.parser.JsonPackage;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
 import com.helger.jcodemodel.plugin.maven.generators.AbstractFlatStructureGenerator;
 import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.FieldOptions;
@@ -35,48 +43,61 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 public class JsonGenerator extends AbstractFlatStructureGenerator
 {
 
+  private static final Logger log = LoggerFactory.getLogger (JsonGenerator.class);
+
   @Override
-  protected Stream <IFlatStructRecord> loadSource (InputStream source)
+  protected Stream <IFlatStructRecord> loadSource (@NonNull final ISourcedInputStream source)
   {
+    final InputStream is = source.inputStream ();
+    if (is == null)
+    {
+      log.warn ("generator " +
+                getClass ().getSimpleName () +
+                " did not receive a valid source, received " +
+                source +
+                " instead");
+      return Stream.empty ();
+    }
+
     try
     {
-      return visitPackage (load (source), null);
+      final List <IFlatStructRecord> ret = new ArrayList <> ();
+      visitPackageRecursive (load (source), null, ret);
+      return ret.stream ();
     }
-    catch (IOException e)
+    catch (final IOException e)
     {
-      throw new RuntimeException (e);
+      throw new UncheckedIOException (e);
     }
   }
 
-  protected JsonPackage load (InputStream source) throws IOException
+  protected JsonPackage load (final ISourcedInputStream source) throws IOException
   {
-    ObjectMapper mapper = new ObjectMapper ();
-    return mapper.readerFor (JsonPackage.class).readValue (source);
+    final ObjectMapper mapper = new ObjectMapper ();
+    return mapper.readerFor (JsonPackage.class).readValue (source.inputStream ());
   }
 
-  protected Stream <IFlatStructRecord> visitPackage (JsonPackage pck, String path)
+  protected void visitPackageRecursive (final JsonPackage pck, final String path, final List <IFlatStructRecord> target)
   {
-    Stream <IFlatStructRecord> ret = Stream.empty ();
     if (pck.isClassInfo ())
     {
       if (pck.clazz != null || pck.parentClassName != null)
       {
-        FieldOptions options = new FieldOptions ();
+        final FieldOptions options = new FieldOptions ();
         if (pck.clazz != null)
         {
-          for (String optStr : pck.clazz)
+          for (final String optStr : pck.clazz)
           {
             applyToFieldOptions (optStr, options);
           }
         }
-        ret = Stream.concat (ret,
-                             Stream.of (new ClassCreation (path, Encapsulated.parse (pck.parentClassName), options)));
+        target.add (new ClassCreation (path, Encapsulated.parse (pck.parentClassName), options));
       }
       if (pck.fields != null)
       {
-        for (Entry <String, JsonField> e : pck.fields.entrySet ())
+        for (final Entry <String, JsonField> e : pck.fields.entrySet ())
         {
-          ret = Stream.concat (ret, visitField (e.getValue (), path, e.getKey ()));
+          visitField (e.getValue (), path, e.getKey (), target);
         }
       }
     }
@@ -84,38 +105,38 @@ public class JsonGenerator extends AbstractFlatStructureGenerator
     {
       if (pck.isPackageInfo ())
       {
-        FieldOptions options = new FieldOptions ();
+        final FieldOptions options = new FieldOptions ();
         if (pck.pck != null)
         {
-          for (String optStr : pck.pck)
+          for (final String optStr : pck.pck)
           {
             applyToFieldOptions (optStr, options);
           }
         }
-        ret = Stream.concat (ret, Stream.of (new PackageCreation (path, options)));
+        target.add (new PackageCreation (path, options));
       }
-      for (Entry <String, JsonPackage> e : pck.subPackages ().entrySet ())
+      for (final Entry <String, JsonPackage> e : pck.subPackages ().entrySet ())
       {
-        String subPath = (path == null ? "" : path + ".") + e.getKey ();
-        ret = Stream.concat (ret, visitPackage (e.getValue (), subPath));
+        final String subPath = (path == null ? "" : path + ".") + e.getKey ();
+        visitPackageRecursive (e.getValue (), subPath, target);
       }
-
     }
-    return ret;
   }
 
-  protected Stream <IFlatStructRecord> visitField (JsonField field, String path, String fieldName)
+  protected void visitField (final JsonField field,
+                             final String path,
+                             final String fieldName,
+                             final List <IFlatStructRecord> target)
   {
-    FieldOptions options = new FieldOptions ();
+    final FieldOptions options = new FieldOptions ();
     if (field.options != null)
     {
-      for (String optStr : field.options)
+      for (final String optStr : field.options)
       {
         applyToFieldOptions (optStr, options);
       }
     }
-    Encapsulated enc = Encapsulated.parse (field.type);
-    return Stream.of (new SimpleField (path, fieldName, enc, options));
+    final Encapsulated enc = Encapsulated.parse (field.type);
+    target.add (new SimpleField (path, fieldName, enc, options));
   }
-
 }

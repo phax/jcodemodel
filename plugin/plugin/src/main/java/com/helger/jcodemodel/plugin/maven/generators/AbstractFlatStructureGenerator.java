@@ -14,7 +14,6 @@
  */
 package com.helger.jcodemodel.plugin.maven.generators;
 
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -51,6 +50,7 @@ import com.helger.jcodemodel.JReferencedClass;
 import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.ICodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.ConcreteTypes;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.EFieldOption;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.EFieldVisibility;
@@ -67,7 +67,9 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
 {
   private String m_sClassHeader = "";
   private String m_sRootPackage = "";
-  protected ConcreteTypes concrete;
+  /// concrete types used for the encapsulations. Replaced by the ones of the parameters in
+  /// [#configure(Map)]
+  protected ConcreteTypes concrete = ConcreteTypes.from (Map.of ());
 
   /**
    * all the classes we created, by local name
@@ -90,7 +92,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
    */
   private final Map <String, JFieldVar> classLastUpdated = new HashMap <> ();
 
-  protected abstract Stream <IFlatStructRecord> loadSource (@Nullable InputStream source);
+  protected abstract Stream <IFlatStructRecord> loadSource (@NonNull ISourcedInputStream source);
 
   public @Nullable String getClassHeader ()
   {
@@ -125,7 +127,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
   }
 
   @Override
-  public void build (final JCodeModel model, final InputStream source) throws JCodeModelException
+  public void build (final JCodeModel model, @NonNull final ISourcedInputStream source) throws JCodeModelException
   {
     final List <IFlatStructRecord> records = loadSource (source).toList ();
     createClasses (model, records);
@@ -357,7 +359,10 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
 
       try
       {
-        staticResolved = Class.forName ((prefix == null || prefix.isBlank () ? "" : prefix + ".") + typeName);
+        // don't initialize the class, only its structure is needed
+        staticResolved = Class.forName ((prefix == null || prefix.isBlank () ? "" : prefix + ".") + typeName,
+                                        false,
+                                        getClass ().getClassLoader ());
       }
       catch (final ClassNotFoundException e)
       {

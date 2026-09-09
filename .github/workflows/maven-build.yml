@@ -5,6 +5,7 @@ name: Maven build
 
 on:
   push:
+  pull_request:
  
 jobs:
   build:

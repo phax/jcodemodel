@@ -20,10 +20,23 @@
   <parent>
     <groupId>com.helger.jcodemodel.plugin</groupId>
     <artifactId>generators</artifactId>
-    <version>4.2.2-SNAPSHOT</version>
+    <version>4.3.1-SNAPSHOT</version>
   </parent>
   <groupId>com.helger.jcodemodel.plugin.generators</groupId>
   <artifactId>csv</artifactId>
   <name>GEN CSV</name>
   <description>generates a structure tree from a csv file</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>

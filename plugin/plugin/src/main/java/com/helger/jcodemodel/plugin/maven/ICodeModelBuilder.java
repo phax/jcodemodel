@@ -14,7 +14,6 @@
  */
 package com.helger.jcodemodel.plugin.maven;
 
-import java.io.InputStream;
 import java.util.Map;
 
 import org.jspecify.annotations.NonNull;
@@ -41,42 +40,35 @@ public interface ICodeModelBuilder
 
   /**
    * @param header
-   *        The class header to be used. May be <code>null</code>.
+   *        The class header (comment) to be used. May be <code>null</code>.
    */
   default void setClassHeader (@Nullable final String header)
   {}
 
   /**
-   * asking the generator to build a model.
+   * alter a model according to the specifications in a source.
    *
    * @param model
    *        the model to build into.
    * @param source
-   *        inputstream deduced by the plugin. May be <code>null</code>.
+   *        inputstream deduced by the plugin, with the source it was created from. When neither
+   *        data nor source is configured, this is {@link ISourcedInputStream#NULL} and its
+   *        inputstream is <code>null</code> : most generators would then do nothing, but this
+   *        allows to have static generators.
    * @throws JCodeModelException
    *         in case of creation error
    */
-  void build (JCodeModel model, @Nullable InputStream source) throws JCodeModelException;
-
-  /**
-   * shortcut to {@link #build(JCodeModel, InputStream)} with null values.
-   *
-   * @param model
-   *        the model to build into.
-   * @throws JCodeModelException
-   *         in case of creation error
-   */
-  default void build (final JCodeModel model) throws JCodeModelException
-  {
-    build (model, null);
-  }
+  void build (JCodeModel model, @NonNull ISourcedInputStream source) throws JCodeModelException;
 
   @Nullable
   String getRootPackage ();
 
+  /** transmitted by the plugin, specifies when set in which package to add the classes */
   void setRootPackage (@Nullable String rootPackage);
 
   /**
+   * transform a relative path into absolute by using the rootPackage.
+   * 
    * @param localPath
    *        class we want to create, eg "pck.MyClass"
    * @return localpath prefixed by rootpackage and "." if needed.

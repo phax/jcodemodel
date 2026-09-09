@@ -193,7 +193,7 @@ public class JSwitchExpression implements IJExpressionStatement
     f.print ('}').newline ();
   }
 
-  protected void generatePre25 (@NonNull final IJFormatter f)
+  protected void generatePre25 (@SuppressWarnings ("unused") @NonNull final IJFormatter f)
   {
     // TODO in that case we generate only the static ones ; the pattern cases must
     // be added on top of the default.

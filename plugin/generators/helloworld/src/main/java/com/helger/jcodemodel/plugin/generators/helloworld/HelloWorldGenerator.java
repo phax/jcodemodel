@@ -14,8 +14,10 @@
  */
 package com.helger.jcodemodel.plugin.generators.helloworld;
 
-import java.io.InputStream;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
@@ -23,11 +25,15 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.ICodeModelBuilder;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
 import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
 
 @JCMGen
 public class HelloWorldGenerator implements ICodeModelBuilder
 {
+
+  private static final Logger log = LoggerFactory.getLogger (HelloWorldGenerator.class);
+
   protected String m_sRootPackage = "com.helger.tests.helloworld";
   private String m_sClassHeader = "";
   protected String className = "Hello";
@@ -46,8 +52,16 @@ public class HelloWorldGenerator implements ICodeModelBuilder
   }
 
   @Override
-  public void build (final JCodeModel model, final InputStream source) throws JCodeModelException
+  public void build (final JCodeModel model, final ISourcedInputStream source) throws JCodeModelException
   {
+    if (source != ISourcedInputStream.NULL)
+    {
+      log.warn ("generator " +
+                getClass ().getSimpleName () +
+                " received a source " +
+                source +
+                " which is discarded. If multiple sources are provided, this may lead to runtime error");
+    }
     final JDefinedClass cl = model._class (expandClassName (className));
     if (m_sClassHeader != null && !m_sClassHeader.isBlank ())
     {

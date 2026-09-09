@@ -36,7 +36,33 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 
 # News and noteworthy
 
-v4.3.0 - 2026-07-23
+v4.3.1 - work in progress
+* Added the new package `literals` with `EIntegerBase`, `IntegerRepresentation` and `AIntegerRepresented` to define how `int` and `long` literals are emitted: base (binary, decimal, hexadecimal or octal), padding, `_` separators, positive sign and prefix/body/suffix casing. The predefined representations `BIN`, `BIN8`, `DEC`, `HEX` and `OCT` are available; the default output is unchanged plain decimal. See [#181](https://github.com/phax/jcodemodel/pull/181) and [#182](https://github.com/phax/jcodemodel/pull/182) - thx @glelouet
+* `JAtomInt` and `JAtomLong` extend the new class `AIntegerRepresented` and offer a fluent API to select the representation per instance: `binary ()`, `decimal ()`, `hexadecimal ()`, `octal ()`, `padding (int)`, `separateEvery (int)`, `separatorSize (int)` and `positiveSign (boolean)`. See [#188](https://github.com/phax/jcodemodel/pull/188) - thx @glelouet
+* `IllegalStateException` and `IllegalArgumentException` are thrown instead of the generic `RuntimeException`. See [#185](https://github.com/phax/jcodemodel/issues/185) and [#187](https://github.com/phax/jcodemodel/pull/187) - thx @glelouet
+* Also fixes the plugin not trying to fetch the source as an url, and showing errors when no error happened.
+* Also fixes the plugin silently skipping when the source could not be loaded.
+* Maven plugin: the `data` and the `source` parameters are now both applied, instead of `data` superseeding `source`. The generators receive the new `ISourcedInputStream`, that keeps the source an inputstream was created from. See [#186](https://github.com/phax/jcodemodel/issues/186) and [#190](https://github.com/phax/jcodemodel/pull/190) - thx @glelouet
+* Maven plugin: the `source` parameter may now also point to a directory - all contained files are then processed one after the other, optionally limited by the new `sourcesFilter` parameter. See [#184](https://github.com/phax/jcodemodel/pull/184) - thx @glelouet
+* Maven plugin: the source files are opened one at a time and always closed, even if the generation fails
+* Maven plugin: directories are no longer skipped by `sourcesFilter` - the filter applies to the files only, as documented
+* Maven plugin: symbolic link loops inside a source directory no longer lead to an endless recursion
+* Maven plugin: the generator is now always configured, so that it gets its default parameters even if no `params` are set
+* CSV generator: the source is now read as UTF-8 by default, instead of the platform default charset. Use the new `charset` parameter to change it
+* CSV generator: the `field_sep` parameter is now used as a literal separator and no longer as a regular expression
+* CSV generator: a line containing only separators no longer throws an `ArrayIndexOutOfBoundsException`
+* CSV generator: the `concrete.list`, `concrete.map` and `concrete.set` parameters are now taken into account
+* CSV and JSON generators: a source without inputstream is handled as an empty source instead of throwing a `NullPointerException`
+* JSON generator: large sources no longer lead to a `StackOverflowError` when collecting the records
+* Flat structure generators: the classes referenced by the source are no longer initialized when they are resolved
+* Extended the documentation on how to write own generators. See [#189](https://github.com/phax/jcodemodel/pull/189) - thx @glelouet
+
+v4.3.0 - 2026-07-24
+* Naming a class `var` now throws an exception, as `var` is no longer a valid type identifier (`Var` is still allowed). See [#180](https://github.com/phax/jcodemodel/pull/180) - thx @glelouet
+* Added support for pattern matching variables via new class `JPatternVar` in the `vars` package. See [#169](https://github.com/phax/jcodemodel/issues/169) and [#170](https://github.com/phax/jcodemodel/pull/170) - thx @glelouet
+* Started moving `JFieldVar` into the `vars` package. See [#172](https://github.com/phax/jcodemodel/issues/172) and [#175](https://github.com/phax/jcodemodel/pull/175) - thx @glelouet
+* Renamed the `expression` package to `expressions` (affects `JArrayInit` and `JInstanceOfVar`). See [#170](https://github.com/phax/jcodemodel/pull/170) - thx @glelouet
+* Fixed the `final` modifier detection in `JMethod.param (...)` and `JMethod.varParam (...)` (used `|` instead of `&`). See [#169](https://github.com/phax/jcodemodel/issues/169) - thx @glelouet
 * Added support for switch expressions (Java 14+) via new classes `JSwitchExpression`, `JYield` and arrow-style cases. See [#144](https://github.com/phax/jcodemodel/pull/144) - thx @glelouet
 * Added support for pattern matching with `instanceof` via new class `JInstanceOfVar`, invoked through `JExpr.instanceOf (...)`. See [#162](https://github.com/phax/jcodemodel/pull/162) - thx @glelouet
 * Added support for the `sealed` and `non-sealed` modifiers and the `permits` clause on `JDefinedClass`. See [#150](https://github.com/phax/jcodemodel/pull/150) - thx @glelouet
@@ -225,5 +251,5 @@ v2.6.4 - 2014-04-10
 
 ---
 
-On Twitter: <a href="https://twitter.com/philiphelger">@philiphelger</a> |
-Kindly supported by [YourKit Java Profiler](https://www.yourkit.com)
+My personal [Coding Styleguide](https://github.com/phax/meta/blob/master/CodingStyleguide.md) |
+It is appreciated if you star the GitHub project if you like it.

@@ -41,7 +41,16 @@
 package com.helger.jcodemodel;
 
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
@@ -226,24 +235,8 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     {
       ValueEnforcer.notEmpty (sName, "Name");
 
-      if (!Character.isJavaIdentifierStart (sName.charAt (0)))
-      {
-        final String msg = "JDefinedClass name " +
-                           sName +
-                           " contains illegal character" +
-                           " for beginning of identifier: " +
-                           sName.charAt (0);
-        throw new IllegalArgumentException (msg);
-      }
-      for (int i = 1; i < sName.length (); i++)
-      {
-        final char c = sName.charAt (i);
-        if (!Character.isJavaIdentifierPart (c))
-        {
-          final String msg = "JDefinedClass name " + sName + " contains illegal character " + c;
-          throw new IllegalArgumentException (msg);
-        }
-      }
+      if (!JJavaName.isTypeIdentifier (sName))
+        throw new IllegalArgumentException ("JDefinedClass name " + sName + " is invalid type name");
     }
 
     if (isInterface ())

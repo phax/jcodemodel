@@ -15,12 +15,21 @@
 package com.helger.jcodemodel.plugin.maven;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -33,16 +42,33 @@ import org.apache.maven.project.MavenProject;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import com.helger.base.io.nonblocking.NonBlockingByteArrayInputStream;
-import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream.DirectSourced;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream.FileSourced;
+import com.helger.jcodemodel.plugin.maven.ISourcedInputStream.URLSourced;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
+/**
+ * Apply a java source generator per source provided.<br />
+ * The generator is required, as a dependency, and/or as a configuration.
+ */
 @Mojo (name = "generate-source", threadSafe = true, defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateSourceMojo extends AbstractMojo
 {
+
+  static boolean isBlank (String s)
+  {
+    return s == null || s.isBlank ();
+  }
+
+  static boolean isNotBlank (String s)
+  {
+    return !isBlank (s);
+  }
+
+  /// generated/parsed generator description file
   public static final String GENERATOR_CLASS_FILE = "jcodemodel/plugin/generator";
 
   /**
@@ -58,14 +84,32 @@ public class GenerateSourceMojo extends AbstractMojo
   @Parameter (name = "outputDir", property = "jcodemodel.outdir", defaultValue = "src/generated/java")
   private String m_sOutputDir;
 
+  // we can't use that example as default value because it would fail for projects that have
+  // non-package groupid or artifactid
+  /**
+   * fully qualified package to create the classes in. Example
+   * 
+   * <pre>
+   * ${project.groupId}.${project.artifactId}
+   * </pre>
+   */
   @Parameter (name = "rootPackage", property = "jcodemodel.rootpackage", defaultValue = "")
   private String m_sRootPackage;
 
   /**
-   * source of the data to transmit to the generator when building the model. can be a url, a file.
+   * source of the data to transmit to the generator when building the model. Can be a url, a file,
+   * a directory.
    */
   @Parameter (name = "source", property = "jcodemodel.source")
   private String m_sSource;
+
+  /**
+   * If the source is a directory, and this param is not blank, only the files in that directory
+   * with a last name containing this param (ignoring case) will be passed to the generator.
+   * Typically used with file extension, eg ".txt"
+   */
+  @Parameter (name = "sourcesFilter", property = "jcodemodel.sourcesFilter", required = false)
+  private String sourcesFilter;
 
   /**
    * Java feature (major release version) the generated class files are targeted at. When unset the
@@ -74,33 +118,55 @@ public class GenerateSourceMojo extends AbstractMojo
   @Parameter (name = "javaFeature", property = "jcodemodel.java.feature")
   private String m_sJavaFeature;
 
+  /**
+   * When this param is set to non-blank, the value is used as an additional source transmitted to
+   * the generator.
+   */
   @Parameter (name = "data", property = "jcodemodel.data")
   private String m_sData;
 
   /**
-   * The fullly qualified name of the generator used. Only needed if
-   * <ul>
-   * <li>you use several generators in the plugin dependencies,</li>
-   * <li>the generator does not provide a {@link #GENERATOR_CLASS_FILE} file to load the class
-   * automatically</li>
-   * <li>you want a different generator class than the one it defaults to</li>
-   * </ul>
+   * The fullly qualified name of the generator used. Only needed if you don't have unique standard
+   * generator in the dependencies, or you want to specify a non-default one.
    */
   @Parameter (name = "generator", property = "jcodemodel.generator")
   private String m_sGenerator;
 
   /**
-   * documentation added to the main generated classes.
+   * Documentation added to the generated unit classes header, typically a license.<br />
+   * Only the main class of a unit is impacted, and only if the generator did not already set the
+   * header.
    */
   @Parameter (name = "classHeader", property = "jcodemodel.classheader")
   private String m_sClassHeader;
 
   /**
-   * direct Map of params to transmit to the generator.
+   * direct Map of params to transmit to the generator. The generator used will be configured using
+   * this map, deciding which set params it should use.
    */
   @Parameter (name = "params", property = "jcodemodel.params")
   private Map <String, String> m_aParams;
 
+  /**
+   * <p>
+   * Technically, this mojo performs the following actions :
+   * <ol>
+   * <li>Deduce the output folder and ensure it is present. If [m_sOutputDir] is null or blank then
+   * default "src/generated/java" is used.</li>
+   * <li>Deduce the generator to be used. If [m_sGenerator] is null or blank, then loads the
+   * resource [GENERATOR_CLASS_FILE] instead.</li>
+   * <li>Instantiate the generator class and configure it, create a new JCM to modify.</li>
+   * <li>list the data to apply the generator to. If provided, [m_sData] is passed. If [m_sSource]
+   * is a file, it is opened ; if it is a directory, its children are opened, after being filtered
+   * by [sourcesFilter] if non null. If [m_sSource] is a url, it is opened. If no data and no source
+   * provided, then null is returned as data.</li>
+   * <li>Apply the generator on each data separately, modifying the JCM.</li>
+   * <li>Export the JCM</li>
+   * </ol>
+   * </p>
+   * <p>
+   * </p>
+   */
   @Override
   public void execute () throws MojoExecutionException, MojoFailureException
   {
@@ -127,29 +193,25 @@ public class GenerateSourceMojo extends AbstractMojo
                     " with params " +
                     m_aParams);
 
-    if (StringHelper.isNotEmpty (m_sClassHeader))
+    if (isNotBlank (m_sClassHeader))
       cmb.setClassHeader (m_sClassHeader);
 
-    if (StringHelper.isNotEmpty (m_sRootPackage))
+    if (isNotBlank (m_sRootPackage))
       cmb.setRootPackage (m_sRootPackage);
 
-    if (m_aParams != null)
-      cmb.configure (m_aParams);
+    // always configure, so that the generator can setup its defaults
+    cmb.configure (m_aParams == null ? Map.of () : m_aParams);
 
     final JCodeModel cm = new JCodeModel ();
-    if (m_sData != null && !m_sData.isBlank () && m_sSource != null && !m_sSource.isBlank ())
+
+    final List <ISourcedInputStream> sourcesList = buildSources (cmb, cm);
+    try
     {
-      getLog ().warn ("discarding source param " + m_sSource + " as data is already set");
-    }
-    try (final InputStream aIS = StringHelper.isEmpty (m_sData) ? findSource ()
-                                                                : new NonBlockingByteArrayInputStream (m_sData.getBytes (StandardCharsets.UTF_8)))
-    {
-      cmb.build (cm, aIS);
       new JCMWriter (cm).setJavaFeature (findJavaFeature ()).build (dir, (IProgressTracker) null);
     }
-    catch (JCodeModelException | IOException e)
+    catch (IOException e)
     {
-      throw new MojoFailureException (e);
+      throw new MojoFailureException ("after applying sources " + sourcesList, e);
     }
   }
 
@@ -177,9 +239,10 @@ public class GenerateSourceMojo extends AbstractMojo
     if (sGeneratorClass == null)
       sGeneratorClass = findGeneratorClass ();
 
-    return StringHelper.isEmpty (sGeneratorClass) ? null : (ICodeModelBuilder) Class.forName (sGeneratorClass)
-                                                                                    .getDeclaredConstructor ()
-                                                                                    .newInstance ();
+    return isBlank (sGeneratorClass) ? null
+                                                  : (ICodeModelBuilder) Class.forName (sGeneratorClass)
+                                                                             .getDeclaredConstructor ()
+                                                                             .newInstance ();
   }
 
   @Nullable
@@ -189,7 +252,7 @@ public class GenerateSourceMojo extends AbstractMojo
     {
       if (is != null)
       {
-        final String className = new String (is.readAllBytes (), StandardCharsets.UTF_8);
+        final String className = new String (is.readAllBytes (), StandardCharsets.UTF_8).trim ();
         getLog ().debug ("using generator class " + className);
         return className;
       }
@@ -198,35 +261,200 @@ public class GenerateSourceMojo extends AbstractMojo
     }
   }
 
-  @Nullable
-  protected InputStream findSource () throws MojoExecutionException
+  /// Apply the generator to the data and to the source, one after the other.
+  ///
+  /// - if data is set, it is applied first ; then the source is processed
+  /// - a directory source is recursively browsed over its files
+  /// - a single file source is applied alone
+  /// - a url source is opened and applied
+  /// - if neither data nor source is set, the generator is applied to [ISourcedInputStream#NULL],
+  ///   so that a generator which does not need data still works, while a generator that requires
+  ///   data fails rather than being silently skipped.
+  ///
+  /// The sources are opened one after the other, so that only one stream is open at a time and each
+  /// of them is closed, even if the generation fails.
+  ///
+  /// @param cmb generator to apply
+  /// @param cm model to build into
+  /// @return the sources that were applied, in the order they were applied.
+  /// @throws MojoExecutionException if the source can be opened neither as a file nor as an url.
+  /// @throws MojoFailureException if the generation of a source failed.
+  @NonNull
+  protected List <ISourcedInputStream> buildSources (@NonNull final ICodeModelBuilder cmb,
+                                                     @NonNull final JCodeModel cm) throws MojoExecutionException,
+                                                                                   MojoFailureException
   {
-    if (m_sSource == null || m_sSource.isBlank ())
-      return null;
+    final List <ISourcedInputStream> ret = new ArrayList <> ();
+    if (isBlank (m_sData) && isBlank (m_sSource))
+    {
+      // no data and no source at all
+      ret.add (buildSource (cmb, cm, ISourcedInputStream.NULL));
+      return ret;
+    }
 
-    // dumb checking : is it a file ? a URL ?
-    try
+    if (isNotBlank (m_sData))
+      ret.add (buildSource (cmb, cm, new DirectSourced (m_sData)));
+
+    if (isNotBlank (m_sSource))
     {
       final File aTargetFile = m_sSource.startsWith ("/") ? new File (m_sSource)
                                                           : new File (m_aProject.getBasedir (), m_sSource);
-      return new FileInputStream (aTargetFile);
-    }
-    catch (final Exception e)
-    {
-      getLog ().info ("while trying to open " + m_sSource + " as a file", e);
-    }
+      if (aTargetFile.exists ())
+      {
+        final List <File> aSourceFiles = findSourceFiles (aTargetFile);
+        if (aSourceFiles.isEmpty ())
+          getLog ().warn ("no source file found in " + aTargetFile.getAbsolutePath ());
 
+        for (final File aSourceFile : aSourceFiles)
+        {
+          getLog ().debug ("applying source file " + aSourceFile.getAbsolutePath ());
+          final FileSourced aSourced;
+          try
+          {
+            aSourced = new FileSourced (aSourceFile);
+          }
+          catch (final FileNotFoundException e)
+          {
+            // should never happen since the file was just listed
+            throw new MojoFailureException ("could not open source file " + aSourceFile.getAbsolutePath (), e);
+          }
+          ret.add (buildSource (cmb, cm, aSourced));
+        }
+      }
+      else
+      {
+        // not an existing file nor directory : the last chance is a url
+        ret.add (buildSource (cmb, cm, openURLSource ()));
+      }
+    }
+    if (ret.isEmpty ())
+      ret.add (buildSource (cmb, cm, ISourcedInputStream.NULL));
+    return ret;
+  }
+
+  /// Apply the generator to a single source, and close its stream afterwards.
+  ///
+  /// @param cmb generator to apply
+  /// @param cm model to build into
+  /// @param sourced the source to apply
+  /// @return the applied source
+  /// @throws MojoFailureException if the generation failed
+  @NonNull
+  protected ISourcedInputStream buildSource (@NonNull final ICodeModelBuilder cmb,
+                                             @NonNull final JCodeModel cm,
+                                             @NonNull final ISourcedInputStream sourced) throws MojoFailureException
+  {
+    // specification accepts null closable, in that case it's not closed.
+    try (InputStream is = sourced.inputStream ())
+    {
+      cmb.build (cm, sourced);
+    }
+    catch (JCodeModelException | IOException e)
+    {
+      throw new MojoFailureException ("while applying source " + sourced, e);
+    }
+    return sourced;
+  }
+
+  /// Open the source as a url.
+  ///
+  /// @return the opened url source
+  /// @throws MojoExecutionException if the source is not a valid url, or can't be opened.
+  @NonNull
+  protected URLSourced openURLSource () throws MojoExecutionException
+  {
     try
     {
-      final URL aURL = new URL (m_sSource);
-      return aURL.openStream ();
+      final URL aURL = new URI (m_sSource).toURL ();
+      return new URLSourced (m_sSource, aURL.openStream ());
+    }
+    catch (final URISyntaxException | IllegalArgumentException | IOException e)
+    {
+      getLog ().error ("source " + m_sSource + " is neither an existing file nor a directory");
+      getLog ().error ("while trying to open " + m_sSource + " as a url", e);
+      throw new MojoExecutionException ("could not open provided source " + m_sSource + " as a file or url");
+    }
+  }
+
+  /// List the files to be used as generator sources.
+  ///
+  /// @param aRootFile file or directory to browse
+  /// @return the file itself if it is a normal file ; the matching files it contains, recursively,
+  ///         if it is a directory. Never null.
+  @NonNull
+  protected List <File> findSourceFiles (@NonNull final File aRootFile)
+  {
+    final List <File> ret = new ArrayList <> ();
+    collectSourceFilesRecursive (aRootFile, new HashSet <> (), ret);
+    return ret;
+  }
+
+  /**
+   * recursively collect the files inside the file.
+   *
+   * @param aRootFile
+   *        file to browse
+   * @param aVisitedDirs
+   *        canonical paths of the directories already visited, to avoid an endless recursion on
+   *        symbolic link loops
+   * @param aTarget
+   *        list the found files are added to
+   */
+  protected void collectSourceFilesRecursive (@NonNull final File aRootFile,
+                                              @NonNull final Set <String> aVisitedDirs,
+                                              @NonNull final List <File> aTarget)
+  {
+    if (aRootFile.isFile ())
+    {
+      aTarget.add (aRootFile);
+      return;
+    }
+
+    if (!aRootFile.isDirectory ())
+      return;
+
+    // isDirectory() follows the symbolic links, so a link loop would recurse forever
+    String sCanonicalPath;
+    try
+    {
+      sCanonicalPath = aRootFile.getCanonicalPath ();
     }
     catch (final IOException e)
     {
-      getLog ().info ("while trying to open " + m_sSource + " as a url", e);
+      sCanonicalPath = aRootFile.getAbsolutePath ();
+    }
+    if (!aVisitedDirs.add (sCanonicalPath))
+    {
+      getLog ().warn ("skipping the already visited directory " + aRootFile.getAbsolutePath ());
+      return;
     }
 
-    throw new MojoExecutionException ("could not open provided source " + m_sSource + " as a file or url");
+    final File [] aChildren = aRootFile.listFiles ();
+    if (aChildren == null)
+    {
+      getLog ().warn ("can't list the content of the directory " + aRootFile.getAbsolutePath ());
+      return;
+    }
+
+    Arrays.stream (aChildren)
+          // the filter applies to the files, the sub directories are always browsed
+          .filter (f -> f.isDirectory () || matchesSourcesFilter (f))
+          .sorted (Comparator.comparing (File::getPath))
+          .forEach (f -> collectSourceFilesRecursive (f, aVisitedDirs, aTarget));
+  }
+
+  /**
+   * @param aFile
+   *        file to check
+   * @return <code>true</code> if the file name matches the {@link #sourcesFilter}, or if no filter
+   *         is set.
+   */
+  protected boolean matchesSourcesFilter (@NonNull final File aFile)
+  {
+    if (sourcesFilter == null || sourcesFilter.isBlank ())
+      return true;
+
+    return aFile.getName ().toLowerCase (Locale.ROOT).contains (sourcesFilter.toLowerCase (Locale.ROOT));
   }
 
   /**
@@ -255,6 +483,11 @@ public class GenerateSourceMojo extends AbstractMojo
   public void setSource (@Nullable final String sSource)
   {
     m_sSource = sSource;
+  }
+
+  public void setSourcesFilter (@Nullable final String sSourcesFilter)
+  {
+    sourcesFilter = sSourcesFilter;
   }
 
   public void setJavaFeature (@Nullable final String sJavaFeature)

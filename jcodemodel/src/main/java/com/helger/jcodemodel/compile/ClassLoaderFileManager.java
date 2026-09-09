@@ -181,7 +181,7 @@ public class ClassLoaderFileManager extends ForwardingJavaFileManager <JavaFileM
     }
     catch (final Exception e)
     {
-      throw new RuntimeException ("Wasn't able to open " + packageFolderURL + " as a jar file", e);
+      throw new IllegalStateException ("Wasn't able to open " + packageFolderURL + " as a jar file", e);
     }
     return result;
   }

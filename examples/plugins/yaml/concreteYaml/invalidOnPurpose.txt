@@ -1,0 +1,1 @@
+file only present to be sure it is filtered out by the plugin's filter ".yaml".  

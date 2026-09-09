@@ -45,19 +45,26 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.literals.AIntegerRepresented;
+import com.helger.jcodemodel.literals.IntegerRepresentation;
 
 /**
  * A special atom for long values
  */
-public class JAtomLong implements IJExpression
+public class JAtomLong extends AIntegerRepresented <JAtomLong> implements IJExpression
 {
-  public static final String SUFFIX_LONG = "L";
 
   private final long m_nValue;
 
   protected JAtomLong (final long nWhat)
   {
     m_nValue = nWhat;
+  }
+
+  public JAtomLong (final long nWhat, IntegerRepresentation representation)
+  {
+    m_nValue = nWhat;
+    representation (representation);
   }
 
   public long what ()
@@ -67,7 +74,7 @@ public class JAtomLong implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print (Long.toString (m_nValue) + SUFFIX_LONG);
+    f.print (representation ().base ().format (m_nValue, new StringBuilder (), representation ()).toString ());
   }
 
   @Override
