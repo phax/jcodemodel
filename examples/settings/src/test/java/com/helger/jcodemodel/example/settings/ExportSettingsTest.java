@@ -3,6 +3,7 @@ package com.helger.jcodemodel.example.settings;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import org.junit.Test;
 
@@ -14,8 +15,9 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator.Feature;
 import com.helger.jcodemodel.writer.FormatterSettings;
 
-/// actually not a test, but export the settings at the project root so people
-/// have an idea what settings are available.
+/// Actually not a test, but export the default formatter settings so people
+/// have an idea of the settings available.
+/// The yaml and json files are exported at the project root.
 public class ExportSettingsTest {
 
   @Test
@@ -31,7 +33,7 @@ public class ExportSettingsTest {
     try (FileWriter writer = new FileWriter(out)) {
       om.writer().writeValue(writer, export);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new UncheckedIOException(e);
     }
   }
 
@@ -51,7 +53,7 @@ public class ExportSettingsTest {
     try (FileWriter writer = new FileWriter(out)) {
       om.writer().writeValue(writer, export);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new UncheckedIOException(e);
     }
   }
 
