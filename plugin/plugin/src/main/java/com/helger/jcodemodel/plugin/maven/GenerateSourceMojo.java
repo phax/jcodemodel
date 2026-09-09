@@ -42,7 +42,6 @@ import org.apache.maven.project.MavenProject;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
-import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.ISourcedInputStream.DirectSourced;
@@ -51,27 +50,23 @@ import com.helger.jcodemodel.plugin.maven.ISourcedInputStream.URLSourced;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
-/// This mojo does the following :
-/// 
-/// 1. deduce the output folder and ensure it is present. If [m_sOutputDir] is null or blank then default "src/generated/java" is used.
-/// 2. deduce the generator to be used. If [m_sGenerator] is null or blank, then loads the resource [GENERATOR_CLASS_FILE] instead.
-/// 3. instantiate the generator class and configure it, create a new JCM to modify.
-/// 4. list the data to apply the generator to.
-///    If provided, [m_sData] is passed.
-///    If [m_sSource] is a file, it is opened ; if it is a directory, its children are opened, after being filtered by [sourcesFilter] if non null.
-///    If [m_sSource] is a url, it is opened.
-///    If no data and no source provided, then null is returned as data.
-/// 5. apply the generator on each data separately, modifying the JCM.
-/// 6. export the JCM
-/// 
-/// Note that the plugin does not actually generate code by itself : the generator used is responsible for modifying the JCM.
-/// 
-/// The simplest way to make it work as a plugin, is to add a single auto executing generator as a dependency.
-/// This way the generator will be discovered and loaded automatically, you just need to configure its data/source, if any.  
-/// 
+/**
+ * Apply a java source generator per source provided.<br />
+ * The generator is required, as a dependency, and/or as a configuration.
+ */
 @Mojo (name = "generate-source", threadSafe = true, defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public class GenerateSourceMojo extends AbstractMojo
 {
+
+  static boolean isBlank (String s)
+  {
+    return s == null || s.isBlank ();
+  }
+
+  static boolean isNotBlank (String s)
+  {
+    return !isBlank (s);
+  }
 
   /// generated/parsed generator description file
   public static final String GENERATOR_CLASS_FILE = "jcodemodel/plugin/generator";
@@ -89,17 +84,30 @@ public class GenerateSourceMojo extends AbstractMojo
   @Parameter (name = "outputDir", property = "jcodemodel.outdir", defaultValue = "src/generated/java")
   private String m_sOutputDir;
 
+  // we can't use that example as default value because it would fail for projects that have
+  // non-package groupid or artifactid
+  /**
+   * fully qualified package to create the classes in. Example
+   * 
+   * <pre>
+   * ${project.groupId}.${project.artifactId}
+   * </pre>
+   */
   @Parameter (name = "rootPackage", property = "jcodemodel.rootpackage", defaultValue = "")
   private String m_sRootPackage;
 
   /**
-   * source of the data to transmit to the generator when building the model. can be a url, a file.
+   * source of the data to transmit to the generator when building the model. Can be a url, a file,
+   * a directory.
    */
   @Parameter (name = "source", property = "jcodemodel.source")
   private String m_sSource;
 
-  /// if the source is a directory, and this param is not null/empty, then only files with a last
-  /// name containing this (ignoring case) will be selected as generator sources
+  /**
+   * If the source is a directory, and this param is not blank, only the files in that directory
+   * with a last name containing this param (ignoring case) will be passed to the generator.
+   * Typically used with file extension, eg ".txt"
+   */
   @Parameter (name = "sourcesFilter", property = "jcodemodel.sourcesFilter", required = false)
   private String sourcesFilter;
 
@@ -110,33 +118,55 @@ public class GenerateSourceMojo extends AbstractMojo
   @Parameter (name = "javaFeature", property = "jcodemodel.java.feature")
   private String m_sJavaFeature;
 
+  /**
+   * When this param is set to non-blank, the value is used as an additional source transmitted to
+   * the generator.
+   */
   @Parameter (name = "data", property = "jcodemodel.data")
   private String m_sData;
 
   /**
-   * The fullly qualified name of the generator used. Only needed if
-   * <ul>
-   * <li>you use several generators in the plugin dependencies,</li>
-   * <li>the generator does not provide a {@link #GENERATOR_CLASS_FILE} file to load the class
-   * automatically</li>
-   * <li>you want a different generator class than the one it defaults to</li>
-   * </ul>
+   * The fullly qualified name of the generator used. Only needed if you don't have unique standard
+   * generator in the dependencies, or you want to specify a non-default one.
    */
   @Parameter (name = "generator", property = "jcodemodel.generator")
   private String m_sGenerator;
 
   /**
-   * documentation added to the main generated classes.
+   * Documentation added to the generated unit classes header, typically a license.<br />
+   * Only the main class of a unit is impacted, and only if the generator did not already set the
+   * header.
    */
   @Parameter (name = "classHeader", property = "jcodemodel.classheader")
   private String m_sClassHeader;
 
   /**
-   * direct Map of params to transmit to the generator.
+   * direct Map of params to transmit to the generator. The generator used will be configured using
+   * this map, deciding which set params it should use.
    */
   @Parameter (name = "params", property = "jcodemodel.params")
   private Map <String, String> m_aParams;
 
+  /**
+   * <p>
+   * Technically, this mojo performs the following actions :
+   * <ol>
+   * <li>Deduce the output folder and ensure it is present. If [m_sOutputDir] is null or blank then
+   * default "src/generated/java" is used.</li>
+   * <li>Deduce the generator to be used. If [m_sGenerator] is null or blank, then loads the
+   * resource [GENERATOR_CLASS_FILE] instead.</li>
+   * <li>Instantiate the generator class and configure it, create a new JCM to modify.</li>
+   * <li>list the data to apply the generator to. If provided, [m_sData] is passed. If [m_sSource]
+   * is a file, it is opened ; if it is a directory, its children are opened, after being filtered
+   * by [sourcesFilter] if non null. If [m_sSource] is a url, it is opened. If no data and no source
+   * provided, then null is returned as data.</li>
+   * <li>Apply the generator on each data separately, modifying the JCM.</li>
+   * <li>Export the JCM</li>
+   * </ol>
+   * </p>
+   * <p>
+   * </p>
+   */
   @Override
   public void execute () throws MojoExecutionException, MojoFailureException
   {
@@ -163,10 +193,10 @@ public class GenerateSourceMojo extends AbstractMojo
                     " with params " +
                     m_aParams);
 
-    if (StringHelper.isNotEmpty (m_sClassHeader))
+    if (isNotBlank (m_sClassHeader))
       cmb.setClassHeader (m_sClassHeader);
 
-    if (StringHelper.isNotEmpty (m_sRootPackage))
+    if (isNotBlank (m_sRootPackage))
       cmb.setRootPackage (m_sRootPackage);
 
     // always configure, so that the generator can setup its defaults
@@ -209,7 +239,7 @@ public class GenerateSourceMojo extends AbstractMojo
     if (sGeneratorClass == null)
       sGeneratorClass = findGeneratorClass ();
 
-    return StringHelper.isEmpty (sGeneratorClass) ? null
+    return isBlank (sGeneratorClass) ? null
                                                   : (ICodeModelBuilder) Class.forName (sGeneratorClass)
                                                                              .getDeclaredConstructor ()
                                                                              .newInstance ();
@@ -255,17 +285,17 @@ public class GenerateSourceMojo extends AbstractMojo
                                                                                    MojoFailureException
   {
     final List <ISourcedInputStream> ret = new ArrayList <> ();
-    if (StringHelper.isEmpty (m_sData) && StringHelper.isEmpty (m_sSource))
+    if (isBlank (m_sData) && isBlank (m_sSource))
     {
       // no data and no source at all
       ret.add (buildSource (cmb, cm, ISourcedInputStream.NULL));
       return ret;
     }
 
-    if (StringHelper.isNotEmpty (m_sData))
+    if (isNotBlank (m_sData))
       ret.add (buildSource (cmb, cm, new DirectSourced (m_sData)));
 
-    if (StringHelper.isNotEmpty (m_sSource))
+    if (isNotBlank (m_sSource))
     {
       final File aTargetFile = m_sSource.startsWith ("/") ? new File (m_sSource)
                                                           : new File (m_aProject.getBasedir (), m_sSource);
@@ -297,6 +327,8 @@ public class GenerateSourceMojo extends AbstractMojo
         ret.add (buildSource (cmb, cm, openURLSource ()));
       }
     }
+    if (ret.isEmpty ())
+      ret.add (buildSource (cmb, cm, ISourcedInputStream.NULL));
     return ret;
   }
 
