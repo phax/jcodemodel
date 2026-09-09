@@ -53,4 +53,19 @@ public class OperatorParenthesesAlways {
     public static int arrIdxCoalesce(int[] a, int[] b, int i) {
         return ((((a) == (null))||((a.length)<= (i)))?(b):(a))[i];
     }
+
+    /**
+     * test precedence of array component and comparison
+     */
+    public static boolean isSortedAsc(int[] arr) {
+        if (((arr) == (null))||((arr.length)<= (1))) {
+            return true;
+        }
+        for (int i = (arr.length)-(2); (i)>= (0); (i)--) {
+            if (((arr)[i])>((arr)[(i)+(1)])) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

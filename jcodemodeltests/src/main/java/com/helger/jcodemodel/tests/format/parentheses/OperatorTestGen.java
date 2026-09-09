@@ -2,6 +2,7 @@ package com.helger.jcodemodel.tests.format.parentheses;
 
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JForLoop;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JOp;
@@ -9,6 +10,7 @@ import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.vars.JBlockVar;
 import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.settings.Parentheses.EParenthesesStrategy;
 
@@ -73,6 +75,22 @@ public class OperatorTestGen {
           b,
           a)
           .component(i));
+    }
+    {
+      JMethod meth =
+          clazz.method (JMod.PUBLIC | JMod.STATIC, clazz.owner ().BOOLEAN, "isSortedAsc");
+      meth.javadoc().add("test precedence of array component and comparison");
+      JVar arr = meth.param(clazz.owner().INT.array(), "arr");
+      // if(arr==null || arr.length==0) return true;
+      meth.body ()._if (arr.eqNull ().cor (arr.ref ("length").lte (JExpr.lit (1))))._then ()._return (JExpr.TRUE);
+      // for(int i = arr.length-2; i>= 0 ; i--)
+      JForLoop _for = meth.body ()._for ();
+      JBlockVar i = _for.init (clazz.owner ().INT, "i", arr.ref ("length").minus (2));
+      _for.test (i.gte (0));
+      _for.update (i.decr ());
+      // if(arr[i]>arr[i+1) return false;
+      _for.body ()._if (arr.component (i).gt (arr.component (i.plus (1))))._then ()._return (JExpr.FALSE);
+      meth.body()._return(JExpr.TRUE);
     }
   }
 

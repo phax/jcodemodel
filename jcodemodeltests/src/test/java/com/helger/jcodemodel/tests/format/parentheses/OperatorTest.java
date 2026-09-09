@@ -80,4 +80,25 @@ public class OperatorTest {
     }
   }
 
+  @FunctionalInterface
+  interface IF5
+  {
+    boolean isSortedAsc (int [] arr);
+  }
+
+  @Test
+  public void testIsSortedAsc ()
+  {
+    for (IF5 f : new IF5 [] { OperatorParenthesesAlways::isSortedAsc,
+                              OperatorParenthesesNoToken::isSortedAsc,
+                              OperatorParenthesesRequired::isSortedAsc })
+    {
+      Assert.assertTrue (f.isSortedAsc (null));
+      Assert.assertTrue (f.isSortedAsc (new int [] { 0 }));
+      Assert.assertTrue (f.isSortedAsc (new int [] { 0, 1 }));
+      Assert.assertTrue (f.isSortedAsc (new int [] { 0, 1, 2, 3, 4 }));
+      Assert.assertFalse (f.isSortedAsc (new int [] { 0, 1, 3, 2, 4 }));
+    }
+  }
+
 }
