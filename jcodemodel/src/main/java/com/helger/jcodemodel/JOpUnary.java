@@ -46,12 +46,37 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.Precedence;
 
 public class JOpUnary implements IJExpression
 {
-  private final String m_sOperator;
+  /// unary operators, their print string and their precedence
+  public static enum UnaryOp
+  {
+    BITWISE_NOT ("~", Precedence.UNARY, true),
+    LOGICAL_NOT ("!", Precedence.UNARY, true),
+    MINUS ("-", Precedence.UNARY, true),
+    POST_DECR ("--", Precedence.POSTFIX, false),
+    POST_INCR ("++", Precedence.POSTFIX, false),
+    PRE_DECR ("--", Precedence.POSTFIX, true),
+    PRE_INCR ("++", Precedence.POSTFIX, true),
+    ;
+
+    public final String print;
+    public final Precedence precedence;
+    public final boolean prefix;
+
+    UnaryOp (String print, Precedence precedence, boolean prefix)
+    {
+      this.print = print;
+      this.precedence = precedence;
+      this.prefix = prefix;
+    }
+
+  }
+
+  private final UnaryOp m_aOperator;
   private final IJExpression m_aExpr;
-  private final boolean m_bOperatorComesFirst;
 
   /**
    * Constructor for operator before expression
@@ -61,32 +86,16 @@ public class JOpUnary implements IJExpression
    * @param aExpr
    *        expression
    */
-  protected JOpUnary (@NonNull final String sOperator, @NonNull final IJExpression aExpr)
+  protected JOpUnary (@NonNull final UnaryOp aOperator, @NonNull final IJExpression aExpr)
   {
-    m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
+    m_aOperator = ValueEnforcer.notNull (aOperator, "Operator");
     m_aExpr = ValueEnforcer.notNull (aExpr, "Expression");
-    m_bOperatorComesFirst = true;
-  }
-
-  /**
-   * Constructor for expression before operator
-   *
-   * @param aExpr
-   *        expression
-   * @param sOperator
-   *        operator
-   */
-  protected JOpUnary (@NonNull final IJExpression aExpr, @NonNull final String sOperator)
-  {
-    m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
-    m_aExpr = ValueEnforcer.notNull (aExpr, "Expression");
-    m_bOperatorComesFirst = false;
   }
 
   @NonNull
   public String op ()
   {
-    return m_sOperator;
+    return m_aOperator.print;
   }
 
   @NonNull
@@ -101,15 +110,37 @@ public class JOpUnary implements IJExpression
    */
   public boolean opFirst ()
   {
-    return m_bOperatorComesFirst;
+    return m_aOperator.prefix;
   }
 
   public void generate (@NonNull final IJFormatter f)
   {
-    if (m_bOperatorComesFirst)
-      f.print ('(').print (m_sOperator).generable (m_aExpr).print (')');
-    else
-      f.print ('(').generable (m_aExpr).print (m_sOperator).print (')');
+    boolean parentheses = true;
+    switch (f.settings ().parentheses.global)
+    {
+      case ALWAYS ->
+      {
+        parentheses = true;
+      }
+      case NOTOKEN ->
+      {
+        parentheses = m_aExpr.operatorPrecedence () != Precedence.TOKEN;
+      }
+      case REQUIRED ->
+      {
+        parentheses = m_aOperator.precedence.higherThan (m_aExpr.operatorPrecedence ());
+      }
+      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
+    }
+    if (m_aOperator.prefix)
+      f.print (m_aOperator.print);
+    if (parentheses)
+      f.print ('(');
+    f.generable (m_aExpr);
+    if (parentheses)
+      f.print (')');
+    if (!m_aOperator.prefix)
+      f.print (m_aOperator.print);
   }
 
   @Override
@@ -120,14 +151,18 @@ public class JOpUnary implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JOpUnary rhs = (JOpUnary) o;
-    return EqualsHelper.equals (m_sOperator, rhs.m_sOperator) &&
-      EqualsHelper.equals (m_aExpr, rhs.m_aExpr) &&
-      EqualsHelper.equals (m_bOperatorComesFirst, rhs.m_bOperatorComesFirst);
+    return EqualsHelper.equals (m_aOperator, rhs.m_aOperator) && EqualsHelper.equals (m_aExpr, rhs.m_aExpr);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, m_sOperator, m_aExpr, Boolean.valueOf (m_bOperatorComesFirst));
+    return getHashCode (this, m_aOperator, m_aExpr);
+  }
+
+  @Override
+  public Precedence operatorPrecedence ()
+  {
+    return m_aOperator.precedence;
   }
 }

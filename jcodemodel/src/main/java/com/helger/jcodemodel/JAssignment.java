@@ -45,6 +45,7 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.Precedence;
 
 /**
  * Assignment statements, which are also expressions.
@@ -119,7 +120,31 @@ public class JAssignment implements IJExpressionStatement
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.generable (m_aLhs).print (opFull ()).generable (m_aRhs);
+    // only right side may need parentheses
+    boolean parentheses = true;
+    switch (f.settings ().parentheses.global)
+    {
+      case ALWAYS ->
+      {
+        parentheses = true;
+      }
+      case NOTOKEN ->
+      {
+        parentheses = m_aRhs.operatorPrecedence () != Precedence.TOKEN;
+      }
+      case REQUIRED ->
+      {
+        // basically only lambdas need to be parenthesized
+        parentheses = Precedence.ASSIGNMENT.higherThan (m_aRhs.operatorPrecedence ());
+      }
+      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
+    }
+    f.generable (m_aLhs).print (opFull ());
+    if (parentheses)
+      f.print ('(');
+    f.generable (m_aRhs);
+    if (parentheses)
+      f.print (')');
   }
 
   public void state (@NonNull final IJFormatter f)
@@ -144,5 +169,11 @@ public class JAssignment implements IJExpressionStatement
   public int hashCode ()
   {
     return getHashCode (this, m_aLhs, m_aRhs, m_sOperator);
+  }
+
+  @Override
+  public Precedence operatorPrecedence ()
+  {
+    return Precedence.ASSIGNMENT;
   }
 }

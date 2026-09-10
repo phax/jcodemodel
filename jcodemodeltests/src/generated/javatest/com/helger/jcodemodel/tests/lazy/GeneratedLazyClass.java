@@ -20,7 +20,7 @@ import javax.annotation.processing.Generated;
 public class GeneratedLazyClass {
 
     public int sum() {
-        return (((getSyncInstance()+ getSyncStatic())+ getASyncInstance())+ getASyncStatic());
+        return getSyncInstance()+ getSyncStatic()+ getASyncInstance()+ getASyncStatic();
     }
 
     private volatile Integer syncInstance;

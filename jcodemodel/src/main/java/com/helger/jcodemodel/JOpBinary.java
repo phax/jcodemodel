@@ -46,19 +46,58 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.Precedence;
 
 public class JOpBinary implements IJExpression
 {
+
+  /// binary operators, their print string and their precedence
+  ///
+  /// use BinaryOp since BinaryOperator exists in the jdk.
+  public static enum BinaryOp
+  {
+    ADD ("+", Precedence.ADDITIVE),
+    BITWISE_AND ("&", Precedence.BITWISE_AND),
+    BITWISE_OR ("|", Precedence.BITWISE_OR),
+    BITWISE_XOR ("^", Precedence.BITWISE_XOR),
+    DIVIDE ("/", Precedence.MULTIPLICATIVE),
+    EQUALS ("==", Precedence.EQUALITY),
+    GREATER (">", Precedence.RELATIONAL),
+    GREATER_EQUAL (">=", Precedence.RELATIONAL),
+    INSTANCE_OF ("instanceof", Precedence.RELATIONAL),
+    LOGICAL_AND ("&&", Precedence.LOGICAL_AND),
+    LOGICAL_OR ("||", Precedence.LOGICAL_OR),
+    LOWER ("<", Precedence.RELATIONAL),
+    LOWER_EQUAL ("<=", Precedence.RELATIONAL),
+    MODULUS ("%", Precedence.MULTIPLICATIVE),
+    MULTIPLY ("*", Precedence.MULTIPLICATIVE),
+    NOT_EQUALS ("!=", Precedence.EQUALITY),
+    SHIFT_LEFT ("<<", Precedence.SHIFT),
+    SHIFT_RIGHT (">>", Precedence.SHIFT),
+    SHIFT_RIGHT_ZERO (">>>", Precedence.SHIFT),
+    SUBSTRACT ("-", Precedence.ADDITIVE);
+
+    public final String print;
+    public final Precedence precedence;
+
+    BinaryOp (String print, Precedence precedence)
+    {
+      this.print = print;
+      this.precedence = precedence;
+    }
+  }
+
   private final IJExpression m_aLeft;
-  private final String m_sOperator;
+  @NonNull
+  private final BinaryOp m_aOperator;
   private final IJGenerable m_aRight;
 
   protected JOpBinary (@NonNull final IJExpression aLeft,
-                       @NonNull final String sOperator,
+                       @NonNull final BinaryOp aOperator,
                        @NonNull final IJGenerable aRight)
   {
     m_aLeft = ValueEnforcer.notNull (aLeft, "Left");
-    m_sOperator = ValueEnforcer.notNull (sOperator, "Operator");
+    m_aOperator = ValueEnforcer.notNull (aOperator, "Operator");
     m_aRight = ValueEnforcer.notNull (aRight, "Right");
   }
 
@@ -71,7 +110,7 @@ public class JOpBinary implements IJExpression
   @NonNull
   public String op ()
   {
-    return m_sOperator;
+    return m_aOperator.print;
   }
 
   @NonNull
@@ -82,7 +121,36 @@ public class JOpBinary implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print ('(').generable (m_aLeft).print (m_sOperator).generable (m_aRight).print (')');
+    boolean leftParentheses = true, rightParentheses = true;
+    switch(f.settings ().parentheses.global) {
+      case ALWAYS ->
+      {
+        leftParentheses = true;
+        rightParentheses = true;
+      }
+      case NOTOKEN ->
+      {
+        leftParentheses = m_aLeft.operatorPrecedence () != Precedence.TOKEN;
+        rightParentheses = m_aRight.operatorPrecedence () != Precedence.TOKEN;
+      }
+      case REQUIRED ->
+          {
+            leftParentheses = m_aOperator.precedence.higherThan (m_aLeft.operatorPrecedence ());
+            rightParentheses = m_aOperator.precedence.higherThan (m_aRight.operatorPrecedence ());
+          }
+          default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
+    }
+    if (leftParentheses)
+      f.print ('(');
+    f.generable (m_aLeft);
+    if (leftParentheses)
+      f.print (')');
+    f.print (m_aOperator.print);
+    if (rightParentheses)
+      f.print ('(');
+    f.generable (m_aRight);
+    if (rightParentheses)
+      f.print (')');
   }
 
   @Override
@@ -94,13 +162,19 @@ public class JOpBinary implements IJExpression
       return false;
     final JOpBinary rhs = (JOpBinary) o;
     return EqualsHelper.equals (m_aLeft, rhs.m_aLeft) &&
-      EqualsHelper.equals (m_sOperator, rhs.m_sOperator) &&
+      EqualsHelper.equals (m_aOperator, rhs.m_aOperator) &&
       EqualsHelper.equals (m_aRight, rhs.m_aRight);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, m_aLeft, m_sOperator, m_aRight);
+    return getHashCode (this, m_aLeft, m_aOperator, m_aRight);
+  }
+
+  @Override
+  public Precedence operatorPrecedence ()
+  {
+    return m_aOperator.precedence;
   }
 }

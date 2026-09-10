@@ -28,6 +28,7 @@
   <description>POM module for all the examples modules</description>
 
   <modules>
+    <module>settings</module>
     <module>plugins</module>
   </modules>
 

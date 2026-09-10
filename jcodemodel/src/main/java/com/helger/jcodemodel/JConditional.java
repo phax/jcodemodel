@@ -133,14 +133,14 @@ public class JConditional implements IJStatement
       return;
     }
 
-    if (JOp.hasTopOp (m_aTestExpr))
-    {
-      f.print ("if ").generable (m_aTestExpr);
-    }
-    else
-    {
+    // if (JOp.hasTopOp (m_aTestExpr))
+    // {
+    // f.print ("if ").generable (m_aTestExpr);
+    // }
+    // else
+    // {
       f.print ("if (").generable (m_aTestExpr).print (')');
-    }
+    // }
     f.generable (m_aThenBlock);
     if (m_aElseBlock != null)
       f.print ("else").generable (m_aElseBlock);

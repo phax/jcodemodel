@@ -17,6 +17,7 @@ import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JCatchBlock;
+import com.helger.jcodemodel.JOp;
 import com.helger.jcodemodel.vars.JCatchFormalParameter;
 
 public class Redirected {
@@ -71,6 +72,10 @@ public class Redirected {
 
     public void generate(IJFormatter arg0) {
         jCatchBlock.generate(arg0);
+    }
+
+    public JOp.Precedence operatorPrecedence() {
+        return jCatchBlock.operatorPrecedence();
     }
 
     public JCatchFormalParameter param() {

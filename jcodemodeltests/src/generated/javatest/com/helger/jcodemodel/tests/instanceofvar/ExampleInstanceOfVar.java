@@ -25,7 +25,7 @@ public class ExampleInstanceOfVar {
         if (o == null) {
             return  0;
         }
-        if ((o instanceof String s)&&(!s.isBlank())) {
+        if ((o instanceof String s)&&!s.isBlank()) {
             return s.strip().length();
         }
         if ((o instanceof Collection c)) {

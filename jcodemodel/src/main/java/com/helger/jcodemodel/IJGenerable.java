@@ -42,10 +42,28 @@ package com.helger.jcodemodel;
 
 import org.jspecify.annotations.NonNull;
 
+import com.helger.jcodemodel.JOp.Precedence;
+
 /**
  * Common interface for code components that can generate uses of themselves.
  */
 public interface IJGenerable extends IJObject
 {
   void generate (@NonNull IJFormatter f);
+
+  /// Indicates the operator precedence at which an operator addition can change the meaning of
+  /// this. Used to check the need for parentheses.
+  ///
+  /// For example, an "a+b*c" element would return the precedence of "+", and any operator with
+  /// an higher precedence could break it : a "++" operator would require parentheses since
+  /// "a+b*c++" is not the same as "(a+b*c)++"
+  ///
+  /// Most elements are not operator-sensitive so the default is the max precedence (token). For
+  /// example method call( "myFunction()" )
+  ///
+  /// @return the lowest operator precedence.
+  default JOp.Precedence operatorPrecedence ()
+  {
+    return Precedence.TOKEN;
+  }
 }

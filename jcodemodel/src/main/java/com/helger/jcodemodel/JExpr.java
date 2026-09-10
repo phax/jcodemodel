@@ -149,25 +149,25 @@ public final class JExpr
   }
 
   @NonNull
-  public static JOpUnaryTight incr (@NonNull final IJExpression aExpr)
+  public static JOpUnary incr (@NonNull final IJExpression aExpr)
   {
     return JOp.postincr (aExpr);
   }
 
   @NonNull
-  public static JOpUnaryTight preincr (@NonNull final IJExpression aExpr)
+  public static JOpUnary preincr (@NonNull final IJExpression aExpr)
   {
     return JOp.preincr (aExpr);
   }
 
   @NonNull
-  public static JOpUnaryTight decr (@NonNull final IJExpression aExpr)
+  public static JOpUnary decr (@NonNull final IJExpression aExpr)
   {
     return JOp.postdecr (aExpr);
   }
 
   @NonNull
-  public static JOpUnaryTight predecr (@NonNull final IJExpression aExpr)
+  public static JOpUnary predecr (@NonNull final IJExpression aExpr)
   {
     return JOp.predecr (aExpr);
   }
