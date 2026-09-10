@@ -1,5 +1,7 @@
 package com.helger.jcodemodel.expressions;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.jcodemodel.IJExpression;
 
 /// A typed expression can resolve to an IJExpression (which is usually an internal field) and knows (at design time) the class of the expression produced by the code at compile and run time.
@@ -10,7 +12,7 @@ import com.helger.jcodemodel.IJExpression;
 /// 
 public interface ITypedExpression <RunTimeType>
 {
-
+  @NonNull
   public IJExpression raw ();
 
 }

@@ -23,4 +23,16 @@ public class LngExpression extends TypedExpressionWrapper <Long>
     return new LngExpression (raw);
   }
 
+  //
+  // unary
+  //
+
+  //
+  // binary
+  //
+
+  //
+  // ternary
+  //
+
 }

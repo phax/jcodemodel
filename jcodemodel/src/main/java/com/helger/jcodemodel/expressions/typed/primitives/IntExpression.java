@@ -2,10 +2,9 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 
 /// expression with a `int` type.
-public class IntExpression extends TypedExpressionWrapper <Integer>
+public class IntExpression extends ASubIntExpression <Integer>
 {
 
   public IntExpression (IJExpression raw)
@@ -22,5 +21,17 @@ public class IntExpression extends TypedExpressionWrapper <Integer>
   {
     return new IntExpression (raw);
   }
+
+  //
+  // unary
+  //
+
+  //
+  // binary
+  //
+
+  //
+  // ternary
+  //
 
 }

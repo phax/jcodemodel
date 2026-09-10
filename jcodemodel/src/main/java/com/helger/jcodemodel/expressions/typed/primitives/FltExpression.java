@@ -23,4 +23,16 @@ public class FltExpression extends TypedExpressionWrapper <Float>
     return new FltExpression (raw);
   }
 
+  //
+  // unary
+  //
+
+  //
+  // binary
+  //
+
+  //
+  // ternary
+  //
+
 }

@@ -23,4 +23,16 @@ public class DblExpression extends TypedExpressionWrapper <Double>
     return new DblExpression (raw);
   }
 
+  //
+  // unary
+  //
+
+  //
+  // binary
+  //
+
+  //
+  // ternary
+  //
+
 }

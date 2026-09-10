@@ -2,10 +2,10 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
+import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 
 /// expression with a `char` type.
-public class CharExpression extends TypedExpressionWrapper <Character>
+public class CharExpression extends ASubIntExpression <Character>
 {
 
   public CharExpression (IJExpression raw)
@@ -22,5 +22,23 @@ public class CharExpression extends TypedExpressionWrapper <Character>
   {
     return new CharExpression (raw);
   }
+
+  //
+  // unary
+  //
+
+  //
+  // binary
+  //
+
+  /// @return `that + other`
+  public StringExpression plus (StringExpression other)
+  {
+    return new StringExpression (raw.plus (other.raw ()));
+  }
+
+  //
+  // ternary
+  //
 
 }
