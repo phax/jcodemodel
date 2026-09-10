@@ -1,13 +1,13 @@
 package com.helger.jcodemodel.expressions.typed;
 
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.expressions.TypedExpression;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 
 
-public abstract class ATypeExpressionWrapper <RunTimeType> implements TypedExpression <RunTimeType>
+public abstract class ATypeExpressionWrapper <RunTimeType> implements ITypedExpression <RunTimeType>
 {
 
-  public final IJExpression raw;
+  protected final IJExpression raw;
 
   public ATypeExpressionWrapper (IJExpression raw)
   {

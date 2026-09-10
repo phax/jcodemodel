@@ -52,7 +52,7 @@ import org.jspecify.annotations.Nullable;
 import com.helger.annotation.Nonnegative;
 import com.helger.jcodemodel.expressions.JArrayInit;
 import com.helger.jcodemodel.expressions.JInstanceOfVar;
-import com.helger.jcodemodel.expressions.TypedExpression;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 
 /**
  * Factory methods that generate various {@link IJExpression}s.
@@ -90,7 +90,7 @@ public final class JExpr
   }
 
   @NonNull
-  public static JAssignment assign (@NonNull final IJAssignmentTarget aLhs, @NonNull final TypedExpression <?> aRhs)
+  public static JAssignment assign (@NonNull final IJAssignmentTarget aLhs, @NonNull final ITypedExpression <?> aRhs)
   {
     return assign (aLhs, aRhs.raw ());
   }

@@ -50,6 +50,7 @@ import org.jspecify.annotations.Nullable;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
 import com.helger.base.hashcode.HashCodeGenerator;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 
 /**
  * {@link JMethod} invocation
@@ -161,6 +162,12 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     ValueEnforcer.notNull (aArg, "Argument");
     m_aArgs.add (aArg);
     return this;
+  }
+
+  @NonNull
+  public JInvocation arg (@NonNull final ITypedExpression <?> aArg)
+  {
+    return arg (aArg.raw ());
   }
 
   /**

@@ -8,7 +8,7 @@ import com.helger.jcodemodel.IJExpression;
 /// 
 /// @param RunTimeType the type we know that expression will resolve to at runtime.
 /// 
-public interface TypedExpression <RunTimeType>
+public interface ITypedExpression <RunTimeType>
 {
 
   public IJExpression raw ();
