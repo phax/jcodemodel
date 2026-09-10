@@ -2,9 +2,10 @@ package com.helger.jcodemodel.expressions.typed.java.lang;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.expressions.typed.ATypeExpressionWrapper;
+import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
+import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 
-public class StringExpression extends ATypeExpressionWrapper <String>
+public class StringExpression extends TypedExpressionWrapper <String>
 {
 
   public StringExpression (IJExpression raw)
@@ -18,11 +19,11 @@ public class StringExpression extends ATypeExpressionWrapper <String>
   }
 
   /// creates `that + other`
-  public StringExpression plus (ATypeExpressionWrapper <? extends String> other)
+  public StringExpression plus (TypedExpressionWrapper <? extends String> other)
   {
     return new StringExpression (raw.plus (other.raw ()));
   }
-  
+
   /// creates `that.length()`
   public IntExpression length ()
   {
@@ -30,7 +31,7 @@ public class StringExpression extends ATypeExpressionWrapper <String>
   }
 
   /// creates `that.startsWith(other)`
-  public StringExpression startsWith (ATypeExpressionWrapper <? extends String> other)
+  public StringExpression startsWith (TypedExpressionWrapper <? extends String> other)
   {
     return new StringExpression (raw.invoke ("startsWith"));
   }

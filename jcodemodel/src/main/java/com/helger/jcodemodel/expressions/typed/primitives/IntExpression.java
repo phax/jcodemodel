@@ -1,11 +1,11 @@
-package com.helger.jcodemodel.expressions.typed.java.lang;
+package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.expressions.typed.ATypeExpressionWrapper;
+import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 
 /// expression with a `int` type.
-public class IntExpression extends ATypeExpressionWrapper <Integer>
+public class IntExpression extends TypedExpressionWrapper <Integer>
 {
 
   public IntExpression (IJExpression raw)

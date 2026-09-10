@@ -4,12 +4,12 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 
 
-public abstract class ATypeExpressionWrapper <RunTimeType> implements ITypedExpression <RunTimeType>
+public class TypedExpressionWrapper <RunTimeType> implements ITypedExpression <RunTimeType>
 {
 
   protected final IJExpression raw;
 
-  public ATypeExpressionWrapper (IJExpression raw)
+  public TypedExpressionWrapper (IJExpression raw)
   {
     this.raw = raw;
   }
