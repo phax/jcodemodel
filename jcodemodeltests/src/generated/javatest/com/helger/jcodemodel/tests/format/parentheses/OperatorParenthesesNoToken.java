@@ -23,14 +23,14 @@ public class OperatorParenthesesNoToken {
      * test precedence of ternary operator and mathematical operations
      */
     public static int multIfSameOddityElseAdd(int a, int b) {
-        return ((a% 2) == (b% 2))?a*b:(a + b);
+        return ((a% 2) == (b% 2))?(a*b):(a + b);
     }
 
     /**
      * test precedence of multiple ternary op
      */
     public static char representBools(boolean a, boolean b) {
-        return a?b?'3':'2':(b?'1':'0');
+        return a?(b?'3':'2'):(b?'1':'0');
     }
 
     /**

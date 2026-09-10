@@ -78,10 +78,9 @@ public final class JOp
   }
 
   /**
-   * The binding strength of an expression, ordered from the tightest to the loosest binding. It is
-   * used to determine whether an operand needs to be surrounded by parentheses.<br>
-   * Several constants may share the same {@link #level()} - a cast binds exactly as tight as a
-   * unary operator - therefore the level and not the ordinal must be compared.
+   * The binding strength of an expression, ordered from the tightest to the loosest binding. The
+   * ordinal of a constant is its binding strength, so the declaration order - and only it -
+   * decides whether an operand has to be surrounded by parentheses.
    *
    * @see <a href="https://docs.oracle.com/javase/specs/jls/se17/html/jls-15.html">JLS 15 -
    *      Expressions</a>
@@ -89,67 +88,61 @@ public final class JOp
   public static enum EPrecedence
   {
     /** Not an operator at all: a literal, a variable name, a method reference, ... */
-    TOKEN (0, ESide.NONE),
+    TOKEN (ESide.NONE),
     /** <code>a.b</code>, <code>a ()</code>, <code>a[b]</code> */
-    DEREF (1, ESide.LEFT),
+    DEREF (ESide.LEFT),
     /** <code>a++</code>, <code>a--</code> */
-    POSTFIX (2, ESide.NONE),
+    POSTFIX (ESide.NONE),
     /**
      * <code>++a</code>, <code>--a</code>, <code>!a</code>, <code>~a</code>, <code>-a</code>.
      * Formally right associative, but deliberately treated as non associative so that stacked
      * operators cannot be glued into a different token - <code>-(-a)</code> must never be printed
      * as <code>--a</code>.
      */
-    UNARY (3, ESide.NONE),
+    UNARY (ESide.NONE),
     /**
-     * <code>(T) a</code>. Binds as tight as {@link #UNARY} but is deliberately treated as non
-     * associative, because <code>(T) -a</code> is parsed as a subtraction when <code>T</code> is a
-     * reference type - see JLS 15.16.
+     * <code>(T) a</code>. Listed after {@link #UNARY} so that a cast used as the operand of a
+     * unary operator keeps its parentheses. The operand of the cast itself may not bind looser
+     * than a postfix expression - see JLS 15.16 - which {@link JCast} expresses by grouping
+     * against {@link #POSTFIX}.
      */
-    CAST (3, ESide.NONE),
+    CAST (ESide.NONE),
     /** <code>a * b</code>, <code>a / b</code>, <code>a % b</code> */
-    MULTIPLICATIVE (4, ESide.LEFT),
+    MULTIPLICATIVE (ESide.LEFT),
     /** <code>a + b</code>, <code>a - b</code> */
-    ADDITIVE (5, ESide.LEFT),
+    ADDITIVE (ESide.LEFT),
     /** <code>a &lt;&lt; b</code>, <code>a &gt;&gt; b</code>, <code>a &gt;&gt;&gt; b</code> */
-    SHIFT (6, ESide.LEFT),
+    SHIFT (ESide.LEFT),
     /** <code>a &lt; b</code>, <code>a instanceof B</code> */
-    RELATIONAL (7, ESide.LEFT),
+    RELATIONAL (ESide.LEFT),
     /** <code>a == b</code>, <code>a != b</code> */
-    EQUALITY (8, ESide.LEFT),
+    EQUALITY (ESide.LEFT),
     /** <code>a &amp; b</code> */
-    BITWISE_AND (9, ESide.LEFT),
+    BITWISE_AND (ESide.LEFT),
     /** <code>a ^ b</code> */
-    BITWISE_XOR (10, ESide.LEFT),
+    BITWISE_XOR (ESide.LEFT),
     /** <code>a | b</code> */
-    BITWISE_OR (11, ESide.LEFT),
+    BITWISE_OR (ESide.LEFT),
     /** <code>a &amp;&amp; b</code> */
-    LOGICAL_AND (12, ESide.LEFT),
+    LOGICAL_AND (ESide.LEFT),
     /** <code>a || b</code> */
-    LOGICAL_OR (13, ESide.LEFT),
+    LOGICAL_OR (ESide.LEFT),
     /** <code>a ? b : c</code> */
-    TERNARY (14, ESide.RIGHT),
+    TERNARY (ESide.RIGHT),
     /** <code>a = b</code>, <code>a += b</code> */
-    ASSIGNMENT (15, ESide.RIGHT),
-    /** <code>a -&gt; b</code>. Binds as loose as an assignment - see JLS 15.27. */
-    LAMBDA (15, ESide.RIGHT);
+    ASSIGNMENT (ESide.RIGHT),
+    /**
+     * <code>a -&gt; b</code>. Binds looser than an assignment, because the body of a lambda
+     * extends as far to the right as possible: <code>a -&gt; v = a</code> is
+     * <code>a -&gt; (v = a)</code> - see JLS 15.27.
+     */
+    LAMBDA (ESide.RIGHT);
 
-    private final int m_nLevel;
     private final ESide m_eAssociativity;
 
-    EPrecedence (final int nLevel, @NonNull final ESide eAssociativity)
+    EPrecedence (@NonNull final ESide eAssociativity)
     {
-      m_nLevel = nLevel;
       m_eAssociativity = eAssociativity;
-    }
-
-    /**
-     * @return The binding strength. The lower the number, the tighter the binding. Different
-     *         constants may share the same level.
-     */
-    public int level ()
-    {
-      return m_nLevel;
     }
 
     /**
@@ -169,12 +162,14 @@ public final class JOp
      */
     public boolean higherThan (@NonNull final EPrecedence aOther)
     {
-      return m_nLevel < aOther.m_nLevel;
+      return ordinal () < aOther.ordinal ();
     }
   }
 
   /**
-   * Determine whether an operand of an operator must be surrounded by parentheses.
+   * Determine whether an operand of an operator must be surrounded by parentheses. An operand that
+   * is a type - like the right hand side of <code>instanceof</code> - may never be parenthesized
+   * and must therefore not be passed in here at all.
    *
    * @param eStrategy
    *        The parentheses strategy taken from the formatter settings. May not be
@@ -192,20 +187,18 @@ public final class JOp
                                           @NonNull final EPrecedence aOperand,
                                           @NonNull final ESide eOperandSide)
   {
-    // An enclosed operand is delimited by the operator itself. Parentheses are never needed there
-    // and - like for the type of "instanceof" - not even always allowed.
-    if (eOperandSide == ESide.NONE)
-      return false;
-
     return switch (eStrategy)
     {
       case ALWAYS -> true;
       case NOTOKEN -> aOperand != EPrecedence.TOKEN;
+      // An operand that is enclosed by the tokens of the operator itself - like the second operand
+      // of the ternary operator - can never become ambiguous.
       // A looser binding operand must be parenthesized. On equal binding this is only needed if
       // the operand sits on the side the operator does not associate to: "a-(b-c)" is not "a-b-c",
       // while "(a-b)-c" is.
-      case REQUIRED -> aOperand.level () > aOperator.level () ||
-                       (aOperand.level () == aOperator.level () && aOperator.associativity () != eOperandSide);
+      case REQUIRED -> eOperandSide != ESide.NONE &&
+                       (aOperator.higherThan (aOperand) ||
+                        (aOperand == aOperator && aOperator.associativity () != eOperandSide));
     };
   }
 

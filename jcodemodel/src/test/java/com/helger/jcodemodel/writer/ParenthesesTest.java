@@ -41,6 +41,8 @@
 package com.helger.jcodemodel.writer;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -54,7 +56,9 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JLambda;
 import com.helger.jcodemodel.JOp;
+import com.helger.jcodemodel.JOp.EPrecedence;
 import com.helger.jcodemodel.writer.settings.Parentheses.EParenthesesStrategy;
 
 /**
@@ -216,6 +220,30 @@ public final class ParenthesesTest
   }
 
   /**
+   * The second operand of a ternary operator needs no parentheses, but the looser strategies must
+   * still print them - an operand may never lose its parentheses in {@link
+   * EParenthesesStrategy#ALWAYS}.
+   */
+  @Test
+  public void testTernaryMidOperandKeepsOptionalParentheses ()
+  {
+    final IJExpression aPlain = JExpr.cond (A, B, C);
+    _assertRequired ("a?b:c", aPlain);
+    _assertNoToken ("a?b:c", aPlain);
+    _assertAlways ("(a)?(b):(c)", aPlain);
+
+    final IJExpression aNested = JExpr.cond (A, JExpr.cond (C, A, B), B);
+    _assertRequired ("a?c?a:b:b", aNested);
+    _assertNoToken ("a?(c?a:b):b", aNested);
+    _assertAlways ("(a)?((c)?(a):(b)):(b)", aNested);
+
+    final IJExpression aSum = JExpr.cond (A, JOp.plus (B, C), B);
+    _assertRequired ("a?b + c:b", aSum);
+    _assertNoToken ("a?(b + c):b", aSum);
+    _assertAlways ("(a)?((b)+(c)):(b)", aSum);
+  }
+
+  /**
    * An assignment is right associative and its left hand side is always an assignment target.
    */
   @Test
@@ -224,6 +252,25 @@ public final class ParenthesesTest
     _assertRequired ("a = b = c", JExpr.assign (TA, JExpr.assign ((IJAssignmentTarget) B, C)));
     _assertRequired ("a = b + c", JExpr.assign (TA, JOp.plus (B, C)));
     _assertRequired ("a = b?a:c", JExpr.assign (TA, JExpr.cond (B, A, C)));
+  }
+
+  /**
+   * A lambda binds looser than an assignment, because its body extends as far to the right as
+   * possible - <code>a -&gt; b = a</code> is <code>a -&gt; (b = a)</code>.
+   */
+  @Test
+  public void testLambdaBindsLooserThanAssignment ()
+  {
+    assertTrue (EPrecedence.ASSIGNMENT.higherThan (EPrecedence.LAMBDA));
+    assertFalse (EPrecedence.LAMBDA.higherThan (EPrecedence.ASSIGNMENT));
+
+    final JLambda aLambda = new JLambda ();
+    aLambda.addParam ("c");
+    aLambda.body ().lambdaExpr (JExpr.assign ((IJAssignmentTarget) B, C));
+    // The body of the lambda swallows the assignment, so the assignment stays unparenthesized ...
+    _assertRequired ("c -> b = c", aLambda);
+    // ... while the lambda used as the right hand side of an assignment has to be grouped
+    _assertRequired ("a = (c -> b = c)", JExpr.assign (TA, aLambda));
   }
 
   /**

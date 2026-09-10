@@ -91,8 +91,11 @@ public class JCast implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
+    // JLS 15.16: the operand of a cast to a reference type must be a unary expression that does
+    // not start with "+" or "-", so everything binding looser than a postfix expression must be
+    // grouped - "(T) -a" would otherwise be parsed as a subtraction
     final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                       EPrecedence.CAST,
+                                                       EPrecedence.POSTFIX,
                                                        m_aObject.operatorPrecedence (),
                                                        ESide.RIGHT);
 

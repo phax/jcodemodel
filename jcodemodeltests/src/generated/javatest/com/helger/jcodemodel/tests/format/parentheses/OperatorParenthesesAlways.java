@@ -23,21 +23,21 @@ public class OperatorParenthesesAlways {
      * test precedence of ternary operator and mathematical operations
      */
     public static int multIfSameOddityElseAdd(int a, int b) {
-        return (((a)%(2)) == ((b)%(2)))?(a)*(b):((a)+(b));
+        return (((a)%(2)) == ((b)%(2)))?((a)*(b)):((a)+(b));
     }
 
     /**
      * test precedence of multiple ternary op
      */
     public static char representBools(boolean a, boolean b) {
-        return (a)?(b)?'3':('2'):((b)?'1':('0'));
+        return (a)?((b)?('3'):('2')):((b)?('1'):('0'));
     }
 
     /**
      * test precedence of multiple ternary operations with other operations
      */
     public static String concat(String a, String b) {
-        return ((a) == (null))?b:(((b) == (null))?a:((a)+(b)));
+        return ((a) == (null))?(b):(((b) == (null))?(a):((a)+(b)));
     }
 
     /**
@@ -51,7 +51,7 @@ public class OperatorParenthesesAlways {
      * test precedence of array component and ternary operator
      */
     public static int arrIdxCoalesce(int[] a, int[] b, int i) {
-        return ((((a) == (null))||(((a).length)<= (i)))?b:(a))[i];
+        return ((((a) == (null))||(((a).length)<= (i)))?(b):(a))[i];
     }
 
     /**
@@ -108,7 +108,7 @@ public class OperatorParenthesesAlways {
      * a ternary used as the target of a method call must be grouped
      */
     public static int condLength(boolean t, String a, String b) {
-        return ((t)?a:(b)).length();
+        return ((t)?(a):(b)).length();
     }
 
     /**

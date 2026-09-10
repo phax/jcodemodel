@@ -145,8 +145,11 @@ public class JOpBinary implements IJExpression
     final EPrecedence aOp = m_aOperator.precedence ();
     final boolean bLeftParentheses = JOp.needsParentheses (eStrategy, aOp, m_aLeft.operatorPrecedence (), ESide.LEFT);
     // The right hand side of "instanceof" is a type, and a type may never be parenthesized
-    final ESide eRightSide = m_aRight instanceof AbstractJType ? ESide.NONE : ESide.RIGHT;
-    final boolean bRightParentheses = JOp.needsParentheses (eStrategy, aOp, m_aRight.operatorPrecedence (), eRightSide);
+    final boolean bRightParentheses = !(m_aRight instanceof AbstractJType) &&
+                                      JOp.needsParentheses (eStrategy,
+                                                            aOp,
+                                                            m_aRight.operatorPrecedence (),
+                                                            ESide.RIGHT);
 
     if (bLeftParentheses)
       f.print ('(');

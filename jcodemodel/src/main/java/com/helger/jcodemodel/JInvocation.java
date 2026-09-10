@@ -408,11 +408,11 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
       {
         // object.<generics> name (
         // A type may never be parenthesized, so a static invocation is left untouched
-        final ESide eObjectSide = m_aObject instanceof AbstractJType ? ESide.NONE : ESide.LEFT;
-        final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+        final boolean bParentheses = !(m_aObject instanceof AbstractJType) &&
+                                     JOp.needsParentheses (f.settings ().parentheses.global,
                                                            EPrecedence.DEREF,
                                                            m_aObject.operatorPrecedence (),
-                                                           eObjectSide);
+                                                           ESide.LEFT);
         if (bParentheses)
           f.print ('(');
         f.generable (m_aObject);
