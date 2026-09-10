@@ -138,9 +138,8 @@ public final class ParenthesesTest
     _assertRequired ("(a + b)[c]", JOp.plus (A, B).component (C));
     _assertRequired ("(a?b:c).hashCode()", JExpr.cond (A, B, C).invoke ("hashCode"));
     _assertRequired ("(a = b).toString()", JExpr.assign (TA, B).invoke ("toString"));
-    _assertRequired ("(a ++).toString()", JOp.postincr (A).invoke ("toString"));
-    _assertRequired ("((java.lang.String) a).length()",
-                     JExpr.cast (CM.ref (String.class), A).invoke ("length"));
+    _assertRequired ("(a++).toString()", JOp.postincr (A).invoke ("toString"));
+    _assertRequired ("((java.lang.String) a).length()", JExpr.cast (CM.ref (String.class), A).invoke ("length"));
     _assertRequired ("((int[]) a).length", JExpr.cast (CM.INT.array (), A).ref ("length"));
     // Chained dereferences are left associative, so no parentheses are needed
     _assertRequired ("a.b().c()", A.invoke ("b").invoke ("c"));
@@ -173,12 +172,18 @@ public final class ParenthesesTest
   {
     _assertRequired ("-(-a)", JOp.minus (JOp.minus (A)));
     _assertRequired ("-(--a)", JOp.minus (JOp.predecr (A)));
-    _assertRequired ("-a --", JOp.minus (JOp.postdecr (A)));
+    _assertRequired ("-a--", JOp.minus (JOp.postdecr (A)));
     _assertRequired ("!(!a)", JOp.not (JOp.not (A)));
     // A negative literal is a plain token, so only the formatter can keep the tokens apart
     _assertRequired ("a - -1", JOp.minus (A, JExpr.lit (-1)));
     _assertRequired ("a +-1", JOp.plus (A, JExpr.lit (-1)));
     _assertRequired ("a*-1", JOp.mul (A, JExpr.lit (-1)));
+
+    // "-a--" groups as "-(a--)", and the postfix operator yields the value before the decrement
+    int a = 5;
+    final int b = -a--;
+    assertEquals (-5, b);
+    assertEquals (4, a);
   }
 
   /**

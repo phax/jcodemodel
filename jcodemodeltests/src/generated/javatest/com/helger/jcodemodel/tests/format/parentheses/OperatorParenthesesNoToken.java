@@ -61,7 +61,7 @@ public class OperatorParenthesesNoToken {
         if ((arr == null)||(arr.length<= 1)) {
             return true;
         }
-        for (int i = arr.length - 2; i >= 0; i --) {
+        for (int i = arr.length - 2; i >= 0; i--) {
             if ((arr[i])>(arr[i + 1 ])) {
                 return false;
             }

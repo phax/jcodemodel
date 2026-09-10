@@ -648,6 +648,20 @@ public class JFormatter implements IJFormatter
 
   @Override
   @NonNull
+  public JFormatter printNoSpace (@NonNull final String sStr)
+  {
+    if ((m_eMode == EMode.PRINTING) && (sStr.length () > 0))
+    {
+      // Only indent - never insert a separating space in front of the token
+      if (atBeginningOfLine ())
+        _spaceIfNeeded (sStr.charAt (0));
+      topContext ().append (sStr);
+    }
+    return this;
+  }
+
+  @Override
+  @NonNull
   public JFormatter print (@NonNull final String sStr)
   {
     if ((m_eMode == EMode.PRINTING) && (sStr.length () > 0))

@@ -158,7 +158,10 @@ public class JOpUnary implements IJExpression
     if (bParentheses)
       f.print (')');
     if (!m_aOperator.prefix ())
-      f.print (m_aOperator.print ());
+    {
+      // A postfix operator stays attached to its operand: "a++" and not "a ++"
+      f.printNoSpace (m_aOperator.print ());
+    }
   }
 
   @Override
