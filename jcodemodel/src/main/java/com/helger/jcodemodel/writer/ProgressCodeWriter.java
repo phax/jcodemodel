@@ -88,8 +88,8 @@ public class ProgressCodeWriter extends FilterCodeWriter
   }
 
   @Override
-  public SourcePrintWriter openSource (@NonNull final JPackage aPackage, @NonNull final String sFilename)
-                                                                                                          throws IOException
+  public SourcePrintWriter openSource (@NonNull final JPackage aPackage,
+                                       @NonNull final String sFilename) throws IOException
   {
     report (toDirName (aPackage), sFilename);
     return super.openSource (aPackage, sFilename);

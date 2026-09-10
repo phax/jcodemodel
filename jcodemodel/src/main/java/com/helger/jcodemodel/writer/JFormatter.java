@@ -625,7 +625,8 @@ public class JFormatter implements IJFormatter
       }
     }
     else
-      if ((lastChar () != 0) && _needSpace (lastChar (), c))
+      // Never append a space next to an existing one - the tokens are already separated
+      if ((lastChar () != 0) && (lastChar () != ' ') && (c != ' ') && _needSpace (lastChar (), c))
       {
         topContext ().append (' ');
       }
@@ -1068,7 +1069,7 @@ public class JFormatter implements IJFormatter
     final AbstractJClass aOuter = aReference.outer ();
     if (aOuter != null)
       if (_collectCausesNoAmbiguities (aOuter, aClassToBeWritten) &&
-        _collectShouldBeImported (aOuter, aClassToBeWritten))
+          _collectShouldBeImported (aOuter, aClassToBeWritten))
       {
         m_aImportedClasses.add (aOuter);
       }

@@ -70,8 +70,8 @@ public final class JOp
     /** Operand right of the operator - as associativity: right associative */
     RIGHT,
     /**
-     * As operand position: the operand is enclosed by tokens of the operator itself (like the
-     * index of an array access) and can therefore never become ambiguous.<br>
+     * As operand position: the operand is enclosed by tokens of the operator itself (like the index
+     * of an array access) and can therefore never become ambiguous.<br>
      * As associativity: the operator is not associative.
      */
     NONE

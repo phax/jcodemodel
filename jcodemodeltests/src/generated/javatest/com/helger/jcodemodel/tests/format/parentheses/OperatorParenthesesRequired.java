@@ -181,13 +181,13 @@ public class OperatorParenthesesRequired {
      */
     public static int switchOnSum(int a, int b) {
         switch (a + b) {
-            case  0 :
+            case 0:
             {
-                return  10;
+                return 10;
             }
-            case  1 :
+            case 1:
             {
-                return  11;
+                return 11;
             }
             default:
             {

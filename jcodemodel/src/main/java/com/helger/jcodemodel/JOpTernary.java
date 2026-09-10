@@ -63,7 +63,9 @@ public class JOpTernary implements IJExpression
     private final String m_sRightPrint;
     private final EPrecedence m_aPrecedence;
 
-    ETernaryOp (@NonNull final String sLeftPrint, @NonNull final String sRightPrint, @NonNull final EPrecedence aPrecedence)
+    ETernaryOp (@NonNull final String sLeftPrint,
+                @NonNull final String sRightPrint,
+                @NonNull final EPrecedence aPrecedence)
     {
       m_sLeftPrint = sLeftPrint;
       m_sRightPrint = sRightPrint;
@@ -153,17 +155,17 @@ public class JOpTernary implements IJExpression
     // the third one is the last thing in the expression, so both accept any expression - see JLS
     // 15.25.
     final boolean bLeftParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                          aOp,
-                                                          m_aExpr1.operatorPrecedence (),
-                                                          ESide.LEFT);
-    final boolean bMidParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                         aOp,
-                                                         m_aExpr2.operatorPrecedence (),
-                                                         ESide.NONE);
-    final boolean bRightParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
                                                            aOp,
-                                                           m_aExpr3.operatorPrecedence (),
-                                                           ESide.RIGHT);
+                                                           m_aExpr1.operatorPrecedence (),
+                                                           ESide.LEFT);
+    final boolean bMidParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                          aOp,
+                                                          m_aExpr2.operatorPrecedence (),
+                                                          ESide.NONE);
+    final boolean bRightParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                            aOp,
+                                                            m_aExpr3.operatorPrecedence (),
+                                                            ESide.RIGHT);
 
     if (bLeftParentheses)
       f.print ('(');
@@ -197,9 +199,9 @@ public class JOpTernary implements IJExpression
       return false;
     final JOpTernary rhs = (JOpTernary) o;
     return EqualsHelper.equals (m_aOperator, rhs.m_aOperator) &&
-      EqualsHelper.equals (m_aExpr1, rhs.m_aExpr1) &&
-      EqualsHelper.equals (m_aExpr2, rhs.m_aExpr2) &&
-      EqualsHelper.equals (m_aExpr3, rhs.m_aExpr3);
+           EqualsHelper.equals (m_aExpr1, rhs.m_aExpr1) &&
+           EqualsHelper.equals (m_aExpr2, rhs.m_aExpr2) &&
+           EqualsHelper.equals (m_aExpr3, rhs.m_aExpr3);
   }
 
   @Override

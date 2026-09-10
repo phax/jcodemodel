@@ -410,9 +410,9 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
         // A type may never be parenthesized, so a static invocation is left untouched
         final ESide eObjectSide = m_aObject instanceof AbstractJType ? ESide.NONE : ESide.LEFT;
         final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                          EPrecedence.DEREF,
-                                                          m_aObject.operatorPrecedence (),
-                                                          eObjectSide);
+                                                           EPrecedence.DEREF,
+                                                           m_aObject.operatorPrecedence (),
+                                                           eObjectSide);
         if (bParentheses)
           f.print ('(');
         f.generable (m_aObject);
@@ -465,10 +465,10 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
       return false;
     final JInvocation rhs = (JInvocation) o;
     if (!(EqualsHelper.equals (m_aObject, rhs.m_aObject) &&
-      EqualsHelper.equals (m_bIsConstructor, rhs.m_bIsConstructor) &&
-      (m_bIsConstructor || EqualsHelper.equals (_methodName (), rhs._methodName ())) &&
-      EqualsHelper.equals (m_aArgs, rhs.m_aArgs) &&
-      EqualsHelper.equals (_typeFullName (), rhs._typeFullName ())))
+          EqualsHelper.equals (m_bIsConstructor, rhs.m_bIsConstructor) &&
+          (m_bIsConstructor || EqualsHelper.equals (_methodName (), rhs._methodName ())) &&
+          EqualsHelper.equals (m_aArgs, rhs.m_aArgs) &&
+          EqualsHelper.equals (_typeFullName (), rhs._typeFullName ())))
     {
       return false;
     }

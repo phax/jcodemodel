@@ -96,9 +96,9 @@ public class JArrayCompRef implements IJAssignmentTarget
   {
     // The index is enclosed by "[" and "]" and can therefore never become ambiguous
     final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                      EPrecedence.DEREF,
-                                                      m_aArray.operatorPrecedence (),
-                                                      ESide.LEFT);
+                                                       EPrecedence.DEREF,
+                                                       m_aArray.operatorPrecedence (),
+                                                       ESide.LEFT);
 
     if (bParentheses)
       f.print ('(');

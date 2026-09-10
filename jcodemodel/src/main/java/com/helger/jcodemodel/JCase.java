@@ -127,7 +127,8 @@ public class JCase implements IJStatement
       else
         aLabelName = m_aLabelExpr;
 
-      f.print ("case ").generable (aLabelName).print (':').newline ();
+      // The colon stays attached to the label: "case 0:" and not "case 0 :"
+      f.print ("case ").generable (aLabelName).printNoSpace (":").newline ();
     }
     if (m_aBody != null)
       f.statement (m_aBody);

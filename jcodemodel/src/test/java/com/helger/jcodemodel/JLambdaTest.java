@@ -73,7 +73,7 @@ public final class JLambdaTest
   {
     final JLambda aLambda = new JLambda ();
     aLambda.body ().lambdaExpr (JExpr.lit (2));
-    assertEquals ("() ->  2", CodeModelTestsHelper.toString (aLambda));
+    assertEquals ("() -> 2", CodeModelTestsHelper.toString (aLambda));
   }
 
   @Test

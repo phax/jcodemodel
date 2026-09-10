@@ -235,8 +235,9 @@ public class JPackage implements
   }
 
   @NonNull
-  public JDefinedClass _class (final int nMods, @NonNull final String sClassName, @NonNull final EClassType eClassType)
-                                                                                                                        throws JCodeModelException
+  public JDefinedClass _class (final int nMods,
+                               @NonNull final String sClassName,
+                               @NonNull final EClassType eClassType) throws JCodeModelException
   {
     final FSName aKey = _createFSName (sClassName);
 

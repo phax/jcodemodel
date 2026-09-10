@@ -146,9 +146,9 @@ public class JOpUnary implements IJExpression
     // A prefix operator has its operand on the right, a postfix operator on the left
     final ESide eOperandSide = m_aOperator.prefix () ? ESide.RIGHT : ESide.LEFT;
     final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                      m_aOperator.precedence (),
-                                                      m_aExpr.operatorPrecedence (),
-                                                      eOperandSide);
+                                                       m_aOperator.precedence (),
+                                                       m_aExpr.operatorPrecedence (),
+                                                       eOperandSide);
 
     if (m_aOperator.prefix ())
       f.print (m_aOperator.print ());

@@ -82,9 +82,7 @@ class Annotator
     m_aTypeEnvironment = typeEnvironment;
   }
 
-  void annotate (@NonNull final List <? extends AnnotationMirror> annotationMirrors) throws CodeModelBuildingException,
-                                                                                     IllegalStateException,
-                                                                                     ErrorTypeFound
+  void annotate (@NonNull final List <? extends AnnotationMirror> annotationMirrors) throws CodeModelBuildingException, IllegalStateException, ErrorTypeFound
   {
     for (final AnnotationMirror annotation : annotationMirrors)
     {
@@ -92,9 +90,7 @@ class Annotator
     }
   }
 
-  private void _annotate (@NonNull final AnnotationMirror annotation) throws CodeModelBuildingException,
-                                                                      IllegalStateException,
-                                                                      ErrorTypeFound
+  private void _annotate (@NonNull final AnnotationMirror annotation) throws CodeModelBuildingException, IllegalStateException, ErrorTypeFound
   {
     final JAnnotationUse annotationUse = m_aAnnotatable.annotate ((AbstractJClass) m_aModelsAdapter.toJType (annotation.getAnnotationType (),
                                                                                                              m_aTypeEnvironment));
@@ -111,9 +107,7 @@ class Annotator
       m_aAnnotationUse = annotationUse;
     }
 
-    void addArguments (final AnnotationMirror annotation) throws CodeModelBuildingException,
-                                                          IllegalStateException,
-                                                          ErrorTypeFound
+    void addArguments (final AnnotationMirror annotation) throws CodeModelBuildingException, IllegalStateException, ErrorTypeFound
     {
       final Map <? extends ExecutableElement, ? extends AnnotationValue> annotationArguments = m_aModelsAdapter.getElementValuesWithDefaults (annotation);
       for (final Map.Entry <? extends ExecutableElement, ? extends AnnotationValue> annotationValueAssignment : annotationArguments.entrySet ())
@@ -124,9 +118,8 @@ class Annotator
       }
     }
 
-    private void _addArgument (final String name, final Object value) throws IllegalStateException,
-                                                                      CodeModelBuildingException,
-                                                                      ErrorTypeFound
+    private void _addArgument (final String name,
+                               final Object value) throws IllegalStateException, CodeModelBuildingException, ErrorTypeFound
     {
       if (value instanceof final String a)
         m_aAnnotationUse.param (name, a);

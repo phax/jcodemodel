@@ -92,9 +92,9 @@ public class JCast implements IJExpression
   public void generate (@NonNull final IJFormatter f)
   {
     final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                      EPrecedence.CAST,
-                                                      m_aObject.operatorPrecedence (),
-                                                      ESide.RIGHT);
+                                                       EPrecedence.CAST,
+                                                       m_aObject.operatorPrecedence (),
+                                                       ESide.RIGHT);
 
     f.print ('(').generable (m_aType).print (')');
     if (bParentheses)
@@ -113,7 +113,7 @@ public class JCast implements IJExpression
       return false;
     final JCast rhs = (JCast) o;
     return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) &&
-      EqualsHelper.equals (m_aObject, rhs.m_aObject);
+           EqualsHelper.equals (m_aObject, rhs.m_aObject);
   }
 
   @Override

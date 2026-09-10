@@ -146,10 +146,7 @@ public class JOpBinary implements IJExpression
     final boolean bLeftParentheses = JOp.needsParentheses (eStrategy, aOp, m_aLeft.operatorPrecedence (), ESide.LEFT);
     // The right hand side of "instanceof" is a type, and a type may never be parenthesized
     final ESide eRightSide = m_aRight instanceof AbstractJType ? ESide.NONE : ESide.RIGHT;
-    final boolean bRightParentheses = JOp.needsParentheses (eStrategy,
-                                                           aOp,
-                                                           m_aRight.operatorPrecedence (),
-                                                           eRightSide);
+    final boolean bRightParentheses = JOp.needsParentheses (eStrategy, aOp, m_aRight.operatorPrecedence (), eRightSide);
 
     if (bLeftParentheses)
       f.print ('(');
@@ -175,8 +172,8 @@ public class JOpBinary implements IJExpression
       return false;
     final JOpBinary rhs = (JOpBinary) o;
     return EqualsHelper.equals (m_aLeft, rhs.m_aLeft) &&
-      EqualsHelper.equals (m_aOperator, rhs.m_aOperator) &&
-      EqualsHelper.equals (m_aRight, rhs.m_aRight);
+           EqualsHelper.equals (m_aOperator, rhs.m_aOperator) &&
+           EqualsHelper.equals (m_aRight, rhs.m_aRight);
   }
 
   @Override

@@ -48,20 +48,23 @@ import com.helger.jcodemodel.IJFormatter;
 import com.helger.jcodemodel.vars.JPatternVar;
 
 /// test if an expression is instance of a type, and produce a new pattern variable when so.
-public class JInstanceOfVar implements IJExpression {
+public class JInstanceOfVar implements IJExpression
+{
 
   private final IJExpression m_aExpr;
 
   private final JPatternVar m_aVar;
 
-  public JInstanceOfVar(@NonNull final IJExpression expr,
-      @NonNull final AbstractJType type,
-      @NonNull final String name) {
+  public JInstanceOfVar (@NonNull final IJExpression expr,
+                         @NonNull final AbstractJType type,
+                         @NonNull final String name)
+  {
     m_aExpr = expr;
     m_aVar = new JPatternVar (false, type, name);
   }
 
-  public IJExpression expr() {
+  public IJExpression expr ()
+  {
     return m_aExpr;
   }
 
@@ -71,8 +74,9 @@ public class JInstanceOfVar implements IJExpression {
   }
 
   @Override
-  public void generate(@NonNull IJFormatter f) {
-    f.print('(').generable(m_aExpr).print("instanceof").var(m_aVar).print(')');
+  public void generate (@NonNull IJFormatter f)
+  {
+    f.print ('(').generable (m_aExpr).print ("instanceof").var (m_aVar).print (')');
   }
 
 }

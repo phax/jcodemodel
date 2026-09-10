@@ -198,9 +198,9 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
       else
       {
         final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                          EPrecedence.DEREF,
-                                                          m_aObject.operatorPrecedence (),
-                                                          ESide.LEFT);
+                                                           EPrecedence.DEREF,
+                                                           m_aObject.operatorPrecedence (),
+                                                           ESide.LEFT);
         if (bParentheses)
           f.print ('(');
         f.generable (m_aObject);
@@ -225,8 +225,8 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
       return false;
     final JFieldRef rhs = (JFieldRef) o;
     return EqualsHelper.equals (m_aObject, rhs.m_aObject) &&
-      EqualsHelper.equals (name (), rhs.name ()) &&
-      EqualsHelper.equals (m_bExplicitThis, rhs.m_bExplicitThis);
+           EqualsHelper.equals (name (), rhs.name ()) &&
+           EqualsHelper.equals (m_bExplicitThis, rhs.m_bExplicitThis);
   }
 
   @Override

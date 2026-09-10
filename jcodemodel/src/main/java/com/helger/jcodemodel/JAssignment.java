@@ -124,9 +124,9 @@ public class JAssignment implements IJExpressionStatement
     // The left hand side is an assignment target, so only the right hand side can ever need
     // parentheses
     final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                      EPrecedence.ASSIGNMENT,
-                                                      m_aRhs.operatorPrecedence (),
-                                                      ESide.RIGHT);
+                                                       EPrecedence.ASSIGNMENT,
+                                                       m_aRhs.operatorPrecedence (),
+                                                       ESide.RIGHT);
 
     f.generable (m_aLhs).print (opFull ());
     if (bParentheses)
@@ -150,8 +150,8 @@ public class JAssignment implements IJExpressionStatement
       return false;
     final JAssignment rhs = (JAssignment) o;
     return EqualsHelper.equals (m_aLhs, rhs.m_aLhs) &&
-      EqualsHelper.equals (m_aRhs, rhs.m_aRhs) &&
-      EqualsHelper.equals (m_sOperator, rhs.m_sOperator);
+           EqualsHelper.equals (m_aRhs, rhs.m_aRhs) &&
+           EqualsHelper.equals (m_sOperator, rhs.m_sOperator);
   }
 
   @Override
