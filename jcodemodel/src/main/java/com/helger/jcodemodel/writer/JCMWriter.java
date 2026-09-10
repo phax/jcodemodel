@@ -287,8 +287,8 @@ public class JCMWriter
    * @throws IOException
    *         on IO error
    */
-  public void build (@NonNull final AbstractCodeWriter aSourceWriter, @NonNull final AbstractCodeWriter aResourceWriter)
-                                                                                                                         throws IOException
+  public void build (@NonNull final AbstractCodeWriter aSourceWriter,
+                     @NonNull final AbstractCodeWriter aResourceWriter) throws IOException
   {
     ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
     ValueEnforcer.notNull (aResourceWriter, "ResourceWriter");
@@ -329,8 +329,8 @@ public class JCMWriter
     return ret;
   }
 
-  public void buildPackage (@NonNull final AbstractCodeWriter aSourceWriter, @NonNull final JPackage aPackage)
-                                                                                                               throws IOException
+  public void buildPackage (@NonNull final AbstractCodeWriter aSourceWriter,
+                            @NonNull final JPackage aPackage) throws IOException
   {
     ValueEnforcer.notNull (aSourceWriter, "SourceWriter");
     ValueEnforcer.notNull (aPackage, "Package");

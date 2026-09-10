@@ -108,15 +108,16 @@ public record IntegerRepresentation (
     public int separatorSize;
     public boolean suffixUpper;
 
-    Copier(IntegerRepresentation ir){
-      positiveSign=ir.positiveSign;
+    Copier (IntegerRepresentation ir)
+    {
+      positiveSign = ir.positiveSign;
       prefixUpper = ir.prefixUpper;
-      base=ir.base;
-      bodyUpper=ir.bodyUpper;
-      padding=ir.padding;
-      separateFormat=ir.separateFormat;
-      separateEvery=ir.separateEvery;
-      separatorSize=ir.separatorSize;
+      base = ir.base;
+      bodyUpper = ir.bodyUpper;
+      padding = ir.padding;
+      separateFormat = ir.separateFormat;
+      separateEvery = ir.separateEvery;
+      separatorSize = ir.separatorSize;
       suffixUpper = ir.suffixUpper;
     }
 

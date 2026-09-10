@@ -645,9 +645,9 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     else
     {
       final boolean bIsDeclarationOnly = (m_aOwningClass.isInterface () && !m_aMods.isDefault ()) ||
-        m_aOwningClass.isAnnotationTypeDeclaration () ||
-        m_aMods.isAbstract () ||
-        m_aMods.isNative ();
+                                         m_aOwningClass.isAnnotationTypeDeclaration () ||
+                                         m_aMods.isAbstract () ||
+                                         m_aMods.isNative ();
 
       if (bIsDeclarationOnly)
       {

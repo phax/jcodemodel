@@ -173,8 +173,8 @@ public class JSwitchExpression implements IJExpressionStatement
     }
     f.indent ();
     if (m_aNullBlock != null &&
-      m_aDefaultBlock != null &&
-      m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
+        m_aDefaultBlock != null &&
+        m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
     {
       f.print ("case null, default -> ").statement (m_aNullBlock);
     }

@@ -37,6 +37,13 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 # News and noteworthy
 
 v4.3.1 - work in progress
+* Expressions no longer surround themselves with parentheses - parentheses are only printed where the Java syntax requires them, so `Math.sqrt (((x*x)+(y*y)))` is now emitted as `Math.sqrt (x*x + y*y)`. The new formatter setting `parentheses.global` selects the strategy: `REQUIRED` (default), `NOTOKEN` or `ALWAYS`. See [#183](https://github.com/phax/jcodemodel/pull/183) - thx @glelouet
+* Added `IJGenerable.operatorPrecedence ()` returning the new enum `JOp.EPrecedence`, which carries the binding strength and the associativity of an operator. `JOp.needsParentheses (...)` and the new enum `JOp.ESide` decide whether a single operand has to be grouped
+* The unary, binary and ternary operators are now modelled by the new enums `JOpUnary.EUnaryOp`, `JOpBinary.EBinaryOp` and `JOpTernary.ETernaryOp` instead of plain strings
+* Removed `JOpUnaryTight` - `JOp.preincr`, `JOp.postincr`, `JOp.predecr` and `JOp.postdecr` now return `JOpUnary`
+* Removed `JOp.hasTopOp (IJExpression)` - the test expression of `if`, `while`, `do` and `switch` is now always parenthesized
+* The formatter no longer emits a space next to an already existing one, so `case  0 :` is now `case 0:`, `return  10;` is now `return 10;` and `case  0,  2  ->` is now `case 0, 2 ->`
+* Added `IJFormatter.printNoSpace (String)` for tokens that must stay attached to the previous one. A postfix operator now uses it, so `a ++` is emitted as `a++`
 * Added the new package `literals` with `EIntegerBase`, `IntegerRepresentation` and `AIntegerRepresented` to define how `int` and `long` literals are emitted: base (binary, decimal, hexadecimal or octal), padding, `_` separators, positive sign and prefix/body/suffix casing. The predefined representations `BIN`, `BIN8`, `DEC`, `HEX` and `OCT` are available; the default output is unchanged plain decimal. See [#181](https://github.com/phax/jcodemodel/pull/181) and [#182](https://github.com/phax/jcodemodel/pull/182) - thx @glelouet
 * `JAtomInt` and `JAtomLong` extend the new class `AIntegerRepresented` and offer a fluent API to select the representation per instance: `binary ()`, `decimal ()`, `hexadecimal ()`, `octal ()`, `padding (int)`, `separateEvery (int)`, `separatorSize (int)` and `positiveSign (boolean)`. See [#188](https://github.com/phax/jcodemodel/pull/188) - thx @glelouet
 * `IllegalStateException` and `IllegalArgumentException` are thrown instead of the generic `RuntimeException`. See [#185](https://github.com/phax/jcodemodel/issues/185) and [#187](https://github.com/phax/jcodemodel/pull/187) - thx @glelouet

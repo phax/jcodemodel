@@ -129,9 +129,8 @@ public class JCodeModelJavaxLangModelAdapter
    *         when operation can't be performed. For example, when given class already exists.
    */
   @NonNull
-  public JDefinedClass getClass (@NonNull final TypeElement element, @NonNull final ErrorTypePolicy policy)
-                                                                                                            throws ErrorTypeFound,
-                                                                                                            CodeModelBuildingException
+  public JDefinedClass getClass (@NonNull final TypeElement element,
+                                 @NonNull final ErrorTypePolicy policy) throws ErrorTypeFound, CodeModelBuildingException
   {
     final DecidedErrorTypesModelsAdapter errorTypeDecision = new DecidedErrorTypesModelsAdapter (m_aCodeModel,
                                                                                                  m_aElementUtils,

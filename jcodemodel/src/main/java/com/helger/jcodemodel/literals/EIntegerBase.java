@@ -101,9 +101,7 @@ public enum EIntegerBase
   }
 
   /// @return sb
-  public StringBuilder format (int i,
-                                  StringBuilder sb,
-                                  IntegerRepresentation f)
+  public StringBuilder format (int i, StringBuilder sb, IntegerRepresentation f)
   {
     boolean neg = i < 0;
     int posI = neg ? -i : i;
@@ -123,9 +121,7 @@ public enum EIntegerBase
   }
 
   /// @return sb
-  public StringBuilder format (long l,
-                                  StringBuilder sb,
-                                  IntegerRepresentation f)
+  public StringBuilder format (long l, StringBuilder sb, IntegerRepresentation f)
   {
     boolean neg = l < 0;
     long posL = neg ? -l : l;
@@ -219,7 +215,7 @@ public enum EIntegerBase
         // body must always end with non-sep, so here assume last format is non-sep
         reversed.append (source.charAt (source.length () - 1));
         for (int formatIndex = sepFormat.length () - 2, sourceIndex = source.length () - 2; formatIndex >= 0 ||
-          sourceIndex >= 0; formatIndex--)
+                                                                                            sourceIndex >= 0; formatIndex--)
         {
           if (formatIndex < 0)
           {

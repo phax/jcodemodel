@@ -45,6 +45,8 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 /**
  * Assignment statements, which are also expressions.
@@ -119,7 +121,19 @@ public class JAssignment implements IJExpressionStatement
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.generable (m_aLhs).print (opFull ()).generable (m_aRhs);
+    // The left hand side is an assignment target, so only the right hand side can ever need
+    // parentheses
+    final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                       EPrecedence.ASSIGNMENT,
+                                                       m_aRhs.operatorPrecedence (),
+                                                       ESide.RIGHT);
+
+    f.generable (m_aLhs).print (opFull ());
+    if (bParentheses)
+      f.print ('(');
+    f.generable (m_aRhs);
+    if (bParentheses)
+      f.print (')');
   }
 
   public void state (@NonNull final IJFormatter f)
@@ -136,13 +150,20 @@ public class JAssignment implements IJExpressionStatement
       return false;
     final JAssignment rhs = (JAssignment) o;
     return EqualsHelper.equals (m_aLhs, rhs.m_aLhs) &&
-      EqualsHelper.equals (m_aRhs, rhs.m_aRhs) &&
-      EqualsHelper.equals (m_sOperator, rhs.m_sOperator);
+           EqualsHelper.equals (m_aRhs, rhs.m_aRhs) &&
+           EqualsHelper.equals (m_sOperator, rhs.m_sOperator);
   }
 
   @Override
   public int hashCode ()
   {
     return getHashCode (this, m_aLhs, m_aRhs, m_sOperator);
+  }
+
+  @Override
+  @NonNull
+  public EPrecedence operatorPrecedence ()
+  {
+    return EPrecedence.ASSIGNMENT;
   }
 }

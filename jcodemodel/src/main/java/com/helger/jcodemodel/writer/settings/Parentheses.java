@@ -38,28 +38,29 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.helger.jcodemodel;
+package com.helger.jcodemodel.writer.settings;
 
-import org.jspecify.annotations.NonNull;
-
-public class JOpUnaryTight extends JOpUnary
+/**
+ * Settings controlling when parentheses are printed around the operand of an operator.
+ */
+public class Parentheses
 {
-  protected JOpUnaryTight (@NonNull final IJExpression aExpr, @NonNull final String sOperator)
+  /// examples are given for [ ( a + b ) * c ] + d
+  public static enum EParenthesesStrategy
   {
-    super (aExpr, sOperator);
+    /// parenthesize every operand : (((a)+(b))*(c))+(d)
+    ALWAYS,
+
+    /// parenthesize every operand that is not a plain token : ((a+b)*c)+d
+    NOTOKEN,
+
+    /// only parenthesize where the Java syntax requires it : (a+b)*c+d
+    REQUIRED
   }
 
-  protected JOpUnaryTight (@NonNull final String sOperator, @NonNull final IJExpression aExpr)
-  {
-    super (sOperator, aExpr);
-  }
+  /// default strategy for parenthesis. Expressions can use a more precise one but should fall back
+  /// to this when null.
+  // Variable name is used externally
+  public EParenthesesStrategy global = EParenthesesStrategy.REQUIRED;
 
-  @Override
-  public void generate (@NonNull final IJFormatter f)
-  {
-    if (opFirst ())
-      f.print (op ()).generable (expr ());
-    else
-      f.generable (expr ()).print (op ());
-  }
 }

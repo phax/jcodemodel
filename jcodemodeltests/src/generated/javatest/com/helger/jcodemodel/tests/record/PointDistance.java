@@ -20,6 +20,6 @@ import javax.annotation.processing.Generated;
 public record PointDistance(int x, int y) {
 
     public double distance() {
-        return Math.sqrt(((x*x)+(y*y)));
+        return Math.sqrt(x*x + y*y);
     }
 }

@@ -563,6 +563,9 @@ public class JFormatter implements IJFormatter
 
   private static boolean _needSpace (final char c1, final char c2)
   {
+    // "-" followed by "-1" or by "--a" must not be printed as "--1" resp. "---a"
+    if ((c1 == '-' || c1 == '+') && c1 == c2)
+      return true;
     if ((c1 == ']') && (c2 == '{'))
       return true;
     if (c1 == ';')
@@ -622,7 +625,8 @@ public class JFormatter implements IJFormatter
       }
     }
     else
-      if ((lastChar () != 0) && _needSpace (lastChar (), c))
+      // Never append a space next to an existing one - the tokens are already separated
+      if ((lastChar () != 0) && (lastChar () != ' ') && (c != ' ') && _needSpace (lastChar (), c))
       {
         topContext ().append (' ');
       }
@@ -639,6 +643,20 @@ public class JFormatter implements IJFormatter
         _spaceIfNeeded (c);
       }
       topContext ().append (c);
+    }
+    return this;
+  }
+
+  @Override
+  @NonNull
+  public JFormatter printNoSpace (@NonNull final String sStr)
+  {
+    if ((m_eMode == EMode.PRINTING) && (sStr.length () > 0))
+    {
+      // Only indent - never insert a separating space in front of the token
+      if (atBeginningOfLine ())
+        _spaceIfNeeded (sStr.charAt (0));
+      topContext ().append (sStr);
     }
     return this;
   }
@@ -1051,7 +1069,7 @@ public class JFormatter implements IJFormatter
     final AbstractJClass aOuter = aReference.outer ();
     if (aOuter != null)
       if (_collectCausesNoAmbiguities (aOuter, aClassToBeWritten) &&
-        _collectShouldBeImported (aOuter, aClassToBeWritten))
+          _collectShouldBeImported (aOuter, aClassToBeWritten))
       {
         m_aImportedClasses.add (aOuter);
       }

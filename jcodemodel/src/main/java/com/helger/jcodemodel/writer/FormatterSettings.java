@@ -43,6 +43,7 @@ package com.helger.jcodemodel.writer;
 import java.util.function.Consumer;
 
 import com.helger.jcodemodel.writer.settings.Indent;
+import com.helger.jcodemodel.writer.settings.Parentheses;
 import com.helger.jcodemodel.writer.settings.Wrap;
 import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping.EListWrapStrategy;
 import com.helger.jcodemodel.writer.settings.Wrap.WordWrapping.EWordWrapStrategy;
@@ -86,6 +87,8 @@ public class FormatterSettings
   //
 
   public final Indent indent = new Indent ();
+
+  public final Parentheses parentheses = new Parentheses ();
 
   public final Wrap wrap = new Wrap ();
 

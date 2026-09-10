@@ -47,6 +47,8 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 /**
  * Field Reference
@@ -194,7 +196,17 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
       if (m_aObject instanceof AbstractJType)
         f.type ((AbstractJType) m_aObject);
       else
+      {
+        final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                           EPrecedence.DEREF,
+                                                           m_aObject.operatorPrecedence (),
+                                                           ESide.LEFT);
+        if (bParentheses)
+          f.print ('(');
         f.generable (m_aObject);
+        if (bParentheses)
+          f.print (')');
+      }
       f.print ('.').print (name);
     }
     else
@@ -213,8 +225,8 @@ public class JFieldRef implements IJAssignmentTarget, IJOwnedMaybe
       return false;
     final JFieldRef rhs = (JFieldRef) o;
     return EqualsHelper.equals (m_aObject, rhs.m_aObject) &&
-      EqualsHelper.equals (name (), rhs.name ()) &&
-      EqualsHelper.equals (m_bExplicitThis, rhs.m_bExplicitThis);
+           EqualsHelper.equals (name (), rhs.name ()) &&
+           EqualsHelper.equals (m_bExplicitThis, rhs.m_bExplicitThis);
   }
 
   @Override

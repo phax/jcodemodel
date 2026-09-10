@@ -403,10 +403,10 @@ public class JDocComment extends JCommentPart implements IJGenerable, IJOwned
   {
     // Is any "@" comment present?
     final boolean bHasAt = !m_aAtParams.isEmpty () ||
-      m_aAtReturn != null ||
-      !m_aAtThrows.isEmpty () ||
-      !m_aAtTags.isEmpty () ||
-      !m_aAtXdoclets.isEmpty ();
+                           m_aAtReturn != null ||
+                           !m_aAtThrows.isEmpty () ||
+                           !m_aAtTags.isEmpty () ||
+                           !m_aAtXdoclets.isEmpty ();
     if (!isEmpty () || bHasAt)
     {
       final String sIndent = m_bIsSingleLineMode ? "// " : " * ";

@@ -214,9 +214,8 @@ class DecidedErrorTypesModelsAdapter
   }
 
   @NonNull
-  private JDefinedClass _defineTopLevelClass (final TypeElement element, final TypeEnvironment environment)
-                                                                                                            throws CodeModelBuildingException,
-                                                                                                            ErrorTypeFound
+  private JDefinedClass _defineTopLevelClass (final TypeElement element,
+                                              final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
   {
     final EClassType classType = _toClassType (element.getKind ());
     int modifiers = toJMod (element.getModifiers ());
@@ -254,9 +253,9 @@ class DecidedErrorTypesModelsAdapter
     for (final Element enclosedElement : element.getEnclosedElements ())
     {
       if (enclosedElement.getKind ().equals (ElementKind.INTERFACE) ||
-        enclosedElement.getKind ().equals (ElementKind.CLASS) ||
-        enclosedElement.getKind ().equals (ElementKind.ENUM) ||
-        enclosedElement.getKind ().equals (ElementKind.ANNOTATION_TYPE))
+          enclosedElement.getKind ().equals (ElementKind.CLASS) ||
+          enclosedElement.getKind ().equals (ElementKind.ENUM) ||
+          enclosedElement.getKind ().equals (ElementKind.ANNOTATION_TYPE))
       {
         final EClassType classType = _toClassType (enclosedElement.getKind ());
         int modifiers = toJMod (enclosedElement.getModifiers ());
@@ -267,8 +266,8 @@ class DecidedErrorTypesModelsAdapter
           modifiers &= ~JMod.ABSTRACT;
         }
         if (classType.equals (EClassType.INTERFACE) ||
-          classType.equals (EClassType.ENUM) ||
-          classType.equals (EClassType.ANNOTATION_TYPE_DECL))
+            classType.equals (EClassType.ENUM) ||
+            classType.equals (EClassType.ANNOTATION_TYPE_DECL))
         {
           // Interfaces and enums are implicitly static. No need for static
           // modifier.
@@ -329,9 +328,8 @@ class DecidedErrorTypesModelsAdapter
     }
   }
 
-  AbstractJType toJType (@NonNull final TypeMirror type, final TypeEnvironment environment)
-                                                                                            throws CodeModelBuildingException,
-                                                                                            ErrorTypeFound
+  AbstractJType toJType (@NonNull final TypeMirror type,
+                         final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
   {
     try
     {

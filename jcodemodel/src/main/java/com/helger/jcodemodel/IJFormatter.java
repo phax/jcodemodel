@@ -140,6 +140,21 @@ public interface IJFormatter extends Closeable
   @NonNull
   IJFormatter print (@NonNull String sStr);
 
+  /**
+   * Print a String into the stream without the separating space that would usually be inserted in
+   * front of it. Use it for a token that must stay attached to what was printed before, like a
+   * postfix operator in <code>a++</code>. Indentation still happens automatically.
+   *
+   * @param sStr
+   *        the String
+   * @return this for chaining
+   */
+  @NonNull
+  default IJFormatter printNoSpace (@NonNull final String sStr)
+  {
+    return print (sStr);
+  }
+
   default IJFormatter println (@NonNull String sStr)
   {
     return print (sStr).print (getNewLine ());

@@ -115,12 +115,11 @@ public class JAtomIntTest
       {
         for (boolean suffixUpper : new boolean [] { true, false })
         {
-          ja.representation (ja.representation ()
-                               .with (ir->{
-                                 ir.positiveSign=positiveSign;
-                                 ir.prefixUpper = prefixUpper;
-                                 ir.suffixUpper = suffixUpper;
-                               }));
+          ja.representation (ja.representation ().with (ir -> {
+            ir.positiveSign = positiveSign;
+            ir.prefixUpper = prefixUpper;
+            ir.suffixUpper = suffixUpper;
+          }));
           Assert.assertEquals (positiveSign ? "+42" : "42", CodeModelTestsHelper.toString (ja));
         }
       }

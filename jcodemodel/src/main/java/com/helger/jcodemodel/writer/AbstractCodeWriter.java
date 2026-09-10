@@ -138,8 +138,8 @@ public abstract class AbstractCodeWriter implements Closeable
    *         On IO error
    */
   @NonNull
-  public final OutputStream openBinary (@NonNull final JPackage aPackage, @NonNull final String sFilename)
-                                                                                                           throws IOException
+  public final OutputStream openBinary (@NonNull final JPackage aPackage,
+                                        @NonNull final String sFilename) throws IOException
   {
     return openBinary (toDirName (aPackage), sFilename);
   }
@@ -159,8 +159,8 @@ public abstract class AbstractCodeWriter implements Closeable
    *         On IO error
    */
   @NonNull
-  public SourcePrintWriter openSource (@NonNull final JPackage aPackage, @NonNull final String sFilename)
-                                                                                                          throws IOException
+  public SourcePrintWriter openSource (@NonNull final JPackage aPackage,
+                                       @NonNull final String sFilename) throws IOException
   {
     final OutputStream aOS = openBinary (aPackage, sFilename);
     final OutputStreamWriter aOSW = new OutputStreamWriter (aOS,

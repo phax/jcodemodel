@@ -21,14 +21,14 @@ public class BasicSwitch {
 
     public static boolean isOdd(int i) {
         return switch (i) {
-            case  0,  2  -> 
+            case 0, 2 -> 
                 false;
-            case  1,  3  -> 
+            case 1, 3 -> 
                 true;
-            case  4,  5,  6,  7,  8,  9  -> 
-                isOdd((i - 2));
+            case 4, 5, 6, 7, 8, 9 -> 
+                isOdd(i - 2);
             default -> {
-                throw new UnsupportedOperationException(("case not handled : "+ i));
+                throw new UnsupportedOperationException("case not handled : "+ i);
             }
         }
         ;

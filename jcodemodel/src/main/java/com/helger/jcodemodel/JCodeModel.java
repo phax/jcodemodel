@@ -226,8 +226,7 @@ public class JCodeModel implements Serializable
    * @since 3.4.0
    */
   @NonNull
-  public final IFileSystemConvention setFileSystemConvention (@NonNull final IFileSystemConvention aFSConvention) throws JCaseSensitivityChangeException,
-                                                                                                                  JInvalidFileNameException
+  public final IFileSystemConvention setFileSystemConvention (@NonNull final IFileSystemConvention aFSConvention) throws JCaseSensitivityChangeException, JInvalidFileNameException
   {
     ValueEnforcer.notNull (aFSConvention, "FSConvention");
     if (aFSConvention == m_aFSConvention)
@@ -355,8 +354,7 @@ public class JCodeModel implements Serializable
    * @since v3.4.0
    */
   @NonNull
-  public JResourceDir resourceDir (@NonNull final String sName) throws JResourceAlreadyExistsException,
-                                                                JInvalidFileNameException
+  public JResourceDir resourceDir (@NonNull final String sName) throws JResourceAlreadyExistsException, JInvalidFileNameException
   {
     ValueEnforcer.notNull (sName, "Name");
 
@@ -504,8 +502,8 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @NonNull
-  public JDefinedClass _class (final int nMods, @NonNull final String sFullyQualifiedClassName)
-                                                                                                throws JCodeModelException
+  public JDefinedClass _class (final int nMods,
+                               @NonNull final String sFullyQualifiedClassName) throws JCodeModelException
   {
     return _class (nMods, sFullyQualifiedClassName, EClassType.CLASS);
   }
@@ -522,8 +520,8 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @NonNull
-  public JDefinedClass _class (@NonNull final String sFullyQualifiedClassName, @NonNull final EClassType eClassType)
-                                                                                                                     throws JCodeModelException
+  public JDefinedClass _class (@NonNull final String sFullyQualifiedClassName,
+                               @NonNull final EClassType eClassType) throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
   }
@@ -766,9 +764,8 @@ public class JCodeModel implements Serializable
    * @see #refWithErrorTypes(TypeElement,Elements)
    */
   @NonNull
-  public JDefinedClass ref (@NonNull final TypeElement aElement, @NonNull final Elements aElementUtils)
-                                                                                                        throws ErrorTypeFound,
-                                                                                                        CodeModelBuildingException
+  public JDefinedClass ref (@NonNull final TypeElement aElement,
+                            @NonNull final Elements aElementUtils) throws ErrorTypeFound, CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClass (aElement);
@@ -800,8 +797,8 @@ public class JCodeModel implements Serializable
    * @see #buildsErrorTypeRefs()
    */
   @NonNull
-  public JDefinedClass refWithErrorTypes (@NonNull final TypeElement aElement, @NonNull final Elements aElementUtils)
-                                                                                                                      throws CodeModelBuildingException
+  public JDefinedClass refWithErrorTypes (@NonNull final TypeElement aElement,
+                                          @NonNull final Elements aElementUtils) throws CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClassWithErrorTypes (aElement);
