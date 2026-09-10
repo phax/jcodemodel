@@ -46,7 +46,8 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-import com.helger.jcodemodel.JOp.Precedence;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 /**
  * array component reference.
@@ -93,28 +94,16 @@ public class JArrayCompRef implements IJAssignmentTarget
 
   public void generate (@NonNull final IJFormatter f)
   {
-    boolean parentheses = true;
-    switch (f.settings ().parentheses.global)
-    {
-      case ALWAYS ->
-      {
-        parentheses = true;
-      }
-      case NOTOKEN ->
-      {
-        parentheses = m_aArray.operatorPrecedence () != Precedence.TOKEN;
-      }
-      case REQUIRED ->
-      {
-        parentheses = Precedence.DEREF.higherThan (m_aArray.operatorPrecedence ());
-      }
-      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
-    }
+    // The index is enclosed by "[" and "]" and can therefore never become ambiguous
+    final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                      EPrecedence.DEREF,
+                                                      m_aArray.operatorPrecedence (),
+                                                      ESide.LEFT);
 
-    if (parentheses)
+    if (bParentheses)
       f.print ('(');
     f.generable (m_aArray);
-    if (parentheses)
+    if (bParentheses)
       f.print (')');
     f.print ('[').generable (m_aIndex).print (']');
   }
@@ -137,8 +126,9 @@ public class JArrayCompRef implements IJAssignmentTarget
   }
 
   @Override
-  public Precedence operatorPrecedence ()
+  @NonNull
+  public EPrecedence operatorPrecedence ()
   {
-    return Precedence.DEREF;
+    return EPrecedence.DEREF;
   }
 }

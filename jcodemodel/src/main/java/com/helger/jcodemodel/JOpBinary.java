@@ -46,54 +46,74 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-import com.helger.jcodemodel.JOp.Precedence;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
+import com.helger.jcodemodel.writer.settings.Parentheses.EParenthesesStrategy;
 
 public class JOpBinary implements IJExpression
 {
 
-  /// binary operators, their print string and their precedence
-  ///
-  /// use BinaryOp since BinaryOperator exists in the jdk.
-  public static enum BinaryOp
+  /**
+   * Binary operators, their textual representation and their precedence.<br>
+   * Named <code>EBinaryOp</code> because <code>BinaryOperator</code> already exists in the JDK.
+   */
+  public static enum EBinaryOp
   {
-    ADD ("+", Precedence.ADDITIVE),
-    BITWISE_AND ("&", Precedence.BITWISE_AND),
-    BITWISE_OR ("|", Precedence.BITWISE_OR),
-    BITWISE_XOR ("^", Precedence.BITWISE_XOR),
-    DIVIDE ("/", Precedence.MULTIPLICATIVE),
-    EQUALS ("==", Precedence.EQUALITY),
-    GREATER (">", Precedence.RELATIONAL),
-    GREATER_EQUAL (">=", Precedence.RELATIONAL),
-    INSTANCE_OF ("instanceof", Precedence.RELATIONAL),
-    LOGICAL_AND ("&&", Precedence.LOGICAL_AND),
-    LOGICAL_OR ("||", Precedence.LOGICAL_OR),
-    LOWER ("<", Precedence.RELATIONAL),
-    LOWER_EQUAL ("<=", Precedence.RELATIONAL),
-    MODULUS ("%", Precedence.MULTIPLICATIVE),
-    MULTIPLY ("*", Precedence.MULTIPLICATIVE),
-    NOT_EQUALS ("!=", Precedence.EQUALITY),
-    SHIFT_LEFT ("<<", Precedence.SHIFT),
-    SHIFT_RIGHT (">>", Precedence.SHIFT),
-    SHIFT_RIGHT_ZERO (">>>", Precedence.SHIFT),
-    SUBSTRACT ("-", Precedence.ADDITIVE);
+    ADD ("+", EPrecedence.ADDITIVE),
+    BITWISE_AND ("&", EPrecedence.BITWISE_AND),
+    BITWISE_OR ("|", EPrecedence.BITWISE_OR),
+    BITWISE_XOR ("^", EPrecedence.BITWISE_XOR),
+    DIVIDE ("/", EPrecedence.MULTIPLICATIVE),
+    EQUALS ("==", EPrecedence.EQUALITY),
+    GREATER (">", EPrecedence.RELATIONAL),
+    GREATER_EQUAL (">=", EPrecedence.RELATIONAL),
+    INSTANCE_OF ("instanceof", EPrecedence.RELATIONAL),
+    LOGICAL_AND ("&&", EPrecedence.LOGICAL_AND),
+    LOGICAL_OR ("||", EPrecedence.LOGICAL_OR),
+    LOWER ("<", EPrecedence.RELATIONAL),
+    LOWER_EQUAL ("<=", EPrecedence.RELATIONAL),
+    MODULUS ("%", EPrecedence.MULTIPLICATIVE),
+    MULTIPLY ("*", EPrecedence.MULTIPLICATIVE),
+    NOT_EQUALS ("!=", EPrecedence.EQUALITY),
+    SHIFT_LEFT ("<<", EPrecedence.SHIFT),
+    SHIFT_RIGHT (">>", EPrecedence.SHIFT),
+    SHIFT_RIGHT_ZERO (">>>", EPrecedence.SHIFT),
+    SUBTRACT ("-", EPrecedence.ADDITIVE);
 
-    public final String print;
-    public final Precedence precedence;
+    private final String m_sPrint;
+    private final EPrecedence m_aPrecedence;
 
-    BinaryOp (String print, Precedence precedence)
+    EBinaryOp (@NonNull final String sPrint, @NonNull final EPrecedence aPrecedence)
     {
-      this.print = print;
-      this.precedence = precedence;
+      m_sPrint = sPrint;
+      m_aPrecedence = aPrecedence;
+    }
+
+    /**
+     * @return The textual representation of this operator. Neither <code>null</code> nor empty.
+     */
+    @NonNull
+    public String print ()
+    {
+      return m_sPrint;
+    }
+
+    /**
+     * @return The binding strength of this operator. Never <code>null</code>.
+     */
+    @NonNull
+    public EPrecedence precedence ()
+    {
+      return m_aPrecedence;
     }
   }
 
   private final IJExpression m_aLeft;
-  @NonNull
-  private final BinaryOp m_aOperator;
+  private final EBinaryOp m_aOperator;
   private final IJGenerable m_aRight;
 
   protected JOpBinary (@NonNull final IJExpression aLeft,
-                       @NonNull final BinaryOp aOperator,
+                       @NonNull final EBinaryOp aOperator,
                        @NonNull final IJGenerable aRight)
   {
     m_aLeft = ValueEnforcer.notNull (aLeft, "Left");
@@ -110,7 +130,7 @@ public class JOpBinary implements IJExpression
   @NonNull
   public String op ()
   {
-    return m_aOperator.print;
+    return m_aOperator.print ();
   }
 
   @NonNull
@@ -121,35 +141,28 @@ public class JOpBinary implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
-    boolean leftParentheses = true, rightParentheses = true;
-    switch(f.settings ().parentheses.global) {
-      case ALWAYS ->
-      {
-        leftParentheses = true;
-        rightParentheses = true;
-      }
-      case NOTOKEN ->
-      {
-        leftParentheses = m_aLeft.operatorPrecedence () != Precedence.TOKEN;
-        rightParentheses = m_aRight.operatorPrecedence () != Precedence.TOKEN;
-      }
-      case REQUIRED ->
-          {
-            leftParentheses = m_aOperator.precedence.higherThan (m_aLeft.operatorPrecedence ());
-            rightParentheses = m_aOperator.precedence.higherThan (m_aRight.operatorPrecedence ());
-          }
-          default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
-    }
-    if (leftParentheses)
+    final EParenthesesStrategy eStrategy = f.settings ().parentheses.global;
+    final EPrecedence aOp = m_aOperator.precedence ();
+    final boolean bLeftParentheses = JOp.needsParentheses (eStrategy, aOp, m_aLeft.operatorPrecedence (), ESide.LEFT);
+    // The right hand side of "instanceof" is a type, and a type may never be parenthesized
+    final ESide eRightSide = m_aRight instanceof AbstractJType ? ESide.NONE : ESide.RIGHT;
+    final boolean bRightParentheses = JOp.needsParentheses (eStrategy,
+                                                           aOp,
+                                                           m_aRight.operatorPrecedence (),
+                                                           eRightSide);
+
+    if (bLeftParentheses)
       f.print ('(');
     f.generable (m_aLeft);
-    if (leftParentheses)
+    if (bLeftParentheses)
       f.print (')');
-    f.print (m_aOperator.print);
-    if (rightParentheses)
+
+    f.print (m_aOperator.print ());
+
+    if (bRightParentheses)
       f.print ('(');
     f.generable (m_aRight);
-    if (rightParentheses)
+    if (bRightParentheses)
       f.print (')');
   }
 
@@ -173,8 +186,9 @@ public class JOpBinary implements IJExpression
   }
 
   @Override
-  public Precedence operatorPrecedence ()
+  @NonNull
+  public EPrecedence operatorPrecedence ()
   {
-    return m_aOperator.precedence;
+    return m_aOperator.precedence ();
   }
 }

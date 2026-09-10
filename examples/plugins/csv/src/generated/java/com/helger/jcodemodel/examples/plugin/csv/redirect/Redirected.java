@@ -74,7 +74,7 @@ public class Redirected {
         jCatchBlock.generate(arg0);
     }
 
-    public JOp.Precedence operatorPrecedence() {
+    public JOp.EPrecedence operatorPrecedence() {
         return jCatchBlock.operatorPrecedence();
     }
 

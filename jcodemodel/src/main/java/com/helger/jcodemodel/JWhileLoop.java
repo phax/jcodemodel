@@ -87,14 +87,7 @@ public class JWhileLoop implements IJStatement
 
   public void state (@NonNull final IJFormatter f)
   {
-    if (JOp.hasTopOp (m_aTextExpr))
-    {
-      f.print ("while ").generable (m_aTextExpr);
-    }
-    else
-    {
-      f.print ("while (").generable (m_aTextExpr).print (')');
-    }
+    f.print ("while (").generable (m_aTextExpr).print (')');
     if (m_aBody != null)
       f.statement (m_aBody);
     else

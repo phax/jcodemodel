@@ -563,6 +563,9 @@ public class JFormatter implements IJFormatter
 
   private static boolean _needSpace (final char c1, final char c2)
   {
+    // "-" followed by "-1" or by "--a" must not be printed as "--1" resp. "---a"
+    if ((c1 == '-' || c1 == '+') && c1 == c2)
+      return true;
     if ((c1 == ']') && (c2 == '{'))
       return true;
     if (c1 == ';')

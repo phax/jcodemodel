@@ -45,7 +45,8 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
-import com.helger.jcodemodel.JOp.Precedence;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 /**
  * Assignment statements, which are also expressions.
@@ -120,30 +121,18 @@ public class JAssignment implements IJExpressionStatement
 
   public void generate (@NonNull final IJFormatter f)
   {
-    // only right side may need parentheses
-    boolean parentheses = true;
-    switch (f.settings ().parentheses.global)
-    {
-      case ALWAYS ->
-      {
-        parentheses = true;
-      }
-      case NOTOKEN ->
-      {
-        parentheses = m_aRhs.operatorPrecedence () != Precedence.TOKEN;
-      }
-      case REQUIRED ->
-      {
-        // basically only lambdas need to be parenthesized
-        parentheses = Precedence.ASSIGNMENT.higherThan (m_aRhs.operatorPrecedence ());
-      }
-      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
-    }
+    // The left hand side is an assignment target, so only the right hand side can ever need
+    // parentheses
+    final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                      EPrecedence.ASSIGNMENT,
+                                                      m_aRhs.operatorPrecedence (),
+                                                      ESide.RIGHT);
+
     f.generable (m_aLhs).print (opFull ());
-    if (parentheses)
+    if (bParentheses)
       f.print ('(');
     f.generable (m_aRhs);
-    if (parentheses)
+    if (bParentheses)
       f.print (')');
   }
 
@@ -172,8 +161,9 @@ public class JAssignment implements IJExpressionStatement
   }
 
   @Override
-  public Precedence operatorPrecedence ()
+  @NonNull
+  public EPrecedence operatorPrecedence ()
   {
-    return Precedence.ASSIGNMENT;
+    return EPrecedence.ASSIGNMENT;
   }
 }

@@ -45,7 +45,8 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
-import com.helger.jcodemodel.JOp.Precedence;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 /**
  * A cast operation.
@@ -90,29 +91,16 @@ public class JCast implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
-    boolean parentheses = true;
-    switch (f.settings ().parentheses.global)
-    {
-      case ALWAYS ->
-      {
-        parentheses = true;
-      }
-      case NOTOKEN ->
-      {
-        parentheses = m_aObject.operatorPrecedence () != Precedence.TOKEN;
-      }
-      case REQUIRED ->
-      {
-        parentheses = Precedence.CAST.higherThan (m_aObject.operatorPrecedence ());
-      }
-      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
-    }
+    final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                      EPrecedence.CAST,
+                                                      m_aObject.operatorPrecedence (),
+                                                      ESide.RIGHT);
 
-    f.print ("(").generable (m_aType).print (')');
-    if (parentheses)
+    f.print ('(').generable (m_aType).print (')');
+    if (bParentheses)
       f.print ('(');
     f.generable (m_aObject);
-    if (parentheses)
+    if (bParentheses)
       f.print (')');
   }
 
@@ -135,8 +123,9 @@ public class JCast implements IJExpression
   }
 
   @Override
-  public Precedence operatorPrecedence ()
+  @NonNull
+  public EPrecedence operatorPrecedence ()
   {
-    return Precedence.CAST;
+    return EPrecedence.CAST;
   }
 }

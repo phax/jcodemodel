@@ -42,7 +42,7 @@ package com.helger.jcodemodel;
 
 import org.jspecify.annotations.NonNull;
 
-import com.helger.jcodemodel.JOp.Precedence;
+import com.helger.jcodemodel.JOp.EPrecedence;
 
 /**
  * Common interface for code components that can generate uses of themselves.
@@ -51,19 +51,20 @@ public interface IJGenerable extends IJObject
 {
   void generate (@NonNull IJFormatter f);
 
-  /// Indicates the operator precedence at which an operator addition can change the meaning of
-  /// this. Used to check the need for parentheses.
-  ///
-  /// For example, an "a+b*c" element would return the precedence of "+", and any operator with
-  /// an higher precedence could break it : a "++" operator would require parentheses since
-  /// "a+b*c++" is not the same as "(a+b*c)++"
-  ///
-  /// Most elements are not operator-sensitive so the default is the max precedence (token). For
-  /// example method call( "myFunction()" )
-  ///
-  /// @return the lowest operator precedence.
-  default JOp.Precedence operatorPrecedence ()
+  /**
+   * The binding strength of this element, used to decide whether it must be surrounded by
+   * parentheses when it is used as the operand of an operator. An operand binding looser than the
+   * operator applied to it changes the meaning of that operand: <code>a+b*c</code> binds as tight
+   * as <code>+</code>, so applying <code>++</code> to it requires parentheses, because
+   * <code>a+b*c++</code> is not <code>(a+b*c)++</code>.<br>
+   * Most elements are not operators at all, so the default is the tightest binding
+   * {@link EPrecedence#TOKEN} - e.g. a method invocation <code>myFunction ()</code>.
+   *
+   * @return The binding strength of this element. Never <code>null</code>.
+   */
+  @NonNull
+  default EPrecedence operatorPrecedence ()
   {
-    return Precedence.TOKEN;
+    return EPrecedence.TOKEN;
   }
 }

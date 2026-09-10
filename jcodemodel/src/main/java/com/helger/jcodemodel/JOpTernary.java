@@ -46,41 +46,71 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-import com.helger.jcodemodel.JOp.Precedence;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 public class JOpTernary implements IJExpression
 {
 
-  /// ternary operators, their print strings and their precedences
-  public static enum TernaryOp
+  /**
+   * Ternary operators and the textual representation of their two separators.
+   */
+  public static enum ETernaryOp
   {
-    TERN_COND ("?", Precedence.TERNAY, ":", Precedence.TERNAY)
-    ;
+    TERN_COND ("?", ":", EPrecedence.TERNARY);
 
-    public final String leftPrint, rightPrint;
-    public final Precedence leftPrecedence, rightPrecedence;
+    private final String m_sLeftPrint;
+    private final String m_sRightPrint;
+    private final EPrecedence m_aPrecedence;
 
-    TernaryOp (String leftPrint, Precedence leftPrecedence, String rightPrint, Precedence rightPrecedence)
+    ETernaryOp (@NonNull final String sLeftPrint, @NonNull final String sRightPrint, @NonNull final EPrecedence aPrecedence)
     {
-      this.leftPrint = leftPrint;
-      this.leftPrecedence = leftPrecedence;
-      this.rightPrint = rightPrint;
-      this.rightPrecedence = rightPrecedence;
+      m_sLeftPrint = sLeftPrint;
+      m_sRightPrint = sRightPrint;
+      m_aPrecedence = aPrecedence;
     }
 
+    /**
+     * @return The separator printed between the first and the second operand. Neither
+     *         <code>null</code> nor empty.
+     */
+    @NonNull
+    public String leftPrint ()
+    {
+      return m_sLeftPrint;
+    }
+
+    /**
+     * @return The separator printed between the second and the third operand. Neither
+     *         <code>null</code> nor empty.
+     */
+    @NonNull
+    public String rightPrint ()
+    {
+      return m_sRightPrint;
+    }
+
+    /**
+     * @return The binding strength of this operator. Never <code>null</code>.
+     */
+    @NonNull
+    public EPrecedence precedence ()
+    {
+      return m_aPrecedence;
+    }
   }
 
-  private final TernaryOp m_aOperator;
+  private final ETernaryOp m_aOperator;
   private final IJExpression m_aExpr1;
   private final IJExpression m_aExpr2;
   private final IJExpression m_aExpr3;
 
-  protected JOpTernary (@NonNull TernaryOp operator,
+  protected JOpTernary (@NonNull final ETernaryOp aOperator,
                         @NonNull final IJExpression aExpr1,
                         @NonNull final IJExpression aExpr2,
                         @NonNull final IJExpression aExpr3)
   {
-    m_aOperator = operator;
+    m_aOperator = ValueEnforcer.notNull (aOperator, "Operator");
     m_aExpr1 = ValueEnforcer.notNull (aExpr1, "Expr1");
     m_aExpr2 = ValueEnforcer.notNull (aExpr2, "Expr2");
     m_aExpr3 = ValueEnforcer.notNull (aExpr3, "Expr3");
@@ -95,7 +125,7 @@ public class JOpTernary implements IJExpression
   @NonNull
   public String op1 ()
   {
-    return m_aOperator.leftPrint;
+    return m_aOperator.leftPrint ();
   }
 
   @NonNull
@@ -107,7 +137,7 @@ public class JOpTernary implements IJExpression
   @NonNull
   public String op2 ()
   {
-    return m_aOperator.rightPrint;
+    return m_aOperator.rightPrint ();
   }
 
   @NonNull
@@ -118,49 +148,43 @@ public class JOpTernary implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
-    boolean leftParentheses = true, midParentheses = true, rightParentheses = true;
-    switch (f.settings ().parentheses.global)
-    {
-      case ALWAYS ->
-      {
-        leftParentheses = true;
-        midParentheses = true;
-        rightParentheses = true;
-      }
-      case NOTOKEN ->
-      {
-        leftParentheses = m_aExpr1.operatorPrecedence () != Precedence.TOKEN;
-        midParentheses = m_aExpr2.operatorPrecedence () != Precedence.TOKEN;
-        rightParentheses = m_aExpr3.operatorPrecedence () != Precedence.TOKEN;
-      }
-      case REQUIRED ->
-      {
-        leftParentheses = !m_aExpr1.operatorPrecedence ().higherThan (m_aOperator.leftPrecedence);
-        midParentheses = !m_aExpr2.operatorPrecedence ().higherThan (m_aOperator.leftPrecedence) ||
-          !m_aExpr2.operatorPrecedence ().higherThan (m_aOperator.rightPrecedence);
-        rightParentheses = !m_aExpr3.operatorPrecedence ().higherThan (m_aOperator.rightPrecedence);
-      }
-    }
-    if (leftParentheses)
+    final EPrecedence aOp = m_aOperator.precedence ();
+    // Only the condition can become ambiguous. The second operand is enclosed by "?" and ":" and
+    // the third one is the last thing in the expression, so both accept any expression - see JLS
+    // 15.25.
+    final boolean bLeftParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                          aOp,
+                                                          m_aExpr1.operatorPrecedence (),
+                                                          ESide.LEFT);
+    final boolean bMidParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                         aOp,
+                                                         m_aExpr2.operatorPrecedence (),
+                                                         ESide.NONE);
+    final boolean bRightParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                           aOp,
+                                                           m_aExpr3.operatorPrecedence (),
+                                                           ESide.RIGHT);
+
+    if (bLeftParentheses)
       f.print ('(');
     f.generable (m_aExpr1);
-    if (leftParentheses)
+    if (bLeftParentheses)
       f.print (')');
 
-    f.print (m_aOperator.leftPrint);
+    f.print (m_aOperator.leftPrint ());
 
-    if (midParentheses)
+    if (bMidParentheses)
       f.print ('(');
     f.generable (m_aExpr2);
-    if (midParentheses)
+    if (bMidParentheses)
       f.print (')');
 
-    f.print (m_aOperator.rightPrint);
+    f.print (m_aOperator.rightPrint ());
 
-    if (rightParentheses)
+    if (bRightParentheses)
       f.print ('(');
     f.generable (m_aExpr3);
-    if (rightParentheses)
+    if (bRightParentheses)
       f.print (')');
   }
 
@@ -185,8 +209,9 @@ public class JOpTernary implements IJExpression
   }
 
   @Override
-  public Precedence operatorPrecedence ()
+  @NonNull
+  public EPrecedence operatorPrecedence ()
   {
-    return m_aOperator.leftPrecedence.lowest (m_aOperator.rightPrecedence);
+    return m_aOperator.precedence ();
   }
 }

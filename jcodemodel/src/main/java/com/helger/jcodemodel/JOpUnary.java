@@ -46,36 +46,64 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
-import com.helger.jcodemodel.JOp.Precedence;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 public class JOpUnary implements IJExpression
 {
-  /// unary operators, their print string and their precedence
-  public static enum UnaryOp
+  /**
+   * Unary operators, their textual representation, their precedence and whether they are printed
+   * before or after their operand.
+   */
+  public static enum EUnaryOp
   {
-    BITWISE_NOT ("~", Precedence.UNARY, true),
-    LOGICAL_NOT ("!", Precedence.UNARY, true),
-    MINUS ("-", Precedence.UNARY, true),
-    POST_DECR ("--", Precedence.POSTFIX, false),
-    POST_INCR ("++", Precedence.POSTFIX, false),
-    PRE_DECR ("--", Precedence.POSTFIX, true),
-    PRE_INCR ("++", Precedence.POSTFIX, true),
-    ;
+    BITWISE_NOT ("~", EPrecedence.UNARY, true),
+    LOGICAL_NOT ("!", EPrecedence.UNARY, true),
+    MINUS ("-", EPrecedence.UNARY, true),
+    POST_DECR ("--", EPrecedence.POSTFIX, false),
+    POST_INCR ("++", EPrecedence.POSTFIX, false),
+    PRE_DECR ("--", EPrecedence.UNARY, true),
+    PRE_INCR ("++", EPrecedence.UNARY, true);
 
-    public final String print;
-    public final Precedence precedence;
-    public final boolean prefix;
+    private final String m_sPrint;
+    private final EPrecedence m_aPrecedence;
+    private final boolean m_bPrefix;
 
-    UnaryOp (String print, Precedence precedence, boolean prefix)
+    EUnaryOp (@NonNull final String sPrint, @NonNull final EPrecedence aPrecedence, final boolean bPrefix)
     {
-      this.print = print;
-      this.precedence = precedence;
-      this.prefix = prefix;
+      m_sPrint = sPrint;
+      m_aPrecedence = aPrecedence;
+      m_bPrefix = bPrefix;
     }
 
+    /**
+     * @return The textual representation of this operator. Neither <code>null</code> nor empty.
+     */
+    @NonNull
+    public String print ()
+    {
+      return m_sPrint;
+    }
+
+    /**
+     * @return The binding strength of this operator. Never <code>null</code>.
+     */
+    @NonNull
+    public EPrecedence precedence ()
+    {
+      return m_aPrecedence;
+    }
+
+    /**
+     * @return <code>true</code> if the operator is printed before its operand.
+     */
+    public boolean prefix ()
+    {
+      return m_bPrefix;
+    }
   }
 
-  private final UnaryOp m_aOperator;
+  private final EUnaryOp m_aOperator;
   private final IJExpression m_aExpr;
 
   /**
@@ -86,7 +114,7 @@ public class JOpUnary implements IJExpression
    * @param aExpr
    *        expression
    */
-  protected JOpUnary (@NonNull final UnaryOp aOperator, @NonNull final IJExpression aExpr)
+  protected JOpUnary (@NonNull final EUnaryOp aOperator, @NonNull final IJExpression aExpr)
   {
     m_aOperator = ValueEnforcer.notNull (aOperator, "Operator");
     m_aExpr = ValueEnforcer.notNull (aExpr, "Expression");
@@ -95,7 +123,7 @@ public class JOpUnary implements IJExpression
   @NonNull
   public String op ()
   {
-    return m_aOperator.print;
+    return m_aOperator.print ();
   }
 
   @NonNull
@@ -110,37 +138,27 @@ public class JOpUnary implements IJExpression
    */
   public boolean opFirst ()
   {
-    return m_aOperator.prefix;
+    return m_aOperator.prefix ();
   }
 
   public void generate (@NonNull final IJFormatter f)
   {
-    boolean parentheses = true;
-    switch (f.settings ().parentheses.global)
-    {
-      case ALWAYS ->
-      {
-        parentheses = true;
-      }
-      case NOTOKEN ->
-      {
-        parentheses = m_aExpr.operatorPrecedence () != Precedence.TOKEN;
-      }
-      case REQUIRED ->
-      {
-        parentheses = m_aOperator.precedence.higherThan (m_aExpr.operatorPrecedence ());
-      }
-      default -> throw new IllegalArgumentException ("Unexpected value: " + f.settings ().parentheses.global);
-    }
-    if (m_aOperator.prefix)
-      f.print (m_aOperator.print);
-    if (parentheses)
+    // A prefix operator has its operand on the right, a postfix operator on the left
+    final ESide eOperandSide = m_aOperator.prefix () ? ESide.RIGHT : ESide.LEFT;
+    final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                      m_aOperator.precedence (),
+                                                      m_aExpr.operatorPrecedence (),
+                                                      eOperandSide);
+
+    if (m_aOperator.prefix ())
+      f.print (m_aOperator.print ());
+    if (bParentheses)
       f.print ('(');
     f.generable (m_aExpr);
-    if (parentheses)
+    if (bParentheses)
       f.print (')');
-    if (!m_aOperator.prefix)
-      f.print (m_aOperator.print);
+    if (!m_aOperator.prefix ())
+      f.print (m_aOperator.print ());
   }
 
   @Override
@@ -161,8 +179,9 @@ public class JOpUnary implements IJExpression
   }
 
   @Override
-  public Precedence operatorPrecedence ()
+  @NonNull
+  public EPrecedence operatorPrecedence ()
   {
-    return m_aOperator.precedence;
+    return m_aOperator.precedence ();
   }
 }

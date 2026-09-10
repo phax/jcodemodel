@@ -110,14 +110,7 @@ public class JSwitch implements IJStatement
 
   public void state (@NonNull final IJFormatter f)
   {
-    if (JOp.hasTopOp (m_aTestExpr))
-    {
-      f.print ("switch ").generable (m_aTestExpr).print (" {").newline ();
-    }
-    else
-    {
-      f.print ("switch (").generable (m_aTestExpr).print (')').print (" {").newline ();
-    }
+    f.print ("switch (").generable (m_aTestExpr).print (')').print (" {").newline ();
     for (final JCase c : m_aCases)
       f.statement (c);
     if (m_aDefaultCase != null)
