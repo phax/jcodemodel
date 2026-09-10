@@ -55,7 +55,7 @@ public class JOpUnary implements IJExpression
    * Unary operators, their textual representation, their precedence and whether they are printed
    * before or after their operand.
    */
-  public static enum EUnaryOp
+  public enum EUnaryOp
   {
     BITWISE_NOT ("~", EPrecedence.UNARY, true),
     LOGICAL_NOT ("!", EPrecedence.UNARY, true),
@@ -103,27 +103,27 @@ public class JOpUnary implements IJExpression
     }
   }
 
-  private final EUnaryOp m_aOperator;
+  private final EUnaryOp m_eOperator;
   private final IJExpression m_aExpr;
 
   /**
    * Constructor for operator before expression
    *
-   * @param sOperator
+   * @param eOperator
    *        operator
    * @param aExpr
    *        expression
    */
-  protected JOpUnary (@NonNull final EUnaryOp aOperator, @NonNull final IJExpression aExpr)
+  protected JOpUnary (@NonNull final EUnaryOp eOperator, @NonNull final IJExpression aExpr)
   {
-    m_aOperator = ValueEnforcer.notNull (aOperator, "Operator");
+    m_eOperator = ValueEnforcer.notNull (eOperator, "Operator");
     m_aExpr = ValueEnforcer.notNull (aExpr, "Expression");
   }
 
   @NonNull
   public String op ()
   {
-    return m_aOperator.print ();
+    return m_eOperator.print ();
   }
 
   @NonNull
@@ -138,29 +138,29 @@ public class JOpUnary implements IJExpression
    */
   public boolean opFirst ()
   {
-    return m_aOperator.prefix ();
+    return m_eOperator.prefix ();
   }
 
   public void generate (@NonNull final IJFormatter f)
   {
     // A prefix operator has its operand on the right, a postfix operator on the left
-    final ESide eOperandSide = m_aOperator.prefix () ? ESide.RIGHT : ESide.LEFT;
+    final ESide eOperandSide = m_eOperator.prefix () ? ESide.RIGHT : ESide.LEFT;
     final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
-                                                       m_aOperator.precedence (),
+                                                       m_eOperator.precedence (),
                                                        m_aExpr.operatorPrecedence (),
                                                        eOperandSide);
 
-    if (m_aOperator.prefix ())
-      f.print (m_aOperator.print ());
+    if (m_eOperator.prefix ())
+      f.print (m_eOperator.print ());
     if (bParentheses)
       f.print ('(');
     f.generable (m_aExpr);
     if (bParentheses)
       f.print (')');
-    if (!m_aOperator.prefix ())
+    if (!m_eOperator.prefix ())
     {
       // A postfix operator stays attached to its operand: "a++" and not "a ++"
-      f.printNoSpace (m_aOperator.print ());
+      f.printNoSpace (m_eOperator.print ());
     }
   }
 
@@ -172,19 +172,19 @@ public class JOpUnary implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JOpUnary rhs = (JOpUnary) o;
-    return EqualsHelper.equals (m_aOperator, rhs.m_aOperator) && EqualsHelper.equals (m_aExpr, rhs.m_aExpr);
+    return EqualsHelper.equals (m_eOperator, rhs.m_eOperator) && EqualsHelper.equals (m_aExpr, rhs.m_aExpr);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, m_aOperator, m_aExpr);
+    return getHashCode (this, m_eOperator, m_aExpr);
   }
 
   @Override
   @NonNull
   public EPrecedence operatorPrecedence ()
   {
-    return m_aOperator.precedence ();
+    return m_eOperator.precedence ();
   }
 }
