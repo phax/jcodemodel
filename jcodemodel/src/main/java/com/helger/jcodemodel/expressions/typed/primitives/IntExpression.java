@@ -18,4 +18,9 @@ public class IntExpression extends TypedExpressionWrapper <Integer>
     return new IntExpression (JExpr.lit (value));
   }
 
+  public static IntExpression of (IJExpression raw)
+  {
+    return new IntExpression (raw);
+  }
+
 }
