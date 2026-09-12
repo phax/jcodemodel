@@ -76,6 +76,13 @@ public final class JOp
     return new JOpUnary ("-", aExpr);
   }
 
+  // mostly used for explicit int promotion, eg from byte to int.
+  @NonNull
+  public static JOpUnary positive (@NonNull final IJExpression aExpr)
+  {
+    return new JOpUnary ("+", aExpr);
+  }
+
   /**
    * Logical not <code>'!x'</code>.
    *

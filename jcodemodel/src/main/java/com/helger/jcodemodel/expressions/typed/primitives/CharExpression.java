@@ -5,12 +5,24 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 
 /// expression with a `char` type.
-public class CharExpression extends ASubIntExpression <Character>
+public class CharExpression extends ASubIntExpression <Character, CharExpression, IntExpression>
 {
 
   public CharExpression (IJExpression raw)
   {
     super (raw);
+  }
+
+  @Override
+  protected CharExpression wrapSelf (IJExpression exp)
+  {
+    return new CharExpression (exp);
+  }
+
+  @Override
+  protected IntExpression wrapPos (IJExpression exp)
+  {
+    return new IntExpression (exp);
   }
 
   public static CharExpression of (char value)
@@ -23,22 +35,10 @@ public class CharExpression extends ASubIntExpression <Character>
     return new CharExpression (raw);
   }
 
-  //
-  // unary
-  //
-
-  //
-  // binary
-  //
-
   /// @return `that + other`
   public StringExpression plus (StringExpression other)
   {
     return new StringExpression (raw.plus (other.raw ()));
   }
-
-  //
-  // ternary
-  //
 
 }

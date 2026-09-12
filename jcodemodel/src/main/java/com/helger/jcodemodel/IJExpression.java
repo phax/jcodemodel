@@ -64,6 +64,15 @@ public interface IJExpression extends IVariableInitializer
   }
 
   /**
+   * @return <code>+[this]" from "[this]</code>.
+   */
+  @NonNull
+  default IJExpression plus ()
+  {
+    return JOp.positive (this);
+  }
+
+  /**
    * Logical 'not' <code>'!x'</code>.
    *
    * @return <code>![this]" from "[this]</code>.
