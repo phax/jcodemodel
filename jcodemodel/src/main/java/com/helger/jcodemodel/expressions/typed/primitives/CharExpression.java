@@ -2,6 +2,8 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JMethod;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 
 /// expression with a `char` type.
@@ -33,6 +35,16 @@ public class CharExpression extends ASubIntExpression <Character, CharExpression
   public static CharExpression of (IJExpression raw)
   {
     return new CharExpression (raw);
+  }
+
+  public static CharExpression of (ITypedExpression <?> untyped)
+  {
+    return of (untyped.raw ());
+  }
+
+  public static CharExpression param (JMethod m, String name)
+  {
+    return m.paramTyped (name, char.class, CharExpression::of);
   }
 
   /// @return `that + other`

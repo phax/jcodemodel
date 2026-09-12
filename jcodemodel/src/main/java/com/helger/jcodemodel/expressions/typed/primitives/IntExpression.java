@@ -2,6 +2,8 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JMethod;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 
 /// expression with a `int` type.
 public class IntExpression extends ASubIntExpression <Integer, IntExpression, IntExpression>
@@ -32,6 +34,16 @@ public class IntExpression extends ASubIntExpression <Integer, IntExpression, In
   public static IntExpression of (IJExpression raw)
   {
     return new IntExpression (raw);
+  }
+
+  public static IntExpression of (ITypedExpression <?> untyped)
+  {
+    return of (untyped.raw ());
+  }
+
+  public static IntExpression param (JMethod m, String name)
+  {
+    return m.paramTyped (name, int.class, IntExpression::of);
   }
 
 }

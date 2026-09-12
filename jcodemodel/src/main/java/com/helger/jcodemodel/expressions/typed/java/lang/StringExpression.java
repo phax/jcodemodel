@@ -2,6 +2,7 @@ package com.helger.jcodemodel.expressions.typed.java.lang;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
@@ -26,6 +27,20 @@ public class StringExpression extends TypedExpressionWrapper <String>
   public static StringExpression of (String value)
   {
     return new StringExpression (JExpr.lit (value));
+  }
+
+  public static StringExpression of (IJExpression raw)
+  {
+    return new StringExpression (raw);
+  }
+
+  public static StringExpression of (ITypedExpression <?> untyped)
+  {
+    return of (untyped.raw ());
+  }
+
+  public static StringExpression param(JMethod m, String name) {
+    return m.paramTyped (name, String.class, StringExpression::of);
   }
 
   /// creates `that.charAt(index)`

@@ -2,6 +2,7 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JOp;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
@@ -23,6 +24,16 @@ public class BoolExpression extends TypedExpressionWrapper <Boolean>
   public static BoolExpression of (IJExpression raw)
   {
     return new BoolExpression (raw);
+  }
+
+  public static BoolExpression of (ITypedExpression <?> untyped)
+  {
+    return of (untyped.raw ());
+  }
+
+  public static BoolExpression param (JMethod m, String name)
+  {
+    return m.paramTyped (name, boolean.class, BoolExpression::of);
   }
 
   //

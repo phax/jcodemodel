@@ -2,6 +2,8 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JMethod;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 
 /// expression with a `long` type. Name is shorter to avoid name clash with java.lang . 
 public class LngExpression extends ASubLongExpression <Long, LngExpression, LngExpression>
@@ -32,6 +34,16 @@ public class LngExpression extends ASubLongExpression <Long, LngExpression, LngE
   public static LngExpression of (IJExpression raw)
   {
     return new LngExpression (raw);
+  }
+
+  public static LngExpression of (ITypedExpression <?> untyped)
+  {
+    return of (untyped.raw ());
+  }
+
+  public static LngExpression param (JMethod m, String name)
+  {
+    return m.paramTyped (name, long.class, LngExpression::of);
   }
 
 }
