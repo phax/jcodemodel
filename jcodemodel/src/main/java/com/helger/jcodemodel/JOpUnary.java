@@ -60,6 +60,7 @@ public class JOpUnary implements IJExpression
     BITWISE_NOT ("~", EPrecedence.UNARY, true),
     LOGICAL_NOT ("!", EPrecedence.UNARY, true),
     MINUS ("-", EPrecedence.UNARY, true),
+    POSITIVE ("+", EPrecedence.UNARY, true),
     POST_DECR ("--", EPrecedence.POSTFIX, false),
     POST_INCR ("++", EPrecedence.POSTFIX, false),
     PRE_DECR ("--", EPrecedence.UNARY, true),
