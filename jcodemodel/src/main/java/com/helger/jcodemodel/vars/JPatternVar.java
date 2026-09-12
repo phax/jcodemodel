@@ -65,10 +65,7 @@ import com.helger.jcodemodel.JVar;
 ///
 public class JPatternVar extends JVar
 {
-  public JPatternVar (
-      boolean isFinal,
-      @NonNull AbstractJType aType,
-      @NonNull String sName)
+  public JPatternVar (boolean isFinal, @NonNull AbstractJType aType, @NonNull String sName)
   {
     super (JMods.forVar (isFinal ? JMod.FINAL : JMod.NONE), aType, sName, null);
   }

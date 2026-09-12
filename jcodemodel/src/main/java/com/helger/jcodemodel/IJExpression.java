@@ -816,4 +816,5 @@ public interface IJExpression extends IVariableInitializer
   {
     return JExpr.cast (aType, this);
   }
+
 }

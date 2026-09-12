@@ -58,12 +58,12 @@ import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 public class GenerateSourceMojo extends AbstractMojo
 {
 
-  static boolean isBlank (String s)
+  static boolean isBlank (final String s)
   {
     return s == null || s.isBlank ();
   }
 
-  static boolean isNotBlank (String s)
+  static boolean isNotBlank (final String s)
   {
     return !isBlank (s);
   }
@@ -88,7 +88,7 @@ public class GenerateSourceMojo extends AbstractMojo
   // non-package groupid or artifactid
   /**
    * fully qualified package to create the classes in. Example
-   * 
+   *
    * <pre>
    * ${project.groupId}.${project.artifactId}
    * </pre>
@@ -163,9 +163,6 @@ public class GenerateSourceMojo extends AbstractMojo
    * <li>Apply the generator on each data separately, modifying the JCM.</li>
    * <li>Export the JCM</li>
    * </ol>
-   * </p>
-   * <p>
-   * </p>
    */
   @Override
   public void execute () throws MojoExecutionException, MojoFailureException
@@ -209,7 +206,7 @@ public class GenerateSourceMojo extends AbstractMojo
     {
       new JCMWriter (cm).setJavaFeature (findJavaFeature ()).build (dir, (IProgressTracker) null);
     }
-    catch (IOException e)
+    catch (final IOException e)
     {
       throw new MojoFailureException ("after applying sources " + sourcesList, e);
     }
@@ -240,9 +237,9 @@ public class GenerateSourceMojo extends AbstractMojo
       sGeneratorClass = findGeneratorClass ();
 
     return isBlank (sGeneratorClass) ? null
-                                                  : (ICodeModelBuilder) Class.forName (sGeneratorClass)
-                                                                             .getDeclaredConstructor ()
-                                                                             .newInstance ();
+                                     : (ICodeModelBuilder) Class.forName (sGeneratorClass)
+                                                                .getDeclaredConstructor ()
+                                                                .newInstance ();
   }
 
   @Nullable
@@ -268,8 +265,8 @@ public class GenerateSourceMojo extends AbstractMojo
   /// - a single file source is applied alone
   /// - a url source is opened and applied
   /// - if neither data nor source is set, the generator is applied to [ISourcedInputStream#NULL],
-  ///   so that a generator which does not need data still works, while a generator that requires
-  ///   data fails rather than being silently skipped.
+  /// so that a generator which does not need data still works, while a generator that requires
+  /// data fails rather than being silently skipped.
   ///
   /// The sources are opened one after the other, so that only one stream is open at a time and each
   /// of them is closed, even if the generation fails.
@@ -281,8 +278,7 @@ public class GenerateSourceMojo extends AbstractMojo
   /// @throws MojoFailureException if the generation of a source failed.
   @NonNull
   protected List <ISourcedInputStream> buildSources (@NonNull final ICodeModelBuilder cmb,
-                                                     @NonNull final JCodeModel cm) throws MojoExecutionException,
-                                                                                   MojoFailureException
+                                                     @NonNull final JCodeModel cm) throws MojoExecutionException, MojoFailureException
   {
     final List <ISourcedInputStream> ret = new ArrayList <> ();
     if (isBlank (m_sData) && isBlank (m_sSource))
@@ -380,7 +376,7 @@ public class GenerateSourceMojo extends AbstractMojo
   ///
   /// @param aRootFile file or directory to browse
   /// @return the file itself if it is a normal file ; the matching files it contains, recursively,
-  ///         if it is a directory. Never null.
+  /// if it is a directory. Never null.
   @NonNull
   protected List <File> findSourceFiles (@NonNull final File aRootFile)
   {

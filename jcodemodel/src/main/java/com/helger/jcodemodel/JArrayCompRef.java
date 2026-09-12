@@ -46,6 +46,8 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 /**
  * array component reference.
@@ -92,7 +94,18 @@ public class JArrayCompRef implements IJAssignmentTarget
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.generable (m_aArray).print ('[').generable (m_aIndex).print (']');
+    // The index is enclosed by "[" and "]" and can therefore never become ambiguous
+    final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                       EPrecedence.DEREF,
+                                                       m_aArray.operatorPrecedence (),
+                                                       ESide.LEFT);
+
+    if (bParentheses)
+      f.print ('(');
+    f.generable (m_aArray);
+    if (bParentheses)
+      f.print (')');
+    f.print ('[').generable (m_aIndex).print (']');
   }
 
   @Override
@@ -110,5 +123,12 @@ public class JArrayCompRef implements IJAssignmentTarget
   public int hashCode ()
   {
     return getHashCode (this, m_aArray, m_aIndex);
+  }
+
+  @Override
+  @NonNull
+  public EPrecedence operatorPrecedence ()
+  {
+    return EPrecedence.DEREF;
   }
 }

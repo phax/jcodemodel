@@ -23,9 +23,9 @@ public class ExampleInstanceOfVar {
 
     public static int toInt(Object o) {
         if (o == null) {
-            return  0;
+            return 0;
         }
-        if ((o instanceof String s)&&(!s.isBlank())) {
+        if ((o instanceof String s)&&!s.isBlank()) {
             return s.strip().length();
         }
         if ((o instanceof Collection c)) {
@@ -37,6 +37,6 @@ public class ExampleInstanceOfVar {
         if ((o instanceof Number n)) {
             return n.intValue();
         }
-        return  0;
+        return 0;
     }
 }

@@ -45,6 +45,8 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 /**
  * A cast operation.
@@ -89,7 +91,20 @@ public class JCast implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print ("((").generable (m_aType).print (')').generable (m_aObject).print (')');
+    // JLS 15.16: the operand of a cast to a reference type must be a unary expression that does
+    // not start with "+" or "-", so everything binding looser than a postfix expression must be
+    // grouped - "(T) -a" would otherwise be parsed as a subtraction
+    final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                       EPrecedence.POSTFIX,
+                                                       m_aObject.operatorPrecedence (),
+                                                       ESide.RIGHT);
+
+    f.print ('(').generable (m_aType).print (')');
+    if (bParentheses)
+      f.print ('(');
+    f.generable (m_aObject);
+    if (bParentheses)
+      f.print (')');
   }
 
   @Override
@@ -101,12 +116,19 @@ public class JCast implements IJExpression
       return false;
     final JCast rhs = (JCast) o;
     return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) &&
-      EqualsHelper.equals (m_aObject, rhs.m_aObject);
+           EqualsHelper.equals (m_aObject, rhs.m_aObject);
   }
 
   @Override
   public int hashCode ()
   {
     return getHashCode (this, m_aType.fullName (), m_aObject);
+  }
+
+  @Override
+  @NonNull
+  public EPrecedence operatorPrecedence ()
+  {
+    return EPrecedence.CAST;
   }
 }

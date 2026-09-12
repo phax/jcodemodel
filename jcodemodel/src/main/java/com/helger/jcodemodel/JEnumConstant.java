@@ -234,7 +234,7 @@ public class JEnumConstant implements IJExpression, IJDeclaration, IJAnnotatable
       return false;
     final JEnumConstant rhs = (JEnumConstant) o;
     return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) &&
-      EqualsHelper.equals (m_sName, rhs.m_sName);
+           EqualsHelper.equals (m_sName, rhs.m_sName);
   }
 
   @Override

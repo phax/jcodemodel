@@ -51,12 +51,22 @@ import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.vars.JBlockVar;
 
 /**
- * For statement
+ * For statement.
+ * 
+ * <pre>
+ * for ([expression]+|[variablelist]? ; [test]? ; [updateStatement]+ )
+ * </pre>
+ * <p>
+ * The init must be either called once to create a variable, or one+ times to add init
+ * expressions.<br />
+ * To create multiple init variables, init the first one and use it to add new ones with the same
+ * type or array types
+ * </p>
  */
 public class JForLoop implements IJStatement
 {
 
-  // either a init var, or expressions
+  // this class contains either a init var, or expressions
   private JBlockVar m_aInitVar;
   private final List <IJExpression> m_aInitExprs = new ArrayList <> ();
   private IJExpression m_aTestExpr;
@@ -87,6 +97,7 @@ public class JForLoop implements IJStatement
       throw new IllegalStateException ("a for loop must have either variable declaration or expressions, this already has variable");
   }
 
+  /// set the base variable init with a modifier (limited to variable modifiers, so final)
   @NonNull
   public JBlockVar init (final int nMods,
                          @NonNull final AbstractJType aType,
@@ -99,6 +110,8 @@ public class JForLoop implements IJStatement
     return aVar;
   }
 
+  /// set the base variable init. `for(int i=0 ; ; )`
+  /// @return a new variable. You can use it to add sub variables, eg `for(int i=0, j=i ; ;)`
   @NonNull
   public JBlockVar init (@NonNull final AbstractJType aType,
                          @NonNull final String sVarName,
@@ -107,11 +120,15 @@ public class JForLoop implements IJStatement
     return init (JMod.NONE, aType, sVarName, aInitExpr);
   }
 
+  /// add an assignment expression to the init list.
+  @NonNull
   public JForLoop init (@NonNull final JVar aVar, @NonNull final IJExpression aRhs)
   {
     return init (JExpr.assign (aVar, aRhs));
   }
 
+  /// add an init expression to the init list
+  @NonNull
   public JForLoop init (IJExpression ije)
   {
     checkInitExpr ();
@@ -148,6 +165,7 @@ public class JForLoop implements IJStatement
     return m_aTestExpr;
   }
 
+  /// add an update statement to the list of existing ones.
   public void update (@NonNull final IJExpression aUpdate)
   {
     ValueEnforcer.notNull (aUpdate, "Update");

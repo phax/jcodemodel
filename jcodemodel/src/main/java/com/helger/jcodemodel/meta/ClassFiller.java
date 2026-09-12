@@ -79,9 +79,8 @@ class ClassFiller
     m_aNewClass = newClass;
   }
 
-  void fillClass (@NonNull final TypeElement element, @NonNull final TypeEnvironment environment)
-                                                                                                  throws CodeModelBuildingException,
-                                                                                                  ErrorTypeFound
+  void fillClass (@NonNull final TypeElement element,
+                  @NonNull final TypeEnvironment environment) throws CodeModelBuildingException, ErrorTypeFound
   {
     m_aNewClass.hide ();
     final Annotator classAnnotator = new Annotator (m_aModelsAdapter, m_aNewClass, environment);
@@ -107,7 +106,7 @@ class ClassFiller
     for (final Element enclosedElement : element.getEnclosedElements ())
     {
       if (enclosedElement.getKind ().equals (ElementKind.INTERFACE) ||
-        enclosedElement.getKind ().equals (ElementKind.CLASS))
+          enclosedElement.getKind ().equals (ElementKind.CLASS))
       {
         final TypeElement innerClassElement = (TypeElement) enclosedElement;
         m_aModelsAdapter.defineInnerClass (m_aNewClass, innerClassElement, environment.enclosed ());

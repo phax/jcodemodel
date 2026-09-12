@@ -54,6 +54,7 @@ import java.util.regex.Pattern;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import com.helger.annotation.misc.ChangeNextMajorRelease;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.string.StringHelper;
 import com.helger.base.string.StringReplace;
@@ -79,6 +80,7 @@ public class JPackage implements
    * By default package names are not forced to lowercase. <br>
    * TODO v4: remove option and change to true
    */
+  @ChangeNextMajorRelease ("remove option and change to true")
   private static final AtomicBoolean FORCE_PACKAGE_NAME_LOWERCASE = new AtomicBoolean (false);
 
   /**
@@ -235,8 +237,9 @@ public class JPackage implements
   }
 
   @NonNull
-  public JDefinedClass _class (final int nMods, @NonNull final String sClassName, @NonNull final EClassType eClassType)
-                                                                                                                        throws JCodeModelException
+  public JDefinedClass _class (final int nMods,
+                               @NonNull final String sClassName,
+                               @NonNull final EClassType eClassType) throws JCodeModelException
   {
     final FSName aKey = _createFSName (sClassName);
 

@@ -48,6 +48,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
+import com.helger.jcodemodel.JOp.EPrecedence;
 
 /**
  * This is a single Java 8 lambda expression. It consists of 0-n parameters and a body statement.
@@ -167,7 +168,7 @@ public class JLambda implements IJExpression
 
     // Print body
     final boolean bBraces = m_aBodyStatement.size () != 1 ||
-      !(m_aBodyStatement.getContents ().get (0) instanceof IJExpression);
+                            !(m_aBodyStatement.getContents ().get (0) instanceof IJExpression);
     m_aBodyStatement.bracesRequired (bBraces);
     f.statement (m_aBodyStatement);
   }
@@ -186,5 +187,12 @@ public class JLambda implements IJExpression
     final JLambda ret = new JLambda ();
     ret.body ().lambdaExpr (aExpr);
     return ret;
+  }
+
+  @Override
+  @NonNull
+  public EPrecedence operatorPrecedence ()
+  {
+    return EPrecedence.LAMBDA;
   }
 }

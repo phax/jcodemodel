@@ -94,8 +94,9 @@ public class FileCodeWriter extends AbstractCodeWriter
     this (aTargetDir, DEFAULT_MARK_READ_ONLY, aEncoding, sNewLine);
   }
 
-  public FileCodeWriter (@NonNull final File aTargetDir, final boolean bMarkReadOnly, @Nullable final Charset aEncoding)
-                                                                                                                         throws IOException
+  public FileCodeWriter (@NonNull final File aTargetDir,
+                         final boolean bMarkReadOnly,
+                         @Nullable final Charset aEncoding) throws IOException
   {
     this (aTargetDir, bMarkReadOnly, aEncoding, JCMWriter.DEFAULT_NEW_LINE);
   }

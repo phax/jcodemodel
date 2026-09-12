@@ -36,7 +36,19 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 
 # News and noteworthy
 
-v4.3.1 - work in progress
+v4.4.1 - work in progress
+* `JOp.EPrecedence` derives the binding strength from the declaration order (`ordinal ()`) again, instead of from an explicitly assigned level. `EPrecedence.level ()` was removed
+* Fixed `JOp.EPrecedence.LAMBDA` binding as tight as `ASSIGNMENT` - a lambda binds looser, because `a -> v = a` is `a -> (v = a)`. See [#195](https://github.com/phax/jcodemodel/pull/195) - thx @glelouet
+* Fixed the second operand of the ternary operator losing its parentheses in the `ALWAYS` and `NOTOKEN` strategies. See [#195](https://github.com/phax/jcodemodel/pull/195) - thx @glelouet
+
+v4.4.0 - 2026-09-10
+* Expressions no longer surround themselves with parentheses - parentheses are only printed where the Java syntax requires them, so `Math.sqrt (((x*x)+(y*y)))` is now emitted as `Math.sqrt (x*x + y*y)`. The new formatter setting `parentheses.global` selects the strategy: `REQUIRED` (default), `NOTOKEN` or `ALWAYS`. See [#183](https://github.com/phax/jcodemodel/pull/183) - thx @glelouet
+* Added `IJGenerable.operatorPrecedence ()` returning the new enum `JOp.EPrecedence`, which carries the binding strength and the associativity of an operator. `JOp.needsParentheses (...)` and the new enum `JOp.ESide` decide whether a single operand has to be grouped
+* The unary, binary and ternary operators are now modelled by the new enums `JOpUnary.EUnaryOp`, `JOpBinary.EBinaryOp` and `JOpTernary.ETernaryOp` instead of plain strings
+* Removed `JOpUnaryTight` - `JOp.preincr`, `JOp.postincr`, `JOp.predecr` and `JOp.postdecr` now return `JOpUnary`
+* Removed `JOp.hasTopOp (IJExpression)` - the test expression of `if`, `while`, `do` and `switch` is now always parenthesized
+* The formatter no longer emits a space next to an already existing one, so `case  0 :` is now `case 0:`, `return  10;` is now `return 10;` and `case  0,  2  ->` is now `case 0, 2 ->`
+* Added `IJFormatter.printNoSpace (String)` for tokens that must stay attached to the previous one. A postfix operator now uses it, so `a ++` is emitted as `a++`
 * Added the new package `literals` with `EIntegerBase`, `IntegerRepresentation` and `AIntegerRepresented` to define how `int` and `long` literals are emitted: base (binary, decimal, hexadecimal or octal), padding, `_` separators, positive sign and prefix/body/suffix casing. The predefined representations `BIN`, `BIN8`, `DEC`, `HEX` and `OCT` are available; the default output is unchanged plain decimal. See [#181](https://github.com/phax/jcodemodel/pull/181) and [#182](https://github.com/phax/jcodemodel/pull/182) - thx @glelouet
 * `JAtomInt` and `JAtomLong` extend the new class `AIntegerRepresented` and offer a fluent API to select the representation per instance: `binary ()`, `decimal ()`, `hexadecimal ()`, `octal ()`, `padding (int)`, `separateEvery (int)`, `separatorSize (int)` and `positiveSign (boolean)`. See [#188](https://github.com/phax/jcodemodel/pull/188) - thx @glelouet
 * `IllegalStateException` and `IllegalArgumentException` are thrown instead of the generic `RuntimeException`. See [#185](https://github.com/phax/jcodemodel/issues/185) and [#187](https://github.com/phax/jcodemodel/pull/187) - thx @glelouet
@@ -48,6 +60,10 @@ v4.3.1 - work in progress
 * Maven plugin: directories are no longer skipped by `sourcesFilter` - the filter applies to the files only, as documented
 * Maven plugin: symbolic link loops inside a source directory no longer lead to an endless recursion
 * Maven plugin: the generator is now always configured, so that it gets its default parameters even if no `params` are set
+* Maven plugin: the goal may now also be invoked with the short prefix `jcm`, as in `mvn jcm:generate-source`, instead of `jcodemodel`. The Maven help output of the mojo and of all its parameters was reworked. See [#194](https://github.com/phax/jcodemodel/pull/194) - thx @glelouet
+* Maven plugin: the String parameters are now tested for blankness instead of emptiness, so a whitespace only value is treated as "not set". See [#194](https://github.com/phax/jcodemodel/pull/194) - thx @glelouet
+* Maven plugin: the generator is now also invoked if neither `source` nor `data` is configured - it then receives `ISourcedInputStream.NULL` instead of nothing. See [#193](https://github.com/phax/jcodemodel/pull/193) - thx @glelouet
+* Generators that ignore their source now log a warning instead of silently discarding it. See [#193](https://github.com/phax/jcodemodel/pull/193) - thx @glelouet
 * CSV generator: the source is now read as UTF-8 by default, instead of the platform default charset. Use the new `charset` parameter to change it
 * CSV generator: the `field_sep` parameter is now used as a literal separator and no longer as a regular expression
 * CSV generator: a line containing only separators no longer throws an `ArrayIndexOutOfBoundsException`

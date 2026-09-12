@@ -42,10 +42,29 @@ package com.helger.jcodemodel;
 
 import org.jspecify.annotations.NonNull;
 
+import com.helger.jcodemodel.JOp.EPrecedence;
+
 /**
  * Common interface for code components that can generate uses of themselves.
  */
 public interface IJGenerable extends IJObject
 {
   void generate (@NonNull IJFormatter f);
+
+  /**
+   * The binding strength of this element, used to decide whether it must be surrounded by
+   * parentheses when it is used as the operand of an operator. An operand binding looser than the
+   * operator applied to it changes the meaning of that operand: <code>a+b*c</code> binds as tight
+   * as <code>+</code>, so applying <code>++</code> to it requires parentheses, because
+   * <code>a+b*c++</code> is not <code>(a+b*c)++</code>.<br>
+   * Most elements are not operators at all, so the default is the tightest binding
+   * {@link EPrecedence#TOKEN} - e.g. a method invocation <code>myFunction ()</code>.
+   *
+   * @return The binding strength of this element. Never <code>null</code>.
+   */
+  @NonNull
+  default EPrecedence operatorPrecedence ()
+  {
+    return EPrecedence.TOKEN;
+  }
 }

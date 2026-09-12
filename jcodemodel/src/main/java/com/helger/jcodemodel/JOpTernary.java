@@ -46,25 +46,75 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 public class JOpTernary implements IJExpression
 {
+
+  /**
+   * Ternary operators and the textual representation of their two separators.
+   */
+  public static enum ETernaryOp
+  {
+    TERN_COND ("?", ":", EPrecedence.TERNARY);
+
+    private final String m_sLeftPrint;
+    private final String m_sRightPrint;
+    private final EPrecedence m_aPrecedence;
+
+    ETernaryOp (@NonNull final String sLeftPrint,
+                @NonNull final String sRightPrint,
+                @NonNull final EPrecedence aPrecedence)
+    {
+      m_sLeftPrint = sLeftPrint;
+      m_sRightPrint = sRightPrint;
+      m_aPrecedence = aPrecedence;
+    }
+
+    /**
+     * @return The separator printed between the first and the second operand. Neither
+     *         <code>null</code> nor empty.
+     */
+    @NonNull
+    public String leftPrint ()
+    {
+      return m_sLeftPrint;
+    }
+
+    /**
+     * @return The separator printed between the second and the third operand. Neither
+     *         <code>null</code> nor empty.
+     */
+    @NonNull
+    public String rightPrint ()
+    {
+      return m_sRightPrint;
+    }
+
+    /**
+     * @return The binding strength of this operator. Never <code>null</code>.
+     */
+    @NonNull
+    public EPrecedence precedence ()
+    {
+      return m_aPrecedence;
+    }
+  }
+
+  private final ETernaryOp m_aOperator;
   private final IJExpression m_aExpr1;
-  private final String m_sOperator1;
   private final IJExpression m_aExpr2;
-  private final String m_sOperator2;
   private final IJExpression m_aExpr3;
 
-  protected JOpTernary (@NonNull final IJExpression aExpr1,
-                        @NonNull final String sOperator1,
+  protected JOpTernary (@NonNull final ETernaryOp aOperator,
+                        @NonNull final IJExpression aExpr1,
                         @NonNull final IJExpression aExpr2,
-                        @NonNull final String sOperator2,
                         @NonNull final IJExpression aExpr3)
   {
+    m_aOperator = ValueEnforcer.notNull (aOperator, "Operator");
     m_aExpr1 = ValueEnforcer.notNull (aExpr1, "Expr1");
-    m_sOperator1 = ValueEnforcer.notNull (sOperator1, "Operator1");
     m_aExpr2 = ValueEnforcer.notNull (aExpr2, "Expr2");
-    m_sOperator2 = ValueEnforcer.notNull (sOperator2, "Operator2");
     m_aExpr3 = ValueEnforcer.notNull (aExpr3, "Expr3");
   }
 
@@ -77,7 +127,7 @@ public class JOpTernary implements IJExpression
   @NonNull
   public String op1 ()
   {
-    return m_sOperator1;
+    return m_aOperator.leftPrint ();
   }
 
   @NonNull
@@ -89,7 +139,7 @@ public class JOpTernary implements IJExpression
   @NonNull
   public String op2 ()
   {
-    return m_sOperator2;
+    return m_aOperator.rightPrint ();
   }
 
   @NonNull
@@ -100,13 +150,44 @@ public class JOpTernary implements IJExpression
 
   public void generate (@NonNull final IJFormatter f)
   {
-    f.print ('(')
-     .generable (m_aExpr1)
-     .print (m_sOperator1)
-     .generable (m_aExpr2)
-     .print (m_sOperator2)
-     .generable (m_aExpr3)
-     .print (')');
+    final EPrecedence aOp = m_aOperator.precedence ();
+    // Only the condition can become ambiguous. The second operand is enclosed by "?" and ":" and
+    // the third one is the last thing in the expression, so both accept any expression - see JLS
+    // 15.25.
+    final boolean bLeftParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                           aOp,
+                                                           m_aExpr1.operatorPrecedence (),
+                                                           ESide.LEFT);
+    final boolean bMidParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                          aOp,
+                                                          m_aExpr2.operatorPrecedence (),
+                                                          ESide.NONE);
+    final boolean bRightParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                            aOp,
+                                                            m_aExpr3.operatorPrecedence (),
+                                                            ESide.RIGHT);
+
+    if (bLeftParentheses)
+      f.print ('(');
+    f.generable (m_aExpr1);
+    if (bLeftParentheses)
+      f.print (')');
+
+    f.print (m_aOperator.leftPrint ());
+
+    if (bMidParentheses)
+      f.print ('(');
+    f.generable (m_aExpr2);
+    if (bMidParentheses)
+      f.print (')');
+
+    f.print (m_aOperator.rightPrint ());
+
+    if (bRightParentheses)
+      f.print ('(');
+    f.generable (m_aExpr3);
+    if (bRightParentheses)
+      f.print (')');
   }
 
   @Override
@@ -117,16 +198,22 @@ public class JOpTernary implements IJExpression
     if (o == null || getClass () != o.getClass ())
       return false;
     final JOpTernary rhs = (JOpTernary) o;
-    return EqualsHelper.equals (m_aExpr1, rhs.m_aExpr1) &&
-      EqualsHelper.equals (m_sOperator1, rhs.m_sOperator1) &&
-      EqualsHelper.equals (m_aExpr2, rhs.m_aExpr2) &&
-      EqualsHelper.equals (m_sOperator2, rhs.m_sOperator2) &&
-      EqualsHelper.equals (m_aExpr3, rhs.m_aExpr3);
+    return EqualsHelper.equals (m_aOperator, rhs.m_aOperator) &&
+           EqualsHelper.equals (m_aExpr1, rhs.m_aExpr1) &&
+           EqualsHelper.equals (m_aExpr2, rhs.m_aExpr2) &&
+           EqualsHelper.equals (m_aExpr3, rhs.m_aExpr3);
   }
 
   @Override
   public int hashCode ()
   {
-    return getHashCode (this, m_aExpr1, m_sOperator1, m_aExpr2, m_sOperator2, m_aExpr3);
+    return getHashCode (this, m_aExpr1, m_aOperator, m_aExpr2, m_aExpr3);
+  }
+
+  @Override
+  @NonNull
+  public EPrecedence operatorPrecedence ()
+  {
+    return m_aOperator.precedence ();
   }
 }

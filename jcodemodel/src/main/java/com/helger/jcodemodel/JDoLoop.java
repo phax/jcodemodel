@@ -92,14 +92,7 @@ public class JDoLoop implements IJStatement
     else
       f.print ("{ }");
 
-    if (JOp.hasTopOp (m_aTest))
-    {
-      f.print ("while ").generable (m_aTest);
-    }
-    else
-    {
-      f.print ("while (").generable (m_aTest).print (')');
-    }
+    f.print ("while (").generable (m_aTest).print (')');
     f.print (';').newline ();
   }
 }

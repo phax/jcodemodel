@@ -50,6 +50,8 @@ import org.jspecify.annotations.Nullable;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.base.equals.EqualsHelper;
 import com.helger.base.hashcode.HashCodeGenerator;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 
 /**
@@ -412,7 +414,17 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
       if (m_aObject != null)
       {
         // object.<generics> name (
+        // A type may never be parenthesized, so a static invocation is left untouched
+        final boolean bParentheses = !(m_aObject instanceof AbstractJType) &&
+                                     JOp.needsParentheses (f.settings ().parentheses.global,
+                                                           EPrecedence.DEREF,
+                                                           m_aObject.operatorPrecedence (),
+                                                           ESide.LEFT);
+        if (bParentheses)
+          f.print ('(');
         f.generable (m_aObject);
+        if (bParentheses)
+          f.print (')');
         f.print ('.');
         _addTypeVars (f);
         f.print (name);
@@ -460,10 +472,10 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
       return false;
     final JInvocation rhs = (JInvocation) o;
     if (!(EqualsHelper.equals (m_aObject, rhs.m_aObject) &&
-      EqualsHelper.equals (m_bIsConstructor, rhs.m_bIsConstructor) &&
-      (m_bIsConstructor || EqualsHelper.equals (_methodName (), rhs._methodName ())) &&
-      EqualsHelper.equals (m_aArgs, rhs.m_aArgs) &&
-      EqualsHelper.equals (_typeFullName (), rhs._typeFullName ())))
+          EqualsHelper.equals (m_bIsConstructor, rhs.m_bIsConstructor) &&
+          (m_bIsConstructor || EqualsHelper.equals (_methodName (), rhs._methodName ())) &&
+          EqualsHelper.equals (m_aArgs, rhs.m_aArgs) &&
+          EqualsHelper.equals (_typeFullName (), rhs._typeFullName ())))
     {
       return false;
     }

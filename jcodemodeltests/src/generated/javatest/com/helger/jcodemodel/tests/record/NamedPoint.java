@@ -22,6 +22,6 @@ public record NamedPoint(int x, int y, String name)
 {
 
     public int compareTo(NamedPoint other) {
-        return  0;
+        return 0;
     }
 }

@@ -1,0 +1,49 @@
+indent:
+  string: "    "
+  tabSize: 4
+parentheses:
+  global: "REQUIRED"
+wrap:
+  lineWidth: 80
+  disabled: false
+  catchClause:
+    types:
+      condition: "NEVER"
+      indent: 1
+      wrapAfterSep: true
+  forLoop:
+    init:
+      condition: "NEVER"
+      indent: 1
+      wrapAfterSep: true
+  method:
+    type:
+      condition: "NEVER"
+      indent: 1
+    name:
+      condition: "NEVER"
+      indent: 1
+    params:
+      condition: "PAST3"
+      indent: 1
+      wrapAfterSep: true
+    bracket:
+      condition: "NEVER"
+      indent: 0
+    args:
+      condition: "PAST3"
+      indent: 1
+      wrapAfterSep: true
+  variables:
+    array:
+      condition: "REQUIRED"
+      indent: 1
+      wrapAfterSep: true
+    block:
+      condition: "REQUIRED"
+      indent: 1
+      wrapAfterSep: true
+    field:
+      condition: "REQUIRED"
+      indent: 1
+      wrapAfterSep: true

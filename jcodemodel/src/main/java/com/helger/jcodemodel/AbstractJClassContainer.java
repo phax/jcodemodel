@@ -221,8 +221,9 @@ public abstract class AbstractJClassContainer <CLASSTYPE extends AbstractJClassC
                                                  @NonNull final String sName);
 
   @NonNull
-  public final CLASSTYPE _class (final int nMods, @NonNull final String sName, @NonNull final EClassType eClassType)
-                                                                                                                     throws JCodeModelException
+  public final CLASSTYPE _class (final int nMods,
+                                 @NonNull final String sName,
+                                 @NonNull final EClassType eClassType) throws JCodeModelException
   {
     final String sRealName;
     if (owner ().getFileSystemConvention ().isCaseSensistive ())

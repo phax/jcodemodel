@@ -113,7 +113,7 @@ public class JEnumConstantRef implements IJExpression
       return false;
     final JEnumConstantRef rhs = (JEnumConstantRef) o;
     return EqualsHelper.equals (m_aType.fullName (), rhs.m_aType.fullName ()) &&
-      EqualsHelper.equals (m_sName, rhs.m_sName);
+           EqualsHelper.equals (m_sName, rhs.m_sName);
   }
 
   @Override
