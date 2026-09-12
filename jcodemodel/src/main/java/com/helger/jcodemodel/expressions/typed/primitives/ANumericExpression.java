@@ -3,7 +3,9 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
+import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 
 /// Root class for numeric expression. The arithmetic operators promote any type to double, unless both are subtypes.
 /// So the type represented is a double-promotable one (double or sub float)
@@ -137,5 +139,12 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   public BoolExpression ne (ANumericExpression <?, ?, ?> other)
   {
     return new BoolExpression (raw.ne (other.raw ()));
+  }
+
+  // operator + with a String operands promotes anything else to String.
+  /// creates `that + other`
+  public StringExpression plus (ITypedExpression <? extends String> other)
+  {
+    return new StringExpression (raw.plus (other.raw ()));
   }
 }
