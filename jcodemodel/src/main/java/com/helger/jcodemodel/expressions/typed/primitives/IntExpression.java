@@ -22,16 +22,4 @@ public class IntExpression extends ASubIntExpression <Integer>
     return new IntExpression (raw);
   }
 
-  //
-  // unary
-  //
-
-  //
-  // binary
-  //
-
-  //
-  // ternary
-  //
-
 }

@@ -2,10 +2,9 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 
 /// expression with a `float` type. Name is shorter to avoid name clash with java.lang . 
-public class FltExpression extends TypedExpressionWrapper <Float>
+public class FltExpression extends ASubFloatExpression <Float>
 {
 
   public FltExpression (IJExpression raw)
@@ -22,17 +21,5 @@ public class FltExpression extends TypedExpressionWrapper <Float>
   {
     return new FltExpression (raw);
   }
-
-  //
-  // unary
-  //
-
-  //
-  // binary
-  //
-
-  //
-  // ternary
-  //
 
 }

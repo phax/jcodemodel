@@ -2,10 +2,9 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 
 /// expression with a `double` type. Name is shorter to avoid name clash with java.lang . 
-public class DblExpression extends TypedExpressionWrapper <Double>
+public class DblExpression extends ANumericExpression <Double>
 {
 
   public DblExpression (IJExpression raw)
@@ -22,17 +21,5 @@ public class DblExpression extends TypedExpressionWrapper <Double>
   {
     return new DblExpression (raw);
   }
-
-  //
-  // unary
-  //
-
-  //
-  // binary
-  //
-
-  //
-  // ternary
-  //
 
 }

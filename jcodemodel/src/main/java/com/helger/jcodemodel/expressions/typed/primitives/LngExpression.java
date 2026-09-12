@@ -2,10 +2,9 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 
 /// expression with a `long` type. Name is shorter to avoid name clash with java.lang . 
-public class LngExpression extends TypedExpressionWrapper <Long>
+public class LngExpression extends ASubLongExpression <Long>
 {
 
   public LngExpression (IJExpression raw)
@@ -22,17 +21,5 @@ public class LngExpression extends TypedExpressionWrapper <Long>
   {
     return new LngExpression (raw);
   }
-
-  //
-  // unary
-  //
-
-  //
-  // binary
-  //
-
-  //
-  // ternary
-  //
 
 }
