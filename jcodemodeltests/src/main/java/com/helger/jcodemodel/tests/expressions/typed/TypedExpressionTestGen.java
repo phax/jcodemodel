@@ -23,15 +23,16 @@ public class TypedExpressionTestGen
     JDefinedClass cl = jp._class ("PalyndromTypedExpression");
     JMethod meth = cl.method (JMod.PUBLIC_STATIC_FINAL, jp.owner ().BOOLEAN, "test");
     StringExpression se = StringExpression.param (meth, "str");
-    meth.body ()._if (se.isNull ().or (se.length ().le (TETools.of (1))).raw ())._then ()._return (JExpr.TRUE);
+    meth.body ()._if (se.isNull ().or (se.length ().le (TETools.of (1))))._then ()._return (JExpr.TRUE);
 
     JForLoop for_ = meth.body ()._for ();
     IntExpression ie = IntExpression.of (for_.init (jp.owner ().INT, "i", JExpr.lit (0)));
-    for_.test (ie.le (se.length ().div (TETools.of (2))).raw ());
-    for_.update (ie.incrPost ().raw ());
+    for_.test (ie.le (se.length ().div (TETools.of (2))));
+    for_.update (ie.incrPost ());
 
     for_.body ()
-        ._if (se.charAt (ie).ne (se.charAt (se.length ().sub (ie).sub (IntExpression.of (1)))).raw ())
+        ._if (se.charAt (ie)
+              .ne (se.charAt (se.length ().sub (ie).sub (IntExpression.of (1)))))
         ._then ()
         ._return (JExpr.FALSE);
     meth.body ()._return (JExpr.TRUE);
@@ -51,8 +52,7 @@ public class TypedExpressionTestGen
     for_.update (i.incr ());
 
     for_.body ()
-        ._if (s.invoke ("charAt")
-               .arg (i)
+        ._if (s.invoke ("charAt").arg (i)
                .ne (s.invoke ("charAt").arg (s.invoke ("length").minus (i).minus (JExpr.lit (1)))))
         ._then ()
         ._return (JExpr.FALSE);
