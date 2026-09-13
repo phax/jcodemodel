@@ -9,21 +9,20 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 public class DblExpression extends ANumericExpression <Double, DblExpression, DblExpression>
 {
 
-  public DblExpression (IJExpression raw)
+  public static class Array extends ArrayExpression <Double>
   {
-    super (raw);
-  }
 
-  @Override
-  protected DblExpression wrapSelf (IJExpression exp)
-  {
-    return new DblExpression (exp);
-  }
+    public Array (IJExpression raw)
+    {
+      super (raw);
+    }
 
-  @Override
-  protected DblExpression wrapPos (IJExpression exp)
-  {
-    return new DblExpression (exp);
+    @Override
+    public DblExpression at (ASubIntExpression <?, ?, ?> index)
+    {
+      return DblExpression.of (super.at (index));
+    }
+
   }
 
   public static DblExpression of (double value)
@@ -44,6 +43,25 @@ public class DblExpression extends ANumericExpression <Double, DblExpression, Db
   public static DblExpression param (JMethod m, String name)
   {
     return m.paramTyped (name, double.class, DblExpression::of);
+  }
+
+  //
+
+  public DblExpression (IJExpression raw)
+  {
+    super (raw);
+  }
+
+  @Override
+  protected DblExpression wrapSelf (IJExpression exp)
+  {
+    return new DblExpression (exp);
+  }
+
+  @Override
+  protected DblExpression wrapPos (IJExpression exp)
+  {
+    return new DblExpression (exp);
   }
 
 }

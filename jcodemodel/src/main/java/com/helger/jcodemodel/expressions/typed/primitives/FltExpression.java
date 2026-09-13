@@ -8,23 +8,22 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 /// expression with a `float` type. Name is shorter to avoid name clash with java.lang . 
 public class FltExpression extends ASubFloatExpression <Float, FltExpression, FltExpression>
 {
-
-  public FltExpression (IJExpression raw)
+  public static class Array extends ArrayExpression <Float>
   {
-    super (raw);
+
+    public Array (IJExpression raw)
+    {
+      super (raw);
+    }
+
+    @Override
+    public FltExpression at (ASubIntExpression <?, ?, ?> index)
+    {
+      return FltExpression.of (super.at (index));
+    }
+
   }
 
-  @Override
-  protected FltExpression wrapSelf (IJExpression exp)
-  {
-    return new FltExpression (exp);
-  }
-
-  @Override
-  protected FltExpression wrapPos (IJExpression exp)
-  {
-    return new FltExpression (exp);
-  }
 
   public static FltExpression of (float value)
   {
@@ -44,6 +43,25 @@ public class FltExpression extends ASubFloatExpression <Float, FltExpression, Fl
   public static FltExpression param (JMethod m, String name)
   {
     return m.paramTyped (name, float.class, FltExpression::of);
+  }
+
+  //
+
+  public FltExpression (IJExpression raw)
+  {
+    super (raw);
+  }
+
+  @Override
+  protected FltExpression wrapSelf (IJExpression exp)
+  {
+    return new FltExpression (exp);
+  }
+
+  @Override
+  protected FltExpression wrapPos (IJExpression exp)
+  {
+    return new FltExpression (exp);
   }
 
 }

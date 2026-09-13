@@ -11,9 +11,20 @@ import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 public class BoolExpression extends TypedExpressionWrapper <Boolean>
 {
 
-  public BoolExpression (IJExpression raw)
+  public static class Array extends ArrayExpression <Boolean>
   {
-    super (raw);
+
+    public Array (IJExpression raw)
+    {
+      super (raw);
+    }
+
+    @Override
+    public BoolExpression at (ASubIntExpression <?, ?, ?> index)
+    {
+      return BoolExpression.of (super.at (index));
+    }
+
   }
 
   public static BoolExpression of (boolean value)
@@ -34,6 +45,13 @@ public class BoolExpression extends TypedExpressionWrapper <Boolean>
   public static BoolExpression param (JMethod m, String name)
   {
     return m.paramTyped (name, boolean.class, BoolExpression::of);
+  }
+
+  //
+
+  public BoolExpression (IJExpression raw)
+  {
+    super (raw);
   }
 
   //

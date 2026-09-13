@@ -9,21 +9,20 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 public class LngExpression extends ASubLongExpression <Long, LngExpression, LngExpression>
 {
 
-  public LngExpression (IJExpression raw)
+  public static class Array extends ArrayExpression <Long>
   {
-    super (raw);
-  }
 
-  @Override
-  protected LngExpression wrapSelf (IJExpression exp)
-  {
-    return new LngExpression (exp);
-  }
+    public Array (IJExpression raw)
+    {
+      super (raw);
+    }
 
-  @Override
-  protected LngExpression wrapPos (IJExpression exp)
-  {
-    return new LngExpression (exp);
+    @Override
+    public LngExpression at (ASubIntExpression <?, ?, ?> index)
+    {
+      return LngExpression.of (super.at (index));
+    }
+
   }
 
   public static LngExpression of (long value)
@@ -44,6 +43,25 @@ public class LngExpression extends ASubLongExpression <Long, LngExpression, LngE
   public static LngExpression param (JMethod m, String name)
   {
     return m.paramTyped (name, long.class, LngExpression::of);
+  }
+
+  //
+
+  public LngExpression (IJExpression raw)
+  {
+    super (raw);
+  }
+
+  @Override
+  protected LngExpression wrapSelf (IJExpression exp)
+  {
+    return new LngExpression (exp);
+  }
+
+  @Override
+  protected LngExpression wrapPos (IJExpression exp)
+  {
+    return new LngExpression (exp);
   }
 
 }

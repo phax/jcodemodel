@@ -4,27 +4,24 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 
 /// expression with a `char` type.
 public class CharExpression extends ASubIntExpression <Character, CharExpression, IntExpression>
 {
-
-  public CharExpression (IJExpression raw)
+  public static class Array extends ArrayExpression <Character>
   {
-    super (raw);
-  }
 
-  @Override
-  protected CharExpression wrapSelf (IJExpression exp)
-  {
-    return new CharExpression (exp);
-  }
+    public Array (IJExpression raw)
+    {
+      super (raw);
+    }
 
-  @Override
-  protected IntExpression wrapPos (IJExpression exp)
-  {
-    return new IntExpression (exp);
+    @Override
+    public CharExpression at (ASubIntExpression <?, ?, ?> index)
+    {
+      return CharExpression.of (super.at (index));
+    }
+
   }
 
   public static CharExpression of (char value)
@@ -47,10 +44,23 @@ public class CharExpression extends ASubIntExpression <Character, CharExpression
     return m.paramTyped (name, char.class, CharExpression::of);
   }
 
-  /// @return `that + other`
-  public StringExpression plus (StringExpression other)
+  //
+
+  public CharExpression (IJExpression raw)
   {
-    return new StringExpression (raw.plus (other.raw ()));
+    super (raw);
+  }
+
+  @Override
+  protected CharExpression wrapSelf (IJExpression exp)
+  {
+    return new CharExpression (exp);
+  }
+
+  @Override
+  protected IntExpression wrapPos (IJExpression exp)
+  {
+    return new IntExpression (exp);
   }
 
 }

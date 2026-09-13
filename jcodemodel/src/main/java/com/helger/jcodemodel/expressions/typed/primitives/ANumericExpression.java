@@ -77,6 +77,13 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
     return new DblExpression (raw.plus (other.raw ()));
   }
 
+  // operator + with a String operands promotes anything else to String.
+  /// @return `that + other`
+  public StringExpression plus (ITypedExpression <? extends String> other)
+  {
+    return new StringExpression (raw.plus (other.raw ()));
+  }
+
   /// @return `that * other`
   public DblExpression mult (ANumericExpression <?, ?, ?> other)
   {
@@ -139,12 +146,5 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   public BoolExpression ne (ANumericExpression <?, ?, ?> other)
   {
     return new BoolExpression (raw.ne (other.raw ()));
-  }
-
-  // operator + with a String operands promotes anything else to String.
-  /// creates `that + other`
-  public StringExpression plus (ITypedExpression <? extends String> other)
-  {
-    return new StringExpression (raw.plus (other.raw ()));
   }
 }
