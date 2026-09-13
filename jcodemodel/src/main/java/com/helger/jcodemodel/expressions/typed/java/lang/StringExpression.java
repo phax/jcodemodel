@@ -6,6 +6,7 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.CharExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 
@@ -67,10 +68,91 @@ public class StringExpression extends TypedExpressionWrapper <String>
     return new IntExpression (raw.invoke ("codePointCount").arg (beginIndex).arg (endIndex));
   }
 
-  /// creates `that.compareTo(prefix)`
-  public IntExpression compareTo (TypedExpressionWrapper <? extends String> prefix)
+  /// creates `that.compareTo(anotherString)`
+  public IntExpression compareTo (TypedExpressionWrapper <? extends String> anotherString)
   {
-    return new IntExpression (raw.invoke ("compareTo").arg (prefix));
+    return new IntExpression (raw.invoke ("compareTo").arg (anotherString));
+  }
+
+  /// creates `that.compareToFoldCase(str)`
+  public IntExpression compareToFoldCase (TypedExpressionWrapper <? extends String> str)
+  {
+    return new IntExpression (raw.invoke ("compareToFoldCase").arg (str));
+  }
+
+  /// creates `that.compareToIgnoreCase(str)`
+  public IntExpression compareToIgnoreCase (TypedExpressionWrapper <? extends String> str)
+  {
+    return new IntExpression (raw.invoke ("compareToIgnoreCase").arg (str));
+  }
+
+  /// creates `that.concat(str)`
+  public StringExpression concat (TypedExpressionWrapper <? extends String> str)
+  {
+    return new StringExpression (raw.invoke ("concat").arg (str));
+  }
+
+  /// creates `that.contains(s)`
+  public BoolExpression contains (TypedExpressionWrapper <? extends CharSequence> s)
+  {
+    return new BoolExpression (raw.invoke ("contains").arg (s));
+  }
+
+  /// creates `that.contentEquals(cs)`
+  public BoolExpression contentEquals (TypedExpressionWrapper <? extends CharSequence> cs)
+  {
+    return new BoolExpression (raw.invoke ("contentEquals").arg (cs));
+  }
+
+  // can't keep base name since same erasure as the other contentEquals
+  /// creates `that.contentEquals(sb)`
+  public BoolExpression contentEqualsSB (TypedExpressionWrapper <? extends StringBuffer> sb)
+  {
+    return new BoolExpression (raw.invoke ("contentEquals").arg (sb));
+  }
+
+  /// creates `that.endsWith(suffix)`
+  public BoolExpression endsWith (TypedExpressionWrapper <? extends String> suffix)
+  {
+    return new BoolExpression (raw.invoke ("endsWith").arg (suffix));
+  }
+
+  /// creates `that.equals(anObject)`
+  public BoolExpression equals (TypedExpressionWrapper <?> anObject)
+  {
+    return new BoolExpression (raw.invoke ("equals").arg (anObject));
+  }
+
+  /// creates `that.equalsFoldCase(anotherString)`
+  public BoolExpression equalsFoldCase (TypedExpressionWrapper <? extends String> anotherString)
+  {
+    return new BoolExpression (raw.invoke ("equalsFoldCase").arg (anotherString));
+  }
+
+  /// creates `that.equalsIgnoreCase(anotherString)`
+  public BoolExpression equalsIgnoreCase (TypedExpressionWrapper <? extends String> anotherString)
+  {
+    return new BoolExpression (raw.invoke ("equalsIgnoreCase").arg (anotherString));
+  }
+
+  /// creates `that.hashCode()`
+  public IntExpression hashCode_ ()
+  {
+    return new IntExpression (raw.invoke ("hashCode"));
+  }
+
+  /// creates `that.indent(n)`
+  public StringExpression indent (ASubIntExpression <?, ?, ?> n)
+  {
+    return new StringExpression (raw.invoke ("indent").arg (n));
+  }
+
+  /// creates `that.indexOf(ch, beginIndex, endIndex)`
+  public StringExpression indexOf (ASubIntExpression <?, ?, ?> ch,
+                                   ASubIntExpression <?, ?, ?> beginIndex,
+                                   ASubIntExpression <?, ?, ?> endIndex)
+  {
+    return new StringExpression (raw.invoke ("indexOf").arg (ch).arg (beginIndex).arg (endIndex));
   }
 
   /// creates `that.length()`

@@ -5,6 +5,8 @@ import org.jspecify.annotations.NonNull;
 import com.helger.jcodemodel.IJExpression;
 
 /// mother class of expressions resolving to an int-promoted type (int, char, byte, short)
+/// 
+/// It can be used typically in arguments to say a function requires an expression matching one of those.
 public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, Self, ?>, PosType extends ASubIntExpression <?, ?, ?>>
                                         extends
                                         ASubLongExpression <T, Self, PosType>
