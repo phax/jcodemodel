@@ -8,10 +8,10 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 /// expression with a `char` type.
 public class CharExpression extends ASubIntExpression <Character, CharExpression, IntExpression>
 {
-  public static class Array extends ArrayExpression <Character>
+  public static class CharArrExp extends ArrayExpression <Character>
   {
 
-    public Array (IJExpression raw)
+    public CharArrExp (IJExpression raw)
     {
       super (raw);
     }

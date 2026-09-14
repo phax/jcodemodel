@@ -1,13 +1,17 @@
 package com.helger.jcodemodel.expressions.typed.java.lang;
 
+import java.nio.charset.Charset;
+
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.ByteExpression.ByteArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.CharExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 
@@ -21,10 +25,10 @@ import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 public class StringExpression extends ObjectExpression <String>
 {
 
-  public static class Array extends ArrayExpression <String>
+  public static class StringArrExp extends ArrayExpression <String>
   {
 
-    public Array (IJExpression raw)
+    public StringArrExp (IJExpression raw)
     {
       super (raw);
     }
@@ -150,16 +154,34 @@ public class StringExpression extends ObjectExpression <String>
     return new BoolExpression (raw.invoke ("equalsIgnoreCase").arg (anotherString));
   }
 
-  // TODO public static String format(Locale l,
-  // String format,
-  // Object... args)
+  // ignore public static String format(Locale l, String format, Object... args)
 
-  // TODO public static String format(String format,
-  // Object... args)
+  // ignore public static String format(String format, Object... args)
 
-  // TODO public String formatted(Object... args)
 
-  // TODO public byte[] getBytes()
+  /// @return `that.formatted(args)`
+  public StringExpression formatted (ObjectExpression <?>... args)
+  {
+    JInvocation invk = raw.invoke ("formatted");
+    if (args != null)
+      for (ObjectExpression <?> a : args)
+      {
+        invk.arg (a.raw ());
+      }
+    return new StringExpression (invk);
+  }
+
+  /// @return `that.getBytes()`
+  public ByteArrExp getBytes ()
+  {
+    return new ByteArrExp (raw.invoke ("getBytes"));
+  }
+
+  /// @return `that.getBytes(charset)`
+  public ByteArrExp getBytes (ITypedExpression <? extends Charset> charset)
+  {
+    return new ByteArrExp (raw.invoke ("getBytes").arg (charset));
+  }
 
   /// @return `that.indent(n)`
   public StringExpression indent (ASubIntExpression <?, ?, ?> n)

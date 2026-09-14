@@ -17,8 +17,8 @@ import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 ///  
 /// This class could be named ASubDoubleExpression but ANumerical seems more explicit. 
 /// 
-/// @param Self the self type, class itself in the concrete.
-/// @param PosType the returned numeric expression type constructed from pos(). +double is double, but +char is int . Same for negative.
+/// @param Self the self type, the class itself in the concrete implementations.
+/// @param PosType the returned numeric expression type constructed from pos(). +double is double, but +char is int.
 public abstract class ANumericExpression <T, Self extends ANumericExpression <T, Self, ?>, PosType extends ANumericExpression <?, ?, ?>>
                                          extends
                                          TypedExpressionWrapper <T>
@@ -91,9 +91,9 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   }
 
   /// @return `- that`
-  public PosType neg ()
+  public Self neg ()
   {
-    return wrapPos (raw.minus ());
+    return wrapSelf (raw.minus ());
   }
 
   /// @return `+ that`
@@ -109,7 +109,8 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   }
 
   //
-  // non-promoting operators : The arguments can be promoted, but the output remains the same
+  // non-promoting operators : The arguments can be promoted, but the output remains the same.
+  // Those don't need to be overloaded in the sub classes.
   //
 
   /// @return `that == other`

@@ -8,10 +8,10 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 /// expression with a `float` type. Name is shorter to avoid name clash with java.lang . 
 public class FltExpression extends ASubFloatExpression <Float, FltExpression, FltExpression>
 {
-  public static class Array extends ArrayExpression <Float>
+  public static class FloatArrExp extends ArrayExpression <Float>
   {
 
-    public Array (IJExpression raw)
+    public FloatArrExp (IJExpression raw)
     {
       super (raw);
     }

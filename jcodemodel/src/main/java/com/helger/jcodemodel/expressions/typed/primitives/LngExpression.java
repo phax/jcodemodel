@@ -9,10 +9,10 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 public class LngExpression extends ASubLongExpression <Long, LngExpression, LngExpression>
 {
 
-  public static class Array extends ArrayExpression <Long>
+  public static class LongArrExp extends ArrayExpression <Long>
   {
 
-    public Array (IJExpression raw)
+    public LongArrExp (IJExpression raw)
     {
       super (raw);
     }

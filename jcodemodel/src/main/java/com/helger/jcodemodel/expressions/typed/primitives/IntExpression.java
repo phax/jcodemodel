@@ -9,10 +9,10 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 public class IntExpression extends ASubIntExpression <Integer, IntExpression, IntExpression>
 {
 
-  public static class Array extends ArrayExpression <Integer>
+  public static class IntArrExp extends ArrayExpression <Integer>
   {
 
-    public Array (IJExpression raw)
+    public IntArrExp (IJExpression raw)
     {
       super (raw);
     }

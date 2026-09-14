@@ -5,18 +5,18 @@ import org.jspecify.annotations.NonNull;
 import com.helger.jcodemodel.IJExpressionStatement;
 import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 
-/// An expression that resolves to a void type, and is a statement. Return type of expressions calling a void method.
-public class StatVoidExpression extends TypedExpressionWrapper <Void>
+/// An expression that resolves to a void type, using a statement. Return type of expressions calling a void method.
+public class VoidStatExpression extends TypedExpressionWrapper <Void>
 {
 
-  public static StatVoidExpression of (IJExpressionStatement raw)
+  public static VoidStatExpression of (IJExpressionStatement raw)
   {
-    return new StatVoidExpression (raw);
+    return new VoidStatExpression (raw);
   }
 
   //
 
-  public StatVoidExpression (@NonNull IJExpressionStatement raw)
+  public VoidStatExpression (@NonNull IJExpressionStatement raw)
   {
     super (raw);
   }

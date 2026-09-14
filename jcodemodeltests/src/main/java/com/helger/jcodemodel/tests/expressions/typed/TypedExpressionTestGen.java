@@ -18,7 +18,7 @@ public class TypedExpressionTestGen
 {
 
   // create a palyndrom test on a string using the TypedExpressions
-  public void palyndromTestTExpr (JPackage jp) throws JCodeModelException
+  public void palyndromTestTypedExpr (JPackage jp) throws JCodeModelException
   {
     JDefinedClass cl = jp._class ("PalyndromTypedExpression");
     JMethod meth = cl.method (JMod.PUBLIC_STATIC_FINAL, jp.owner ().BOOLEAN, "test");
@@ -39,7 +39,7 @@ public class TypedExpressionTestGen
   }
 
   // generates the same code but using the IJExpressions only
-  public void palyndromTestTIJExpr (JPackage jp) throws JCodeModelException
+  public void palyndromTestIJExpr (JPackage jp) throws JCodeModelException
   {
     JDefinedClass cl = jp._class ("PalyndromIJExpression");
     JMethod meth = cl.method (JMod.PUBLIC_STATIC_FINAL, jp.owner ().BOOLEAN, "test");

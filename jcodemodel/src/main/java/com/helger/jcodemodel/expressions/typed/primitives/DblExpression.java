@@ -9,10 +9,10 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 public class DblExpression extends ANumericExpression <Double, DblExpression, DblExpression>
 {
 
-  public static class Array extends ArrayExpression <Double>
+  public static class DoubleArrExp extends ArrayExpression <Double>
   {
 
-    public Array (IJExpression raw)
+    public DoubleArrExp (IJExpression raw)
     {
       super (raw);
     }

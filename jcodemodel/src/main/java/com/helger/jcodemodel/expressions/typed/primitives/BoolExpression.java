@@ -11,10 +11,10 @@ import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 public class BoolExpression extends TypedExpressionWrapper <Boolean>
 {
 
-  public static class Array extends ArrayExpression <Boolean>
+  public static class BoolArrExp extends ArrayExpression <Boolean>
   {
 
-    public Array (IJExpression raw)
+    public BoolArrExp (IJExpression raw)
     {
       super (raw);
     }

@@ -371,9 +371,10 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
     return m_aVarParam != null ? m_aVarParam.type () : null;
   }
 
-  /// Add a parameter to that method, with a designtime known type.
+  /// Add a parameter to that method, with a runtime type known at design time.
   ///
-  /// Mainly present to allow dedicated concrete class to statically add params in a method.
+  /// Mainly present to allow dedicated concrete class to statically add params in a method in their
+  /// syntaxic sugar methods.
   ///
   /// @return a new TypedExpression. You can use raw() to get the actual JVar.
   ///

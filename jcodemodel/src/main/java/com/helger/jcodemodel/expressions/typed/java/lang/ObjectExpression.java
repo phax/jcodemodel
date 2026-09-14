@@ -6,7 +6,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubLongExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
-import com.helger.jcodemodel.expressions.typed.primitives.StatVoidExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 
 /// base class for the equals, hashcode, ==null etc. methods that are available for non-primitive types
 public class ObjectExpression <T> extends TypedExpressionWrapper <T>
@@ -37,15 +37,15 @@ public class ObjectExpression <T> extends TypedExpressionWrapper <T>
   }
 
   /// @return `that.notify()`
-  public StatVoidExpression notify_ ()
+  public VoidStatExpression notify_ ()
   {
-    return new StatVoidExpression (raw.invoke ("notify"));
+    return new VoidStatExpression (raw.invoke ("notify"));
   }
 
   /// @return `that.notifyAll()`
-  public StatVoidExpression notifyAll_ ()
+  public VoidStatExpression notifyAll_ ()
   {
-    return new StatVoidExpression (raw.invoke ("notifyAll"));
+    return new VoidStatExpression (raw.invoke ("notifyAll"));
   }
 
   /// @return `that != null`
@@ -67,21 +67,21 @@ public class ObjectExpression <T> extends TypedExpressionWrapper <T>
   }
 
   /// @return `that.wait()`
-  public StatVoidExpression wait_ ()
+  public VoidStatExpression wait_ ()
   {
-    return new StatVoidExpression (raw.invoke ("wait"));
+    return new VoidStatExpression (raw.invoke ("wait"));
   }
 
   /// @return `that.wait(timeoutMillis)`
-  public StatVoidExpression wait_ (ASubLongExpression <?, ?, ?> timeoutMillis)
+  public VoidStatExpression wait_ (ASubLongExpression <?, ?, ?> timeoutMillis)
   {
-    return new StatVoidExpression (raw.invoke ("wait").arg (timeoutMillis));
+    return new VoidStatExpression (raw.invoke ("wait").arg (timeoutMillis));
   }
 
   /// @return `that.wait(timeoutMillis, nanos)`
-  public StatVoidExpression wait_ (ASubLongExpression <?, ?, ?> timeoutMillis, ASubIntExpression <?, ?, ?> nanos)
+  public VoidStatExpression wait_ (ASubLongExpression <?, ?, ?> timeoutMillis, ASubIntExpression <?, ?, ?> nanos)
   {
-    return new StatVoidExpression (raw.invoke ("wait").arg (timeoutMillis).arg (nanos));
+    return new VoidStatExpression (raw.invoke ("wait").arg (timeoutMillis).arg (nanos));
   }
 
 }
