@@ -1,6 +1,7 @@
 package com.helger.jcodemodel.expressions.typed.java.lang;
 
 import java.nio.charset.Charset;
+import java.util.stream.Stream;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
@@ -13,7 +14,9 @@ import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ByteExpression.ByteArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.CharExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.CharExpression.CharArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 
 //
 // Since operator+ is defined on String, this one must be done manually.
@@ -45,7 +48,7 @@ public class StringExpression extends ObjectExpression <String>
   {
     super (raw);
   }
-  
+
   public static StringExpression of (String value)
   {
     return new StringExpression (JExpr.lit (value));
@@ -61,7 +64,8 @@ public class StringExpression extends ObjectExpression <String>
     return of (untyped.raw ());
   }
 
-  public static StringExpression param(JMethod m, String name) {
+  public static StringExpression param (JMethod m, String name)
+  {
     return m.paramTyped (name, String.class, StringExpression::of);
   }
 
@@ -158,7 +162,6 @@ public class StringExpression extends ObjectExpression <String>
 
   // ignore public static String format(String format, Object... args)
 
-
   /// @return `that.formatted(args)`
   public StringExpression formatted (ObjectExpression <?>... args)
   {
@@ -166,7 +169,7 @@ public class StringExpression extends ObjectExpression <String>
     if (args != null)
       for (ObjectExpression <?> a : args)
       {
-        invk.arg (a.raw ());
+        invk.arg (a);
       }
     return new StringExpression (invk);
   }
@@ -183,6 +186,25 @@ public class StringExpression extends ObjectExpression <String>
     return new ByteArrExp (raw.invoke ("getBytes").arg (charset));
   }
 
+  // ignore @Deprecated(since="1.1") public void getBytes(int srcBegin, int srcEnd, byte[] dst, int
+  // dstBegin)
+
+  /// Named to avoid classh with Charset one.
+  /// @return `that.getBytes(charsetName)`
+  public ByteArrExp getBytesStr (ITypedExpression <? extends String> charsetName)
+  {
+    return new ByteArrExp (raw.invoke ("getBytes").arg (charsetName));
+  }
+
+  /// @return `that.getChars(srcBegin, srcEnd, dst, dstBegin)`
+  public VoidStatExpression getChars (ASubIntExpression <?, ?, ?> srcBegin,
+                                      ASubIntExpression <?, ?, ?> srcEnd,
+                                      CharArrExp dst,
+                                      ASubIntExpression <?, ?, ?> dstBegin)
+  {
+    return new VoidStatExpression (raw.invoke ("getChars").arg (srcBegin).arg (srcEnd).arg (dst).arg (dstBegin));
+  }
+
   /// @return `that.indent(n)`
   public StringExpression indent (ASubIntExpression <?, ?, ?> n)
   {
@@ -190,11 +212,108 @@ public class StringExpression extends ObjectExpression <String>
   }
 
   /// @return `that.indexOf(ch, beginIndex, endIndex)`
-  public StringExpression indexOf (ASubIntExpression <?, ?, ?> ch,
-                                   ASubIntExpression <?, ?, ?> beginIndex,
-                                   ASubIntExpression <?, ?, ?> endIndex)
+  public IntExpression indexOf (ASubIntExpression <?, ?, ?> ch,
+                                ASubIntExpression <?, ?, ?> beginIndex,
+                                ASubIntExpression <?, ?, ?> endIndex)
   {
-    return new StringExpression (raw.invoke ("indexOf").arg (ch).arg (beginIndex).arg (endIndex));
+    return new IntExpression (raw.invoke ("indexOf").arg (ch).arg (beginIndex).arg (endIndex));
+  }
+
+  /// @return `that.indexOf(ch, fromIndex)`
+  public IntExpression indexOf (ASubIntExpression <?, ?, ?> ch, ASubIntExpression <?, ?, ?> fromIndex)
+  {
+    return new IntExpression (raw.invoke ("indexOf").arg (ch).arg (fromIndex));
+  }
+
+  /// @return `that.indexOf(ch)`
+  public IntExpression indexOf (ASubIntExpression <?, ?, ?> ch)
+  {
+    return new IntExpression (raw.invoke ("indexOf").arg (ch));
+  }
+
+  /// @return `that.indexOf(str, beginIndex, endIndex)`
+  public IntExpression indexOf (ITypedExpression <? extends String> str,
+                                ASubIntExpression <?, ?, ?> beginIndex,
+                                ASubIntExpression <?, ?, ?> endIndex)
+  {
+    return new IntExpression (raw.invoke ("indexOf").arg (str).arg (beginIndex).arg (endIndex));
+  }
+
+  /// @return `that.indexOf(str, fromIndex)`
+  public IntExpression indexOf (ITypedExpression <? extends String> str, ASubIntExpression <?, ?, ?> fromIndex)
+  {
+    return new IntExpression (raw.invoke ("indexOf").arg (str).arg (fromIndex));
+  }
+
+  /// @return `that.indexOf(str)`
+  public IntExpression indexOf (ITypedExpression <? extends String> str)
+  {
+    return new IntExpression (raw.invoke ("indexOf").arg (str));
+  }
+
+  /// @return `that.intern()`
+  public StringExpression intern ()
+  {
+    return new StringExpression (raw.invoke ("intern"));
+  }
+
+  /// @return `that.isBlank()`
+  public BoolExpression isBlank ()
+  {
+    return new BoolExpression (raw.invoke ("isBlank"));
+  }
+
+  /// @return `that.isEmpty()`
+  public BoolExpression isEmpty ()
+  {
+    return new BoolExpression (raw.invoke ("isEmpty"));
+  }
+
+  /// @return `that.join(delimiter, elements)`
+  @SuppressWarnings ("unchecked")
+  public StringExpression join (TypedExpressionWrapper <? extends CharSequence> delimiter,
+                                TypedExpressionWrapper <? extends CharSequence>... elements)
+  {
+    JInvocation invoke = raw.invoke ("join").arg (delimiter);
+    if (elements != null)
+    {
+      for (TypedExpressionWrapper <? extends CharSequence> te : elements)
+      {
+        invoke.arg (te);
+      }
+    }
+    return new StringExpression (invoke);
+  }
+
+  /// @return `that.join(delimiter, elements)`
+  public StringExpression join (TypedExpressionWrapper <? extends CharSequence> delimiter,
+                                TypedExpressionWrapper <? extends Iterable <? extends CharSequence>> elements)
+  {
+    return new StringExpression (raw.invoke ("join").arg (delimiter).arg (elements));
+  }
+
+  /// @return `that.lastIndexOf(ch, fromIndex)`
+  public IntExpression lastIndexOf (ASubIntExpression <?, ?, ?> ch, ASubIntExpression <?, ?, ?> fromIndex)
+  {
+    return new IntExpression (raw.invoke ("lastIndexOf").arg (ch).arg (fromIndex));
+  }
+
+  /// @return `that.lastIndexOf(ch)`
+  public IntExpression lastIndexOf (ASubIntExpression <?, ?, ?> ch)
+  {
+    return new IntExpression (raw.invoke ("lastIndexOf").arg (ch));
+  }
+
+  /// @return `that.lastIndexOf(str, fromIndex)`
+  public IntExpression lastIndexOf (ITypedExpression <? extends String> str, ASubIntExpression <?, ?, ?> fromIndex)
+  {
+    return new IntExpression (raw.invoke ("lastIndexOf").arg (str).arg (fromIndex));
+  }
+
+  /// @return `that.lastIndexOf(str)`
+  public IntExpression lastIndexOf (ITypedExpression <? extends String> str)
+  {
+    return new IntExpression (raw.invoke ("lastIndexOf").arg (str));
   }
 
   /// @return `that.length()`
@@ -203,11 +322,74 @@ public class StringExpression extends ObjectExpression <String>
     return new IntExpression (raw.invoke ("length"));
   }
 
+  // TODO use StreamExpression when avail.
+  /// @return `that.lines()`
+  public ObjectExpression <? extends Stream <? extends String>> lines ()
+  {
+    return new ObjectExpression <> (raw.invoke ("lines"));
+  }
+
+  /// @return `that.matches(regex)`
+  public BoolExpression matches (TypedExpressionWrapper <? extends String> regex)
+  {
+    return new BoolExpression (raw.invoke ("matches").arg (regex));
+  }
+
   // operator + with a String operands promotes anything else to String.
   /// @return `that + other`
   public StringExpression plus (ITypedExpression <?> other)
   {
     return new StringExpression (raw.plus (other.raw ()));
+  }
+
+  /// @return `that.offsetByCodePoints(index, codePointOffset)`
+  public IntExpression offsetByCodePoints (ASubIntExpression <?, ?, ?> index,
+                                           ASubIntExpression <?, ?, ?> codePointOffset)
+  {
+    return new IntExpression (raw.invoke ("offsetByCodePoints").arg (index).arg (codePointOffset));
+  }
+
+  /// @return `that.regionMatches(ignoreCase, toffset, other, ooffset, len)`
+  public BoolExpression regionMatches (BoolExpression ignoreCase,
+                                       ASubIntExpression <?, ?, ?> toffset,
+                                       TypedExpressionWrapper <? extends String> other,
+                                       ASubIntExpression <?, ?, ?> ooffset,
+                                       ASubIntExpression <?, ?, ?> len)
+  {
+    return new BoolExpression (raw.invoke ("regionMatches")
+                                  .arg (ignoreCase)
+                                  .arg (toffset)
+                                  .arg (other)
+                                  .arg (ooffset)
+                                  .arg (len));
+  }
+
+  /// @return `that.regionMatches(toffset, other, ooffset, len)`
+  public BoolExpression regionMatches (ASubIntExpression <?, ?, ?> toffset,
+                                       TypedExpressionWrapper <? extends String> other,
+                                       ASubIntExpression <?, ?, ?> ooffset,
+                                       ASubIntExpression <?, ?, ?> len)
+  {
+    return new BoolExpression (raw.invoke ("regionMatches").arg (toffset).arg (other).arg (ooffset).arg (len));
+  }
+
+  /// @return `that.repeat(count)`
+  public StringExpression repeat (ASubIntExpression <?, ?, ?> count)
+  {
+    return new StringExpression (raw.invoke ("repeat").arg (count));
+  }
+
+  /// @return `that.replace(oldChar, newChar)`
+  public StringExpression replace (CharExpression oldChar, CharExpression newChar)
+  {
+    return new StringExpression (raw.invoke ("replace").arg (oldChar).arg (newChar));
+  }
+
+  /// @return `that.replace(target, replacement)`
+  public StringExpression replace (ITypedExpression <? extends CharSequence> target,
+                                   ITypedExpression <? extends CharSequence> replacement)
+  {
+    return new StringExpression (raw.invoke ("replace").arg (target).arg (replacement));
   }
 
   /// @return `that.startsWith(prefix)`
