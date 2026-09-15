@@ -1,6 +1,9 @@
 package com.helger.jcodemodel.expressions.typed.java.lang;
 
+import java.lang.invoke.MethodHandles;
 import java.nio.charset.Charset;
+import java.util.function.Function;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.helger.jcodemodel.IJExpression;
@@ -75,7 +78,11 @@ public class StringExpression extends ObjectExpression <String>
     return new CharExpression (raw.invoke ("charAt").arg (index));
   }
 
-  // TODO public IntStream chars()
+  /// @return `that.chars()`
+  public ObjectExpression <? extends IntStream> chars ()
+  {
+    return new ObjectExpression <> (raw.invoke ("chars"));
+  }
 
   /// @return `that.charAt(index)`
   public IntExpression codePointAt (ASubIntExpression <?, ?, ?> index)
@@ -95,7 +102,11 @@ public class StringExpression extends ObjectExpression <String>
     return new IntExpression (raw.invoke ("codePointCount").arg (beginIndex).arg (endIndex));
   }
 
-  // TODO public IntStream codePoints()
+  /// @return `that.codePoints()`
+  public ObjectExpression <? extends IntStream> codePoints ()
+  {
+    return new ObjectExpression <> (raw.invoke ("codePoints"));
+  }
 
   /// @return `that.compareTo(anotherString)`
   public IntExpression compareTo (TypedExpressionWrapper <? extends String> anotherString)
@@ -392,6 +403,44 @@ public class StringExpression extends ObjectExpression <String>
     return new StringExpression (raw.invoke ("replace").arg (target).arg (replacement));
   }
 
+  /// @return `that.replaceFirst(regex, replacement)`
+  public StringExpression replaceFirst (ITypedExpression <? extends String> regex,
+                                        ITypedExpression <? extends String> replacement)
+  {
+    return new StringExpression (raw.invoke ("replaceFirst").arg (regex).arg (replacement));
+  }
+
+  /// @return `that.replaceAll(regex, replacement)`
+  public StringExpression replaceAll (ITypedExpression <? extends String> regex,
+                                      ITypedExpression <? extends String> replacement)
+  {
+    return new StringExpression (raw.invoke ("replaceAll").arg (regex).arg (replacement));
+  }
+
+  /// @return `that.resolveConstantDesc(lookup)`
+  public StringExpression resolveConstantDesc (ITypedExpression <? extends MethodHandles.Lookup> lookup)
+  {
+    return new StringExpression (raw.invoke ("resolveConstantDesc").arg (lookup));
+  }
+
+  /// @return `that.split(regex, limit)`
+  public StringArrExp split (ITypedExpression <? extends String> regex, ASubIntExpression <?, ?, ?> limit)
+  {
+    return new StringArrExp (raw.invoke ("split").arg (regex).arg (limit));
+  }
+
+  /// @return `that.split(regex)`
+  public StringArrExp split (ITypedExpression <? extends String> regex)
+  {
+    return new StringArrExp (raw.invoke ("split").arg (regex));
+  }
+
+  /// @return `that.splitWithDelimiters(regex, limit)`
+  public StringArrExp splitWithDelimiters (ITypedExpression <? extends String> regex, ASubIntExpression <?, ?, ?> limit)
+  {
+    return new StringArrExp (raw.invoke ("splitWithDelimiters").arg (regex).arg (limit));
+  }
+
   /// @return `that.startsWith(prefix)`
   public StringExpression startsWith (TypedExpressionWrapper <? extends String> prefix)
   {
@@ -420,6 +469,44 @@ public class StringExpression extends ObjectExpression <String>
   public StringExpression stripTrailing ()
   {
     return new StringExpression (raw.invoke ("stripTrailing"));
+  }
+
+  // TODO use CharSequenceExpression when avail
+  /// @return `that.subSequence(beginIndex, endIndex)`
+  public ObjectExpression <CharSequence> subSequence (ASubIntExpression <?, ?, ?> beginIndex,
+                                                      ASubIntExpression <?, ?, ?> endIndex)
+  {
+    return new ObjectExpression <> (raw.invoke ("subSequence").arg (beginIndex).arg (endIndex));
+  }
+
+  /// @return `that.substring(beginIndex, endIndex)`
+  public StringExpression substring (ASubIntExpression <?, ?, ?> beginIndex, ASubIntExpression <?, ?, ?> endIndex)
+  {
+    return new StringExpression (raw.invoke ("substring").arg (beginIndex).arg (endIndex));
+  }
+
+  /// @return `that.substring(beginIndex)`
+  public StringExpression substring (ASubIntExpression <?, ?, ?> beginIndex)
+  {
+    return new StringExpression (raw.invoke ("substring").arg (beginIndex));
+  }
+
+  /// @return `that.translateEscapes()`
+  public StringExpression translateEscapes ()
+  {
+    return new StringExpression (raw.invoke ("translateEscapes"));
+  }
+
+  /// @return `that.transform(f)`
+  public <R> ObjectExpression <? extends R> transform (ITypedExpression <? extends Function <? super String, ? extends R>> f)
+  {
+    return new ObjectExpression <> (raw.invoke ("transform").arg (f));
+  }
+
+  /// @return `that.trim()`
+  public StringExpression trim ()
+  {
+    return new StringExpression (raw.invoke ("trim"));
   }
 
 }
