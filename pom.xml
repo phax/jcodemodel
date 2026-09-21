@@ -112,10 +112,11 @@
   </contributors>
 
   <modules>
-    <module>jcodemodel</module>
-    <module>plugin</module>
     <module>examples</module>
+    <module>expressions</module>
+    <module>jcodemodel</module>
     <module>jcodemodeltests</module>
+    <module>plugin</module>
   </modules>
 
   <dependencyManagement>
@@ -133,6 +134,11 @@
       <dependency>
         <groupId>com.helger</groupId>
         <artifactId>jcodemodel</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.helger</groupId>
+        <artifactId>expressions</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>

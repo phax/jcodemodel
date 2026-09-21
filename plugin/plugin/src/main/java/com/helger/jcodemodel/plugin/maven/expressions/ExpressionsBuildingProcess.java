@@ -1,0 +1,277 @@
+package com.helger.jcodemodel.plugin.maven.expressions;
+
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.helger.jcodemodel.*;
+import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
+import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.FinalTargetMirror;
+import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.NonFinalTargetMirror;
+import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.ParametrizedMirror;
+import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.TargetMirror;
+
+public class ExpressionsBuildingProcess
+{
+
+  private static final Logger log = LoggerFactory.getLogger (ExpressionsBuildingProcess.class);
+
+  public final JCodeModel jcm = new JCodeModel ();
+  private final JPackage rootPackage;
+
+  // mapping for returned types
+  private final HashMap <Class <?>, MirroringClass> resolved = new HashMap <> ();
+
+  private final Set <Class <?>> targetClasses = new HashSet <> ();
+
+  public ExpressionsBuildingProcess (String rootPackage)
+  {
+    this.rootPackage = jcm._package (rootPackage);
+    MirroringClass.stream (jcm).forEach (rs -> resolved.put (rs.target (), rs));
+  }
+
+  /// add a new class as a target, create the raw JCM classes. inheritance is only partial, and need
+  /// to be complete with addHierarchy after all the targets are added.
+  public void addTargetClass (Class <?> targetClass) throws JCodeModelException
+  {
+    if (targetClass == null || targetClass.isPrimitive ())
+    {
+      log.warn ("can't build expression for class " + targetClass);
+      return;
+    }
+    if (targetClasses.add (targetClass))
+    {
+      JPackage pckg = rootPackage.subPackage (targetClass.getPackageName ());
+      if ((targetClass.getModifiers () & Modifier.FINAL) > 0)
+      {
+        // only a concrete class, for both param and return.
+        JDefinedClass bothTypes = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
+        JMethod cs = bothTypes.constructor (JMod.PUBLIC);
+        JVar param = cs.param (IJExpression.class, "raw");
+        cs.body ().add (JInvocation._super ().arg (param));
+        copyParams (targetClass, bothTypes);
+        resolved.put (targetClass, new FinalTargetMirror (targetClass, bothTypes));
+      }
+      else
+      {
+        /// for example, a target HashMap<K, V> would have param and return types :
+        /// - `ASubHashMapExpr<K, V, T extends HashMap<K, V>> extends ASubObjectExpression<T>`
+        /// - `HashMapExpr<K, V> extends ASubHashMapExpr<K, V, HashMap<K, V>`
+        ///
+        /// If we also have the Map interface as a target, instead param type :
+        /// - `ASubHashMapExpression<K, V, T extends HashMap<K, V>> extends ASubMapExpression<T>`
+        /// so the inheritance of the param must be done at a later step, addHierarchy
+        ///
+
+        // param type
+        JDefinedClass paramType = pckg._class (JMod.PUBLIC | JMod.ABSTRACT,
+                                               "ASub" + targetClass.getSimpleName () + "Expr");
+        copyParams (targetClass, paramType);
+
+        // return type
+        JDefinedClass returnType = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
+        copyParams (targetClass, returnType);
+        List <AbstractJClass> narrows = new ArrayList <> ();
+        for (JTypeVar jtv : returnType.typeParams ())
+        {
+          narrows.add (jtv);
+        }
+        narrows.add (referenceWithBounds (targetClass, jcm));
+        returnType._extends (paramType.narrow (narrows));
+
+        // add constructor calling super in both
+        for (JDefinedClass jdc : new JDefinedClass [] { returnType, paramType })
+        {
+          JMethod cs = jdc.constructor (JMod.PUBLIC);
+          JVar param = cs.param (IJExpression.class, "raw");
+          cs.body ().add (JInvocation._super ().arg (param));
+        }
+        resolved.put (targetClass, new NonFinalTargetMirror (targetClass, returnType, paramType));
+      }
+    }
+  }
+
+  /// copy each type param of a source class into the created JDC.
+  protected void copyParams (Class <?> source, JDefinedClass created)
+  {
+    for (TypeVariable <?> tv : source.getTypeParameters ())
+    {
+      JTypeVar jtv = created.generify (tv.getName ());
+      for (Type b : tv.getBounds ())
+      {
+        jtv.bound (created.owner ().directClass (b.getTypeName ()));
+      }
+    }
+  }
+
+  public MirroringClass mirroringClass (Class <?> cl)
+  {
+    return resolved.computeIfAbsent (cl, this::makeMissingMirror);
+  }
+
+  public AbstractJClass mirrorReturn (Type type)
+  {    
+    if (type instanceof ParameterizedType pt)
+    {
+      AbstractJClass retType = mirroringClass ((Class <?>) pt.getRawType ()).asReturn ();
+      ArrayList <AbstractJClass> narrows = new ArrayList <> ();
+      for (Type ata : pt.getActualTypeArguments ())
+      {
+        narrows.add (jcm.directClass (ata.getTypeName ()));
+      }
+      return retType.erasure ().narrow (jcm.directClass (pt.getRawType ().getTypeName ()).narrow (narrows));
+    }
+    else
+      if (type instanceof Class <?> cl)
+      {
+        return mirroringClass (cl).asReturn ();
+    }
+
+    return null;
+  }
+
+  // resolve a class that we don't already have resolved : this is not a target, do not create class
+  // for it.
+  protected MirroringClass makeMissingMirror (Class <?> unresolvedClass)
+  {
+    if ((unresolvedClass.getModifiers () & Modifier.FINAL) > 0)
+    {
+      if (unresolvedClass.isArray ())
+      {
+        return new ParametrizedMirror (unresolvedClass,
+                                       jcm.ref (ArrayExpression.class).narrow (unresolvedClass.componentType ()));
+      }
+      else
+      {
+        return new ParametrizedMirror (unresolvedClass, jcm.ref (ASubObjectExpression.class).narrow (unresolvedClass));
+      }
+    }
+    else
+    {
+      JNarrowedClass paramType = jcm.ref (ASubObjectExpression.class)
+                                    .narrow (jcm.ref (unresolvedClass).wildcardExtends ());
+      JNarrowedClass retType = jcm.ref (ASubObjectExpression.class).narrow (unresolvedClass);
+      return new ParametrizedMirror (unresolvedClass, paramType, retType);
+    }
+  }
+
+  ///
+  public void processTargets ()
+  {
+    // copy in a list to not have processing concurrentmodificationexception
+    for (MirroringClass mc : new ArrayList <> (resolved.values ()))
+    {
+      if (mc instanceof TargetMirror tm)
+      {
+        addHierarchy (tm);
+        addMethods (tm);
+      }
+    }
+  }
+
+  /// add the inheritance between the target's mainClass type and its parent class.
+  protected void addHierarchy (TargetMirror tm)
+  {
+    Class <?> superClass = tm.target ().getSuperclass ();
+    if (superClass != null && !superClass.equals (Object.class))
+    {
+      MirroringClass resolvedParent = mirroringClass (superClass);
+      resolvedParent.parentOf (tm);
+    }
+    else
+    {
+      tm.mainClass ()._extends (jcm.ref (ASubObjectExpression.class).narrow (tm.superRefParam ()));
+    }
+  }
+
+  protected void addMethods (TargetMirror tm)
+  {
+    List <Method> sortedMethods = new ArrayList <> ();
+    // only the public instance methods declared by the class, excluding synthetic/brdiges
+    for (Method m : tm.target ().getDeclaredMethods ())
+    {
+      if ((m.getModifiers () & Modifier.STATIC) > 0 ||
+        (m.getModifiers () & Modifier.PUBLIC) == 0 ||
+        m.isSynthetic () ||
+        m.isBridge ())
+        continue;
+      sortedMethods.add (m);
+    }
+    Collections.sort (sortedMethods,
+                      Comparator.comparing (Method::getName)
+                                .thenComparingInt (Method::getParameterCount)
+                                .thenComparing (Method::toGenericString));
+    JDefinedClass updating = tm.mainClass ();
+    for (Method m : sortedMethods)
+    {
+      String methName = m.getName ();
+      if (OBJECT_METHODS.contains (methName))
+        methName += '_';
+      AbstractJClass retType = mirrorReturn (m.getGenericReturnType ());
+      // TODO not use this.
+      retType = mirroringClass (m.getReturnType ()).asReturn ();
+
+      // TODO use j21 switch pattern matching
+      if (m.getGenericReturnType () instanceof ParameterizedType pt)
+      {
+        ArrayList <AbstractJClass> narrows = new ArrayList <> ();
+        for (Type ata : pt.getActualTypeArguments ())
+        {
+          narrows.add (jcm.directClass (ata.getTypeName ()));
+        }
+
+        retType = retType.erasure ().narrow (jcm.directClass (pt.getRawType ().getTypeName ()).narrow (narrows));
+      }
+      else
+      {
+        // nope, already resolved
+      }
+      JMethod meth = updating.method (JMod.PUBLIC, retType, methName);
+      JInvocation rawinvoke = JExpr.invokeThis ("raw").invoke ("invoke").arg (m.getName ());
+      for (Parameter p : m.getParameters ())
+      {
+        JVar mirroredParam = meth.param (mirroringClass (p.getType ()).asParam (), p.getName ());
+        rawinvoke = rawinvoke.invoke ("arg").arg (mirroredParam);
+      }
+      JInvocation retnew = retType._new ().arg (rawinvoke);
+      if (retType.typeParams ().length > 0 || retType.isParameterized ())
+        retnew = retType.erasure ().narrowEmpty ()._new ().arg (rawinvoke);
+      meth.body ()._return (retnew);
+    }
+  }
+
+  private final Set <String> OBJECT_METHODS = Set.of ("equals", "hashCode", "toString");
+
+  //
+  // tools
+  //
+
+  public static AbstractJClass referenceWithBounds (Class <?> source, JCodeModel jcm)
+  {
+    AbstractJClass baseref = jcm.ref (source);
+
+    JNarrowedClass jnc = null;
+    for (TypeVariable <?> tv : source.getTypeParameters ())
+    {
+      jnc = jnc == null ? baseref.narrow (jcm.directClass (tv.getTypeName ()))
+                        : jnc.narrow (jcm.directClass (tv.getTypeName ()));
+    }
+    return jnc == null ? baseref : jnc;
+  }
+
+}

@@ -9,10 +9,10 @@ import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 
 /// base class for the equals, hashcode, ==null etc. methods that are available for non-primitive types
-public class ObjectExpression <T> extends TypedExpressionWrapper <T>
+public class ASubObjectExpression <T> extends TypedExpressionWrapper <T>
 {
 
-  public ObjectExpression (IJExpression raw)
+  public ASubObjectExpression (IJExpression raw)
   {
     super (raw);
   }
@@ -25,9 +25,9 @@ public class ObjectExpression <T> extends TypedExpressionWrapper <T>
   }
 
   /// @return `that.getClass()`
-  public ObjectExpression <Class <?>> getClass_ ()
+  public ASubObjectExpression <Class <?>> getClass_ ()
   {
-    return new ObjectExpression <> (raw.invoke ("getClass"));
+    return new ASubObjectExpression <> (raw.invoke ("getClass"));
   }
 
   /// @return `that.hashCode()`

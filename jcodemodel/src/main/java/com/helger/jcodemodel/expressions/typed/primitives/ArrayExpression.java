@@ -3,9 +3,9 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
 
-public class ArrayExpression <ElementType> extends ObjectExpression <ElementType []>
+public class ArrayExpression <ElementType> extends ASubObjectExpression <ElementType []>
 {
 
   public ArrayExpression (IJExpression raw)
@@ -16,7 +16,7 @@ public class ArrayExpression <ElementType> extends ObjectExpression <ElementType
   /// @return `that[index]`
   public ITypedExpression <? extends ElementType> at (ASubIntExpression <?, ?, ?> index)
   {
-    return new ObjectExpression <> (JExpr.component (raw, index.raw ()));
+    return new ASubObjectExpression <> (JExpr.component (raw, index.raw ()));
   }
 
   /// @return `that.length`

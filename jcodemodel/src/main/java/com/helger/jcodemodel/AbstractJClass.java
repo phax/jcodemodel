@@ -258,6 +258,19 @@ public abstract class AbstractJClass extends AbstractJType
     return narrow (owner ().ref (aClazz));
   }
 
+  /***
+   * @param aClazz
+   * @return
+   * 
+   *         <pre>
+   * this&lt;? extends aClazz&gt;
+   *         </pre>
+   */
+  public JNarrowedClass narrowExtends (@NonNull final Class <?> aClazz)
+  {
+    return narrow (owner ().ref (aClazz).wildcardExtends ());
+  }
+
   @NonNull
   public AbstractJClass narrow (@NonNull final Class <?>... aClazzes)
   {
@@ -279,6 +292,19 @@ public abstract class AbstractJClass extends AbstractJType
   public JNarrowedClass narrow (@NonNull final AbstractJClass aClazz)
   {
     return new JNarrowedClass (this, aClazz);
+  }
+
+  /***
+   * @param aClazz
+   * @return
+   * 
+   *         <pre>
+   * this&lt;? extends aClazz&gt;
+   *         </pre>
+   */
+  public JNarrowedClass narrowExtends (@NonNull final AbstractJClass aClazz)
+  {
+    return narrow (aClazz.wildcardExtends ());
   }
 
   @NonNull
