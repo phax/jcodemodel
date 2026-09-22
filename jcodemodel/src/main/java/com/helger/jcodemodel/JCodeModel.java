@@ -44,6 +44,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -226,7 +231,8 @@ public class JCodeModel implements Serializable
    * @since 3.4.0
    */
   @NonNull
-  public final IFileSystemConvention setFileSystemConvention (@NonNull final IFileSystemConvention aFSConvention) throws JCaseSensitivityChangeException, JInvalidFileNameException
+  public final IFileSystemConvention setFileSystemConvention (@NonNull final IFileSystemConvention aFSConvention) throws JCaseSensitivityChangeException,
+                                                                                                                  JInvalidFileNameException
   {
     ValueEnforcer.notNull (aFSConvention, "FSConvention");
     if (aFSConvention == m_aFSConvention)
@@ -354,7 +360,8 @@ public class JCodeModel implements Serializable
    * @since v3.4.0
    */
   @NonNull
-  public JResourceDir resourceDir (@NonNull final String sName) throws JResourceAlreadyExistsException, JInvalidFileNameException
+  public JResourceDir resourceDir (@NonNull final String sName) throws JResourceAlreadyExistsException,
+                                                                JInvalidFileNameException
   {
     ValueEnforcer.notNull (sName, "Name");
 
@@ -502,8 +509,8 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @NonNull
-  public JDefinedClass _class (final int nMods,
-                               @NonNull final String sFullyQualifiedClassName) throws JCodeModelException
+  public JDefinedClass _class (final int nMods, @NonNull final String sFullyQualifiedClassName)
+                                                                                                throws JCodeModelException
   {
     return _class (nMods, sFullyQualifiedClassName, EClassType.CLASS);
   }
@@ -520,8 +527,8 @@ public class JCodeModel implements Serializable
    *            When the specified class/interface was already created.
    */
   @NonNull
-  public JDefinedClass _class (@NonNull final String sFullyQualifiedClassName,
-                               @NonNull final EClassType eClassType) throws JCodeModelException
+  public JDefinedClass _class (@NonNull final String sFullyQualifiedClassName, @NonNull final EClassType eClassType)
+                                                                                                                     throws JCodeModelException
   {
     return _class (JMod.PUBLIC, sFullyQualifiedClassName, eClassType);
   }
@@ -697,6 +704,36 @@ public class JCodeModel implements Serializable
     return r;
   }
 
+  /// reference a reflect type. Useful for example when copying an existing method's return type
+  /// that is parameterized.
+  @NonNull
+  public AbstractJClass ref (@NonNull Type type)
+  {
+    // TODO switch to switch j21
+    if (type instanceof Class <?> cl)
+    {
+      return ref (cl);
+    }
+    if (type instanceof GenericArrayType gat)
+    {
+      return ref (gat);
+    }
+    if (type instanceof ParameterizedType pt)
+    {
+      return ref (pt);
+    }
+    if (type instanceof TypeVariable <?> tv)
+    {
+      return ref (tv);
+    }
+    if (type instanceof WildcardType wt)
+    {
+      return ref (wt);
+    }
+    // can happen if we have an external library that also declares its own types
+    throw new IllegalStateException ("case " + type.getClass () + "not handled for type " + type.getTypeName ());
+  }
+
   /**
    * Obtains a reference to an existing class from its Class object.
    * <p>
@@ -731,7 +768,49 @@ public class JCodeModel implements Serializable
     return aRefClass;
   }
 
-  ///
+  // T[], String[]
+  @NonNull
+  protected AbstractJClass ref (@NonNull GenericArrayType gat)
+  {
+    return ref (gat.getGenericComponentType ()).array ();
+  }
+
+  // Map<K, Integer> for example.
+  @NonNull
+  protected AbstractJClass ref (@NonNull ParameterizedType pt)
+  {
+    List <AbstractJClass> narrows = new ArrayList <> ();
+    for (Type t : pt.getActualTypeArguments ())
+    {
+      narrows.add (ref (t));
+    }
+    return ref (pt.getRawType ()).narrow (narrows);
+  }
+
+  // a reference to a Type declared somewhere else, like class, or method level ; thus can't resolve
+  // it outside of context. We keep it as is.
+  @NonNull
+  protected AbstractJClass ref (@NonNull TypeVariable <?> tv)
+  {
+    return new JDirectClass (this, null, EClassType.CLASS, tv.getName ());
+  }
+
+  // ?, ? extends X, or ? super Y
+  @NonNull
+  protected AbstractJClass ref (@NonNull WildcardType wt)
+  {
+    // only one of super/extends at most in java specs.
+    for (Type o : wt.getLowerBounds ())
+    {
+      return ref (o).wildcardSuper ();
+    }
+    for (Type o : wt.getUpperBounds ())
+    {
+      return ref (o).wildcardExtends ();
+    }
+    return wildcard ();
+  }
+
   /// reference a existing enum value
   public @NonNull JEnumConstantRef ref (Enum <?> e)
   {
@@ -764,8 +843,9 @@ public class JCodeModel implements Serializable
    * @see #refWithErrorTypes(TypeElement,Elements)
    */
   @NonNull
-  public JDefinedClass ref (@NonNull final TypeElement aElement,
-                            @NonNull final Elements aElementUtils) throws ErrorTypeFound, CodeModelBuildingException
+  public JDefinedClass ref (@NonNull final TypeElement aElement, @NonNull final Elements aElementUtils)
+                                                                                                        throws ErrorTypeFound,
+                                                                                                        CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClass (aElement);
@@ -797,8 +877,8 @@ public class JCodeModel implements Serializable
    * @see #buildsErrorTypeRefs()
    */
   @NonNull
-  public JDefinedClass refWithErrorTypes (@NonNull final TypeElement aElement,
-                                          @NonNull final Elements aElementUtils) throws CodeModelBuildingException
+  public JDefinedClass refWithErrorTypes (@NonNull final TypeElement aElement, @NonNull final Elements aElementUtils)
+                                                                                                                      throws CodeModelBuildingException
   {
     final JCodeModelJavaxLangModelAdapter adapter = new JCodeModelJavaxLangModelAdapter (this, aElementUtils);
     return adapter.getClassWithErrorTypes (aElement);

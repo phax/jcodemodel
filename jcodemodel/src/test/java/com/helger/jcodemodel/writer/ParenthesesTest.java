@@ -221,8 +221,8 @@ public final class ParenthesesTest
 
   /**
    * The second operand of a ternary operator needs no parentheses, but the looser strategies must
-   * still print them - an operand may never lose its parentheses in {@link
-   * EParenthesesStrategy#ALWAYS}.
+   * still print them - an operand may never lose its parentheses in
+   * {@link EParenthesesStrategy#ALWAYS}.
    */
   @Test
   public void testTernaryMidOperandKeepsOptionalParentheses ()
