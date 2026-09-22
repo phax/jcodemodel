@@ -44,7 +44,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -236,5 +239,33 @@ public final class JCodeModelTest
     {
       // correct
     }
+  }
+
+  @Test
+  public void testRefType () throws NoSuchMethodException, SecurityException
+  {
+    final JCodeModel jcm = JCodeModel.createUnified ();
+
+    {
+    // void Map::putAll(Map<? extends K, ? extends V> m);
+    Method mapPutAll = Map.class.getMethod ("putAll", Map.class);
+    Type firstParam = mapPutAll.getParameters ()[0].getParameterizedType ();
+    Assert.assertEquals ("java.util.Map<? extends K, ? extends V>",
+                         CodeModelTestsHelper.generate (jcm.ref (firstParam)));
+  }
+  {
+    // Set<Map.Entry<K, V>> Map::entrySet();
+    Method mapEntrySet = Map.class.getMethod ("entrySet");
+    Type retType = mapEntrySet.getGenericReturnType ();
+    Assert.assertEquals ("java.util.Set<java.util.Map.Entry<K, V>>", CodeModelTestsHelper.generate (jcm.ref (retType)));
+  }
+  {
+    // Set<Map.Entry<K, V>> Map::entrySet();
+    Method listToArray = List.class.getMethod ("toArray", Object [].class);
+    Type retType = listToArray.getGenericReturnType ();
+    Assert.assertEquals ("T[]", CodeModelTestsHelper.generate (jcm.ref (retType)));
+    Type firstParam = listToArray.getParameters ()[0].getParameterizedType ();
+    Assert.assertEquals ("T[]", CodeModelTestsHelper.generate (jcm.ref (firstParam)));
+  }
   }
 }
