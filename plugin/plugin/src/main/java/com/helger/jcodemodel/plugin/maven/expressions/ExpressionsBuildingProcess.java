@@ -112,10 +112,13 @@ public class ExpressionsBuildingProcess
   {
     for (TypeVariable <?> tv : source.getTypeParameters ())
     {
-      JTypeVar jtv = created.generify (tv.getName ());
-      for (Type b : tv.getBounds ())
+      if (tv.getBounds ()[0].equals (Object.class))
       {
-        jtv.bound (created.owner ().directClass (b.getTypeName ()));
+        created.generify (tv.getName ());
+      }
+      else
+      {
+        created.generify (tv.getName (), jcm.ref (tv.getBounds ()[0]));
       }
     }
   }

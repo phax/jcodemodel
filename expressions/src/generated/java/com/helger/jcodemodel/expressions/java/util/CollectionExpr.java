@@ -3,7 +3,7 @@ package com.helger.jcodemodel.expressions.java.util;
 import java.util.Collection;
 import com.helger.jcodemodel.IJExpression;
 
-public final class CollectionExpr<E extends Object>
+public final class CollectionExpr<E>
     extends ASubCollectionExpr<E, Collection<E>>
 {
 

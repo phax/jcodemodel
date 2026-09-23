@@ -10,7 +10,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 
-public abstract class ASubSetExpr<E extends java.lang.Object, Contained extends Set<E>>
+public abstract class ASubSetExpr<E, Contained extends Set<E>>
     extends ASubObjectExpression<Contained>
 {
 
@@ -18,7 +18,7 @@ public abstract class ASubSetExpr<E extends java.lang.Object, Contained extends 
         super(raw);
     }
 
-    public BoolExpression add(ASubObjectExpression<java.lang.Object> arg0) {
+    public BoolExpression add(ASubObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("add").arg(arg0));
     }
 
@@ -30,7 +30,7 @@ public abstract class ASubSetExpr<E extends java.lang.Object, Contained extends 
         return new VoidStatExpression(this.raw().invoke("clear"));
     }
 
-    public BoolExpression contains(ASubObjectExpression<java.lang.Object> arg0) {
+    public BoolExpression contains(ASubObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
     }
 
@@ -38,7 +38,7 @@ public abstract class ASubSetExpr<E extends java.lang.Object, Contained extends 
         return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
     }
 
-    public BoolExpression equals_(ASubObjectExpression<java.lang.Object> arg0) {
+    public BoolExpression equals_(ASubObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("equals").arg(arg0));
     }
 
@@ -54,7 +54,7 @@ public abstract class ASubSetExpr<E extends java.lang.Object, Contained extends 
         return new ASubObjectExpression<>(this.raw().invoke("iterator"));
     }
 
-    public BoolExpression remove(ASubObjectExpression<java.lang.Object> arg0) {
+    public BoolExpression remove(ASubObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("remove").arg(arg0));
     }
 
@@ -74,11 +74,11 @@ public abstract class ASubSetExpr<E extends java.lang.Object, Contained extends 
         return new ASubObjectExpression<>(this.raw().invoke("spliterator"));
     }
 
-    public ArrayExpression<java.lang.Object> toArray() {
+    public ArrayExpression<Object> toArray() {
         return new ArrayExpression<>(this.raw().invoke("toArray"));
     }
 
-    public<T> ArrayExpression<T> toArray(ArrayExpression<java.lang.Object> arg0) {
+    public<T> ArrayExpression<T> toArray(ArrayExpression<Object> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 }
