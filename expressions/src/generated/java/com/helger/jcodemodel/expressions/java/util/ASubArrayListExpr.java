@@ -1,11 +1,13 @@
 package com.helger.jcodemodel.expressions.java.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
@@ -15,11 +17,11 @@ import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 
-public abstract class ASubListExpr<E, Contained extends List<E>>
+public abstract class ASubArrayListExpr<E, Contained extends ArrayList<E>>
     extends ASubObjectExpression<Contained>
 {
 
-    public ASubListExpr(IJExpression raw) {
+    public ASubArrayListExpr(IJExpression raw) {
         super(raw);
     }
 
@@ -51,16 +53,24 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new VoidStatExpression(this.raw().invoke("clear"));
     }
 
+    public ASubObjectExpression<?> clone() {
+        return new ASubObjectExpression<>(this.raw().invoke("clone"));
+    }
+
     public BoolExpression contains(ASubObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
     }
 
-    public BoolExpression containsAll(ASubCollectionExpr<?, Collection<?>> arg0) {
-        return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
+    public VoidStatExpression ensureCapacity(ASubIntExpression<?, ?, ?> arg0) {
+        return new VoidStatExpression(this.raw().invoke("ensureCapacity").arg(arg0));
     }
 
     public BoolExpression equals_(ASubObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("equals").arg(arg0));
+    }
+
+    public VoidStatExpression forEach(ASubObjectExpression<? extends Consumer<? super E>> arg0) {
+        return new VoidStatExpression(this.raw().invoke("forEach").arg(arg0));
     }
 
     public ASubObjectExpression<E> get(ASubIntExpression<?, ?, ?> arg0) {
@@ -119,6 +129,10 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new ASubObjectExpression<>(this.raw().invoke("removeFirst"));
     }
 
+    public BoolExpression removeIf(ASubObjectExpression<? extends Predicate<? super E>> arg0) {
+        return new BoolExpression(this.raw().invoke("removeIf").arg(arg0));
+    }
+
     public ASubObjectExpression<E> removeLast() {
         return new ASubObjectExpression<>(this.raw().invoke("removeLast"));
     }
@@ -129,10 +143,6 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
 
     public BoolExpression retainAll(ASubCollectionExpr<?, Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("retainAll").arg(arg0));
-    }
-
-    public ListExpr<E> reversed() {
-        return new ListExpr<>(this.raw().invoke("reversed"));
     }
 
     public ASubObjectExpression<E> set(ASubIntExpression<?, ?, ?> arg0, ASubObjectExpression<E> arg1) {
@@ -161,5 +171,9 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
 
     public<T> ArrayExpression<T> toArray(ArrayExpression<T> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
+    }
+
+    public VoidStatExpression trimToSize() {
+        return new VoidStatExpression(this.raw().invoke("trimToSize"));
     }
 }

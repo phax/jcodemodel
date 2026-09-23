@@ -61,7 +61,9 @@ limitations under the License. -->
             </goals>
             <configuration>
               <classes>
+                <class>java.util.ArrayList</class>
                 <class>java.util.Collection</class>
+                <class>java.util.HashSet</class>
                 <class>java.util.List</class>
                 <class>java.util.Set</class>
                 <class>java.util.UUID</class>

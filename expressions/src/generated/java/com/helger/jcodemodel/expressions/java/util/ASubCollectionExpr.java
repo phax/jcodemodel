@@ -21,11 +21,11 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         super(raw);
     }
 
-    public BoolExpression add(ASubObjectExpression<Object> arg0) {
+    public BoolExpression add(ASubObjectExpression<E> arg0) {
         return new BoolExpression(this.raw().invoke("add").arg(arg0));
     }
 
-    public BoolExpression addAll(ASubCollectionExpr arg0) {
+    public BoolExpression addAll(ASubCollectionExpr<? extends E, Collection<? extends E>> arg0) {
         return new BoolExpression(this.raw().invoke("addAll").arg(arg0));
     }
 
@@ -37,7 +37,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
     }
 
-    public BoolExpression containsAll(ASubCollectionExpr arg0) {
+    public BoolExpression containsAll(ASubCollectionExpr<?, Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
     }
 
@@ -65,15 +65,15 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new BoolExpression(this.raw().invoke("remove").arg(arg0));
     }
 
-    public BoolExpression removeAll(ASubCollectionExpr arg0) {
+    public BoolExpression removeAll(ASubCollectionExpr<?, Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
     }
 
-    public BoolExpression removeIf(ASubObjectExpression<Predicate> arg0) {
+    public BoolExpression removeIf(ASubObjectExpression<? extends Predicate<? super E>> arg0) {
         return new BoolExpression(this.raw().invoke("removeIf").arg(arg0));
     }
 
-    public BoolExpression retainAll(ASubCollectionExpr arg0) {
+    public BoolExpression retainAll(ASubCollectionExpr<?, Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("retainAll").arg(arg0));
     }
 
@@ -93,11 +93,11 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new ArrayExpression<>(this.raw().invoke("toArray"));
     }
 
-    public<T> ArrayExpression<T> toArray(ArrayExpression<Object> arg0) {
+    public<T> ArrayExpression<T> toArray(ArrayExpression<T> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 
-    public<T> ArrayExpression<T> toArray(ASubObjectExpression<IntFunction> arg0) {
+    public<T> ArrayExpression<T> toArray_1(ASubObjectExpression<? extends IntFunction<T[]>> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 }

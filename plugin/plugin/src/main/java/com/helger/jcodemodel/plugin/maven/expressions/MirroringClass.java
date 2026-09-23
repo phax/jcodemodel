@@ -2,6 +2,10 @@ package com.helger.jcodemodel.plugin.maven.expressions;
 
 
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -45,6 +49,24 @@ public sealed interface MirroringClass
   /// The param types in a mirrored function. Still needs parameters.
   public AbstractJClass asParam ();
 
+  default AbstractJClass generifiedParam (ParameterizedType pt, JCodeModel jcm)
+  {
+    if (isFinal ())
+    {
+      return asParam ().erasure ().narrow (jcm.ref (pt));
+    }
+    else
+    {
+      List <AbstractJClass> narrows = new ArrayList <> ();
+      for (Type ata : pt.getActualTypeArguments ())
+      {
+        narrows.add (jcm.ref (ata));
+      }
+      narrows.add (jcm.ref (pt));
+      return asParam ().erasure ().narrow (narrows);
+    }
+  }
+
   public default boolean isFinal ()
   {
     return (target ().getModifiers () & Modifier.FINAL) > 0;
@@ -68,17 +90,35 @@ public sealed interface MirroringClass
                                        MirroringClass
   {
 
+
     // usual case, when the class is not final it has one param type that is extended by the
     // returned type. eg ASubIntExpression param type, and its IntExpression returned type.
     public HardcodedMirror (JCodeModel jcm, Class <?> target, Class <?> returnType, Class <?> paramType)
     {
-      this (target, jcm.ref (returnType), jcm.ref (paramType));
+      this (target, jcm.ref (returnType), wildcardedRef (jcm, paramType));
     }
 
     // typically when the class is final, eg short/byte
     public HardcodedMirror (JCodeModel jcm, Class <?> target, Class <?> bothTypes)
     {
-      this (target, jcm.ref (bothTypes), jcm.ref (bothTypes));
+      this (target, jcm.ref (bothTypes), wildcardedRef (jcm, bothTypes));
+    }
+
+    /// reference a harcoded mirroring class with its type generics replaced with `?`
+    static AbstractJClass wildcardedRef (JCodeModel jcm, Class <?> paramType)
+    {
+      AbstractJClass ret = jcm.ref (paramType);
+      if (paramType.getTypeParameters ().length > 0)
+      {
+        List <AbstractJClass> narrows = new ArrayList <> ();
+        for (@SuppressWarnings ("unused")
+        TypeVariable <?> tv : paramType.getTypeParameters ())
+        {
+          narrows.add (jcm.wildcard ());
+        }
+        ret = ret.narrow (narrows);
+      }
+      return ret;
     }
 
     /// hardcoded source.
@@ -210,12 +250,12 @@ public sealed interface MirroringClass
   /// if the target is final, then we have one single same type for parameters and return types.
   /// Otherwise we have a `GenericClass<T extends target>` for parameters, and a `GenericClass<T>`
   /// for return.
-  public static record ParametrizedMirror (Class <?> target, AbstractJClass asReturn, AbstractJClass asParam) implements
+  public static record GenericMirror (Class <?> target, AbstractJClass asReturn, AbstractJClass asParam) implements
                                           MirroringClass
   {
 
     // when final, same both types.
-    public ParametrizedMirror (Class <?> target, AbstractJClass bothTypes)
+    public GenericMirror (Class <?> target, AbstractJClass bothTypes)
     {
       this (target, bothTypes, bothTypes);
     }
@@ -224,6 +264,18 @@ public sealed interface MirroringClass
     public boolean returnFullyGenerified ()
     {
       return true;
+    }
+
+    public AbstractJClass generifiedParam (ParameterizedType pt, JCodeModel jcm)
+    {
+      if (isFinal ())
+      {
+        return asParam ().erasure ().narrow (jcm.ref (pt));
+      }
+      else
+      {
+        return asParam ().erasure ().narrow (jcm.ref (pt).wildcardExtends ());
+      }
     }
 
   }

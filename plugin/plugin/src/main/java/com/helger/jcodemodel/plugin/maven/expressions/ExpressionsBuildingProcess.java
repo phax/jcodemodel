@@ -23,8 +23,8 @@ import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.FinalTargetMirror;
+import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.GenericMirror;
 import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.NonFinalTargetMirror;
-import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.ParametrizedMirror;
 import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.TargetMirror;
 
 public class ExpressionsBuildingProcess
@@ -136,12 +136,12 @@ public class ExpressionsBuildingProcess
     {
       if (unresolvedClass.isArray ())
       {
-        return new ParametrizedMirror (unresolvedClass,
+        return new GenericMirror (unresolvedClass,
                                        jcm.ref (ArrayExpression.class).narrow (unresolvedClass.componentType ()));
       }
       else
       {
-        return new ParametrizedMirror (unresolvedClass, jcm.ref (ASubObjectExpression.class).narrow (unresolvedClass));
+        return new GenericMirror (unresolvedClass, jcm.ref (ASubObjectExpression.class).narrow (unresolvedClass));
       }
     }
     else
@@ -149,12 +149,27 @@ public class ExpressionsBuildingProcess
       JNarrowedClass paramType = jcm.ref (ASubObjectExpression.class)
                                     .narrow (jcm.ref (unresolvedClass).wildcardExtends ());
       JNarrowedClass retType = jcm.ref (ASubObjectExpression.class).narrow (unresolvedClass);
-      return new ParametrizedMirror (unresolvedClass, paramType, retType);
+      return new GenericMirror (unresolvedClass, paramType, retType);
     }
   }
 
   public AbstractJClass mirrorReturn (Type type)
   {
+    if (type instanceof Class <?> cl)
+    {
+      return mirroringClass (cl).asReturn ();
+    }
+    if (type instanceof GenericArrayType gat)
+    {
+      if (gat.getGenericComponentType () instanceof Class <?> cl)
+      {
+        // in that case we can convert the Type to a Class : ArrayType<String> = String[].class
+        return mirroringClass (cl.arrayType ()).asReturn ();
+      }
+      // here we can't, so we create the return type for Object[] and change its generics with the
+      // component type
+      return mirroringClass (Object [].class).asReturn ().erasure ().narrow (jcm.ref (gat.getGenericComponentType ()));
+    }
     if (type instanceof ParameterizedType pt)
     {
       MirroringClass mirroring = mirroringClass ((Class <?>) pt.getRawType ());
@@ -173,20 +188,37 @@ public class ExpressionsBuildingProcess
         return mirroring.asReturn ().erasure ().narrow (narrows);
       }
     }
-    if (type instanceof Class <?> cl)
-    {
-      return mirroringClass (cl).asReturn ();
-    }
-    if (type instanceof GenericArrayType gat)
-    {
-      if (gat.getGenericComponentType () instanceof Class <?> cl)
-        return mirroringClass (cl.arrayType ()).asReturn ();
-      return mirroringClass (Object [].class).asReturn ().erasure ().narrow (jcm.ref (gat.getGenericComponentType ()));
-    }
     if (type instanceof TypeVariable <?> tv)
     {
       // Object return type, but we use the variable type instead of object.
       return mirroringClass (Object.class).asReturn ().erasure ().narrow (jcm.ref (tv));
+    }
+    throw new IllegalArgumentException ("can't mirror return type " + type + " class " + type.getClass ());
+  }
+
+  public AbstractJClass mirrorParam (Type type)
+  {
+    if (type instanceof Class <?> cl)
+    {
+      return mirroringClass (cl).asParam ();
+    }
+    if (type instanceof GenericArrayType gat)
+    {
+      if (gat.getGenericComponentType () instanceof Class <?> cl)
+      {
+        return mirroringClass (cl.arrayType ()).asParam ();
+      }
+      return mirroringClass (Object [].class).asParam ().erasure ().narrow (jcm.ref (gat.getGenericComponentType ()));
+    }
+    if (type instanceof ParameterizedType pt)
+    {
+      MirroringClass mirroring = mirroringClass ((Class <?>) pt.getRawType ());
+      return mirroring.generifiedParam (pt, jcm);
+    }
+    if (type instanceof TypeVariable <?> tv)
+    {
+      // Object return type, but we use the variable type instead of object.
+      return mirroringClass (Object.class).asParam ().erasure ().narrow (jcm.ref (tv));
     }
     throw new IllegalArgumentException ("can't mirror return type " + type + " class " + type.getClass ());
   }
@@ -237,38 +269,67 @@ public class ExpressionsBuildingProcess
                       Comparator.comparing (Method::getName)
                                 .thenComparingInt (Method::getParameterCount)
                                 .thenComparing (Method::toGenericString));
-    JDefinedClass updating = tm.mainClass ();
+    JDefinedClass methodClass = tm.mainClass ();
     for (Method m : sortedMethods)
     {
-      String methName = m.getName ();
-      if (OBJECT_METHODS.contains (methName))
-        methName += '_';
-      AbstractJClass retType = mirrorReturn (m.getGenericReturnType ());
-
-      JMethod meth = updating.method (JMod.PUBLIC, retType, methName);
-      for (TypeVariable <Method> tv : m.getTypeParameters ())
-      {
-        if (tv.getBounds ()[0].equals (Object.class))
-        {
-          meth.generify (tv.getName ());
-        }
-        else
-        {
-          meth.generify (tv.getName (), jcm.ref (tv.getBounds ()[0]));
-        }
-      }
-
-      JInvocation rawinvoke = JExpr.invokeThis ("raw").invoke ("invoke").arg (m.getName ());
-      for (Parameter p : m.getParameters ())
-      {
-        JVar mirroredParam = meth.param (mirroringClass (p.getType ()).asParam (), p.getName ());
-        rawinvoke = rawinvoke.invoke ("arg").arg (mirroredParam);
-      }
-      JInvocation retnew = retType._new ().arg (rawinvoke);
-      if (retType.typeParams ().length > 0 || retType.isParameterized ())
-        retnew = retType.erasure ().narrowEmpty ()._new ().arg (rawinvoke);
-      meth.body ()._return (retnew);
+      addMethod (methodClass, m);
     }
+  }
+
+  protected void addMethod (JDefinedClass methodClass, Method m)
+  {
+    // method name clashes avoidance :
+    // - avoid names already present in Object
+    // - if a method already exists with a name and same params size, increment i to use method_i
+    //
+    // That last part is because the same method with different arguments can lead to the same
+    // erasure once mirrored,
+    //
+    // typically call(MyClass1) and call(MyClass2) will be mirror erased to
+    // call(ASubObjectExpression)
+
+    String methName = m.getName ();
+    if (OBJECT_METHODS.contains (methName))
+      methName += '_';
+    for (int i = 0;; i++)
+    {
+      String tested = i == 0 ? methName : (methName + '_' + i);
+      if (methodClass.methods ()
+                     .stream ()
+                     .filter (jm -> jm.name ().equals (tested) && jm.params ().size () == m.getParameterCount ())
+                     .findAny ()
+                     .isEmpty ())
+      {
+        methName = tested;
+        break;
+      }
+    }
+
+    AbstractJClass retType = mirrorReturn (m.getGenericReturnType ());
+
+    JMethod meth = methodClass.method (JMod.PUBLIC, retType, methName);
+    for (TypeVariable <Method> tv : m.getTypeParameters ())
+    {
+      if (tv.getBounds ()[0].equals (Object.class))
+      {
+        meth.generify (tv.getName ());
+      }
+      else
+      {
+        meth.generify (tv.getName (), jcm.ref (tv.getBounds ()[0]));
+      }
+    }
+
+    JInvocation rawinvoke = JExpr.invokeThis ("raw").invoke ("invoke").arg (m.getName ());
+    for (Parameter p : m.getParameters ())
+    {
+      JVar mirroredParam = meth.param (mirrorParam (p.getParameterizedType ()), p.getName ());
+      rawinvoke = rawinvoke.invoke ("arg").arg (mirroredParam);
+    }
+    JInvocation retnew = retType._new ().arg (rawinvoke);
+    if (retType.typeParams ().length > 0 || retType.isParameterized ())
+      retnew = retType.erasure ().narrowEmpty ()._new ().arg (rawinvoke);
+    meth.body ()._return (retnew);
   }
 
   private final Set <String> OBJECT_METHODS = Set.of ("equals", "hashCode", "toString");

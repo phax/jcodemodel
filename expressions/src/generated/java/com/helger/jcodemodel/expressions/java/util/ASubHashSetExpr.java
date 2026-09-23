@@ -1,8 +1,7 @@
 package com.helger.jcodemodel.expressions.java.util;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.Spliterator;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
@@ -11,11 +10,11 @@ import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 
-public abstract class ASubSetExpr<E, Contained extends Set<E>>
+public abstract class ASubHashSetExpr<E, Contained extends HashSet<E>>
     extends ASubObjectExpression<Contained>
 {
 
-    public ASubSetExpr(IJExpression raw) {
+    public ASubHashSetExpr(IJExpression raw) {
         super(raw);
     }
 
@@ -23,28 +22,16 @@ public abstract class ASubSetExpr<E, Contained extends Set<E>>
         return new BoolExpression(this.raw().invoke("add").arg(arg0));
     }
 
-    public BoolExpression addAll(ASubCollectionExpr<? extends E, Collection<? extends E>> arg0) {
-        return new BoolExpression(this.raw().invoke("addAll").arg(arg0));
-    }
-
     public VoidStatExpression clear() {
         return new VoidStatExpression(this.raw().invoke("clear"));
     }
 
+    public ASubObjectExpression<?> clone() {
+        return new ASubObjectExpression<>(this.raw().invoke("clone"));
+    }
+
     public BoolExpression contains(ASubObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
-    }
-
-    public BoolExpression containsAll(ASubCollectionExpr<?, Collection<?>> arg0) {
-        return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
-    }
-
-    public BoolExpression equals_(ASubObjectExpression<Object> arg0) {
-        return new BoolExpression(this.raw().invoke("equals").arg(arg0));
-    }
-
-    public IntExpression hashCode_() {
-        return new IntExpression(this.raw().invoke("hashCode"));
     }
 
     public BoolExpression isEmpty() {
@@ -57,14 +44,6 @@ public abstract class ASubSetExpr<E, Contained extends Set<E>>
 
     public BoolExpression remove(ASubObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("remove").arg(arg0));
-    }
-
-    public BoolExpression removeAll(ASubCollectionExpr<?, Collection<?>> arg0) {
-        return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
-    }
-
-    public BoolExpression retainAll(ASubCollectionExpr<?, Collection<?>> arg0) {
-        return new BoolExpression(this.raw().invoke("retainAll").arg(arg0));
     }
 
     public IntExpression size() {
