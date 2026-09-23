@@ -13,7 +13,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -289,7 +292,7 @@ public class ExpressionsBuildingProcess
     // call(ASubObjectExpression)
 
     String methName = m.getName ();
-    if (OBJECT_METHODS.contains (methName))
+    if (OBJECT_METHODS_ARGS.getOrDefault (methName, Set.of ()).contains (m.getParameterCount ()))
       methName += '_';
     for (int i = 0;; i++)
     {
@@ -332,7 +335,11 @@ public class ExpressionsBuildingProcess
     meth.body ()._return (retnew);
   }
 
-  private final Set <String> OBJECT_METHODS = Set.of ("equals", "hashCode", "toString");
+  private static final Map <String, Set <Integer>> OBJECT_METHODS_ARGS = Stream.of (Object.class.getMethods ())
+                                                                         .filter (m -> ((m.getModifiers () &Modifier.STATIC) == 0))
+                                                                               .collect (Collectors.groupingBy (Method::getName,
+                                                                                                                Collectors.mapping (Method::getParameterCount,
+                                                                                                                                    Collectors.toSet ())));
 
   //
   // tools
