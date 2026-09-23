@@ -1,5 +1,6 @@
 package com.helger.jcodemodel.plugin.maven.expressions;
 
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -124,29 +125,8 @@ public class ExpressionsBuildingProcess
     return resolved.computeIfAbsent (cl, this::makeMissingMirror);
   }
 
-  public AbstractJClass mirrorReturn (Type type)
-  {    
-    if (type instanceof ParameterizedType pt)
-    {
-      AbstractJClass retType = mirroringClass ((Class <?>) pt.getRawType ()).asReturn ();
-      ArrayList <AbstractJClass> narrows = new ArrayList <> ();
-      for (Type ata : pt.getActualTypeArguments ())
-      {
-        narrows.add (jcm.directClass (ata.getTypeName ()));
-      }
-      return retType.erasure ().narrow (jcm.directClass (pt.getRawType ().getTypeName ()).narrow (narrows));
-    }
-    else
-      if (type instanceof Class <?> cl)
-      {
-        return mirroringClass (cl).asReturn ();
-    }
-
-    return null;
-  }
-
-  // resolve a class that we don't already have resolved : this is not a target, do not create class
-  // for it.
+  // resolve a class that we don't already have resolved : this is not a target, do not create
+  // JDefinedClass for it.
   protected MirroringClass makeMissingMirror (Class <?> unresolvedClass)
   {
     if ((unresolvedClass.getModifiers () & Modifier.FINAL) > 0)
@@ -168,6 +148,44 @@ public class ExpressionsBuildingProcess
       JNarrowedClass retType = jcm.ref (ASubObjectExpression.class).narrow (unresolvedClass);
       return new ParametrizedMirror (unresolvedClass, paramType, retType);
     }
+  }
+
+  public AbstractJClass mirrorReturn (Type type)
+  {
+    if (type instanceof ParameterizedType pt)
+    {
+      MirroringClass mirroring = mirroringClass ((Class <?>) pt.getRawType ());
+      if (mirroring.returnFullyGenerified ())
+      {
+        return mirroring.asReturn ().erasure ().narrow (jcm.ref (pt));
+      }
+      else
+      {
+        // we got a return for the specific class, so we generify only with that class' par
+        List <AbstractJClass> narrows = new ArrayList <> ();
+        for (Type ata : pt.getActualTypeArguments ())
+        {
+          narrows.add (jcm.ref (ata));
+        }
+        return mirroring.asReturn ().erasure ().narrow (narrows);
+      }
+    }
+    if (type instanceof Class <?> cl)
+    {
+      return mirroringClass (cl).asReturn ();
+    }
+    if (type instanceof GenericArrayType gat)
+    {
+      if (gat.getGenericComponentType () instanceof Class <?> cl)
+        return mirroringClass (cl.arrayType ()).asReturn ();
+      return mirroringClass (Object [].class).asReturn ().erasure ().narrow (jcm.ref (gat.getGenericComponentType ()));
+    }
+    if (type instanceof TypeVariable <?> tv)
+    {
+      // Object return type, but we use the variable type instead of object.
+      return mirroringClass (Object.class).asReturn ().erasure ().narrow (jcm.ref (tv));
+    }
+    throw new IllegalArgumentException ("can't mirror return type " + type + " class " + type.getClass ());
   }
 
   ///
@@ -223,25 +241,20 @@ public class ExpressionsBuildingProcess
       if (OBJECT_METHODS.contains (methName))
         methName += '_';
       AbstractJClass retType = mirrorReturn (m.getGenericReturnType ());
-      // TODO not use this.
-      retType = mirroringClass (m.getReturnType ()).asReturn ();
 
-      // TODO use j21 switch pattern matching
-      if (m.getGenericReturnType () instanceof ParameterizedType pt)
-      {
-        ArrayList <AbstractJClass> narrows = new ArrayList <> ();
-        for (Type ata : pt.getActualTypeArguments ())
-        {
-          narrows.add (jcm.directClass (ata.getTypeName ()));
-        }
-
-        retType = retType.erasure ().narrow (jcm.directClass (pt.getRawType ().getTypeName ()).narrow (narrows));
-      }
-      else
-      {
-        // nope, already resolved
-      }
       JMethod meth = updating.method (JMod.PUBLIC, retType, methName);
+      for (TypeVariable <Method> tv : m.getTypeParameters ())
+      {
+        if (tv.getBounds ()[0].equals (Object.class))
+        {
+          meth.generify (tv.getName ());
+        }
+        else
+        {
+          meth.generify (tv.getName (), jcm.ref (tv.getBounds ()[0]));
+        }
+      }
+
       JInvocation rawinvoke = JExpr.invokeThis ("raw").invoke ("invoke").arg (m.getName ());
       for (Parameter p : m.getParameters ())
       {

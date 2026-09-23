@@ -78,7 +78,7 @@ public abstract class ASubSetExpr<E extends java.lang.Object, Contained extends 
         return new ArrayExpression<>(this.raw().invoke("toArray"));
     }
 
-    public ArrayExpression<java.lang.Object> toArray(ArrayExpression<java.lang.Object> arg0) {
+    public<T> ArrayExpression<T> toArray(ArrayExpression<java.lang.Object> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 }

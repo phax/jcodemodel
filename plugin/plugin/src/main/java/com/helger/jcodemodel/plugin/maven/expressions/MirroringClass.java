@@ -31,6 +31,17 @@ public sealed interface MirroringClass
   /// the returned types in a mirrored function. Still needs to be parametrized.
   public AbstractJClass asReturn ();
 
+  /// when true, the return must be generified using the method return type. Otherwise, only apply
+  /// the return type's parameter.
+  ///
+  /// for example, a returned `List<E>` can be mirrored into a `ObjectExpression<List<E>>`, using
+  /// the full generification, or a `ListExpression<E>`, only generified using the type's own
+  /// parameters (`E`)
+  default boolean returnFullyGenerified ()
+  {
+    return false;
+  }
+
   /// The param types in a mirrored function. Still needs parameters.
   public AbstractJClass asParam ();
 
@@ -139,7 +150,6 @@ public sealed interface MirroringClass
      */
     public AbstractJClass superRefParam ();
 
-
   }
 
   // a target (a class we need to mirror) that is final, so only one type for both param and return.
@@ -208,6 +218,12 @@ public sealed interface MirroringClass
     public ParametrizedMirror (Class <?> target, AbstractJClass bothTypes)
     {
       this (target, bothTypes, bothTypes);
+    }
+
+    @Override
+    public boolean returnFullyGenerified ()
+    {
+      return true;
     }
 
   }

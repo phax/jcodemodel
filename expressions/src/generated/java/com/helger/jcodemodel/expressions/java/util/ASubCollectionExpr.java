@@ -93,11 +93,11 @@ public abstract class ASubCollectionExpr<E extends java.lang.Object, Contained e
         return new ArrayExpression<>(this.raw().invoke("toArray"));
     }
 
-    public ArrayExpression<java.lang.Object> toArray(ArrayExpression<java.lang.Object> arg0) {
+    public<T> ArrayExpression<T> toArray(ArrayExpression<java.lang.Object> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 
-    public ArrayExpression<java.lang.Object> toArray(ASubObjectExpression<IntFunction> arg0) {
+    public<T> ArrayExpression<T> toArray(ASubObjectExpression<IntFunction> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 }

@@ -2,6 +2,7 @@ package com.helger.jcodemodel.expressions.java.util;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.Spliterator;
 import java.util.function.UnaryOperator;
@@ -13,7 +14,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 
-public abstract class ASubListExpr<E extends java.lang.Object, Contained extends java.util.List<E>>
+public abstract class ASubListExpr<E extends java.lang.Object, Contained extends List<E>>
     extends ASubObjectExpression<Contained>
 {
 
@@ -61,15 +62,15 @@ public abstract class ASubListExpr<E extends java.lang.Object, Contained extends
         return new BoolExpression(this.raw().invoke("equals").arg(arg0));
     }
 
-    public ASubObjectExpression<?> get(ASubIntExpression arg0) {
+    public ASubObjectExpression<E> get(ASubIntExpression arg0) {
         return new ASubObjectExpression<>(this.raw().invoke("get").arg(arg0));
     }
 
-    public ASubObjectExpression<?> getFirst() {
+    public ASubObjectExpression<E> getFirst() {
         return new ASubObjectExpression<>(this.raw().invoke("getFirst"));
     }
 
-    public ASubObjectExpression<?> getLast() {
+    public ASubObjectExpression<E> getLast() {
         return new ASubObjectExpression<>(this.raw().invoke("getLast"));
     }
 
@@ -101,7 +102,7 @@ public abstract class ASubListExpr<E extends java.lang.Object, Contained extends
         return new ASubObjectExpression<>(this.raw().invoke("listIterator").arg(arg0));
     }
 
-    public ASubObjectExpression<?> remove(ASubIntExpression arg0) {
+    public ASubObjectExpression<E> remove(ASubIntExpression arg0) {
         return new ASubObjectExpression<>(this.raw().invoke("remove").arg(arg0));
     }
 
@@ -113,11 +114,11 @@ public abstract class ASubListExpr<E extends java.lang.Object, Contained extends
         return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
     }
 
-    public ASubObjectExpression<?> removeFirst() {
+    public ASubObjectExpression<E> removeFirst() {
         return new ASubObjectExpression<>(this.raw().invoke("removeFirst"));
     }
 
-    public ASubObjectExpression<?> removeLast() {
+    public ASubObjectExpression<E> removeLast() {
         return new ASubObjectExpression<>(this.raw().invoke("removeLast"));
     }
 
@@ -129,11 +130,11 @@ public abstract class ASubListExpr<E extends java.lang.Object, Contained extends
         return new BoolExpression(this.raw().invoke("retainAll").arg(arg0));
     }
 
-    public ListExpr<java.util.List<E>> reversed() {
+    public ListExpr<E> reversed() {
         return new ListExpr<>(this.raw().invoke("reversed"));
     }
 
-    public ASubObjectExpression<?> set(ASubIntExpression arg0, ASubObjectExpression<java.lang.Object> arg1) {
+    public ASubObjectExpression<E> set(ASubIntExpression arg0, ASubObjectExpression<java.lang.Object> arg1) {
         return new ASubObjectExpression<>(this.raw().invoke("set").arg(arg0).arg(arg1));
     }
 
@@ -149,7 +150,7 @@ public abstract class ASubListExpr<E extends java.lang.Object, Contained extends
         return new ASubObjectExpression<>(this.raw().invoke("spliterator"));
     }
 
-    public ListExpr<java.util.List<E>> subList(ASubIntExpression arg0, ASubIntExpression arg1) {
+    public ListExpr<E> subList(ASubIntExpression arg0, ASubIntExpression arg1) {
         return new ListExpr<>(this.raw().invoke("subList").arg(arg0).arg(arg1));
     }
 
@@ -157,7 +158,7 @@ public abstract class ASubListExpr<E extends java.lang.Object, Contained extends
         return new ArrayExpression<>(this.raw().invoke("toArray"));
     }
 
-    public ArrayExpression<java.lang.Object> toArray(ArrayExpression<java.lang.Object> arg0) {
+    public<T> ArrayExpression<T> toArray(ArrayExpression<java.lang.Object> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 }
