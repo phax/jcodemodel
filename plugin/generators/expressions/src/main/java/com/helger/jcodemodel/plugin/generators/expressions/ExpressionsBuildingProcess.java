@@ -80,6 +80,7 @@ public class ExpressionsBuildingProcess
       {
         // only a concrete class, for both param and return.
         JDefinedClass bothTypes = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
+        addHeader (bothTypes);
         JMethod cs = bothTypes.constructor (JMod.PUBLIC);
         JVar param = cs.param (IJExpression.class, "raw");
         cs.body ().add (JInvocation._super ().arg (param));
@@ -100,10 +101,12 @@ public class ExpressionsBuildingProcess
         // param type
         JDefinedClass paramType = pckg._class (JMod.PUBLIC | JMod.ABSTRACT,
                                                "ASub" + targetClass.getSimpleName () + "Expr");
+        addHeader (paramType);
         copyParams (targetClass, paramType);
 
         // return type
         JDefinedClass returnType = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
+        addHeader (returnType);
         copyParams (targetClass, returnType);
         List <AbstractJClass> narrows = new ArrayList <> ();
         for (JTypeVar jtv : returnType.typeParams ())
