@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.processing.Generated;
+
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,19 +51,23 @@ public class ExpressionsBuildingProcess
   /// when not null, will be added as each class' header comment.
   private String classHeader = null;
 
-  public ExpressionsBuildingProcess(JCodeModel jcm, String rootPackage) {
+  public ExpressionsBuildingProcess (JCodeModel jcm, String rootPackage)
+  {
     this.jcm = jcm;
-    this.rootPackage = jcm._package(rootPackage);
-    MirroringClass.stream(jcm).forEach(rs -> resolved.put(rs.target(), rs));
+    this.rootPackage = jcm._package (rootPackage);
+    MirroringClass.stream (jcm).forEach (rs -> resolved.put (rs.target (), rs));
   }
 
-  public void setClassHeader(@Nullable String classHeader) {
+  public void setClassHeader (@Nullable String classHeader)
+  {
     this.classHeader = classHeader;
   }
 
-  protected void addHeader(JDefinedClass jdc) {
+  protected void onNewJDC (JDefinedClass jdc)
+  {
     if (!StringHelper.isBlank (classHeader))
       jdc.headerComment ().add (classHeader);
+    jdc.annotate (Generated.class).param (JCodeModel.class.getCanonicalName ());
   }
 
   /// add a new class as a target, create the raw JCM classes. inheritance is only partial, and need
@@ -80,7 +86,7 @@ public class ExpressionsBuildingProcess
       {
         // only a concrete class, for both param and return.
         JDefinedClass bothTypes = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
-        addHeader (bothTypes);
+        onNewJDC (bothTypes);
         JMethod cs = bothTypes.constructor (JMod.PUBLIC);
         JVar param = cs.param (IJExpression.class, "raw");
         cs.body ().add (JInvocation._super ().arg (param));
@@ -101,12 +107,12 @@ public class ExpressionsBuildingProcess
         // param type
         JDefinedClass paramType = pckg._class (JMod.PUBLIC | JMod.ABSTRACT,
                                                "ASub" + targetClass.getSimpleName () + "Expr");
-        addHeader (paramType);
+        onNewJDC (paramType);
         copyParams (targetClass, paramType);
 
         // return type
         JDefinedClass returnType = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
-        addHeader (returnType);
+        onNewJDC (returnType);
         copyParams (targetClass, returnType);
         List <AbstractJClass> narrows = new ArrayList <> ();
         for (JTypeVar jtv : returnType.typeParams ())
@@ -158,7 +164,7 @@ public class ExpressionsBuildingProcess
       if (unresolvedClass.isArray ())
       {
         return new GenericMirror (unresolvedClass,
-                                       jcm.ref (ArrayExpression.class).narrow (unresolvedClass.componentType ()));
+                                  jcm.ref (ArrayExpression.class).narrow (unresolvedClass.componentType ()));
       }
       else
       {
@@ -276,15 +282,19 @@ public class ExpressionsBuildingProcess
   protected void addMethods (TargetMirror tm)
   {
     List <Method> sortedMethods = new ArrayList <> ();
-    // only the public instance methods declared by the class, excluding synthetic/brdiges
+    // only the public instance methods declared by the class, excluding synthetic/bridges
     for (Method m : tm.target ().getDeclaredMethods ())
     {
-      if ((m.getModifiers () & Modifier.STATIC) > 0 ||
-        (m.getModifiers () & Modifier.PUBLIC) == 0 ||
-        m.isSynthetic () ||
-        m.isBridge ()) {
+      if (ignoreMethod (m))
+      {
         continue;
       }
+      // ignore method if already present in a super class/interface that is a target or hardcoded
+      if (alreadyDefined (m, tm.target ()))
+      {
+        continue;
+      }
+
       sortedMethods.add (m);
     }
     Collections.sort (sortedMethods,
@@ -296,6 +306,51 @@ public class ExpressionsBuildingProcess
     {
       addMethod (methodClass, m);
     }
+  }
+
+  /// check if method declared in a class should be ignored
+  protected boolean ignoreMethod (Method m)
+  {
+    return ((m.getModifiers () & Modifier.STATIC) > 0 ||
+      (m.getModifiers () & Modifier.PUBLIC) == 0 ||
+      m.isSynthetic () ||
+      m.isBridge ());
+  }
+
+  /// check if a parent of a class is a target (or object) and already defines a method.
+  protected boolean alreadyDefined (Method m, Class <?> cl)
+  {
+    if ((m.getModifiers () & Modifier.STATIC) > 0)
+      return false;
+    List <Class <?>> superClasses = Stream.concat (Stream.of (Object.class), streamSupers (cl))
+                                          .distinct ()
+                                          .filter (superClass -> targetClasses.contains (superClass) ||
+                                            superClass == Object.class)
+                                          .sorted (Comparator.comparing (Class::getCanonicalName))
+                                          .toList ();
+    for (Class <?> superClass : superClasses)
+    {
+      try
+      {
+        Method found = superClass.getDeclaredMethod (m.getName (), m.getParameterTypes ());
+        if (ignoreMethod (found) || (found.getModifiers () & Modifier.STATIC) > 0)
+          continue;
+        log.debug ("method " + m + " is already defined in super " + superClass);
+        return true;
+      }
+      catch (NoSuchMethodException | SecurityException e)
+      {
+        // method not found, ignore
+      }
+    }
+    return false;
+  }
+
+  // stream all the super classes and interfaces.
+  protected Stream <Class <?>> streamSupers (Class <?> cl)
+  {
+    return Stream.concat (cl.getSuperclass () != null ? Stream.of (cl.getSuperclass ()) : Stream.empty (),
+                          Stream.of (cl.getInterfaces ()));
   }
 
   protected void addMethod (JDefinedClass methodClass, Method m)
@@ -311,7 +366,8 @@ public class ExpressionsBuildingProcess
     // call(ASubObjectExpression)
 
     String methName = m.getName ();
-    if (OBJECT_METHODS_ARGS.getOrDefault (methName, Set.of ()).contains (m.getParameterCount ())) {
+    if (OBJECT_METHODS_ARGS.getOrDefault (methName, Set.of ()).contains (m.getParameterCount ()))
+    {
       methName += '_';
     }
     for (int i = 0;; i++)
@@ -350,14 +406,16 @@ public class ExpressionsBuildingProcess
       rawinvoke = rawinvoke.invoke ("arg").arg (mirroredParam);
     }
     JInvocation retnew = retType._new ().arg (rawinvoke);
-    if (retType.typeParams ().length > 0 || retType.isParameterized ()) {
+    if (retType.typeParams ().length > 0 || retType.isParameterized ())
+    {
       retnew = retType.erasure ().narrowEmpty ()._new ().arg (rawinvoke);
     }
     meth.body ()._return (retnew);
   }
 
   private static final Map <String, Set <Integer>> OBJECT_METHODS_ARGS = Stream.of (Object.class.getMethods ())
-                                                                         .filter (m -> ((m.getModifiers () &Modifier.STATIC) == 0))
+                                                                               .filter (m -> ((m.getModifiers () &
+                                                                                               Modifier.STATIC) == 0))
                                                                                .collect (Collectors.groupingBy (Method::getName,
                                                                                                                 Collectors.mapping (Method::getParameterCount,
                                                                                                                                     Collectors.toSet ())));

@@ -25,7 +25,9 @@ import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
+import javax.annotation.processing.Generated;
 
+@Generated("com.helger.jcodemodel.JCodeModel")
 public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
     extends ASubObjectExpression<Contained>
 {
@@ -52,14 +54,6 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
 
     public BoolExpression containsAll(ASubCollectionExpr<?, Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
-    }
-
-    public BoolExpression equals_(ASubObjectExpression<Object> arg0) {
-        return new BoolExpression(this.raw().invoke("equals").arg(arg0));
-    }
-
-    public IntExpression hashCode_() {
-        return new IntExpression(this.raw().invoke("hashCode"));
     }
 
     public BoolExpression isEmpty() {

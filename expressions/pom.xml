@@ -13,7 +13,7 @@ limitations under the License. -->
   </parent>
   <artifactId>expressions</artifactId>
   <name>LIB Typed Expressions</name>
-  <description>generated typed expressions to enhance JCM work</description>
+  <description>generated typed expressions to enhance JCM usage</description>
 
   <dependencies>
       <dependency>

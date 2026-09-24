@@ -27,7 +27,9 @@ import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
+import javax.annotation.processing.Generated;
 
+@Generated("com.helger.jcodemodel.JCodeModel")
 public abstract class ASubListExpr<E, Contained extends List<E>>
     extends ASubObjectExpression<Contained>
 {
@@ -72,10 +74,6 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
     }
 
-    public BoolExpression equals_(ASubObjectExpression<Object> arg0) {
-        return new BoolExpression(this.raw().invoke("equals").arg(arg0));
-    }
-
     public ASubObjectExpression<E> get(ASubIntExpression<?, ?, ?> arg0) {
         return new ASubObjectExpression<>(this.raw().invoke("get").arg(arg0));
     }
@@ -86,10 +84,6 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
 
     public ASubObjectExpression<E> getLast() {
         return new ASubObjectExpression<>(this.raw().invoke("getLast"));
-    }
-
-    public IntExpression hashCode_() {
-        return new IntExpression(this.raw().invoke("hashCode"));
     }
 
     public IntExpression indexOf(ASubObjectExpression<Object> arg0) {

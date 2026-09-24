@@ -15,7 +15,9 @@ package com.helger.jcodemodel.expressions.java.util;
 
 import java.util.Collection;
 import com.helger.jcodemodel.IJExpression;
+import javax.annotation.processing.Generated;
 
+@Generated("com.helger.jcodemodel.JCodeModel")
 public final class CollectionExpr<E>
     extends ASubCollectionExpr<E, Collection<E>>
 {

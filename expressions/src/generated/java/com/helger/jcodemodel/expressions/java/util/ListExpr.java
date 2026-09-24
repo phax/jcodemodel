@@ -15,7 +15,9 @@ package com.helger.jcodemodel.expressions.java.util;
 
 import java.util.List;
 import com.helger.jcodemodel.IJExpression;
+import javax.annotation.processing.Generated;
 
+@Generated("com.helger.jcodemodel.JCodeModel")
 public final class ListExpr<E>
     extends ASubListExpr<E, List<E>>
 {

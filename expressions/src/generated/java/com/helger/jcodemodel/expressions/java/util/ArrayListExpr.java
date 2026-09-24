@@ -15,7 +15,9 @@ package com.helger.jcodemodel.expressions.java.util;
 
 import java.util.ArrayList;
 import com.helger.jcodemodel.IJExpression;
+import javax.annotation.processing.Generated;
 
+@Generated("com.helger.jcodemodel.JCodeModel")
 public final class ArrayListExpr<E>
     extends ASubArrayListExpr<E, ArrayList<E>>
 {

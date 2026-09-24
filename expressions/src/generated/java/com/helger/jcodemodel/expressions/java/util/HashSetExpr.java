@@ -15,7 +15,9 @@ package com.helger.jcodemodel.expressions.java.util;
 
 import java.util.HashSet;
 import com.helger.jcodemodel.IJExpression;
+import javax.annotation.processing.Generated;
 
+@Generated("com.helger.jcodemodel.JCodeModel")
 public final class HashSetExpr<E>
     extends ASubHashSetExpr<E, HashSet<E>>
 {
