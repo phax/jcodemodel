@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.plugin.maven.expressions;
+package com.helger.jcodemodel.plugin.generators.expressions;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
@@ -18,35 +18,50 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
-import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.FinalTargetMirror;
-import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.GenericMirror;
-import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.NonFinalTargetMirror;
-import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.TargetMirror;
+import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.FinalTargetMirror;
+import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.GenericMirror;
+import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.NonFinalTargetMirror;
+import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.TargetMirror;
 
 public class ExpressionsBuildingProcess
 {
 
   private static final Logger log = LoggerFactory.getLogger (ExpressionsBuildingProcess.class);
 
-  public final JCodeModel jcm = new JCodeModel ();
+  public final JCodeModel jcm;
   private final JPackage rootPackage;
 
   // mapping for returned types
   private final HashMap <Class <?>, MirroringClass> resolved = new HashMap <> ();
 
+  // the classes we want to generate a mirror of
   private final Set <Class <?>> targetClasses = new HashSet <> ();
 
-  public ExpressionsBuildingProcess (String rootPackage)
-  {
-    this.rootPackage = jcm._package (rootPackage);
-    MirroringClass.stream (jcm).forEach (rs -> resolved.put (rs.target (), rs));
+  /// when not null, will be added as each class' header comment.
+  private String classHeader = null;
+
+  public ExpressionsBuildingProcess(JCodeModel jcm, String rootPackage) {
+    this.jcm = jcm;
+    this.rootPackage = jcm._package(rootPackage);
+    MirroringClass.stream(jcm).forEach(rs -> resolved.put(rs.target(), rs));
+  }
+
+  public void setClassHeader(@Nullable String classHeader) {
+    this.classHeader = classHeader;
+  }
+
+  protected void addHeader(JDefinedClass jdc) {
+    if (!StringHelper.isBlank (classHeader))
+      jdc.headerComment ().add (classHeader);
   }
 
   /// add a new class as a target, create the raw JCM classes. inheritance is only partial, and need
@@ -264,8 +279,9 @@ public class ExpressionsBuildingProcess
       if ((m.getModifiers () & Modifier.STATIC) > 0 ||
         (m.getModifiers () & Modifier.PUBLIC) == 0 ||
         m.isSynthetic () ||
-        m.isBridge ())
+        m.isBridge ()) {
         continue;
+      }
       sortedMethods.add (m);
     }
     Collections.sort (sortedMethods,
@@ -292,11 +308,12 @@ public class ExpressionsBuildingProcess
     // call(ASubObjectExpression)
 
     String methName = m.getName ();
-    if (OBJECT_METHODS_ARGS.getOrDefault (methName, Set.of ()).contains (m.getParameterCount ()))
+    if (OBJECT_METHODS_ARGS.getOrDefault (methName, Set.of ()).contains (m.getParameterCount ())) {
       methName += '_';
+    }
     for (int i = 0;; i++)
     {
-      String tested = i == 0 ? methName : (methName + '_' + i);
+      String tested = i == 0 ? methName : methName + '_' + i;
       if (methodClass.methods ()
                      .stream ()
                      .filter (jm -> jm.name ().equals (tested) && jm.params ().size () == m.getParameterCount ())
@@ -330,8 +347,9 @@ public class ExpressionsBuildingProcess
       rawinvoke = rawinvoke.invoke ("arg").arg (mirroredParam);
     }
     JInvocation retnew = retType._new ().arg (rawinvoke);
-    if (retType.typeParams ().length > 0 || retType.isParameterized ())
+    if (retType.typeParams ().length > 0 || retType.isParameterized ()) {
       retnew = retType.erasure ().narrowEmpty ()._new ().arg (rawinvoke);
+    }
     meth.body ()._return (retnew);
   }
 

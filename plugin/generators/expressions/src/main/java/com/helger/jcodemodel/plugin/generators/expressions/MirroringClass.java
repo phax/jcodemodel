@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.plugin.maven.expressions;
+package com.helger.jcodemodel.plugin.generators.expressions;
 
 
 import java.lang.reflect.Modifier;
@@ -23,7 +23,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.FltExpression.FloatArr
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression.IntArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.LngExpression.LongArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.ShortExpression.ShortArrExp;
-import com.helger.jcodemodel.plugin.maven.expressions.MirroringClass.HardcodedMirror.Source;
+import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.HardcodedMirror.Source;
 
 // the resolution of a runtime class  to the mirroring expression. 
 public sealed interface MirroringClass
