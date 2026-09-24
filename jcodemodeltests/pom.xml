@@ -26,6 +26,11 @@
   <description>Integration tests for JCodeModel</description>
   <url>https://github.com/phax/jcodemodel/jcodemodeltests</url>
 
+  <properties>
+    <!-- Don't publish the integration test module to Maven Central -->
+    <skipPublishing>true</skipPublishing>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.helger</groupId>

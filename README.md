@@ -40,6 +40,7 @@ v4.4.1 - work in progress
 * `JOp.EPrecedence` derives the binding strength from the declaration order (`ordinal ()`) again, instead of from an explicitly assigned level. `EPrecedence.level ()` was removed
 * Fixed `JOp.EPrecedence.LAMBDA` binding as tight as `ASSIGNMENT` - a lambda binds looser, because `a -> v = a` is `a -> (v = a)`. See [#195](https://github.com/phax/jcodemodel/pull/195) - thx @glelouet
 * Fixed the second operand of the ternary operator losing its parentheses in the `ALWAYS` and `NOTOKEN` strategies. See [#195](https://github.com/phax/jcodemodel/pull/195) - thx @glelouet
+* All the example modules below `examples` and the integration test module `JCodeModel-Tests` are no longer published to Maven Central
 
 v4.4.0 - 2026-09-10
 * Expressions no longer surround themselves with parentheses - parentheses are only printed where the Java syntax requires them, so `Math.sqrt (((x*x)+(y*y)))` is now emitted as `Math.sqrt (x*x + y*y)`. The new formatter setting `parentheses.global` selects the strategy: `REQUIRED` (default), `NOTOKEN` or `ALWAYS`. See [#183](https://github.com/phax/jcodemodel/pull/183) - thx @glelouet

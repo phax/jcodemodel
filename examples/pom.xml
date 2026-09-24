@@ -27,6 +27,11 @@
   <name>POM Examples</name>
   <description>POM module for all the examples modules</description>
 
+  <properties>
+    <!-- Don't publish the example modules to Maven Central -->
+    <skipPublishing>true</skipPublishing>
+  </properties>
+
   <modules>
     <module>settings</module>
     <module>plugins</module>
