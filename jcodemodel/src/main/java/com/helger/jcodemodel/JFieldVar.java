@@ -132,7 +132,7 @@ public class JFieldVar extends JBlockVar implements IJDocCommentable
 
     final String sOldName = name ();
     super.name (sNewName);
-    m_aOwnerClass.internalRenameField (sOldName, sNewName, (com.helger.jcodemodel.vars.JFieldVar) this);
+    m_aOwnerClass.internalRenameField (sOldName, sNewName, this);
   }
 
   @Override
