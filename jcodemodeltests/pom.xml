@@ -19,12 +19,17 @@
   <parent>
     <groupId>com.helger.jcodemodel</groupId>
     <artifactId>jcodemodel-parent-pom</artifactId>
-    <version>4.4.1-SNAPSHOT</version>
+    <version>4.4.2-SNAPSHOT</version>
   </parent>
   <artifactId>JCodeModel-Tests</artifactId>
   <name>JCodeModel Tests</name>
   <description>Integration tests for JCodeModel</description>
   <url>https://github.com/phax/jcodemodel/jcodemodeltests</url>
+
+  <properties>
+    <!-- Don't publish the integration test module to Maven Central -->
+    <skipPublishing>true</skipPublishing>
+  </properties>
 
   <dependencies>
     <dependency>

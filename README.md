@@ -36,79 +36,124 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 
 # News and noteworthy
 
-v4.4.1 - work in progress
-* `JOp.EPrecedence` derives the binding strength from the declaration order (`ordinal ()`) again, instead of from an explicitly assigned level. `EPrecedence.level ()` was removed
-* Fixed `JOp.EPrecedence.LAMBDA` binding as tight as `ASSIGNMENT` - a lambda binds looser, because `a -> v = a` is `a -> (v = a)`. See [#195](https://github.com/phax/jcodemodel/pull/195) - thx @glelouet
-* Fixed the second operand of the ternary operator losing its parentheses in the `ALWAYS` and `NOTOKEN` strategies. See [#195](https://github.com/phax/jcodemodel/pull/195) - thx @glelouet
+v4.4.1 - 2026-09-25
+* `JOp.EPrecedence` derives the binding strength from the declaration order (`ordinal ()`) again, instead of from an explicitly assigned level.
+  `EPrecedence.level ()` was removed
+* Fixed `JOp.EPrecedence.LAMBDA` binding as tight as `ASSIGNMENT` - a lambda binds looser, because `a -> v = a` is `a -> (v = a)`.
+  See [#195](https://github.com/phax/jcodemodel/pull/195) - thx @glelouet
+* Fixed the second operand of the ternary operator losing its parentheses in the `ALWAYS` and `NOTOKEN` strategies.
+  See [#195](https://github.com/phax/jcodemodel/pull/195) - thx @glelouet
+* Fixed a signed literal not being grouped after a cast to a reference type - `(java.lang.Integer) -1` was emitted, which Java parses as a subtraction (JLS 15.16).
+  `JAtomInt`, `JAtomLong`, `JAtomFloat` and `JAtomDouble` now return `JOp.EPrecedence.UNARY` instead of `TOKEN` when the literal is printed with a leading `-` or `+`.
+  As a side effect the `NOTOKEN` strategy now parenthesizes a signed literal as well
+* All the example modules below `examples` and the integration test module `JCodeModel-Tests` are no longer published to Maven Central
 
 v4.4.0 - 2026-09-10
-* Expressions no longer surround themselves with parentheses - parentheses are only printed where the Java syntax requires them, so `Math.sqrt (((x*x)+(y*y)))` is now emitted as `Math.sqrt (x*x + y*y)`. The new formatter setting `parentheses.global` selects the strategy: `REQUIRED` (default), `NOTOKEN` or `ALWAYS`. See [#183](https://github.com/phax/jcodemodel/pull/183) - thx @glelouet
-* Added `IJGenerable.operatorPrecedence ()` returning the new enum `JOp.EPrecedence`, which carries the binding strength and the associativity of an operator. `JOp.needsParentheses (...)` and the new enum `JOp.ESide` decide whether a single operand has to be grouped
+* Expressions no longer surround themselves with parentheses - parentheses are only printed where the Java syntax requires them, so `Math.sqrt (((x*x)+(y*y)))` is now emitted as `Math.sqrt (x*x + y*y)`.
+  The new formatter setting `parentheses.global` selects the strategy: `REQUIRED` (default), `NOTOKEN` or `ALWAYS`.
+  See [#183](https://github.com/phax/jcodemodel/pull/183) - thx @glelouet
+* Added `IJGenerable.operatorPrecedence ()` returning the new enum `JOp.EPrecedence`, which carries the binding strength and the associativity of an operator.
+  `JOp.needsParentheses (...)` and the new enum `JOp.ESide` decide whether a single operand has to be grouped
 * The unary, binary and ternary operators are now modelled by the new enums `JOpUnary.EUnaryOp`, `JOpBinary.EBinaryOp` and `JOpTernary.ETernaryOp` instead of plain strings
 * Removed `JOpUnaryTight` - `JOp.preincr`, `JOp.postincr`, `JOp.predecr` and `JOp.postdecr` now return `JOpUnary`
 * Removed `JOp.hasTopOp (IJExpression)` - the test expression of `if`, `while`, `do` and `switch` is now always parenthesized
 * The formatter no longer emits a space next to an already existing one, so `case  0 :` is now `case 0:`, `return  10;` is now `return 10;` and `case  0,  2  ->` is now `case 0, 2 ->`
-* Added `IJFormatter.printNoSpace (String)` for tokens that must stay attached to the previous one. A postfix operator now uses it, so `a ++` is emitted as `a++`
-* Added the new package `literals` with `EIntegerBase`, `IntegerRepresentation` and `AIntegerRepresented` to define how `int` and `long` literals are emitted: base (binary, decimal, hexadecimal or octal), padding, `_` separators, positive sign and prefix/body/suffix casing. The predefined representations `BIN`, `BIN8`, `DEC`, `HEX` and `OCT` are available; the default output is unchanged plain decimal. See [#181](https://github.com/phax/jcodemodel/pull/181) and [#182](https://github.com/phax/jcodemodel/pull/182) - thx @glelouet
-* `JAtomInt` and `JAtomLong` extend the new class `AIntegerRepresented` and offer a fluent API to select the representation per instance: `binary ()`, `decimal ()`, `hexadecimal ()`, `octal ()`, `padding (int)`, `separateEvery (int)`, `separatorSize (int)` and `positiveSign (boolean)`. See [#188](https://github.com/phax/jcodemodel/pull/188) - thx @glelouet
-* `IllegalStateException` and `IllegalArgumentException` are thrown instead of the generic `RuntimeException`. See [#185](https://github.com/phax/jcodemodel/issues/185) and [#187](https://github.com/phax/jcodemodel/pull/187) - thx @glelouet
+* Added `IJFormatter.printNoSpace (String)` for tokens that must stay attached to the previous one.
+  A postfix operator now uses it, so `a ++` is emitted as `a++`
+* Added the new package `literals` with `EIntegerBase`, `IntegerRepresentation` and `AIntegerRepresented` to define how `int` and `long` literals are emitted: base (binary, decimal, hexadecimal or octal), padding, `_` separators, positive sign and prefix/body/suffix casing.
+  The predefined representations `BIN`, `BIN8`, `DEC`, `HEX` and `OCT` are available; the default output is unchanged plain decimal.
+  See [#181](https://github.com/phax/jcodemodel/pull/181) and [#182](https://github.com/phax/jcodemodel/pull/182) - thx @glelouet
+* `JAtomInt` and `JAtomLong` extend the new class `AIntegerRepresented` and offer a fluent API to select the representation per instance: `binary ()`, `decimal ()`, `hexadecimal ()`, `octal ()`, `padding (int)`, `separateEvery (int)`, `separatorSize (int)` and `positiveSign (boolean)`.
+  See [#188](https://github.com/phax/jcodemodel/pull/188) - thx @glelouet
+* `IllegalStateException` and `IllegalArgumentException` are thrown instead of the generic `RuntimeException`.
+  See [#185](https://github.com/phax/jcodemodel/issues/185) and [#187](https://github.com/phax/jcodemodel/pull/187) - thx @glelouet
 * Also fixes the plugin not trying to fetch the source as an url, and showing errors when no error happened.
 * Also fixes the plugin silently skipping when the source could not be loaded.
-* Maven plugin: the `data` and the `source` parameters are now both applied, instead of `data` superseeding `source`. The generators receive the new `ISourcedInputStream`, that keeps the source an inputstream was created from. See [#186](https://github.com/phax/jcodemodel/issues/186) and [#190](https://github.com/phax/jcodemodel/pull/190) - thx @glelouet
-* Maven plugin: the `source` parameter may now also point to a directory - all contained files are then processed one after the other, optionally limited by the new `sourcesFilter` parameter. See [#184](https://github.com/phax/jcodemodel/pull/184) - thx @glelouet
+* Maven plugin: the `data` and the `source` parameters are now both applied, instead of `data` superseeding `source`.
+  The generators receive the new `ISourcedInputStream`, that keeps the source an inputstream was created from.
+  See [#186](https://github.com/phax/jcodemodel/issues/186) and [#190](https://github.com/phax/jcodemodel/pull/190) - thx @glelouet
+* Maven plugin: the `source` parameter may now also point to a directory - all contained files are then processed one after the other, optionally limited by the new `sourcesFilter` parameter.
+  See [#184](https://github.com/phax/jcodemodel/pull/184) - thx @glelouet
 * Maven plugin: the source files are opened one at a time and always closed, even if the generation fails
 * Maven plugin: directories are no longer skipped by `sourcesFilter` - the filter applies to the files only, as documented
 * Maven plugin: symbolic link loops inside a source directory no longer lead to an endless recursion
 * Maven plugin: the generator is now always configured, so that it gets its default parameters even if no `params` are set
-* Maven plugin: the goal may now also be invoked with the short prefix `jcm`, as in `mvn jcm:generate-source`, instead of `jcodemodel`. The Maven help output of the mojo and of all its parameters was reworked. See [#194](https://github.com/phax/jcodemodel/pull/194) - thx @glelouet
-* Maven plugin: the String parameters are now tested for blankness instead of emptiness, so a whitespace only value is treated as "not set". See [#194](https://github.com/phax/jcodemodel/pull/194) - thx @glelouet
-* Maven plugin: the generator is now also invoked if neither `source` nor `data` is configured - it then receives `ISourcedInputStream.NULL` instead of nothing. See [#193](https://github.com/phax/jcodemodel/pull/193) - thx @glelouet
-* Generators that ignore their source now log a warning instead of silently discarding it. See [#193](https://github.com/phax/jcodemodel/pull/193) - thx @glelouet
-* CSV generator: the source is now read as UTF-8 by default, instead of the platform default charset. Use the new `charset` parameter to change it
+* Maven plugin: the goal may now also be invoked with the short prefix `jcm`, as in `mvn jcm:generate-source`, instead of `jcodemodel`.
+  The Maven help output of the mojo and of all its parameters was reworked.
+  See [#194](https://github.com/phax/jcodemodel/pull/194) - thx @glelouet
+* Maven plugin: the String parameters are now tested for blankness instead of emptiness, so a whitespace only value is treated as "not set".
+  See [#194](https://github.com/phax/jcodemodel/pull/194) - thx @glelouet
+* Maven plugin: the generator is now also invoked if neither `source` nor `data` is configured - it then receives `ISourcedInputStream.NULL` instead of nothing.
+  See [#193](https://github.com/phax/jcodemodel/pull/193) - thx @glelouet
+* Generators that ignore their source now log a warning instead of silently discarding it.
+  See [#193](https://github.com/phax/jcodemodel/pull/193) - thx @glelouet
+* CSV generator: the source is now read as UTF-8 by default, instead of the platform default charset.
+  Use the new `charset` parameter to change it
 * CSV generator: the `field_sep` parameter is now used as a literal separator and no longer as a regular expression
 * CSV generator: a line containing only separators no longer throws an `ArrayIndexOutOfBoundsException`
 * CSV generator: the `concrete.list`, `concrete.map` and `concrete.set` parameters are now taken into account
 * CSV and JSON generators: a source without inputstream is handled as an empty source instead of throwing a `NullPointerException`
 * JSON generator: large sources no longer lead to a `StackOverflowError` when collecting the records
 * Flat structure generators: the classes referenced by the source are no longer initialized when they are resolved
-* Extended the documentation on how to write own generators. See [#189](https://github.com/phax/jcodemodel/pull/189) - thx @glelouet
+* Extended the documentation on how to write own generators.
+  See [#189](https://github.com/phax/jcodemodel/pull/189) - thx @glelouet
 
 v4.3.0 - 2026-07-24
-* Naming a class `var` now throws an exception, as `var` is no longer a valid type identifier (`Var` is still allowed). See [#180](https://github.com/phax/jcodemodel/pull/180) - thx @glelouet
-* Added support for pattern matching variables via new class `JPatternVar` in the `vars` package. See [#169](https://github.com/phax/jcodemodel/issues/169) and [#170](https://github.com/phax/jcodemodel/pull/170) - thx @glelouet
-* Started moving `JFieldVar` into the `vars` package. See [#172](https://github.com/phax/jcodemodel/issues/172) and [#175](https://github.com/phax/jcodemodel/pull/175) - thx @glelouet
-* Renamed the `expression` package to `expressions` (affects `JArrayInit` and `JInstanceOfVar`). See [#170](https://github.com/phax/jcodemodel/pull/170) - thx @glelouet
-* Fixed the `final` modifier detection in `JMethod.param (...)` and `JMethod.varParam (...)` (used `|` instead of `&`). See [#169](https://github.com/phax/jcodemodel/issues/169) - thx @glelouet
-* Added support for switch expressions (Java 14+) via new classes `JSwitchExpression`, `JYield` and arrow-style cases. See [#144](https://github.com/phax/jcodemodel/pull/144) - thx @glelouet
-* Added support for pattern matching with `instanceof` via new class `JInstanceOfVar`, invoked through `JExpr.instanceOf (...)`. See [#162](https://github.com/phax/jcodemodel/pull/162) - thx @glelouet
-* Added support for the `sealed` and `non-sealed` modifiers and the `permits` clause on `JDefinedClass`. See [#150](https://github.com/phax/jcodemodel/pull/150) - thx @glelouet
-* Added support for local variable type inference (`var`); `JVar` no longer requires an explicit type. See [#161](https://github.com/phax/jcodemodel/pull/161) - thx @glelouet
-* Added the lazy initialization pattern via new class `JLazy`. See [#160](https://github.com/phax/jcodemodel/pull/160) - thx @glelouet
-* Added a concise try-with-resources syntax. See [#142](https://github.com/phax/jcodemodel/pull/142) - thx @glelouet
-* Added new interface `IJModified` and the `emod (EMod...)` API (with new enum `EMod`), implemented by `JMods`, `JDefinedClass`, `JVar`, `JFieldVar` and `JMethod`. See [#155](https://github.com/phax/jcodemodel/pull/155) - thx @glelouet
-* Added configurable formatter settings via `FormatterSettings` to control indentation and line wrapping. See [#163](https://github.com/phax/jcodemodel/pull/163) - thx @glelouet
-* Added `JCMWriter.setJavaFeature (int)` to target a specific Java feature version; features requiring a higher level may be replaced with fallback code. See [#143](https://github.com/phax/jcodemodel/issues/143)
-* Fixed text block (`JTextBlock`) indentation handling. See [#148](https://github.com/phax/jcodemodel/issues/148) and [#158](https://github.com/phax/jcodemodel/pull/158) - thx @glelouet
+* Naming a class `var` now throws an exception, as `var` is no longer a valid type identifier (`Var` is still allowed).
+  See [#180](https://github.com/phax/jcodemodel/pull/180) - thx @glelouet
+* Added support for pattern matching variables via new class `JPatternVar` in the `vars` package.
+  See [#169](https://github.com/phax/jcodemodel/issues/169) and [#170](https://github.com/phax/jcodemodel/pull/170) - thx @glelouet
+* Started moving `JFieldVar` into the `vars` package.
+  See [#172](https://github.com/phax/jcodemodel/issues/172) and [#175](https://github.com/phax/jcodemodel/pull/175) - thx @glelouet
+* Renamed the `expression` package to `expressions` (affects `JArrayInit` and `JInstanceOfVar`).
+  See [#170](https://github.com/phax/jcodemodel/pull/170) - thx @glelouet
+* Fixed the `final` modifier detection in `JMethod.param (...)` and `JMethod.varParam (...)` (used `|` instead of `&`).
+  See [#169](https://github.com/phax/jcodemodel/issues/169) - thx @glelouet
+* Added support for switch expressions (Java 14+) via new classes `JSwitchExpression`, `JYield` and arrow-style cases.
+  See [#144](https://github.com/phax/jcodemodel/pull/144) - thx @glelouet
+* Added support for pattern matching with `instanceof` via new class `JInstanceOfVar`, invoked through `JExpr.instanceOf (...)`.
+  See [#162](https://github.com/phax/jcodemodel/pull/162) - thx @glelouet
+* Added support for the `sealed` and `non-sealed` modifiers and the `permits` clause on `JDefinedClass`.
+  See [#150](https://github.com/phax/jcodemodel/pull/150) - thx @glelouet
+* Added support for local variable type inference (`var`); `JVar` no longer requires an explicit type.
+  See [#161](https://github.com/phax/jcodemodel/pull/161) - thx @glelouet
+* Added the lazy initialization pattern via new class `JLazy`.
+  See [#160](https://github.com/phax/jcodemodel/pull/160) - thx @glelouet
+* Added a concise try-with-resources syntax.
+  See [#142](https://github.com/phax/jcodemodel/pull/142) - thx @glelouet
+* Added new interface `IJModified` and the `emod (EMod...)` API (with new enum `EMod`), implemented by `JMods`, `JDefinedClass`, `JVar`, `JFieldVar` and `JMethod`.
+  See [#155](https://github.com/phax/jcodemodel/pull/155) - thx @glelouet
+* Added configurable formatter settings via `FormatterSettings` to control indentation and line wrapping.
+  See [#163](https://github.com/phax/jcodemodel/pull/163) - thx @glelouet
+* Added `JCMWriter.setJavaFeature (int)` to target a specific Java feature version; features requiring a higher level may be replaced with fallback code.
+  See [#143](https://github.com/phax/jcodemodel/issues/143)
+* Fixed text block (`JTextBlock`) indentation handling.
+  See [#148](https://github.com/phax/jcodemodel/issues/148) and [#158](https://github.com/phax/jcodemodel/pull/158) - thx @glelouet
 
 v4.2.1 - 2026-05-29
-* Added support for annotations with parameters on type annotations and fixed `@since` tags. See [#130](https://github.com/phax/jcodemodel/pull/130) - thx @joelittlejohn
+* Added support for annotations with parameters on type annotations and fixed `@since` tags.
+  See [#130](https://github.com/phax/jcodemodel/pull/130) - thx @joelittlejohn
 * Added support for Java text blocks via [#145](https://github.com/phax/jcodemodel/pull/145) and [#147](https://github.com/phax/jcodemodel/pull/147), including a `keepWhiteSpaces` option - thx @glelouet
 * Generated test sources now carry an `@Generated` annotation [#149](https://github.com/phax/jcodemodel/pull/149) - thx @glelouet
 * Added proper license headers to the `generated/javatests` sources [#139](https://github.com/phax/jcodemodel/pull/139) - thx @glelouet
 
 v4.2.0 - 2026-05-13
 * Removed OSGI bundling
-* Added support for Java `record` types. Fixes [#98](https://github.com/phax/jcodemodel/issues/98) via [#126](https://github.com/phax/jcodemodel/pull/126) - thx @joelittlejohn
-* Added support for annotation target `TYPE_USE`. Fixes [#50](https://github.com/phax/jcodemodel/issues/50) via [#127](https://github.com/phax/jcodemodel/pull/127) - thx @joelittlejohn
+* Added support for Java `record` types.
+  Fixes [#98](https://github.com/phax/jcodemodel/issues/98) via [#126](https://github.com/phax/jcodemodel/pull/126) - thx @joelittlejohn
+* Added support for annotation target `TYPE_USE`.
+  Fixes [#50](https://github.com/phax/jcodemodel/issues/50) via [#127](https://github.com/phax/jcodemodel/pull/127) - thx @joelittlejohn
 * Added `JDefinedClass.isRecord ()` and a mutable accessor `recordComponentsMutable ()`; `recordComponents ()` now returns an immutable list
 * Added `JExpr.ref (JRecordComponent)` and `JExpr.refthis (JRecordComponent)` for nicer record component references
 * Added `JBlock._throw (AbstractJClass, IJExpression...)` overload for throwing an exception with constructor arguments
-* Fixed JavaDoc reference to use `JCMWriter` instead of the deprecated `cm.build (...)`. See [#135](https://github.com/phax/jcodemodel/issues/135)
+* Fixed JavaDoc reference to use `JCMWriter` instead of the deprecated `cm.build (...)`.
+  See [#135](https://github.com/phax/jcodemodel/issues/135)
 
 v4.1.0 - 2025-11-16
 * Updated to ph-commons 12.1.0
 * Using JSpecify annotations
-* Added Maven plugin to generate Java code from CSV, JSON or YAML. Thanks a million to @glelouet for providing all of the great work
+* Added Maven plugin to generate Java code from CSV, JSON or YAML.
+  Thanks a million to @glelouet for providing all of the great work
 
 v4.0.0 - 2025-08-25
 * Requires Java 17 as the minimum version
@@ -156,9 +201,12 @@ v3.2.1 - 2019-01-23
 * Put each method parameter on a separate line if more than 3 parameters are present
 
 v3.2.0 - 2018-10-20
-* Introduced class `JCMWriter` that should be used to emit the outgoing Java files. This replaces `codemodel.build` and offers a more consistent API. Most existing method remain existing and deprecated and just forward to `JCMWriter`.
+* Introduced class `JCMWriter` that should be used to emit the outgoing Java files.
+  This replaces `codemodel.build` and offers a more consistent API.
+  Most existing method remain existing and deprecated and just forward to `JCMWriter`.
     * Instead of `cm.build (...)` use `new JCMWriter (cm).build (...)` 
-* Extracted `IJFormatter` interface for better separation of concerns. `JFormatter` was moved to a sub-package
+* Extracted `IJFormatter` interface for better separation of concerns.
+  `JFormatter` was moved to a sub-package
 * `ProgressCodeWriter` no longer needs an explicit `PrintStream` but a `ProgressCodeWriter.IProgressTracker` instead.
 * Default charset for Java classes is now `UTF-8`.
 * Added new `JAnnotationUse` method overloads that automatically pass `value` as the annotation parameter name ([issue #64](https://github.com/phax/jcodemodel/issues/64)) 

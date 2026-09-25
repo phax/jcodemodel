@@ -263,6 +263,35 @@ public class OperatorTest {
   }
 
   @FunctionalInterface
+  interface IF15 {
+    Integer apply();
+  }
+
+  @FunctionalInterface
+  interface IF16 {
+    Long apply();
+  }
+
+  /// a reference type cast of a negative literal must be grouped
+  @Test
+  public void testCastOfNegativeLiteral() {
+    for (IF15 f : new IF15[] {
+        OperatorParenthesesAlways::castNegLiteral,
+        OperatorParenthesesNoToken::castNegLiteral,
+        OperatorParenthesesRequired::castNegLiteral
+    }) {
+      Assert.assertEquals(Integer.valueOf(-1), f.apply());
+    }
+    for (IF16 f : new IF16[] {
+        OperatorParenthesesAlways::castNegLongLiteral,
+        OperatorParenthesesNoToken::castNegLongLiteral,
+        OperatorParenthesesRequired::castNegLongLiteral
+    }) {
+      Assert.assertEquals(Long.valueOf(-1L), f.apply());
+    }
+  }
+
+  @FunctionalInterface
   interface IF14 {
     int apply(int a, int b);
   }
