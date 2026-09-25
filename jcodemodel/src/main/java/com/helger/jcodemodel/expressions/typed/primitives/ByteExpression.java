@@ -40,7 +40,7 @@ public class ByteExpression extends ASubIntExpression <Byte, ByteExpression, Byt
     return m.paramTyped (name, byte.class, ByteExpression::of);
   }
 
-  public static ByteExpression of (int value)
+  public static ByteExpression of (byte value)
   {
     return new ByteExpression (JExpr.lit (value));
   }

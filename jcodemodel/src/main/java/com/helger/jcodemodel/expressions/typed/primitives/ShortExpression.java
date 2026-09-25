@@ -40,7 +40,7 @@ public class ShortExpression extends ASubIntExpression <Short, ShortExpression, 
     return m.paramTyped (name, short.class, ShortExpression::of);
   }
 
-  public static ShortExpression of (int value)
+  public static ShortExpression of (short value)
   {
     return new ShortExpression (JExpr.lit (value));
   }
