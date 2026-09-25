@@ -15,6 +15,6 @@ import com.helger.jcodemodel.IJExpression;
 public interface ITypedExpression <RunTimeType>
 {
   @NonNull
-  public IJExpression raw ();
+  IJExpression raw ();
 
 }
