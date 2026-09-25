@@ -28,44 +28,52 @@ import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping.EListWrapStrategy;
 
 @TestJCM
-public class CatchClauseTestGen {
+public class CatchClauseTestGen
+{
 
-  public static void addCatchMethod(JDefinedClass jdc) {
+  protected static void addCatchMethod (JDefinedClass jdc)
+  {
     {
-      JMethod m = jdc.method(JMod.PUBLIC_STATIC_FINAL, jdc.owner().VOID, "multiplecatch");
-      JTryBlock tr = m.body()._try();
+      JMethod m = jdc.method (JMod.PUBLIC_STATIC_FINAL, jdc.owner ().VOID, "multiplecatch");
+      JTryBlock tr = m.body ()._try ();
       // we just iterate over a lot of various children of RuntimeException in the
       // base java packages
-      tr._catch(jdc.owner().ref(ClassCastException.class));
-      tr._catch(jdc.owner().ref(ArithmeticException.class), "exception1");
-      tr._catch(jdc.owner().ref(ArrayIndexOutOfBoundsException.class)).param()
-          .addType(jdc.owner().ref(ArrayStoreException.class))
-          .addType(jdc.owner().ref(BufferOverflowException.class))
-          .addType(jdc.owner().ref(BufferUnderflowException.class));
+      tr._catch (jdc.owner ().ref (ClassCastException.class));
+      tr._catch (jdc.owner ().ref (ArithmeticException.class), "exception1");
+      tr._catch (jdc.owner ().ref (ArrayIndexOutOfBoundsException.class))
+        .param ()
+        .addType (jdc.owner ().ref (ArrayStoreException.class))
+        .addType (jdc.owner ().ref (BufferOverflowException.class))
+        .addType (jdc.owner ().ref (BufferUnderflowException.class));
     }
   }
 
-  protected static void addClassMethod(JPackage root, String className) throws JCodeModelException {
-    addCatchMethod(root._class(className));
+  protected static void addClassMethod (JPackage root, String className) throws JCodeModelException
+  {
+    addCatchMethod (root._class (className));
   }
 
-  public void testWithDisabled(final JPackage root, FormatterSettings settings) throws JCodeModelException {
-    settings.wrap.disable();
-    addClassMethod(root, "DisabledWrap");
+  public void testWithDisabled (final JPackage root, FormatterSettings settings) throws JCodeModelException
+  {
+    settings.wrap.disable ();
+    addClassMethod (root, "DisabledWrap");
   }
 
-  public void testWithDefaultOptions(final JPackage root) throws JCodeModelException {
-    addClassMethod(root, "DefaultWrapOptions");
+  public void testWithDefaultOptions (final JPackage root) throws JCodeModelException
+  {
+    addClassMethod (root, "DefaultWrapOptions");
   }
 
-  public void testWithWrapTypesBinary(final JPackage root, FormatterSettings settings) throws JCodeModelException {
-    settings.wrap.catchClause.types.condition(EListWrapStrategy.BINARY);
-    addClassMethod(root, "WrapTypesBinary");
+  public void testWithWrapTypesBinary (final JPackage root, FormatterSettings settings) throws JCodeModelException
+  {
+    settings.wrap.catchClause.types.condition (EListWrapStrategy.BINARY);
+    addClassMethod (root, "WrapTypesBinary");
   }
 
-  public void testWithWrapTypesRequired(final JPackage root, FormatterSettings settings) throws JCodeModelException {
-    settings.wrap.catchClause.types.condition(EListWrapStrategy.REQUIRED);
-    addClassMethod(root, "WrapTypesRequired");
+  public void testWithWrapTypesRequired (final JPackage root, FormatterSettings settings) throws JCodeModelException
+  {
+    settings.wrap.catchClause.types.condition (EListWrapStrategy.REQUIRED);
+    addClassMethod (root, "WrapTypesRequired");
   }
 
 }
