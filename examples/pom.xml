@@ -20,12 +20,17 @@
   <parent>
     <groupId>com.helger.jcodemodel</groupId>
     <artifactId>jcodemodel-parent-pom</artifactId>
-    <version>4.4.1-SNAPSHOT</version>
+    <version>4.4.2-SNAPSHOT</version>
   </parent>
   <artifactId>examples</artifactId>
   <packaging>pom</packaging>
   <name>POM Examples</name>
   <description>POM module for all the examples modules</description>
+
+  <properties>
+    <!-- Don't publish the example modules to Maven Central -->
+    <skipPublishing>true</skipPublishing>
+  </properties>
 
   <modules>
     <module>settings</module>

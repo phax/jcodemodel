@@ -79,8 +79,8 @@ public final class JOp
 
   /**
    * The binding strength of an expression, ordered from the tightest to the loosest binding. The
-   * ordinal of a constant is its binding strength, so the declaration order - and only it -
-   * decides whether an operand has to be surrounded by parentheses.
+   * ordinal of a constant is its binding strength, so the declaration order - and only it - decides
+   * whether an operand has to be surrounded by parentheses.
    *
    * @see <a href="https://docs.oracle.com/javase/specs/jls/se17/html/jls-15.html">JLS 15 -
    *      Expressions</a>
@@ -101,10 +101,10 @@ public final class JOp
      */
     UNARY (ESide.NONE),
     /**
-     * <code>(T) a</code>. Listed after {@link #UNARY} so that a cast used as the operand of a
-     * unary operator keeps its parentheses. The operand of the cast itself may not bind looser
-     * than a postfix expression - see JLS 15.16 - which {@link JCast} expresses by grouping
-     * against {@link #POSTFIX}.
+     * <code>(T) a</code>. Listed after {@link #UNARY} so that a cast used as the operand of a unary
+     * operator keeps its parentheses. The operand of the cast itself may not bind looser than a
+     * postfix expression - see JLS 15.16 - which {@link JCast} expresses by grouping against
+     * {@link #POSTFIX}.
      */
     CAST (ESide.NONE),
     /** <code>a * b</code>, <code>a / b</code>, <code>a % b</code> */
@@ -132,9 +132,9 @@ public final class JOp
     /** <code>a = b</code>, <code>a += b</code> */
     ASSIGNMENT (ESide.RIGHT),
     /**
-     * <code>a -&gt; b</code>. Binds looser than an assignment, because the body of a lambda
-     * extends as far to the right as possible: <code>a -&gt; v = a</code> is
-     * <code>a -&gt; (v = a)</code> - see JLS 15.27.
+     * <code>a -&gt; b</code>. Binds looser than an assignment, because the body of a lambda extends
+     * as far to the right as possible: <code>a -&gt; v = a</code> is <code>a -&gt; (v = a)</code> -
+     * see JLS 15.27.
      */
     LAMBDA (ESide.RIGHT);
 

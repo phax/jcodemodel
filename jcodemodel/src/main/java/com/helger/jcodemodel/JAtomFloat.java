@@ -45,6 +45,7 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.EPrecedence;
 
 /**
  * A special atom for float values
@@ -68,18 +69,31 @@ public class JAtomFloat implements IJExpression
     return m_fWhat;
   }
 
-  public void generate (@NonNull final IJFormatter f)
+  @NonNull
+  private String _getAsString ()
   {
     if (m_fWhat == Float.NEGATIVE_INFINITY)
-      f.print (JAVA_LANG_FLOAT_NEGATIVE_INFINITY);
-    else
-      if (m_fWhat == Float.POSITIVE_INFINITY)
-        f.print (JAVA_LANG_FLOAT_POSITIVE_INFINITY);
-      else
-        if (Float.isNaN (m_fWhat))
-          f.print (JAVA_LANG_FLOAT_NAN);
-        else
-          f.print (Float.toString (m_fWhat) + SUFFIX_FLOAT);
+      return JAVA_LANG_FLOAT_NEGATIVE_INFINITY;
+    if (m_fWhat == Float.POSITIVE_INFINITY)
+      return JAVA_LANG_FLOAT_POSITIVE_INFINITY;
+    if (Float.isNaN (m_fWhat))
+      return JAVA_LANG_FLOAT_NAN;
+    return Float.toString (m_fWhat) + SUFFIX_FLOAT;
+  }
+
+  public void generate (@NonNull final IJFormatter f)
+  {
+    f.print (_getAsString ());
+  }
+
+  @Override
+  @NonNull
+  public EPrecedence operatorPrecedence ()
+  {
+    // A negative value is printed with a leading "-", so the literal is textually a unary
+    // expression and not a plain token. JLS 15.16 forbids such an operand for a cast to a
+    // reference type - "(Float) -1.0F" would be parsed as a subtraction
+    return _getAsString ().charAt (0) == '-' ? EPrecedence.UNARY : EPrecedence.TOKEN;
   }
 
   @Override

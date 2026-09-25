@@ -45,6 +45,7 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.EPrecedence;
 
 /**
  * A special atom for double values
@@ -67,18 +68,31 @@ public class JAtomDouble implements IJExpression
     return m_dWhat;
   }
 
-  public void generate (@NonNull final IJFormatter f)
+  @NonNull
+  private String _getAsString ()
   {
     if (m_dWhat == Double.NEGATIVE_INFINITY)
-      f.print (JAVA_LANG_DOUBLE_NEGATIVE_INFINITY);
-    else
-      if (m_dWhat == Double.POSITIVE_INFINITY)
-        f.print (JAVA_LANG_DOUBLE_POSITIVE_INFINITY);
-      else
-        if (Double.isNaN (m_dWhat))
-          f.print (JAVA_LANG_DOUBLE_NAN);
-        else
-          f.print (Double.toString (m_dWhat));
+      return JAVA_LANG_DOUBLE_NEGATIVE_INFINITY;
+    if (m_dWhat == Double.POSITIVE_INFINITY)
+      return JAVA_LANG_DOUBLE_POSITIVE_INFINITY;
+    if (Double.isNaN (m_dWhat))
+      return JAVA_LANG_DOUBLE_NAN;
+    return Double.toString (m_dWhat);
+  }
+
+  public void generate (@NonNull final IJFormatter f)
+  {
+    f.print (_getAsString ());
+  }
+
+  @Override
+  @NonNull
+  public EPrecedence operatorPrecedence ()
+  {
+    // A negative value is printed with a leading "-", so the literal is textually a unary
+    // expression and not a plain token. JLS 15.16 forbids such an operand for a cast to a
+    // reference type - "(Double) -1.0" would be parsed as a subtraction
+    return _getAsString ().charAt (0) == '-' ? EPrecedence.UNARY : EPrecedence.TOKEN;
   }
 
   @Override

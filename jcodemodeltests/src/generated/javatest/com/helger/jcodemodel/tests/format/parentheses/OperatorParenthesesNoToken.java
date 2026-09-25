@@ -144,7 +144,7 @@ public class OperatorParenthesesNoToken {
      * a negative literal must not be glued to the operator before it
      */
     public static int minusNegLiteral(int a) {
-        return a - -1;
+        return a -(-1);
     }
 
     /**
@@ -152,6 +152,20 @@ public class OperatorParenthesesNoToken {
      */
     public static Integer castNeg(int a) {
         return (Integer)(-a);
+    }
+
+    /**
+     * a reference type cast of a negative literal must be grouped, because "(Integer) -1" is parsed as a subtraction
+     */
+    public static Integer castNegLiteral() {
+        return (Integer)(-1);
+    }
+
+    /**
+     * same as castNegLiteral, for a long literal
+     */
+    public static Long castNegLongLiteral() {
+        return (Long)(-1L);
     }
 
     /**
