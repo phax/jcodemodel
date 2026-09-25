@@ -51,8 +51,8 @@ import org.jspecify.annotations.NonNull;
 import org.junit.Test;
 
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.vars.JFieldVar;
 import com.helger.jcodemodel.writer.StringCodeWriter;
-
 /**
  * abstract method for a test of copying. Such a test consist in creating a source codemodel,
  * copying it, check the equality of the representation of the copy and the source ; then apply
