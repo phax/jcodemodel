@@ -91,9 +91,9 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   }
 
   /// @return `- that`
-  public Self neg ()
+  public PosType neg ()
   {
-    return wrapSelf (raw.minus ());
+    return wrapPos (raw.minus ());
   }
 
   /// @return `+ that`
