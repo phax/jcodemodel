@@ -127,7 +127,7 @@ public class JBlockVar extends JVar
   /// add and return a new var with same type and mods, but given name and
   /// dimension.
   ///
-  /// init is set to null, so nonexistant assignment.
+  /// init is set to null, so non-existant assignment.
   public JSameVar andVar (final String name, final int dim)
   {
     return andVar (name, dim, null);
