@@ -155,6 +155,20 @@ public class OperatorParenthesesAlways {
     }
 
     /**
+     * a reference type cast of a negative literal must be grouped, because "(Integer) -1" is parsed as a subtraction
+     */
+    public static Integer castNegLiteral() {
+        return (Integer)(-1);
+    }
+
+    /**
+     * same as castNegLiteral, for a long literal
+     */
+    public static Long castNegLongLiteral() {
+        return (Long)(-1L);
+    }
+
+    /**
      * the test of a while loop is always parenthesized
      */
     public static int countDownWhile(int n) {

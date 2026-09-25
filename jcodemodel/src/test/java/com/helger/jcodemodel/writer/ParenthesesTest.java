@@ -64,8 +64,9 @@ import com.helger.jcodemodel.writer.settings.Parentheses.EParenthesesStrategy;
 /**
  * Test the parentheses that are printed around the operands of an operator. Every expression in
  * here must keep its meaning under all three {@link EParenthesesStrategy} values - see
- * <code>OperatorTestGen</code> in the <code>jcodemodeltests</code> module for the tests that
- * additionally compile and execute the generated code.
+ * {@link ParenthesesCompileTest} and <code>OperatorTestGen</code> in the
+ * <code>jcodemodeltests</code> module for the tests that additionally compile and execute the
+ * generated code.
  */
 public final class ParenthesesTest
 {
@@ -188,6 +189,38 @@ public final class ParenthesesTest
     final int b = -a--;
     assertEquals (-5, b);
     assertEquals (4, a);
+  }
+
+  /**
+   * A negative literal - and a literal with an explicit positive sign - is printed with a leading
+   * <code>-</code> resp. <code>+</code>, so it is textually a unary expression and not a plain
+   * token. JLS 15.16 forbids such an operand for a cast to a reference type.
+   */
+  @Test
+  public void testSignedLiteral ()
+  {
+    final IJExpression aNeg = JExpr.lit (-1);
+    // "(java.lang.Integer) -1" would be parsed as a subtraction
+    _assertRequired ("(java.lang.Integer)(-1)", JExpr.cast (CM.ref (Integer.class), aNeg));
+    _assertRequired ("(java.lang.Long)(-1L)", JExpr.cast (CM.ref (Long.class), JExpr.lit (-1L)));
+    _assertRequired ("(java.lang.Double)(-1.0)", JExpr.cast (CM.ref (Double.class), JExpr.lit (-1.0)));
+    _assertRequired ("(java.lang.Float)(-1.0F)", JExpr.cast (CM.ref (Float.class), JExpr.lit (-1.0F)));
+    // A primitive cast would accept it, but it is grouped as well
+    _assertRequired ("(int)(-1)", JExpr.cast (CM.INT, aNeg));
+    // A positive literal stays a plain token
+    _assertRequired ("(java.lang.Integer) 1", JExpr.cast (CM.ref (Integer.class), JExpr.lit (1)));
+    // ... unless it is printed with an explicit positive sign
+    _assertRequired ("(java.lang.Integer)(+1)", JExpr.cast (CM.ref (Integer.class), JExpr.lit (1).positiveSign (true)));
+
+    // As the operand of an operator the literal needs no parentheses - only the formatter has to
+    // keep the tokens apart
+    _assertRequired ("a - -1", JOp.minus (A, aNeg));
+    _assertRequired ("a +-1", JOp.plus (A, aNeg));
+    _assertRequired ("a*-1", JOp.mul (A, aNeg));
+    // A looser strategy may add them, a stacked unary operator must
+    _assertNoToken ("a -(-1)", JOp.minus (A, aNeg));
+    _assertAlways ("(a)-(-1)", JOp.minus (A, aNeg));
+    _assertRequired ("-(-1)", JOp.minus (aNeg));
   }
 
   /**

@@ -45,6 +45,7 @@ import static com.helger.jcodemodel.util.JCHashCodeGenerator.getHashCode;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.equals.EqualsHelper;
+import com.helger.jcodemodel.JOp.EPrecedence;
 import com.helger.jcodemodel.literals.AIntegerRepresented;
 import com.helger.jcodemodel.literals.IntegerRepresentation;
 
@@ -75,6 +76,17 @@ public class JAtomLong extends AIntegerRepresented <JAtomLong> implements IJExpr
   public void generate (@NonNull final IJFormatter f)
   {
     f.print (representation ().base ().format (m_nValue, new StringBuilder (), representation ()).toString ());
+  }
+
+  @Override
+  @NonNull
+  public EPrecedence operatorPrecedence ()
+  {
+    // A negative value is printed with a leading "-" and an explicit positive sign with a leading
+    // "+", so the literal is textually a unary expression and not a plain token. JLS 15.16 forbids
+    // such an operand for a cast to a reference type - "(Long) -1L" would be parsed as a
+    // subtraction - and "-1L.toString ()" is not a valid dereference either
+    return m_nValue < 0 || representation ().positiveSign () ? EPrecedence.UNARY : EPrecedence.TOKEN;
   }
 
   @Override

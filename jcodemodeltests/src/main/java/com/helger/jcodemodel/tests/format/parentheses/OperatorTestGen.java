@@ -195,6 +195,19 @@ public class OperatorTestGen {
       meth.body()._return(JExpr.cast(clazz.owner().ref(Integer.class), JOp.minus(a)));
     }
     {
+      JMethod meth =
+          clazz.method(JMod.PUBLIC | JMod.STATIC, clazz.owner().ref(Integer.class), "castNegLiteral");
+      meth.javadoc().add("a reference type cast of a negative literal must be grouped, "
+          + "because \"(Integer) -1\" is parsed as a subtraction");
+      meth.body()._return(JExpr.cast(clazz.owner().ref(Integer.class), JExpr.lit(-1)));
+    }
+    {
+      JMethod meth =
+          clazz.method(JMod.PUBLIC | JMod.STATIC, clazz.owner().ref(Long.class), "castNegLongLiteral");
+      meth.javadoc().add("same as castNegLiteral, for a long literal");
+      meth.body()._return(JExpr.cast(clazz.owner().ref(Long.class), JExpr.lit(-1L)));
+    }
+    {
       JMethod meth = clazz.method(JMod.PUBLIC | JMod.STATIC, clazz.owner().INT, "countDownWhile");
       meth.javadoc().add("the test of a while loop is always parenthesized");
       JVar n = meth.param(clazz.owner().INT, "n");
