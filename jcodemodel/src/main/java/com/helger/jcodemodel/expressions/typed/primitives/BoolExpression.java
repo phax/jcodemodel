@@ -1,5 +1,8 @@
 package com.helger.jcodemodel.expressions.typed.primitives;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
@@ -103,10 +106,23 @@ public class BoolExpression extends TypedExpressionWrapper <Boolean>
   //
 
   /// @return `that ? pass : fail`
-  public <T> TypedExpressionWrapper <T> ternary (TypedExpressionWrapper <? extends T> pass,
-                                                 TypedExpressionWrapper <? extends T> fail)
+  public <V extends ITypedExpression <?>> V ternary (V pass, V fail)
   {
-    return new TypedExpressionWrapper <> (JOp.cond (raw, pass.raw (), fail.raw ()));
+    // use reflect to get the constructor of the pass instance, then build a new one with the
+    // ternary expression.
+    // This means the actual type is always pass class, but this appears as the common lower bound
+    // in the signature.
+    try
+    {
+      @SuppressWarnings ("unchecked")
+      Constructor <? extends V> cons = (Constructor <? extends V>) pass.getClass ().getConstructor (IJExpression.class);
+      return (V) cons.newInstance (JOp.cond (raw, pass.raw (), fail.raw ()));
+    }
+    catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException |
+           IllegalArgumentException | InvocationTargetException e)
+    {
+      throw new IllegalStateException (e);
+    }
   }
 
 }
