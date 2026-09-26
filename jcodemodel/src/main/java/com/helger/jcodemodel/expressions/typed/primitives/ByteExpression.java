@@ -6,7 +6,7 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 
 /// expression with a `byte` type.
-public class ByteExpression extends ASubIntExpression <Byte, ByteExpression, ByteExpression>
+public class ByteExpression extends ASubShortExpression <Byte, ByteExpression, ByteExpression>
 {
 
   public static class ByteArrExp extends ArrayExpression <Byte>
