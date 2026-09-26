@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import org.jspecify.annotations.NonNull;
@@ -54,6 +55,7 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.modifiers.EMod;
 import com.helger.jcodemodel.modifiers.IJModified;
 import com.helger.jcodemodel.util.ClassNameComparator;
@@ -367,6 +369,26 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   public AbstractJType listVarParamType ()
   {
     return m_aVarParam != null ? m_aVarParam.type () : null;
+  }
+
+  /// Add a parameter to that method, with a runtime type known at design time.
+  ///
+  /// Mainly present to allow dedicated concrete class to statically add params in a method in their
+  /// syntaxic sugar methods.
+  ///
+  /// @return a new TypedExpression. You can use raw() to get the actual JVar.
+  ///
+  /// @param paramName the parameter name, stored at compile tume
+  /// @param runtimeClass the designtime type of the param
+  /// @param concreteOf constructor of the concrete TypedExpression to return, based on a
+  /// IJExpression. Typically ConcreteClass::of hence the name.
+  @NonNull
+  public <RuntimeType, Concrete extends ITypedExpression <? extends RuntimeType>> Concrete paramTyped (@NonNull String paramName,
+                                                                                                       @NonNull Class <RuntimeType> runtimeClass,
+                                                                                                       @NonNull Function <IJExpression, Concrete> concreteOf)
+  {
+    JVar p = param (owner ().ref (runtimeClass), paramName);
+    return concreteOf.apply (p);
   }
 
   /**
