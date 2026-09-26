@@ -131,7 +131,7 @@ public class BoolExpression extends TypedExpressionWrapper <Boolean>
     catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException |
            IllegalArgumentException | InvocationTargetException e)
     {
-      throw new IllegalStateException (e);
+      throw new IllegalStateException ("while getting " + pass.getClass () + "::new(IJExpression)", e);
     }
   }
 
