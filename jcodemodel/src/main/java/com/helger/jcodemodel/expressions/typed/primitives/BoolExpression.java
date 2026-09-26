@@ -35,6 +35,16 @@ public class BoolExpression extends TypedExpressionWrapper <Boolean>
     return new BoolExpression (JExpr.lit (value));
   }
 
+  public static BoolExpression true_ ()
+  {
+    return of (true);
+  }
+
+  public static BoolExpression false_ ()
+  {
+    return of (false);
+  }
+
   public static BoolExpression of (IJExpression raw)
   {
     return new BoolExpression (raw);
