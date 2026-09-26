@@ -1,7 +1,5 @@
 package com.helger.jcodemodel.expressions.typed;
 
-import java.util.ArrayList;
-
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
@@ -21,7 +19,6 @@ public class TypedExpressionWrapper <RunTimeType> implements ITypedExpression <R
 
   public TypedExpressionWrapper (@NonNull IJExpression raw)
   {
-    new ArrayList <> ().clear ();
     this.raw = raw;
   }
 
