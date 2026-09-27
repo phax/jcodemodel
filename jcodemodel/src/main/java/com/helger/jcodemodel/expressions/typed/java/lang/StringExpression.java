@@ -11,7 +11,6 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
@@ -109,62 +108,62 @@ public class StringExpression extends ObjectExpression <String>
   }
 
   /// @return `that.compareTo(anotherString)`
-  public IntExpression compareTo (TypedExpressionWrapper <? extends String> anotherString)
+  public IntExpression compareTo (ITypedExpression <? extends String> anotherString)
   {
     return new IntExpression (raw.invoke ("compareTo").arg (anotherString));
   }
 
   /// @return `that.compareToFoldCase(str)`
-  public IntExpression compareToFoldCase (TypedExpressionWrapper <? extends String> str)
+  public IntExpression compareToFoldCase (ITypedExpression <? extends String> str)
   {
     return new IntExpression (raw.invoke ("compareToFoldCase").arg (str));
   }
 
   /// @return `that.compareToIgnoreCase(str)`
-  public IntExpression compareToIgnoreCase (TypedExpressionWrapper <? extends String> str)
+  public IntExpression compareToIgnoreCase (ITypedExpression <? extends String> str)
   {
     return new IntExpression (raw.invoke ("compareToIgnoreCase").arg (str));
   }
 
   /// @return `that.concat(str)`
-  public StringExpression concat (TypedExpressionWrapper <? extends String> str)
+  public StringExpression concat (ITypedExpression <? extends String> str)
   {
     return new StringExpression (raw.invoke ("concat").arg (str));
   }
 
   /// @return `that.contains(s)`
-  public BoolExpression contains (TypedExpressionWrapper <? extends CharSequence> s)
+  public BoolExpression contains (ITypedExpression <? extends CharSequence> s)
   {
     return new BoolExpression (raw.invoke ("contains").arg (s));
   }
 
   /// @return `that.contentEquals(cs)`
-  public BoolExpression contentEquals (TypedExpressionWrapper <? extends CharSequence> cs)
+  public BoolExpression contentEquals (ITypedExpression <? extends CharSequence> cs)
   {
     return new BoolExpression (raw.invoke ("contentEquals").arg (cs));
   }
 
   // can't keep base name since same erasure as the other contentEquals
   /// @return `that.contentEquals(sb)`
-  public BoolExpression contentEqualsSB (TypedExpressionWrapper <? extends StringBuffer> sb)
+  public BoolExpression contentEqualsSB (ITypedExpression <? extends StringBuffer> sb)
   {
     return new BoolExpression (raw.invoke ("contentEquals").arg (sb));
   }
 
   /// @return `that.endsWith(suffix)`
-  public BoolExpression endsWith (TypedExpressionWrapper <? extends String> suffix)
+  public BoolExpression endsWith (ITypedExpression <? extends String> suffix)
   {
     return new BoolExpression (raw.invoke ("endsWith").arg (suffix));
   }
 
   /// @return `that.equalsFoldCase(anotherString)`
-  public BoolExpression equalsFoldCase (TypedExpressionWrapper <? extends String> anotherString)
+  public BoolExpression equalsFoldCase (ITypedExpression <? extends String> anotherString)
   {
     return new BoolExpression (raw.invoke ("equalsFoldCase").arg (anotherString));
   }
 
   /// @return `that.equalsIgnoreCase(anotherString)`
-  public BoolExpression equalsIgnoreCase (TypedExpressionWrapper <? extends String> anotherString)
+  public BoolExpression equalsIgnoreCase (ITypedExpression <? extends String> anotherString)
   {
     return new BoolExpression (raw.invoke ("equalsIgnoreCase").arg (anotherString));
   }
@@ -282,13 +281,13 @@ public class StringExpression extends ObjectExpression <String>
 
   /// @return `that.join(delimiter, elements)`
   @SuppressWarnings ("unchecked")
-  public StringExpression join (TypedExpressionWrapper <? extends CharSequence> delimiter,
-                                TypedExpressionWrapper <? extends CharSequence>... elements)
+  public StringExpression join (ITypedExpression <? extends CharSequence> delimiter,
+                                ITypedExpression <? extends CharSequence>... elements)
   {
     JInvocation invoke = raw.invoke ("join").arg (delimiter);
     if (elements != null)
     {
-      for (TypedExpressionWrapper <? extends CharSequence> te : elements)
+      for (ITypedExpression <? extends CharSequence> te : elements)
       {
         invoke.arg (te);
       }
@@ -297,8 +296,8 @@ public class StringExpression extends ObjectExpression <String>
   }
 
   /// @return `that.join(delimiter, elements)`
-  public StringExpression join (TypedExpressionWrapper <? extends CharSequence> delimiter,
-                                TypedExpressionWrapper <? extends Iterable <? extends CharSequence>> elements)
+  public StringExpression join (ITypedExpression <? extends CharSequence> delimiter,
+                                ITypedExpression <? extends Iterable <? extends CharSequence>> elements)
   {
     return new StringExpression (raw.invoke ("join").arg (delimiter).arg (elements));
   }
@@ -341,7 +340,7 @@ public class StringExpression extends ObjectExpression <String>
   }
 
   /// @return `that.matches(regex)`
-  public BoolExpression matches (TypedExpressionWrapper <? extends String> regex)
+  public BoolExpression matches (ITypedExpression <? extends String> regex)
   {
     return new BoolExpression (raw.invoke ("matches").arg (regex));
   }
@@ -363,7 +362,7 @@ public class StringExpression extends ObjectExpression <String>
   /// @return `that.regionMatches(ignoreCase, toffset, other, ooffset, len)`
   public BoolExpression regionMatches (BoolExpression ignoreCase,
                                        ASubIntExpression <?, ?, ?> toffset,
-                                       TypedExpressionWrapper <? extends String> other,
+                                       ITypedExpression <? extends String> other,
                                        ASubIntExpression <?, ?, ?> ooffset,
                                        ASubIntExpression <?, ?, ?> len)
   {
@@ -377,7 +376,7 @@ public class StringExpression extends ObjectExpression <String>
 
   /// @return `that.regionMatches(toffset, other, ooffset, len)`
   public BoolExpression regionMatches (ASubIntExpression <?, ?, ?> toffset,
-                                       TypedExpressionWrapper <? extends String> other,
+                                       ITypedExpression <? extends String> other,
                                        ASubIntExpression <?, ?, ?> ooffset,
                                        ASubIntExpression <?, ?, ?> len)
   {
@@ -442,7 +441,7 @@ public class StringExpression extends ObjectExpression <String>
   }
 
   /// @return `that.startsWith(prefix)`
-  public StringExpression startsWith (TypedExpressionWrapper <? extends String> prefix)
+  public StringExpression startsWith (ITypedExpression <? extends String> prefix)
   {
     return new StringExpression (raw.invoke ("startsWith").arg (prefix));
   }

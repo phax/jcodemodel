@@ -28,4 +28,11 @@ public class TypedExpressionWrapper <RunTimeType> implements ITypedExpression <R
     return raw;
   }
 
+  @Override
+  public
+  String toString ()
+  {
+    return getClass ().getSimpleName () + "[" + raw () + "]";
+  }
+
 }
