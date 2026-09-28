@@ -1,6 +1,7 @@
 package com.helger.jcodemodel.expressions.typed.java.lang;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubLongExpression;
@@ -19,7 +20,7 @@ public class ASubObjectExpression <T> extends TypedExpressionWrapper <T>
 
   // the name is underscored to avoid being called in eg hashmap.
   /// @return `that.equals(anObject)`
-  public BoolExpression equals_ (TypedExpressionWrapper <?> anObject)
+  public BoolExpression equals_ (ITypedExpression <?> anObject)
   {
     return new BoolExpression (raw.invoke ("equals").arg (anObject));
   }

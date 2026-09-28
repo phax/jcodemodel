@@ -6,7 +6,7 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 
 /// expression with a `short` type.
-public class ShortExpression extends ASubIntExpression <Short, ShortExpression, ShortExpression>
+public class ShortExpression extends ASubShortExpression <Short, ShortExpression, ShortExpression>
 {
 
   public static class ShortArrExp extends ArrayExpression <Short>
@@ -40,7 +40,7 @@ public class ShortExpression extends ASubIntExpression <Short, ShortExpression, 
     return m.paramTyped (name, short.class, ShortExpression::of);
   }
 
-  public static ShortExpression of (int value)
+  public static ShortExpression of (short value)
   {
     return new ShortExpression (JExpr.lit (value));
   }

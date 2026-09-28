@@ -5,7 +5,13 @@ import org.jspecify.annotations.NonNull;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 
-
+/// Basic implementation for a non-necessarily object expression.
+/// 
+/// There are 4 sub implementations to represent
+///  - Object, so equals and co methods
+///  - numeral primitives, for numeral operations
+///  - boolean primitive
+///  - void, for example Collection::clear
 public class TypedExpressionWrapper <RunTimeType> implements ITypedExpression <RunTimeType>
 {
 
@@ -20,6 +26,13 @@ public class TypedExpressionWrapper <RunTimeType> implements ITypedExpression <R
   public IJExpression raw ()
   {
     return raw;
+  }
+
+  @Override
+  public
+  String toString ()
+  {
+    return getClass ().getSimpleName () + "[" + raw () + "]";
   }
 
 }
