@@ -15,12 +15,12 @@ package com.helger.jcodemodel.expressions.java.util;
 
 import java.util.Set;
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import javax.annotation.processing.Generated;
 
 @Generated("com.helger.jcodemodel.JCodeModel")
 public abstract class ASubSetExpr<E, Contained extends Set<E>>
-    extends ASubObjectExpression<Contained>
+    extends ObjectExpression<Contained>
 {
 
     public ASubSetExpr(IJExpression raw) {

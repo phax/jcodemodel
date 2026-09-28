@@ -10,10 +10,14 @@ import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 
 /// base class for the equals, hashcode, ==null etc. methods that are available for non-primitive types
-public class ASubObjectExpression <T> extends TypedExpressionWrapper <T>
+/// 
+/// There is no abstract/concrete couple because the concrete class would also be used as default return mirror.
+/// For example, a method returning a `MyClass` would be mirrored into a `return new ObjectExpression<MyClass>(raw…)`.
+/// Therefore adding two classes would complexify the hierarchy without a benefit.
+public class ObjectExpression <T> extends TypedExpressionWrapper <T>
 {
 
-  public ASubObjectExpression (IJExpression raw)
+  public ObjectExpression (IJExpression raw)
   {
     super (raw);
   }
@@ -26,9 +30,9 @@ public class ASubObjectExpression <T> extends TypedExpressionWrapper <T>
   }
 
   /// @return `that.getClass()`
-  public ASubObjectExpression <Class <?>> getClass_ ()
+  public ObjectExpression <Class <?>> getClass_ ()
   {
-    return new ASubObjectExpression <> (raw.invoke ("getClass"));
+    return new ObjectExpression <> (raw.invoke ("getClass"));
   }
 
   /// @return `that.hashCode()`

@@ -21,7 +21,7 @@ import java.util.ListIterator;
 import java.util.Spliterator;
 import java.util.function.UnaryOperator;
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
@@ -31,18 +31,18 @@ import javax.annotation.processing.Generated;
 
 @Generated("com.helger.jcodemodel.JCodeModel")
 public abstract class ASubListExpr<E, Contained extends List<E>>
-    extends ASubObjectExpression<Contained>
+    extends ObjectExpression<Contained>
 {
 
     public ASubListExpr(IJExpression raw) {
         super(raw);
     }
 
-    public BoolExpression add(ASubObjectExpression<E> arg0) {
+    public BoolExpression add(ObjectExpression<E> arg0) {
         return new BoolExpression(this.raw().invoke("add").arg(arg0));
     }
 
-    public VoidStatExpression add(ASubIntExpression<?, ?, ?> arg0, ASubObjectExpression<E> arg1) {
+    public VoidStatExpression add(ASubIntExpression<?, ?, ?> arg0, ObjectExpression<E> arg1) {
         return new VoidStatExpression(this.raw().invoke("add").arg(arg0).arg(arg1));
     }
 
@@ -54,11 +54,11 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new BoolExpression(this.raw().invoke("addAll").arg(arg0).arg(arg1));
     }
 
-    public VoidStatExpression addFirst(ASubObjectExpression<E> arg0) {
+    public VoidStatExpression addFirst(ObjectExpression<E> arg0) {
         return new VoidStatExpression(this.raw().invoke("addFirst").arg(arg0));
     }
 
-    public VoidStatExpression addLast(ASubObjectExpression<E> arg0) {
+    public VoidStatExpression addLast(ObjectExpression<E> arg0) {
         return new VoidStatExpression(this.raw().invoke("addLast").arg(arg0));
     }
 
@@ -66,7 +66,7 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new VoidStatExpression(this.raw().invoke("clear"));
     }
 
-    public BoolExpression contains(ASubObjectExpression<Object> arg0) {
+    public BoolExpression contains(ObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
     }
 
@@ -74,19 +74,19 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
     }
 
-    public ASubObjectExpression<E> get(ASubIntExpression<?, ?, ?> arg0) {
-        return new ASubObjectExpression<>(this.raw().invoke("get").arg(arg0));
+    public ObjectExpression<E> get(ASubIntExpression<?, ?, ?> arg0) {
+        return new ObjectExpression<>(this.raw().invoke("get").arg(arg0));
     }
 
-    public ASubObjectExpression<E> getFirst() {
-        return new ASubObjectExpression<>(this.raw().invoke("getFirst"));
+    public ObjectExpression<E> getFirst() {
+        return new ObjectExpression<>(this.raw().invoke("getFirst"));
     }
 
-    public ASubObjectExpression<E> getLast() {
-        return new ASubObjectExpression<>(this.raw().invoke("getLast"));
+    public ObjectExpression<E> getLast() {
+        return new ObjectExpression<>(this.raw().invoke("getLast"));
     }
 
-    public IntExpression indexOf(ASubObjectExpression<Object> arg0) {
+    public IntExpression indexOf(ObjectExpression<Object> arg0) {
         return new IntExpression(this.raw().invoke("indexOf").arg(arg0));
     }
 
@@ -94,27 +94,27 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new BoolExpression(this.raw().invoke("isEmpty"));
     }
 
-    public ASubObjectExpression<Iterator<E>> iterator() {
-        return new ASubObjectExpression<>(this.raw().invoke("iterator"));
+    public ObjectExpression<Iterator<E>> iterator() {
+        return new ObjectExpression<>(this.raw().invoke("iterator"));
     }
 
-    public IntExpression lastIndexOf(ASubObjectExpression<Object> arg0) {
+    public IntExpression lastIndexOf(ObjectExpression<Object> arg0) {
         return new IntExpression(this.raw().invoke("lastIndexOf").arg(arg0));
     }
 
-    public ASubObjectExpression<ListIterator<E>> listIterator() {
-        return new ASubObjectExpression<>(this.raw().invoke("listIterator"));
+    public ObjectExpression<ListIterator<E>> listIterator() {
+        return new ObjectExpression<>(this.raw().invoke("listIterator"));
     }
 
-    public ASubObjectExpression<ListIterator<E>> listIterator(ASubIntExpression<?, ?, ?> arg0) {
-        return new ASubObjectExpression<>(this.raw().invoke("listIterator").arg(arg0));
+    public ObjectExpression<ListIterator<E>> listIterator(ASubIntExpression<?, ?, ?> arg0) {
+        return new ObjectExpression<>(this.raw().invoke("listIterator").arg(arg0));
     }
 
-    public ASubObjectExpression<E> remove(ASubIntExpression<?, ?, ?> arg0) {
-        return new ASubObjectExpression<>(this.raw().invoke("remove").arg(arg0));
+    public ObjectExpression<E> remove(ASubIntExpression<?, ?, ?> arg0) {
+        return new ObjectExpression<>(this.raw().invoke("remove").arg(arg0));
     }
 
-    public BoolExpression remove_1(ASubObjectExpression<Object> arg0) {
+    public BoolExpression remove_1(ObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("remove").arg(arg0));
     }
 
@@ -122,15 +122,15 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
     }
 
-    public ASubObjectExpression<E> removeFirst() {
-        return new ASubObjectExpression<>(this.raw().invoke("removeFirst"));
+    public ObjectExpression<E> removeFirst() {
+        return new ObjectExpression<>(this.raw().invoke("removeFirst"));
     }
 
-    public ASubObjectExpression<E> removeLast() {
-        return new ASubObjectExpression<>(this.raw().invoke("removeLast"));
+    public ObjectExpression<E> removeLast() {
+        return new ObjectExpression<>(this.raw().invoke("removeLast"));
     }
 
-    public VoidStatExpression replaceAll(ASubObjectExpression<? extends UnaryOperator<E>> arg0) {
+    public VoidStatExpression replaceAll(ObjectExpression<? extends UnaryOperator<E>> arg0) {
         return new VoidStatExpression(this.raw().invoke("replaceAll").arg(arg0));
     }
 
@@ -142,20 +142,20 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new ListExpr<>(this.raw().invoke("reversed"));
     }
 
-    public ASubObjectExpression<E> set(ASubIntExpression<?, ?, ?> arg0, ASubObjectExpression<E> arg1) {
-        return new ASubObjectExpression<>(this.raw().invoke("set").arg(arg0).arg(arg1));
+    public ObjectExpression<E> set(ASubIntExpression<?, ?, ?> arg0, ObjectExpression<E> arg1) {
+        return new ObjectExpression<>(this.raw().invoke("set").arg(arg0).arg(arg1));
     }
 
     public IntExpression size() {
         return new IntExpression(this.raw().invoke("size"));
     }
 
-    public VoidStatExpression sort(ASubObjectExpression<? extends Comparator<? super E>> arg0) {
+    public VoidStatExpression sort(ObjectExpression<? extends Comparator<? super E>> arg0) {
         return new VoidStatExpression(this.raw().invoke("sort").arg(arg0));
     }
 
-    public ASubObjectExpression<Spliterator<E>> spliterator() {
-        return new ASubObjectExpression<>(this.raw().invoke("spliterator"));
+    public ObjectExpression<Spliterator<E>> spliterator() {
+        return new ObjectExpression<>(this.raw().invoke("spliterator"));
     }
 
     public ListExpr<E> subList(ASubIntExpression<?, ?, ?> arg0, ASubIntExpression<?, ?, ?> arg1) {

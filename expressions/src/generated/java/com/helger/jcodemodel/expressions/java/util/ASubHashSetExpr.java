@@ -15,19 +15,19 @@ package com.helger.jcodemodel.expressions.java.util;
 
 import java.util.HashSet;
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import javax.annotation.processing.Generated;
 
 @Generated("com.helger.jcodemodel.JCodeModel")
 public abstract class ASubHashSetExpr<E, Contained extends HashSet<E>>
-    extends ASubObjectExpression<Contained>
+    extends ObjectExpression<Contained>
 {
 
     public ASubHashSetExpr(IJExpression raw) {
         super(raw);
     }
 
-    public ASubObjectExpression<?> clone() {
-        return new ASubObjectExpression<>(this.raw().invoke("clone"));
+    public ObjectExpression<?> clone() {
+        return new ObjectExpression<>(this.raw().invoke("clone"));
     }
 }

@@ -20,7 +20,7 @@ import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
@@ -29,14 +29,14 @@ import javax.annotation.processing.Generated;
 
 @Generated("com.helger.jcodemodel.JCodeModel")
 public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
-    extends ASubObjectExpression<Contained>
+    extends ObjectExpression<Contained>
 {
 
     public ASubCollectionExpr(IJExpression raw) {
         super(raw);
     }
 
-    public BoolExpression add(ASubObjectExpression<E> arg0) {
+    public BoolExpression add(ObjectExpression<E> arg0) {
         return new BoolExpression(this.raw().invoke("add").arg(arg0));
     }
 
@@ -48,7 +48,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new VoidStatExpression(this.raw().invoke("clear"));
     }
 
-    public BoolExpression contains(ASubObjectExpression<Object> arg0) {
+    public BoolExpression contains(ObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
     }
 
@@ -60,15 +60,15 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new BoolExpression(this.raw().invoke("isEmpty"));
     }
 
-    public ASubObjectExpression<Iterator<E>> iterator() {
-        return new ASubObjectExpression<>(this.raw().invoke("iterator"));
+    public ObjectExpression<Iterator<E>> iterator() {
+        return new ObjectExpression<>(this.raw().invoke("iterator"));
     }
 
-    public ASubObjectExpression<Stream<E>> parallelStream() {
-        return new ASubObjectExpression<>(this.raw().invoke("parallelStream"));
+    public ObjectExpression<Stream<E>> parallelStream() {
+        return new ObjectExpression<>(this.raw().invoke("parallelStream"));
     }
 
-    public BoolExpression remove(ASubObjectExpression<Object> arg0) {
+    public BoolExpression remove(ObjectExpression<Object> arg0) {
         return new BoolExpression(this.raw().invoke("remove").arg(arg0));
     }
 
@@ -76,7 +76,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
     }
 
-    public BoolExpression removeIf(ASubObjectExpression<? extends Predicate<? super E>> arg0) {
+    public BoolExpression removeIf(ObjectExpression<? extends Predicate<? super E>> arg0) {
         return new BoolExpression(this.raw().invoke("removeIf").arg(arg0));
     }
 
@@ -88,12 +88,12 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new IntExpression(this.raw().invoke("size"));
     }
 
-    public ASubObjectExpression<Spliterator<E>> spliterator() {
-        return new ASubObjectExpression<>(this.raw().invoke("spliterator"));
+    public ObjectExpression<Spliterator<E>> spliterator() {
+        return new ObjectExpression<>(this.raw().invoke("spliterator"));
     }
 
-    public ASubObjectExpression<Stream<E>> stream() {
-        return new ASubObjectExpression<>(this.raw().invoke("stream"));
+    public ObjectExpression<Stream<E>> stream() {
+        return new ObjectExpression<>(this.raw().invoke("stream"));
     }
 
     public ArrayExpression<Object> toArray() {
@@ -104,7 +104,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 
-    public<T> ArrayExpression<T> toArray_1(ASubObjectExpression<? extends IntFunction<T[]>> arg0) {
+    public<T> ArrayExpression<T> toArray_1(ObjectExpression<? extends IntFunction<T[]>> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 }

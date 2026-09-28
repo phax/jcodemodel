@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
@@ -25,26 +25,26 @@ import javax.annotation.processing.Generated;
 
 @Generated("com.helger.jcodemodel.JCodeModel")
 public abstract class ASubArrayListExpr<E, Contained extends ArrayList<E>>
-    extends ASubObjectExpression<Contained>
+    extends ObjectExpression<Contained>
 {
 
     public ASubArrayListExpr(IJExpression raw) {
         super(raw);
     }
 
-    public ASubObjectExpression<?> clone() {
-        return new ASubObjectExpression<>(this.raw().invoke("clone"));
+    public ObjectExpression<?> clone() {
+        return new ObjectExpression<>(this.raw().invoke("clone"));
     }
 
     public VoidStatExpression ensureCapacity(ASubIntExpression<?, ?, ?> arg0) {
         return new VoidStatExpression(this.raw().invoke("ensureCapacity").arg(arg0));
     }
 
-    public VoidStatExpression forEach(ASubObjectExpression<? extends Consumer<? super E>> arg0) {
+    public VoidStatExpression forEach(ObjectExpression<? extends Consumer<? super E>> arg0) {
         return new VoidStatExpression(this.raw().invoke("forEach").arg(arg0));
     }
 
-    public BoolExpression removeIf(ASubObjectExpression<? extends Predicate<? super E>> arg0) {
+    public BoolExpression removeIf(ObjectExpression<? extends Predicate<? super E>> arg0) {
         return new BoolExpression(this.raw().invoke("removeIf").arg(arg0));
     }
 

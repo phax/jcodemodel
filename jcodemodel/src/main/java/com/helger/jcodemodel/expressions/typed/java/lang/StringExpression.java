@@ -27,7 +27,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 //
 // ref : https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/lang/String.html
 //
-public class StringExpression extends ASubObjectExpression <String>
+public class StringExpression extends ObjectExpression <String>
 {
 
   public static class StringArrExp extends ArrayExpression <String>
@@ -78,9 +78,9 @@ public class StringExpression extends ASubObjectExpression <String>
   }
 
   /// @return `that.chars()`
-  public ASubObjectExpression <? extends IntStream> chars ()
+  public ObjectExpression <? extends IntStream> chars ()
   {
-    return new ASubObjectExpression <> (raw.invoke ("chars"));
+    return new ObjectExpression <> (raw.invoke ("chars"));
   }
 
   /// @return `that.charAt(index)`
@@ -102,9 +102,9 @@ public class StringExpression extends ASubObjectExpression <String>
   }
 
   /// @return `that.codePoints()`
-  public ASubObjectExpression <? extends IntStream> codePoints ()
+  public ObjectExpression <? extends IntStream> codePoints ()
   {
-    return new ASubObjectExpression <> (raw.invoke ("codePoints"));
+    return new ObjectExpression <> (raw.invoke ("codePoints"));
   }
 
   /// @return `that.compareTo(anotherString)`
@@ -173,11 +173,11 @@ public class StringExpression extends ASubObjectExpression <String>
   // ignore public static String format(String format, Object... args)
 
   /// @return `that.formatted(args)`
-  public StringExpression formatted (ASubObjectExpression <?>... args)
+  public StringExpression formatted (ObjectExpression <?>... args)
   {
     JInvocation invk = raw.invoke ("formatted");
     if (args != null)
-      for (ASubObjectExpression <?> a : args)
+      for (ObjectExpression <?> a : args)
       {
         invk.arg (a);
       }
@@ -334,9 +334,9 @@ public class StringExpression extends ASubObjectExpression <String>
 
   // TODO use StreamExpression when avail.
   /// @return `that.lines()`
-  public ASubObjectExpression <? extends Stream <? extends String>> lines ()
+  public ObjectExpression <? extends Stream <? extends String>> lines ()
   {
-    return new ASubObjectExpression <> (raw.invoke ("lines"));
+    return new ObjectExpression <> (raw.invoke ("lines"));
   }
 
   /// @return `that.matches(regex)`
@@ -472,10 +472,10 @@ public class StringExpression extends ASubObjectExpression <String>
 
   // TODO use CharSequenceExpression when avail
   /// @return `that.subSequence(beginIndex, endIndex)`
-  public ASubObjectExpression <CharSequence> subSequence (ASubIntExpression <?, ?, ?> beginIndex,
+  public ObjectExpression <CharSequence> subSequence (ASubIntExpression <?, ?, ?> beginIndex,
                                                       ASubIntExpression <?, ?, ?> endIndex)
   {
-    return new ASubObjectExpression <> (raw.invoke ("subSequence").arg (beginIndex).arg (endIndex));
+    return new ObjectExpression <> (raw.invoke ("subSequence").arg (beginIndex).arg (endIndex));
   }
 
   /// @return `that.substring(beginIndex, endIndex)`
@@ -497,9 +497,9 @@ public class StringExpression extends ASubObjectExpression <String>
   }
 
   /// @return `that.transform(f)`
-  public <R> ASubObjectExpression <? extends R> transform (ITypedExpression <? extends Function <? super String, ? extends R>> f)
+  public <R> ObjectExpression <? extends R> transform (ITypedExpression <? extends Function <? super String, ? extends R>> f)
   {
-    return new ASubObjectExpression <> (raw.invoke ("transform").arg (f));
+    return new ObjectExpression <> (raw.invoke ("transform").arg (f));
   }
 
   /// @return `that.trim()`

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
-import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.FinalTargetMirror;
 import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.GenericMirror;
@@ -168,14 +168,14 @@ public class ExpressionsBuildingProcess
       }
       else
       {
-        return new GenericMirror (unresolvedClass, jcm.ref (ASubObjectExpression.class).narrow (unresolvedClass));
+        return new GenericMirror (unresolvedClass, jcm.ref (ObjectExpression.class).narrow (unresolvedClass));
       }
     }
     else
     {
-      JNarrowedClass paramType = jcm.ref (ASubObjectExpression.class)
+      JNarrowedClass paramType = jcm.ref (ObjectExpression.class)
                                     .narrow (jcm.ref (unresolvedClass).wildcardExtends ());
-      JNarrowedClass retType = jcm.ref (ASubObjectExpression.class).narrow (unresolvedClass);
+      JNarrowedClass retType = jcm.ref (ObjectExpression.class).narrow (unresolvedClass);
       return new GenericMirror (unresolvedClass, paramType, retType);
     }
   }
@@ -275,7 +275,7 @@ public class ExpressionsBuildingProcess
     }
     else
     {
-      tm.mainClass ()._extends (jcm.ref (ASubObjectExpression.class).narrow (tm.superRefParam ()));
+      tm.mainClass ()._extends (jcm.ref (ObjectExpression.class).narrow (tm.superRefParam ()));
     }
   }
 

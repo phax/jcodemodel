@@ -15,14 +15,14 @@ package com.helger.jcodemodel.expressions.java.util;
 
 import java.util.UUID;
 import com.helger.jcodemodel.IJExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ASubObjectExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.LngExpression;
 import javax.annotation.processing.Generated;
 
 @Generated("com.helger.jcodemodel.JCodeModel")
 public final class UUIDExpr
-    extends ASubObjectExpression<UUID>
+    extends ObjectExpression<UUID>
 {
 
     public UUIDExpr(IJExpression raw) {
