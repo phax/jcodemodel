@@ -36,15 +36,13 @@ public class LambdaExpression
   {
     try
     {
-      Method writeReplace = pred.getClass ().getDeclaredMethod ("writeReplace");
-      writeReplace.setAccessible (true);
-      SerializedLambda sl = (SerializedLambda) writeReplace.invoke (pred);
+      SerializedLambda sl = serializeLambda (pred);
       // we need a static method call, so no object.
       if (sl.getCapturedArgCount () > 0)
       {
         throw new UnsupportedOperationException ();
       }
-      JLambdaMethodRef ref = new JLambdaMethodRef (jcm.ref (sl.getImplClass ().replace ('/', '.')),
+      JLambdaMethodRef ref = new JLambdaMethodRef (jcm.ref (replace (sl.getImplClass (), '/', '.')),
                                                    sl.getImplMethodName ());
       return new ObjectExpression <> (ref);
     }
@@ -63,25 +61,47 @@ public class LambdaExpression
   {
     try
     {
-      Method writeReplace = pred.getClass ().getDeclaredMethod ("writeReplace");
-      writeReplace.setAccessible (true);
-      SerializedLambda sl = (SerializedLambda) writeReplace.invoke (pred);
+      SerializedLambda sl = serializeLambda (pred);
       // we need exactly one param transmitted, in the for of myObject::method
       if (sl.getCapturedArgCount () != 1)
       {
         throw new UnsupportedOperationException ();
       }
-
       String methodName = sl.getImplMethodName ();
-      JLambdaMethodRef ref = new JLambdaMethodRef (((ITypedExpression <?>) sl.getCapturedArg (0)).raw (),
-                                                   methodName);
+      JLambdaMethodRef ref = new JLambdaMethodRef (((ITypedExpression <?>) sl.getCapturedArg (0)).raw (), methodName);
       return new ObjectExpression <> (ref);
     }
-    catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException |
-           InvocationTargetException e)
+    catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException |
+           NoSuchMethodException e)
     {
       throw new RuntimeException (e);
     }
+  }
+
+  /// need to bypass Method::setAccessible by using reflect otherwise build fails -.-'
+  protected static SerializedLambda serializeLambda (Object lambda) throws NoSuchMethodException,
+                                                                    SecurityException,
+                                                                    IllegalAccessException,
+                                                                    IllegalArgumentException,
+                                                                    InvocationTargetException
+  {
+    Method writeReplace = lambda.getClass ().getDeclaredMethod ("writeReplace");
+    Method setAccessible = Method.class.getMethod ("setAccessible", boolean.class);
+    setAccessible.invoke (writeReplace, true);
+    // writeReplace.setAccessible (true);
+    return (SerializedLambda) writeReplace.invoke (lambda);
+  }
+
+  /// need to rewrite String.replace otherwise build fails -.-'
+  protected static String replace (String source, char oldChar, char newChar)
+  {
+    char [] arr = source.toCharArray ();
+    for (int i = 0; i < arr.length; i++)
+    {
+      if (arr[i] == oldChar)
+        arr[i] = newChar;
+    }
+    return new String (arr);
   }
 
 }
