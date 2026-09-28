@@ -387,7 +387,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
                                                                                                        @NonNull Class <RuntimeType> runtimeClass,
                                                                                                        @NonNull Function <IJExpression, Concrete> concreteOf)
   {
-    JVar p = param (owner ().ref (runtimeClass), paramName);
+    JVar p = param (owner ()._ref (runtimeClass), paramName);
     return concreteOf.apply (p);
   }
 

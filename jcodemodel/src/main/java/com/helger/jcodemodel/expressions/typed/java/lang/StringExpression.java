@@ -7,10 +7,12 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.Mirroring;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
@@ -30,6 +32,10 @@ import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 public class StringExpression extends ObjectExpression <String>
 {
 
+  //
+  // array class
+  //
+
   public static class StringArrExp extends ArrayExpression <String>
   {
 
@@ -45,6 +51,10 @@ public class StringExpression extends ObjectExpression <String>
     }
 
   }
+
+  //
+  // basic constructor and static tooling
+  //
 
   public StringExpression (IJExpression raw)
   {
@@ -70,6 +80,55 @@ public class StringExpression extends ObjectExpression <String>
   {
     return m.paramTyped (name, String.class, StringExpression::of);
   }
+
+  //
+  // mirror static methods including constructors
+  //
+
+  // ignore public static String format(Locale l, String format, Object... args)
+
+  // ignore public static String format(String format, Object... args)
+
+  /// @return `new String()`
+  @Mirroring ("String")
+  public static StringExpression new_ (JCodeModel jcm)
+  {
+    return new StringExpression (jcm.ref (String.class)._new ());
+  }
+
+  /// @return `new String(bytes)`
+  @Mirroring ("String")
+  public static StringExpression new_ (JCodeModel jcm, ByteArrExp bytes)
+  {
+    return new StringExpression (jcm.ref (String.class)._new ().arg (bytes.raw ()));
+  }
+
+  /// @return `new String(value)`
+  @Mirroring ("String")
+  public static StringExpression new_ (JCodeModel jcm, CharArrExp value)
+  {
+    return new StringExpression (jcm.ref (String.class)._new ().arg (value.raw ()));
+  }
+
+  /// @return `new String(original)`
+  @Mirroring ("String")
+  public static StringExpression new_ (JCodeModel jcm, StringExpression original)
+  {
+    return new StringExpression (jcm.ref (String.class)._new ().arg (original.raw ()));
+  }
+
+  // ignore public String(StringBuffer buffer)
+
+  /// @return `new String(builder)`
+  @Mirroring ("String")
+  public static StringExpression new_ (JCodeModel jcm, ITypedExpression <? extends StringBuilder> builder)
+  {
+    return new StringExpression (jcm.ref (String.class)._new ().arg (builder.raw ()));
+  }
+
+  //
+  // mirror instance methods
+  //
 
   /// @return `that.charAt(index)`
   public CharExpression charAt (ASubIntExpression <?, ?, ?> index)
@@ -168,16 +227,12 @@ public class StringExpression extends ObjectExpression <String>
     return new BoolExpression (raw.invoke ("equalsIgnoreCase").arg (anotherString));
   }
 
-  // ignore public static String format(Locale l, String format, Object... args)
-
-  // ignore public static String format(String format, Object... args)
-
   /// @return `that.formatted(args)`
-  public StringExpression formatted (ObjectExpression <?>... args)
+  public StringExpression formatted (ITypedExpression <?>... args)
   {
     JInvocation invk = raw.invoke ("formatted");
     if (args != null)
-      for (ObjectExpression <?> a : args)
+      for (ITypedExpression <?> a : args)
       {
         invk.arg (a);
       }
@@ -470,7 +525,6 @@ public class StringExpression extends ObjectExpression <String>
     return new StringExpression (raw.invoke ("stripTrailing"));
   }
 
-  // TODO use CharSequenceExpression when avail
   /// @return `that.subSequence(beginIndex, endIndex)`
   public ObjectExpression <CharSequence> subSequence (ASubIntExpression <?, ?, ?> beginIndex,
                                                       ASubIntExpression <?, ?, ?> endIndex)
@@ -488,6 +542,12 @@ public class StringExpression extends ObjectExpression <String>
   public StringExpression substring (ASubIntExpression <?, ?, ?> beginIndex)
   {
     return new StringExpression (raw.invoke ("substring").arg (beginIndex));
+  }
+
+  /// @return `that.toCharArray()`
+  public CharArrExp toCharArray ()
+  {
+    return new CharArrExp (raw.invoke ("toCharArray"));
   }
 
   /// @return `that.translateEscapes()`

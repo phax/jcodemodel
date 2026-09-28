@@ -42,33 +42,10 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   // := double`
   //
 
-  /// @return `that --`
-  public Self decrPost ()
-  {
-    return wrapSelf (raw.postdecr ());
-  }
-
-  /// @return `-- that`
-  public Self decrPre ()
-  {
-    return wrapSelf (raw.predecr ());
-  }
-
   /// @return `that + other`
   public DblExpression div (ANumericExpression <?, ?, ?> other)
   {
     return new DblExpression (raw.div (other.raw ()));
-  }
-
-  /// @return `that ++`
-  public Self incrPost ()
-  {
-    return wrapSelf (raw.postincr ());
-  }
-
-  /// @return `++ that`
-  public Self incrPre() {
-    return wrapSelf (raw.preincr ());
   }
 
   /// @return `that + other`
@@ -100,6 +77,30 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   public PosType pos ()
   {
     return wrapPos (raw.plus ());
+  }
+
+  /// @return `that --`
+  public Self postDecr ()
+  {
+    return wrapSelf (raw.postdecr ());
+  }
+
+  /// @return `that ++`
+  public Self postIncr ()
+  {
+    return wrapSelf (raw.postincr ());
+  }
+
+  /// @return `-- that`
+  public Self preDecr ()
+  {
+    return wrapSelf (raw.predecr ());
+  }
+
+  /// @return `++ that`
+  public Self preIncr ()
+  {
+    return wrapSelf (raw.preincr ());
   }
 
   /// @return `that - other`
