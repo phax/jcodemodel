@@ -715,6 +715,12 @@ public class JBlock implements IJGenerable, IJStatement
     return internalInsert (new JReturn (aExpr));
   }
 
+  @NonNull
+  public JReturn _return (@Nullable final ITypedExpression <?> aExpr)
+  {
+    return _return (aExpr.raw ());
+  }
+
   /**
    * Create a throw statement and add it to this block
    *

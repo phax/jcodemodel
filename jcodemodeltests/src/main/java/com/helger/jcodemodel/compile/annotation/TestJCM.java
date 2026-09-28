@@ -47,9 +47,9 @@ import com.helger.jcodemodel.writer.FormatterSettings;
  * When run, the arguments of the function are resolved to actual objects and injected in the method
  * call :
  * <ul>
- * <li>A {@link JCodeModel} arg is created at most once per function. It is not shared because the
- * modification of this JCM in one function could impact the execution of another function in a
- * non-deterministic way</li>
+ * <li>A {@link JCodeModel} arg is created at most once per function. It is not shared among
+ * functions/classes because the modification of this JCM in one function could impact the execution
+ * of another function in a non-deterministic way</li>
  * <li>A {@link JPackage} arg is resolved to a package with the method's class' package, in the JCM
  * created for that method. This means if both JCM and JPackage arguments are present, the
  * JPackage's owner is the JCM.</li>

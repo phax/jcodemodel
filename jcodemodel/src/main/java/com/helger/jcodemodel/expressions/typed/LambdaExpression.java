@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JLambdaMethodRef;
 import com.helger.jcodemodel.expressions.ITypedExpression;
@@ -42,8 +43,10 @@ public class LambdaExpression
       {
         throw new UnsupportedOperationException ();
       }
+      String methodName = sl.getImplMethodName ();
+      // TODO replace name if mirroring method is annotated with @Mirroring
       JLambdaMethodRef ref = new JLambdaMethodRef (jcm.ref (replace (sl.getImplClass (), '/', '.')),
-                                                   sl.getImplMethodName ());
+                                                   methodName);
       return new ObjectExpression <> (ref);
     }
     catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException |
@@ -62,13 +65,16 @@ public class LambdaExpression
     try
     {
       SerializedLambda sl = serializeLambda (pred);
-      // we need exactly one param transmitted, in the for of myObject::method
+      // we need exactly one param transmitted, the myObject of the `myObject::method`
       if (sl.getCapturedArgCount () != 1)
       {
         throw new UnsupportedOperationException ();
       }
+      ITypedExpression <?> typedExpression = ((ITypedExpression <?>) sl.getCapturedArg (0));
+      IJExpression objectRef = typedExpression.raw ();
       String methodName = sl.getImplMethodName ();
-      JLambdaMethodRef ref = new JLambdaMethodRef (((ITypedExpression <?>) sl.getCapturedArg (0)).raw (), methodName);
+      // TODO replace name if mirroring method is annotated with @Mirroring
+      JLambdaMethodRef ref = new JLambdaMethodRef (objectRef, methodName);
       return new ObjectExpression <> (ref);
     }
     catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException |
