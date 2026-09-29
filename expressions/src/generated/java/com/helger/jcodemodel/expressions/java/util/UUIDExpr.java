@@ -15,6 +15,7 @@ package com.helger.jcodemodel.expressions.java.util;
 
 import java.util.UUID;
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.LngExpression;
@@ -33,7 +34,7 @@ public final class UUIDExpr
         return new IntExpression(this.raw().invoke("clockSequence"));
     }
 
-    public IntExpression compareTo(UUIDExpr arg0) {
+    public IntExpression compareTo(ITypedExpression<? extends UUID> arg0) {
         return new IntExpression(this.raw().invoke("compareTo").arg(arg0));
     }
 

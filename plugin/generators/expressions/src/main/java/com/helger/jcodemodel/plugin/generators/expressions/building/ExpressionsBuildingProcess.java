@@ -83,33 +83,35 @@ public class ExpressionsBuildingProcess
     if (targetClasses.add (targetClass))
     {
       JPackage pckg = rootPackage.subPackage (targetClass.getPackageName ());
+      AbstractJClass containedType = jcm.ref (targetClass);
+      AbstractJClass paramType = jcm.ref (ITypedExpression.class).narrow (containedType.wildcardExtends ());
+
       if ((targetClass.getModifiers () & Modifier.FINAL) > 0)
       {
-        // only a concrete class, for both param and return.
-        JDefinedClass bothTypes = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
-        onNewJDC (bothTypes);
-        JMethod cs = bothTypes.constructor (JMod.PUBLIC);
+        // only a concrete class for return
+        JDefinedClass returnType = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
+        onNewJDC (returnType);
+        JMethod cs = returnType.constructor (JMod.PUBLIC);
         JVar param = cs.param (IJExpression.class, "raw");
         cs.body ().add (JInvocation._super ().arg (param));
-        copyParams (targetClass, bothTypes);
-        resolved.put (targetClass, new FinalTargetMirror (targetClass, bothTypes));
+        copyParams (targetClass, returnType);
+        resolved.put (targetClass, new FinalTargetMirror (targetClass, returnType, paramType));
       }
       else
       {
-        /// for example, a target HashMap<K, V> would have param and return types :
-        /// - `ASubHashMapExpr<K, V, T extends HashMap<K, V>> extends ASubObjectExpression<T>`
-        /// - `HashMapExpr<K, V> extends ASubHashMapExpr<K, V, HashMap<K, V>`
+        /// for example, a target HashMap<K, V> would have mirror types :
+        /// - param `ITypedExpression<? extends HashMap<K, V>>`
+        /// - return `HashMapExpr<K, V> extends ASubHashMapExpr<K, V, HashMap<K, V>`
         ///
-        /// If we also have the Map interface as a target, instead param type :
-        /// - `ASubHashMapExpression<K, V, T extends HashMap<K, V>> extends ASubMapExpression<T>`
-        /// so the inheritance of the param must be done at a later step, addHierarchy
-        ///
+        /// If the HashMap was final, then
+        /// - param `ITypedExpression<HashMap<K, V>>`
+        /// - return not changed
 
-        // param type
-        JDefinedClass paramType = pckg._class (JMod.PUBLIC | JMod.ABSTRACT,
+        // return type
+        JDefinedClass abstractType = pckg._class (JMod.PUBLIC | JMod.ABSTRACT,
                                                "ASub" + targetClass.getSimpleName () + "Expr");
-        onNewJDC (paramType);
-        copyParams (targetClass, paramType);
+        onNewJDC (abstractType);
+        copyParams (targetClass, abstractType);
 
         // return type
         JDefinedClass returnType = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
@@ -121,16 +123,20 @@ public class ExpressionsBuildingProcess
           narrows.add (jtv);
         }
         narrows.add (referenceWithBounds (targetClass, jcm));
-        returnType._extends (paramType.narrow (narrows));
+        returnType._extends (abstractType.narrow (narrows));
 
         // add constructor calling super in both
-        for (JDefinedClass jdc : new JDefinedClass [] { returnType, paramType })
+        for (JDefinedClass jdc : new JDefinedClass [] { returnType, abstractType })
         {
           JMethod cs = jdc.constructor (JMod.PUBLIC);
           JVar param = cs.param (IJExpression.class, "raw");
           cs.body ().add (JInvocation._super ().arg (param));
         }
-        resolved.put (targetClass, new NonFinalTargetMirror (targetClass, returnType, paramType));
+
+        // param type
+
+        // ret
+        resolved.put (targetClass, new NonFinalTargetMirror (targetClass, returnType, abstractType, paramType));
       }
     }
   }
@@ -138,6 +144,7 @@ public class ExpressionsBuildingProcess
   /// copy each type param of a source class into the created JDC.
   protected void copyParams (Class <?> source, JDefinedClass created)
   {
+    // only use first bound because java only allows one bound per type variable.
     for (TypeVariable <?> tv : source.getTypeParameters ())
     {
       if (tv.getBounds ()[0].equals (Object.class))
@@ -424,14 +431,12 @@ public class ExpressionsBuildingProcess
   public static AbstractJClass referenceWithBounds (Class <?> source, JCodeModel jcm)
   {
     AbstractJClass baseref = jcm.ref (source);
-
-    JNarrowedClass jnc = null;
+    List <AbstractJClass> narrows = new ArrayList <> ();
     for (TypeVariable <?> tv : source.getTypeParameters ())
     {
-      jnc = jnc == null ? baseref.narrow (jcm.directClass (tv.getTypeName ()))
-                        : jnc.narrow (jcm.directClass (tv.getTypeName ()));
+      narrows.add (jcm.ref (tv));
     }
-    return jnc == null ? baseref : jnc;
+    return narrows.isEmpty () ? baseref : baseref.narrow (narrows);
   }
 
 }

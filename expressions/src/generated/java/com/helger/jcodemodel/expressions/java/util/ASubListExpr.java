@@ -47,11 +47,11 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new VoidStatExpression(this.raw().invoke("add").arg(arg0).arg(arg1));
     }
 
-    public BoolExpression addAll(ASubCollectionExpr<? extends E, Collection<? extends E>> arg0) {
+    public BoolExpression addAll(ITypedExpression<? extends E, Collection<? extends E>> arg0) {
         return new BoolExpression(this.raw().invoke("addAll").arg(arg0));
     }
 
-    public BoolExpression addAll(ASubIntExpression<?, ?, ?> arg0, ASubCollectionExpr<? extends E, Collection<? extends E>> arg1) {
+    public BoolExpression addAll(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<? extends E, Collection<? extends E>> arg1) {
         return new BoolExpression(this.raw().invoke("addAll").arg(arg0).arg(arg1));
     }
 
@@ -71,7 +71,7 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
     }
 
-    public BoolExpression containsAll(ASubCollectionExpr<?, Collection<?>> arg0) {
+    public BoolExpression containsAll(ITypedExpression<?, Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
     }
 
@@ -119,7 +119,7 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new BoolExpression(this.raw().invoke("remove").arg(arg0));
     }
 
-    public BoolExpression removeAll(ASubCollectionExpr<?, Collection<?>> arg0) {
+    public BoolExpression removeAll(ITypedExpression<?, Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
     }
 
@@ -135,7 +135,7 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new VoidStatExpression(this.raw().invoke("replaceAll").arg(arg0));
     }
 
-    public BoolExpression retainAll(ASubCollectionExpr<?, Collection<?>> arg0) {
+    public BoolExpression retainAll(ITypedExpression<?, Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("retainAll").arg(arg0));
     }
 

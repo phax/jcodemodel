@@ -26,7 +26,8 @@ import com.helger.jcodemodel.expressions.typed.primitives.LngExpression.LongArrE
 import com.helger.jcodemodel.expressions.typed.primitives.ShortExpression.ShortArrExp;
 import com.helger.jcodemodel.plugin.generators.expressions.building.MirroringClass.HardcodedMirror.Source;
 
-// the resolution of a runtime class  to the mirroring expression. 
+/// the resolution of a runtime class  to the mirroring expression. 
+/// the types are the one with no additional parameter. They need to be adapted.
 public sealed interface MirroringClass
 {
 
@@ -50,14 +51,13 @@ public sealed interface MirroringClass
   /// The param types in a mirrored function. Still needs parameters.
   public AbstractJClass asParam ();
 
+  public default AbstractJClass paramType (ParameterizedType pt, JCodeModel jcm)
+  {
+    return null;
+  }
+
   default AbstractJClass generifiedParam (ParameterizedType pt, JCodeModel jcm)
   {
-    if (isFinal ())
-    {
-      return asParam ().erasure ().narrow (jcm.ref (pt));
-    }
-    else
-    {
       List <AbstractJClass> narrows = new ArrayList <> ();
       for (Type ata : pt.getActualTypeArguments ())
       {
@@ -70,7 +70,6 @@ public sealed interface MirroringClass
       }
       narrows.add (jcm.ref (pt));
       return asParam ().erasure ().narrow (narrows);
-    }
   }
 
   public default boolean isFinal ()
@@ -199,54 +198,48 @@ public sealed interface MirroringClass
   }
 
   // a target (a class we need to mirror) that is final, so only one type for both param and return.
-  public static record FinalTargetMirror (Class <?> target, JDefinedClass bothType, AbstractJClass superRefParam)
+  public static record FinalTargetMirror (Class <?> target,
+                                          JDefinedClass asReturn,
+                                          AbstractJClass asParam,
+                                          AbstractJClass superRefParam)
                                          implements
                                          TargetMirror
   {
-    public FinalTargetMirror (Class <?> target, JDefinedClass bothType)
+    public FinalTargetMirror (Class <?> target, JDefinedClass asReturn, AbstractJClass asParam)
     {
-      this (target, bothType, ExpressionsBuildingProcess.referenceWithBounds (target, bothType.owner ()));
-    }
-
-    @Override
-    public AbstractJClass asParam ()
-    {
-      return bothType ();
-    }
-
-    @Override
-    public AbstractJClass asReturn ()
-    {
-      return bothType ();
+      this (target, asReturn, asParam, ExpressionsBuildingProcess.referenceWithBounds (target, asReturn.owner ()));
     }
 
     @Override
     public JDefinedClass mainClass ()
     {
-      return bothType ();
+      return asReturn ();
     }
   }
 
-  // a target that is not final, therefore a generic param type, and a return type that extends the
-  // param type with the exact generic type.
+  // a target that is not final, therefore a generic-based param type, and a return type that
+  // extends an abstract type with the exact generic type.
   public static record NonFinalTargetMirror (Class <?> target,
                                              JDefinedClass asReturn,
-                                             JDefinedClass asParam,
+                                             JDefinedClass abstractType,
+                                             AbstractJClass asParam,
                                              AbstractJClass superRefParam) implements TargetMirror
   {
 
-    NonFinalTargetMirror (Class <?> target, JDefinedClass asReturn, JDefinedClass asParam)
+    NonFinalTargetMirror (Class <?> target, JDefinedClass asReturn, JDefinedClass abstractType, AbstractJClass asParam)
     {
       this (target,
             asReturn,
+            abstractType,
             asParam,
-            asParam.generify ("Contained", ExpressionsBuildingProcess.referenceWithBounds (target, asReturn.owner ())));
+            abstractType.generify ("Contained",
+                                   ExpressionsBuildingProcess.referenceWithBounds (target, asReturn.owner ())));
     }
 
     @Override
     public JDefinedClass mainClass ()
     {
-      return asParam ();
+      return abstractType ();
     }
 
   }
