@@ -16,7 +16,7 @@ import com.helger.jcodemodel.expressions.typed.Mirroring;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
-import com.helger.jcodemodel.expressions.typed.primitives.ByteExpression.ByteArrExp;
+import com.helger.jcodemodel.expressions.typed.primitives.BytExpression.ByteArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.CharExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.CharExpression.CharArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
