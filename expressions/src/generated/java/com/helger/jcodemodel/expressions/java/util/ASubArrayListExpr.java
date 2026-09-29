@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
@@ -32,7 +33,7 @@ public abstract class ASubArrayListExpr<E, Contained extends ArrayList<E>>
         super(raw);
     }
 
-    public ObjectExpression<?> clone() {
+    public ObjectExpression<Object> clone() {
         return new ObjectExpression<>(this.raw().invoke("clone"));
     }
 
@@ -40,11 +41,11 @@ public abstract class ASubArrayListExpr<E, Contained extends ArrayList<E>>
         return new VoidStatExpression(this.raw().invoke("ensureCapacity").arg(arg0));
     }
 
-    public VoidStatExpression forEach(ObjectExpression<? extends Consumer<? super E>> arg0) {
+    public VoidStatExpression forEach(ITypedExpression<? extends Consumer<? super E>> arg0) {
         return new VoidStatExpression(this.raw().invoke("forEach").arg(arg0));
     }
 
-    public BoolExpression removeIf(ObjectExpression<? extends Predicate<? super E>> arg0) {
+    public BoolExpression removeIf(ITypedExpression<? extends Predicate<? super E>> arg0) {
         return new BoolExpression(this.raw().invoke("removeIf").arg(arg0));
     }
 

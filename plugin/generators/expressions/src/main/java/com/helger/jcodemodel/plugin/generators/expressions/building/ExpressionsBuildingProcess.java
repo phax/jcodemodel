@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.plugin.generators.expressions;
+package com.helger.jcodemodel.plugin.generators.expressions.building;
 
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
@@ -27,12 +27,13 @@ import org.slf4j.LoggerFactory;
 import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
-import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.FinalTargetMirror;
-import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.GenericMirror;
-import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.NonFinalTargetMirror;
-import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.TargetMirror;
+import com.helger.jcodemodel.plugin.generators.expressions.building.MirroringClass.FinalTargetMirror;
+import com.helger.jcodemodel.plugin.generators.expressions.building.MirroringClass.GenericMirror;
+import com.helger.jcodemodel.plugin.generators.expressions.building.MirroringClass.NonFinalTargetMirror;
+import com.helger.jcodemodel.plugin.generators.expressions.building.MirroringClass.TargetMirror;
 
 public class ExpressionsBuildingProcess
 {
@@ -155,28 +156,24 @@ public class ExpressionsBuildingProcess
     return resolved.computeIfAbsent (cl, this::makeMissingMirror);
   }
 
-  // resolve a class that we don't already have resolved : this is not a target, do not create
-  // JDefinedClass for it.
+  /// Resolve a class class that we don't already have resolved : this is not a target, do not
+  /// create a JDefinedClass for it.
+  ///
+  /// Note that this would fail for primitive class.
   protected MirroringClass makeMissingMirror (Class <?> unresolvedClass)
   {
-    if ((unresolvedClass.getModifiers () & Modifier.FINAL) > 0)
+    if (unresolvedClass.isArray ())
     {
-      if (unresolvedClass.isArray ())
-      {
-        return new GenericMirror (unresolvedClass,
-                                  jcm.ref (ArrayExpression.class).narrow (unresolvedClass.componentType ()));
-      }
-      else
-      {
-        return new GenericMirror (unresolvedClass, jcm.ref (ObjectExpression.class).narrow (unresolvedClass));
-      }
+      JNarrowedClass paramType = jcm.ref (ArrayExpression.class)
+                                    .narrow (jcm.ref (unresolvedClass.componentType ()));
+      JNarrowedClass retType = paramType;
+      return new GenericMirror (unresolvedClass, retType, paramType);
     }
     else
     {
-      JNarrowedClass paramType = jcm.ref (ObjectExpression.class)
-                                    .narrow (jcm.ref (unresolvedClass).wildcardExtends ());
+      JNarrowedClass paramType = jcm.ref (ITypedExpression.class).narrow (jcm.ref (unresolvedClass).wildcardExtends ());
       JNarrowedClass retType = jcm.ref (ObjectExpression.class).narrow (unresolvedClass);
-      return new GenericMirror (unresolvedClass, paramType, retType);
+      return new GenericMirror (unresolvedClass, retType, paramType);
     }
   }
 

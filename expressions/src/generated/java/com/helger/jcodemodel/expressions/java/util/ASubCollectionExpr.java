@@ -20,6 +20,7 @@ import java.util.function.IntFunction;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
@@ -36,7 +37,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         super(raw);
     }
 
-    public BoolExpression add(ObjectExpression<E> arg0) {
+    public BoolExpression add(ITypedExpression<E> arg0) {
         return new BoolExpression(this.raw().invoke("add").arg(arg0));
     }
 
@@ -48,7 +49,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new VoidStatExpression(this.raw().invoke("clear"));
     }
 
-    public BoolExpression contains(ObjectExpression<Object> arg0) {
+    public BoolExpression contains(ITypedExpression<?> arg0) {
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
     }
 
@@ -68,7 +69,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new ObjectExpression<>(this.raw().invoke("parallelStream"));
     }
 
-    public BoolExpression remove(ObjectExpression<Object> arg0) {
+    public BoolExpression remove(ITypedExpression<?> arg0) {
         return new BoolExpression(this.raw().invoke("remove").arg(arg0));
     }
 
@@ -76,7 +77,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
     }
 
-    public BoolExpression removeIf(ObjectExpression<? extends Predicate<? super E>> arg0) {
+    public BoolExpression removeIf(ITypedExpression<? extends Predicate<? super E>> arg0) {
         return new BoolExpression(this.raw().invoke("removeIf").arg(arg0));
     }
 
@@ -104,7 +105,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 
-    public<T> ArrayExpression<T> toArray_1(ObjectExpression<? extends IntFunction<T[]>> arg0) {
+    public<T> ArrayExpression<T> toArray_1(ITypedExpression<? extends IntFunction<T[]>> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 }

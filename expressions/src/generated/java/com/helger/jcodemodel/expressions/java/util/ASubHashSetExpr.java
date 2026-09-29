@@ -27,7 +27,7 @@ public abstract class ASubHashSetExpr<E, Contained extends HashSet<E>>
         super(raw);
     }
 
-    public ObjectExpression<?> clone() {
+    public ObjectExpression<Object> clone() {
         return new ObjectExpression<>(this.raw().invoke("clone"));
     }
 }

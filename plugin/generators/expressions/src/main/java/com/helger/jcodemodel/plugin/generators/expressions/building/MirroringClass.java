@@ -1,4 +1,4 @@
-package com.helger.jcodemodel.plugin.generators.expressions;
+package com.helger.jcodemodel.plugin.generators.expressions.building;
 
 
 import java.lang.reflect.Modifier;
@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JTypeWildcard;
 import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression.StringArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.*;
@@ -23,7 +24,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.FltExpression.FloatArr
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression.IntArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.LngExpression.LongArrExp;
 import com.helger.jcodemodel.expressions.typed.primitives.ShortExpression.ShortArrExp;
-import com.helger.jcodemodel.plugin.generators.expressions.MirroringClass.HardcodedMirror.Source;
+import com.helger.jcodemodel.plugin.generators.expressions.building.MirroringClass.HardcodedMirror.Source;
 
 // the resolution of a runtime class  to the mirroring expression. 
 public sealed interface MirroringClass
@@ -60,7 +61,12 @@ public sealed interface MirroringClass
       List <AbstractJClass> narrows = new ArrayList <> ();
       for (Type ata : pt.getActualTypeArguments ())
       {
-        narrows.add (jcm.ref (ata));
+        AbstractJClass ref = jcm.ref (ata);
+        if (!(ref instanceof JTypeWildcard))
+        {
+          ref = ref.wildcardExtends ();
+        }
+        narrows.add (ref);
       }
       narrows.add (jcm.ref (pt));
       return asParam ().erasure ().narrow (narrows);
@@ -78,7 +84,7 @@ public sealed interface MirroringClass
   {
     if (isFinal ())
       throw new IllegalArgumentException ("class " + target () + " is final and can't be extended by another class");
-    t.mainClass ()._extends (asParam ().erasure ().narrow (t.superRefParam ()));
+    t.mainClass ()._extends (asReturn ().erasure ().narrow (t.superRefParam ()));
   }
 
   //
@@ -253,12 +259,6 @@ public sealed interface MirroringClass
   public static record GenericMirror (Class <?> target, AbstractJClass asReturn, AbstractJClass asParam) implements
                                           MirroringClass
   {
-
-    // when final, same both types.
-    public GenericMirror (Class <?> target, AbstractJClass bothTypes)
-    {
-      this (target, bothTypes, bothTypes);
-    }
 
     @Override
     public boolean returnFullyGenerified ()

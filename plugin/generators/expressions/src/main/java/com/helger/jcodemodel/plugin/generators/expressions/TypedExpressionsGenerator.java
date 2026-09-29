@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import com.helger.base.string.StringHelper;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.plugin.generators.expressions.building.ExpressionsBuildingProcess;
 import com.helger.jcodemodel.plugin.maven.ICodeModelBuilder;
 import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
 import com.helger.jcodemodel.plugin.maven.generators.JCMGen;
