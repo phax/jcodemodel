@@ -37,11 +37,11 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         super(raw);
     }
 
-    public BoolExpression add(ITypedExpression<E> arg0) {
+    public BoolExpression add(ITypedExpression<? extends E> arg0) {
         return new BoolExpression(this.raw().invoke("add").arg(arg0));
     }
 
-    public BoolExpression addAll(ITypedExpression<? extends E, Collection<? extends E>> arg0) {
+    public BoolExpression addAll(ITypedExpression<? extends Collection<? extends E>> arg0) {
         return new BoolExpression(this.raw().invoke("addAll").arg(arg0));
     }
 
@@ -53,7 +53,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
     }
 
-    public BoolExpression containsAll(ITypedExpression<?, Collection<?>> arg0) {
+    public BoolExpression containsAll(ITypedExpression<? extends Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
     }
 
@@ -73,7 +73,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new BoolExpression(this.raw().invoke("remove").arg(arg0));
     }
 
-    public BoolExpression removeAll(ITypedExpression<?, Collection<?>> arg0) {
+    public BoolExpression removeAll(ITypedExpression<? extends Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
     }
 
@@ -81,7 +81,7 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new BoolExpression(this.raw().invoke("removeIf").arg(arg0));
     }
 
-    public BoolExpression retainAll(ITypedExpression<?, Collection<?>> arg0) {
+    public BoolExpression retainAll(ITypedExpression<? extends Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("retainAll").arg(arg0));
     }
 
@@ -101,11 +101,11 @@ public abstract class ASubCollectionExpr<E, Contained extends Collection<E>>
         return new ArrayExpression<>(this.raw().invoke("toArray"));
     }
 
-    public<T> ArrayExpression<T> toArray(ArrayExpression<T> arg0) {
+    public<T> ArrayExpression<T> toArray(ArrayExpression<? extends T> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 
-    public<T> ArrayExpression<T> toArray_1(ITypedExpression<? extends IntFunction<T[]>> arg0) {
+    public<T> ArrayExpression<T> toArray_1(ITypedExpression<? extends IntFunction<? extends T[]>> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 }

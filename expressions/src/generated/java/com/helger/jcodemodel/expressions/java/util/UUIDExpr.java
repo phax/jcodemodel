@@ -34,7 +34,7 @@ public final class UUIDExpr
         return new IntExpression(this.raw().invoke("clockSequence"));
     }
 
-    public IntExpression compareTo(ITypedExpression<? extends UUID> arg0) {
+    public IntExpression compareTo(ITypedExpression<UUID> arg0) {
         return new IntExpression(this.raw().invoke("compareTo").arg(arg0));
     }
 

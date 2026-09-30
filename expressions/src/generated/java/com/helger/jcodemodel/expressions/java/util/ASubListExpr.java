@@ -39,27 +39,27 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         super(raw);
     }
 
-    public BoolExpression add(ITypedExpression<E> arg0) {
+    public BoolExpression add(ITypedExpression<? extends E> arg0) {
         return new BoolExpression(this.raw().invoke("add").arg(arg0));
     }
 
-    public VoidStatExpression add(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<E> arg1) {
+    public VoidStatExpression add(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<? extends E> arg1) {
         return new VoidStatExpression(this.raw().invoke("add").arg(arg0).arg(arg1));
     }
 
-    public BoolExpression addAll(ITypedExpression<? extends E, Collection<? extends E>> arg0) {
+    public BoolExpression addAll(ITypedExpression<? extends Collection<? extends E>> arg0) {
         return new BoolExpression(this.raw().invoke("addAll").arg(arg0));
     }
 
-    public BoolExpression addAll(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<? extends E, Collection<? extends E>> arg1) {
+    public BoolExpression addAll(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<? extends Collection<? extends E>> arg1) {
         return new BoolExpression(this.raw().invoke("addAll").arg(arg0).arg(arg1));
     }
 
-    public VoidStatExpression addFirst(ITypedExpression<E> arg0) {
+    public VoidStatExpression addFirst(ITypedExpression<? extends E> arg0) {
         return new VoidStatExpression(this.raw().invoke("addFirst").arg(arg0));
     }
 
-    public VoidStatExpression addLast(ITypedExpression<E> arg0) {
+    public VoidStatExpression addLast(ITypedExpression<? extends E> arg0) {
         return new VoidStatExpression(this.raw().invoke("addLast").arg(arg0));
     }
 
@@ -71,7 +71,7 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new BoolExpression(this.raw().invoke("contains").arg(arg0));
     }
 
-    public BoolExpression containsAll(ITypedExpression<?, Collection<?>> arg0) {
+    public BoolExpression containsAll(ITypedExpression<? extends Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
     }
 
@@ -119,7 +119,7 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new BoolExpression(this.raw().invoke("remove").arg(arg0));
     }
 
-    public BoolExpression removeAll(ITypedExpression<?, Collection<?>> arg0) {
+    public BoolExpression removeAll(ITypedExpression<? extends Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
     }
 
@@ -131,11 +131,11 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new ObjectExpression<>(this.raw().invoke("removeLast"));
     }
 
-    public VoidStatExpression replaceAll(ITypedExpression<? extends UnaryOperator<E>> arg0) {
+    public VoidStatExpression replaceAll(ITypedExpression<? extends UnaryOperator<? extends E>> arg0) {
         return new VoidStatExpression(this.raw().invoke("replaceAll").arg(arg0));
     }
 
-    public BoolExpression retainAll(ITypedExpression<?, Collection<?>> arg0) {
+    public BoolExpression retainAll(ITypedExpression<? extends Collection<?>> arg0) {
         return new BoolExpression(this.raw().invoke("retainAll").arg(arg0));
     }
 
@@ -143,7 +143,7 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new ListExpr<>(this.raw().invoke("reversed"));
     }
 
-    public ObjectExpression<E> set(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<E> arg1) {
+    public ObjectExpression<E> set(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<? extends E> arg1) {
         return new ObjectExpression<>(this.raw().invoke("set").arg(arg0).arg(arg1));
     }
 
@@ -167,7 +167,7 @@ public abstract class ASubListExpr<E, Contained extends List<E>>
         return new ArrayExpression<>(this.raw().invoke("toArray"));
     }
 
-    public<T> ArrayExpression<T> toArray(ArrayExpression<T> arg0) {
+    public<T> ArrayExpression<T> toArray(ArrayExpression<? extends T> arg0) {
         return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
     }
 }

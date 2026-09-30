@@ -71,8 +71,10 @@ public class ExpressionsBuildingProcess
     jdc.annotate (Generated.class).param (JCodeModel.class.getCanonicalName ());
   }
 
-  /// add a new class as a target, create the raw JCM classes. inheritance is only partial, and need
-  /// to be complete with addHierarchy after all the targets are added.
+  /// add a new class as a target, create the raw JCM classes.
+  ///
+  /// Inheritance is only partial, and need to be completed with addHierarchy after all the targets
+  /// are added, to solve the inter-targets.
   public void addTargetClass (Class <?> targetClass) throws JCodeModelException
   {
     if (targetClass == null || targetClass.isPrimitive ())
@@ -82,61 +84,78 @@ public class ExpressionsBuildingProcess
     }
     if (targetClasses.add (targetClass))
     {
+      /// for example, a target HashMap<K, V> would have mirror types :
+      /// - param `ITypedExpression<? extends HashMap<K, V>>`
+      /// - return `HashMapExpr<K, V> extends ASubHashMapExpr<K, V, HashMap<K, V>`
+      ///
+      /// If the HashMap was final, then
+      /// - param `ITypedExpression<HashMap<K, V>>`
+      /// - return not changed
+
       JPackage pckg = rootPackage.subPackage (targetClass.getPackageName ());
-      AbstractJClass containedType = jcm.ref (targetClass);
-      AbstractJClass paramType = jcm.ref (ITypedExpression.class).narrow (containedType.wildcardExtends ());
+
+      // param type is `ITypedExpression<? extends targetClass>`,
+      // or if targetClass has parameters `ITypedExpression<? extends targetClass<?>>`
+      AbstractJClass paramContainedType = jcm.ref (targetClass);
+      if (targetClass.getTypeParameters () != null && targetClass.getTypeParameters ().length > 0)
+      {
+        List <AbstractJClass> narrows = new ArrayList <> ();
+        for (TypeVariable <?> tp : targetClass.getTypeParameters ())
+        {
+          narrows.add (jcm.wildcard ());
+        }
+        paramContainedType = paramContainedType.narrow (narrows);
+      }
 
       if ((targetClass.getModifiers () & Modifier.FINAL) > 0)
       {
+        AbstractJClass paramType = jcm.ref (ITypedExpression.class).narrow (paramContainedType);
         // only a concrete class for return
-        JDefinedClass returnType = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
-        onNewJDC (returnType);
-        JMethod cs = returnType.constructor (JMod.PUBLIC);
+        JDefinedClass concreteType = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
+        copyParams (targetClass, concreteType);
+        onNewJDC (concreteType);
+
+        // add constructor calling super with IJExpression
+        JMethod cs = concreteType.constructor (JMod.PUBLIC);
         JVar param = cs.param (IJExpression.class, "raw");
         cs.body ().add (JInvocation._super ().arg (param));
-        copyParams (targetClass, returnType);
-        resolved.put (targetClass, new FinalTargetMirror (targetClass, returnType, paramType));
+
+        resolved.put (targetClass, new FinalTargetMirror (targetClass, concreteType, paramType));
       }
       else
       {
-        /// for example, a target HashMap<K, V> would have mirror types :
-        /// - param `ITypedExpression<? extends HashMap<K, V>>`
-        /// - return `HashMapExpr<K, V> extends ASubHashMapExpr<K, V, HashMap<K, V>`
-        ///
-        /// If the HashMap was final, then
-        /// - param `ITypedExpression<HashMap<K, V>>`
-        /// - return not changed
+        AbstractJClass paramType = jcm.ref (ITypedExpression.class).narrow (paramContainedType.wildcardExtends ());
 
-        // return type
-        JDefinedClass abstractType = pckg._class (JMod.PUBLIC | JMod.ABSTRACT,
-                                               "ASub" + targetClass.getSimpleName () + "Expr");
-        onNewJDC (abstractType);
-        copyParams (targetClass, abstractType);
+        // abstract class, to be extended by other expressions and the return type
+        JDefinedClass abstractClass = pckg._class (JMod.PUBLIC | JMod.ABSTRACT,
+                                                   "ASub" + targetClass.getSimpleName () + "Expr");
+        onNewJDC (abstractClass);
+        copyParams (targetClass, abstractClass);
 
-        // return type
-        JDefinedClass returnType = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
-        onNewJDC (returnType);
-        copyParams (targetClass, returnType);
+        // concrete class
+        JDefinedClass concreteClass = pckg._class (JMod.PUBLIC | JMod.FINAL, targetClass.getSimpleName () + "Expr");
+        copyParams (targetClass, concreteClass);
+        onNewJDC (concreteClass);
+
         List <AbstractJClass> narrows = new ArrayList <> ();
-        for (JTypeVar jtv : returnType.typeParams ())
+        for (JTypeVar jtv : concreteClass.typeParams ())
         {
           narrows.add (jtv);
         }
+        // add the abstract contained type from the target. The abstract class' param will be added
+        // in the addhierarchy phase.
         narrows.add (referenceWithBounds (targetClass, jcm));
-        returnType._extends (abstractType.narrow (narrows));
+        concreteClass._extends (abstractClass.narrow (narrows));
 
         // add constructor calling super in both
-        for (JDefinedClass jdc : new JDefinedClass [] { returnType, abstractType })
+        for (JDefinedClass jdc : new JDefinedClass [] { concreteClass, abstractClass })
         {
           JMethod cs = jdc.constructor (JMod.PUBLIC);
           JVar param = cs.param (IJExpression.class, "raw");
           cs.body ().add (JInvocation._super ().arg (param));
         }
 
-        // param type
-
-        // ret
-        resolved.put (targetClass, new NonFinalTargetMirror (targetClass, returnType, abstractType, paramType));
+        resolved.put (targetClass, new NonFinalTargetMirror (targetClass, concreteClass, abstractClass, paramType));
       }
     }
   }
@@ -171,15 +190,18 @@ public class ExpressionsBuildingProcess
   {
     if (unresolvedClass.isArray ())
     {
+      JNarrowedClass retType = jcm.ref (ArrayExpression.class).narrow (jcm.ref (unresolvedClass.componentType ()));
       JNarrowedClass paramType = jcm.ref (ArrayExpression.class)
-                                    .narrow (jcm.ref (unresolvedClass.componentType ()));
-      JNarrowedClass retType = paramType;
+                                    .narrow (jcm.ref (unresolvedClass.componentType ()).wildcardExtends ());
+      System.out.println ("pramType for " + unresolvedClass + " is " + paramType);
       return new GenericMirror (unresolvedClass, retType, paramType);
     }
     else
     {
-      JNarrowedClass paramType = jcm.ref (ITypedExpression.class).narrow (jcm.ref (unresolvedClass).wildcardExtends ());
       JNarrowedClass retType = jcm.ref (ObjectExpression.class).narrow (unresolvedClass);
+      JNarrowedClass paramType = retType;
+      if ((unresolvedClass.getModifiers () & Modifier.FINAL) == 0)
+        paramType = jcm.ref (ITypedExpression.class).narrow (jcm.ref (unresolvedClass).wildcardExtends ());
       return new GenericMirror (unresolvedClass, retType, paramType);
     }
   }
@@ -231,25 +253,48 @@ public class ExpressionsBuildingProcess
   {
     if (type instanceof Class <?> cl)
     {
-      return mirroringClass (cl).asParam ();
+      // a direct class : get its mirror class, return its param with no additional narrowing.
+      // String => ITypedExpression< ? extends String>
+      return mirroringClass (cl).param ();
     }
     if (type instanceof GenericArrayType gat)
     {
+      /// arrays are covariant, so a String[] is an Object[] but an Object[] is not a String[].
+      /// therefore we need to `? extends componentType` in a param
       if (gat.getGenericComponentType () instanceof Class <?> cl)
       {
-        return mirroringClass (cl.arrayType ()).asParam ();
+        // Object[] => ArrayExpression< ? extends Object>
+        return mirroringClass (cl.arrayType ()).param ();
       }
-      return mirroringClass (Object [].class).asParam ().erasure ().narrow (jcm.ref (gat.getGenericComponentType ()));
+      if (gat.getGenericComponentType () instanceof TypeVariable <?> tv)
+      {
+        // T[] => ArrayExpression<? extends T>
+        return jcm.ref (ArrayExpression.class).narrow (jcm.ref (tv).wildcardExtends ());
+      }
+      // T[][] => ArrayExpression<? extends T[]>
+      // List<String>[] => ArrayExpression<? extends List<String>>
+      AbstractJClass contained = jcm.ref (gat.getGenericComponentType ());
+      return mirroringClass (Object [].class).param (contained);
     }
     if (type instanceof ParameterizedType pt)
     {
       MirroringClass mirroring = mirroringClass ((Class <?>) pt.getRawType ());
-      return mirroring.generifiedParam (pt, jcm);
+      List <AbstractJClass> narrows = new ArrayList <> ();
+      for (Type ata : pt.getActualTypeArguments ())
+      {
+        AbstractJClass ref = jcm.ref (ata);
+        if (!(ref instanceof JTypeWildcard))
+        {
+          ref = ref.wildcardExtends ();
+        }
+        narrows.add (ref);
+      }
+      return mirroring.param (narrows);
     }
     if (type instanceof TypeVariable <?> tv)
     {
-      // Object return type, but we use the variable type instead of object.
-      return mirroringClass (Object.class).asParam ().erasure ().narrow (jcm.ref (tv));
+      // we have a param T : the mirror is ITypedExpression<? extends T>
+      return jcm.ref (ITypedExpression.class).narrow (jcm.ref (tv).wildcardExtends ());
     }
     throw new IllegalArgumentException ("can't mirror return type " + type + " class " + type.getClass ());
   }

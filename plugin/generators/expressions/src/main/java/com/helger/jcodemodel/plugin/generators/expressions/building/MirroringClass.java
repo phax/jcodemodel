@@ -2,29 +2,16 @@ package com.helger.jcodemodel.plugin.generators.expressions.building;
 
 
 import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.jspecify.annotations.NonNull;
+
 import com.helger.jcodemodel.AbstractJClass;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JTypeWildcard;
-import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression.StringArrExp;
-import com.helger.jcodemodel.expressions.typed.primitives.*;
-import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression.BoolArrExp;
-import com.helger.jcodemodel.expressions.typed.primitives.ByteExpression.ByteArrExp;
-import com.helger.jcodemodel.expressions.typed.primitives.CharExpression.CharArrExp;
-import com.helger.jcodemodel.expressions.typed.primitives.DblExpression.DoubleArrExp;
-import com.helger.jcodemodel.expressions.typed.primitives.FltExpression.FloatArrExp;
-import com.helger.jcodemodel.expressions.typed.primitives.IntExpression.IntArrExp;
-import com.helger.jcodemodel.expressions.typed.primitives.LngExpression.LongArrExp;
-import com.helger.jcodemodel.expressions.typed.primitives.ShortExpression.ShortArrExp;
-import com.helger.jcodemodel.plugin.generators.expressions.building.MirroringClass.HardcodedMirror.Source;
 
 /// the resolution of a runtime class  to the mirroring expression. 
 /// the types are the one with no additional parameter. They need to be adapted.
@@ -36,6 +23,33 @@ public sealed interface MirroringClass
 
   /// the returned types in a mirrored function. Still needs to be parametrized.
   public AbstractJClass asReturn ();
+
+  /// applies the narrows to param type
+  ///
+  /// - if no param empty, return the param type
+  /// - if target is final, return the param type, parameterized with the ref to the target, itself
+  /// narrowed to the narrows.
+  /// - return the param type, parameterized with ? extends the ref to the target, itself narrowed
+  /// to the narrows.
+  ///
+  /// @param narrows the mirrored types paremeterizing the param.
+  /// For example, a method with a param `Map<String, Integer> m` would mirror the param type
+  /// ```java
+  /// var narrows = List.of(mirror(String.class), mirror(Integer.class));
+  /// mType = mirror(Map.class).param(narrows);
+  /// ```
+  public default AbstractJClass param (@NonNull List <AbstractJClass> narrows)
+  {
+    if (narrows == null || narrows.isEmpty ())
+      return asParam ();
+    AbstractJClass containedClass = asParam ().owner ().ref (target ()).narrow (narrows);
+    return asParam ().erasure ().narrow (isFinal () ? containedClass : containedClass.wildcardExtends ());
+  }
+
+  public default AbstractJClass param (AbstractJClass... narrows)
+  {
+    return param (narrows == null || narrows.length == 0 ? List.of () : List.of (narrows));
+  }
 
   /// when true, the return must be generified using the method return type. Otherwise, only apply
   /// the return type's parameter.
@@ -50,27 +64,6 @@ public sealed interface MirroringClass
 
   /// The param types in a mirrored function. Still needs parameters.
   public AbstractJClass asParam ();
-
-  public default AbstractJClass paramType (ParameterizedType pt, JCodeModel jcm)
-  {
-    return null;
-  }
-
-  default AbstractJClass generifiedParam (ParameterizedType pt, JCodeModel jcm)
-  {
-      List <AbstractJClass> narrows = new ArrayList <> ();
-      for (Type ata : pt.getActualTypeArguments ())
-      {
-        AbstractJClass ref = jcm.ref (ata);
-        if (!(ref instanceof JTypeWildcard))
-        {
-          ref = ref.wildcardExtends ();
-        }
-        narrows.add (ref);
-      }
-      narrows.add (jcm.ref (pt));
-      return asParam ().erasure ().narrow (narrows);
-  }
 
   public default boolean isFinal ()
   {
@@ -126,19 +119,9 @@ public sealed interface MirroringClass
       return ret;
     }
 
-    /// hardcoded source.
-    public static record Source (Class <?> target, Class <?> returnType, Class <?> paramType)
-    {
-
-      public Source (Class <?> target, Class <?> returnType)
-      {
-        this (target, returnType, returnType);
-      }
-    }
-
     public static HardcodedMirror of (JCodeModel jcm, Source source)
     {
-      return source.paramType == null ? new HardcodedMirror (jcm, source.target (), source.returnType ())
+      return source.paramType () == null ? new HardcodedMirror (jcm, source.target (), source.returnType ())
                                       : new HardcodedMirror (jcm,
                                                              source.target (),
                                                              source.returnType (),
@@ -147,37 +130,9 @@ public sealed interface MirroringClass
 
   }
 
-  public static final List <Source> HARDCODED_SOURCES = List.of (new Source (boolean.class, BoolExpression.class),
-                                                                 new Source (boolean [].class, BoolArrExp.class),
-                                                                 new Source (byte.class, ByteExpression.class),
-                                                                 new Source (byte [].class, ByteArrExp.class),
-                                                                 new Source (char.class, CharExpression.class),
-                                                                 new Source (char [].class, CharArrExp.class),
-                                                                 new Source (double.class,
-                                                                             DblExpression.class,
-                                                                             ANumericExpression.class),
-                                                                 new Source (double [].class, DoubleArrExp.class),
-                                                                 new Source (float.class,
-                                                                             FltExpression.class,
-                                                                             ASubFloatExpression.class),
-                                                                 new Source (float [].class, FloatArrExp.class),
-                                                                 new Source (int.class,
-                                                                             IntExpression.class,
-                                                                             ASubIntExpression.class),
-                                                                 new Source (int [].class, IntArrExp.class),
-                                                                 new Source (long.class,
-                                                                             LngExpression.class,
-                                                                             ASubLongExpression.class),
-                                                                 new Source (long [].class, LongArrExp.class),
-                                                                 new Source (short.class, ShortExpression.class),
-                                                                 new Source (short [].class, ShortArrExp.class),
-                                                                 new Source (String.class, StringExpression.class),
-                                                                 new Source (String [].class, StringArrExp.class),
-                                                                 new Source (void.class, VoidStatExpression.class));
-
   public static Stream <HardcodedMirror> stream (JCodeModel jcm)
   {
-    return HARDCODED_SOURCES.stream ().map (s -> HardcodedMirror.of (jcm, s));
+    return Source.HARDCODED_SOURCES.stream ().map (s -> HardcodedMirror.of (jcm, s));
   }
 
   
@@ -257,18 +212,6 @@ public sealed interface MirroringClass
     public boolean returnFullyGenerified ()
     {
       return true;
-    }
-
-    public AbstractJClass generifiedParam (ParameterizedType pt, JCodeModel jcm)
-    {
-      if (isFinal ())
-      {
-        return asParam ().erasure ().narrow (jcm.ref (pt));
-      }
-      else
-      {
-        return asParam ().erasure ().narrow (jcm.ref (pt).wildcardExtends ());
-      }
     }
 
   }
