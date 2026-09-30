@@ -1,0 +1,173 @@
+/**
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.helger.jcodemodel.expressions.java.util;
+
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Spliterator;
+import java.util.function.UnaryOperator;
+import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
+import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
+import javax.annotation.processing.Generated;
+
+@Generated("com.helger.jcodemodel.JCodeModel")
+public abstract class ASubListExpr<E, Contained extends List<E>>
+    extends ObjectExpression<Contained>
+{
+
+    public ASubListExpr(IJExpression raw) {
+        super(raw);
+    }
+
+    public BoolExpression add(ITypedExpression<? extends E> arg0) {
+        return new BoolExpression(this.raw().invoke("add").arg(arg0));
+    }
+
+    public VoidStatExpression add(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<? extends E> arg1) {
+        return new VoidStatExpression(this.raw().invoke("add").arg(arg0).arg(arg1));
+    }
+
+    public BoolExpression addAll(ITypedExpression<? extends Collection<? extends E>> arg0) {
+        return new BoolExpression(this.raw().invoke("addAll").arg(arg0));
+    }
+
+    public BoolExpression addAll(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<? extends Collection<? extends E>> arg1) {
+        return new BoolExpression(this.raw().invoke("addAll").arg(arg0).arg(arg1));
+    }
+
+    public VoidStatExpression addFirst(ITypedExpression<? extends E> arg0) {
+        return new VoidStatExpression(this.raw().invoke("addFirst").arg(arg0));
+    }
+
+    public VoidStatExpression addLast(ITypedExpression<? extends E> arg0) {
+        return new VoidStatExpression(this.raw().invoke("addLast").arg(arg0));
+    }
+
+    public VoidStatExpression clear() {
+        return new VoidStatExpression(this.raw().invoke("clear"));
+    }
+
+    public BoolExpression contains(ITypedExpression<?> arg0) {
+        return new BoolExpression(this.raw().invoke("contains").arg(arg0));
+    }
+
+    public BoolExpression containsAll(ITypedExpression<? extends Collection<?>> arg0) {
+        return new BoolExpression(this.raw().invoke("containsAll").arg(arg0));
+    }
+
+    public ObjectExpression<E> get(ASubIntExpression<?, ?, ?> arg0) {
+        return new ObjectExpression<>(this.raw().invoke("get").arg(arg0));
+    }
+
+    public ObjectExpression<E> getFirst() {
+        return new ObjectExpression<>(this.raw().invoke("getFirst"));
+    }
+
+    public ObjectExpression<E> getLast() {
+        return new ObjectExpression<>(this.raw().invoke("getLast"));
+    }
+
+    public IntExpression indexOf(ITypedExpression<?> arg0) {
+        return new IntExpression(this.raw().invoke("indexOf").arg(arg0));
+    }
+
+    public BoolExpression isEmpty() {
+        return new BoolExpression(this.raw().invoke("isEmpty"));
+    }
+
+    public ObjectExpression<Iterator<E>> iterator() {
+        return new ObjectExpression<>(this.raw().invoke("iterator"));
+    }
+
+    public IntExpression lastIndexOf(ITypedExpression<?> arg0) {
+        return new IntExpression(this.raw().invoke("lastIndexOf").arg(arg0));
+    }
+
+    public ObjectExpression<ListIterator<E>> listIterator() {
+        return new ObjectExpression<>(this.raw().invoke("listIterator"));
+    }
+
+    public ObjectExpression<ListIterator<E>> listIterator(ASubIntExpression<?, ?, ?> arg0) {
+        return new ObjectExpression<>(this.raw().invoke("listIterator").arg(arg0));
+    }
+
+    public ObjectExpression<E> remove(ASubIntExpression<?, ?, ?> arg0) {
+        return new ObjectExpression<>(this.raw().invoke("remove").arg(arg0));
+    }
+
+    public BoolExpression remove_1(ITypedExpression<?> arg0) {
+        return new BoolExpression(this.raw().invoke("remove").arg(arg0));
+    }
+
+    public BoolExpression removeAll(ITypedExpression<? extends Collection<?>> arg0) {
+        return new BoolExpression(this.raw().invoke("removeAll").arg(arg0));
+    }
+
+    public ObjectExpression<E> removeFirst() {
+        return new ObjectExpression<>(this.raw().invoke("removeFirst"));
+    }
+
+    public ObjectExpression<E> removeLast() {
+        return new ObjectExpression<>(this.raw().invoke("removeLast"));
+    }
+
+    public VoidStatExpression replaceAll(ITypedExpression<? extends UnaryOperator<? extends E>> arg0) {
+        return new VoidStatExpression(this.raw().invoke("replaceAll").arg(arg0));
+    }
+
+    public BoolExpression retainAll(ITypedExpression<? extends Collection<?>> arg0) {
+        return new BoolExpression(this.raw().invoke("retainAll").arg(arg0));
+    }
+
+    public ListExpr<E> reversed() {
+        return new ListExpr<>(this.raw().invoke("reversed"));
+    }
+
+    public ObjectExpression<E> set(ASubIntExpression<?, ?, ?> arg0, ITypedExpression<? extends E> arg1) {
+        return new ObjectExpression<>(this.raw().invoke("set").arg(arg0).arg(arg1));
+    }
+
+    public IntExpression size() {
+        return new IntExpression(this.raw().invoke("size"));
+    }
+
+    public VoidStatExpression sort(ITypedExpression<? extends Comparator<? super E>> arg0) {
+        return new VoidStatExpression(this.raw().invoke("sort").arg(arg0));
+    }
+
+    public ObjectExpression<Spliterator<E>> spliterator() {
+        return new ObjectExpression<>(this.raw().invoke("spliterator"));
+    }
+
+    public ListExpr<E> subList(ASubIntExpression<?, ?, ?> arg0, ASubIntExpression<?, ?, ?> arg1) {
+        return new ListExpr<>(this.raw().invoke("subList").arg(arg0).arg(arg1));
+    }
+
+    public ArrayExpression<Object> toArray() {
+        return new ArrayExpression<>(this.raw().invoke("toArray"));
+    }
+
+    public<T> ArrayExpression<T> toArray(ArrayExpression<? extends T> arg0) {
+        return new ArrayExpression<>(this.raw().invoke("toArray").arg(arg0));
+    }
+}

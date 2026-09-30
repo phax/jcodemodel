@@ -49,6 +49,7 @@ import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.vars.JBlockVar;
 
 /**
@@ -584,6 +585,12 @@ public class JBlock implements IJGenerable, IJStatement
     return internalInsert (new JConditional (aTestExpr));
   }
 
+  @NonNull
+  public JConditional _if (@NonNull final ITypedExpression <?> aTestExpr)
+  {
+    return _if (aTestExpr.raw ());
+  }
+
   /**
    * Create an If statement with the respective then statement and add it to this block
    *
@@ -706,6 +713,12 @@ public class JBlock implements IJGenerable, IJStatement
   public JReturn _return (@Nullable final IJExpression aExpr)
   {
     return internalInsert (new JReturn (aExpr));
+  }
+
+  @NonNull
+  public JReturn _return (@Nullable final ITypedExpression <?> aExpr)
+  {
+    return _return (aExpr.raw ());
   }
 
   /**

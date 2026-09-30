@@ -26,6 +26,9 @@ import java.util.stream.Stream;
 
 import javax.annotation.processing.Generated;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.JReferencedClass;
@@ -33,8 +36,11 @@ import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.JCMWriter;
 import com.helger.jcodemodel.writer.ProgressCodeWriter.IProgressTracker;
 
+
 public class GenerateTestFiles
 {
+
+  private static final Logger log = LoggerFactory.getLogger (GenerateTestFiles.class);
   private static final String OUTPUT_DIR = "src/generated/javatest";
   private static final String CLASS_SCAN_DIR = "src/main/java";
   private static final String LICENCE = """
@@ -174,8 +180,8 @@ public class GenerateTestFiles
     for (final Method m : clazz.getDeclaredMethods ())
     {
       // only apply to methods public
-      // and that produce a JCodeModel or require one or a package
-      if ((m.getModifiers () & Modifier.PUBLIC) > 0)
+      // and not marked with @Ignore
+      if ((m.getModifiers () & Modifier.PUBLIC) > 0 && m.getAnnotation (TestJCM.Ignore.class) == null)
       {
         final boolean returnsJCM = m.getReturnType ().equals (JCodeModel.class);
         boolean requiresJCM = false;
@@ -260,6 +266,32 @@ public class GenerateTestFiles
                                     .build (m_aOutputDir, (IProgressTracker) null);
           }
         }
+        else
+        {
+          List <String> reasons = new ArrayList <> ();
+          if (missingParam)
+          {
+            reasons.add ("unresolvable param(s)");
+          }
+          if (!returnsJCM || !requiresJCM)
+          {
+            reasons.add ("does not refer to JCM/JPackage");
+          }
+          log.debug (clazz.getSimpleName () + "::" + m.getName () + " not selected for generation : " + reasons);
+        }
+      }
+      else
+      {
+        List <String> reasons = new ArrayList <> ();
+        if ((m.getModifiers () & Modifier.PUBLIC) <= 0)
+        {
+          reasons.add ("not public");
+        }
+        if (m.getAnnotation (TestJCM.Ignore.class) != null)
+        {
+          reasons.add ("marked @Ignore");
+        }
+        log.debug (clazz.getSimpleName () + "::" + m.getName () + " not selected for generation : " + reasons);
       }
     }
   }
