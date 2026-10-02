@@ -379,7 +379,7 @@ public class JMethod extends AbstractJGenerifiableImpl implements IJAnnotatable,
   /// @return a new TypedExpression. You can use raw() to get the actual JVar.
   ///
   /// @param paramName the parameter name, stored at compile tume
-  /// @param runtimeClass the designtime type of the param
+  /// @param runtimeClass the design-time type of the param
   /// @param concreteOf constructor of the concrete TypedExpression to return, based on a
   /// IJExpression. Typically ConcreteClass::of hence the name.
   @NonNull

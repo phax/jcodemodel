@@ -3,7 +3,7 @@ package com.helger.jcodemodel.tests.expressions.typed;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class TypedExpressionTest
+public class PalyndromTest
 {
 
   @FunctionalInterface

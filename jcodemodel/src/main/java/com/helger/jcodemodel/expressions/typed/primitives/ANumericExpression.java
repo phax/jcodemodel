@@ -4,6 +4,7 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
 import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 
@@ -22,6 +23,8 @@ import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 public abstract class ANumericExpression <T, Self extends ANumericExpression <T, Self, ?>, PosType extends ANumericExpression <?, ?, ?>>
                                          extends
                                          TypedExpressionWrapper <T>
+                                         implements
+                                         NonVoidExpression <T>
 {
 
   protected ANumericExpression (@NonNull IJExpression raw)
@@ -114,12 +117,6 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   // Those don't need to be overloaded in the sub classes.
   //
 
-  /// @return `that == other`
-  public BoolExpression eq (ANumericExpression <?, ?, ?> other)
-  {
-    return new BoolExpression (raw.eq (other.raw ()));
-  }
-
   /// @return `that >= other`
   public BoolExpression ge (ANumericExpression <?, ?, ?> other)
   {
@@ -142,11 +139,5 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   public BoolExpression lt (ANumericExpression <?, ?, ?> other)
   {
     return new BoolExpression (raw.lt (other.raw ()));
-  }
-
-  /// @return `that != other`
-  public BoolExpression ne (ANumericExpression <?, ?, ?> other)
-  {
-    return new BoolExpression (raw.ne (other.raw ()));
   }
 }
