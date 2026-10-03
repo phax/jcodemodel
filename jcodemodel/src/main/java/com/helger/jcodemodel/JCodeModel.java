@@ -706,6 +706,8 @@ public class JCodeModel implements Serializable
 
   /// reference a reflect type. Useful for example when copying an existing method's return type
   /// that is parameterized.
+  ///
+  /// Will fail if any internal type is a primitive.
   @NonNull
   public AbstractJClass ref (@NonNull Type type)
   {
@@ -770,8 +772,14 @@ public class JCodeModel implements Serializable
 
   // T[], String[]
   @NonNull
-  protected AbstractJClass ref (@NonNull GenericArrayType gat)
+  protected JArrayClass ref (@NonNull GenericArrayType gat)
   {
+    // ref(Type) does not allow int.class, but it allows int[].class : so here we can't recursively
+    // call it. instead call _ref that can work with int.class .
+    if (gat.getGenericComponentType () instanceof Class <?> cl)
+    {
+      return _ref (cl).array ();
+    }
     return ref (gat.getGenericComponentType ()).array ();
   }
 

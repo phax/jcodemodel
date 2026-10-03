@@ -1,8 +1,18 @@
 package com.helger.jcodemodel.expressions.typed.java.lang;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.JInstanceOfVar;
+import com.helger.jcodemodel.expressions.typed.InstanceOfExpression;
 import com.helger.jcodemodel.expressions.typed.Mirroring;
+import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
 import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubLongExpression;
@@ -15,13 +25,37 @@ import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 /// There is no abstract/concrete couple because the concrete class would also be used as default return mirror.
 /// For example, a method returning a `MyClass` would be mirrored into a `return new ObjectExpression<MyClass>(raw…)`.
 /// Therefore adding two classes would complexify the hierarchy without a benefit.
-public class ObjectExpression <T> extends TypedExpressionWrapper <T>
+public class ObjectExpression <T> extends TypedExpressionWrapper <T> implements NonVoidExpression <T>
 {
 
   public ObjectExpression (IJExpression raw)
   {
     super (raw);
   }
+
+  //
+  // static methods must have different name from the sub methods.
+  //
+
+  public static <T> ObjectExpression <T> containing (IJExpression raw)
+  {
+    return new ObjectExpression <> (raw);
+  }
+
+  public static <T> ObjectExpression <T> cast (ITypedExpression <?> untyped)
+  {
+    return containing (untyped.raw ());
+  }
+
+  // only works for non generic classes.
+  public static <T> ObjectExpression <T> addParam (JMethod m, Class <T> cl, String name)
+  {
+    return m.paramTyped (name, cl, ObjectExpression::containing);
+  }
+
+  //
+  // mirroring
+  //
 
   /// @return `that.equals(anObject)`
   @Mirroring ("equals")
@@ -56,6 +90,48 @@ public class ObjectExpression <T> extends TypedExpressionWrapper <T>
   public VoidStatExpression notifyAll_ ()
   {
     return new VoidStatExpression (raw.invoke ("notifyAll"));
+  }
+
+  /// Sadly we can't extract the class nor the jcm from the generics
+  ///
+  /// @param jcm required to convert the type
+  /// @param VarType the static class
+  /// @param varName the name of the newly created variable.
+  /// @return `that instanceof VarType varname`
+  public <VarType> InstanceOfExpression <? extends VarType, ? extends ObjectExpression <VarType>> instanceOf (JCodeModel jcm,
+                                                                                                              Class <? extends VarType> varClass,
+                                                                                                              String varName)
+  {
+    JInstanceOfVar io = JExpr.instanceOf (raw (), jcm.ref (varClass), varName);
+    InstanceOfExpression <VarType, ObjectExpression <VarType>> ret = new InstanceOfExpression <> (io);
+    return ret.setTypedVar (new ObjectExpression <> (io.var ()));
+  }
+
+
+  /// @param ExpressionType an objectexpression because we can't cast Object to primitive. `( new
+  /// Integer(5) instanceof int i) ` fails.
+  /// @return `that instanceof VarType varname`
+  @SuppressWarnings ("unchecked")
+  public <VarType, ExpressionType extends ObjectExpression <VarType>> 
+      InstanceOfExpression <VarType, ExpressionType> 
+    instanceOf (
+        JCodeModel jcm,
+        Class <? extends VarType> varClass,
+        String varName,
+        Class <? extends ExpressionType> retClass)
+  {
+    try
+    {
+      JInstanceOfVar io = JExpr.instanceOf (raw (), jcm.ref (varClass), varName);
+      MethodHandles.Lookup publicLookup = MethodHandles.publicLookup ();
+      MethodType mt = MethodType.methodType (void.class, IJExpression.class);
+      MethodHandle constructor = publicLookup.findConstructor (retClass, mt);
+      return new InstanceOfExpression <VarType, ExpressionType> (io).setTypedVar ((ExpressionType) constructor.invoke (io.var ()));
+    }
+    catch (Throwable e)
+    {
+      throw new RuntimeException (e);
+    }
   }
 
   /// @return `that != null`
