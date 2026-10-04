@@ -15,12 +15,13 @@ import com.helger.jcodemodel.expressions.typed.primitives.CharExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 
 /// generate a class with contains(Object containing, char contained) .
-/// Checks the instanceof pattern 
+/// 
+/// Checks the instanceof method of AReferenceExpression 
 @TestJCM
 public class ContainsCharTestGen
 {
 
-  public void ContainsTypedExpression (JPackage jp, JCodeModel jcm) throws JCodeModelException
+  public void containsTypedExpression (JPackage jp, JCodeModel jcm) throws JCodeModelException
   {
     JDefinedClass cl = jp._class ("ContainsTypedExpression");
     JMethod meth = cl.method (JMod.PUBLIC_STATIC_FINAL, jp.owner ().BOOLEAN, "contains");

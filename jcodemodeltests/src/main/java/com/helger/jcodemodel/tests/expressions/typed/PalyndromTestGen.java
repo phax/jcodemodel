@@ -14,7 +14,8 @@ import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 
 /// generate two classes with static methods. One is created using raw JCM calls, the other using expressions.
-/// this allows to visually check that both generate the same result, and that the feature provided by expression is usable.
+/// 
+/// visually check that both generate the same result, and that the feature provided by expression is usable.
 @TestJCM
 public class PalyndromTestGen
 {

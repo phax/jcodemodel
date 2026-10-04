@@ -17,8 +17,8 @@ import com.helger.jcodemodel.expressions.typed.primitives.CharExpression.CharArr
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 
 /// generate a class with replace(String source, char oldChar, char newChar) .
+/// 
 /// Checks that calling various String, array functions does not crash ^^
-
 @TestJCM
 public class StringReplaceTestGen
 {
