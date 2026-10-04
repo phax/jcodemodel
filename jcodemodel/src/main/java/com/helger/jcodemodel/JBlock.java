@@ -50,6 +50,7 @@ import org.jspecify.annotations.Nullable;
 import com.helger.annotation.Nonnegative;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
 import com.helger.jcodemodel.vars.JBlockVar;
 
 /**
@@ -358,6 +359,12 @@ public class JBlock implements IJGenerable, IJStatement
   {
     internalInsert (JExpr.assign (aLhs, aExpr));
     return this;
+  }
+
+  @NonNull
+  public JBlock assign (@NonNull final IJAssignmentTarget aLhs, @NonNull final NonVoidExpression <?> aExpr)
+  {
+    return assign (aLhs, aExpr.raw ());
   }
 
   @NonNull

@@ -46,10 +46,28 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   // := double`
   //
 
-  /// @return `that + other`
+  /// @return `that / other`
   public DblExpression div (ANumericExpression <?, ?, ?> other)
   {
     return new DblExpression (raw.div (other.raw ()));
+  }
+
+  /// @return `that % other`
+  public DblExpression mod (ANumericExpression <?, ?, ?> other)
+  {
+    return new DblExpression (raw.mod (other.raw ()));
+  }
+
+  /// @return `that * other`
+  public DblExpression mult (ANumericExpression <?, ?, ?> other)
+  {
+    return new DblExpression (raw.mul (other.raw ()));
+  }
+
+  /// @return `- that`
+  public PosType neg ()
+  {
+    return wrapPos (raw.minus ());
   }
 
   /// @return `that + other`
@@ -63,18 +81,6 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   public StringExpression plus (ITypedExpression <? extends String> other)
   {
     return new StringExpression (raw.plus (other.raw ()));
-  }
-
-  /// @return `that * other`
-  public DblExpression mult (ANumericExpression <?, ?, ?> other)
-  {
-    return new DblExpression (raw.mul (other.raw ()));
-  }
-
-  /// @return `- that`
-  public PosType neg ()
-  {
-    return wrapPos (raw.minus ());
   }
 
   /// @return `+ that`

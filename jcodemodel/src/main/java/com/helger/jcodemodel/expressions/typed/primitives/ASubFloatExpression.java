@@ -19,22 +19,28 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
   // promoting operators
   //
 
-  /// @return `that + other`
+  /// @return `that / other`
   public FltExpression div (ASubFloatExpression <?, ?, ?> other)
   {
     return new FltExpression (raw.div (other.raw ()));
   }
 
-  /// @return `that + other`
-  public FltExpression plus (ASubFloatExpression <?, ?, ?> other)
+  /// @return `that % other`
+  public FltExpression mod (ASubFloatExpression <?, ?, ?> other)
   {
-    return new FltExpression (raw.plus (other.raw ()));
+    return new FltExpression (raw.mod (other.raw ()));
   }
 
   /// @return `that * other`
   public FltExpression mult (ASubFloatExpression <?, ?, ?> other)
   {
     return new FltExpression (raw.mul (other.raw ()));
+  }
+
+  /// @return `that + other`
+  public FltExpression plus (ASubFloatExpression <?, ?, ?> other)
+  {
+    return new FltExpression (raw.plus (other.raw ()));
   }
 
   /// @return `that - other`

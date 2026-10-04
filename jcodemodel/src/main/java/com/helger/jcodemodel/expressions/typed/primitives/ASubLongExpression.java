@@ -19,22 +19,28 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
   // binary
   //
 
-  /// @return `that + other`
+  /// @return `that / other`
   public LngExpression div (ASubLongExpression <?, ?, ?> other)
   {
     return new LngExpression (raw.div (other.raw ()));
   }
 
-  /// @return `that + other`
-  public LngExpression plus (ASubLongExpression <?, ?, ?> other)
+  /// @return `that % other`
+  public LngExpression mod (ASubLongExpression <?, ?, ?> other)
   {
-    return new LngExpression (raw.plus (other.raw ()));
+    return new LngExpression (raw.mod (other.raw ()));
   }
 
   /// @return `that * other`
   public LngExpression mult (ASubLongExpression <?, ?, ?> other)
   {
     return new LngExpression (raw.mul (other.raw ()));
+  }
+
+  /// @return `that + other`
+  public LngExpression plus (ASubLongExpression <?, ?, ?> other)
+  {
+    return new LngExpression (raw.plus (other.raw ()));
   }
 
   /// @return `that - other`

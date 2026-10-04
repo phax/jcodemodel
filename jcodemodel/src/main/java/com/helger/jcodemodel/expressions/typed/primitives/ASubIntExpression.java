@@ -21,22 +21,28 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
   // promoting operators
   //
 
-  /// @return `that + other`
+  /// @return `that / other`
   public IntExpression div (ASubIntExpression <?, ?, ?> other)
   {
     return new IntExpression (raw.div (other.raw ()));
   }
 
-  /// @return `that + other`
-  public IntExpression plus (ASubIntExpression <?, ?, ?> other)
+  /// @return `that % other`
+  public IntExpression mod (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.plus (other.raw ()));
+    return new IntExpression (raw.mod (other.raw ()));
   }
 
   /// @return `that * other`
   public IntExpression mult (ASubIntExpression <?, ?, ?> other)
   {
     return new IntExpression (raw.mul (other.raw ()));
+  }
+
+  /// @return `that + other`
+  public IntExpression plus (ASubIntExpression <?, ?, ?> other)
+  {
+    return new IntExpression (raw.plus (other.raw ()));
   }
 
   /// @return `that - other`
