@@ -3,10 +3,10 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpressionStatement;
-import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
+import com.helger.jcodemodel.expressions.typed.ATypedExpressionWrapper;
 
 /// An expression that resolves to a void type, using a statement. Return type of expressions calling a void method.
-public class VoidStatExpression extends TypedExpressionWrapper <Void>
+public class VoidStatExpression extends ATypedExpressionWrapper <Void>
 {
 
   public static VoidStatExpression of (IJExpressionStatement raw)

@@ -4,8 +4,8 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.ATypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
-import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 
 /// Root class for numeric expression. The arithmetic operators promote any type to double, unless both are subtypes.
@@ -20,9 +20,10 @@ import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 /// 
 /// @param Self the self type, the class itself in the concrete implementations.
 /// @param PosType the returned numeric expression type constructed from pos(). +double is double, but +char is int.
+/// This param is not bound to T because the result of a `+x` maybe a different type from **x**, typically `+'a'` is an int.
 public abstract class ANumericExpression <T, Self extends ANumericExpression <T, Self, ?>, PosType extends ANumericExpression <?, ?, ?>>
                                          extends
-                                         TypedExpressionWrapper <T>
+                                         ATypedExpressionWrapper <T>
                                          implements
                                          NonVoidExpression <T>
 {

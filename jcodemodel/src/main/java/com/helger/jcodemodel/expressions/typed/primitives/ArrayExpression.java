@@ -3,9 +3,10 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
-public class ArrayExpression <ElementType> extends ObjectExpression <ElementType []>
+public class ArrayExpression <ElementType> extends AReferenceExpression <ElementType []>
 {
 
   public ArrayExpression (IJExpression raw)

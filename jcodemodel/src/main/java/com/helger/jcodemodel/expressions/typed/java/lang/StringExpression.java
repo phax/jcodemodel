@@ -12,6 +12,7 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 import com.helger.jcodemodel.expressions.typed.Mirroring;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
@@ -29,7 +30,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 //
 // ref : https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/lang/String.html
 //
-public class StringExpression extends ObjectExpression <String>
+public class StringExpression extends AReferenceExpression <String>
 {
 
   //
@@ -61,6 +62,11 @@ public class StringExpression extends ObjectExpression <String>
     super (raw);
   }
 
+  public static StringExpression null_ ()
+  {
+    return of (JExpr._null ());
+  }
+
   public static StringExpression of (String value)
   {
     return new StringExpression (JExpr.lit (value));
@@ -76,6 +82,8 @@ public class StringExpression extends ObjectExpression <String>
     return of (untyped.raw ());
   }
 
+  /// creates a new param in the method, of type String, and return its corresponding typed
+  /// expression.
   public static StringExpression param (JMethod m, String name)
   {
     return m.paramTyped (name, String.class, StringExpression::of);

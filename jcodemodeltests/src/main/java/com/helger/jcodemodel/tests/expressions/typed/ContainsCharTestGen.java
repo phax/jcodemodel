@@ -24,7 +24,7 @@ public class ContainsCharTestGen
   {
     JDefinedClass cl = jp._class ("ContainsTypedExpression");
     JMethod meth = cl.method (JMod.PUBLIC_STATIC_FINAL, jp.owner ().BOOLEAN, "contains");
-    ObjectExpression <Object> containing = ObjectExpression.addParam (meth, Object.class, "containing");
+    ObjectExpression <Object> containing = ObjectExpression.of (meth, Object.class, "containing");
     CharExpression contained = CharExpression.param (meth, "contained");
 
     // if( containing instanceof char c) return c == contained;
