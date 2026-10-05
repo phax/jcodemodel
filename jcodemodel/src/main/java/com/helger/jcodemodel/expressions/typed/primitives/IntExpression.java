@@ -4,6 +4,7 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 /// expression with a `int` type.
 public class IntExpression extends ASubIntExpression <Integer, IntExpression, IntExpression>
@@ -62,6 +63,11 @@ public class IntExpression extends ASubIntExpression <Integer, IntExpression, In
   protected IntExpression wrapPos (IJExpression exp)
   {
     return new IntExpression (exp);
+  }
+
+  public ObjectExpression <Integer> autoBox ()
+  {
+    return new ObjectExpression <> (raw ());
   }
 
 }

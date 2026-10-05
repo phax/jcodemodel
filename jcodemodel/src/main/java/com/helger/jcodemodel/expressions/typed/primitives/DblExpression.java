@@ -4,6 +4,7 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 /// expression with a `double` type. Name is shorter to avoid name clash with java.lang . 
 public class DblExpression extends ANumericExpression <Double, DblExpression, DblExpression>
@@ -62,6 +63,11 @@ public class DblExpression extends ANumericExpression <Double, DblExpression, Db
   protected DblExpression wrapPos (IJExpression exp)
   {
     return new DblExpression (exp);
+  }
+
+  public ObjectExpression <Double> autoBox ()
+  {
+    return new ObjectExpression <> (raw ());
   }
 
 }

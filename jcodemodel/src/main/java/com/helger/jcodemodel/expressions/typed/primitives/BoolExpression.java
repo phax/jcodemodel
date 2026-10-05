@@ -8,8 +8,9 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JOp;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
 import com.helger.jcodemodel.expressions.typed.ATypedExpressionWrapper;
+import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 /// expression with a `boolean` type. Name is shorter to avoid name clash with java.lang . 
 public class BoolExpression extends ATypedExpressionWrapper <Boolean> implements NonVoidExpression <Boolean>
@@ -66,6 +67,11 @@ public class BoolExpression extends ATypedExpressionWrapper <Boolean> implements
   public BoolExpression (IJExpression raw)
   {
     super (raw);
+  }
+
+  public ObjectExpression <Boolean> autoBox ()
+  {
+    return new ObjectExpression <> (raw ());
   }
 
   //
