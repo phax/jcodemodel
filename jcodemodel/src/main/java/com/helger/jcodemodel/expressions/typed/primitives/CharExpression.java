@@ -4,7 +4,6 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 /// expression with a `char` type.
 public class CharExpression extends ASubIntExpression <Character, CharExpression, IntExpression>
@@ -45,6 +44,11 @@ public class CharExpression extends ASubIntExpression <Character, CharExpression
     return m.paramTyped (name, char.class, CharExpression::of);
   }
 
+  public static CharExpression unboxing (ITypedExpression <Character> object)
+  {
+    return of (object);
+  }
+
   //
 
   public CharExpression (IJExpression raw)
@@ -62,11 +66,6 @@ public class CharExpression extends ASubIntExpression <Character, CharExpression
   protected IntExpression wrapPos (IJExpression exp)
   {
     return new IntExpression (exp);
-  }
-
-  public ObjectExpression <Character> autoBox ()
-  {
-    return new ObjectExpression <> (raw ());
   }
 
 }

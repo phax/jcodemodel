@@ -4,7 +4,6 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 /// expression with a `byte` type.
 public class BytExpression extends ASubShortExpression <Byte, BytExpression, BytExpression>
@@ -36,14 +35,19 @@ public class BytExpression extends ASubShortExpression <Byte, BytExpression, Byt
     return of (untyped.raw ());
   }
 
+  public static BytExpression of (byte value)
+  {
+    return new BytExpression (JExpr.lit (value));
+  }
+
   public static BytExpression param (JMethod m, String name)
   {
     return m.paramTyped (name, byte.class, BytExpression::of);
   }
 
-  public static BytExpression of (byte value)
+  public static BytExpression unboxing (ITypedExpression <Byte> object)
   {
-    return new BytExpression (JExpr.lit (value));
+    return of (object);
   }
 
   ///
@@ -63,11 +67,6 @@ public class BytExpression extends ASubShortExpression <Byte, BytExpression, Byt
   protected BytExpression wrapPos (IJExpression exp)
   {
     return new BytExpression (exp);
-  }
-
-  public ObjectExpression <Byte> autoBox ()
-  {
-    return new ObjectExpression <> (raw ());
   }
 
 }

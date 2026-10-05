@@ -10,7 +10,6 @@ import com.helger.jcodemodel.JOp;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.ATypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 /// expression with a `boolean` type. Name is shorter to avoid name clash with java.lang . 
 public class BoolExpression extends ATypedExpressionWrapper <Boolean> implements NonVoidExpression <Boolean>
@@ -62,16 +61,16 @@ public class BoolExpression extends ATypedExpressionWrapper <Boolean> implements
     return m.paramTyped (name, boolean.class, BoolExpression::of);
   }
 
+  public static BoolExpression unboxing (ITypedExpression <Boolean> object)
+  {
+    return of (object);
+  }
+
   //
 
   public BoolExpression (IJExpression raw)
   {
     super (raw);
-  }
-
-  public ObjectExpression <Boolean> autoBox ()
-  {
-    return new ObjectExpression <> (raw ());
   }
 
   //

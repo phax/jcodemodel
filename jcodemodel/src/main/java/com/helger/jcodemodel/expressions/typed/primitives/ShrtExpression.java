@@ -4,7 +4,6 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 /// expression with a `short` type.
 public class ShrtExpression extends ASubShortExpression <Short, ShrtExpression, ShrtExpression>
@@ -36,14 +35,19 @@ public class ShrtExpression extends ASubShortExpression <Short, ShrtExpression, 
     return of (untyped.raw ());
   }
 
+  public static ShrtExpression of (short value)
+  {
+    return new ShrtExpression (JExpr.lit (value));
+  }
+
   public static ShrtExpression param (JMethod m, String name)
   {
     return m.paramTyped (name, short.class, ShrtExpression::of);
   }
 
-  public static ShrtExpression of (short value)
+  public static ShrtExpression unboxing (ITypedExpression <Short> object)
   {
-    return new ShrtExpression (JExpr.lit (value));
+    return of (object);
   }
 
   ///
@@ -63,11 +67,6 @@ public class ShrtExpression extends ASubShortExpression <Short, ShrtExpression, 
   protected ShrtExpression wrapPos (IJExpression exp)
   {
     return new ShrtExpression (exp);
-  }
-
-  public ObjectExpression <Short> autoBox ()
-  {
-    return new ObjectExpression <> (raw ());
   }
 
 }

@@ -4,7 +4,6 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 /// expression with a `int` type.
 public class IntExpression extends ASubIntExpression <Integer, IntExpression, IntExpression>
@@ -36,14 +35,19 @@ public class IntExpression extends ASubIntExpression <Integer, IntExpression, In
     return of (untyped.raw ());
   }
 
+  public static IntExpression of (int value)
+  {
+    return new IntExpression (JExpr.lit (value));
+  }
+
   public static IntExpression param (JMethod m, String name)
   {
     return m.paramTyped (name, int.class, IntExpression::of);
   }
 
-  public static IntExpression of (int value)
+  public static IntExpression unboxing (ITypedExpression <Integer> object)
   {
-    return new IntExpression (JExpr.lit (value));
+    return of (object);
   }
 
   ///
@@ -63,11 +67,6 @@ public class IntExpression extends ASubIntExpression <Integer, IntExpression, In
   protected IntExpression wrapPos (IJExpression exp)
   {
     return new IntExpression (exp);
-  }
-
-  public ObjectExpression <Integer> autoBox ()
-  {
-    return new ObjectExpression <> (raw ());
   }
 
 }

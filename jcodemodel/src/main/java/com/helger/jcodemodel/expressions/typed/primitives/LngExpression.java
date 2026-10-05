@@ -4,7 +4,6 @@ import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 /// expression with a `long` type. Name is shorter to avoid name clash with java.lang . 
 public class LngExpression extends ASubLongExpression <Long, LngExpression, LngExpression>
@@ -46,6 +45,11 @@ public class LngExpression extends ASubLongExpression <Long, LngExpression, LngE
     return m.paramTyped (name, long.class, LngExpression::of);
   }
 
+  public static LngExpression unboxing (ITypedExpression <Long> object)
+  {
+    return of (object);
+  }
+
   //
 
   public LngExpression (IJExpression raw)
@@ -63,11 +67,6 @@ public class LngExpression extends ASubLongExpression <Long, LngExpression, LngE
   protected LngExpression wrapPos (IJExpression exp)
   {
     return new LngExpression (exp);
-  }
-
-  public ObjectExpression <Long> autoBox ()
-  {
-    return new ObjectExpression <> (raw ());
   }
 
 }
