@@ -1,14 +1,17 @@
 package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 
 /// expression with a `float` type. Name is shorter to avoid name clash with java.lang . 
 public class FltExpression extends ASubFloatExpression <Float, FltExpression, FltExpression>
 {
-  public static class FloatArrExp extends ArrayExpression <Float>
+  public static class FloatArrExp extends AReferenceExpression <float []>
   {
 
     public FloatArrExp (IJExpression raw)
@@ -16,10 +19,26 @@ public class FltExpression extends ASubFloatExpression <Float, FltExpression, Fl
       super (raw);
     }
 
-    @Override
+    /// create an initialization to provided values
+    public static FloatArrExp of (JCodeModel jcm, float... values)
+    {
+      JInvocation invoke = jcm.ref (float [].class)._new ();
+      if (values != null)
+        for (float v : values)
+          invoke.arg (v);
+      return new FloatArrExp (invoke);
+    }
+
+    /// @return `that[index]`
     public FltExpression at (ASubIntExpression <?, ?, ?> index)
     {
-      return FltExpression.of (super.at (index));
+      return FltExpression.of (JExpr.component (raw (), index.raw ()));
+    }
+
+    /// @return `that.length`
+    public IntExpression length ()
+    {
+      return new IntExpression (JExpr.ref (raw, "length"));
     }
 
   }

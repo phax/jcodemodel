@@ -1,15 +1,18 @@
 package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 
 /// expression with a `byte` type.
 public class BytExpression extends ASubShortExpression <Byte, BytExpression, BytExpression>
 {
 
-  public static class ByteArrExp extends ArrayExpression <Byte>
+  public static class ByteArrExp extends AReferenceExpression <byte []>
   {
 
     public ByteArrExp (IJExpression raw)
@@ -17,10 +20,26 @@ public class BytExpression extends ASubShortExpression <Byte, BytExpression, Byt
       super (raw);
     }
 
-    @Override
+    /// create an initialization to provided values
+    public static ByteArrExp of (JCodeModel jcm, byte... values)
+    {
+      JInvocation invoke = jcm.ref (byte [].class)._new ();
+      if (values != null)
+        for (byte v : values)
+          invoke.arg (v);
+      return new ByteArrExp (invoke);
+    }
+
+    /// @return `that[index]`
     public BytExpression at (ASubIntExpression <?, ?, ?> index)
     {
-      return BytExpression.of (super.at (index));
+      return BytExpression.of (JExpr.component (raw (), index.raw ()));
+    }
+
+    /// @return `that.length`
+    public IntExpression length ()
+    {
+      return new IntExpression (JExpr.ref (raw, "length"));
     }
 
   }

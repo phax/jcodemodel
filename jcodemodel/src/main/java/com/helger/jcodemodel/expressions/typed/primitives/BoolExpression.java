@@ -4,10 +4,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JOp;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 import com.helger.jcodemodel.expressions.typed.ATypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
 
@@ -15,7 +18,7 @@ import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
 public class BoolExpression extends ATypedExpressionWrapper <Boolean> implements NonVoidExpression <Boolean>
 {
 
-  public static class BoolArrExp extends ArrayExpression <Boolean>
+  public static class BoolArrExp extends AReferenceExpression <boolean []>
   {
 
     public BoolArrExp (IJExpression raw)
@@ -23,10 +26,26 @@ public class BoolExpression extends ATypedExpressionWrapper <Boolean> implements
       super (raw);
     }
 
-    @Override
+    /// create an initialization to provided values
+    public static BoolArrExp of (JCodeModel jcm, boolean... values)
+    {
+      JInvocation invoke = jcm.ref (boolean [].class)._new ();
+      if (values != null)
+        for (boolean v : values)
+          invoke.arg (v);
+      return new BoolArrExp (invoke);
+    }
+
+    /// @return `that[index]`
     public BoolExpression at (ASubIntExpression <?, ?, ?> index)
     {
-      return BoolExpression.of (super.at (index));
+      return BoolExpression.of (JExpr.component (raw (), index.raw ()));
+    }
+
+    /// @return `that.length`
+    public IntExpression length ()
+    {
+      return new IntExpression (JExpr.ref (raw, "length"));
     }
 
   }

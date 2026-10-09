@@ -1,9 +1,12 @@
 package com.helger.jcodemodel.expressions.typed.primitives;
 
+import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
+import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
 public class ArrayExpression <ElementType> extends AReferenceExpression <ElementType []>
@@ -12,6 +15,18 @@ public class ArrayExpression <ElementType> extends AReferenceExpression <Element
   public ArrayExpression (IJExpression raw)
   {
     super (raw);
+  }
+
+  @SafeVarargs
+  public static <T> ArrayExpression <T> of (AbstractJType componentType, NonVoidExpression <? extends T>... values)
+  {
+    JInvocation invoke = componentType.array ()._new ();
+    if (values != null)
+      for (NonVoidExpression <? extends T> v : values)
+      {
+        invoke.arg (v.raw ());
+      }
+    return new ArrayExpression <> (invoke);
   }
 
   /// @return `that[index]`

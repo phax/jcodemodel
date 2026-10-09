@@ -1,14 +1,17 @@
 package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 
 /// expression with a `char` type.
 public class CharExpression extends ASubIntExpression <Character, CharExpression, IntExpression>
 {
-  public static class CharArrExp extends ArrayExpression <Character>
+  public static class CharArrExp extends AReferenceExpression <char []>
   {
 
     public CharArrExp (IJExpression raw)
@@ -16,10 +19,26 @@ public class CharExpression extends ASubIntExpression <Character, CharExpression
       super (raw);
     }
 
-    @Override
+    /// create an initialization to provided values
+    public static CharArrExp of (JCodeModel jcm, char... values)
+    {
+      JInvocation invoke = jcm.ref (char [].class)._new ();
+      if (values != null)
+        for (char v : values)
+          invoke.arg (v);
+      return new CharArrExp (invoke);
+    }
+
+    /// @return `that[index]`
     public CharExpression at (ASubIntExpression <?, ?, ?> index)
     {
-      return CharExpression.of (super.at (index));
+      return CharExpression.of (JExpr.component (raw (), index.raw ()));
+    }
+
+    /// @return `that.length`
+    public IntExpression length ()
+    {
+      return new IntExpression (JExpr.ref (raw, "length"));
     }
 
   }

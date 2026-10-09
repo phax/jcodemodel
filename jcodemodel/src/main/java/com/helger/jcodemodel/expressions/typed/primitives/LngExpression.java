@@ -1,15 +1,18 @@
 package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 
 /// expression with a `long` type. Name is shorter to avoid name clash with java.lang . 
 public class LngExpression extends ASubLongExpression <Long, LngExpression, LngExpression>
 {
 
-  public static class LongArrExp extends ArrayExpression <Long>
+  public static class LongArrExp extends AReferenceExpression <long []>
   {
 
     public LongArrExp (IJExpression raw)
@@ -17,10 +20,26 @@ public class LngExpression extends ASubLongExpression <Long, LngExpression, LngE
       super (raw);
     }
 
-    @Override
+    /// create an initialization to provided values
+    public static LongArrExp of (JCodeModel jcm, long... values)
+    {
+      JInvocation invoke = jcm.ref (long [].class)._new ();
+      if (values != null)
+        for (long v : values)
+          invoke.arg (v);
+      return new LongArrExp (invoke);
+    }
+
+    /// @return `that[index]`
     public LngExpression at (ASubIntExpression <?, ?, ?> index)
     {
-      return LngExpression.of (super.at (index));
+      return LngExpression.of (JExpr.component (raw (), index.raw ()));
+    }
+
+    /// @return `that.length`
+    public IntExpression length ()
+    {
+      return new IntExpression (JExpr.ref (raw, "length"));
     }
 
   }

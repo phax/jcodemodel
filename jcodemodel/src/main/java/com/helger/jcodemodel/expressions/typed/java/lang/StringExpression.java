@@ -45,6 +45,16 @@ public class StringExpression extends AReferenceExpression <String>
       super (raw);
     }
 
+    /// create an initialization to provided values
+    public static StringArrExp of (JCodeModel jcm, String... values)
+    {
+      JInvocation invoke = jcm.ref (String [].class)._new ();
+      if (values != null)
+        for (String v : values)
+          invoke.arg (v);
+      return new StringArrExp (invoke);
+    }
+
     @Override
     public StringExpression at (ASubIntExpression <?, ?, ?> index)
     {

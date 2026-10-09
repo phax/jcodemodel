@@ -1,15 +1,18 @@
 package com.helger.jcodemodel.expressions.typed.primitives;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 
 /// expression with a `double` type. Name is shorter to avoid name clash with java.lang . 
 public class DblExpression extends ANumericExpression <Double, DblExpression, DblExpression>
 {
 
-  public static class DoubleArrExp extends ArrayExpression <Double>
+  public static class DoubleArrExp extends AReferenceExpression <double []>
   {
 
     public DoubleArrExp (IJExpression raw)
@@ -17,10 +20,26 @@ public class DblExpression extends ANumericExpression <Double, DblExpression, Db
       super (raw);
     }
 
-    @Override
+    /// create an initialization to provided values
+    public static DoubleArrExp of (JCodeModel jcm, double... values)
+    {
+      JInvocation invoke = jcm.ref (double [].class)._new ();
+      if (values != null)
+        for (double v : values)
+          invoke.arg (v);
+      return new DoubleArrExp (invoke);
+    }
+
+    /// @return `that[index]`
     public DblExpression at (ASubIntExpression <?, ?, ?> index)
     {
-      return DblExpression.of (super.at (index));
+      return DblExpression.of (JExpr.component (raw (), index.raw ()));
+    }
+
+    /// @return `that.length`
+    public IntExpression length ()
+    {
+      return new IntExpression (JExpr.ref (raw, "length"));
     }
 
   }
