@@ -20,7 +20,7 @@ public class StringCharAtTestGen
     IntExpression i = IntExpression.param (meth, "i");
     JBlock body = meth.body ();
     body._if (s.isNull ().or (s.isEmpty ()))._then ()._return (JExpr.lit ((char) 0));
-    JConditional ifneg = body._if (i.lt (IntExpression.of (0)));
+    JConditional ifneg = body._if (i.lt (0));
     ifneg._then ().assign ((IJAssignmentTarget) i.raw (), s.length ().plus (i.mod (s.length ())).mod (s.length ()));
     ifneg._else ().assign ((IJAssignmentTarget) i.raw (), i.mod (s.length ()));
     body._return (s.charAt (i));

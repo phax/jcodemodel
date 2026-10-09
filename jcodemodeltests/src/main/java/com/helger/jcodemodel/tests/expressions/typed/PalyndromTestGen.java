@@ -26,7 +26,7 @@ public class PalyndromTestGen
     JDefinedClass cl = jp._class ("PalyndromTypedExpression");
     JMethod meth = cl.method (JMod.PUBLIC_STATIC_FINAL, jp.owner ().BOOLEAN, "test");
     StringExpression se = StringExpression.param (meth, "str");
-    meth.body ()._if (se.isNull ().or (se.length ().le (TETools.of (1))))._then ()._return (JExpr.TRUE);
+    meth.body ()._if (se.isNull ().or (se.length ().le (1)))._then ()._return (JExpr.TRUE);
 
     JForLoop for_ = meth.body ()._for ();
     IntExpression ie = IntExpression.of (for_.init (jp.owner ().INT, "i", JExpr.lit (0)));

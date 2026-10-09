@@ -12,7 +12,6 @@ import com.helger.jcodemodel.expressions.typed.InstanceOfExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.CharExpression;
-import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 
 /// generate a class with contains(Object containing, char contained) .
 /// 
@@ -45,7 +44,7 @@ public class ContainsCharTestGen
     meth.body ()
         ._if (ios.and (s -> s.isEmpty ().not ()))
         ._then ()
-        ._return (ios.getTypedVar ().indexOf (contained).gt (IntExpression.of (-1)));
+        ._return (ios.getTypedVar ().indexOf (contained).gt (-1));
 
     meth.body ()._return (JExpr.FALSE);
   }
