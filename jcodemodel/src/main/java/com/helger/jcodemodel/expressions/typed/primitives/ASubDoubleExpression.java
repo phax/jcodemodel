@@ -3,6 +3,7 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.ATypedExpressionWrapper;
 import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
@@ -167,24 +168,164 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
   /// @return `that >= other`
   public BoolExpression ge (ASubDoubleExpression <?, ?, ?> other)
   {
-    return new BoolExpression (raw.gte (other.raw ()));
+    return BoolExpression.of (raw.gte (other.raw ()));
+  }
+
+  public BoolExpression ge (double d)
+  {
+    return BoolExpression.of (raw ().gte (JExpr.lit (d)));
+  }
+
+  public BoolExpression ge (float f)
+  {
+    return BoolExpression.of (raw ().gte (JExpr.lit (f)));
+  }
+
+  public BoolExpression ge (long l)
+  {
+    return BoolExpression.of (raw ().gte (JExpr.lit (l)));
+  }
+
+  public BoolExpression ge (int i)
+  {
+    return BoolExpression.of (raw ().gte (JExpr.lit (i)));
+  }
+
+  public BoolExpression ge (short s)
+  {
+    return BoolExpression.of (raw ().gte (JExpr.lit (s)));
+  }
+
+  public BoolExpression ge (byte b)
+  {
+    return BoolExpression.of (raw ().gte (JExpr.lit (b)));
+  }
+
+  public BoolExpression ge (char c)
+  {
+    return BoolExpression.of (raw ().gte (JExpr.lit (c)));
   }
 
   /// @return `that > other`
   public BoolExpression gt (ASubDoubleExpression <?, ?, ?> other)
   {
-    return new BoolExpression (raw.gt (other.raw ()));
+    return BoolExpression.of (raw.gt (other.raw ()));
+  }
+
+  public BoolExpression gt (double d)
+  {
+    return BoolExpression.of (raw ().gt (JExpr.lit (d)));
+  }
+
+  public BoolExpression gt (float f)
+  {
+    return BoolExpression.of (raw ().gt (JExpr.lit (f)));
+  }
+
+  public BoolExpression gt (long l)
+  {
+    return BoolExpression.of (raw ().gt (JExpr.lit (l)));
+  }
+
+  public BoolExpression gt (int i)
+  {
+    return BoolExpression.of (raw ().gt (JExpr.lit (i)));
+  }
+
+  public BoolExpression gt (short s)
+  {
+    return BoolExpression.of (raw ().gt (JExpr.lit (s)));
+  }
+
+  public BoolExpression gt (byte b)
+  {
+    return BoolExpression.of (raw ().gt (JExpr.lit (b)));
+  }
+
+  public BoolExpression gt (char c)
+  {
+    return BoolExpression.of (raw ().gt (JExpr.lit (c)));
   }
 
   /// @return `that <= other`
   public BoolExpression le (ASubDoubleExpression <?, ?, ?> other)
   {
-    return new BoolExpression (raw.lte (other.raw ()));
+    return BoolExpression.of (raw.lte (other.raw ()));
+  }
+
+  public BoolExpression le (double d)
+  {
+    return BoolExpression.of (raw ().lte (JExpr.lit (d)));
+  }
+
+  public BoolExpression le (float f)
+  {
+    return BoolExpression.of (raw ().lte (JExpr.lit (f)));
+  }
+
+  public BoolExpression le (long l)
+  {
+    return BoolExpression.of (raw ().lte (JExpr.lit (l)));
+  }
+
+  public BoolExpression le (int i)
+  {
+    return BoolExpression.of (raw ().lte (JExpr.lit (i)));
+  }
+
+  public BoolExpression le (short s)
+  {
+    return BoolExpression.of (raw ().lte (JExpr.lit (s)));
+  }
+
+  public BoolExpression le (byte b)
+  {
+    return BoolExpression.of (raw ().lte (JExpr.lit (b)));
+  }
+
+  public BoolExpression le (char c)
+  {
+    return BoolExpression.of (raw ().lte (JExpr.lit (c)));
   }
 
   /// @return `that < other`
   public BoolExpression lt (ASubDoubleExpression <?, ?, ?> other)
   {
     return new BoolExpression (raw.lt (other.raw ()));
+  }
+
+  public BoolExpression lt (double d)
+  {
+    return BoolExpression.of (raw ().lt (JExpr.lit (d)));
+  }
+
+  public BoolExpression lt (float f)
+  {
+    return BoolExpression.of (raw ().lt (JExpr.lit (f)));
+  }
+
+  public BoolExpression lt (long l)
+  {
+    return BoolExpression.of (raw ().lt (JExpr.lit (l)));
+  }
+
+  public BoolExpression lt (int i)
+  {
+    return BoolExpression.of (raw ().lt (JExpr.lit (i)));
+  }
+
+  public BoolExpression lt (short s)
+  {
+    return BoolExpression.of (raw ().lt (JExpr.lit (s)));
+  }
+
+  public BoolExpression lt (byte b)
+  {
+    return BoolExpression.of (raw ().lt (JExpr.lit (b)));
+  }
+
+  public BoolExpression lt (char c)
+  {
+    return BoolExpression.of (raw ().lt (JExpr.lit (c)));
   }
 }
