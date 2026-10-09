@@ -52,6 +52,7 @@ import com.helger.base.equals.EqualsHelper;
 import com.helger.base.hashcode.HashCodeGenerator;
 import com.helger.jcodemodel.JOp.EPrecedence;
 import com.helger.jcodemodel.JOp.ESide;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 
 /**
  * {@link JMethod} invocation
@@ -163,6 +164,12 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
     ValueEnforcer.notNull (aArg, "Argument");
     m_aArgs.add (aArg);
     return this;
+  }
+
+  @NonNull
+  public JInvocation arg (@NonNull final ITypedExpression <?> aArg)
+  {
+    return arg (aArg.raw ());
   }
 
   /**

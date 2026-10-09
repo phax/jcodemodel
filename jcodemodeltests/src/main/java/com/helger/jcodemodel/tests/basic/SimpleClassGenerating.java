@@ -18,6 +18,7 @@ import javax.annotation.processing.Generated;
 
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
+import com.helger.jcodemodel.compile.annotation.TestJCM.Ignore;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 
 @TestJCM
@@ -39,7 +40,7 @@ public class SimpleClassGenerating
    */
   protected void protectedCall (final JPackage root) throws JCodeModelException
   {
-    root._class ("ERROR");
+    root._class ("ERROR_Protected");
   }
 
   /*
@@ -48,11 +49,20 @@ public class SimpleClassGenerating
   public void invalidParamCall (final JPackage root, @SuppressWarnings ("unused") final Object o)
                                                                                                   throws JCodeModelException
   {
-    root._class ("ERROR2");
+    root._class ("ERROR_UnresolvedParam");
   }
 
   public static void staticSimple (final JPackage root) throws JCodeModelException
   {
     root._class ("Simple3");
+  }
+
+  /*
+   * ignored so should not be selected
+   */
+  @Ignore
+  public void IgnoredCall (final JPackage root) throws JCodeModelException
+  {
+    root._class ("ERROR_Ignored");
   }
 }
