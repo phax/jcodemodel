@@ -36,7 +36,7 @@ public class ObjectExpression <T> extends AReferenceExpression <T>
     return of (untyped.raw ());
   }
 
-  // only works for non generic classes.
+  /// only works for non generic classes.
   public static <T> ObjectExpression <T> of (JMethod m, Class <T> cl, String name)
   {
     return m.paramTyped (name, cl, ObjectExpression::of);

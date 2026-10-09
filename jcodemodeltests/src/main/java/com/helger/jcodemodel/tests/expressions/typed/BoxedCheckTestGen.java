@@ -10,6 +10,7 @@ import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.CharExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
@@ -24,6 +25,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 @TestJCM
 public class BoxedCheckTestGen
 {
+
   public void boxedTypeExpression (JPackage jp, JCodeModel jcm) throws JCodeModelException
   {
     JDefinedClass cl = jp._class ("BoxedTypeExpression");
@@ -31,24 +33,25 @@ public class BoxedCheckTestGen
     JBlock body = meth.body ();
     StringExpression s = StringExpression.of (body.decl (jcm.ref (String.class), "s", JExpr.lit ("test")));
 
+    // compiles, as we pass an int to an int param
     "test".charAt (0);
-    // compiles as we pass an int to an int param
     body.add ((IJStatement) s.charAt (IntExpression.of (0)).raw ());
 
+    // compiles, as an Integer can be boxed into an int.
     "test".charAt ((Integer) 0);
-    // compiles as an Integer can be boxed into an int.
-    // body.add ((IJStatement) s.charAt (ObjectExpression.<Integer> of (JExpr.lit (0).castTo
-    // (jcm.ref (Integer.class))))
-    // .raw ());
+    // however we need to explicitly unbox it
+    ObjectExpression <Integer> boxedInt = IntExpression.of (0).cast (jcm.ref (Integer.class));
+    body.add ((IJStatement) s.charAt (IntExpression.unboxing (boxedInt)).raw ());
 
+    // compiles, as a char is promoted to an int
     "test".charAt ('\0');
-    // compiles as a char is an int
     body.add ((IJStatement) s.charAt (CharExpression.of ('\0')).raw ());
 
+    // compiles, since a Character is unboxed into a char, which is an int.
     "test".charAt ((Character) '\0');
-    // compiles since a Character is unboxed into a char, which is an int.
-    // body.add ((IJStatement) s.charAt (ObjectExpression.<Character> of (JExpr.lit (0).castTo
-    // (jcm.ref (Integer.class))));
+    // however we also need to explicit the unboxing
+    ObjectExpression <Character> boxedChar = CharExpression.of ('\0').cast (jcm.ref (Character.class));
+    body.add ((IJStatement) s.charAt (CharExpression.unboxing (boxedChar)).raw ());
 
     // does not compile since a Character is not an Integer
     // Integer i = Character.valueOf ('a');

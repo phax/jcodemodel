@@ -22,6 +22,8 @@ public class BoxedTypeExpression {
     public static final void test() {
         String s = "test";
         s.charAt(0);
+        s.charAt((Integer) 0);
         s.charAt('\u0000');
+        s.charAt((Character)'\u0000');
     }
 }

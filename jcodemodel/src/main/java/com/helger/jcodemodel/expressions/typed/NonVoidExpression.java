@@ -1,6 +1,11 @@
 package com.helger.jcodemodel.expressions.typed;
 
+import org.jspecify.annotations.NonNull;
+
+import com.helger.jcodemodel.AbstractJType;
+import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 
 /// common interface for typed expression that have something, so excluding void.
@@ -19,5 +24,10 @@ public interface NonVoidExpression <T> extends ITypedExpression <T>
   public default BoolExpression ne (NonVoidExpression <?> other)
   {
     return new BoolExpression (raw ().ne (other.raw ()));
+  }
+
+  public default <U> ObjectExpression <U> cast (@NonNull AbstractJType type)
+  {
+    return new ObjectExpression <> (JExpr.cast (type, raw ()));
   }
 }
