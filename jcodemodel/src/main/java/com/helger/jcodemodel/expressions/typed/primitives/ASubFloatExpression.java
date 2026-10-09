@@ -7,7 +7,7 @@ import com.helger.jcodemodel.IJExpression;
 /// mother class of expressions resolving to an float-promoted type (float and sub long)
 public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <T, Self, ?>, PosType extends ASubFloatExpression <?, ?, ?>>
                                           extends
-                                          ANumericExpression <T, Self, PosType>
+                                          ASubDoubleExpression <T, Self, PosType>
 {
 
   protected ASubFloatExpression (@NonNull IJExpression raw)

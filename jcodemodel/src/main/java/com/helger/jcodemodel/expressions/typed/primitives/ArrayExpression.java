@@ -9,6 +9,7 @@ import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 
+/// array of non-primitive types
 public class ArrayExpression <ElementType> extends AReferenceExpression <ElementType []>
 {
 

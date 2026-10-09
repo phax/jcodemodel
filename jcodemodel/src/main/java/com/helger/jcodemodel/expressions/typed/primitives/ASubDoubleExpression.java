@@ -15,20 +15,18 @@ import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 /// basically promotion for numerics is double, float, long, int
 /// 
 /// The subtype-check is done in subclasses ; this one only considers doubles .
-///  
-/// This class could be named ASubDoubleExpression but ANumerical seems more explicit. 
 /// 
 /// @param Self the self type, the class itself in the concrete implementations.
 /// @param PosType the returned numeric expression type constructed from pos(). +double is double, but +char is int.
 /// This param is not bound to T because the result of a `+x` maybe a different type from **x**, typically `+'a'` is an int.
-public abstract class ANumericExpression <T, Self extends ANumericExpression <T, Self, ?>, PosType extends ANumericExpression <?, ?, ?>>
+public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression <T, Self, ?>, PosType extends ASubDoubleExpression <?, ?, ?>>
                                          extends
                                          ATypedExpressionWrapper <T>
                                          implements
                                          NonVoidExpression <T>
 {
 
-  protected ANumericExpression (@NonNull IJExpression raw)
+  protected ASubDoubleExpression (@NonNull IJExpression raw)
   {
     super (raw);
   }
@@ -47,19 +45,19 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   //
 
   /// @return `that / other`
-  public DblExpression div (ANumericExpression <?, ?, ?> other)
+  public DblExpression div (ASubDoubleExpression <?, ?, ?> other)
   {
     return new DblExpression (raw.div (other.raw ()));
   }
 
   /// @return `that % other`
-  public DblExpression mod (ANumericExpression <?, ?, ?> other)
+  public DblExpression mod (ASubDoubleExpression <?, ?, ?> other)
   {
     return new DblExpression (raw.mod (other.raw ()));
   }
 
   /// @return `that * other`
-  public DblExpression mult (ANumericExpression <?, ?, ?> other)
+  public DblExpression mult (ASubDoubleExpression <?, ?, ?> other)
   {
     return new DblExpression (raw.mul (other.raw ()));
   }
@@ -71,9 +69,51 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   }
 
   /// @return `that + other`
-  public DblExpression plus (ANumericExpression <?, ?, ?> other)
+  public DblExpression plus (ASubDoubleExpression <?, ?, ?> other)
   {
     return new DblExpression (raw.plus (other.raw ()));
+  }
+
+  //
+  // added just to show the pain. They should be overridden in sub types, and duplicated for each
+  // operator :
+  // + - * /
+  // > ≥ < ≤ would not be overriden (same return all the time)
+  //
+
+  public DblExpression plus (double d)
+  {
+    return DblExpression.of (raw ().plus (d));
+  }
+
+  public DblExpression plus (float f)
+  {
+    return DblExpression.of (raw ().plus (f));
+  }
+
+  public DblExpression plus (long l)
+  {
+    return DblExpression.of (raw ().plus (l));
+  }
+
+  public DblExpression plus (int i)
+  {
+    return DblExpression.of (raw ().plus (i));
+  }
+
+  public DblExpression plus (short s)
+  {
+    return DblExpression.of (raw ().plus (s));
+  }
+
+  public DblExpression plus (byte b)
+  {
+    return DblExpression.of (raw ().plus (b));
+  }
+
+  public DblExpression plus (char c)
+  {
+    return DblExpression.of (raw ().plus (c));
   }
 
   // operator + with a String operands promotes anything else to String.
@@ -114,7 +154,7 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   }
 
   /// @return `that - other`
-  public DblExpression sub (ANumericExpression <?, ?, ?> other)
+  public DblExpression sub (ASubDoubleExpression <?, ?, ?> other)
   {
     return new DblExpression (raw.minus (other.raw ()));
   }
@@ -125,25 +165,25 @@ public abstract class ANumericExpression <T, Self extends ANumericExpression <T,
   //
 
   /// @return `that >= other`
-  public BoolExpression ge (ANumericExpression <?, ?, ?> other)
+  public BoolExpression ge (ASubDoubleExpression <?, ?, ?> other)
   {
     return new BoolExpression (raw.gte (other.raw ()));
   }
 
   /// @return `that > other`
-  public BoolExpression gt (ANumericExpression <?, ?, ?> other)
+  public BoolExpression gt (ASubDoubleExpression <?, ?, ?> other)
   {
     return new BoolExpression (raw.gt (other.raw ()));
   }
 
   /// @return `that <= other`
-  public BoolExpression le (ANumericExpression <?, ?, ?> other)
+  public BoolExpression le (ASubDoubleExpression <?, ?, ?> other)
   {
     return new BoolExpression (raw.lte (other.raw ()));
   }
 
   /// @return `that < other`
-  public BoolExpression lt (ANumericExpression <?, ?, ?> other)
+  public BoolExpression lt (ASubDoubleExpression <?, ?, ?> other)
   {
     return new BoolExpression (raw.lt (other.raw ()));
   }

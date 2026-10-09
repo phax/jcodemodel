@@ -9,7 +9,7 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 
 /// expression with a `double` type. Name is shorter to avoid name clash with java.lang . 
-public class DblExpression extends ANumericExpression <Double, DblExpression, DblExpression>
+public class DblExpression extends ASubDoubleExpression <Double, DblExpression, DblExpression>
 {
 
   public static class DoubleArrExp extends AReferenceExpression <double []>
