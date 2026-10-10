@@ -43,6 +43,36 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
     return new FltExpression (raw.plus (other.raw ()));
   }
 
+  public ASubFloatExpression <?, ?, ?> plus (float f)
+  {
+    return FltExpression.of (raw ().plus (f));
+  }
+
+  public ASubFloatExpression <?, ?, ?> plus (long l)
+  {
+    return FltExpression.of (raw ().plus (l));
+  }
+
+  public ASubFloatExpression <?, ?, ?> plus (int i)
+  {
+    return FltExpression.of (raw ().plus (i));
+  }
+
+  public ASubFloatExpression <?, ?, ?> plus (short s)
+  {
+    return FltExpression.of (raw ().plus (s));
+  }
+
+  public ASubFloatExpression <?, ?, ?> plus (byte b)
+  {
+    return FltExpression.of (raw ().plus (b));
+  }
+
+  public ASubFloatExpression <?, ?, ?> plus (char c)
+  {
+    return FltExpression.of (raw ().plus (c));
+  }
+
   /// @return `that - other`
   public FltExpression sub (ASubFloatExpression <?, ?, ?> other)
   {

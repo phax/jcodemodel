@@ -82,37 +82,37 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
   // > ≥ < ≤ would not be overriden (same return all the time)
   //
 
-  public DblExpression plus (double d)
+  public ASubDoubleExpression <?, ?, ?> plus (double d)
   {
     return DblExpression.of (raw ().plus (d));
   }
 
-  public DblExpression plus (float f)
+  public ASubDoubleExpression <?, ?, ?> plus (float f)
   {
     return DblExpression.of (raw ().plus (f));
   }
 
-  public DblExpression plus (long l)
+  public ASubDoubleExpression <?, ?, ?> plus (long l)
   {
     return DblExpression.of (raw ().plus (l));
   }
 
-  public DblExpression plus (int i)
+  public ASubDoubleExpression <?, ?, ?> plus (int i)
   {
     return DblExpression.of (raw ().plus (i));
   }
 
-  public DblExpression plus (short s)
+  public ASubDoubleExpression <?, ?, ?> plus (short s)
   {
     return DblExpression.of (raw ().plus (s));
   }
 
-  public DblExpression plus (byte b)
+  public ASubDoubleExpression <?, ?, ?> plus (byte b)
   {
     return DblExpression.of (raw ().plus (b));
   }
 
-  public DblExpression plus (char c)
+  public ASubDoubleExpression <?, ?, ?> plus (char c)
   {
     return DblExpression.of (raw ().plus (c));
   }
