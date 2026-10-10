@@ -25,6 +25,36 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
     return new FltExpression (raw.div (other.raw ()));
   }
 
+  public ASubFloatExpression <?, ?, ?> div (float f)
+  {
+    return FltExpression.of (raw ().div (f));
+  }
+
+  public ASubFloatExpression <?, ?, ?> div (long l)
+  {
+    return FltExpression.of (raw ().div (l));
+  }
+
+  public ASubFloatExpression <?, ?, ?> div (int i)
+  {
+    return FltExpression.of (raw ().div (i));
+  }
+
+  public ASubFloatExpression <?, ?, ?> div (short s)
+  {
+    return FltExpression.of (raw ().div (s));
+  }
+
+  public ASubFloatExpression <?, ?, ?> div (byte b)
+  {
+    return FltExpression.of (raw ().div (b));
+  }
+
+  public ASubFloatExpression <?, ?, ?> div (char c)
+  {
+    return FltExpression.of (raw ().div (c));
+  }
+
   /// @return `that % other`
   public FltExpression mod (ASubFloatExpression <?, ?, ?> other)
   {

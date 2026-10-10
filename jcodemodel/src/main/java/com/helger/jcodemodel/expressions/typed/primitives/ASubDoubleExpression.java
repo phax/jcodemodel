@@ -21,10 +21,9 @@ import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 /// @param PosType the returned numeric expression type constructed from pos(). +double is double, but +char is int.
 /// This param is not bound to T because the result of a `+x` maybe a different type from **x**, typically `+'a'` is an int.
 public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression <T, Self, ?>, PosType extends ASubDoubleExpression <?, ?, ?>>
-                                         extends
-                                         ATypedExpressionWrapper <T>
-                                         implements
-                                         NonVoidExpression <T>
+                                           extends
+                                           ATypedExpressionWrapper <T> implements
+                                           NonVoidExpression <T>
 {
 
   protected ASubDoubleExpression (@NonNull IJExpression raw)
@@ -38,7 +37,6 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
   /// basically constructor.
   protected abstract PosType wrapPos (IJExpression exp);
 
-
   //
   // Promoting operators.
   // Those operators promote the result type based on the operand types. For example, `int + double
@@ -49,6 +47,41 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
   public DblExpression div (ASubDoubleExpression <?, ?, ?> other)
   {
     return new DblExpression (raw.div (other.raw ()));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> div (double d)
+  {
+    return DblExpression.of (raw ().div (d));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> div (float f)
+  {
+    return DblExpression.of (raw ().div (f));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> div (long l)
+  {
+    return DblExpression.of (raw ().div (l));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> div (int i)
+  {
+    return DblExpression.of (raw ().div (i));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> div (short s)
+  {
+    return DblExpression.of (raw ().div (s));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> div (byte b)
+  {
+    return DblExpression.of (raw ().div (b));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> div (char c)
+  {
+    return DblExpression.of (raw ().div (c));
   }
 
   /// @return `that % other`
@@ -74,13 +107,6 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
   {
     return new DblExpression (raw.plus (other.raw ()));
   }
-
-  //
-  // added just to show the pain. They should be overridden in sub types, and duplicated for each
-  // operator :
-  // + - * /
-  // > ≥ < ≤ would not be overriden (same return all the time)
-  //
 
   public ASubDoubleExpression <?, ?, ?> plus (double d)
   {

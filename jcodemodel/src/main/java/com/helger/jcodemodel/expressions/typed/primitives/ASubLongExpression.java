@@ -25,6 +25,31 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
     return new LngExpression (raw.div (other.raw ()));
   }
 
+  public ASubLongExpression <?, ?, ?> div (long l)
+  {
+    return LngExpression.of (raw ().div (l));
+  }
+
+  public ASubLongExpression <?, ?, ?> div (int i)
+  {
+    return LngExpression.of (raw ().div (i));
+  }
+
+  public ASubLongExpression <?, ?, ?> div (short s)
+  {
+    return LngExpression.of (raw ().div (s));
+  }
+
+  public ASubLongExpression <?, ?, ?> div (byte b)
+  {
+    return LngExpression.of (raw ().div (b));
+  }
+
+  public ASubLongExpression <?, ?, ?> div (char c)
+  {
+    return LngExpression.of (raw ().div (c));
+  }
+
   /// @return `that % other`
   public LngExpression mod (ASubLongExpression <?, ?, ?> other)
   {
