@@ -105,7 +105,7 @@ public class IntExpression extends ASubIntExpression <Integer, IntExpression, In
 
   ///
 
-  private IntExpression (IJExpression raw)
+  protected IntExpression (IJExpression raw)
   {
     super (raw);
   }
