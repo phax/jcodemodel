@@ -170,4 +170,34 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
     return new FltExpression (raw.minus (other.raw ()));
   }
 
+  public ASubFloatExpression <?, ?, ?> sub (float f)
+  {
+    return FltExpression.of (raw ().minus (f));
+  }
+
+  public ASubFloatExpression <?, ?, ?> sub (long l)
+  {
+    return FltExpression.of (raw ().minus (l));
+  }
+
+  public ASubFloatExpression <?, ?, ?> sub (int i)
+  {
+    return FltExpression.of (raw ().minus (i));
+  }
+
+  public ASubFloatExpression <?, ?, ?> sub (short s)
+  {
+    return FltExpression.of (raw ().minus (s));
+  }
+
+  public ASubFloatExpression <?, ?, ?> sub (byte b)
+  {
+    return FltExpression.of (raw ().minus (b));
+  }
+
+  public ASubFloatExpression <?, ?, ?> sub (char c)
+  {
+    return FltExpression.of (raw ().minus (c));
+  }
+
 }

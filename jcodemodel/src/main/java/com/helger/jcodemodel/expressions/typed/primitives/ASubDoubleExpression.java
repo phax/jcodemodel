@@ -256,6 +256,41 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
     return new DblExpression (raw.minus (other.raw ()));
   }
 
+  public ASubDoubleExpression <?, ?, ?> sub (double d)
+  {
+    return DblExpression.of (raw ().minus (d));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> sub (float f)
+  {
+    return DblExpression.of (raw ().minus (f));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> sub (long l)
+  {
+    return DblExpression.of (raw ().minus (l));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> sub (int i)
+  {
+    return DblExpression.of (raw ().minus (i));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> sub (short s)
+  {
+    return DblExpression.of (raw ().minus (s));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> sub (byte b)
+  {
+    return DblExpression.of (raw ().minus (b));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> sub (char c)
+  {
+    return DblExpression.of (raw ().minus (c));
+  }
+
   //
   // non-promoting operators : The arguments can be promoted, but the output remains the same.
   // Those don't need to be overloaded in the sub classes.

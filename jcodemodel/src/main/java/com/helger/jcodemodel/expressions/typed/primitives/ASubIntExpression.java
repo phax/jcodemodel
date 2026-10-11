@@ -131,6 +131,26 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
     return new IntExpression (raw.minus (other.raw ()));
   }
 
+  public IntExpression sub (int i)
+  {
+    return IntExpression.of (raw ().minus (i));
+  }
+
+  public IntExpression sub (short s)
+  {
+    return IntExpression.of (raw ().minus (s));
+  }
+
+  public IntExpression sub (byte b)
+  {
+    return IntExpression.of (raw ().minus (b));
+  }
+
+  public IntExpression sub (char c)
+  {
+    return IntExpression.of (raw ().minus (c));
+  }
+
   //
   // bitwise operators
   // https://docs.oracle.com/javase/tutorial/java/nutsandbolts/op3.html

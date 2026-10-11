@@ -149,4 +149,29 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
     return new LngExpression (raw.minus (other.raw ()));
   }
 
+  public ASubLongExpression <?, ?, ?> sub (long l)
+  {
+    return LngExpression.of (raw ().minus (l));
+  }
+
+  public ASubLongExpression <?, ?, ?> sub (int i)
+  {
+    return LngExpression.of (raw ().minus (i));
+  }
+
+  public ASubLongExpression <?, ?, ?> sub (short s)
+  {
+    return LngExpression.of (raw ().minus (s));
+  }
+
+  public ASubLongExpression <?, ?, ?> sub (byte b)
+  {
+    return LngExpression.of (raw ().minus (b));
+  }
+
+  public ASubLongExpression <?, ?, ?> sub (char c)
+  {
+    return LngExpression.of (raw ().minus (c));
+  }
+
 }
