@@ -87,6 +87,31 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
     return new LngExpression (raw.mul (other.raw ()));
   }
 
+  public ASubLongExpression <?, ?, ?> mult (long l)
+  {
+    return LngExpression.of (raw ().mul (l));
+  }
+
+  public ASubLongExpression <?, ?, ?> mult (int i)
+  {
+    return LngExpression.of (raw ().mul (i));
+  }
+
+  public ASubLongExpression <?, ?, ?> mult (short s)
+  {
+    return LngExpression.of (raw ().mul (s));
+  }
+
+  public ASubLongExpression <?, ?, ?> mult (byte b)
+  {
+    return LngExpression.of (raw ().mul (b));
+  }
+
+  public ASubLongExpression <?, ?, ?> mult (char c)
+  {
+    return LngExpression.of (raw ().mul (c));
+  }
+
   /// @return `that + other`
   public LngExpression plus (ASubLongExpression <?, ?, ?> other)
   {

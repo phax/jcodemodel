@@ -131,6 +131,41 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
     return new DblExpression (raw.mul (other.raw ()));
   }
 
+  public ASubDoubleExpression <?, ?, ?> mult (double d)
+  {
+    return DblExpression.of (raw ().mul (d));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mult (float f)
+  {
+    return DblExpression.of (raw ().mul (f));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mult (long l)
+  {
+    return DblExpression.of (raw ().mul (l));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mult (int i)
+  {
+    return DblExpression.of (raw ().mul (i));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mult (short s)
+  {
+    return DblExpression.of (raw ().mul (s));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mult (byte b)
+  {
+    return DblExpression.of (raw ().mul (b));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mult (char c)
+  {
+    return DblExpression.of (raw ().mul (c));
+  }
+
   /// @return `- that`
   public PosType neg ()
   {
