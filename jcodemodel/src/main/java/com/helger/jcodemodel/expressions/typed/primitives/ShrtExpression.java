@@ -39,7 +39,7 @@ public class ShrtExpression extends ASubShortExpression <Short, ShrtExpression, 
     /// @return `that.length`
     public IntExpression length ()
     {
-      return new IntExpression (JExpr.ref (raw, "length"));
+      return IntExpression.of (JExpr.ref (raw, "length"));
     }
 
   }

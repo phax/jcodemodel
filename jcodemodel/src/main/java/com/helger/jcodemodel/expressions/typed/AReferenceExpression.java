@@ -54,7 +54,7 @@ public abstract class AReferenceExpression <T> extends ATypedExpressionWrapper <
   @Mirroring ("hashCode")
   public IntExpression hashCode_ ()
   {
-    return new IntExpression (raw.invoke ("hashCode"));
+    return IntExpression.of (raw.invoke ("hashCode"));
   }
 
   /// @return `that.notify()`

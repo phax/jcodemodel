@@ -38,7 +38,7 @@ public class CharExpression extends ASubIntExpression <Character, CharExpression
     /// @return `that.length`
     public IntExpression length ()
     {
-      return new IntExpression (JExpr.ref (raw, "length"));
+      return IntExpression.of (JExpr.ref (raw, "length"));
     }
 
   }
@@ -84,7 +84,7 @@ public class CharExpression extends ASubIntExpression <Character, CharExpression
   @Override
   protected IntExpression wrapPos (IJExpression exp)
   {
-    return new IntExpression (exp);
+    return IntExpression.of (exp);
   }
 
 }

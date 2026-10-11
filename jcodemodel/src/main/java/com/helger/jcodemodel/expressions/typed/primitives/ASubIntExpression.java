@@ -25,7 +25,7 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
   /// @return `that / other`
   public IntExpression div (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.div (other.raw ()));
+    return IntExpression.of (raw.div (other.raw ()));
   }
 
   public IntExpression div (int i)
@@ -51,7 +51,7 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
   /// @return `that % other`
   public IntExpression mod (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.mod (other.raw ()));
+    return IntExpression.of (raw.mod (other.raw ()));
   }
 
   public IntExpression mod (int i)
@@ -77,7 +77,7 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
   /// @return `that * other`
   public IntExpression mult (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.mul (other.raw ()));
+    return IntExpression.of (raw.mul (other.raw ()));
   }
 
   public IntExpression mult (int i)
@@ -103,7 +103,7 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
   /// @return `that + other`
   public IntExpression plus (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.plus (other.raw ()));
+    return IntExpression.of (raw.plus (other.raw ()));
   }
 
   public IntExpression plus (int i)
@@ -129,7 +129,7 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
   /// @return `that - other`
   public IntExpression sub (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.minus (other.raw ()));
+    return IntExpression.of (raw.minus (other.raw ()));
   }
 
   public IntExpression sub (int i)
@@ -160,37 +160,37 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
   /// @return `that & other`
   public IntExpression band (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.band (other.raw ()));
+    return IntExpression.of (raw.band (other.raw ()));
   }
 
   /// @return `~that`
   public IntExpression bnot ()
   {
-    return new IntExpression (raw.complement ());
+    return IntExpression.of (raw.complement ());
   }
 
   /// @return `that | other`
   public IntExpression bor (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.bor (other.raw ()));
+    return IntExpression.of (raw.bor (other.raw ()));
   }
 
   /// @return `that ^ other`
   public IntExpression bxor (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.xor (other.raw ()));
+    return IntExpression.of (raw.xor (other.raw ()));
   }
 
   /// @return `that << other`
   public IntExpression lshift (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.shl (other.raw ()));
+    return IntExpression.of (raw.shl (other.raw ()));
   }
 
   /// @return `that >> other`
   public IntExpression rshift (ASubIntExpression <?, ?, ?> other)
   {
-    return new IntExpression (raw.shr (other.raw ()));
+    return IntExpression.of (raw.shr (other.raw ()));
   }
 
 }

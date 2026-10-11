@@ -163,19 +163,19 @@ public class StringExpression extends AReferenceExpression <String>
   /// @return `that.charAt(index)`
   public IntExpression codePointAt (ASubIntExpression <?, ?, ?> index)
   {
-    return new IntExpression (raw.invoke ("codePointAt").arg (index));
+    return IntExpression.of (raw.invoke ("codePointAt").arg (index));
   }
 
   /// @return `that.codePointBefore(index)`
   public IntExpression codePointBefore (ASubIntExpression <?, ?, ?> index)
   {
-    return new IntExpression (raw.invoke ("codePointBefore").arg (index));
+    return IntExpression.of (raw.invoke ("codePointBefore").arg (index));
   }
 
   /// @return `that.codePointCount(beginIndex, endIndex)`
   public IntExpression codePointCount (ASubIntExpression <?, ?, ?> beginIndex, ASubIntExpression <?, ?, ?> endIndex)
   {
-    return new IntExpression (raw.invoke ("codePointCount").arg (beginIndex).arg (endIndex));
+    return IntExpression.of (raw.invoke ("codePointCount").arg (beginIndex).arg (endIndex));
   }
 
   /// @return `that.codePoints()`
@@ -187,19 +187,19 @@ public class StringExpression extends AReferenceExpression <String>
   /// @return `that.compareTo(anotherString)`
   public IntExpression compareTo (ITypedExpression <? extends String> anotherString)
   {
-    return new IntExpression (raw.invoke ("compareTo").arg (anotherString));
+    return IntExpression.of (raw.invoke ("compareTo").arg (anotherString));
   }
 
   /// @return `that.compareToFoldCase(str)`
   public IntExpression compareToFoldCase (ITypedExpression <? extends String> str)
   {
-    return new IntExpression (raw.invoke ("compareToFoldCase").arg (str));
+    return IntExpression.of (raw.invoke ("compareToFoldCase").arg (str));
   }
 
   /// @return `that.compareToIgnoreCase(str)`
   public IntExpression compareToIgnoreCase (ITypedExpression <? extends String> str)
   {
-    return new IntExpression (raw.invoke ("compareToIgnoreCase").arg (str));
+    return IntExpression.of (raw.invoke ("compareToIgnoreCase").arg (str));
   }
 
   /// @return `that.concat(str)`
@@ -299,19 +299,19 @@ public class StringExpression extends AReferenceExpression <String>
                                 ASubIntExpression <?, ?, ?> beginIndex,
                                 ASubIntExpression <?, ?, ?> endIndex)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (ch).arg (beginIndex).arg (endIndex));
+    return IntExpression.of (raw.invoke ("indexOf").arg (ch).arg (beginIndex).arg (endIndex));
   }
 
   /// @return `that.indexOf(ch, fromIndex)`
   public IntExpression indexOf (ASubIntExpression <?, ?, ?> ch, ASubIntExpression <?, ?, ?> fromIndex)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (ch).arg (fromIndex));
+    return IntExpression.of (raw.invoke ("indexOf").arg (ch).arg (fromIndex));
   }
 
   /// @return `that.indexOf(ch)`
   public IntExpression indexOf (ASubIntExpression <?, ?, ?> ch)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (ch));
+    return IntExpression.of (raw.invoke ("indexOf").arg (ch));
   }
 
   /// @return `that.indexOf(str, beginIndex, endIndex)`
@@ -319,19 +319,19 @@ public class StringExpression extends AReferenceExpression <String>
                                 ASubIntExpression <?, ?, ?> beginIndex,
                                 ASubIntExpression <?, ?, ?> endIndex)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (str).arg (beginIndex).arg (endIndex));
+    return IntExpression.of (raw.invoke ("indexOf").arg (str).arg (beginIndex).arg (endIndex));
   }
 
   /// @return `that.indexOf(str, fromIndex)`
   public IntExpression indexOf (ITypedExpression <? extends String> str, ASubIntExpression <?, ?, ?> fromIndex)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (str).arg (fromIndex));
+    return IntExpression.of (raw.invoke ("indexOf").arg (str).arg (fromIndex));
   }
 
   /// @return `that.indexOf(str)`
   public IntExpression indexOf (ITypedExpression <? extends String> str)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (str));
+    return IntExpression.of (raw.invoke ("indexOf").arg (str));
   }
 
   /// @return `that.intern()`
@@ -378,31 +378,31 @@ public class StringExpression extends AReferenceExpression <String>
   /// @return `that.lastIndexOf(ch, fromIndex)`
   public IntExpression lastIndexOf (ASubIntExpression <?, ?, ?> ch, ASubIntExpression <?, ?, ?> fromIndex)
   {
-    return new IntExpression (raw.invoke ("lastIndexOf").arg (ch).arg (fromIndex));
+    return IntExpression.of (raw.invoke ("lastIndexOf").arg (ch).arg (fromIndex));
   }
 
   /// @return `that.lastIndexOf(ch)`
   public IntExpression lastIndexOf (ASubIntExpression <?, ?, ?> ch)
   {
-    return new IntExpression (raw.invoke ("lastIndexOf").arg (ch));
+    return IntExpression.of (raw.invoke ("lastIndexOf").arg (ch));
   }
 
   /// @return `that.lastIndexOf(str, fromIndex)`
   public IntExpression lastIndexOf (ITypedExpression <? extends String> str, ASubIntExpression <?, ?, ?> fromIndex)
   {
-    return new IntExpression (raw.invoke ("lastIndexOf").arg (str).arg (fromIndex));
+    return IntExpression.of (raw.invoke ("lastIndexOf").arg (str).arg (fromIndex));
   }
 
   /// @return `that.lastIndexOf(str)`
   public IntExpression lastIndexOf (ITypedExpression <? extends String> str)
   {
-    return new IntExpression (raw.invoke ("lastIndexOf").arg (str));
+    return IntExpression.of (raw.invoke ("lastIndexOf").arg (str));
   }
 
   /// @return `that.length()`
   public IntExpression length ()
   {
-    return new IntExpression (raw.invoke ("length"));
+    return IntExpression.of (raw.invoke ("length"));
   }
 
   // TODO use StreamExpression when avail.
@@ -429,7 +429,7 @@ public class StringExpression extends AReferenceExpression <String>
   public IntExpression offsetByCodePoints (ASubIntExpression <?, ?, ?> index,
                                            ASubIntExpression <?, ?, ?> codePointOffset)
   {
-    return new IntExpression (raw.invoke ("offsetByCodePoints").arg (index).arg (codePointOffset));
+    return IntExpression.of (raw.invoke ("offsetByCodePoints").arg (index).arg (codePointOffset));
   }
 
   /// @return `that.regionMatches(ignoreCase, toffset, other, ooffset, len)`
