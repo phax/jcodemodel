@@ -211,38 +211,38 @@ public class StringExpression extends AReferenceExpression <String>
   /// @return `that.contains(s)`
   public BoolExpression contains (ITypedExpression <? extends CharSequence> s)
   {
-    return new BoolExpression (raw.invoke ("contains").arg (s));
+    return BoolExpression.of (raw.invoke ("contains").arg (s));
   }
 
   /// @return `that.contentEquals(cs)`
   public BoolExpression contentEquals (ITypedExpression <? extends CharSequence> cs)
   {
-    return new BoolExpression (raw.invoke ("contentEquals").arg (cs));
+    return BoolExpression.of (raw.invoke ("contentEquals").arg (cs));
   }
 
   // can't keep base name since same erasure as the other contentEquals
   /// @return `that.contentEquals(sb)`
   public BoolExpression contentEqualsSB (ITypedExpression <? extends StringBuffer> sb)
   {
-    return new BoolExpression (raw.invoke ("contentEquals").arg (sb));
+    return BoolExpression.of (raw.invoke ("contentEquals").arg (sb));
   }
 
   /// @return `that.endsWith(suffix)`
   public BoolExpression endsWith (ITypedExpression <? extends String> suffix)
   {
-    return new BoolExpression (raw.invoke ("endsWith").arg (suffix));
+    return BoolExpression.of (raw.invoke ("endsWith").arg (suffix));
   }
 
   /// @return `that.equalsFoldCase(anotherString)`
   public BoolExpression equalsFoldCase (ITypedExpression <? extends String> anotherString)
   {
-    return new BoolExpression (raw.invoke ("equalsFoldCase").arg (anotherString));
+    return BoolExpression.of (raw.invoke ("equalsFoldCase").arg (anotherString));
   }
 
   /// @return `that.equalsIgnoreCase(anotherString)`
   public BoolExpression equalsIgnoreCase (ITypedExpression <? extends String> anotherString)
   {
-    return new BoolExpression (raw.invoke ("equalsIgnoreCase").arg (anotherString));
+    return BoolExpression.of (raw.invoke ("equalsIgnoreCase").arg (anotherString));
   }
 
   /// @return `that.formatted(args)`
@@ -343,13 +343,13 @@ public class StringExpression extends AReferenceExpression <String>
   /// @return `that.isBlank()`
   public BoolExpression isBlank ()
   {
-    return new BoolExpression (raw.invoke ("isBlank"));
+    return BoolExpression.of (raw.invoke ("isBlank"));
   }
 
   /// @return `that.isEmpty()`
   public BoolExpression isEmpty ()
   {
-    return new BoolExpression (raw.invoke ("isEmpty"));
+    return BoolExpression.of (raw.invoke ("isEmpty"));
   }
 
   /// @return `that.join(delimiter, elements)`
@@ -415,7 +415,7 @@ public class StringExpression extends AReferenceExpression <String>
   /// @return `that.matches(regex)`
   public BoolExpression matches (ITypedExpression <? extends String> regex)
   {
-    return new BoolExpression (raw.invoke ("matches").arg (regex));
+    return BoolExpression.of (raw.invoke ("matches").arg (regex));
   }
 
   // operator + with a String operands promotes anything else to String.
@@ -439,7 +439,7 @@ public class StringExpression extends AReferenceExpression <String>
                                        ASubIntExpression <?, ?, ?> ooffset,
                                        ASubIntExpression <?, ?, ?> len)
   {
-    return new BoolExpression (raw.invoke ("regionMatches")
+    return BoolExpression.of (raw.invoke ("regionMatches")
                                   .arg (ignoreCase)
                                   .arg (toffset)
                                   .arg (other)
@@ -453,7 +453,7 @@ public class StringExpression extends AReferenceExpression <String>
                                        ASubIntExpression <?, ?, ?> ooffset,
                                        ASubIntExpression <?, ?, ?> len)
   {
-    return new BoolExpression (raw.invoke ("regionMatches").arg (toffset).arg (other).arg (ooffset).arg (len));
+    return BoolExpression.of (raw.invoke ("regionMatches").arg (toffset).arg (other).arg (ooffset).arg (len));
   }
 
   /// @return `that.repeat(count)`

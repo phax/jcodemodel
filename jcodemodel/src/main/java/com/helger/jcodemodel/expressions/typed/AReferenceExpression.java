@@ -40,7 +40,7 @@ public abstract class AReferenceExpression <T> extends ATypedExpressionWrapper <
   @Mirroring ("equals")
   public BoolExpression equals_ (ITypedExpression <?> anObject)
   {
-    return new BoolExpression (raw.invoke ("equals").arg (anObject));
+    return BoolExpression.of (raw.invoke ("equals").arg (anObject));
   }
 
   /// @return `that.getClass()`
@@ -112,13 +112,13 @@ public abstract class AReferenceExpression <T> extends ATypedExpressionWrapper <
   /// @return `that != null`
   public BoolExpression isNotNull ()
   {
-    return new BoolExpression (raw.neNull ());
+    return BoolExpression.of (raw.neNull ());
   }
 
   /// @return `that == null`
   public BoolExpression isNull ()
   {
-    return new BoolExpression (raw.eqNull ());
+    return BoolExpression.of (raw.eqNull ());
   }
 
   /// @return `that.toString()`

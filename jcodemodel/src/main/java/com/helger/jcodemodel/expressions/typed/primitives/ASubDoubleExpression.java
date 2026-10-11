@@ -422,7 +422,7 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
   /// @return `that < other`
   public BoolExpression lt (ASubDoubleExpression <?, ?, ?> other)
   {
-    return new BoolExpression (raw.lt (other.raw ()));
+    return BoolExpression.of (raw.lt (other.raw ()));
   }
 
   public BoolExpression lt (double d)

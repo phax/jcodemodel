@@ -17,13 +17,13 @@ public interface NonVoidExpression <T> extends ITypedExpression <T>
   /// @return `that == other`
   public default BoolExpression eq (NonVoidExpression <?> other)
   {
-    return new BoolExpression (raw ().eq (other.raw ()));
+    return BoolExpression.of (raw ().eq (other.raw ()));
   }
 
   /// @return `that != other`
   public default BoolExpression ne (NonVoidExpression <?> other)
   {
-    return new BoolExpression (raw ().ne (other.raw ()));
+    return BoolExpression.of (raw ().ne (other.raw ()));
   }
 
   public default <U> ObjectExpression <U> cast (@NonNull AbstractJType type)
