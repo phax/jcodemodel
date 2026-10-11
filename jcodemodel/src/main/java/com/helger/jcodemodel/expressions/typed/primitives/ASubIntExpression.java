@@ -53,6 +53,26 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
     return new IntExpression (raw.mod (other.raw ()));
   }
 
+  public IntExpression mod (int i)
+  {
+    return IntExpression.of (raw ().mod (i));
+  }
+
+  public IntExpression mod (short s)
+  {
+    return IntExpression.of (raw ().mod (s));
+  }
+
+  public IntExpression mod (byte b)
+  {
+    return IntExpression.of (raw ().mod (b));
+  }
+
+  public IntExpression mod (char c)
+  {
+    return IntExpression.of (raw ().mod (c));
+  }
+
   /// @return `that * other`
   public IntExpression mult (ASubIntExpression <?, ?, ?> other)
   {

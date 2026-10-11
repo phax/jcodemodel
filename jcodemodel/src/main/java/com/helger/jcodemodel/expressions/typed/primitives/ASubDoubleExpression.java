@@ -90,6 +90,41 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
     return new DblExpression (raw.mod (other.raw ()));
   }
 
+  public ASubDoubleExpression <?, ?, ?> mod (double d)
+  {
+    return DblExpression.of (raw ().mod (JExpr.lit (d)));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mod (float f)
+  {
+    return DblExpression.of (raw ().mod (JExpr.lit (f)));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mod (long l)
+  {
+    return DblExpression.of (raw ().mod (l));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mod (int i)
+  {
+    return DblExpression.of (raw ().mod (i));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mod (short s)
+  {
+    return DblExpression.of (raw ().mod (s));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mod (byte b)
+  {
+    return DblExpression.of (raw ().mod (b));
+  }
+
+  public ASubDoubleExpression <?, ?, ?> mod (char c)
+  {
+    return DblExpression.of (raw ().mod (c));
+  }
+
   /// @return `that * other`
   public DblExpression mult (ASubDoubleExpression <?, ?, ?> other)
   {

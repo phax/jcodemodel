@@ -3,6 +3,7 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JExpr;
 
 /// mother class of expressions resolving to an float-promoted type (float and sub long)
 public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <T, Self, ?>, PosType extends ASubFloatExpression <?, ?, ?>>
@@ -59,6 +60,36 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
   public FltExpression mod (ASubFloatExpression <?, ?, ?> other)
   {
     return new FltExpression (raw.mod (other.raw ()));
+  }
+
+  public ASubFloatExpression <?, ?, ?> mod (float f)
+  {
+    return FltExpression.of (raw ().mod (JExpr.lit (f)));
+  }
+
+  public ASubFloatExpression <?, ?, ?> mod (long l)
+  {
+    return FltExpression.of (raw ().mod (l));
+  }
+
+  public ASubFloatExpression <?, ?, ?> mod (int i)
+  {
+    return FltExpression.of (raw ().mod (i));
+  }
+
+  public ASubFloatExpression <?, ?, ?> mod (short s)
+  {
+    return FltExpression.of (raw ().mod (s));
+  }
+
+  public ASubFloatExpression <?, ?, ?> mod (byte b)
+  {
+    return FltExpression.of (raw ().mod (b));
+  }
+
+  public ASubFloatExpression <?, ?, ?> mod (char c)
+  {
+    return FltExpression.of (raw ().mod (c));
   }
 
   /// @return `that * other`

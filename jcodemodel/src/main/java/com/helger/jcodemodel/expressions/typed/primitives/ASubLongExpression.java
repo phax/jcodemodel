@@ -56,6 +56,31 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
     return new LngExpression (raw.mod (other.raw ()));
   }
 
+  public ASubLongExpression <?, ?, ?> mod (long l)
+  {
+    return LngExpression.of (raw ().mod (l));
+  }
+
+  public ASubLongExpression <?, ?, ?> mod (int i)
+  {
+    return LngExpression.of (raw ().mod (i));
+  }
+
+  public ASubLongExpression <?, ?, ?> mod (short s)
+  {
+    return LngExpression.of (raw ().mod (s));
+  }
+
+  public ASubLongExpression <?, ?, ?> mod (byte b)
+  {
+    return LngExpression.of (raw ().mod (b));
+  }
+
+  public ASubLongExpression <?, ?, ?> mod (char c)
+  {
+    return LngExpression.of (raw ().mod (c));
+  }
+
   /// @return `that * other`
   public LngExpression mult (ASubLongExpression <?, ?, ?> other)
   {
