@@ -3,6 +3,7 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JExpr;
 
 /// mother class of expressions resolving to an int-promoted type (int, char, byte, short)
 /// 
@@ -34,17 +35,17 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
 
   public IntExpression div (short s)
   {
-    return IntExpression.of (raw ().div (s));
+    return IntExpression.of (raw ().div (JExpr.lit (s)));
   }
 
   public IntExpression div (byte b)
   {
-    return IntExpression.of (raw ().div (b));
+    return IntExpression.of (raw ().div (JExpr.lit (b)));
   }
 
   public IntExpression div (char c)
   {
-    return IntExpression.of (raw ().div (c));
+    return IntExpression.of (raw ().div (JExpr.lit (c)));
   }
 
   /// @return `that % other`
@@ -60,17 +61,17 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
 
   public IntExpression mod (short s)
   {
-    return IntExpression.of (raw ().mod (s));
+    return IntExpression.of (raw ().mod (JExpr.lit (s)));
   }
 
   public IntExpression mod (byte b)
   {
-    return IntExpression.of (raw ().mod (b));
+    return IntExpression.of (raw ().mod (JExpr.lit (b)));
   }
 
   public IntExpression mod (char c)
   {
-    return IntExpression.of (raw ().mod (c));
+    return IntExpression.of (raw ().mod (JExpr.lit (c)));
   }
 
   /// @return `that * other`
@@ -86,17 +87,17 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
 
   public IntExpression mult (short s)
   {
-    return IntExpression.of (raw ().mul (s));
+    return IntExpression.of (raw ().mul (JExpr.lit (s)));
   }
 
   public IntExpression mult (byte b)
   {
-    return IntExpression.of (raw ().mul (b));
+    return IntExpression.of (raw ().mul (JExpr.lit (b)));
   }
 
   public IntExpression mult (char c)
   {
-    return IntExpression.of (raw ().mul (c));
+    return IntExpression.of (raw ().mul (JExpr.lit (c)));
   }
 
   /// @return `that + other`
@@ -112,17 +113,17 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
 
   public IntExpression plus (short s)
   {
-    return IntExpression.of (raw ().plus (s));
+    return IntExpression.of (raw ().plus (JExpr.lit (s)));
   }
 
   public IntExpression plus (byte b)
   {
-    return IntExpression.of (raw ().plus (b));
+    return IntExpression.of (raw ().plus (JExpr.lit (b)));
   }
 
   public IntExpression plus (char c)
   {
-    return IntExpression.of (raw ().plus (c));
+    return IntExpression.of (raw ().plus (JExpr.lit (c)));
   }
 
   /// @return `that - other`
@@ -138,17 +139,17 @@ public abstract class ASubIntExpression <T, Self extends ASubIntExpression <T, S
 
   public IntExpression sub (short s)
   {
-    return IntExpression.of (raw ().minus (s));
+    return IntExpression.of (raw ().minus (JExpr.lit (s)));
   }
 
   public IntExpression sub (byte b)
   {
-    return IntExpression.of (raw ().minus (b));
+    return IntExpression.of (raw ().minus (JExpr.lit (b)));
   }
 
   public IntExpression sub (char c)
   {
-    return IntExpression.of (raw ().minus (c));
+    return IntExpression.of (raw ().minus (JExpr.lit (c)));
   }
 
   //

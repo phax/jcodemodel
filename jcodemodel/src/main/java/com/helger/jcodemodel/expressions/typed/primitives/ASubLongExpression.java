@@ -3,6 +3,7 @@ package com.helger.jcodemodel.expressions.typed.primitives;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JExpr;
 
 /// mother class of expressions resolving to an long-promoted type (long and sub int)
 public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T, Self, ?>, PosType extends ASubLongExpression <?, ?, ?>>
@@ -37,17 +38,17 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
 
   public ASubLongExpression <?, ?, ?> div (short s)
   {
-    return LngExpression.of (raw ().div (s));
+    return LngExpression.of (raw ().div (JExpr.lit (s)));
   }
 
   public ASubLongExpression <?, ?, ?> div (byte b)
   {
-    return LngExpression.of (raw ().div (b));
+    return LngExpression.of (raw ().div (JExpr.lit (b)));
   }
 
   public ASubLongExpression <?, ?, ?> div (char c)
   {
-    return LngExpression.of (raw ().div (c));
+    return LngExpression.of (raw ().div (JExpr.lit (c)));
   }
 
   /// @return `that % other`
@@ -68,17 +69,17 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
 
   public ASubLongExpression <?, ?, ?> mod (short s)
   {
-    return LngExpression.of (raw ().mod (s));
+    return LngExpression.of (raw ().mod (JExpr.lit (s)));
   }
 
   public ASubLongExpression <?, ?, ?> mod (byte b)
   {
-    return LngExpression.of (raw ().mod (b));
+    return LngExpression.of (raw ().mod (JExpr.lit (b)));
   }
 
   public ASubLongExpression <?, ?, ?> mod (char c)
   {
-    return LngExpression.of (raw ().mod (c));
+    return LngExpression.of (raw ().mod (JExpr.lit (c)));
   }
 
   /// @return `that * other`
@@ -99,17 +100,17 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
 
   public ASubLongExpression <?, ?, ?> mult (short s)
   {
-    return LngExpression.of (raw ().mul (s));
+    return LngExpression.of (raw ().mul (JExpr.lit (s)));
   }
 
   public ASubLongExpression <?, ?, ?> mult (byte b)
   {
-    return LngExpression.of (raw ().mul (b));
+    return LngExpression.of (raw ().mul (JExpr.lit (b)));
   }
 
   public ASubLongExpression <?, ?, ?> mult (char c)
   {
-    return LngExpression.of (raw ().mul (c));
+    return LngExpression.of (raw ().mul (JExpr.lit (c)));
   }
 
   /// @return `that + other`
@@ -130,17 +131,17 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
 
   public ASubLongExpression <?, ?, ?> plus (short s)
   {
-    return LngExpression.of (raw ().plus (s));
+    return LngExpression.of (raw ().plus (JExpr.lit (s)));
   }
 
   public ASubLongExpression <?, ?, ?> plus (byte b)
   {
-    return LngExpression.of (raw ().plus (b));
+    return LngExpression.of (raw ().plus (JExpr.lit (b)));
   }
 
   public ASubLongExpression <?, ?, ?> plus (char c)
   {
-    return LngExpression.of (raw ().plus (c));
+    return LngExpression.of (raw ().plus (JExpr.lit (c)));
   }
 
   /// @return `that - other`
@@ -161,17 +162,17 @@ public abstract class ASubLongExpression <T, Self extends ASubLongExpression <T,
 
   public ASubLongExpression <?, ?, ?> sub (short s)
   {
-    return LngExpression.of (raw ().minus (s));
+    return LngExpression.of (raw ().minus (JExpr.lit (s)));
   }
 
   public ASubLongExpression <?, ?, ?> sub (byte b)
   {
-    return LngExpression.of (raw ().minus (b));
+    return LngExpression.of (raw ().minus (JExpr.lit (b)));
   }
 
   public ASubLongExpression <?, ?, ?> sub (char c)
   {
-    return LngExpression.of (raw ().minus (c));
+    return LngExpression.of (raw ().minus (JExpr.lit (c)));
   }
 
 }

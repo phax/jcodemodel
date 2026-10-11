@@ -71,17 +71,17 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
 
   public ASubDoubleExpression <?, ?, ?> div (short s)
   {
-    return DblExpression.of (raw ().div (s));
+    return DblExpression.of (raw ().div (JExpr.lit (s)));
   }
 
   public ASubDoubleExpression <?, ?, ?> div (byte b)
   {
-    return DblExpression.of (raw ().div (b));
+    return DblExpression.of (raw ().div (JExpr.lit (b)));
   }
 
   public ASubDoubleExpression <?, ?, ?> div (char c)
   {
-    return DblExpression.of (raw ().div (c));
+    return DblExpression.of (raw ().div (JExpr.lit (c)));
   }
 
   /// @return `that % other`
@@ -112,17 +112,17 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
 
   public ASubDoubleExpression <?, ?, ?> mod (short s)
   {
-    return DblExpression.of (raw ().mod (s));
+    return DblExpression.of (raw ().mod (JExpr.lit (s)));
   }
 
   public ASubDoubleExpression <?, ?, ?> mod (byte b)
   {
-    return DblExpression.of (raw ().mod (b));
+    return DblExpression.of (raw ().mod (JExpr.lit (b)));
   }
 
   public ASubDoubleExpression <?, ?, ?> mod (char c)
   {
-    return DblExpression.of (raw ().mod (c));
+    return DblExpression.of (raw ().mod (JExpr.lit (c)));
   }
 
   /// @return `that * other`
@@ -153,17 +153,17 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
 
   public ASubDoubleExpression <?, ?, ?> mult (short s)
   {
-    return DblExpression.of (raw ().mul (s));
+    return DblExpression.of (raw ().mul (JExpr.lit (s)));
   }
 
   public ASubDoubleExpression <?, ?, ?> mult (byte b)
   {
-    return DblExpression.of (raw ().mul (b));
+    return DblExpression.of (raw ().mul (JExpr.lit (b)));
   }
 
   public ASubDoubleExpression <?, ?, ?> mult (char c)
   {
-    return DblExpression.of (raw ().mul (c));
+    return DblExpression.of (raw ().mul (JExpr.lit (c)));
   }
 
   /// @return `- that`
@@ -200,17 +200,17 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
 
   public ASubDoubleExpression <?, ?, ?> plus (short s)
   {
-    return DblExpression.of (raw ().plus (s));
+    return DblExpression.of (raw ().plus (JExpr.lit (s)));
   }
 
   public ASubDoubleExpression <?, ?, ?> plus (byte b)
   {
-    return DblExpression.of (raw ().plus (b));
+    return DblExpression.of (raw ().plus (JExpr.lit (b)));
   }
 
   public ASubDoubleExpression <?, ?, ?> plus (char c)
   {
-    return DblExpression.of (raw ().plus (c));
+    return DblExpression.of (raw ().plus (JExpr.lit (c)));
   }
 
   // operator + with a String operands promotes anything else to String.
@@ -278,17 +278,17 @@ public abstract class ASubDoubleExpression <T, Self extends ASubDoubleExpression
 
   public ASubDoubleExpression <?, ?, ?> sub (short s)
   {
-    return DblExpression.of (raw ().minus (s));
+    return DblExpression.of (raw ().minus (JExpr.lit (s)));
   }
 
   public ASubDoubleExpression <?, ?, ?> sub (byte b)
   {
-    return DblExpression.of (raw ().minus (b));
+    return DblExpression.of (raw ().minus (JExpr.lit (b)));
   }
 
   public ASubDoubleExpression <?, ?, ?> sub (char c)
   {
-    return DblExpression.of (raw ().minus (c));
+    return DblExpression.of (raw ().minus (JExpr.lit (c)));
   }
 
   //

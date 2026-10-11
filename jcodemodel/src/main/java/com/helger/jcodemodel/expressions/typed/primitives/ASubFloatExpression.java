@@ -43,17 +43,17 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
 
   public ASubFloatExpression <?, ?, ?> div (short s)
   {
-    return FltExpression.of (raw ().div (s));
+    return FltExpression.of (raw ().div (JExpr.lit (s)));
   }
 
   public ASubFloatExpression <?, ?, ?> div (byte b)
   {
-    return FltExpression.of (raw ().div (b));
+    return FltExpression.of (raw ().div (JExpr.lit (b)));
   }
 
   public ASubFloatExpression <?, ?, ?> div (char c)
   {
-    return FltExpression.of (raw ().div (c));
+    return FltExpression.of (raw ().div (JExpr.lit (c)));
   }
 
   /// @return `that % other`
@@ -79,17 +79,17 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
 
   public ASubFloatExpression <?, ?, ?> mod (short s)
   {
-    return FltExpression.of (raw ().mod (s));
+    return FltExpression.of (raw ().mod (JExpr.lit (s)));
   }
 
   public ASubFloatExpression <?, ?, ?> mod (byte b)
   {
-    return FltExpression.of (raw ().mod (b));
+    return FltExpression.of (raw ().mod (JExpr.lit (b)));
   }
 
   public ASubFloatExpression <?, ?, ?> mod (char c)
   {
-    return FltExpression.of (raw ().mod (c));
+    return FltExpression.of (raw ().mod (JExpr.lit (c)));
   }
 
   /// @return `that * other`
@@ -115,17 +115,17 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
 
   public ASubFloatExpression <?, ?, ?> mult (short s)
   {
-    return FltExpression.of (raw ().mul (s));
+    return FltExpression.of (raw ().mul (JExpr.lit (s)));
   }
 
   public ASubFloatExpression <?, ?, ?> mult (byte b)
   {
-    return FltExpression.of (raw ().mul (b));
+    return FltExpression.of (raw ().mul (JExpr.lit (b)));
   }
 
   public ASubFloatExpression <?, ?, ?> mult (char c)
   {
-    return FltExpression.of (raw ().mul (c));
+    return FltExpression.of (raw ().mul (JExpr.lit (c)));
   }
 
   /// @return `that + other`
@@ -151,17 +151,17 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
 
   public ASubFloatExpression <?, ?, ?> plus (short s)
   {
-    return FltExpression.of (raw ().plus (s));
+    return FltExpression.of (raw ().plus (JExpr.lit (s)));
   }
 
   public ASubFloatExpression <?, ?, ?> plus (byte b)
   {
-    return FltExpression.of (raw ().plus (b));
+    return FltExpression.of (raw ().plus (JExpr.lit (b)));
   }
 
   public ASubFloatExpression <?, ?, ?> plus (char c)
   {
-    return FltExpression.of (raw ().plus (c));
+    return FltExpression.of (raw ().plus (JExpr.lit (c)));
   }
 
   /// @return `that - other`
@@ -187,17 +187,17 @@ public abstract class ASubFloatExpression <T, Self extends ASubFloatExpression <
 
   public ASubFloatExpression <?, ?, ?> sub (short s)
   {
-    return FltExpression.of (raw ().minus (s));
+    return FltExpression.of (raw ().minus (JExpr.lit (s)));
   }
 
   public ASubFloatExpression <?, ?, ?> sub (byte b)
   {
-    return FltExpression.of (raw ().minus (b));
+    return FltExpression.of (raw ().minus (JExpr.lit (b)));
   }
 
   public ASubFloatExpression <?, ?, ?> sub (char c)
   {
-    return FltExpression.of (raw ().minus (c));
+    return FltExpression.of (raw ().minus (JExpr.lit (c)));
   }
 
 }
