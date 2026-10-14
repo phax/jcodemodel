@@ -265,6 +265,7 @@ public class JVar implements IJAssignmentTarget, IJDeclaration, IJAnnotatable, I
 
     if (m_aAnnotations != null)
     {
+      // TODO use the new JfieldVar instead, later, once the base one is abstract.
       final boolean bNewLine = this instanceof JFieldVar;
       for (final JAnnotationUse annotation : m_aAnnotations)
       {

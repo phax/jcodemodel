@@ -34,20 +34,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.base.string.StringHelper;
-import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.AbstractJType;
-import com.helger.jcodemodel.JBlock;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
-import com.helger.jcodemodel.JInvocation;
-import com.helger.jcodemodel.JMethod;
-import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JNarrowedClass;
-import com.helger.jcodemodel.JPrimitiveType;
-import com.helger.jcodemodel.JReferencedClass;
-import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.plugin.maven.ICodeModelBuilder;
 import com.helger.jcodemodel.plugin.maven.ISourcedInputStream;
@@ -62,6 +49,7 @@ import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecor
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.IFieldCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.PackageCreation;
 import com.helger.jcodemodel.plugin.maven.generators.flatstruct.IFlatStructRecord.SimpleField;
+import com.helger.jcodemodel.vars.JFieldVar;
 
 public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilder
 {
@@ -546,7 +534,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
   }
 
   @NonNull
-  protected List <JFieldVar> extractFinalFields (@NonNull final JDefinedClass createdClass)
+  protected List <com.helger.jcodemodel.JFieldVar> extractFinalFields (@NonNull final JDefinedClass createdClass)
   {
     return createdClass.fields ()
                        .values ()
@@ -583,7 +571,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
       createConstructors (model, createdClass);
       return;
     }
-    final List <JFieldVar> finalFields = extractFinalFields (createdClass);
+    final List <com.helger.jcodemodel.JFieldVar> finalFields = extractFinalFields (createdClass);
     selectedConstructors.stream ().forEach (sc -> {
       final JMethod newConstructor = createdClass.constructor (JMod.PUBLIC);
       final JBlock body = newConstructor.body ();
@@ -593,7 +581,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
         supercall.arg (newConstructor.param (jv.type (), jv.name ()));
       }
       body.add (supercall);
-      for (final JFieldVar jfv : finalFields)
+      for (final com.helger.jcodemodel.JFieldVar jfv : finalFields)
       {
         body.add (JExpr.assign (JExpr.refthis (jfv), newConstructor.param (jfv.type (), jfv.name ())));
       }
@@ -636,7 +624,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
       createConstructors (model, createdClass);
       return;
     }
-    final List <JFieldVar> finalFields = extractFinalFields (createdClass);
+    final List <com.helger.jcodemodel.JFieldVar> finalFields = extractFinalFields (createdClass);
     selectedConstructors.stream ().forEach (sc -> {
       final JMethod newConstructor = createdClass.constructor (JMod.PUBLIC);
       final JBlock body = newConstructor.body ();
@@ -646,7 +634,7 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
         supercall.arg (newConstructor.param (model.ref (p.getType ()), p.getName ()));
       }
       body.add (supercall);
-      for (final JFieldVar jfv : finalFields)
+      for (final com.helger.jcodemodel.JFieldVar jfv : finalFields)
       {
         body.add (JExpr.assign (JExpr.refthis (jfv), newConstructor.param (jfv.type (), jfv.name ())));
       }
@@ -659,14 +647,14 @@ public abstract class AbstractFlatStructureGenerator implements ICodeModelBuilde
    */
   protected void createConstructors (final JCodeModel model, final JDefinedClass createdClass)
   {
-    final List <JFieldVar> finalFields = extractFinalFields (createdClass);
+    final List <com.helger.jcodemodel.JFieldVar> finalFields = extractFinalFields (createdClass);
     if (finalFields.isEmpty ())
     {
       return;
     }
     final JMethod newConstructor = createdClass.constructor (JMod.PUBLIC);
     final JBlock body = newConstructor.body ();
-    for (final JFieldVar jfv : finalFields)
+    for (final com.helger.jcodemodel.JFieldVar jfv : finalFields)
     {
       body.add (JExpr.assign (JExpr.refthis (jfv), newConstructor.param (jfv.type (), jfv.name ())));
     }

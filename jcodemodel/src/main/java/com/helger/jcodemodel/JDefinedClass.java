@@ -61,6 +61,7 @@ import com.helger.annotation.style.ReturnsMutableObject;
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.modifiers.EMod;
 import com.helger.jcodemodel.util.ClassNameComparator;
+import com.helger.jcodemodel.vars.JFieldVar;
 import com.helger.jcodemodel.writer.JFormatter;
 
 /**
@@ -106,7 +107,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   /**
    * Fields keyed by their names.
    */
-  private final LinkedHashMap <String, JFieldVar> m_aFields = new LinkedHashMap <> ();
+  private final LinkedHashMap <String, com.helger.jcodemodel.JFieldVar> m_aFields = new LinkedHashMap <> ();
 
   /**
    * Static initializer, if this class has one
@@ -606,7 +607,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
   {
     ValueEnforcer.isFalse (m_aFields.containsKey (sName), () -> "trying to create the same field twice: " + sName);
 
-    final JFieldVar f = new com.helger.jcodemodel.vars.JFieldVar (this, JMods.forField (nMods), aType, sName, aInit);
+    final JFieldVar f = new JFieldVar (this, JMods.forField (nMods), aType, sName, aInit);
     m_aFields.put (sName, f);
     return f;
   }
@@ -623,7 +624,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @return always non-null.
    */
   @NonNull
-  public LinkedHashMap <String, JFieldVar> fieldsMutable ()
+  public LinkedHashMap <String, com.helger.jcodemodel.JFieldVar> fieldsMutable ()
   {
     return m_aFields;
   }
@@ -635,7 +636,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
    * @return always non-null.
    */
   @NonNull
-  public Map <String, JFieldVar> fields ()
+  public Map <String, com.helger.jcodemodel.JFieldVar> fields ()
   {
     return Collections.unmodifiableMap (fieldsMutable ());
   }
@@ -666,7 +667,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
 
   void internalRenameField (@NonNull final String sOldName,
                             @NonNull final String sNewName,
-                            @NonNull final JFieldVar aField)
+                            final com.helger.jcodemodel.@NonNull JFieldVar aField)
   {
     if (m_aFields.remove (sOldName) == null)
       throw new IllegalArgumentException ("Failed to remove field with name '" +
@@ -981,7 +982,7 @@ public class JDefinedClass extends AbstractJClassContainer <JDefinedClass> imple
     }
 
     // All fields
-    for (final JFieldVar field : m_aFields.values ())
+    for (final com.helger.jcodemodel.JFieldVar field : m_aFields.values ())
     {
       f.declaration (field);
     }

@@ -16,11 +16,11 @@ package com.helger.jcodemodel.tests.format.variables.field;
 
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.compile.annotation.TestJCM;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
+import com.helger.jcodemodel.vars.JFieldVar;
 import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping.EListWrapStrategy;
 
