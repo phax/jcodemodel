@@ -26,6 +26,7 @@ public class Issue201TestGen
     sw = JExpr._switch (param);
     jm.body ().assign (param, sw);
     sw._case (JExpr.lit (1)).yield (JExpr.lit (42));
+    sw._case (JExpr.lit (2)).add (JExpr.assign (param, JExpr.incr (param))).yield (JExpr.lit (40));
     sw._default ().yield (param);
   }
 

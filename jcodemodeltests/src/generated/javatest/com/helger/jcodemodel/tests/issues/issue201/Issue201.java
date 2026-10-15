@@ -35,6 +35,11 @@ public class Issue201 {
         i = switch (i) {
             case 1 -> 
                 42;
+            case 2 -> 
+            {
+                i = i++;
+                yield 40;
+            }
             default  -> 
                 i;
         }
