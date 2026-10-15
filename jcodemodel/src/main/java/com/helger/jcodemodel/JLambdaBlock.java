@@ -75,6 +75,8 @@ public class JLambdaBlock extends JBlock
       if (aContentElement instanceof IJStatement && aContentElement instanceof IJExpression)
       {
         f.generable ((IJGenerable) aContentElement);
+        if (bracesRequired ())
+          f.print (';').newline ();
         return;
       }
     }
