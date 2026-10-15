@@ -196,29 +196,6 @@ public class JSwitchExpression implements IJExpressionStatement
     f.print ('}').newline ();
   }
 
-  protected void printBody (@NonNull final IJFormatter f, JLambdaBlock jlb)
-  {
-    if (jlb.getContents ().size () == 1)
-    {
-      final IJObject firstContent = jlb.getContents ().get (0);
-      if (firstContent instanceof final JYield jy)
-      {
-        f.indent ();
-        f.generable (jy.expr ()).print (";").newline ();
-        f.outdent ();
-        return;
-      }
-      if (firstContent instanceof final JThrow jt)
-      {
-        f.indent ();
-        f.statement (jt);
-        f.outdent ();
-        return;
-      }
-    }
-    f.statement (jlb);
-  }
-
   // protected void generatePre25 (@SuppressWarnings ("unused") @NonNull final IJFormatter f)
   // {
   // // TODO in that case we generate only the static ones ; the pattern cases must
