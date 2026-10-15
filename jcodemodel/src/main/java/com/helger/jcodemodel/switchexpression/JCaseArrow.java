@@ -86,10 +86,16 @@ public abstract class JCaseArrow <Self extends JCaseArrow <?>> implements IJStat
   /// generate the arrow and body in the formatter
   protected void stateBody (@NonNull final IJFormatter f)
   {
+    stateBlock (f, getBlock ());
+  }
+
+  /// generate the arrow and body in the formatter
+  public static void stateBlock (@NonNull final IJFormatter f, JLambdaBlock jlb)
+  {
     f.print (" -> ").newline ();
-    if (m_aBlock.getContents ().size () == 1)
+    if (jlb.getContents ().size () == 1)
     {
-      final IJObject firstContent = m_aBlock.getContents ().get (0);
+      final IJObject firstContent = jlb.getContents ().get (0);
       if (firstContent instanceof final JYield jy)
       {
         f.indent ();
@@ -105,6 +111,9 @@ public abstract class JCaseArrow <Self extends JCaseArrow <?>> implements IJStat
         return;
       }
     }
-    f.statement (getBlock ());
+    f.statement (jlb);
+    if (jlb.getContents ().size () == 1)
+      f.print (';').newline ();
   }
+
 }

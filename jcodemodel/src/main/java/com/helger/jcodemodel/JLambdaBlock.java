@@ -52,6 +52,11 @@ import com.helger.base.enforce.ValueEnforcer;
  */
 public class JLambdaBlock extends JBlock
 {
+
+  public JLambdaBlock ()
+  {
+    bracesRequired (false);
+  }
   /**
    * Remove all existing expressions and only add the provided expression
    *
@@ -62,6 +67,7 @@ public class JLambdaBlock extends JBlock
   {
     ValueEnforcer.notNull (aExpr, "Expression");
     removeAll ();
+    bracesRequired (false);
     internalInsert (aExpr);
   }
 
@@ -72,15 +78,12 @@ public class JLambdaBlock extends JBlock
     {
       // Special handling - prefer expressions over statement in case it is both
       final IJObject aContentElement = m_aContentList.get (0);
-      if (aContentElement instanceof IJStatement && aContentElement instanceof IJExpression)
+      if (aContentElement instanceof IJStatement && aContentElement instanceof IJExpression ije)
       {
-        f.generable ((IJGenerable) aContentElement);
-        if (bracesRequired ())
-          f.print (';').newline ();
+        f.generable (ije);
         return;
       }
     }
-
     super.generateBody (f);
   }
 }

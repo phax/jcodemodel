@@ -25,9 +25,8 @@ public class ESwitch {
                 31;
             case FEB -> 
                 28;
-            default -> {
+            default  -> 
                 throw new UnsupportedOperationException();
-            }
         }
         ;
     }
@@ -40,9 +39,8 @@ public class ESwitch {
                 7;
             case MONTH -> 
                 throw new UnsupportedOperationException("a month can have 28, 30 or 31 days.");
-            default -> {
+            default  -> 
                 throw new UnsupportedOperationException();
-            }
         }
         ;
     }

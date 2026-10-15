@@ -70,12 +70,12 @@ public class JSwitchExpression implements IJExpressionStatement
   /**
    * a single default block
    */
-  private JBlock m_aDefaultBlock;
+  private JLambdaBlock m_aDefaultBlock;
 
   /**
    * a single null block
    */
-  private JBlock m_aNullBlock;
+  private JLambdaBlock m_aNullBlock;
 
   /**
    * Construct a switch statement
@@ -176,21 +176,47 @@ public class JSwitchExpression implements IJExpressionStatement
         m_aDefaultBlock != null &&
         m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
     {
-      f.print ("case null, default -> ").statement (m_aNullBlock);
+      f.print ("case null, default ");
+      JCaseArrow.stateBlock (f, m_aNullBlock);
     }
     else
     {
       if (m_aNullBlock != null)
       {
-        f.print ("case null -> ").statement (m_aNullBlock);
+        f.print ("case null ");
+        JCaseArrow.stateBlock (f, m_aNullBlock);
       }
       if (m_aDefaultBlock != null)
       {
-        f.print ("default -> ").statement (m_aDefaultBlock);
+        f.print ("default ");
+        JCaseArrow.stateBlock (f, m_aDefaultBlock);
       }
     }
     f.outdent ();
     f.print ('}').newline ();
+  }
+
+  protected void printBody (@NonNull final IJFormatter f, JLambdaBlock jlb)
+  {
+    if (jlb.getContents ().size () == 1)
+    {
+      final IJObject firstContent = jlb.getContents ().get (0);
+      if (firstContent instanceof final JYield jy)
+      {
+        f.indent ();
+        f.generable (jy.expr ()).print (";").newline ();
+        f.outdent ();
+        return;
+      }
+      if (firstContent instanceof final JThrow jt)
+      {
+        f.indent ();
+        f.statement (jt);
+        f.outdent ();
+        return;
+      }
+    }
+    f.statement (jlb);
   }
 
   // protected void generatePre25 (@SuppressWarnings ("unused") @NonNull final IJFormatter f)

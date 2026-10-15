@@ -27,9 +27,8 @@ public class BasicSwitch {
                 true;
             case 4, 5, 6, 7, 8, 9 -> 
                 isOdd(i - 2);
-            default -> {
+            default  -> 
                 throw new UnsupportedOperationException("case not handled : "+ i);
-            }
         }
         ;
     }
