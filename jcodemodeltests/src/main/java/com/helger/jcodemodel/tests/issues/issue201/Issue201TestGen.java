@@ -20,6 +20,7 @@ public class Issue201TestGen
     JSwitchExpression sw = JExpr._switch (param);
     jm.body ().add (sw);
     sw._case (JExpr.lit (1)).getBlock ().assign (param, JExpr.lit (42));
+    sw._case (JExpr.lit (2)).getBlock ().assign (param, JExpr.lit (40)).assign (param, JExpr.lit (40));
     sw._default ().add (JExpr.assign (param, JExpr.lit (-1)));
 
     sw = JExpr._switch (param);

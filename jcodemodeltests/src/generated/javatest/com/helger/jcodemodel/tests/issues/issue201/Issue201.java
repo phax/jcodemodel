@@ -25,6 +25,11 @@ public class Issue201 {
             {
                 i = 42;
             }
+            case 2 -> 
+            {
+                i = 40;
+                i = 40;
+            }
             default -> {
                 i = -1;
             }
