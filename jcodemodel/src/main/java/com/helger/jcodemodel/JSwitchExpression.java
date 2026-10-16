@@ -210,7 +210,7 @@ public class JSwitchExpression implements IJExpressionStatement
   public void state (@NonNull final IJFormatter f)
   {
     // we don't add a semicolon since a switch statement does not need one.
-    f.generable (this).newline ();
+    f.generable (this);
   }
 
 }
