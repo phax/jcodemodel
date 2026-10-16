@@ -102,16 +102,16 @@ public abstract class AJCaseArrow <Self extends AJCaseArrow <?>> implements IJSt
       final IJObject firstContent = jlb.getContents ().get (0);
       if (firstContent instanceof final JYield jy)
       {
-        singleLinePrint (f, jy, () -> f.generable (jy.expr ()).print (";"));
+        printSingleStatement (f, () -> f.generable (jy.expr ()).print (";"));
       }
       else
         if (firstContent instanceof final JThrow jt)
         {
-          singleLinePrint (f, jt, () -> f.print ("throw").generable (jt.expr ()).print (';'));
+          printSingleStatement (f, () -> f.print ("throw").generable (jt.expr ()).print (';'));
         }
         else
         {
-          singleLinePrint (f, firstContent, () -> f.generable (jlb).print (';'));
+          printSingleStatement (f, () -> f.generable (jlb).print (';'));
         }
     }
     else
@@ -121,11 +121,12 @@ public abstract class AJCaseArrow <Self extends AJCaseArrow <?>> implements IJSt
     }
   }
 
-  protected static void singleLinePrint (@NonNull final IJFormatter f, IJObject blockContent, Runnable internalPrint)
+  protected static void printSingleStatement (@NonNull final IJFormatter f, Runnable internalPrint)
   {
-    f.indent ();
-    f.printSingleLine (f.settings ().wrap.switchExpression.singleLine.condition, internalPrint);
-    f.outdent ();
+    f.indent ()
+     .printSingleLine (f.settings ().wrap.switchExpression.singleLine.condition, internalPrint)
+     .newline ()
+     .outdent ();
   }
 
 }

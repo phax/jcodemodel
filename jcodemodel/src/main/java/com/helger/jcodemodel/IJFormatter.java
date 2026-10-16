@@ -44,6 +44,7 @@ import java.io.Closeable;
 import java.util.Collection;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
@@ -234,8 +235,8 @@ public interface IJFormatter extends Closeable
 
   @NonNull
   IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList,
-                         String separator,
-                         ListWrapping wrapping);
+                         @NonNull String separator,
+                         @Nullable ListWrapping wrapping);
 
   /**
    * Cause the {@link IJStatement} to generate source for itself
@@ -295,7 +296,12 @@ public interface IJFormatter extends Closeable
   /// create a new buffer to write data into.
   IContextCloser addContextLayer ();
 
-  /// append a single line, then a newline. if needed, starts with a wrapping.
+  /// append a single line. If needed, starts with a wrapping.
+  /// @param condition to decide when to wrap before. If [EWordWrapStrategy.REQUIRED], then tries to
+  /// append the line without a wrap, and rollback if the result is too big, adding a wrap before
+  /// doing it.
+  /// @param lineAppend the call to make the actual line addition. Can be called several times, so
+  /// should be stateless.
   public default IJFormatter printSingleLine (EWordWrapStrategy condition, Runnable lineAppend)
   {
     switch (condition)
@@ -311,20 +317,27 @@ public interface IJFormatter extends Closeable
       }
       case REQUIRED ->
       {
-        try (IContextCloser o = addContextLayer ().persistOnClose ())
+        if (currentLineSize () == 0)
         {
+          // in that specific case, no need to rollback check.
           lineAppend.run ();
-          if ((currentLineSize () > settings ().wrap.lineWidth))
+        }
+        else
+        {
+          try (IContextCloser o = addContextLayer ().persistOnClose ())
           {
-            o.rollback ();
-            newline ();
             lineAppend.run ();
+            if ((currentLineSize () > settings ().wrap.lineWidth))
+            {
+              o.rollback ();
+              newline ();
+              lineAppend.run ();
+            }
           }
         }
       }
       default -> throw new IllegalArgumentException ("Unexpected value: " + condition);
     }
-    newline ();
     return this;
   }
 }
