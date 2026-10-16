@@ -93,7 +93,7 @@ public abstract class JCaseArrow <Self extends JCaseArrow <?>> implements IJStat
   /// one-line yield `i->yield i`
   ///
   /// This is a tooling method, public since called from two classes.
-  public static void stateBlock (@NonNull final IJFormatter f, JLambdaBlock jlb)
+  public static void stateBlock (@NonNull final IJFormatter f, @NonNull final JLambdaBlock jlb)
   {
     // we let the formatter decide whether to whitespace or not the arrow
     f.print ("->");
@@ -121,7 +121,7 @@ public abstract class JCaseArrow <Self extends JCaseArrow <?>> implements IJStat
     }
   }
 
-  protected static void printSingleStatement (@NonNull final IJFormatter f, Runnable internalPrint)
+  protected static void printSingleStatement (@NonNull final IJFormatter f, @NonNull final Runnable internalPrint)
   {
     f.indent ()
      .printSingleLine (f.settings ().wrap.switchExpression.singleLine.condition, internalPrint)

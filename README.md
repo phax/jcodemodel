@@ -36,6 +36,15 @@ Add the following to your pom.xml to use this artifact (where `x.y.z` denotes th
 
 # News and noteworthy
 
+v4.5.0 - work in progress
+* Fixed the missing semicolon in arrow `case` blocks of `JSwitchExpression` with a single assignment statement, which produced invalid code.
+  See [#201](https://github.com/phax/jcodemodel/issues/201) and [#202](https://github.com/phax/jcodemodel/pull/202) - thx @glelouet
+* Added the new formatter settings `wrap.switchExpression.labels` and `wrap.switchExpression.singleLine` (class `SwitchExpression`) to control the wrapping of switch labels and single statement cases
+* Added `IJFormatter.printSingleLine (EWordWrapStrategy, Runnable)`
+* The code layout of `JSwitchExpression` and `JCaseArrow` / `JCaseStatic` changed (indentation, line breaks, no trailing semicolon after a switch statement, `case null, default`). Generated code may differ from previous versions
+* `JBlock` now enables braces and indentation for statements inserted at an index greater than 0; `JLambdaBlock` starts without braces and indentation
+* Removed the unimplemented, protected `JSwitchExpression.generatePre25 ()`
+
 v4.4.1 - 2026-09-25
 * `JOp.EPrecedence` derives the binding strength from the declaration order (`ordinal ()`) again, instead of from an explicitly assigned level.
   `EPrecedence.level ()` was removed

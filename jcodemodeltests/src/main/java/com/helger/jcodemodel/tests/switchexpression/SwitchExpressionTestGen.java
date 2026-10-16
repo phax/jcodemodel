@@ -89,4 +89,19 @@ public class SwitchExpressionTestGen
     sw._default ()._throws (jcm, UnsupportedOperationException.class);
   }
 
+  /**
+   * Throw a variable from an arrow case - the keyword and the variable must be separated by a
+   * space.
+   */
+  public void throwVariable (JPackage root, JCodeModel jcm) throws JCodeModelException
+  {
+    JDefinedClass cl = root._class ("ThrowSwitch");
+    JMethod m = cl.method (JMod.PUBLIC | JMod.STATIC, jcm.VOID, "check");
+    JVar i = m.param (jcm.INT, "i");
+    JVar e = m.param (jcm.ref (RuntimeException.class), "e");
+    JSwitchExpression sw = JExpr._switch (i);
+    m.body ().add (sw);
+    sw._case (JExpr.lit (1)).getBlock ()._throw (e);
+  }
+
 }

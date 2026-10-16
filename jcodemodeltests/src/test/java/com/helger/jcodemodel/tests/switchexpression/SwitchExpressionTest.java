@@ -37,4 +37,11 @@ public class SwitchExpressionTest {
     Assert.assertThrows(UnsupportedOperationException.class, () -> ESwitch.daysIn(EPeriod.MONTH));
   }
 
+  @Test
+  public void throwVariable() {
+    final RuntimeException ex = new IllegalStateException();
+    Assert.assertSame(ex, Assert.assertThrows(IllegalStateException.class, () -> ThrowSwitch.check(1, ex)));
+    ThrowSwitch.check(2, ex);
+  }
+
 }

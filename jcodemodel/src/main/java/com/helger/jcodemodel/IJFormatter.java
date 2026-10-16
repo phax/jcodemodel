@@ -157,7 +157,7 @@ public interface IJFormatter extends Closeable
     return print (sStr);
   }
 
-  default IJFormatter println (@NonNull String sStr)
+  default IJFormatter println (@NonNull final String sStr)
   {
     return print (sStr).print (getNewLine ());
   }
@@ -198,7 +198,7 @@ public interface IJFormatter extends Closeable
     return vars (aList, null);
   }
 
-  IJFormatter vars (@NonNull final Collection <? extends JVar> aList, ListWrapping wrapping);
+  IJFormatter vars (@NonNull Collection <? extends JVar> aList, ListWrapping wrapping);
 
   /**
    * Print an identifier
@@ -234,7 +234,7 @@ public interface IJFormatter extends Closeable
   }
 
   @NonNull
-  IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList,
+  IJFormatter generable (@NonNull Collection <? extends IJGenerable> aList,
                          @NonNull String separator,
                          @Nullable ListWrapping wrapping);
 
@@ -302,7 +302,7 @@ public interface IJFormatter extends Closeable
   /// doing it.
   /// @param lineAppend the call to make the actual line addition. Can be called several times, so
   /// should be stateless.
-  public default IJFormatter printSingleLine (EWordWrapStrategy condition, Runnable lineAppend)
+  default IJFormatter printSingleLine (@NonNull final EWordWrapStrategy condition, @NonNull final Runnable lineAppend)
   {
     switch (condition)
     {
@@ -324,12 +324,12 @@ public interface IJFormatter extends Closeable
         }
         else
         {
-          try (IContextCloser o = addContextLayer ().persistOnClose ())
+          try (final IContextCloser cc = addContextLayer ().persistOnClose ())
           {
             lineAppend.run ();
-            if ((currentLineSize () > settings ().wrap.lineWidth))
+            if (currentLineSize () > settings ().wrap.lineWidth)
             {
-              o.rollback ();
+              cc.rollback ();
               newline ();
               lineAppend.run ();
             }

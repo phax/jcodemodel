@@ -89,7 +89,7 @@ public class JCaseStatic extends JCaseArrow <JCaseStatic>
   }
 
   /// copied from [JCase]
-  protected IJExpression mapLabel (IJExpression ije)
+  protected IJExpression mapLabel (@NonNull final IJExpression ije)
   {
     if (ije instanceof final JEnumConstant jec)
     {
