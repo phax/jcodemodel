@@ -21,27 +21,26 @@ public class Issue201 {
 
     public static void test(int i) {
         switch (i) {
-            case 1 -> 
+            case 1 ->
                 i = 42;
-            case 2 -> 
+            case 2 ->
             {
                 i = 40;
                 i = 40;
             }
-            default  -> 
+            default ->
                 i = -1;
         }
         i = switch (i) {
-            case 1 -> 
+            case 1 ->
                 42;
-            case 2 -> 
+            case 2 ->
             {
                 i = i++;
                 yield 40;
             }
-            default  -> 
+            default ->
                 i;
-        }
-        ;
+        };
     }
 }

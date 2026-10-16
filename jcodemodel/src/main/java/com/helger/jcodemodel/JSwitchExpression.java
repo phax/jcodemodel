@@ -179,24 +179,24 @@ public class JSwitchExpression implements IJExpressionStatement
         m_aDefaultBlock != null &&
         m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
     {
-      f.print ("case null, default ");
+      f.print ("case null, default");
       JCaseArrow.stateBlock (f, m_aNullBlock);
     }
     else
     {
       if (m_aNullBlock != null)
       {
-        f.print ("case null ");
+        f.print ("case null");
         JCaseArrow.stateBlock (f, m_aNullBlock);
       }
       if (m_aDefaultBlock != null)
       {
-        f.print ("default ");
+        f.print ("default");
         JCaseArrow.stateBlock (f, m_aDefaultBlock);
       }
     }
     f.outdent ();
-    f.print ('}').newline ();
+    f.print ('}');
   }
 
   // protected void generatePre25 (@SuppressWarnings ("unused") @NonNull final IJFormatter f)
@@ -210,7 +210,7 @@ public class JSwitchExpression implements IJExpressionStatement
   public void state (@NonNull final IJFormatter f)
   {
     // we don't add a semicolon since a switch statement does not need one.
-    f.generable (this);
+    f.generable (this).newline ();
   }
 
 }

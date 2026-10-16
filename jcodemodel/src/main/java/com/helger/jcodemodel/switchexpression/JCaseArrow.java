@@ -89,13 +89,14 @@ public abstract class JCaseArrow <Self extends JCaseArrow <?>> implements IJStat
     stateBlock (f, getBlock ());
   }
 
-  /// generate the arrow and body in the formatter. Checks for special cases to avoid printing `i->
-  /// yield i`
+  /// generate the arrow and body in the formatter. Checks for special cases to avoid printing
+  /// one-line yield `i->yield i`
   ///
   /// This is a tooling method, public since called from two classes.
   public static void stateBlock (@NonNull final IJFormatter f, JLambdaBlock jlb)
   {
-    f.print (" -> ").newline ();
+    // we let the formatter decide whether to whitespace or not the arrow
+    f.print ("->").newline ();
     if (jlb.getContents ().size () == 1)
     {
       final IJObject firstContent = jlb.getContents ().get (0);

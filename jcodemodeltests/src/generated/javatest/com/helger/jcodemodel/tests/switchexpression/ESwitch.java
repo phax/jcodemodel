@@ -21,27 +21,25 @@ public class ESwitch {
 
     public static int daysIn(EnumMonths em) {
         return switch (em) {
-            case JAN, MAR -> 
+            case JAN, MAR ->
                 31;
-            case FEB -> 
+            case FEB ->
                 28;
-            default  -> 
+            default ->
                 throw new UnsupportedOperationException();
-        }
-        ;
+        };
     }
 
     public static int daysIn(EPeriod ep) {
         return switch (ep) {
-            case YEAR -> 
+            case YEAR ->
                 365;
-            case WEEK -> 
+            case WEEK ->
                 7;
-            case MONTH -> 
+            case MONTH ->
                 throw new UnsupportedOperationException("a month can have 28, 30 or 31 days.");
-            default  -> 
+            default ->
                 throw new UnsupportedOperationException();
-        }
-        ;
+        };
     }
 }
