@@ -57,7 +57,7 @@ import com.helger.jcodemodel.JSwitchExpression;
 /// case 1,3 ->
 /// case MyEnum.OPT1 ->
 /// ```
-public class JCaseStatic extends AJCaseArrow <JCaseStatic>
+public class JCaseStatic extends JCaseArrow <JCaseStatic>
 {
   private final List <IJExpression> m_aLabels;
 

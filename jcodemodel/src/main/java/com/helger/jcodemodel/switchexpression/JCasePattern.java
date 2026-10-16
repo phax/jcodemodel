@@ -58,7 +58,7 @@ import com.helger.jcodemodel.JThrow;
 /// ```
 /// 	case char c when c>='&' && c<='z'-> {countChars++; yield 1+c-'a';}
 /// ```
-public class JCasePattern extends AJCaseArrow <JCasePattern>
+public class JCasePattern extends JCaseArrow <JCasePattern>
 {
   private final AbstractJType m_aType;
   private final String m_sVarName;

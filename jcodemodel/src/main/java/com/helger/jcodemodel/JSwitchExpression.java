@@ -46,7 +46,7 @@ import java.util.List;
 
 import org.jspecify.annotations.NonNull;
 
-import com.helger.jcodemodel.switchexpression.AJCaseArrow;
+import com.helger.jcodemodel.switchexpression.JCaseArrow;
 import com.helger.jcodemodel.switchexpression.JCaseSpecialSelector;
 import com.helger.jcodemodel.switchexpression.JCaseStatic;
 
@@ -68,7 +68,7 @@ public class JSwitchExpression implements IJExpressionStatement
   /**
    * vector of JCases.
    */
-  private final List <AJCaseArrow <?>> m_aCases = new ArrayList <> ();
+  private final List <JCaseArrow <?>> m_aCases = new ArrayList <> ();
 
   /**
    * a single default block
@@ -98,7 +98,7 @@ public class JSwitchExpression implements IJExpressionStatement
   }
 
   @NonNull
-  public Iterator <AJCaseArrow <?>> cases ()
+  public Iterator <JCaseArrow <?>> cases ()
   {
     return m_aCases.iterator ();
   }
@@ -171,7 +171,7 @@ public class JSwitchExpression implements IJExpressionStatement
   {
     f.print ("switch (").generable (m_aTestExpr).print (')').print (" {").newline ();
     f.indent ();
-    for (final AJCaseArrow <?> c : m_aCases)
+    for (final JCaseArrow <?> c : m_aCases)
     {
       f.statement (c);
     }
@@ -180,19 +180,19 @@ public class JSwitchExpression implements IJExpressionStatement
       m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
     {
       f.print ("case null, default");
-      AJCaseArrow.stateBlock (f, m_aNullBlock);
+      JCaseArrow.stateBlock (f, m_aNullBlock);
     }
     else
     {
       if (m_aNullBlock != null)
       {
         f.print ("case null");
-        AJCaseArrow.stateBlock (f, m_aNullBlock);
+        JCaseArrow.stateBlock (f, m_aNullBlock);
       }
       if (m_aDefaultBlock != null)
       {
         f.print ("default");
-        AJCaseArrow.stateBlock (f, m_aDefaultBlock);
+        JCaseArrow.stateBlock (f, m_aDefaultBlock);
       }
     }
     f.outdent ();
