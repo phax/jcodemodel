@@ -41,7 +41,8 @@ v4.5.0 - work in progress
   See [#201](https://github.com/phax/jcodemodel/issues/201) and [#202](https://github.com/phax/jcodemodel/pull/202) - thx @glelouet
 * Added the new formatter settings `wrap.switchExpression.labels` and `wrap.switchExpression.singleLine` (class `SwitchExpression`) to control the wrapping of switch labels and single statement cases
 * Added `IJFormatter.printSingleLine (EWordWrapStrategy, Runnable)`
-* The code layout of `JSwitchExpression` and `JCaseArrow` / `JCaseStatic` changed (indentation, line breaks, no trailing semicolon after a switch statement, `case null, default`). Generated code may differ from previous versions
+* The code layout of `JSwitchExpression` and `JCaseArrow` / `JCaseStatic` changed (indentation, line breaks, no trailing semicolon after a switch statement, `case null, default`).
+  Generated code may differ from previous versions
 * `JBlock` now enables braces and indentation for statements inserted at an index greater than 0; `JLambdaBlock` starts without braces and indentation
 * Removed the unimplemented, protected `JSwitchExpression.generatePre25 ()`
 
