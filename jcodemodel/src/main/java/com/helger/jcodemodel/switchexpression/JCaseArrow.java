@@ -86,25 +86,47 @@ public abstract class JCaseArrow <Self extends JCaseArrow <?>> implements IJStat
   /// generate the arrow and body in the formatter
   protected void stateBody (@NonNull final IJFormatter f)
   {
-    f.print (" -> ").newline ();
-    if (m_aBlock.getContents ().size () == 1)
+    stateBlock (f, getBlock ());
+  }
+
+  /// generate the arrow and body in the formatter. Checks for special cases to avoid printing
+  /// one-line yield `i->yield i`
+  ///
+  /// This is a tooling method, public since called from two classes.
+  public static void stateBlock (@NonNull final IJFormatter f, JLambdaBlock jlb)
+  {
+    // we let the formatter decide whether to whitespace or not the arrow
+    f.print ("->");
+    if (jlb.getContents ().size () == 1)
     {
-      final IJObject firstContent = m_aBlock.getContents ().get (0);
+      final IJObject firstContent = jlb.getContents ().get (0);
       if (firstContent instanceof final JYield jy)
       {
-        f.indent ();
-        f.generable (jy.expr ()).print (";").newline ();
-        f.outdent ();
-        return;
+        printSingleStatement (f, () -> f.generable (jy.expr ()).print (";"));
       }
-      if (firstContent instanceof final JThrow jt)
-      {
-        f.indent ();
-        f.statement (jt);
-        f.outdent ();
-        return;
-      }
+      else
+        if (firstContent instanceof final JThrow jt)
+        {
+          printSingleStatement (f, () -> f.print ("throw").generable (jt.expr ()).print (';'));
+        }
+        else
+        {
+          printSingleStatement (f, () -> f.generable (jlb).print (';'));
+        }
     }
-    f.statement (getBlock ());
+    else
+    {
+      f.newline ();
+      f.statement (jlb);
+    }
   }
+
+  protected static void printSingleStatement (@NonNull final IJFormatter f, Runnable internalPrint)
+  {
+    f.indent ()
+     .printSingleLine (f.settings ().wrap.switchExpression.singleLine.condition, internalPrint)
+     .newline ()
+     .outdent ();
+  }
+
 }

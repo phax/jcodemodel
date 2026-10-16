@@ -46,6 +46,7 @@ import org.jspecify.annotations.Nullable;
 import com.helger.jcodemodel.writer.settings.wrap.CatchClause;
 import com.helger.jcodemodel.writer.settings.wrap.ForLoop;
 import com.helger.jcodemodel.writer.settings.wrap.Method;
+import com.helger.jcodemodel.writer.settings.wrap.SwitchExpression;
 import com.helger.jcodemodel.writer.settings.wrap.Variables;
 
 public class Wrap
@@ -183,6 +184,8 @@ public class Wrap
   public final ForLoop forLoop = new ForLoop ();
 
   public final Method method = new Method ();
+
+  public final SwitchExpression switchExpression = new SwitchExpression ();
 
   public final Variables variables = new Variables ();
 

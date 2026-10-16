@@ -59,16 +59,7 @@ import org.slf4j.LoggerFactory;
 import com.helger.annotation.WillCloseWhenClosed;
 import com.helger.annotation.concurrent.NotThreadSafe;
 import com.helger.base.enforce.ValueEnforcer;
-import com.helger.jcodemodel.AbstractJClass;
-import com.helger.jcodemodel.IJDeclaration;
-import com.helger.jcodemodel.IJFormatter;
-import com.helger.jcodemodel.IJGenerable;
-import com.helger.jcodemodel.IJStatement;
-import com.helger.jcodemodel.JAnonymousClass;
-import com.helger.jcodemodel.JDefinedClass;
-import com.helger.jcodemodel.JNarrowedClass;
-import com.helger.jcodemodel.JPackage;
-import com.helger.jcodemodel.JVar;
+import com.helger.jcodemodel.*;
 import com.helger.jcodemodel.util.ClassNameComparator;
 import com.helger.jcodemodel.util.NullWriter;
 import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
@@ -801,8 +792,8 @@ public class JFormatter implements IJFormatter
 
   @Override
   public @NonNull IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList,
-                                         final String separator,
-                                         final ListWrapping wrapping)
+                                         @NonNull final String separator,
+                                         @Nullable final ListWrapping wrapping)
   {
     if (settings ().wrap.disabled)
       return generableLegacy (aList, separator);
