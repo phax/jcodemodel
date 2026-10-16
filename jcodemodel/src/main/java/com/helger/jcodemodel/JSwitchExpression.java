@@ -53,7 +53,10 @@ import com.helger.jcodemodel.switchexpression.JCaseStatic;
 ///
 /// A switch whose result can be used as an expression or a statement.
 /// basically a copy of [JSwitch]
-/// It has two specific blocks : null and default. When writing those, they should be tested for equality.
+/// 
+/// It has two specific blocks : null and default. When generating code for those, they are tested for equality
+/// to check if they can be merged into a single `case default, null` .
+/// 
 public class JSwitchExpression implements IJExpressionStatement
 {
 
@@ -206,7 +209,8 @@ public class JSwitchExpression implements IJExpressionStatement
   @Override
   public void state (@NonNull final IJFormatter f)
   {
-    f.generable (this).print (';').newline ();
+    // we don't add a semicolon since a switch statement does not need one.
+    f.generable (this).newline ();
   }
 
 }

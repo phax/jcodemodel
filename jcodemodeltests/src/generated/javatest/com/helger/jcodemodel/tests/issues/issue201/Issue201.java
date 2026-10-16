@@ -31,7 +31,7 @@ public class Issue201 {
             default  -> 
                 i = -1;
         }
-        ;
+
         i = switch (i) {
             case 1 -> 
                 42;
