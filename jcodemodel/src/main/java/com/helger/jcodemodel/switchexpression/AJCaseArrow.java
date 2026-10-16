@@ -40,72 +40,92 @@
  */
 package com.helger.jcodemodel.switchexpression;
 
-import java.util.Iterator;
 import java.util.List;
 
-import com.helger.jcodemodel.AbstractJType;
-import com.helger.jcodemodel.IJExpression;
+import org.jspecify.annotations.NonNull;
+
+import com.helger.jcodemodel.IJFormatter;
+import com.helger.jcodemodel.IJObject;
 import com.helger.jcodemodel.IJStatement;
 import com.helger.jcodemodel.JBlock;
-import com.helger.jcodemodel.JCodeModel;
-import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JInvocation;
+import com.helger.jcodemodel.JLambdaBlock;
+import com.helger.jcodemodel.JSwitchExpression;
 import com.helger.jcodemodel.JThrow;
 import com.helger.jcodemodel.JYield;
 
 ///
-/// represents a list of blocks to which add statements, with syntaxic sugar for yield. Made specifically for switch (and yield)
-public interface BlockSelection <Self extends BlockSelection <?>> extends Iterable <JBlock>
+/// a switch case using arrow. The case select depends on the implementation
+/// [BlockSelection] allows to chain them, but requires to provide a list of blocks
+public abstract class AJCaseArrow <Self extends AJCaseArrow <?>> implements IJStatement, IBlockSelection <Self>
 {
+  private final JSwitchExpression m_aParent;
+  private final JLambdaBlock m_aBlock = new JLambdaBlock ();
+  private final List <JBlock> m_aBlocks = List.of (m_aBlock);
 
-  List <JBlock> blocks ();
-
-  /// cast this to the template Self type
-  @SuppressWarnings ("unchecked")
-  default Self selfThis ()
+  public AJCaseArrow (final JSwitchExpression parent)
   {
-    return (Self) this;
+    this.m_aParent = parent;
+  }
+
+  public JSwitchExpression up ()
+  {
+    return m_aParent;
+  }
+
+  public JLambdaBlock getBlock ()
+  {
+    return m_aBlock;
   }
 
   @Override
-  default Iterator <JBlock> iterator ()
+  public List <JBlock> blocks ()
   {
-    return blocks ().iterator ();
+    return m_aBlocks;
   }
 
-  default Self add (IJStatement stt)
+  /// generate the arrow and body in the formatter
+  protected void stateBody (@NonNull final IJFormatter f)
   {
-    for (JBlock jb : this)
+    stateBlock (f, getBlock ());
+  }
+
+  /// generate the arrow and body in the formatter. Checks for special cases to avoid printing
+  /// one-line yield `i->yield i`
+  ///
+  /// This is a tooling method, public since called from two classes.
+  public static void stateBlock (@NonNull final IJFormatter f, JLambdaBlock jlb)
+  {
+    // we let the formatter decide whether to whitespace or not the arrow
+    f.print ("->");
+    if (jlb.getContents ().size () == 1)
     {
-      jb.add (stt);
-    }
-    return selfThis ();
-  }
-
-  default Self _throws (JCodeModel owner, Class <? extends Throwable> clazz, IJExpression... params)
-  {
-    return _throws (owner.ref (clazz), params);
-  }
-
-  /// create a new throw
-  default Self _throws (AbstractJType t, IJExpression... params)
-  {
-    JInvocation _new = JExpr._new (t);
-    if (params != null)
-    {
-      for (IJExpression ije : params)
+      final IJObject firstContent = jlb.getContents ().get (0);
+      if (firstContent instanceof final JYield jy)
       {
-        _new.arg (ije);
+        singleLinePrint (f, jy, () -> f.generable (jy.expr ()).print (";"));
       }
+      else
+        if (firstContent instanceof final JThrow jt)
+        {
+          singleLinePrint (f, jt, () -> f.print ("throw").generable (jt.expr ()).print (';'));
+        }
+        else
+        {
+          singleLinePrint (f, firstContent, () -> f.generable (jlb).print (';'));
+        }
     }
-    add (new JThrow (_new));
-    return selfThis ();
+    else
+    {
+      f.newline ();
+      f.statement (jlb);
+    }
   }
 
-  default Self yield (IJExpression exp)
+  protected static void singleLinePrint (@NonNull final IJFormatter f, IJObject blockContent, Runnable internalPrint)
   {
-    add (new JYield (exp));
-    return selfThis ();
+    f.indent ();
+    f.printSingleLine (f.settings ().wrap.switchExpression.singleLine.condition, internalPrint);
+    f.outdent ();
   }
 
 }

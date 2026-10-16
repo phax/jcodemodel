@@ -56,6 +56,7 @@ public class JLambdaBlock extends JBlock
   public JLambdaBlock ()
   {
     bracesRequired (false);
+    indentRequired (false);
   }
   /**
    * Remove all existing expressions and only add the provided expression
@@ -68,6 +69,7 @@ public class JLambdaBlock extends JBlock
     ValueEnforcer.notNull (aExpr, "Expression");
     removeAll ();
     bracesRequired (false);
+    indentRequired (false);
     internalInsert (aExpr);
   }
 

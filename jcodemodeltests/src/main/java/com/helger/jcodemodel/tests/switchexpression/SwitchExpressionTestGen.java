@@ -44,7 +44,14 @@ public class SwitchExpressionTestGen
                                .or (JExpr.lit (12))
                                .or (JExpr.lit (13))
                                .or (JExpr.lit (14))
-                               .or (JExpr.lit (15));
+                               .or (JExpr.lit (15))
+                               .or (JExpr.lit (100))
+                               .or (JExpr.lit (1000))
+                               .or (JExpr.lit (10000))
+                               .or (JExpr.lit (100000))
+                               .or (JExpr.lit (1000000))
+                               .or (JExpr.lit (10000000))
+                               .or (JExpr.lit (100000000));
     case10plus.add (JExpr.assignMinus (i, JExpr.lit (10)));
     case10plus.yield (JExpr.invoke (m).arg (i));
 

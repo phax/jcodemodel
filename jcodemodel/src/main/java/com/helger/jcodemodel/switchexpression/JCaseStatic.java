@@ -57,7 +57,7 @@ import com.helger.jcodemodel.JSwitchExpression;
 /// case 1,3 ->
 /// case MyEnum.OPT1 ->
 /// ```
-public class JCaseStatic extends JCaseArrow <JCaseStatic>
+public class JCaseStatic extends AJCaseArrow <JCaseStatic>
 {
   private final List <IJExpression> m_aLabels;
 
@@ -80,42 +80,32 @@ public class JCaseStatic extends JCaseArrow <JCaseStatic>
     return or (aLabel);
   }
 
-  /// copy of [JCase]
   @Override
   public void state (@NonNull final IJFormatter f)
   {
-    f.indent ();
     f.print ("case ");
-    boolean first = true;
-    for (final IJExpression aLabel : m_aLabels)
+    f.generable (m_aLabels.stream ().map (this::mapLabel).toList (), ",", f.settings ().wrap.switchExpression.labels);
+    stateBody (f);
+  }
+
+  /// copied from [JCase]
+  protected IJExpression mapLabel (IJExpression ije)
+  {
+    if (ije instanceof final JEnumConstant jec)
     {
-      final IJExpression aLabelName;
-      // Hack for #41 :)
-      if (aLabel instanceof final JEnumConstant jec)
+      // Just use the name, but not the type of the enum
+      return f1 -> f1.print (jec.name ());
+    }
+    else
+      if (ije instanceof final JEnumConstantRef jecr)
       {
         // Just use the name, but not the type of the enum
-        aLabelName = f1 -> f1.print (jec.name ());
+        return f1 -> f1.print (jecr.name ());
       }
       else
-        if (aLabel instanceof final JEnumConstantRef jecr)
-        {
-          // Just use the name, but not the type of the enum
-          aLabelName = f1 -> f1.print (jecr.name ());
-        }
-        else
-        {
-          aLabelName = aLabel;
-        }
-
-      if (!first)
       {
-        f.print (", ");
+        return ije;
       }
-      f.generable (aLabelName);
-      first = false;
-    }
-    stateBody (f);
-    f.outdent ();
   }
 
 }

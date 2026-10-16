@@ -29,7 +29,7 @@ public class Issue201 {
                 i = 40;
             }
             default ->
-                i = -1;
+                i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = i = -1;
         }
         i = switch (i) {
             case 1 ->

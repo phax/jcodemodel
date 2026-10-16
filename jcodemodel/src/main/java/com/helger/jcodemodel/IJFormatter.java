@@ -47,6 +47,7 @@ import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
+import com.helger.jcodemodel.writer.settings.Wrap.WordWrapping.EWordWrapStrategy;
 
 /**
  * Base interface for JFormatter.
@@ -293,4 +294,37 @@ public interface IJFormatter extends Closeable
 
   /// create a new buffer to write data into.
   IContextCloser addContextLayer ();
+
+  /// append a single line, then a newline. if needed, starts with a wrapping.
+  public default IJFormatter printSingleLine (EWordWrapStrategy condition, Runnable lineAppend)
+  {
+    switch (condition)
+    {
+      case ALWAYS ->
+      {
+        newline ();
+        lineAppend.run ();
+      }
+      case NEVER ->
+      {
+        lineAppend.run ();
+      }
+      case REQUIRED ->
+      {
+        try (IContextCloser o = addContextLayer ().persistOnClose ())
+        {
+          lineAppend.run ();
+          if ((currentLineSize () > settings ().wrap.lineWidth))
+          {
+            o.rollback ();
+            newline ();
+            lineAppend.run ();
+          }
+        }
+      }
+      default -> throw new IllegalArgumentException ("Unexpected value: " + condition);
+    }
+    newline ();
+    return this;
+  }
 }

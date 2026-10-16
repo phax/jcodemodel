@@ -1,5 +1,6 @@
 package com.helger.jcodemodel.tests.issues.issue201;
 
+import com.helger.jcodemodel.JAssignment;
 import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
@@ -21,7 +22,10 @@ public class Issue201TestGen
     jm.body ().add (sw);
     sw._case (JExpr.lit (1)).getBlock ().assign (param, JExpr.lit (42));
     sw._case (JExpr.lit (2)).getBlock ().assign (param, JExpr.lit (40)).assign (param, JExpr.lit (40));
-    sw._default ().add (JExpr.assign (param, JExpr.lit (-1)));
+    JAssignment iAss = JExpr.assign (param, JExpr.lit (-1));
+    for (int i = 0; i < 25; i++)
+      iAss = JExpr.assign (param, iAss);
+    sw._default ().add (iAss);
 
     sw = JExpr._switch (param);
     jm.body ().assign (param, sw);

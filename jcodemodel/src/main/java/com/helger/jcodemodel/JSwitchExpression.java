@@ -46,7 +46,7 @@ import java.util.List;
 
 import org.jspecify.annotations.NonNull;
 
-import com.helger.jcodemodel.switchexpression.JCaseArrow;
+import com.helger.jcodemodel.switchexpression.AJCaseArrow;
 import com.helger.jcodemodel.switchexpression.JCaseSpecialSelector;
 import com.helger.jcodemodel.switchexpression.JCaseStatic;
 
@@ -68,7 +68,7 @@ public class JSwitchExpression implements IJExpressionStatement
   /**
    * vector of JCases.
    */
-  private final List <JCaseArrow <?>> m_aCases = new ArrayList <> ();
+  private final List <AJCaseArrow <?>> m_aCases = new ArrayList <> ();
 
   /**
    * a single default block
@@ -98,7 +98,7 @@ public class JSwitchExpression implements IJExpressionStatement
   }
 
   @NonNull
-  public Iterator <JCaseArrow <?>> cases ()
+  public Iterator <AJCaseArrow <?>> cases ()
   {
     return m_aCases.iterator ();
   }
@@ -170,29 +170,29 @@ public class JSwitchExpression implements IJExpressionStatement
   protected void generate25 (@NonNull final IJFormatter f)
   {
     f.print ("switch (").generable (m_aTestExpr).print (')').print (" {").newline ();
-    for (final JCaseArrow <?> c : m_aCases)
+    f.indent ();
+    for (final AJCaseArrow <?> c : m_aCases)
     {
       f.statement (c);
     }
-    f.indent ();
     if (m_aNullBlock != null &&
-        m_aDefaultBlock != null &&
-        m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
+      m_aDefaultBlock != null &&
+      m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
     {
       f.print ("case null, default");
-      JCaseArrow.stateBlock (f, m_aNullBlock);
+      AJCaseArrow.stateBlock (f, m_aNullBlock);
     }
     else
     {
       if (m_aNullBlock != null)
       {
         f.print ("case null");
-        JCaseArrow.stateBlock (f, m_aNullBlock);
+        AJCaseArrow.stateBlock (f, m_aNullBlock);
       }
       if (m_aDefaultBlock != null)
       {
         f.print ("default");
-        JCaseArrow.stateBlock (f, m_aDefaultBlock);
+        AJCaseArrow.stateBlock (f, m_aDefaultBlock);
       }
     }
     f.outdent ();

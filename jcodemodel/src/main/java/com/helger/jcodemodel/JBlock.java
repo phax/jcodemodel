@@ -969,12 +969,12 @@ public class JBlock implements IJGenerable, IJStatement
         f.print ('{');
         f.newline ();
       }
-      if (indentRequired ())
+      if (bracesRequired () || indentRequired ())
       {
         f.indent ();
       }
       generateBody (f);
-      if (indentRequired ())
+      if (bracesRequired () || indentRequired ())
       {
         f.outdent ();
       }
@@ -1014,5 +1014,11 @@ public class JBlock implements IJGenerable, IJStatement
     {
       f.newline ();
     }
+  }
+
+  @Override
+  public String toString ()
+  {
+    return getClass ().getSimpleName () + m_aContentList;
   }
 }

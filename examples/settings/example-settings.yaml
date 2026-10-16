@@ -34,6 +34,14 @@ wrap:
       condition: "PAST3"
       indent: 1
       wrapAfterSep: true
+  switchExpression:
+    labels:
+      condition: "REQUIRED"
+      indent: 1
+      wrapAfterSep: true
+    singleLine:
+      condition: "ALWAYS"
+      indent: 1
   variables:
     array:
       condition: "REQUIRED"

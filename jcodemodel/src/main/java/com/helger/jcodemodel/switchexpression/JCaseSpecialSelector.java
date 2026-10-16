@@ -49,7 +49,7 @@ import com.helger.jcodemodel.JSwitchExpression;
 /// specify the special `case null` and `default` in a switch expression
 ///
 
-public class JCaseSpecialSelector implements BlockSelection <JCaseSpecialSelector>
+public class JCaseSpecialSelector implements IBlockSelection <JCaseSpecialSelector>
 {
   private boolean m_bSetDefault = false;
   private boolean m_bSetNull = false;
