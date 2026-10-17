@@ -44,9 +44,11 @@ import java.io.Closeable;
 import java.util.Collection;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import com.helger.jcodemodel.writer.FormatterSettings;
 import com.helger.jcodemodel.writer.settings.Wrap.ListWrapping;
+import com.helger.jcodemodel.writer.settings.Wrap.WordWrapping.EWordWrapStrategy;
 
 /**
  * Base interface for JFormatter.
@@ -155,7 +157,7 @@ public interface IJFormatter extends Closeable
     return print (sStr);
   }
 
-  default IJFormatter println (@NonNull String sStr)
+  default IJFormatter println (@NonNull final String sStr)
   {
     return print (sStr).print (getNewLine ());
   }
@@ -196,7 +198,7 @@ public interface IJFormatter extends Closeable
     return vars (aList, null);
   }
 
-  IJFormatter vars (@NonNull final Collection <? extends JVar> aList, ListWrapping wrapping);
+  IJFormatter vars (@NonNull Collection <? extends JVar> aList, ListWrapping wrapping);
 
   /**
    * Print an identifier
@@ -232,9 +234,9 @@ public interface IJFormatter extends Closeable
   }
 
   @NonNull
-  IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList,
-                         String separator,
-                         ListWrapping wrapping);
+  IJFormatter generable (@NonNull Collection <? extends IJGenerable> aList,
+                         @NonNull String separator,
+                         @Nullable ListWrapping wrapping);
 
   /**
    * Cause the {@link IJStatement} to generate source for itself
@@ -293,4 +295,49 @@ public interface IJFormatter extends Closeable
 
   /// create a new buffer to write data into.
   IContextCloser addContextLayer ();
+
+  /// append a single line. If needed, starts with a wrapping.
+  /// @param condition to decide when to wrap before. If [EWordWrapStrategy.REQUIRED], then tries to
+  /// append the line without a wrap, and rollback if the result is too big, adding a wrap before
+  /// doing it.
+  /// @param lineAppend the call to make the actual line addition. Can be called several times, so
+  /// should be stateless.
+  default IJFormatter printSingleLine (@NonNull final EWordWrapStrategy condition, @NonNull final Runnable lineAppend)
+  {
+    switch (condition)
+    {
+      case ALWAYS ->
+      {
+        newline ();
+        lineAppend.run ();
+      }
+      case NEVER ->
+      {
+        lineAppend.run ();
+      }
+      case REQUIRED ->
+      {
+        if (currentLineSize () == 0)
+        {
+          // in that specific case, no need to rollback check.
+          lineAppend.run ();
+        }
+        else
+        {
+          try (final IContextCloser cc = addContextLayer ().persistOnClose ())
+          {
+            lineAppend.run ();
+            if (currentLineSize () > settings ().wrap.lineWidth)
+            {
+              cc.rollback ();
+              newline ();
+              lineAppend.run ();
+            }
+          }
+        }
+      }
+      default -> throw new IllegalArgumentException ("Unexpected value: " + condition);
+    }
+    return this;
+  }
 }

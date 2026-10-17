@@ -53,7 +53,10 @@ import com.helger.jcodemodel.switchexpression.JCaseStatic;
 ///
 /// A switch whose result can be used as an expression or a statement.
 /// basically a copy of [JSwitch]
-/// It has two specific blocks : null and default. When writing those, they should be tested for equality.
+/// 
+/// It has two specific blocks : null and default. When generating code for those, they are tested for equality
+/// to check if they can be merged into a single `case default, null` .
+/// 
 public class JSwitchExpression implements IJExpressionStatement
 {
 
@@ -70,12 +73,12 @@ public class JSwitchExpression implements IJExpressionStatement
   /**
    * a single default block
    */
-  private JBlock m_aDefaultBlock;
+  private JLambdaBlock m_aDefaultBlock;
 
   /**
    * a single null block
    */
-  private JBlock m_aNullBlock;
+  private JLambdaBlock m_aNullBlock;
 
   /**
    * Construct a switch statement
@@ -167,43 +170,47 @@ public class JSwitchExpression implements IJExpressionStatement
   protected void generate25 (@NonNull final IJFormatter f)
   {
     f.print ("switch (").generable (m_aTestExpr).print (')').print (" {").newline ();
+    f.indent ();
     for (final JCaseArrow <?> c : m_aCases)
     {
       f.statement (c);
     }
-    f.indent ();
     if (m_aNullBlock != null &&
-        m_aDefaultBlock != null &&
-        m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
+      m_aDefaultBlock != null &&
+      m_aNullBlock.getContents ().equals (m_aDefaultBlock.getContents ()))
     {
-      f.print ("case null, default -> ").statement (m_aNullBlock);
+      f.print ("case null, default");
+      JCaseArrow.stateBlock (f, m_aNullBlock);
     }
     else
     {
       if (m_aNullBlock != null)
       {
-        f.print ("case null -> ").statement (m_aNullBlock);
+        f.print ("case null");
+        JCaseArrow.stateBlock (f, m_aNullBlock);
       }
       if (m_aDefaultBlock != null)
       {
-        f.print ("default -> ").statement (m_aDefaultBlock);
+        f.print ("default");
+        JCaseArrow.stateBlock (f, m_aDefaultBlock);
       }
     }
     f.outdent ();
-    f.print ('}').newline ();
+    f.print ('}');
   }
 
-  protected void generatePre25 (@SuppressWarnings ("unused") @NonNull final IJFormatter f)
-  {
-    // TODO in that case we generate only the static ones ; the pattern cases must
-    // be added on top of the default.
-    throw new UnsupportedOperationException ("not implemented yet.");
-  }
+  // protected void generatePre25 (@SuppressWarnings ("unused") @NonNull final IJFormatter f)
+  // {
+  // // TODO in that case we generate only the static ones ; the pattern cases must
+  // // be added on top of the default.
+  // throw new UnsupportedOperationException ("not implemented yet.");
+  // }
 
   @Override
   public void state (@NonNull final IJFormatter f)
   {
-    f.generable (this).print (';').newline ();
+    // we don't add a semicolon since a switch statement does not need one.
+    f.generable (this).newline ();
   }
 
 }

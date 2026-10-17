@@ -84,11 +84,10 @@ import com.helger.jcodemodel.vars.JBlockVar;
 import com.helger.jcodemodel.writer.settings.Parentheses.EParenthesesStrategy;
 
 /**
- * Generate a large set of expressions, print them with every
- * {@link EParenthesesStrategy}, compile the result in memory and run it. Every strategy may only
- * differ in the parentheses it prints - the generated code must always compile and must always
- * produce exactly the same result. See <code>ParenthesesTest</code> for the textual expectations of
- * a single expression.
+ * Generate a large set of expressions, print them with every {@link EParenthesesStrategy}, compile
+ * the result in memory and run it. Every strategy may only differ in the parentheses it prints -
+ * the generated code must always compile and must always produce exactly the same result. See
+ * <code>ParenthesesTest</code> for the textual expectations of a single expression.
  *
  * @author Philip Helger
  */
@@ -200,13 +199,13 @@ public final class ParenthesesCompileTest
   }
 
   /**
-   * Nest every operator into every operand position of every other operator, so that all
-   * precedence and associativity combinations of a family are covered.
+   * Nest every operator into every operand position of every other operator, so that all precedence
+   * and associativity combinations of a family are covered.
    *
    * @param aBaseOperands
    *        Creates the three operands of the family from the method parameters. For an
-   *        <code>int</code> family these are the parameters themselves, for a
-   *        <code>boolean</code> family they are comparisons of the parameters.
+   *        <code>int</code> family these are the parameters themselves, for a <code>boolean</code>
+   *        family they are comparisons of the parameters.
    * @return The names of all created methods
    */
   @NonNull
@@ -239,14 +238,10 @@ public final class ParenthesesCompileTest
     for (final NamedUnary aUnary : aUnaries)
       for (final NamedBinary aBinary : aBinaries)
       {
-        ret.add (_addMethod (aClass,
-                             aReturnType,
-                             aParamType,
-                             "ub_" + aUnary.sName () + "_" + aBinary.sName (),
-                             p -> {
-                               final IJExpression [] o = aBaseOperands.apply (p);
-                               return aUnary.aFactory ().build (aBinary.aFactory ().build (o[0], o[1]));
-                             }));
+        ret.add (_addMethod (aClass, aReturnType, aParamType, "ub_" + aUnary.sName () + "_" + aBinary.sName (), p -> {
+          final IJExpression [] o = aBaseOperands.apply (p);
+          return aUnary.aFactory ().build (aBinary.aFactory ().build (o[0], o[1]));
+        }));
         final String sBase = "bu_" + aBinary.sName () + "_" + aUnary.sName ();
         ret.add (_addMethod (aClass, aReturnType, aParamType, sBase + "_l", p -> {
           final IJExpression [] o = aBaseOperands.apply (p);
@@ -276,14 +271,12 @@ public final class ParenthesesCompileTest
                              aReturnType,
                              aParamType,
                              sBase + "_l",
-                             p -> aBinary.aFactory ()
-                                         .build (aLeaf.aFactory ().build (p), aBaseOperands.apply (p)[2])));
+                             p -> aBinary.aFactory ().build (aLeaf.aFactory ().build (p), aBaseOperands.apply (p)[2])));
         ret.add (_addMethod (aClass,
                              aReturnType,
                              aParamType,
                              sBase + "_r",
-                             p -> aBinary.aFactory ()
-                                         .build (aBaseOperands.apply (p)[2], aLeaf.aFactory ().build (p))));
+                             p -> aBinary.aFactory ().build (aBaseOperands.apply (p)[2], aLeaf.aFactory ().build (p))));
       }
     for (final NamedUnary aUnary : aUnaries)
       for (final NamedLeaf aLeaf : aLeaves)
@@ -329,12 +322,9 @@ public final class ParenthesesCompileTest
     aUnaries.add (new NamedUnary ("boxIntValue", x -> JExpr.cast (aCM.ref (Integer.class), x).invoke ("intValue")));
     aUnaries.add (new NamedUnary ("abs", x -> aCM.ref (Math.class).staticInvoke ("abs").arg (x)));
     aUnaries.add (new NamedUnary ("condPos", x -> JExpr.cond (JOp.gt (x, JExpr.lit (0)), x, JOp.minus (x))));
-    aUnaries.add (new NamedUnary ("arrayIdx",
-                                  x -> JExpr.ref (FIELD_ARRAY).component (JOp.band (x, JExpr.lit (1)))));
+    aUnaries.add (new NamedUnary ("arrayIdx", x -> JExpr.ref (FIELD_ARRAY).component (JOp.band (x, JExpr.lit (1)))));
     aUnaries.add (new NamedUnary ("toStringLength",
-                                  x -> JExpr.cast (aCM.ref (Object.class), x)
-                                            .invoke ("toString")
-                                            .invoke ("length")));
+                                  x -> JExpr.cast (aCM.ref (Object.class), x).invoke ("toString").invoke ("length")));
 
     final ICommonsList <NamedLeaf> aLeaves = new CommonsArrayList <> ();
     aLeaves.add (new NamedLeaf ("varA", p -> p[0]));
@@ -474,8 +464,7 @@ public final class ParenthesesCompileTest
       final JVar aParamA = aMethod.param (aCM.INT, "a");
       final JLambda aLambda = new JLambda ();
       final JLambdaParam aX = aLambda.addParam ("x");
-      aLambda.body ()
-             .lambdaExpr (JExpr.cond (JOp.lt (aX, JExpr.lit (0)), JOp.minus (aX), JOp.plus (aX, aParamA)));
+      aLambda.body ().lambdaExpr (JExpr.cond (JOp.lt (aX, JExpr.lit (0)), JOp.minus (aX), JOp.plus (aX, aParamA)));
       final JBlockVar aF = aMethod.body ().decl (aIntUnaryOperator, "f", aLambda);
       aMethod.body ()._return (aF.invoke ("applyAsInt").arg (aParamA));
       ret.add (aMethod.name ());
