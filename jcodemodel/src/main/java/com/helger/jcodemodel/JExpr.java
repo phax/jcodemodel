@@ -50,6 +50,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.annotation.Nonnegative;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.JArrayInit;
 import com.helger.jcodemodel.expressions.JInstanceOfVar;
 
@@ -86,6 +87,12 @@ public final class JExpr
   public static JAssignment assign (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {
     return new JAssignment (aLhs, aRhs);
+  }
+
+  @NonNull
+  public static JAssignment assign (@NonNull final IJAssignmentTarget aLhs, @NonNull final ITypedExpression <?> aRhs)
+  {
+    return assign (aLhs, aRhs.raw ());
   }
 
   @NonNull
@@ -456,9 +463,9 @@ public final class JExpr
   }
 
   @NonNull
-  public static JAtomInt lit (final int n)
+  public static JAtomInt lit (final int i)
   {
-    return new JAtomInt (n);
+    return new JAtomInt (i);
   }
 
   @NonNull
