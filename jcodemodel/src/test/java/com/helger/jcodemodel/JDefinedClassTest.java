@@ -52,6 +52,7 @@ import com.github.javaparser.ast.body.TypeDeclaration;
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.modifiers.EMod;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.vars.JFieldVar;
 
 /**
  * Test class for class {@link JDefinedClass}.
