@@ -6,11 +6,11 @@ import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 
-/// base class for the equals, hashcode, ==null etc. methods that are available for non-primitive types
+/// Concrete class to default when mirroring a returned non-primitive type, including Object.
 /// 
-/// It's still generic, for when we create an expression that resolves to an non-mirrored type.
-/// 
-/// returning an `ObjectExpression<String>` is correct, but returning a `StringExpression` instead would allow more specific methods, as the latter mirrors the `String::length` for example.
+/// Mirroring a returned String to a `ObjectExpression<String>` is correct,
+/// but returning a `StringExpression` instead would allow more specific methods,
+/// as the latter mirrors the `String::length` for example.
 public class ObjectExpression <T> extends AReferenceExpression <T>
 {
 
@@ -23,9 +23,12 @@ public class ObjectExpression <T> extends AReferenceExpression <T>
   // static tooling
   //
 
+  private static final ObjectExpression <Object> NULL = of (JExpr._null ());
+
+  @SuppressWarnings ("unchecked")
   public static <T> ObjectExpression <T> null_ ()
   {
-    return of (JExpr._null ());
+    return (ObjectExpression <T>) NULL;
   }
 
   public static <T> ObjectExpression <T> of (IJExpression raw)

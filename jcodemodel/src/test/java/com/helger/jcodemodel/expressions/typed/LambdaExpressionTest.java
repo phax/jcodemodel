@@ -18,6 +18,12 @@ public class LambdaExpressionTest
 {
 
   @Test
+  public void testReplace ()
+  {
+    Assert.assertEquals ("java.util.Collection", LambdaExpression.throwayReplace ("java/util/Collection", '/', '.'));
+  }
+
+  @Test
   public void test () throws JCodeModelException
   {
     JCodeModel jcm = new JCodeModel ();

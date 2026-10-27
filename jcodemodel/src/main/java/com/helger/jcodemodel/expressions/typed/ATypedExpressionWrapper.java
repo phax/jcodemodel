@@ -12,6 +12,8 @@ import com.helger.jcodemodel.expressions.ITypedExpression;
 ///  - numeral primitives, for numeral operations
 ///  - boolean primitive
 ///  - void, for example Collection::clear
+/// 
+/// This class should not be used outside of classes extending it.
 public abstract class ATypedExpressionWrapper <RunTimeType> implements ITypedExpression <RunTimeType>
 {
 

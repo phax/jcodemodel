@@ -19,11 +19,12 @@ import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 
-/// mother class of expression that resolves to a reference type (as opposed to primitive types)
+/// Parent class of expression that resolves to a reference type (as opposed to primitive types)
 /// 
-/// the equals, hashcode, ==null, etc. methods that are available for non-primitive types
+/// Defines the equals, hashcode, ==null, etc. methods that are available for non-primitive types.
 /// 
-/// It's abstract because you want people to return an ObjectExpression instead of this one, only acceptable as param type.
+/// The acceptable use case of this class, is to mirror a parameter type.
+/// To mirror returned type, use an `ObjectExpression<T>` instead - or `ObjectExpression<? extends T>` if the enclosing class is not final.
 public abstract class AReferenceExpression <T> extends ATypedExpressionWrapper <T> implements NonVoidExpression <T>
 {
 
@@ -45,7 +46,7 @@ public abstract class AReferenceExpression <T> extends ATypedExpressionWrapper <
 
   /// @return `that.getClass()`
   @Mirroring ("getClass")
-  public ObjectExpression <Class <?>> getClass_ ()
+  public ObjectExpression <? extends Class <?>> getClass_ ()
   {
     return new ObjectExpression <> (raw.invoke ("getClass"));
   }
@@ -71,7 +72,8 @@ public abstract class AReferenceExpression <T> extends ATypedExpressionWrapper <
     return new VoidStatExpression (raw.invoke ("notifyAll"));
   }
 
-  /// Sadly we can't extract the class nor the jcm from the generics
+  /// Sadly we can't extract the class nor the jcm from the generics, so we need to provide them as
+  /// params
   ///
   /// @param jcm required to convert the type
   /// @param VarType the static class
@@ -86,8 +88,8 @@ public abstract class AReferenceExpression <T> extends ATypedExpressionWrapper <
     return ret.setTypedVar (new ObjectExpression <> (io.var ()));
   }
 
-  /// @param ExpressionType an objectexpression because we can't cast Object to primitive. `( new
-  /// Integer(5) instanceof int i) ` fails.
+  /// @param ExpressionType a AReferenceExpression because java does not allow to cast Object to
+  /// primitive : `( new Integer(5) instanceof int i) ` fails.
   /// @return `that instanceof VarType varname`
   @SuppressWarnings ("unchecked")
   public <VarType, ExpressionType extends AReferenceExpression <VarType>> InstanceOfExpression <VarType, ExpressionType> instanceOf (JCodeModel jcm,
@@ -105,7 +107,7 @@ public abstract class AReferenceExpression <T> extends ATypedExpressionWrapper <
     }
     catch (Throwable e)
     {
-      throw new RuntimeException (e);
+      throw new IllegalStateException (e);
     }
   }
 

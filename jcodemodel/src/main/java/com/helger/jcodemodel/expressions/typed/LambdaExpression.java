@@ -16,7 +16,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.BoolExpression;
 
 /// transform several lambda calls to matching expressions.
 /// 
-/// we create functional interface with serializable for all the interfaces we want to mirror.
+/// We define a functional interface extending serializable for all the lambda interfaces we want to mirror.
 /// 
 public class LambdaExpression
 {
@@ -29,9 +29,8 @@ public class LambdaExpression
   public interface SerializableFunction <T, R> extends Function <T, R>, Serializable
   {}
 
-  /// transforms a static predicate. eg Map::isEmpty .
-  /// We need a jcm to static link the class, eg Map.
-  ///
+  /// Transforms a static predicate. eg Map::isEmpty .
+  /// We need a jcm to get a static link to the class, in that case Map.
   public static <T> ObjectExpression <Predicate <T>> predicate (JCodeModel jcm,
                                                                 SerializablePredicate <? extends T> pred)
   {
@@ -41,25 +40,32 @@ public class LambdaExpression
       // we need a static method call, so no object.
       if (sl.getCapturedArgCount () > 0)
       {
-        throw new UnsupportedOperationException ();
+        throw new IllegalArgumentException ("trying to create a static lambda with " +
+                                            sl.getCapturedArgCount () +
+                                            " captured arguments. Did you use an object reference ?");
       }
       String methodName = sl.getImplMethodName ();
       // TODO replace name if mirroring method is annotated with @Mirroring
-      JLambdaMethodRef ref = new JLambdaMethodRef (jcm.ref (replace (sl.getImplClass (), '/', '.')),
-                                                   methodName);
+      JLambdaMethodRef ref = new JLambdaMethodRef (jcm.ref (throwayReplace (sl.getImplClass (), '/', '.')), methodName);
       return new ObjectExpression <> (ref);
     }
     catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException |
            InvocationTargetException e)
     {
-      throw new RuntimeException (e);
+      throw new IllegalStateException (e);
     }
   }
 
-  /// transforms a TypeExpression-based instance predicate. eg myStringExpression::isblank .
-  /// we dont need a JCM as the ITypedExpression instance is transmitted as SerializedLambda
-  /// captured arg, we retrieve the underlying IJExpression from it.
+  /// Transforms a TypeExpression-based instance predicate.
   ///
+  /// For example,
+  /// ```java
+  /// StringExpression se; // assume it's the param of a method
+  /// ObjectExpression<Predicate<CharSequence>> pe = predicate(se::contains);
+  /// ```
+  ///
+  /// The predicate is transmitted as a SerializedLambda, we use its first captured argument as the
+  /// IJExpression (`se` in the example).
   public static <T> ObjectExpression <Predicate <T>> predicate (SerializableFunction <? extends ITypedExpression <T>, BoolExpression> pred)
   {
     try
@@ -68,7 +74,8 @@ public class LambdaExpression
       // we need exactly one param transmitted, the myObject of the `myObject::method`
       if (sl.getCapturedArgCount () != 1)
       {
-        throw new UnsupportedOperationException ();
+        throw new IllegalArgumentException ("creating an object lambda expression requires 1 captured arg, we received " +
+                                            sl.getCapturedArgCount ());
       }
       ITypedExpression <?> typedExpression = ((ITypedExpression <?>) sl.getCapturedArg (0));
       IJExpression objectRef = typedExpression.raw ();
@@ -80,7 +87,7 @@ public class LambdaExpression
     catch (SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException |
            NoSuchMethodException e)
     {
-      throw new RuntimeException (e);
+      throw new IllegalStateException (e);
     }
   }
 
@@ -99,15 +106,22 @@ public class LambdaExpression
   }
 
   /// need to rewrite String.replace otherwise build fails -.-'
-  protected static String replace (String source, char oldChar, char newChar)
+  /// TODO replace calls with StringHelper::replace when avail and remove this code.
+  protected static String throwayReplace (String source, char oldChar, char newChar)
   {
+    if (source == null || source.isEmpty ())
+      return source;
+    boolean changed = false;
     char [] arr = source.toCharArray ();
     for (int i = 0; i < arr.length; i++)
     {
       if (arr[i] == oldChar)
+      {
+        changed = true;
         arr[i] = newChar;
+      }
     }
-    return new String (arr);
+    return changed ? new String (arr) : source;
   }
 
 }
