@@ -193,7 +193,6 @@ public class ExpressionsBuildingProcess
       JNarrowedClass retType = jcm.ref (ArrayExpression.class).narrow (jcm.ref (unresolvedClass.componentType ()));
       JNarrowedClass paramType = jcm.ref (ArrayExpression.class)
                                     .narrow (jcm.ref (unresolvedClass.componentType ()).wildcardExtends ());
-      System.out.println ("pramType for " + unresolvedClass + " is " + paramType);
       return new GenericMirror (unresolvedClass, retType, paramType);
     }
     else
