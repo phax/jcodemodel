@@ -31,7 +31,7 @@ public record Source (Class <?> target, Class <?> returnType, Class <?> paramTyp
                                                                  new Source (char [].class, CharArrExp.class),
                                                                  new Source (double.class,
                                                                              DblExpression.class,
-                                                                             ANumericExpression.class),
+                                                                             ASubDoubleExpression.class),
                                                                  new Source (double [].class, DoubleArrExp.class),
                                                                  new Source (float.class,
                                                                              FltExpression.class,

@@ -98,7 +98,7 @@ public class BoolExpression extends ATypedExpressionWrapper <Boolean> implements
 
   //
 
-  protected BoolExpression (IJExpression raw)
+  public BoolExpression (IJExpression raw)
   {
     super (raw);
   }
