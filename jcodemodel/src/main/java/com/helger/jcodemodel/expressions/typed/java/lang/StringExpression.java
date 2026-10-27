@@ -12,6 +12,7 @@ import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.expressions.ITypedExpression;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
 import com.helger.jcodemodel.expressions.typed.Mirroring;
 import com.helger.jcodemodel.expressions.typed.primitives.ASubIntExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.ArrayExpression;
@@ -29,7 +30,7 @@ import com.helger.jcodemodel.expressions.typed.primitives.VoidStatExpression;
 //
 // ref : https://docs.oracle.com/en/java/javase/26/docs/api/java.base/java/lang/String.html
 //
-public class StringExpression extends ObjectExpression <String>
+public class StringExpression extends AReferenceExpression <String>
 {
 
   //
@@ -42,6 +43,16 @@ public class StringExpression extends ObjectExpression <String>
     public StringArrExp (IJExpression raw)
     {
       super (raw);
+    }
+
+    /// create an initialization to provided values
+    public static StringArrExp of (JCodeModel jcm, String... values)
+    {
+      JInvocation invoke = jcm.ref (String [].class)._new ();
+      if (values != null)
+        for (String v : values)
+          invoke.arg (v);
+      return new StringArrExp (invoke);
     }
 
     @Override
@@ -61,6 +72,11 @@ public class StringExpression extends ObjectExpression <String>
     super (raw);
   }
 
+  public static StringExpression null_ ()
+  {
+    return of (JExpr._null ());
+  }
+
   public static StringExpression of (String value)
   {
     return new StringExpression (JExpr.lit (value));
@@ -76,6 +92,8 @@ public class StringExpression extends ObjectExpression <String>
     return of (untyped.raw ());
   }
 
+  /// creates a new param in the method, of type String, and return its corresponding typed
+  /// expression.
   public static StringExpression param (JMethod m, String name)
   {
     return m.paramTyped (name, String.class, StringExpression::of);
@@ -145,19 +163,19 @@ public class StringExpression extends ObjectExpression <String>
   /// @return `that.charAt(index)`
   public IntExpression codePointAt (ASubIntExpression <?, ?, ?> index)
   {
-    return new IntExpression (raw.invoke ("codePointAt").arg (index));
+    return IntExpression.of (raw.invoke ("codePointAt").arg (index));
   }
 
   /// @return `that.codePointBefore(index)`
   public IntExpression codePointBefore (ASubIntExpression <?, ?, ?> index)
   {
-    return new IntExpression (raw.invoke ("codePointBefore").arg (index));
+    return IntExpression.of (raw.invoke ("codePointBefore").arg (index));
   }
 
   /// @return `that.codePointCount(beginIndex, endIndex)`
   public IntExpression codePointCount (ASubIntExpression <?, ?, ?> beginIndex, ASubIntExpression <?, ?, ?> endIndex)
   {
-    return new IntExpression (raw.invoke ("codePointCount").arg (beginIndex).arg (endIndex));
+    return IntExpression.of (raw.invoke ("codePointCount").arg (beginIndex).arg (endIndex));
   }
 
   /// @return `that.codePoints()`
@@ -169,19 +187,19 @@ public class StringExpression extends ObjectExpression <String>
   /// @return `that.compareTo(anotherString)`
   public IntExpression compareTo (ITypedExpression <? extends String> anotherString)
   {
-    return new IntExpression (raw.invoke ("compareTo").arg (anotherString));
+    return IntExpression.of (raw.invoke ("compareTo").arg (anotherString));
   }
 
   /// @return `that.compareToFoldCase(str)`
   public IntExpression compareToFoldCase (ITypedExpression <? extends String> str)
   {
-    return new IntExpression (raw.invoke ("compareToFoldCase").arg (str));
+    return IntExpression.of (raw.invoke ("compareToFoldCase").arg (str));
   }
 
   /// @return `that.compareToIgnoreCase(str)`
   public IntExpression compareToIgnoreCase (ITypedExpression <? extends String> str)
   {
-    return new IntExpression (raw.invoke ("compareToIgnoreCase").arg (str));
+    return IntExpression.of (raw.invoke ("compareToIgnoreCase").arg (str));
   }
 
   /// @return `that.concat(str)`
@@ -193,38 +211,38 @@ public class StringExpression extends ObjectExpression <String>
   /// @return `that.contains(s)`
   public BoolExpression contains (ITypedExpression <? extends CharSequence> s)
   {
-    return new BoolExpression (raw.invoke ("contains").arg (s));
+    return BoolExpression.of (raw.invoke ("contains").arg (s));
   }
 
   /// @return `that.contentEquals(cs)`
   public BoolExpression contentEquals (ITypedExpression <? extends CharSequence> cs)
   {
-    return new BoolExpression (raw.invoke ("contentEquals").arg (cs));
+    return BoolExpression.of (raw.invoke ("contentEquals").arg (cs));
   }
 
   // can't keep base name since same erasure as the other contentEquals
   /// @return `that.contentEquals(sb)`
   public BoolExpression contentEqualsSB (ITypedExpression <? extends StringBuffer> sb)
   {
-    return new BoolExpression (raw.invoke ("contentEquals").arg (sb));
+    return BoolExpression.of (raw.invoke ("contentEquals").arg (sb));
   }
 
   /// @return `that.endsWith(suffix)`
   public BoolExpression endsWith (ITypedExpression <? extends String> suffix)
   {
-    return new BoolExpression (raw.invoke ("endsWith").arg (suffix));
+    return BoolExpression.of (raw.invoke ("endsWith").arg (suffix));
   }
 
   /// @return `that.equalsFoldCase(anotherString)`
   public BoolExpression equalsFoldCase (ITypedExpression <? extends String> anotherString)
   {
-    return new BoolExpression (raw.invoke ("equalsFoldCase").arg (anotherString));
+    return BoolExpression.of (raw.invoke ("equalsFoldCase").arg (anotherString));
   }
 
   /// @return `that.equalsIgnoreCase(anotherString)`
   public BoolExpression equalsIgnoreCase (ITypedExpression <? extends String> anotherString)
   {
-    return new BoolExpression (raw.invoke ("equalsIgnoreCase").arg (anotherString));
+    return BoolExpression.of (raw.invoke ("equalsIgnoreCase").arg (anotherString));
   }
 
   /// @return `that.formatted(args)`
@@ -281,19 +299,19 @@ public class StringExpression extends ObjectExpression <String>
                                 ASubIntExpression <?, ?, ?> beginIndex,
                                 ASubIntExpression <?, ?, ?> endIndex)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (ch).arg (beginIndex).arg (endIndex));
+    return IntExpression.of (raw.invoke ("indexOf").arg (ch).arg (beginIndex).arg (endIndex));
   }
 
   /// @return `that.indexOf(ch, fromIndex)`
   public IntExpression indexOf (ASubIntExpression <?, ?, ?> ch, ASubIntExpression <?, ?, ?> fromIndex)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (ch).arg (fromIndex));
+    return IntExpression.of (raw.invoke ("indexOf").arg (ch).arg (fromIndex));
   }
 
   /// @return `that.indexOf(ch)`
   public IntExpression indexOf (ASubIntExpression <?, ?, ?> ch)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (ch));
+    return IntExpression.of (raw.invoke ("indexOf").arg (ch));
   }
 
   /// @return `that.indexOf(str, beginIndex, endIndex)`
@@ -301,19 +319,19 @@ public class StringExpression extends ObjectExpression <String>
                                 ASubIntExpression <?, ?, ?> beginIndex,
                                 ASubIntExpression <?, ?, ?> endIndex)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (str).arg (beginIndex).arg (endIndex));
+    return IntExpression.of (raw.invoke ("indexOf").arg (str).arg (beginIndex).arg (endIndex));
   }
 
   /// @return `that.indexOf(str, fromIndex)`
   public IntExpression indexOf (ITypedExpression <? extends String> str, ASubIntExpression <?, ?, ?> fromIndex)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (str).arg (fromIndex));
+    return IntExpression.of (raw.invoke ("indexOf").arg (str).arg (fromIndex));
   }
 
   /// @return `that.indexOf(str)`
   public IntExpression indexOf (ITypedExpression <? extends String> str)
   {
-    return new IntExpression (raw.invoke ("indexOf").arg (str));
+    return IntExpression.of (raw.invoke ("indexOf").arg (str));
   }
 
   /// @return `that.intern()`
@@ -325,13 +343,13 @@ public class StringExpression extends ObjectExpression <String>
   /// @return `that.isBlank()`
   public BoolExpression isBlank ()
   {
-    return new BoolExpression (raw.invoke ("isBlank"));
+    return BoolExpression.of (raw.invoke ("isBlank"));
   }
 
   /// @return `that.isEmpty()`
   public BoolExpression isEmpty ()
   {
-    return new BoolExpression (raw.invoke ("isEmpty"));
+    return BoolExpression.of (raw.invoke ("isEmpty"));
   }
 
   /// @return `that.join(delimiter, elements)`
@@ -360,31 +378,31 @@ public class StringExpression extends ObjectExpression <String>
   /// @return `that.lastIndexOf(ch, fromIndex)`
   public IntExpression lastIndexOf (ASubIntExpression <?, ?, ?> ch, ASubIntExpression <?, ?, ?> fromIndex)
   {
-    return new IntExpression (raw.invoke ("lastIndexOf").arg (ch).arg (fromIndex));
+    return IntExpression.of (raw.invoke ("lastIndexOf").arg (ch).arg (fromIndex));
   }
 
   /// @return `that.lastIndexOf(ch)`
   public IntExpression lastIndexOf (ASubIntExpression <?, ?, ?> ch)
   {
-    return new IntExpression (raw.invoke ("lastIndexOf").arg (ch));
+    return IntExpression.of (raw.invoke ("lastIndexOf").arg (ch));
   }
 
   /// @return `that.lastIndexOf(str, fromIndex)`
   public IntExpression lastIndexOf (ITypedExpression <? extends String> str, ASubIntExpression <?, ?, ?> fromIndex)
   {
-    return new IntExpression (raw.invoke ("lastIndexOf").arg (str).arg (fromIndex));
+    return IntExpression.of (raw.invoke ("lastIndexOf").arg (str).arg (fromIndex));
   }
 
   /// @return `that.lastIndexOf(str)`
   public IntExpression lastIndexOf (ITypedExpression <? extends String> str)
   {
-    return new IntExpression (raw.invoke ("lastIndexOf").arg (str));
+    return IntExpression.of (raw.invoke ("lastIndexOf").arg (str));
   }
 
   /// @return `that.length()`
   public IntExpression length ()
   {
-    return new IntExpression (raw.invoke ("length"));
+    return IntExpression.of (raw.invoke ("length"));
   }
 
   // TODO use StreamExpression when avail.
@@ -397,7 +415,7 @@ public class StringExpression extends ObjectExpression <String>
   /// @return `that.matches(regex)`
   public BoolExpression matches (ITypedExpression <? extends String> regex)
   {
-    return new BoolExpression (raw.invoke ("matches").arg (regex));
+    return BoolExpression.of (raw.invoke ("matches").arg (regex));
   }
 
   // operator + with a String operands promotes anything else to String.
@@ -411,7 +429,7 @@ public class StringExpression extends ObjectExpression <String>
   public IntExpression offsetByCodePoints (ASubIntExpression <?, ?, ?> index,
                                            ASubIntExpression <?, ?, ?> codePointOffset)
   {
-    return new IntExpression (raw.invoke ("offsetByCodePoints").arg (index).arg (codePointOffset));
+    return IntExpression.of (raw.invoke ("offsetByCodePoints").arg (index).arg (codePointOffset));
   }
 
   /// @return `that.regionMatches(ignoreCase, toffset, other, ooffset, len)`
@@ -421,7 +439,7 @@ public class StringExpression extends ObjectExpression <String>
                                        ASubIntExpression <?, ?, ?> ooffset,
                                        ASubIntExpression <?, ?, ?> len)
   {
-    return new BoolExpression (raw.invoke ("regionMatches")
+    return BoolExpression.of (raw.invoke ("regionMatches")
                                   .arg (ignoreCase)
                                   .arg (toffset)
                                   .arg (other)
@@ -435,7 +453,7 @@ public class StringExpression extends ObjectExpression <String>
                                        ASubIntExpression <?, ?, ?> ooffset,
                                        ASubIntExpression <?, ?, ?> len)
   {
-    return new BoolExpression (raw.invoke ("regionMatches").arg (toffset).arg (other).arg (ooffset).arg (len));
+    return BoolExpression.of (raw.invoke ("regionMatches").arg (toffset).arg (other).arg (ooffset).arg (len));
   }
 
   /// @return `that.repeat(count)`

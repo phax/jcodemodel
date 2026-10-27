@@ -4,17 +4,22 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JAtom;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.JInvocation;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JOp;
 import com.helger.jcodemodel.expressions.ITypedExpression;
-import com.helger.jcodemodel.expressions.typed.TypedExpressionWrapper;
+import com.helger.jcodemodel.expressions.typed.AReferenceExpression;
+import com.helger.jcodemodel.expressions.typed.ATypedExpressionWrapper;
+import com.helger.jcodemodel.expressions.typed.NonVoidExpression;
 
 /// expression with a `boolean` type. Name is shorter to avoid name clash with java.lang . 
-public class BoolExpression extends TypedExpressionWrapper <Boolean>
+public class BoolExpression extends ATypedExpressionWrapper <Boolean> implements NonVoidExpression <Boolean>
 {
 
-  public static class BoolArrExp extends ArrayExpression <Boolean>
+  public static class BoolArrExp extends AReferenceExpression <boolean []>
   {
 
     public BoolArrExp (IJExpression raw)
@@ -22,31 +27,57 @@ public class BoolExpression extends TypedExpressionWrapper <Boolean>
       super (raw);
     }
 
-    @Override
+    /// create an initialization to provided values
+    public static BoolArrExp of (JCodeModel jcm, boolean... values)
+    {
+      JInvocation invoke = jcm.ref (boolean [].class)._new ();
+      if (values != null)
+        for (boolean v : values)
+          invoke.arg (v);
+      return new BoolArrExp (invoke);
+    }
+
+    /// @return `that[index]`
     public BoolExpression at (ASubIntExpression <?, ?, ?> index)
     {
-      return BoolExpression.of (super.at (index));
+      return BoolExpression.of (JExpr.component (raw (), index.raw ()));
+    }
+
+    /// @return `that.length`
+    public IntExpression length ()
+    {
+      return IntExpression.of (JExpr.ref (raw, "length"));
     }
 
   }
 
-  public static BoolExpression of (boolean value)
-  {
-    return new BoolExpression (JExpr.lit (value));
-  }
+  private static final BoolExpression TRUE = new BoolExpression (JExpr.TRUE);
+  private static final BoolExpression FALSE = new BoolExpression (JExpr.TRUE);
 
   public static BoolExpression true_ ()
   {
-    return of (true);
+    return TRUE;
   }
 
   public static BoolExpression false_ ()
   {
-    return of (false);
+    return FALSE;
+  }
+
+  public static BoolExpression of (boolean value)
+  {
+    return value ? TRUE : FALSE;
   }
 
   public static BoolExpression of (IJExpression raw)
   {
+    if (raw instanceof JAtom ja)
+    {
+      if (ja == JExpr.TRUE)
+        return TRUE;
+      if (ja == JExpr.FALSE)
+        return FALSE;
+    }
     return new BoolExpression (raw);
   }
 
@@ -60,9 +91,14 @@ public class BoolExpression extends TypedExpressionWrapper <Boolean>
     return m.paramTyped (name, boolean.class, BoolExpression::of);
   }
 
+  public static BoolExpression unboxing (ITypedExpression <Boolean> object)
+  {
+    return of (object);
+  }
+
   //
 
-  public BoolExpression (IJExpression raw)
+  protected BoolExpression (IJExpression raw)
   {
     super (raw);
   }
@@ -74,7 +110,7 @@ public class BoolExpression extends TypedExpressionWrapper <Boolean>
   /// @return `! that`
   public BoolExpression not ()
   {
-    return new BoolExpression (raw.not ());
+    return of (raw.not ());
   }
 
   //
@@ -84,31 +120,31 @@ public class BoolExpression extends TypedExpressionWrapper <Boolean>
   /// @return `that && other`
   public BoolExpression and (ITypedExpression <? extends Boolean> other)
   {
-    return new BoolExpression (raw.cand (other.raw ()));
+    return of (raw.cand (other.raw ()));
   }
 
   /// @return `that & other`
   public BoolExpression band (ITypedExpression <? extends Boolean> other)
   {
-    return new BoolExpression (raw.band (other.raw ()));
+    return of (raw.band (other.raw ()));
   }
 
   /// @return `that | other`
   public BoolExpression bor (ITypedExpression <? extends Boolean> other)
   {
-    return new BoolExpression (raw.bor (other.raw ()));
+    return of (raw.bor (other.raw ()));
   }
 
   /// @return `that || other`
   public BoolExpression or (ITypedExpression <? extends Boolean> other)
   {
-    return new BoolExpression (raw.cor (other.raw ()));
+    return of (raw.cor (other.raw ()));
   }
 
   /// @return `that ^ other`
   public BoolExpression xor (ITypedExpression <? extends Boolean> other)
   {
-    return new BoolExpression (raw.xor (other.raw ()));
+    return of (raw.xor (other.raw ()));
   }
 
   //

@@ -15,7 +15,7 @@ public class BoolExpressionTest
     ASubShortExpression <?, ?, ?> ternary = BoolExpression.true_ ()
                                                           .ternary (ShrtExpression.of ((short) 5),
                                                                     BytExpression.of ((byte) 3));
-    IntExpression test = ternary.plus (CharExpression.of ('a'));
+    IntExpression test = ternary.plus ('a');
     Assert.assertEquals ("(true? 5 : 3)+'a'", CodeModelTestsHelper.generate (test.raw ()));
     
   }

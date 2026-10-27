@@ -12,19 +12,19 @@ import com.helger.jcodemodel.expressions.typed.InstanceOfExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.ObjectExpression;
 import com.helger.jcodemodel.expressions.typed.java.lang.StringExpression;
 import com.helger.jcodemodel.expressions.typed.primitives.CharExpression;
-import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 
 /// generate a class with contains(Object containing, char contained) .
-/// Checks the instanceof pattern 
+/// 
+/// Checks the instanceof method of AReferenceExpression 
 @TestJCM
 public class ContainsCharTestGen
 {
 
-  public void ContainsTypedExpression (JPackage jp, JCodeModel jcm) throws JCodeModelException
+  public void containsTypedExpression (JPackage jp, JCodeModel jcm) throws JCodeModelException
   {
     JDefinedClass cl = jp._class ("ContainsTypedExpression");
     JMethod meth = cl.method (JMod.PUBLIC_STATIC_FINAL, jp.owner ().BOOLEAN, "contains");
-    ObjectExpression <Object> containing = ObjectExpression.addParam (meth, Object.class, "containing");
+    ObjectExpression <Object> containing = ObjectExpression.of (meth, Object.class, "containing");
     CharExpression contained = CharExpression.param (meth, "contained");
 
     // if( containing instanceof char c) return c == contained;
@@ -44,7 +44,7 @@ public class ContainsCharTestGen
     meth.body ()
         ._if (ios.and (s -> s.isEmpty ().not ()))
         ._then ()
-        ._return (ios.getTypedVar ().indexOf (contained).gt (IntExpression.of (-1)));
+        ._return (ios.getTypedVar ().indexOf (contained).gt (-1));
 
     meth.body ()._return (JExpr.FALSE);
   }

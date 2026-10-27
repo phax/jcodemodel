@@ -801,8 +801,8 @@ public class JFormatter implements IJFormatter
 
   @Override
   public @NonNull IJFormatter generable (@NonNull final Collection <? extends IJGenerable> aList,
-                                         final String separator,
-                                         final ListWrapping wrapping)
+                                         @NonNull final String separator,
+                                         @Nullable final ListWrapping wrapping)
   {
     if (settings ().wrap.disabled)
       return generableLegacy (aList, separator);

@@ -17,8 +17,8 @@ import com.helger.jcodemodel.expressions.typed.primitives.CharExpression.CharArr
 import com.helger.jcodemodel.expressions.typed.primitives.IntExpression;
 
 /// generate a class with replace(String source, char oldChar, char newChar) .
+/// 
 /// Checks that calling various String, array functions does not crash ^^
-
 @TestJCM
 public class StringReplaceTestGen
 {
@@ -33,7 +33,7 @@ public class StringReplaceTestGen
     JBlock body = meth.body ();
     body._if (source.isNull ().or (source.isEmpty ()))._then ()._return (source);
     CharArrExp arr = new CharArrExp (body.decl (jp.owner ().ref (char [].class), "arr", source.toCharArray ().raw ()));
-    BoolExpression changed = new BoolExpression (body.decl (jp.owner ().BOOLEAN, "changed", JExpr.lit (false)));
+    BoolExpression changed = BoolExpression.of (body.decl (jp.owner ().BOOLEAN, "changed", JExpr.lit (false)));
     JForLoop for_ = body._for ();
     IntExpression i = IntExpression.of (for_.init (jp.owner ().INT, "i", JExpr.lit (0)));
     for_.test (i.lt (arr.length ()));

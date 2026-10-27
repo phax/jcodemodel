@@ -5,19 +5,19 @@ import org.jspecify.annotations.NonNull;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.expressions.ITypedExpression;
 
-/// Basic implementation for a non-necessarily object expression.
+/// Convenience implementation for Typed expressions.
 /// 
 /// There are 4 sub implementations to represent
-///  - Object, so equals and co methods
+///  - References, so equals and co methods ; but also null check and instanceof
 ///  - numeral primitives, for numeral operations
 ///  - boolean primitive
 ///  - void, for example Collection::clear
-public class TypedExpressionWrapper <RunTimeType> implements ITypedExpression <RunTimeType>
+public abstract class ATypedExpressionWrapper <RunTimeType> implements ITypedExpression <RunTimeType>
 {
 
   protected final IJExpression raw;
 
-  public TypedExpressionWrapper (@NonNull IJExpression raw)
+  public ATypedExpressionWrapper (@NonNull IJExpression raw)
   {
     this.raw = raw;
   }
