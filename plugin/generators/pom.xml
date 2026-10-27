@@ -30,7 +30,6 @@
 
   <modules>
     <module>csv</module>
-    <module>expressions</module>
     <module>helloworld</module>
     <module>json</module>
     <module>yaml</module>
