@@ -48,6 +48,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.expressions.ITypedExpression;
 import com.helger.jcodemodel.vars.JBlockVar;
 
 /**
@@ -159,6 +160,11 @@ public class JForLoop implements IJStatement
     m_aTestExpr = aTestExpr;
   }
 
+  public void test (@Nullable final ITypedExpression <?> aTestExpr)
+  {
+    test (aTestExpr.raw ());
+  }
+
   @Nullable
   public IJExpression test ()
   {
@@ -170,6 +176,11 @@ public class JForLoop implements IJStatement
   {
     ValueEnforcer.notNull (aUpdate, "Update");
     m_aUpdateExprs.add (aUpdate);
+  }
+
+  public void update (@NonNull final ITypedExpression <?> aUpdate)
+  {
+    update (aUpdate.raw ());
   }
 
   @NonNull

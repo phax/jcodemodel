@@ -265,6 +265,12 @@ public class JLambdaMethodRef implements IJExpression
     f.print ("::").print (methodName ());
   }
 
+  @Override
+  public String toString ()
+  {
+    return (isStaticRef () ? type () : (m_aVar != null ? m_aVar : m_aLhsExpr)) + "::" + methodName ();
+  }
+
   /**
    * Factory method for a static constructor method reference (<code>type::new</code>).
    *

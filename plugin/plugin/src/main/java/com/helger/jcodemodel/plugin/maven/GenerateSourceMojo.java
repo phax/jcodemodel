@@ -167,7 +167,7 @@ public class GenerateSourceMojo extends AbstractMojo
   @Override
   public void execute () throws MojoExecutionException, MojoFailureException
   {
-    final File dir = javaOutputFolder ();
+    final File dir = javaOutputFolder (m_aProject, m_sOutputDir);
     getLog ().debug ("generating model into " + dir.getAbsolutePath ());
     dir.mkdirs ();
     ICodeModelBuilder cmb = null;
@@ -204,7 +204,7 @@ public class GenerateSourceMojo extends AbstractMojo
     final List <ISourcedInputStream> sourcesList = buildSources (cmb, cm);
     try
     {
-      new JCMWriter (cm).setJavaFeature (findJavaFeature ()).build (dir, (IProgressTracker) null);
+      new JCMWriter (cm).setJavaFeature (findJavaFeature (m_sJavaFeature)).build (dir, (IProgressTracker) null);
     }
     catch (final IOException e)
     {
@@ -216,15 +216,15 @@ public class GenerateSourceMojo extends AbstractMojo
    * @return the java files output folder
    */
   @NonNull
-  protected File javaOutputFolder ()
+  static File javaOutputFolder (MavenProject project, String outputDir)
   {
-    if (m_sOutputDir == null || m_sOutputDir.isBlank ())
-      return new File (m_aProject.getBasedir (), "src/generated/java");
+    if (outputDir == null || outputDir.isBlank ())
+      return new File (project.getBasedir (), "src/generated/java");
 
-    if (m_sOutputDir.startsWith ("/"))
-      return new File (m_sOutputDir);
+    if (outputDir.startsWith ("/"))
+      return new File (outputDir);
 
-    return new File (m_aProject.getBasedir (), m_sOutputDir);
+    return new File (project.getBasedir (), outputDir);
   }
 
   /*
@@ -457,7 +457,7 @@ public class GenerateSourceMojo extends AbstractMojo
    * @return the configured {@link #m_sJavaFeature} parsed as an integer, falling back to
    *         {@link JCMWriter#DEFAULT_JAVA_FEATURE} when unset or blank.
    */
-  public int findJavaFeature ()
+  public static int findJavaFeature (String m_sJavaFeature)
   {
     if (m_sJavaFeature == null || m_sJavaFeature.isBlank ())
       return JCMWriter.DEFAULT_JAVA_FEATURE;
