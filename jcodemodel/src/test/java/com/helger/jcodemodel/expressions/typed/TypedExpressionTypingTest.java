@@ -51,6 +51,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -89,8 +90,16 @@ public final class TypedExpressionTypingTest
   private static final String PKG = "com.helger.jcodemodel.expressions.typed.";
   private static final String REJECTED = "<rejected>";
 
+  /** Java array type and its typed mirror */
+  private static final String [] [] ARRAYS = { { "int []", "ArrayExpression <int [], IntExpression>" },
+                                              { "int [] []",
+                                                "ArrayExpression <int [] [], ArrayExpression <int [], IntExpression>>" },
+                                              { "String []", "ArrayExpression <String [], StringExpression>" },
+                                              { "Integer []", "ArrayExpression <Integer [], IntegerExpression>" },
+                                              { "Object []", "ArrayExpression <Object [], ObjectExpression <Object>>" } };
+
   /** Java value type and its typed mirror */
-  private static final String [] [] VALUES = { { "byte", "ByteExpression" },
+  private static final String [] [] VALUES = _concat (new String [] [] { { "byte", "ByteExpression" },
                                               { "short", "ShortExpression" },
                                               { "char", "CharExpression" },
                                               { "int", "IntExpression" },
@@ -101,7 +110,8 @@ public final class TypedExpressionTypingTest
                                               { "Integer", "IntegerExpression" },
                                               { "Character", "CharacterExpression" },
                                               { "String", "StringExpression" },
-                                              { "Object", "ObjectExpression <Object>" } };
+                                                                         { "Object", "ObjectExpression <Object>" } },
+                                                     ARRAYS);
 
   /** Java parameter type and its typed parameter mirror */
   private static final String [] [] PARAMS = { { "byte", "IByteConvertible <?>" },
@@ -121,7 +131,14 @@ public final class TypedExpressionTypingTest
                                                 "ITypedExpression <? extends java.io.Serializable>" },
                                               { "String", "ITypedExpression <? extends String>" },
                                               { "CharSequence", "ITypedExpression <? extends CharSequence>" },
-                                              { "Object", "ITypedExpression <?>" } };
+                                              { "Object", "ITypedExpression <?>" },
+                                              { "Cloneable", "ITypedExpression <? extends Cloneable>" },
+                                              { "int []", "ITypedExpression <? extends int []>" },
+                                              { "long []", "ITypedExpression <? extends long []>" },
+                                              { "int [] []", "ITypedExpression <? extends int [] []>" },
+                                              { "Object []", "ITypedExpression <? extends Object []>" },
+                                              { "Number []", "ITypedExpression <? extends Number []>" },
+                                              { "CharSequence []", "ITypedExpression <? extends CharSequence []>" } };
 
   /** Java binary operator and the typed method names that may implement it */
   private static final String [] [] BINARY_OPS = { { "+", "plus" },
@@ -146,24 +163,25 @@ public final class TypedExpressionTypingTest
 
   private static final String [] [] UNARY_OPS = { { "-", "minus" }, { "~", "complement" }, { "!", "not" } };
 
-  private static final Map <String, String> RESULT_MIRRORS = Map.of ("byte",
-                                                                      "ByteExpression",
-                                                                      "short",
-                                                                      "ShortExpression",
-                                                                      "char",
-                                                                      "CharExpression",
-                                                                      "int",
-                                                                      "IntExpression",
-                                                                      "long",
-                                                                      "LongExpression",
-                                                                      "float",
-                                                                      "FloatExpression",
-                                                                      "double",
-                                                                      "DoubleExpression",
-                                                                      "boolean",
-                                                                      "BooleanExpression",
-                                                                      "java.lang.String",
-                                                                      "StringExpression");
+  /** javac result type to the expected typed mirror, as printed by javac without blanks */
+  private static final Map <String, String> RESULT_MIRRORS = Map.ofEntries (Map.entry ("byte", "ByteExpression"),
+                                                                             Map.entry ("short", "ShortExpression"),
+                                                                             Map.entry ("char", "CharExpression"),
+                                                                             Map.entry ("int", "IntExpression"),
+                                                                             Map.entry ("long", "LongExpression"),
+                                                                             Map.entry ("float", "FloatExpression"),
+                                                                             Map.entry ("double", "DoubleExpression"),
+                                                                             Map.entry ("boolean", "BooleanExpression"),
+                                                                             Map.entry ("java.lang.Integer",
+                                                                                        "IntegerExpression"),
+                                                                             Map.entry ("java.lang.Character",
+                                                                                        "CharacterExpression"),
+                                                                             Map.entry ("java.lang.String",
+                                                                                        "StringExpression"),
+                                                                             Map.entry ("java.lang.Object",
+                                                                                        "ObjectExpression<java.lang.Object>"),
+                                                                             Map.entry ("int[]",
+                                                                                        "ArrayExpression<int[],IntExpression>"));
 
   private static final class StringSource extends SimpleJavaFileObject
   {
@@ -185,6 +203,13 @@ public final class TypedExpressionTypingTest
   /** One case: the Java snippet and the alternative typed snippets */
   private record Case (String sDescription, String sJavaClass, List <String> aTypedClasses)
   {}
+
+  private static String [] [] _concat (@NonNull final String [] [] aFirst, @NonNull final String [] [] aSecond)
+  {
+    final String [] [] ret = Arrays.copyOf (aFirst, aFirst.length + aSecond.length);
+    System.arraycopy (aSecond, 0, ret, aFirst.length, aSecond.length);
+    return ret;
+  }
 
   private static String _classPathOf (@NonNull final Class <?> aClass)
   {
@@ -277,7 +302,7 @@ public final class TypedExpressionTypingTest
     {
       final String sType = aResults.get (sTypedClass);
       if (!REJECTED.equals (sType))
-        return sType.startsWith (PKG) ? sType.substring (PKG.length ()) : sType;
+        return sType.replace (PKG, "").replace (" ", "");
     }
     return REJECTED;
   }
@@ -334,6 +359,49 @@ public final class TypedExpressionTypingTest
     }
     LOGGER.info ("Checked " + aCases.size () + " argument conversions against javac");
     assertEquals ("Argument conversions differing from javac: " + aMismatches, 0, aMismatches.size ());
+  }
+
+  @Test
+  public void testArrayAccessMatchesJavac ()
+  {
+    final Map <String, String> aSources = new LinkedHashMap <> ();
+    final List <Case> aCases = new ArrayList <> ();
+    for (final String [] aArray : ARRAYS)
+    {
+      int nIndex = aCases.size ();
+      aSources.put ("J" + nIndex, _source ("J" + nIndex, "static void t (" + aArray[0] + " a) { var r = a.length; }"));
+      aSources.put ("T" + nIndex,
+                    _source ("T" + nIndex, "static void t (" + aArray[1] + " a) { var r = a.length (); }"));
+      aCases.add (new Case (aArray[0] + ".length", "J" + nIndex, List.of ("T" + nIndex)));
+
+      for (final String [] aIndex : VALUES)
+      {
+        nIndex = aCases.size ();
+        aSources.put ("J" + nIndex,
+                      _source ("J" + nIndex,
+                               "static void t (" + aArray[0] + " a, " + aIndex[0] + " i) { var r = a [i]; }"));
+        aSources.put ("T" + nIndex,
+                      _source ("T" + nIndex,
+                               "static void t (" +
+                                              aArray[1] +
+                                              " a, " +
+                                              aIndex[1] +
+                                              " i) { var r = a.component (i); }"));
+        aCases.add (new Case (aArray[0] + " [" + aIndex[0] + "]", "J" + nIndex, List.of ("T" + nIndex)));
+      }
+    }
+
+    final Map <String, String> aResults = _compile (aSources);
+    final List <String> aMismatches = new ArrayList <> ();
+    for (final Case aCase : aCases)
+    {
+      final String sJava = _javaOutcome (aCase, aResults);
+      final String sTyped = _typedOutcome (aCase, aResults);
+      if (!sJava.equals (sTyped))
+        aMismatches.add (aCase.sDescription () + ": javac " + sJava + ", typed " + sTyped);
+    }
+    LOGGER.info ("Checked " + aCases.size () + " array accesses against javac");
+    assertEquals ("Array accesses differing from javac: " + aMismatches, 0, aMismatches.size ());
   }
 
   @Test

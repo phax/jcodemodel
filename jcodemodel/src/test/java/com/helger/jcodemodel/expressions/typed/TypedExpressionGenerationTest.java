@@ -40,6 +40,7 @@
  */
 package com.helger.jcodemodel.expressions.typed;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Method;
@@ -51,6 +52,7 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JForLoop;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
+import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.compile.DynamicClassLoader;
 import com.helger.jcodemodel.compile.MemoryCodeWriter;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
@@ -108,6 +110,30 @@ public final class TypedExpressionGenerationTest
       aMethod.body ()._return (aResult.raw ());
     }
 
+    // static int totalLength (String [] a)
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.INT, "totalLength");
+      final ArrayExpression <String [], StringExpression> aArray = ArrayExpression.param (aMethod,
+                                                                                          ArrayType.of (String.class,
+                                                                                                        StringExpression::of),
+                                                                                          "a");
+      final IntExpression aSum = IntExpression.of (aMethod.body ().decl (cm.INT, "sum", IntExpression.lit (0).raw ()));
+      final JForLoop aLoop = aMethod.body ()._for ();
+      final IntExpression aIdx = IntExpression.of (aLoop.init (cm.INT, "i", IntExpression.lit (0).raw ()));
+      aLoop.test (aIdx.lt (aArray.length ()).raw ());
+      aLoop.update (aIdx.raw ().incr ());
+      aLoop.body ().assignPlus ((JVar) aSum.raw (), aArray.component (aIdx).length ().raw ());
+      aMethod.body ()._return (aSum.raw ());
+    }
+
+    // static int [] [] grid (): a two-dimensional array literal
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.INT.array ().array (), "grid");
+      final var aRow1 = ArrayExpression.newArrayOf (cm, ArrayType.INT, IntExpression.lit (1), IntExpression.lit (2));
+      final var aRow2 = ArrayExpression.newArrayOf (cm, ArrayType.INT, IntExpression.lit (3));
+      aMethod.body ()._return (ArrayExpression.newArrayOf (cm, ArrayType.INT.array (), aRow1, aRow2).raw ());
+    }
+
     final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
     final Class <?> aCompiled = aLoader.loadClass ("com.example.typed.Generated");
 
@@ -120,5 +146,9 @@ public final class TypedExpressionGenerationTest
                   aCompiled.getMethod ("at", String.class, Integer.class).invoke (null, "abc", Integer.valueOf (2)));
     assertEquals (Long.valueOf ('b'),
                   aCompiled.getMethod ("next", Character.class).invoke (null, Character.valueOf ('a')));
+    assertEquals (Integer.valueOf (6),
+                  aCompiled.getMethod ("totalLength", String [].class)
+                           .invoke (null, (Object) new String [] { "a", "bc", "def" }));
+    assertArrayEquals (new int [] [] { { 1, 2 }, { 3 } }, (int [] []) aCompiled.getMethod ("grid").invoke (null));
   }
 }
