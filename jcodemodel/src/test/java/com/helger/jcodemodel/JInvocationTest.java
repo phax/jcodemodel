@@ -40,6 +40,10 @@
  */
 package com.helger.jcodemodel;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -128,5 +132,27 @@ public final class JInvocationTest
 
     CodeModelTestsHelper.parseCodeModel (cm);
     CodeModelTestsHelper.compileCodeModel (cm);
+  }
+
+  @Test
+  public void testAccessors ()
+  {
+    final JCodeModel cm = JCodeModel.createUnified ();
+    final JBlock aBlock = new JBlock ();
+    final JVar aVar = aBlock.decl (cm._ref (String.class), "s");
+
+    final JInvocation aMethod = aVar.invoke ("length");
+    assertSame (aVar, aMethod.object ());
+    assertEquals ("length", aMethod.methodName ());
+    assertNull (aMethod.constructorType ());
+
+    final JInvocation aStatic = cm.ref (String.class).staticInvoke ("valueOf").arg (aVar);
+    assertSame (cm.ref (String.class), aStatic.object ());
+    assertEquals ("valueOf", aStatic.methodName ());
+
+    final JInvocation aNew = JExpr._new (cm.ref (StringBuilder.class)).arg (aVar);
+    assertNull (aNew.object ());
+    assertNull (aNew.methodName ());
+    assertSame (cm.ref (StringBuilder.class), aNew.constructorType ());
   }
 }

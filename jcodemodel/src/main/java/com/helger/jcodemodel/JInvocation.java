@@ -151,6 +151,38 @@ public class JInvocation implements IJExpressionStatement, IJOwnedMaybe
   }
 
   /**
+   * @return The object or the type (for a static invocation) the method is invoked on. May be
+   *         <code>null</code> for a constructor invocation or an unqualified method invocation.
+   * @since 4.5.0
+   */
+  @Nullable
+  public IJGenerable object ()
+  {
+    return m_aObject;
+  }
+
+  /**
+   * @return The name of the invoked method. <code>null</code> for a constructor invocation.
+   * @since 4.5.0
+   */
+  @Nullable
+  public String methodName ()
+  {
+    return _methodName ();
+  }
+
+  /**
+   * @return The type created by a constructor invocation. <code>null</code> for a method
+   *         invocation.
+   * @since 4.5.0
+   */
+  @Nullable
+  public AbstractJType constructorType ()
+  {
+    return m_aConstructorType;
+  }
+
+  /**
    * Add an expression to this invocation's argument list
    *
    * @param aArg

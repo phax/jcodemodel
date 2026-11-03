@@ -194,4 +194,20 @@ public final class JLambdaMethodRefTest
     if (false)
       CodeModelTestsHelper.compileCodeModel (cm);
   }
+
+  @Test
+  public void testInvocationMethodRef_Parentheses ()
+  {
+    final JCodeModel cm = JCodeModel.createUnified ();
+    final JBlock aBlock = new JBlock ();
+    final JVar aVar = aBlock.decl (cm._ref (Object.class), "aObj");
+
+    assertEquals ("((java.lang.String) aObj)::length",
+                  CodeModelTestsHelper.toString (new JLambdaMethodRef (JExpr.cast (cm.ref (String.class), aVar),
+                                                                       "length")));
+    assertEquals ("(aObj +\"x\")::length",
+                  CodeModelTestsHelper.toString (new JLambdaMethodRef (aVar.plus ("x"), "length")));
+    assertEquals ("aObj.toString()::length",
+                  CodeModelTestsHelper.toString (new JLambdaMethodRef (aVar.invoke ("toString"), "length")));
+  }
 }

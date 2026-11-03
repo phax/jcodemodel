@@ -44,6 +44,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.JOp.EPrecedence;
+import com.helger.jcodemodel.JOp.ESide;
 
 /**
  * This is a single Java 8 lambda method reference expression.
@@ -261,7 +263,18 @@ public class JLambdaMethodRef implements IJExpression
       if (m_aVar != null)
         f.generable (m_aVar);
       else
+      {
+        // A looser binding expression like "a + b" must be parenthesized: "(a + b)::m"
+        final boolean bParentheses = JOp.needsParentheses (f.settings ().parentheses.global,
+                                                           EPrecedence.DEREF,
+                                                           m_aLhsExpr.operatorPrecedence (),
+                                                           ESide.LEFT);
+        if (bParentheses)
+          f.print ('(');
         f.generable (m_aLhsExpr);
+        if (bParentheses)
+          f.print (')');
+      }
     f.print ("::").print (methodName ());
   }
 
