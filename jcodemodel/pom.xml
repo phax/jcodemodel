@@ -150,6 +150,8 @@
             <exclude>**/Issue74FuncTest.class</exclude>
             <exclude>**/JCMWriter.class</exclude>
             <exclude>**/SingleStreamCodeWriter.class</exclude>
+            <!-- uses the javac tree API (com.sun.source) to compare typed expressions with javac -->
+            <exclude>**/TypedExpressionTypingTest*.class</exclude>
           </excludes>
         </configuration>
         <!-- local executions are ignored -->
