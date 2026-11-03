@@ -187,6 +187,19 @@ public final class TypedExpressionTypingTest
                                                  { "Object []",
                                                    "TypedVariable <ArrayExpression <Object [], ObjectExpression <Object>, ITypedExpression <? extends Object>>, ITypedExpression <? extends Object []>>" } };
 
+  /** Java compound assignment operator and the typed method name prefix */
+  private static final String [] [] COMPOUND_OPS = { { "+=", "plus" },
+                                                    { "-=", "minus" },
+                                                    { "*=", "mul" },
+                                                    { "/=", "div" },
+                                                    { "%=", "mod" },
+                                                    { "&=", "band" },
+                                                    { "|=", "bor" },
+                                                    { "^=", "xor" },
+                                                    { "<<=", "shl" },
+                                                    { ">>=", "shr" },
+                                                    { ">>>=", "shrz" } };
+
   /** Java increment/decrement operator, whether it is a prefix, and the typed method name */
   private static final String [] [] INC_DEC_OPS = { { "++", "false", "postincr" },
                                                    { "++", "true", "preincr" },
@@ -485,6 +498,49 @@ public final class TypedExpressionTypingTest
     final List <String> aMismatches = _exactMismatches (aCases, _compile (aSources));
     LOGGER.info ("Checked " + aCases.size () + " variable assignments and increments against javac");
     assertEquals ("Variable operations differing from javac: " + aMismatches, 0, aMismatches.size ());
+  }
+
+  @Test
+  public void testCompoundAssignmentsMatchJavac ()
+  {
+    final Map <String, String> aSources = new LinkedHashMap <> ();
+    final List <Case> aCases = new ArrayList <> ();
+    for (final String [] aVar : VARIABLES)
+      for (final String [] aOp : COMPOUND_OPS)
+        for (final String [] aValue : VALUES)
+        {
+          final int nIndex = aCases.size ();
+          aSources.put ("J" + nIndex,
+                        _source ("J" + nIndex,
+                                 "static void t (" +
+                                                aVar[0] +
+                                                " a, " +
+                                                aValue[0] +
+                                                " v) { var r = (a " +
+                                                aOp[0] +
+                                                " v); }"));
+          aSources.put ("T" + nIndex,
+                        _source ("T" + nIndex,
+                                 "static void t (" +
+                                                aVar[1] +
+                                                " a, " +
+                                                aValue[1] +
+                                                " v) { var r = TypedVariable." +
+                                                aOp[1] +
+                                                "AssignExpr (a, v); }"));
+          aCases.add (new Case (aVar[0] + " " + aOp[0] + " " + aValue[0], "J" + nIndex, List.of ("T" + nIndex)));
+        }
+
+    final List <String> aMismatches = _exactMismatches (aCases, _compile (aSources));
+    LOGGER.info ("Checked " + aCases.size () + " compound assignments against javac");
+    // The only intended gap is "+=" with a String operand on a variable of a super type of String
+    final List <String> aGaps = new ArrayList <> ();
+    for (final String sMismatch : aMismatches)
+      if (sMismatch.contains (" += String: ") && sMismatch.endsWith (", typed " + REJECTED))
+        aGaps.add (sMismatch);
+    LOGGER.info ("Known gaps: " + aGaps);
+    aMismatches.removeAll (aGaps);
+    assertEquals ("Compound assignments differing from javac: " + aMismatches, 0, aMismatches.size ());
   }
 
   /** Description, Java snippet, typed snippet */

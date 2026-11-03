@@ -40,10 +40,14 @@
  */
 package com.helger.jcodemodel.expressions.typed;
 
+import java.util.function.BiFunction;
+
 import org.jspecify.annotations.NonNull;
 
 import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.IJAssignmentTarget;
+import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JAssignment;
 import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JExpr;
@@ -54,8 +58,11 @@ import com.helger.jcodemodel.JMethod;
  * component. Reading returns the mirror <code>M</code>, assigning requires the parameter mirror
  * <code>P</code>, so assignment conversion follows the same rules as method invocation conversion.
  * <p>
- * Not modelled: the narrowing of constant expressions (<code>byte b = 1;</code>) and compound
- * assignments (<code>+=</code> etc.), which contain an implicit cast.
+ * Compound assignments (<code>+=</code> etc.) contain an implicit cast to the variable type. The
+ * operands they accept are declared by the mirror via {@link ICompoundArithmeticTarget},
+ * {@link ICompoundBitwiseTarget} and {@link ICompoundShiftTarget}.
+ * <p>
+ * Not modelled: the narrowing of constant expressions (<code>byte b = 1;</code>).
  *
  * @param <M>
  *        The typed mirror of the value.
@@ -76,8 +83,17 @@ public class TypedVariable <M extends ITypedExpression <?>, P extends ITypedExpr
   }
 
   @NonNull
+  private static JAssignment _compound (@NonNull final TypedVariable <?, ?> aVar,
+                                        @NonNull final BiFunction <IJAssignmentTarget, IJExpression, JAssignment> aOp,
+                                        @NonNull final Object aValue)
+  {
+    // The operand mirrors of all compound targets are typed expressions
+    return aOp.apply (aVar.m_aTarget, ((ITypedExpression <?>) aValue).raw ());
+  }
+
+  @NonNull
   public static <M extends ITypedExpression <?>, P extends ITypedExpression <?>> TypedVariable <M, P> of (@NonNull final TypedType <M, P> aType,
-                                                                                                         @NonNull final IJAssignmentTarget aTarget)
+                                                                                                          @NonNull final IJAssignmentTarget aTarget)
   {
     return new TypedVariable <> (aType, aTarget);
   }
@@ -103,10 +119,10 @@ public class TypedVariable <M extends ITypedExpression <?>, P extends ITypedExpr
    */
   @NonNull
   public static <M extends ITypedExpression <?>, P extends ITypedExpression <?>> TypedVariable <M, P> decl (@NonNull final JCodeModel aCM,
-                                                                                                           @NonNull final JBlock aBlock,
-                                                                                                           @NonNull final TypedType <M, P> aType,
-                                                                                                           @NonNull final String sName,
-                                                                                                           @NonNull final P aInit)
+                                                                                                            @NonNull final JBlock aBlock,
+                                                                                                            @NonNull final TypedType <M, P> aType,
+                                                                                                            @NonNull final String sName,
+                                                                                                            @NonNull final P aInit)
   {
     return of (aType, aBlock.decl (aType.type (aCM), sName, aInit.raw ()));
   }
@@ -128,8 +144,8 @@ public class TypedVariable <M extends ITypedExpression <?>, P extends ITypedExpr
    */
   @NonNull
   public static <M extends ITypedExpression <?>, P extends ITypedExpression <?>> TypedVariable <M, P> param (@NonNull final JMethod aMethod,
-                                                                                                            @NonNull final TypedType <M, P> aType,
-                                                                                                            @NonNull final String sName)
+                                                                                                             @NonNull final TypedType <M, P> aType,
+                                                                                                             @NonNull final String sName)
   {
     return of (aType, aMethod.param (aType.type (aMethod.owner ()), sName));
   }
@@ -234,5 +250,490 @@ public class TypedVariable <M extends ITypedExpression <?>, P extends ITypedExpr
   public static <M extends IDoubleConvertible <?>> M predecr (@NonNull final TypedVariable <M, ?> aVar)
   {
     return aVar.m_aType.wrap (JExpr.predecr (aVar.m_aTarget));
+  }
+
+  /**
+   * Add the statement <code>v += value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> JBlock plusAssign (@NonNull final JBlock aBlock,
+                                                                                                       @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                       @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignPlus, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v += value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> M plusAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                      @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignPlus, aValue));
+  }
+
+  /**
+   * Add the statement <code>v -= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> JBlock minusAssign (@NonNull final JBlock aBlock,
+                                                                                                        @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                        @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignMinus, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v -= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> M minusAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                       @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignMinus, aValue));
+  }
+
+  /**
+   * Add the statement <code>v *= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> JBlock mulAssign (@NonNull final JBlock aBlock,
+                                                                                                      @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                      @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignTimes, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v *= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> M mulAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                     @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignTimes, aValue));
+  }
+
+  /**
+   * Add the statement <code>v /= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> JBlock divAssign (@NonNull final JBlock aBlock,
+                                                                                                      @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                      @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignDivide, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v /= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> M divAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                     @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignDivide, aValue));
+  }
+
+  /**
+   * Add the statement <code>v %= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> JBlock modAssign (@NonNull final JBlock aBlock,
+                                                                                                      @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                      @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignMod, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundArithmeticTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v %= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundArithmeticTarget <C>, C> M modAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                     @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignMod, aValue));
+  }
+
+  /**
+   * Add the statement <code>v &amp;= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundBitwiseTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundBitwiseTarget <C>, C> JBlock bandAssign (@NonNull final JBlock aBlock,
+                                                                                                    @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                    @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignBand, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundBitwiseTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v &amp;= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundBitwiseTarget <C>, C> M bandAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                   @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignBand, aValue));
+  }
+
+  /**
+   * Add the statement <code>v |= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundBitwiseTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundBitwiseTarget <C>, C> JBlock borAssign (@NonNull final JBlock aBlock,
+                                                                                                   @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                   @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignBor, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundBitwiseTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v |= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundBitwiseTarget <C>, C> M borAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                  @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignBor, aValue));
+  }
+
+  /**
+   * Add the statement <code>v ^= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundBitwiseTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundBitwiseTarget <C>, C> JBlock xorAssign (@NonNull final JBlock aBlock,
+                                                                                                   @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                   @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignXor, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundBitwiseTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v ^= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundBitwiseTarget <C>, C> M xorAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                  @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignXor, aValue));
+  }
+
+  /**
+   * Add the statement <code>v &lt;&lt;= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundShiftTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundShiftTarget <C>, C> JBlock shlAssign (@NonNull final JBlock aBlock,
+                                                                                                 @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                 @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignShl, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundShiftTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v &lt;&lt;= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundShiftTarget <C>, C> M shlAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignShl, aValue));
+  }
+
+  /**
+   * Add the statement <code>v &gt;&gt;= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundShiftTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundShiftTarget <C>, C> JBlock shrAssign (@NonNull final JBlock aBlock,
+                                                                                                 @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                 @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignShr, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundShiftTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v &gt;&gt;= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundShiftTarget <C>, C> M shrAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignShr, aValue));
+  }
+
+  /**
+   * Add the statement <code>v &gt;&gt;&gt;= value;</code> to a block.
+   *
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundShiftTarget}.
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundShiftTarget <C>, C> JBlock shrzAssign (@NonNull final JBlock aBlock,
+                                                                                                  @NonNull final TypedVariable <M, ?> aVar,
+                                                                                                  @NonNull final C aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignShrz, aValue));
+  }
+
+  /**
+   * @param <M>
+   *        The typed mirror of the variable.
+   * @param <C>
+   *        The operand mirror accepted by the variable, see {@link ICompoundShiftTarget}.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The expression <code>(v &gt;&gt;&gt;= value)</code>, which has the type of the variable.
+   */
+  @NonNull
+  public static <M extends ITypedExpression <?> & ICompoundShiftTarget <C>, C> M shrzAssignExpr (@NonNull final TypedVariable <M, ?> aVar,
+                                                                                                 @NonNull final C aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignShrz, aValue));
+  }
+
+  /**
+   * Add the statement <code>s += value;</code> to a <code>String</code> variable, which accepts
+   * any operand that is not <code>void</code>.
+   *
+   * @param aBlock
+   *        The block to add the statement to. May not be <code>null</code>.
+   * @param aVar
+   *        The variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand. May not be <code>null</code>.
+   * @return The passed block. Never <code>null</code>.
+   */
+  @NonNull
+  public static JBlock plusAssign (@NonNull final JBlock aBlock,
+                                   @NonNull final TypedVariable <StringExpression, ?> aVar,
+                                   @NonNull final ITypedExpression <?> aValue)
+  {
+    return aBlock.add (_compound (aVar, JExpr::assignPlus, aValue));
+  }
+
+  /**
+   * @param aVar
+   *        The <code>String</code> variable. May not be <code>null</code>.
+   * @param aValue
+   *        The operand, which may be anything but <code>void</code>. May not be <code>null</code>.
+   * @return The expression <code>(s += value)</code> of type <code>String</code>.
+   */
+  @NonNull
+  public static StringExpression plusAssignExpr (@NonNull final TypedVariable <StringExpression, ?> aVar,
+                                                 @NonNull final ITypedExpression <?> aValue)
+  {
+    return aVar.m_aType.wrap (_compound (aVar, JExpr::assignPlus, aValue));
   }
 }

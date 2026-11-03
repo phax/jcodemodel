@@ -52,7 +52,8 @@ import com.helger.jcodemodel.JMethod;
  */
 public class FloatObjExpression extends AbstractTypedExpression <Float> implements
                                IReferenceExpression <Float>,
-                               IFloatConvertible <Float>
+                               IFloatConvertible <Float>,
+                               ICompoundArithmeticTarget <IFloatConvertible <?>>
 {
   protected FloatObjExpression (@NonNull final IJExpression aRaw)
   {

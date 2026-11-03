@@ -51,7 +51,8 @@ import com.helger.jcodemodel.JMethod;
  * <code>Float</code>, which models boxing.
  */
 public class FloatExpression extends AbstractTypedExpression <Float> implements IFloatConvertible <Float>,
-                                                                                IPrimitiveNumericExpression <Float>
+                                                                                IPrimitiveNumericExpression <Float>,
+                                                                                ICompoundArithmeticTarget <IDoubleConvertible <?>>
 {
   protected FloatExpression (@NonNull final IJExpression aRaw)
   {

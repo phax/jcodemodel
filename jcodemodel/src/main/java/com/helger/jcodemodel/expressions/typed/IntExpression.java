@@ -51,7 +51,10 @@ import com.helger.jcodemodel.JMethod;
  * <code>Integer</code>, which models boxing.
  */
 public class IntExpression extends AbstractTypedExpression <Integer> implements IIntPromotedOperators <Integer>,
-                                                                                IPrimitiveNumericExpression <Integer>
+                                                                                IPrimitiveNumericExpression <Integer>,
+                                                                                ICompoundArithmeticTarget <IDoubleConvertible <?>>,
+                                                                                ICompoundBitwiseTarget <ILongConvertible <?>>,
+                                                                                ICompoundShiftTarget <ILongConvertible <?>>
 {
   protected IntExpression (@NonNull final IJExpression aRaw)
   {

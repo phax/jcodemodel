@@ -52,7 +52,10 @@ import com.helger.jcodemodel.JMethod;
  */
 public class LongObjExpression extends AbstractTypedExpression <Long> implements
                                IReferenceExpression <Long>,
-                               ILongPromotedOperators <Long>
+                               ILongPromotedOperators <Long>,
+                               ICompoundArithmeticTarget <ILongConvertible <?>>,
+                               ICompoundBitwiseTarget <ILongConvertible <?>>,
+                               ICompoundShiftTarget <ILongConvertible <?>>
 {
   protected LongObjExpression (@NonNull final IJExpression aRaw)
   {

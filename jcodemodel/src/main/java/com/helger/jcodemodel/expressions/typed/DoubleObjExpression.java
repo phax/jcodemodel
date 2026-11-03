@@ -52,7 +52,8 @@ import com.helger.jcodemodel.JMethod;
  */
 public class DoubleObjExpression extends AbstractTypedExpression <Double> implements
                                IReferenceExpression <Double>,
-                               IDoubleConvertible <Double>
+                               IDoubleConvertible <Double>,
+                               ICompoundArithmeticTarget <IDoubleConvertible <?>>
 {
   protected DoubleObjExpression (@NonNull final IJExpression aRaw)
   {

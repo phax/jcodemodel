@@ -51,7 +51,10 @@ import com.helger.jcodemodel.JMethod;
  */
 public class ShortExpression extends AbstractTypedExpression <Short> implements IShortConvertible <Short>,
                                                                                 IIntPromotedOperators <Short>,
-                                                                                IPrimitiveNumericExpression <Short>
+                                                                                IPrimitiveNumericExpression <Short>,
+                                                                                ICompoundArithmeticTarget <IDoubleConvertible <?>>,
+                                                                                ICompoundBitwiseTarget <ILongConvertible <?>>,
+                                                                                ICompoundShiftTarget <ILongConvertible <?>>
 {
   protected ShortExpression (@NonNull final IJExpression aRaw)
   {

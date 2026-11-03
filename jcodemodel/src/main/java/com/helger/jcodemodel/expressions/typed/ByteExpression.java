@@ -51,7 +51,10 @@ import com.helger.jcodemodel.JMethod;
  */
 public class ByteExpression extends AbstractTypedExpression <Byte> implements IByteConvertible <Byte>,
                                                                               IIntPromotedOperators <Byte>,
-                                                                              IPrimitiveNumericExpression <Byte>
+                                                                              IPrimitiveNumericExpression <Byte>,
+                                                                              ICompoundArithmeticTarget <IDoubleConvertible <?>>,
+                                                                              ICompoundBitwiseTarget <ILongConvertible <?>>,
+                                                                              ICompoundShiftTarget <ILongConvertible <?>>
 {
   protected ByteExpression (@NonNull final IJExpression aRaw)
   {

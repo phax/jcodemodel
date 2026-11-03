@@ -52,7 +52,10 @@ import com.helger.jcodemodel.JMethod;
  */
 public class CharExpression extends AbstractTypedExpression <Character> implements ICharConvertible <Character>,
                                                                                    IIntPromotedOperators <Character>,
-                                                                                   IPrimitiveNumericExpression <Character>
+                                                                                   IPrimitiveNumericExpression <Character>,
+                                                                                   ICompoundArithmeticTarget <IDoubleConvertible <?>>,
+                                                                                   ICompoundBitwiseTarget <ILongConvertible <?>>,
+                                                                                   ICompoundShiftTarget <ILongConvertible <?>>
 {
   protected CharExpression (@NonNull final IJExpression aRaw)
   {

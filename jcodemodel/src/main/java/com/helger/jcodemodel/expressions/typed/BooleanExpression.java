@@ -50,7 +50,8 @@ import com.helger.jcodemodel.JMethod;
  * An expression of the primitive type <code>boolean</code>. Its runtime type parameter is
  * <code>Boolean</code>, which models boxing.
  */
-public class BooleanExpression extends AbstractTypedExpression <Boolean> implements IBooleanConvertible <Boolean>
+public class BooleanExpression extends AbstractTypedExpression <Boolean> implements IBooleanConvertible <Boolean>,
+                                                                                    ICompoundBitwiseTarget <IBooleanConvertible <?>>
 {
   protected BooleanExpression (@NonNull final IJExpression aRaw)
   {

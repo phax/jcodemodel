@@ -52,7 +52,8 @@ import com.helger.jcodemodel.JMethod;
  */
 public class BooleanObjExpression extends AbstractTypedExpression <Boolean> implements
                                IReferenceExpression <Boolean>,
-                               IBooleanConvertible <Boolean>
+                               IBooleanConvertible <Boolean>,
+                               ICompoundBitwiseTarget <IBooleanConvertible <?>>
 {
   protected BooleanObjExpression (@NonNull final IJExpression aRaw)
   {

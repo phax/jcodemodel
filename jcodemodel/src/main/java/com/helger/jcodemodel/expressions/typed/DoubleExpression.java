@@ -50,7 +50,8 @@ import com.helger.jcodemodel.JMethod;
  * An expression of the primitive type <code>double</code>. Its runtime type parameter is
  * <code>Double</code>, which models boxing.
  */
-public class DoubleExpression extends AbstractTypedExpression <Double> implements IPrimitiveNumericExpression <Double>
+public class DoubleExpression extends AbstractTypedExpression <Double> implements IPrimitiveNumericExpression <Double>,
+                                                                                  ICompoundArithmeticTarget <IDoubleConvertible <?>>
 {
   protected DoubleExpression (@NonNull final IJExpression aRaw)
   {

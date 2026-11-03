@@ -52,7 +52,10 @@ import com.helger.jcodemodel.JMethod;
  */
 public class IntegerExpression extends AbstractTypedExpression <Integer> implements
                                IReferenceExpression <Integer>,
-                               IIntPromotedOperators <Integer>
+                               IIntPromotedOperators <Integer>,
+                               ICompoundArithmeticTarget <IIntConvertible <?>>,
+                               ICompoundBitwiseTarget <IIntConvertible <?>>,
+                               ICompoundShiftTarget <ILongConvertible <?>>
 {
   protected IntegerExpression (@NonNull final IJExpression aRaw)
   {

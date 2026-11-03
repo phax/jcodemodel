@@ -51,7 +51,10 @@ import com.helger.jcodemodel.JMethod;
  * <code>Long</code>, which models boxing.
  */
 public class LongExpression extends AbstractTypedExpression <Long> implements ILongPromotedOperators <Long>,
-                                                                              IPrimitiveNumericExpression <Long>
+                                                                              IPrimitiveNumericExpression <Long>,
+                                                                              ICompoundArithmeticTarget <IDoubleConvertible <?>>,
+                                                                              ICompoundBitwiseTarget <ILongConvertible <?>>,
+                                                                              ICompoundShiftTarget <ILongConvertible <?>>
 {
   protected LongExpression (@NonNull final IJExpression aRaw)
   {

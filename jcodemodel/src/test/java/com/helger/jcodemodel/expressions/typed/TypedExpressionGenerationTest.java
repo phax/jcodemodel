@@ -52,8 +52,10 @@ import java.util.function.Predicate;
 
 import org.junit.Test;
 
+import com.helger.jcodemodel.JBlock;
 import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
+import com.helger.jcodemodel.JExpr;
 import com.helger.jcodemodel.JForLoop;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
@@ -227,6 +229,32 @@ public final class TypedExpressionGenerationTest
       aMethod.body ()._return (aResult.raw ());
     }
 
+    // static String label (String s): compound assignments with implicit narrowing and boxing
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.ref (String.class), "label");
+      final StringExpression aStr = StringExpression.param (aMethod, "s");
+      final JBlock aBody = aMethod.body ();
+      final var aHash = TypedVariable.decl (cm, aBody, TypedType.INTEGER, "h", IntExpression.lit (7));
+      final var aByte = TypedVariable.decl (cm,
+                                            aBody,
+                                            TypedType.BYTE,
+                                            "b",
+                                            ByteExpression.of (JExpr.cast (cm.BYTE, JExpr.lit (0))));
+      final JForLoop aLoop = aBody._for ();
+      final var aIdx = TypedVariable.of (TypedType.INT, aLoop.init (cm.INT, "i", IntExpression.lit (0).raw ()));
+      aLoop.test (aIdx.get ().lt (aStr.length ()).raw ());
+      aLoop.update (TypedVariable.postincr (aIdx).raw ());
+      TypedVariable.mulAssign (aLoop.body (), aHash, IntExpression.lit (31));
+      TypedVariable.plusAssign (aLoop.body (), aHash, aStr.charAt (aIdx.get ()));
+      TypedVariable.plusAssign (aLoop.body (), aByte, aStr.charAt (aIdx.get ()));
+      TypedVariable.bandAssign (aLoop.body (), aHash, IntExpression.lit (0xFFFF));
+      TypedVariable.shrAssign (aBody, aHash, IntExpression.lit (1));
+      final var aResult = TypedVariable.decl (cm, aBody, TypedType.STRING, "r", aStr);
+      TypedVariable.plusAssign (aBody, aResult, CharExpression.lit (':'));
+      TypedVariable.plusAssign (aBody, aResult, aHash.get ());
+      aBody._return (TypedVariable.plusAssignExpr (aResult, aByte.get ()).raw ());
+    }
+
     final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
     final Class <?> aCompiled = aLoader.loadClass ("com.example.typed.Generated");
 
@@ -259,6 +287,9 @@ public final class TypedExpressionGenerationTest
     final Method aMax = aCompiled.getMethod ("max", int.class, long.class);
     assertEquals (Long.valueOf (7), aMax.invoke (null, Integer.valueOf (7), Long.valueOf (3)));
     assertEquals (Long.valueOf (9), aMax.invoke (null, Integer.valueOf (7), Long.valueOf (9)));
+    final Method aLabel = aCompiled.getMethod ("label", String.class);
+    assertEquals ("ab:4916-61", aLabel.invoke (null, "ab"));
+    assertEquals (":30", aLabel.invoke (null, ""));
     final Method aWeigh = aCompiled.getMethod ("weigh", Long.class, Short.class, Boolean.class);
     assertEquals (Long.valueOf (12), aWeigh.invoke (null, Long.valueOf (10), Short.valueOf ((short) 2), Boolean.TRUE));
     assertEquals (Long.valueOf (-40), aWeigh.invoke (null, Long.valueOf (10), Short.valueOf ((short) 2), Boolean.FALSE));

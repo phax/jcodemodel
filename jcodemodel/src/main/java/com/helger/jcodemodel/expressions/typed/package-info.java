@@ -30,6 +30,12 @@
  * <li>Variables: <code>TypedVariable&lt;M, P&gt;</code> reads as the mirror <code>M</code> and
  * only accepts the parameter mirror <code>P</code> on assignment. <code>TypedType</code> describes
  * a type as such a pair, and arrays are built on top of it.</li>
+ * <li>Compound assignments (<code>+=</code> etc.) contain an implicit cast to the variable type.
+ * Each mirror declares the operands its variables accept via
+ * <code>ICompoundArithmeticTarget</code>, <code>ICompoundBitwiseTarget</code> and
+ * <code>ICompoundShiftTarget</code>: any numeric operand for a primitive variable, but only
+ * operands up to <code>int</code> for an <code>Integer</code> variable, and none for
+ * <code>Short</code>, <code>Byte</code> and <code>Character</code> variables.</li>
  * <li>Lambdas: <code>PredicateExpression</code>, <code>FunctionExpression</code>,
  * <code>SupplierExpression</code> and <code>ConsumerExpression</code> create lambdas from typed
  * bodies. Lambda parameters must have reference mirrors, as type arguments are always reference
