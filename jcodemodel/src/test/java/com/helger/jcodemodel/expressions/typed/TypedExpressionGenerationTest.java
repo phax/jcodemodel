@@ -52,7 +52,6 @@ import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JForLoop;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
-import com.helger.jcodemodel.JVar;
 import com.helger.jcodemodel.compile.DynamicClassLoader;
 import com.helger.jcodemodel.compile.MemoryCodeWriter;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
@@ -113,17 +112,31 @@ public final class TypedExpressionGenerationTest
     // static int totalLength (String [] a)
     {
       final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.INT, "totalLength");
-      final ArrayExpression <String [], StringExpression> aArray = ArrayExpression.param (aMethod,
-                                                                                          ArrayType.of (String.class,
-                                                                                                        StringExpression::of),
-                                                                                          "a");
-      final IntExpression aSum = IntExpression.of (aMethod.body ().decl (cm.INT, "sum", IntExpression.lit (0).raw ()));
+      final var aArray = ArrayExpression.param (aMethod, ArrayType.of (String.class, StringExpression::of), "a");
+      final var aSum = TypedVariable.decl (cm, aMethod.body (), TypedType.INT, "sum", IntExpression.lit (0));
       final JForLoop aLoop = aMethod.body ()._for ();
-      final IntExpression aIdx = IntExpression.of (aLoop.init (cm.INT, "i", IntExpression.lit (0).raw ()));
-      aLoop.test (aIdx.lt (aArray.length ()).raw ());
-      aLoop.update (aIdx.raw ().incr ());
-      aLoop.body ().assignPlus ((JVar) aSum.raw (), aArray.component (aIdx).length ().raw ());
-      aMethod.body ()._return (aSum.raw ());
+      final var aIdx = TypedVariable.of (TypedType.INT, aLoop.init (cm.INT, "i", IntExpression.lit (0).raw ()));
+      aLoop.test (aIdx.get ().lt (aArray.length ()).raw ());
+      aLoop.update (TypedVariable.postincr (aIdx).raw ());
+      aSum.assign (aLoop.body (), aSum.get ().plus (aArray.component (aIdx.get ()).length ()));
+      aMethod.body ()._return (aSum.get ().raw ());
+    }
+
+    // static int [] squares (int n): stores into array components
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.INT.array (), "squares");
+      final IntExpression aN = IntExpression.param (aMethod, "n");
+      final var aResult = TypedVariable.decl (cm,
+                                              aMethod.body (),
+                                              ArrayType.INT.asType (),
+                                              "ret",
+                                              ArrayExpression.newArray (cm, ArrayType.INT, aN));
+      final JForLoop aLoop = aMethod.body ()._for ();
+      final var aIdx = TypedVariable.of (TypedType.INT, aLoop.init (cm.INT, "i", IntExpression.lit (0).raw ()));
+      aLoop.test (aIdx.get ().lt (aN).raw ());
+      aLoop.update (TypedVariable.preincr (aIdx).raw ());
+      aResult.get ().componentVar (aIdx.get ()).assign (aLoop.body (), aIdx.get ().mul (aIdx.get ()));
+      aMethod.body ()._return (aResult.get ().raw ());
     }
 
     // static int [] [] grid (): a two-dimensional array literal
@@ -149,6 +162,8 @@ public final class TypedExpressionGenerationTest
     assertEquals (Integer.valueOf (6),
                   aCompiled.getMethod ("totalLength", String [].class)
                            .invoke (null, (Object) new String [] { "a", "bc", "def" }));
+    assertArrayEquals (new int [] { 0, 1, 4, 9 },
+                       (int []) aCompiled.getMethod ("squares", int.class).invoke (null, Integer.valueOf (4)));
     assertArrayEquals (new int [] [] { { 1, 2 }, { 3 } }, (int [] []) aCompiled.getMethod ("grid").invoke (null));
   }
 }

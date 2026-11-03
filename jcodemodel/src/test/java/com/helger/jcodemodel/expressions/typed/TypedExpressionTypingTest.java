@@ -91,12 +91,12 @@ public final class TypedExpressionTypingTest
   private static final String REJECTED = "<rejected>";
 
   /** Java array type and its typed mirror */
-  private static final String [] [] ARRAYS = { { "int []", "ArrayExpression <int [], IntExpression>" },
+  private static final String [] [] ARRAYS = { { "int []", "ArrayExpression <int [], IntExpression, IIntConvertible <?>>" },
                                               { "int [] []",
-                                                "ArrayExpression <int [] [], ArrayExpression <int [], IntExpression>>" },
-                                              { "String []", "ArrayExpression <String [], StringExpression>" },
-                                              { "Integer []", "ArrayExpression <Integer [], IntegerExpression>" },
-                                              { "Object []", "ArrayExpression <Object [], ObjectExpression <Object>>" } };
+                                                "ArrayExpression <int [] [], ArrayExpression <int [], IntExpression, IIntConvertible <?>>, ITypedExpression <? extends int []>>" },
+                                              { "String []", "ArrayExpression <String [], StringExpression, ITypedExpression <? extends String>>" },
+                                              { "Integer []", "ArrayExpression <Integer [], IntegerExpression, ITypedExpression <? extends Integer>>" },
+                                              { "Object []", "ArrayExpression <Object [], ObjectExpression <Object>, ITypedExpression <? extends Object>>" } };
 
   /** Java value type and its typed mirror */
   private static final String [] [] VALUES = _concat (new String [] [] { { "byte", "ByteExpression" },
@@ -140,6 +140,36 @@ public final class TypedExpressionTypingTest
                                               { "Number []", "ITypedExpression <? extends Number []>" },
                                               { "CharSequence []", "ITypedExpression <? extends CharSequence []>" } };
 
+  /** Java variable type and its typed variable */
+  private static final String [] [] VARIABLES = { { "byte", "TypedVariable <ByteExpression, IByteConvertible <?>>" },
+                                                 { "short", "TypedVariable <ShortExpression, IShortConvertible <?>>" },
+                                                 { "char", "TypedVariable <CharExpression, ICharConvertible <?>>" },
+                                                 { "int", "TypedVariable <IntExpression, IIntConvertible <?>>" },
+                                                 { "long", "TypedVariable <LongExpression, ILongConvertible <?>>" },
+                                                 { "float", "TypedVariable <FloatExpression, IFloatConvertible <?>>" },
+                                                 { "double", "TypedVariable <DoubleExpression, IDoubleConvertible <?>>" },
+                                                 { "boolean", "TypedVariable <BooleanExpression, IBooleanConvertible <?>>" },
+                                                 { "Integer",
+                                                   "TypedVariable <IntegerExpression, ITypedExpression <? extends Integer>>" },
+                                                 { "Character",
+                                                   "TypedVariable <CharacterExpression, ITypedExpression <? extends Character>>" },
+                                                 { "String",
+                                                   "TypedVariable <StringExpression, ITypedExpression <? extends String>>" },
+                                                 { "Object",
+                                                   "TypedVariable <ObjectExpression <Object>, ITypedExpression <? extends Object>>" },
+                                                 { "int []",
+                                                   "TypedVariable <ArrayExpression <int [], IntExpression, IIntConvertible <?>>, ITypedExpression <? extends int []>>" },
+                                                 { "String []",
+                                                   "TypedVariable <ArrayExpression <String [], StringExpression, ITypedExpression <? extends String>>, ITypedExpression <? extends String []>>" },
+                                                 { "Object []",
+                                                   "TypedVariable <ArrayExpression <Object [], ObjectExpression <Object>, ITypedExpression <? extends Object>>, ITypedExpression <? extends Object []>>" } };
+
+  /** Java increment/decrement operator, whether it is a prefix, and the typed method name */
+  private static final String [] [] INC_DEC_OPS = { { "++", "false", "postincr" },
+                                                   { "++", "true", "preincr" },
+                                                   { "--", "false", "postdecr" },
+                                                   { "--", "true", "predecr" } };
+
   /** Java binary operator and the typed method names that may implement it */
   private static final String [] [] BINARY_OPS = { { "+", "plus" },
                                                   { "-", "minus" },
@@ -180,8 +210,12 @@ public final class TypedExpressionTypingTest
                                                                                         "StringExpression"),
                                                                              Map.entry ("java.lang.Object",
                                                                                         "ObjectExpression<java.lang.Object>"),
+                                                                             Map.entry ("java.lang.String[]",
+                                                                                        "ArrayExpression<java.lang.String[],StringExpression,ITypedExpression<?extendsjava.lang.String>>"),
+                                                                             Map.entry ("java.lang.Object[]",
+                                                                                        "ArrayExpression<java.lang.Object[],ObjectExpression<java.lang.Object>,ITypedExpression<?extendsjava.lang.Object>>"),
                                                                              Map.entry ("int[]",
-                                                                                        "ArrayExpression<int[],IntExpression>"));
+                                                                                        "ArrayExpression<int[],IntExpression,IIntConvertible<?>>"));
 
   private static final class StringSource extends SimpleJavaFileObject
   {
@@ -361,6 +395,65 @@ public final class TypedExpressionTypingTest
     assertEquals ("Argument conversions differing from javac: " + aMismatches, 0, aMismatches.size ());
   }
 
+  private static List <String> _exactMismatches (@NonNull final List <Case> aCases,
+                                                 @NonNull final Map <String, String> aResults)
+  {
+    final List <String> ret = new ArrayList <> ();
+    int nAccepted = 0;
+    for (final Case aCase : aCases)
+    {
+      final String sJava = _javaOutcome (aCase, aResults);
+      if (!REJECTED.equals (sJava))
+        nAccepted++;
+      final String sTyped = _typedOutcome (aCase, aResults);
+      if (!sJava.equals (sTyped))
+        ret.add (aCase.sDescription () + ": javac " + sJava + ", typed " + sTyped);
+    }
+    LOGGER.info (nAccepted + " of " + aCases.size () + " cases are valid Java");
+    return ret;
+  }
+
+  @Test
+  public void testVariablesMatchJavac ()
+  {
+    final Map <String, String> aSources = new LinkedHashMap <> ();
+    final List <Case> aCases = new ArrayList <> ();
+    for (final String [] aVar : VARIABLES)
+    {
+      for (final String [] aValue : VALUES)
+      {
+        final int nIndex = aCases.size ();
+        aSources.put ("J" + nIndex,
+                      _source ("J" + nIndex,
+                               "static void t (" + aVar[0] + " a, " + aValue[0] + " v) { var r = (a = v); }"));
+        aSources.put ("T" + nIndex,
+                      _source ("T" + nIndex,
+                               "static void t (" + aVar[1] + " a, " + aValue[1] + " v) { var r = a.assignExpr (v); }"));
+        aCases.add (new Case (aVar[0] + " = " + aValue[0], "J" + nIndex, List.of ("T" + nIndex)));
+      }
+      for (final String [] aOp : INC_DEC_OPS)
+      {
+        final int nIndex = aCases.size ();
+        final boolean bPrefix = Boolean.parseBoolean (aOp[1]);
+        aSources.put ("J" + nIndex,
+                      _source ("J" + nIndex,
+                               "static void t (" +
+                                              aVar[0] +
+                                              " a) { var r = " +
+                                              (bPrefix ? aOp[0] + "a" : "a" + aOp[0]) +
+                                              "; }"));
+        aSources.put ("T" + nIndex,
+                      _source ("T" + nIndex,
+                               "static void t (" + aVar[1] + " a) { var r = TypedVariable." + aOp[2] + " (a); }"));
+        aCases.add (new Case (bPrefix ? aOp[0] + aVar[0] : aVar[0] + aOp[0], "J" + nIndex, List.of ("T" + nIndex)));
+      }
+    }
+
+    final List <String> aMismatches = _exactMismatches (aCases, _compile (aSources));
+    LOGGER.info ("Checked " + aCases.size () + " variable assignments and increments against javac");
+    assertEquals ("Variable operations differing from javac: " + aMismatches, 0, aMismatches.size ());
+  }
+
   @Test
   public void testArrayAccessMatchesJavac ()
   {
@@ -391,15 +484,7 @@ public final class TypedExpressionTypingTest
       }
     }
 
-    final Map <String, String> aResults = _compile (aSources);
-    final List <String> aMismatches = new ArrayList <> ();
-    for (final Case aCase : aCases)
-    {
-      final String sJava = _javaOutcome (aCase, aResults);
-      final String sTyped = _typedOutcome (aCase, aResults);
-      if (!sJava.equals (sTyped))
-        aMismatches.add (aCase.sDescription () + ": javac " + sJava + ", typed " + sTyped);
-    }
+    final List <String> aMismatches = _exactMismatches (aCases, _compile (aSources));
     LOGGER.info ("Checked " + aCases.size () + " array accesses against javac");
     assertEquals ("Array accesses differing from javac: " + aMismatches, 0, aMismatches.size ());
   }

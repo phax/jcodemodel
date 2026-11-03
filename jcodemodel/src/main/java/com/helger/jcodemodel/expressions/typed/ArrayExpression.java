@@ -62,13 +62,15 @@ import com.helger.jcodemodel.JMethod;
  *        The Java array type, e.g. <code>int []</code> or <code>String []</code>.
  * @param <M>
  *        The typed mirror of a component.
+ * @param <P>
+ *        The parameter mirror of a component, i.e. what can be stored as an element.
  */
-public class ArrayExpression <A, M extends ITypedExpression <?>> extends AbstractTypedExpression <A> implements
+public class ArrayExpression <A, M extends ITypedExpression <?>, P extends ITypedExpression <?>> extends AbstractTypedExpression <A> implements
                              IReferenceExpression <A>
 {
-  private final ArrayType <A, M, ?> m_aType;
+  private final ArrayType <A, M, P> m_aType;
 
-  protected ArrayExpression (@NonNull final ArrayType <A, M, ?> aType, @NonNull final IJExpression aRaw)
+  protected ArrayExpression (@NonNull final ArrayType <A, M, P> aType, @NonNull final IJExpression aRaw)
   {
     super (aRaw);
     ValueEnforcer.notNull (aType, "Type");
@@ -76,7 +78,7 @@ public class ArrayExpression <A, M extends ITypedExpression <?>> extends Abstrac
   }
 
   @NonNull
-  public static <A, M extends ITypedExpression <?>> ArrayExpression <A, M> of (@NonNull final ArrayType <A, M, ?> aType,
+  public static <A, M extends ITypedExpression <?>, P extends ITypedExpression <?>> ArrayExpression <A, M, P> of (@NonNull final ArrayType <A, M, P> aType,
                                                                               @NonNull final IJExpression aRaw)
   {
     return new ArrayExpression <> (aType, aRaw);
@@ -89,6 +91,8 @@ public class ArrayExpression <A, M extends ITypedExpression <?>> extends Abstrac
    *        The Java array type.
    * @param <M>
    *        The typed mirror of a component.
+   * @param <P>
+   *        The parameter mirror of a component.
    * @param aMethod
    *        The method to add the parameter to. May not be <code>null</code>.
    * @param aType
@@ -98,8 +102,8 @@ public class ArrayExpression <A, M extends ITypedExpression <?>> extends Abstrac
    * @return The typed parameter reference. Never <code>null</code>.
    */
   @NonNull
-  public static <A, M extends ITypedExpression <?>> ArrayExpression <A, M> param (@NonNull final JMethod aMethod,
-                                                                                 @NonNull final ArrayType <A, M, ?> aType,
+  public static <A, M extends ITypedExpression <?>, P extends ITypedExpression <?>> ArrayExpression <A, M, P> param (@NonNull final JMethod aMethod,
+                                                                                 @NonNull final ArrayType <A, M, P> aType,
                                                                                  @NonNull final String sName)
   {
     return of (aType, aMethod.param (aType.arrayType (aMethod.owner ()), sName));
@@ -110,6 +114,8 @@ public class ArrayExpression <A, M extends ITypedExpression <?>> extends Abstrac
    *        The Java array type.
    * @param <M>
    *        The typed mirror of a component.
+   * @param <P>
+   *        The parameter mirror of a component.
    * @param aCM
    *        The code model. May not be <code>null</code>.
    * @param aType
@@ -119,11 +125,11 @@ public class ArrayExpression <A, M extends ITypedExpression <?>> extends Abstrac
    * @return <code>new T [size]</code>
    */
   @NonNull
-  public static <A, M extends ITypedExpression <?>> ArrayExpression <A, M> newArray (@NonNull final JCodeModel aCM,
-                                                                                    @NonNull final ArrayType <A, M, ?> aType,
+  public static <A, M extends ITypedExpression <?>, P extends ITypedExpression <?>> ArrayExpression <A, M, P> newArray (@NonNull final JCodeModel aCM,
+                                                                                    @NonNull final ArrayType <A, M, P> aType,
                                                                                     @NonNull final IIntConvertible <?> aSize)
   {
-    return of (aType, JExpr.newArray (aType.componentType (aCM), aSize.raw ()));
+    return of (aType, JExpr.newArray (aType.componentType ().type (aCM), aSize.raw ()));
   }
 
   /**
@@ -143,12 +149,12 @@ public class ArrayExpression <A, M extends ITypedExpression <?>> extends Abstrac
    */
   @NonNull
   @SafeVarargs
-  public static <A, M extends ITypedExpression <?>, P extends ITypedExpression <?>> ArrayExpression <A, M> newArrayOf (@NonNull final JCodeModel aCM,
+  public static <A, M extends ITypedExpression <?>, P extends ITypedExpression <?>> ArrayExpression <A, M, P> newArrayOf (@NonNull final JCodeModel aCM,
                                                                                                                       @NonNull final ArrayType <A, M, P> aType,
                                                                                                                       @NonNull final P... aValues)
   {
     ValueEnforcer.notNull (aValues, "Values");
-    final JArray aArray = JExpr.newArray (aType.componentType (aCM));
+    final JArray aArray = JExpr.newArray (aType.componentType ().type (aCM));
     for (final P aValue : aValues)
       aArray.add (aValue.raw ());
     return of (aType, aArray);
@@ -162,7 +168,7 @@ public class ArrayExpression <A, M extends ITypedExpression <?>> extends Abstrac
   @NonNull
   public M component (@NonNull final IIntConvertible <?> aIndex)
   {
-    return m_aType.wrapComponent (raw ().component (aIndex.raw ()));
+    return m_aType.componentType ().wrap (raw ().component (aIndex.raw ()));
   }
 
   /**
@@ -173,7 +179,19 @@ public class ArrayExpression <A, M extends ITypedExpression <?>> extends Abstrac
   @NonNull
   public M component (final int nIndex)
   {
-    return m_aType.wrapComponent (raw ().component (nIndex));
+    return m_aType.componentType ().wrap (raw ().component (nIndex));
+  }
+
+  /**
+   * @param aIndex
+   *        The index. May not be <code>null</code>.
+   * @return <code>this[index]</code> as assignment target. Storing into a covariant array can
+   *         still throw an {@link ArrayStoreException} at runtime, exactly like in Java.
+   */
+  @NonNull
+  public TypedVariable <M, P> componentVar (@NonNull final IIntConvertible <?> aIndex)
+  {
+    return TypedVariable.of (m_aType.componentType (), raw ().component (aIndex.raw ()));
   }
 
   /**

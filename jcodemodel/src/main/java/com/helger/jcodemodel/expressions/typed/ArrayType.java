@@ -44,7 +44,6 @@ import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 
-import com.helger.base.enforce.ValueEnforcer;
 import com.helger.jcodemodel.AbstractJType;
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JCodeModel;
@@ -64,48 +63,43 @@ import com.helger.jcodemodel.JCodeModel;
 public final class ArrayType <A, M extends ITypedExpression <?>, P extends ITypedExpression <?>>
 {
   /** <code>boolean []</code> */
-  public static final ArrayType <boolean [], BooleanExpression, IBooleanConvertible <?>> BOOLEAN = new ArrayType <> (aCM -> aCM.BOOLEAN, BooleanExpression::of);
+  public static final ArrayType <boolean [], BooleanExpression, IBooleanConvertible <?>> BOOLEAN = new ArrayType <> (TypedType.BOOLEAN);
 
   /** <code>byte []</code> */
-  public static final ArrayType <byte [], ByteExpression, IByteConvertible <?>> BYTE = new ArrayType <> (aCM -> aCM.BYTE, ByteExpression::of);
+  public static final ArrayType <byte [], ByteExpression, IByteConvertible <?>> BYTE = new ArrayType <> (TypedType.BYTE);
 
   /** <code>short []</code> */
-  public static final ArrayType <short [], ShortExpression, IShortConvertible <?>> SHORT = new ArrayType <> (aCM -> aCM.SHORT, ShortExpression::of);
+  public static final ArrayType <short [], ShortExpression, IShortConvertible <?>> SHORT = new ArrayType <> (TypedType.SHORT);
 
   /** <code>char []</code> */
-  public static final ArrayType <char [], CharExpression, ICharConvertible <?>> CHAR = new ArrayType <> (aCM -> aCM.CHAR, CharExpression::of);
+  public static final ArrayType <char [], CharExpression, ICharConvertible <?>> CHAR = new ArrayType <> (TypedType.CHAR);
 
   /** <code>int []</code> */
-  public static final ArrayType <int [], IntExpression, IIntConvertible <?>> INT = new ArrayType <> (aCM -> aCM.INT, IntExpression::of);
+  public static final ArrayType <int [], IntExpression, IIntConvertible <?>> INT = new ArrayType <> (TypedType.INT);
 
   /** <code>long []</code> */
-  public static final ArrayType <long [], LongExpression, ILongConvertible <?>> LONG = new ArrayType <> (aCM -> aCM.LONG, LongExpression::of);
+  public static final ArrayType <long [], LongExpression, ILongConvertible <?>> LONG = new ArrayType <> (TypedType.LONG);
 
   /** <code>float []</code> */
-  public static final ArrayType <float [], FloatExpression, IFloatConvertible <?>> FLOAT = new ArrayType <> (aCM -> aCM.FLOAT, FloatExpression::of);
+  public static final ArrayType <float [], FloatExpression, IFloatConvertible <?>> FLOAT = new ArrayType <> (TypedType.FLOAT);
 
   /** <code>double []</code> */
-  public static final ArrayType <double [], DoubleExpression, IDoubleConvertible <?>> DOUBLE = new ArrayType <> (aCM -> aCM.DOUBLE, DoubleExpression::of);
+  public static final ArrayType <double [], DoubleExpression, IDoubleConvertible <?>> DOUBLE = new ArrayType <> (TypedType.DOUBLE);
 
-  private final Function <JCodeModel, AbstractJType> m_aComponentTypeFct;
-  private final Function <IJExpression, M> m_aComponentFactory;
+  private final TypedType <M, P> m_aComponentType;
 
-  private ArrayType (@NonNull final Function <JCodeModel, AbstractJType> aComponentTypeFct,
-                     @NonNull final Function <IJExpression, M> aComponentFactory)
+  private ArrayType (@NonNull final TypedType <M, P> aComponentType)
   {
-    m_aComponentTypeFct = aComponentTypeFct;
-    m_aComponentFactory = aComponentFactory;
+    m_aComponentType = aComponentType;
   }
 
   /**
-   * @param aCM
-   *        The code model to resolve the type in. May not be <code>null</code>.
    * @return The component type. Never <code>null</code>.
    */
   @NonNull
-  public AbstractJType componentType (@NonNull final JCodeModel aCM)
+  public TypedType <M, P> componentType ()
   {
-    return m_aComponentTypeFct.apply (aCM);
+    return m_aComponentType;
   }
 
   /**
@@ -116,18 +110,17 @@ public final class ArrayType <A, M extends ITypedExpression <?>, P extends IType
   @NonNull
   public AbstractJType arrayType (@NonNull final JCodeModel aCM)
   {
-    return componentType (aCM).array ();
+    return m_aComponentType.type (aCM).array ();
   }
 
   /**
-   * @param aRaw
-   *        An untyped expression of the component type. May not be <code>null</code>.
-   * @return The typed component. Never <code>null</code>.
+   * @return This array type as {@link TypedType}, e.g. to declare a variable of it. Never
+   *         <code>null</code>.
    */
   @NonNull
-  public M wrapComponent (@NonNull final IJExpression aRaw)
+  public TypedType <ArrayExpression <A, M, P>, ITypedExpression <? extends A>> asType ()
   {
-    return m_aComponentFactory.apply (aRaw);
+    return new TypedType <> (this::arrayType, aRaw -> ArrayExpression.of (this, aRaw));
   }
 
   /**
@@ -135,9 +128,9 @@ public final class ArrayType <A, M extends ITypedExpression <?>, P extends IType
    *         <code>int []</code>. Never <code>null</code>.
    */
   @NonNull
-  public ArrayType <A [], ArrayExpression <A, M>, ITypedExpression <? extends A>> array ()
+  public ArrayType <A [], ArrayExpression <A, M, P>, ITypedExpression <? extends A>> array ()
   {
-    return new ArrayType <> (this::arrayType, aRaw -> ArrayExpression.of (this, aRaw));
+    return new ArrayType <> (asType ());
   }
 
   /**
@@ -158,8 +151,6 @@ public final class ArrayType <A, M extends ITypedExpression <?>, P extends IType
   public static <E, M extends ITypedExpression <E>> ArrayType <E [], M, ITypedExpression <? extends E>> of (@NonNull final Class <E> aClass,
                                                                                                          @NonNull final Function <IJExpression, M> aComponentFactory)
   {
-    ValueEnforcer.notNull (aClass, "Class");
-    ValueEnforcer.notNull (aComponentFactory, "ComponentFactory");
-    return new ArrayType <> (aCM -> aCM.ref (aClass), aComponentFactory);
+    return new ArrayType <> (TypedType.of (aClass, aComponentFactory));
   }
 }

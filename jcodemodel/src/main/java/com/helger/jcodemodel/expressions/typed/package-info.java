@@ -22,10 +22,13 @@
  * operators returning its own type, and javac picks the most specific applicable one.</li>
  * <li>Operators whose result type depends on the left operand only (unary minus, complement,
  * shifts) are declared on the concrete types or on <code>IIntPromotedOperators</code>.</li>
- * <li>Arrays: <code>ArrayExpression&lt;A, M&gt;</code> carries the array type <code>A</code> as runtime
+ * <li>Arrays: <code>ArrayExpression&lt;A, M, P&gt;</code> carries the array type <code>A</code> as runtime
  * type, so reference array covariance and the invariance of primitive arrays follow from the
  * generics. <code>ArrayType</code> keeps <code>A</code> and the component mirror <code>M</code>
  * consistent.</li>
+ * <li>Variables: <code>TypedVariable&lt;M, P&gt;</code> reads as the mirror <code>M</code> and
+ * only accepts the parameter mirror <code>P</code> on assignment. <code>TypedType</code> describes
+ * a type as such a pair, and arrays are built on top of it.</li>
  * </ul>
  * Nothing in the core API depends on this package. Pass {@link ITypedExpression#raw()} wherever
  * an {@link com.helger.jcodemodel.IJExpression} is needed.
