@@ -214,6 +214,10 @@ public final class TypedExpressionTypingTest
                                                                                         "ArrayExpression<java.lang.String[],StringExpression,ITypedExpression<?extendsjava.lang.String>>"),
                                                                              Map.entry ("java.lang.Object[]",
                                                                                         "ArrayExpression<java.lang.Object[],ObjectExpression<java.lang.Object>,ITypedExpression<?extendsjava.lang.Object>>"),
+                                                                             Map.entry ("java.lang.Integer[]",
+                                                                                        "ArrayExpression<java.lang.Integer[],IntegerExpression,ITypedExpression<?extendsjava.lang.Integer>>"),
+                                                                             Map.entry ("int[][]",
+                                                                                        "ArrayExpression<int[][],ArrayExpression<int[],IntExpression,IIntConvertible<?>>,ITypedExpression<?extendsint[]>>"),
                                                                              Map.entry ("int[]",
                                                                                         "ArrayExpression<int[],IntExpression,IIntConvertible<?>>"));
 
@@ -347,8 +351,8 @@ public final class TypedExpressionTypingTest
     if (REJECTED.equals (sType) || sType.isEmpty ())
       return sType;
     final String sMirror = RESULT_MIRRORS.get (sType);
-    assertNotNull ("No mirror for result type " + sType, sMirror);
-    return sMirror;
+    // A Java type without mirror, e.g. an intersection type, never equals a typed outcome
+    return sMirror != null ? sMirror : "<unmapped " + sType + ">";
   }
 
   private static String _source (@NonNull final String sClassName, @NonNull final String sBody)
@@ -618,6 +622,68 @@ public final class TypedExpressionTypingTest
       });
     }
     assertEquals ("instanceof cases accepted by the typed API but rejected by javac: " + aUnsound,
+                  0,
+                  aUnsound.size ());
+  }
+
+  @Test
+  public void testConditionalIsSound ()
+  {
+    final Map <String, String> aSources = new LinkedHashMap <> ();
+    final List <Case> aCases = new ArrayList <> ();
+    for (final String [] aThen : VALUES)
+      for (final String [] aElse : VALUES)
+      {
+        final int nIndex = aCases.size ();
+        aSources.put ("J" + nIndex,
+                      _source ("J" + nIndex,
+                               "static void t (boolean c, " +
+                                              aThen[0] +
+                                              " a, " +
+                                              aElse[0] +
+                                              " b) { var r = c ? a : b; }"));
+        aSources.put ("T" + nIndex + "_1",
+                      _source ("T" + nIndex + "_1",
+                               "static void t (BooleanExpression c, " +
+                                                    aThen[1] +
+                                                    " a, " +
+                                                    aElse[1] +
+                                                    " b) { var r = c.cond (a, b); }"));
+        aSources.put ("T" + nIndex + "_2",
+                      _source ("T" + nIndex + "_2",
+                               "static void t (BooleanExpression c, " +
+                                                    aThen[1] +
+                                                    " a, " +
+                                                    aElse[1] +
+                                                    " b) { var r = c.cond (TypedType.object (Object.class), a, b); }"));
+        aCases.add (new Case (aThen[0] + " : " + aElse[0], "J" + nIndex, List.of ("T" + nIndex + "_1", "T" + nIndex + "_2")));
+      }
+
+    final Map <String, String> aResults = _compile (aSources);
+    final List <String> aUnsound = new ArrayList <> ();
+    final List <String> aGaps = new ArrayList <> ();
+    int nAccepted = 0;
+    for (final Case aCase : aCases)
+    {
+      final String sJava = _javaOutcome (aCase, aResults);
+      final String sTyped = _typedOutcome (aCase, aResults);
+      if (!REJECTED.equals (sJava))
+        nAccepted++;
+      if (!sJava.equals (sTyped))
+        if (REJECTED.equals (sTyped))
+          aGaps.add (aCase.sDescription () + " (" + sJava + ")");
+        else
+          aUnsound.add (aCase.sDescription () + ": javac " + sJava + ", typed " + sTyped);
+    }
+    LOGGER.info ("Checked " +
+                 aCases.size () +
+                 " conditionals against javac, " +
+                 nAccepted +
+                 " are valid Java, " +
+                 aGaps.size () +
+                 " are not offered: " +
+                 aGaps);
+    assertEquals ("Conditionals accepted by the typed API with a different result than javac: " + aUnsound,
                   0,
                   aUnsound.size ());
   }

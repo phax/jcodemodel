@@ -208,6 +208,15 @@ public final class TypedExpressionGenerationTest
       aMethod.body ()._return (IntExpression.lit (0).raw ());
     }
 
+    // static long max (int a, long b): the conditional promotes to long
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.LONG, "max");
+      final IntExpression aA = IntExpression.param (aMethod, "a");
+      final LongExpression aB = LongExpression.param (aMethod, "b");
+      final LongExpression aMax = aA.gt (aB).cond (aA, aB);
+      aMethod.body ()._return (aMax.raw ());
+    }
+
     final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
     final Class <?> aCompiled = aLoader.loadClass ("com.example.typed.Generated");
 
@@ -237,6 +246,9 @@ public final class TypedExpressionGenerationTest
     assertEquals (Integer.valueOf (3), aLengthOrZero.invoke (null, "abc"));
     assertEquals (Integer.valueOf (0), aLengthOrZero.invoke (null, ""));
     assertEquals (Integer.valueOf (0), aLengthOrZero.invoke (null, Integer.valueOf (5)));
+    final Method aMax = aCompiled.getMethod ("max", int.class, long.class);
+    assertEquals (Long.valueOf (7), aMax.invoke (null, Integer.valueOf (7), Long.valueOf (3)));
+    assertEquals (Long.valueOf (9), aMax.invoke (null, Integer.valueOf (7), Long.valueOf (9)));
     assertArrayEquals (new int [] { 0, 1, 4, 9 },
                        (int []) aCompiled.getMethod ("squares", int.class).invoke (null, Integer.valueOf (4)));
     assertArrayEquals (new int [] [] { { 1, 2 }, { 3 } }, (int [] []) aCompiled.getMethod ("grid").invoke (null));

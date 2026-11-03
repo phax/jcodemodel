@@ -37,6 +37,9 @@
  * <li><code>instanceof</code>: the target is a {@link java.lang.Class} (always reifiable) that must
  * be a sub type of the expression type (always castable). The pattern form types its binding
  * variable via a factory such as <code>StringExpression::of</code>.</li>
+ * <li>Conditional operator: <code>cond</code> on {@link IBooleanConvertible} follows JLS 15.25 for
+ * boolean and numeric operands via overload resolution. Reference operands must have the same
+ * mirror type.</li>
  * </ul>
  * Nothing in the core API depends on this package. Pass {@link ITypedExpression#raw()} wherever
  * an {@link com.helger.jcodemodel.IJExpression} is needed.
