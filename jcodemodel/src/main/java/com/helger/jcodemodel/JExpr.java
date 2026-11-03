@@ -112,6 +112,20 @@ public final class JExpr
     return new JAssignment (aLhs, aRhs, "/");
   }
 
+  /**
+   * @param aLhs
+   *        The left hand side. May not be <code>null</code>.
+   * @param aRhs
+   *        The right hand side. May not be <code>null</code>.
+   * @return <code>lhs %= rhs</code>
+   * @since 4.5.0
+   */
+  @NonNull
+  public static JAssignment assignMod (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
+  {
+    return new JAssignment (aLhs, aRhs, "%");
+  }
+
   @NonNull
   public static JAssignment assignShl (@NonNull final IJAssignmentTarget aLhs, @NonNull final IJExpression aRhs)
   {

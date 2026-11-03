@@ -81,4 +81,10 @@ public final class JExprTest
     assertEquals ("5L", CodeModelTestsHelper.toString (JExpr.lit (5l)));
     assertEquals ("5L", CodeModelTestsHelper.toString (JExpr.lit ((long) 5)));
   }
+
+  @Test
+  public void testAssignMod ()
+  {
+    assertEquals ("a%= 2", CodeModelTestsHelper.toString ((IJExpression) JExpr.assignMod (JExpr.ref ("a"), JExpr.lit (2))));
+  }
 }

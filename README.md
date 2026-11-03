@@ -43,6 +43,7 @@ v4.5.0 - work in progress
 * Added `IJFormatter.printSingleLine (EWordWrapStrategy, Runnable)`
 * Added the experimental package `com.helger.jcodemodel.expressions.typed` with compile-time typed expression wrappers for primitives, all primitive wrapper classes, `String`, `Object`, arrays, typed variables, `void`, lambdas and method references of the core functional interfaces, `instanceof` patterns and the conditional operator, with boxing, unboxing and numeric promotion modelled by the type system
 * Added `JInvocation.object ()`, `JInvocation.methodName ()` and `JInvocation.constructorType ()`
+* Added `JExpr.assignMod` for the compound assignment `%=`
 * `JLambdaMethodRef` now puts parentheses around a receiver expression that binds less tightly than `::`, e.g. `(a + b)::length`
 * The code layout of `JSwitchExpression` and `JCaseArrow` / `JCaseStatic` changed (indentation, line breaks, no trailing semicolon after a switch statement, `case null, default`).
   Generated code may differ from previous versions
