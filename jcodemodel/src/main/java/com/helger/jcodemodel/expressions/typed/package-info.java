@@ -14,7 +14,8 @@
  * <code>ILongConvertible</code> &larr; <code>IIntConvertible</code> &larr;
  * <code>IShortConvertible</code> &larr; <code>IByteConvertible</code>, plus
  * <code>ICharConvertible</code> &rarr; <code>IIntConvertible</code>). Primitive mirrors and
- * boxed mirrors (<code>IntegerExpression</code>, <code>CharacterExpression</code>) both implement
+ * boxed mirrors (<code>IntegerExpression</code>, <code>CharacterExpression</code> and
+ * <code>LongObjExpression</code> etc. for the wrappers whose name equals a primitive mirror) implement
  * it, so unboxing followed by widening needs no explicit call. Since the convertibility
  * interfaces and <code>T</code> are independent, <code>Character</code> is still not accepted
  * where <code>Integer</code> is expected.</li>

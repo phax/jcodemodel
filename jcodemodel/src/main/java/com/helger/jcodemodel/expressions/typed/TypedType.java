@@ -93,6 +93,24 @@ public final class TypedType <M extends ITypedExpression <?>, P extends ITypedEx
   public static final TypedType <CharacterExpression, ITypedExpression <? extends Character>> CHARACTER = of (Character.class,
                                                                                                           CharacterExpression::of);
 
+  /** {@link Boolean} */
+  public static final TypedType <BooleanObjExpression, ITypedExpression <? extends Boolean>> BOOLEAN_OBJ = of (Boolean.class, BooleanObjExpression::of);
+
+  /** {@link Byte} */
+  public static final TypedType <ByteObjExpression, ITypedExpression <? extends Byte>> BYTE_OBJ = of (Byte.class, ByteObjExpression::of);
+
+  /** {@link Short} */
+  public static final TypedType <ShortObjExpression, ITypedExpression <? extends Short>> SHORT_OBJ = of (Short.class, ShortObjExpression::of);
+
+  /** {@link Long} */
+  public static final TypedType <LongObjExpression, ITypedExpression <? extends Long>> LONG_OBJ = of (Long.class, LongObjExpression::of);
+
+  /** {@link Float} */
+  public static final TypedType <FloatObjExpression, ITypedExpression <? extends Float>> FLOAT_OBJ = of (Float.class, FloatObjExpression::of);
+
+  /** {@link Double} */
+  public static final TypedType <DoubleObjExpression, ITypedExpression <? extends Double>> DOUBLE_OBJ = of (Double.class, DoubleObjExpression::of);
+
   /** {@link String} */
   public static final TypedType <StringExpression, ITypedExpression <? extends String>> STRING = of (String.class,
                                                                                                  StringExpression::of);

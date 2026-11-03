@@ -50,7 +50,7 @@ import com.helger.jcodemodel.JMethod;
  * An expression of the primitive type <code>long</code>. Its runtime type parameter is
  * <code>Long</code>, which models boxing.
  */
-public class LongExpression extends AbstractTypedExpression <Long> implements ILongConvertible <Long>,
+public class LongExpression extends AbstractTypedExpression <Long> implements ILongPromotedOperators <Long>,
                                                                               IPrimitiveNumericExpression <Long>
 {
   protected LongExpression (@NonNull final IJExpression aRaw)
@@ -83,53 +83,5 @@ public class LongExpression extends AbstractTypedExpression <Long> implements IL
   public static LongExpression param (@NonNull final JMethod aMethod, @NonNull final String sName)
   {
     return of (aMethod.param (aMethod.owner ().LONG, sName));
-  }
-
-  @NonNull
-  public LongExpression minus ()
-  {
-    return of (raw ().minus ());
-  }
-
-  @NonNull
-  public LongExpression complement ()
-  {
-    return of (raw ().complement ());
-  }
-
-  @NonNull
-  public LongExpression shl (@NonNull final ILongConvertible <?> aRhs)
-  {
-    return of (raw ().shl (aRhs.raw ()));
-  }
-
-  @NonNull
-  public LongExpression shl (final int nRhs)
-  {
-    return of (raw ().shl (nRhs));
-  }
-
-  @NonNull
-  public LongExpression shr (@NonNull final ILongConvertible <?> aRhs)
-  {
-    return of (raw ().shr (aRhs.raw ()));
-  }
-
-  @NonNull
-  public LongExpression shr (final int nRhs)
-  {
-    return of (raw ().shr (nRhs));
-  }
-
-  @NonNull
-  public LongExpression shrz (@NonNull final ILongConvertible <?> aRhs)
-  {
-    return of (raw ().shrz (aRhs.raw ()));
-  }
-
-  @NonNull
-  public LongExpression shrz (final int nRhs)
-  {
-    return of (raw ().shrz (nRhs));
   }
 }

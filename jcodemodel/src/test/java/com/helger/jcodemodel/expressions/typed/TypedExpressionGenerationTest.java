@@ -217,6 +217,16 @@ public final class TypedExpressionGenerationTest
       aMethod.body ()._return (aMax.raw ());
     }
 
+    // static long weigh (Long a, Short b, Boolean c): implicit unboxing of all wrappers
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.LONG, "weigh");
+      final LongObjExpression aA = LongObjExpression.param (aMethod, "a");
+      final ShortObjExpression aB = ShortObjExpression.param (aMethod, "b");
+      final BooleanObjExpression aC = BooleanObjExpression.param (aMethod, "c");
+      final LongExpression aResult = aC.cond (aA.plus (aB), aA.minus ().shl (aB));
+      aMethod.body ()._return (aResult.raw ());
+    }
+
     final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
     final Class <?> aCompiled = aLoader.loadClass ("com.example.typed.Generated");
 
@@ -249,6 +259,9 @@ public final class TypedExpressionGenerationTest
     final Method aMax = aCompiled.getMethod ("max", int.class, long.class);
     assertEquals (Long.valueOf (7), aMax.invoke (null, Integer.valueOf (7), Long.valueOf (3)));
     assertEquals (Long.valueOf (9), aMax.invoke (null, Integer.valueOf (7), Long.valueOf (9)));
+    final Method aWeigh = aCompiled.getMethod ("weigh", Long.class, Short.class, Boolean.class);
+    assertEquals (Long.valueOf (12), aWeigh.invoke (null, Long.valueOf (10), Short.valueOf ((short) 2), Boolean.TRUE));
+    assertEquals (Long.valueOf (-40), aWeigh.invoke (null, Long.valueOf (10), Short.valueOf ((short) 2), Boolean.FALSE));
     assertArrayEquals (new int [] { 0, 1, 4, 9 },
                        (int []) aCompiled.getMethod ("squares", int.class).invoke (null, Integer.valueOf (4)));
     assertArrayEquals (new int [] [] { { 1, 2 }, { 3 } }, (int [] []) aCompiled.getMethod ("grid").invoke (null));

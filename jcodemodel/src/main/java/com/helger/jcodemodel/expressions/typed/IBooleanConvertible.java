@@ -148,6 +148,42 @@ public interface IBooleanConvertible <T> extends ITypedExpression <T>
   }
 
   @NonNull
+  default LongObjExpression cond (@NonNull final LongObjExpression aThen, @NonNull final LongObjExpression aElse)
+  {
+    return LongObjExpression.of (JExpr.cond (raw (), aThen.raw (), aElse.raw ()));
+  }
+
+  @NonNull
+  default ShortObjExpression cond (@NonNull final ShortObjExpression aThen, @NonNull final ShortObjExpression aElse)
+  {
+    return ShortObjExpression.of (JExpr.cond (raw (), aThen.raw (), aElse.raw ()));
+  }
+
+  @NonNull
+  default ByteObjExpression cond (@NonNull final ByteObjExpression aThen, @NonNull final ByteObjExpression aElse)
+  {
+    return ByteObjExpression.of (JExpr.cond (raw (), aThen.raw (), aElse.raw ()));
+  }
+
+  @NonNull
+  default FloatObjExpression cond (@NonNull final FloatObjExpression aThen, @NonNull final FloatObjExpression aElse)
+  {
+    return FloatObjExpression.of (JExpr.cond (raw (), aThen.raw (), aElse.raw ()));
+  }
+
+  @NonNull
+  default DoubleObjExpression cond (@NonNull final DoubleObjExpression aThen, @NonNull final DoubleObjExpression aElse)
+  {
+    return DoubleObjExpression.of (JExpr.cond (raw (), aThen.raw (), aElse.raw ()));
+  }
+
+  @NonNull
+  default BooleanObjExpression cond (@NonNull final BooleanObjExpression aThen, @NonNull final BooleanObjExpression aElse)
+  {
+    return BooleanObjExpression.of (JExpr.cond (raw (), aThen.raw (), aElse.raw ()));
+  }
+
+  @NonNull
   default IntegerExpression cond (@NonNull final IntegerExpression aThen, @NonNull final IntegerExpression aElse)
   {
     return IntegerExpression.of (JExpr.cond (raw (), aThen.raw (), aElse.raw ()));
