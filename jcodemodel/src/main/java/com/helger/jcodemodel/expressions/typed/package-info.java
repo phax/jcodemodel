@@ -34,6 +34,9 @@
  * bodies. Lambda parameters must have reference mirrors, as type arguments are always reference
  * types. <code>VoidExpression</code> is not an <code>ITypedExpression</code>, so a
  * <code>void</code> value can only become a statement.</li>
+ * <li><code>instanceof</code>: the target is a {@link java.lang.Class} (always reifiable) that must
+ * be a sub type of the expression type (always castable). The pattern form types its binding
+ * variable via a factory such as <code>StringExpression::of</code>.</li>
  * </ul>
  * Nothing in the core API depends on this package. Pass {@link ITypedExpression#raw()} wherever
  * an {@link com.helger.jcodemodel.IJExpression} is needed.

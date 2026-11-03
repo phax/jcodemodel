@@ -533,6 +533,95 @@ public final class TypedExpressionTypingTest
     assertEquals ("Lambda cases differing from javac: " + aMismatches, 0, aMismatches.size ());
   }
 
+  /** Target classes for instanceof */
+  private static final String [] INSTANCEOF_TARGETS = { "String",
+                                                        "Integer",
+                                                        "Number",
+                                                        "CharSequence",
+                                                        "Comparable",
+                                                        "Runnable",
+                                                        "Object",
+                                                        "int []",
+                                                        "Object []",
+                                                        "String []" };
+
+  @Test
+  public void testInstanceOfIsSound ()
+  {
+    final boolean bSameTypePatternAllowed = Runtime.version ().feature () >= 21;
+    final Map <String, String> aSources = new LinkedHashMap <> ();
+    final List <Case> aCases = new ArrayList <> ();
+    final Map <Case, Boolean> aIsPattern = new HashMap <> ();
+    for (final String sTarget : INSTANCEOF_TARGETS)
+      for (final String [] aValue : VALUES)
+        for (final boolean bPattern : new boolean [] { false, true })
+        {
+          final int nIndex = aCases.size ();
+          final String sCM = "com.helger.jcodemodel.JCodeModel cm, ";
+          aSources.put ("J" + nIndex,
+                        _source ("J" + nIndex,
+                                 "static void t (" +
+                                                aValue[0] +
+                                                " a) { var r = a instanceof " +
+                                                sTarget +
+                                                (bPattern ? " b" : "") +
+                                                "; }"));
+          aSources.put ("T" + nIndex,
+                        _source ("T" + nIndex,
+                                 "static void t (" +
+                                                sCM +
+                                                aValue[1] +
+                                                " a) { var r = a." +
+                                                (bPattern ? "instanceOfPattern (cm, " +
+                                                            sTarget +
+                                                            ".class, \"b\", ObjectExpression::of).test ()"
+                                                          : "instanceOf (cm, " + sTarget + ".class)") +
+                                                "; }"));
+          final Case aCase = new Case (aValue[0] + " instanceof " + sTarget + (bPattern ? " b" : ""),
+                                       "J" + nIndex,
+                                       List.of ("T" + nIndex));
+          aCases.add (aCase);
+          aIsPattern.put (aCase, Boolean.valueOf (bPattern));
+        }
+
+    final Map <String, String> aResults = _compile (aSources);
+    final List <String> aUnsound = new ArrayList <> ();
+    final List <String> aGaps = new ArrayList <> ();
+    int nAccepted = 0;
+    for (final Case aCase : aCases)
+    {
+      final String sJava = _javaOutcome (aCase, aResults);
+      final String sTyped = _typedOutcome (aCase, aResults);
+      if (!REJECTED.equals (sJava))
+        nAccepted++;
+      if (!sJava.equals (sTyped))
+        if (REJECTED.equals (sTyped))
+          aGaps.add (aCase.sDescription ());
+        else
+          aUnsound.add (aCase.sDescription () + ": javac " + sJava + ", typed " + sTyped);
+    }
+    LOGGER.info ("Checked " +
+                 aCases.size () +
+                 " instanceof cases against javac, " +
+                 nAccepted +
+                 " are valid Java, " +
+                 aGaps.size () +
+                 " are not offered: " +
+                 aGaps);
+    if (!bSameTypePatternAllowed)
+    {
+      // javac before 21 rejects a pattern of the static type of the expression, see instanceOfPattern
+      LOGGER.info ("Accepted by the typed API but rejected by this javac: " + aUnsound);
+      aUnsound.removeIf (x -> {
+        final String [] aParts = x.substring (0, x.indexOf (':')).split (" instanceof ");
+        return aParts[1].equals (aParts[0] + " b");
+      });
+    }
+    assertEquals ("instanceof cases accepted by the typed API but rejected by javac: " + aUnsound,
+                  0,
+                  aUnsound.size ());
+  }
+
   @Test
   public void testArrayAccessMatchesJavac ()
   {

@@ -196,6 +196,18 @@ public final class TypedExpressionGenerationTest
       aConsumer.get ().accept (aArray.component (aIdx.get ()).plus ("!")).addTo (aLoop.body ());
     }
 
+    // static int lengthOrZero (Object o): if (o instanceof String s && !s.isEmpty ()) return s.length ();
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.INT, "lengthOrZero");
+      final var aObj = TypedVariable.param (aMethod, TypedType.object (Object.class), "o").get ();
+      final var aPattern = aObj.instanceOfPattern (cm, String.class, "s", StringExpression::of);
+      aMethod.body ()
+             ._if (aPattern.test ().cand (aPattern.var ().isEmpty ().not ()).raw ())
+             ._then ()
+             ._return (aPattern.var ().length ().raw ());
+      aMethod.body ()._return (IntExpression.lit (0).raw ());
+    }
+
     final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
     final Class <?> aCompiled = aLoader.loadClass ("com.example.typed.Generated");
 
@@ -221,6 +233,10 @@ public final class TypedExpressionGenerationTest
     aCompiled.getMethod ("each", String [].class, Consumer.class)
              .invoke (null, new String [] { "x", "y" }, aCollector);
     assertEquals (List.of ("x!", "y!"), aCollected);
+    final Method aLengthOrZero = aCompiled.getMethod ("lengthOrZero", Object.class);
+    assertEquals (Integer.valueOf (3), aLengthOrZero.invoke (null, "abc"));
+    assertEquals (Integer.valueOf (0), aLengthOrZero.invoke (null, ""));
+    assertEquals (Integer.valueOf (0), aLengthOrZero.invoke (null, Integer.valueOf (5)));
     assertArrayEquals (new int [] { 0, 1, 4, 9 },
                        (int []) aCompiled.getMethod ("squares", int.class).invoke (null, Integer.valueOf (4)));
     assertArrayEquals (new int [] [] { { 1, 2 }, { 3 } }, (int [] []) aCompiled.getMethod ("grid").invoke (null));
