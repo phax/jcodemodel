@@ -45,6 +45,7 @@ import java.util.function.Function;
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JLambda;
 
 /**
@@ -124,6 +125,41 @@ public class FunctionExpression <A, R> extends AbstractTypedExpression <Function
     final MA aParam = aArgType.wrap (aLambda.addParam (sName));
     aLambda.body ().lambdaExpr (aBody.apply (aParam).raw ());
     return of (aLambda);
+  }
+
+  /**
+   * Create the method reference that is equivalent to the lambda <code>p -&gt; call</code>.
+   * <p>
+   * The call must pass the parameter unchanged and nothing else: <code>p.m()</code> and
+   * <code>Type.m(p)</code> become <code>Type::m</code>, <code>expr.m(p)</code> becomes
+   * <code>expr::m</code> and <code>new Type(p)</code> becomes <code>Type::new</code>. The method
+   * reference has the type of the equivalent lambda. Note that a receiver <code>expr</code> is
+   * evaluated once when the method reference is created, not on every invocation.
+   *
+   * @param <A>
+   *        The argument type.
+   * @param <MA>
+   *        The typed mirror of the argument.
+   * @param <R>
+   *        The result type.
+   * @param aCM
+   *        The code model to resolve the argument type in. May not be <code>null</code>.
+   * @param aArgType
+   *        The argument type. May not be <code>null</code>.
+   * @param aCall
+   *        Creates the call from the typed parameter, e.g. <code>StringExpression::length</code>.
+   *        May not be <code>null</code>.
+   * @return The method reference. Never <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If the call has no equivalent method reference, or if javac might consider it
+   *         ambiguous.
+   */
+  @NonNull
+  public static <A, MA extends IReferenceExpression <A>, R> FunctionExpression <A, R> methodRef (@NonNull final JCodeModel aCM,
+                                                                                                 @NonNull final TypedType <MA, ?> aArgType,
+                                                                                                 @NonNull final Function <MA, ? extends ITypedExpression <R>> aCall)
+  {
+    return of (MethodRefHelper.fromCall (aCM, aArgType, aParam -> aCall.apply (aParam).raw ()));
   }
 
   /**

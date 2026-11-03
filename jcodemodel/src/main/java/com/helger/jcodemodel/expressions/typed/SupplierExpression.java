@@ -102,6 +102,28 @@ public class SupplierExpression <R> extends AbstractTypedExpression <Supplier <R
   }
 
   /**
+   * Create the method reference that is equivalent to the lambda <code>() -&gt; call</code>.
+   * <p>
+   * The call must not have arguments: <code>Type.m()</code> becomes <code>Type::m</code>,
+   * <code>expr.m()</code> becomes <code>expr::m</code> and <code>new Type()</code> becomes
+   * <code>Type::new</code>. Note that a receiver <code>expr</code> is evaluated once when the
+   * method reference is created, not on every invocation.
+   *
+   * @param <R>
+   *        The result type.
+   * @param aCall
+   *        The call. May not be <code>null</code>.
+   * @return The method reference. Never <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If the call has no equivalent method reference.
+   */
+  @NonNull
+  public static <R> SupplierExpression <R> methodRef (@NonNull final ITypedExpression <R> aCall)
+  {
+    return of (MethodRefHelper.fromCall (aCall.raw ()));
+  }
+
+  /**
    * @return <code>this.get()</code>, without a dedicated mirror. Never <code>null</code>.
    */
   @NonNull

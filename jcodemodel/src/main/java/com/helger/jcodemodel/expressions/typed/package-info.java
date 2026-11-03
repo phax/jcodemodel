@@ -35,6 +35,11 @@
  * bodies. Lambda parameters must have reference mirrors, as type arguments are always reference
  * types. <code>VoidExpression</code> is not an <code>ITypedExpression</code>, so a
  * <code>void</code> value can only become a statement.</li>
+ * <li>Method references are derived from a typed call on a placeholder for the lambda
+ * parameter (e.g. <code>StringExpression::length</code> becomes <code>String::length</code>), so
+ * they get the type of the equivalent lambda. Calls without equivalent method reference, and
+ * method references javac might consider ambiguous (like <code>Integer::toString</code>), are
+ * rejected.</li>
  * <li><code>instanceof</code>: the target is a {@link java.lang.Class} (always reifiable) that must
  * be a sub type of the expression type (always castable). The pattern form types its binding
  * variable via a factory such as <code>StringExpression::of</code>.</li>

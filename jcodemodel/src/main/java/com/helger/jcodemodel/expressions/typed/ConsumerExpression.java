@@ -42,11 +42,13 @@ package com.helger.jcodemodel.expressions.typed;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.jspecify.annotations.NonNull;
 
 import com.helger.jcodemodel.IJExpression;
 import com.helger.jcodemodel.JBlock;
+import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JLambda;
 
 /**
@@ -113,6 +115,39 @@ public class ConsumerExpression <A> extends AbstractTypedExpression <Consumer <A
     final MA aParam = aArgType.wrap (aLambda.addParam (sName));
     aBody.accept (aLambda.body (), aParam);
     return of (aLambda);
+  }
+
+  /**
+   * Create the method reference that is equivalent to the lambda <code>p -&gt; call</code>.
+   * <p>
+   * The call must pass the parameter unchanged and nothing else: <code>p.m()</code> and
+   * <code>Type.m(p)</code> become <code>Type::m</code>, <code>expr.m(p)</code> becomes
+   * <code>expr::m</code> and <code>new Type(p)</code> becomes <code>Type::new</code>. The method
+   * reference has the type of the equivalent lambda. Note that a receiver <code>expr</code> is
+   * evaluated once when the method reference is created, not on every invocation.
+   *
+   * @param <A>
+   *        The argument type.
+   * @param <MA>
+   *        The typed mirror of the argument.
+   * @param aCM
+   *        The code model to resolve the argument type in. May not be <code>null</code>.
+   * @param aArgType
+   *        The argument type. May not be <code>null</code>.
+   * @param aCall
+   *        Creates the <code>void</code> call from the typed parameter. May not be
+   *        <code>null</code>.
+   * @return The method reference. Never <code>null</code>.
+   * @throws IllegalArgumentException
+   *         If the call has no equivalent method reference, or if javac might consider it
+   *         ambiguous.
+   */
+  @NonNull
+  public static <A, MA extends IReferenceExpression <A>> ConsumerExpression <A> methodRef (@NonNull final JCodeModel aCM,
+                                                                                           @NonNull final TypedType <MA, ?> aArgType,
+                                                                                           @NonNull final Function <MA, VoidExpression> aCall)
+  {
+    return of (MethodRefHelper.fromCall (aCM, aArgType, aParam -> aCall.apply (aParam).raw ()));
   }
 
   /**

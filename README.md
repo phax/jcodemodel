@@ -41,7 +41,7 @@ v4.5.0 - work in progress
   See [#201](https://github.com/phax/jcodemodel/issues/201) and [#202](https://github.com/phax/jcodemodel/pull/202) - thx @glelouet
 * Added the new formatter settings `wrap.switchExpression.labels` and `wrap.switchExpression.singleLine` (class `SwitchExpression`) to control the wrapping of switch labels and single statement cases
 * Added `IJFormatter.printSingleLine (EWordWrapStrategy, Runnable)`
-* Added the experimental package `com.helger.jcodemodel.expressions.typed` with compile-time typed expression wrappers for primitives, all primitive wrapper classes, `String`, `Object`, arrays, typed variables, `void`, lambdas of the core functional interfaces, `instanceof` patterns and the conditional operator, with boxing, unboxing and numeric promotion modelled by the type system
+* Added the experimental package `com.helger.jcodemodel.expressions.typed` with compile-time typed expression wrappers for primitives, all primitive wrapper classes, `String`, `Object`, arrays, typed variables, `void`, lambdas and method references of the core functional interfaces, `instanceof` patterns and the conditional operator, with boxing, unboxing and numeric promotion modelled by the type system
 * Added `JInvocation.object ()`, `JInvocation.methodName ()` and `JInvocation.constructorType ()`
 * `JLambdaMethodRef` now puts parentheses around a receiver expression that binds less tightly than `::`, e.g. `(a + b)::length`
 * The code layout of `JSwitchExpression` and `JCaseArrow` / `JCaseStatic` changed (indentation, line breaks, no trailing semicolon after a switch statement, `case null, default`).

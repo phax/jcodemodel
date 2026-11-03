@@ -58,6 +58,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
@@ -72,6 +73,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.helger.base.enforce.ValueEnforcer;
+import com.helger.jcodemodel.IJExpression;
+import com.helger.jcodemodel.JCodeModel;
+import com.helger.jcodemodel.JExpr;
+import com.helger.jcodemodel.util.CodeModelTestsHelper;
 import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.VariableTree;
 import com.sun.source.util.JavacTask;
@@ -826,5 +831,347 @@ public final class TypedExpressionTypingTest
     // The only intended gaps are == and != with a boxed or reference operand on the left
     for (final String sGap : aGaps)
       assertTrue ("Unexpected gap: " + sGap, sGap.contains (" == ") || sGap.contains (" != "));
+  }
+
+  /**
+   * A method reference case: the lambda, the method reference created from the same call, the
+   * expected method reference text (<code>null</code> if creating it must fail) and optionally the
+   * method reference that javac must reject.
+   */
+  private record MethodRefCase (String sDescription,
+                                String sTarget,
+                                IJExpression aLambda,
+                                Supplier <IJExpression> aMethodRef,
+                                String sExpected,
+                                String sJavacRejects)
+  {}
+
+  @Test
+  public void testMethodRefsMatchLambdas ()
+  {
+    final JCodeModel cm = JCodeModel.createUnified ();
+    final StringExpression aT = StringExpression.of (JExpr.ref ("t"));
+    final StringExpression aU = StringExpression.of (JExpr.ref ("u"));
+    final ConsumerExpression <String> aC = ConsumerExpression.of (JExpr.ref ("c"));
+    final List <MethodRefCase> aRefCases = List.of (new MethodRefCase ("unbound String::length",
+                                                                       "Function <String, Integer>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  StringExpression::length)
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           StringExpression::length)
+                                                                                               .raw (),
+                                                                       "java.lang.String::length",
+                                                                       null),
+                                                    new MethodRefCase ("unbound String::length to a wider result",
+                                                                       "Function <String, ? extends Number>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  StringExpression::length)
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           StringExpression::length)
+                                                                                               .raw (),
+                                                                       "java.lang.String::length",
+                                                                       null),
+                                                    new MethodRefCase ("unbound String::isEmpty",
+                                                                       "Predicate <String>",
+                                                                       PredicateExpression.lambda (TypedType.STRING,
+                                                                                                   "s",
+                                                                                                   StringExpression::isEmpty)
+                                                                                          .raw (),
+                                                                       () -> PredicateExpression.methodRef (cm,
+                                                                                                            TypedType.STRING,
+                                                                                                            StringExpression::isEmpty)
+                                                                                                .raw (),
+                                                                       "java.lang.String::isEmpty",
+                                                                       null),
+                                                    new MethodRefCase ("unbound Object::hashCode",
+                                                                       "Function <Object, Integer>",
+                                                                       FunctionExpression.lambda (TypedType.object (Object.class),
+                                                                                                  "o",
+                                                                                                  ObjectExpression::callHashCode)
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.object (Object.class),
+                                                                                                           ObjectExpression::callHashCode)
+                                                                                               .raw (),
+                                                                       "java.lang.Object::hashCode",
+                                                                       null),
+                                                    new MethodRefCase ("unbound Integer::intValue",
+                                                                       "Function <Integer, Integer>",
+                                                                       FunctionExpression.lambda (TypedType.INTEGER,
+                                                                                                  "i",
+                                                                                                  IntegerExpression::intValue)
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.INTEGER,
+                                                                                                           IntegerExpression::intValue)
+                                                                                               .raw (),
+                                                                       "java.lang.Integer::intValue",
+                                                                       null),
+                                                    new MethodRefCase ("unbound Integer::hashCode is ambiguous",
+                                                                       "Function <Integer, Integer>",
+                                                                       FunctionExpression.lambda (TypedType.INTEGER,
+                                                                                                  "i",
+                                                                                                  IntegerExpression::callHashCode)
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.INTEGER,
+                                                                                                           IntegerExpression::callHashCode)
+                                                                                               .raw (),
+                                                                       null,
+                                                                       "Integer::hashCode"),
+                                                    new MethodRefCase ("unbound Integer::toString is ambiguous",
+                                                                       "Function <Integer, String>",
+                                                                       FunctionExpression.lambda (TypedType.INTEGER,
+                                                                                                  "i",
+                                                                                                  IntegerExpression::callToString)
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.INTEGER,
+                                                                                                           IntegerExpression::callToString)
+                                                                                               .raw (),
+                                                                       null,
+                                                                       "Integer::toString"),
+                                                    new MethodRefCase ("static String::valueOf",
+                                                                       "Function <Object, String>",
+                                                                       FunctionExpression.lambda (TypedType.object (Object.class),
+                                                                                                  "o",
+                                                                                                  o -> StringExpression.of (cm.ref (String.class)
+                                                                                                                              .staticInvoke ("valueOf")
+                                                                                                                              .arg (o.raw ())))
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.object (Object.class),
+                                                                                                           o -> StringExpression.of (cm.ref (String.class)
+                                                                                                                                       .staticInvoke ("valueOf")
+                                                                                                                                       .arg (o.raw ())))
+                                                                                               .raw (),
+                                                                       "java.lang.String::valueOf",
+                                                                       null),
+                                                    new MethodRefCase ("static Integer::parseInt",
+                                                                       "Function <String, Integer>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  s -> IntExpression.of (cm.ref (Integer.class)
+                                                                                                                           .staticInvoke ("parseInt")
+                                                                                                                           .arg (s.raw ())))
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           s -> IntExpression.of (cm.ref (Integer.class)
+                                                                                                                                    .staticInvoke ("parseInt")
+                                                                                                                                    .arg (s.raw ())))
+                                                                                               .raw (),
+                                                                       "java.lang.Integer::parseInt",
+                                                                       null),
+                                                    new MethodRefCase ("static Integer::toString is ambiguous",
+                                                                       "Function <Integer, String>",
+                                                                       FunctionExpression.lambda (TypedType.INTEGER,
+                                                                                                  "i",
+                                                                                                  i -> StringExpression.of (cm.ref (Integer.class)
+                                                                                                                              .staticInvoke ("toString")
+                                                                                                                              .arg (i.raw ())))
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.INTEGER,
+                                                                                                           i -> StringExpression.of (cm.ref (Integer.class)
+                                                                                                                                       .staticInvoke ("toString")
+                                                                                                                                       .arg (i.raw ())))
+                                                                                               .raw (),
+                                                                       null,
+                                                                       "Integer::toString"),
+                                                    new MethodRefCase ("bound t::concat",
+                                                                       "Function <String, String>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  aT::concat)
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           aT::concat)
+                                                                                               .raw (),
+                                                                       "t::concat",
+                                                                       null),
+                                                    new MethodRefCase ("bound t::indexOf picks the String overload",
+                                                                       "Function <String, Integer>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  s -> aT.indexOf (s))
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           s -> aT.indexOf (s))
+                                                                                               .raw (),
+                                                                       "t::indexOf",
+                                                                       null),
+                                                    new MethodRefCase ("bound (t + u)::concat",
+                                                                       "Function <String, String>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  s -> aT.plus (aU).concat (s))
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           s -> aT.plus (aU)
+                                                                                                                  .concat (s))
+                                                                                               .raw (),
+                                                                       "(t + u)::concat",
+                                                                       null),
+                                                    new MethodRefCase ("bound c::accept",
+                                                                       "Consumer <String>",
+                                                                       ConsumerExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  (aBlock, s) -> aC.accept (s)
+                                                                                                                   .addTo (aBlock))
+                                                                                         .raw (),
+                                                                       () -> ConsumerExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           aC::accept)
+                                                                                               .raw (),
+                                                                       "c::accept",
+                                                                       null),
+                                                    new MethodRefCase ("constructor StringBuilder::new",
+                                                                       "Function <String, StringBuilder>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  s -> ObjectExpression.<StringBuilder> of (JExpr._new (cm.ref (StringBuilder.class))
+                                                                                                                                                 .arg (s.raw ())))
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           s -> ObjectExpression.<StringBuilder> of (JExpr._new (cm.ref (StringBuilder.class))
+                                                                                                                                                          .arg (s.raw ())))
+                                                                                               .raw (),
+                                                                       "java.lang.StringBuilder::new",
+                                                                       null),
+                                                    new MethodRefCase ("supplier StringBuilder::new",
+                                                                       "Supplier <StringBuilder>",
+                                                                       SupplierExpression.lambda (ObjectExpression.<StringBuilder> of (JExpr._new (cm.ref (StringBuilder.class))))
+                                                                                         .raw (),
+                                                                       () -> SupplierExpression.methodRef (ObjectExpression.<StringBuilder> of (JExpr._new (cm.ref (StringBuilder.class))))
+                                                                                               .raw (),
+                                                                       "java.lang.StringBuilder::new",
+                                                                       null),
+                                                    new MethodRefCase ("supplier of a generic constructor",
+                                                                       "Supplier <java.util.List <String>>",
+                                                                       SupplierExpression.lambda (ObjectExpression.<ArrayList <String>> of (JExpr._new (cm.ref (ArrayList.class)
+                                                                                                                                                        .narrow (String.class))))
+                                                                                         .raw (),
+                                                                       () -> SupplierExpression.methodRef (ObjectExpression.<ArrayList <String>> of (JExpr._new (cm.ref (ArrayList.class)
+                                                                                                                                                                 .narrow (String.class))))
+                                                                                               .raw (),
+                                                                       "java.util.ArrayList::new",
+                                                                       null),
+                                                    new MethodRefCase ("supplier t::length",
+                                                                       "Supplier <Integer>",
+                                                                       SupplierExpression.lambda (aT.length ()).raw (),
+                                                                       () -> SupplierExpression.methodRef (aT.length ()).raw (),
+                                                                       "t::length",
+                                                                       null),
+                                                    new MethodRefCase ("supplier (t + u)::length",
+                                                                       "Supplier <Integer>",
+                                                                       SupplierExpression.lambda (aT.plus (aU).length ()).raw (),
+                                                                       () -> SupplierExpression.methodRef (aT.plus (aU).length ())
+                                                                                               .raw (),
+                                                                       "(t + u)::length",
+                                                                       null),
+                                                    new MethodRefCase ("receiver uses the parameter",
+                                                                       "Function <String, String>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  s -> s.concat (s))
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           s -> s.concat (s))
+                                                                                               .raw (),
+                                                                       null,
+                                                                       null),
+                                                    new MethodRefCase ("parameter not passed",
+                                                                       "Function <String, String>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  s -> aT.concat (aU))
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           s -> aT.concat (aU))
+                                                                                               .raw (),
+                                                                       null,
+                                                                       null),
+                                                    new MethodRefCase ("not an invocation",
+                                                                       "Function <String, Integer>",
+                                                                       FunctionExpression.lambda (TypedType.STRING,
+                                                                                                  "s",
+                                                                                                  s -> s.length ().plus (1))
+                                                                                         .raw (),
+                                                                       () -> FunctionExpression.methodRef (cm,
+                                                                                                           TypedType.STRING,
+                                                                                                           s -> s.length ()
+                                                                                                                 .plus (1))
+                                                                                               .raw (),
+                                                                       null,
+                                                                       null));
+
+    final String sParams = "(String t, String u, Consumer <String> c)";
+    final Map <String, String> aSources = new LinkedHashMap <> ();
+    final List <String> aMismatches = new ArrayList <> ();
+    int nRefs = 0;
+    for (int i = 0; i < aRefCases.size (); i++)
+    {
+      final MethodRefCase aCase = aRefCases.get (i);
+      aSources.put ("L" + i,
+                    _source ("L" + i,
+                             "static void t " +
+                                   sParams +
+                                   " { " +
+                                   aCase.sTarget () +
+                                   " r = " +
+                                   CodeModelTestsHelper.toString (aCase.aLambda ()) +
+                                   "; }"));
+      String sRef;
+      try
+      {
+        sRef = CodeModelTestsHelper.toString (aCase.aMethodRef ().get ());
+        nRefs++;
+      }
+      catch (final IllegalArgumentException ex)
+      {
+        sRef = null;
+      }
+      if (sRef == null ? aCase.sExpected () != null : !sRef.equals (aCase.sExpected ()))
+        aMismatches.add (aCase.sDescription () + ": expected " + aCase.sExpected () + ", created " + sRef);
+      if (sRef != null)
+        aSources.put ("M" + i, _source ("M" + i, "static void t " + sParams + " { " + aCase.sTarget () + " r = " + sRef + "; }"));
+      if (aCase.sJavacRejects () != null)
+        aSources.put ("J" + i,
+                      _source ("J" + i,
+                               "static void t " +
+                                     sParams +
+                                     " { " +
+                                     aCase.sTarget () +
+                                     " r = " +
+                                     aCase.sJavacRejects () +
+                                     "; }"));
+    }
+
+    final Map <String, String> aResults = _compile (aSources);
+    for (int i = 0; i < aRefCases.size (); i++)
+    {
+      final MethodRefCase aCase = aRefCases.get (i);
+      if (REJECTED.equals (aResults.get ("L" + i)))
+        aMismatches.add (aCase.sDescription () + ": the lambda does not compile");
+      if (aSources.containsKey ("M" + i) && REJECTED.equals (aResults.get ("M" + i)))
+        aMismatches.add (aCase.sDescription () + ": the method reference does not compile");
+      if (aSources.containsKey ("J" + i) && !REJECTED.equals (aResults.get ("J" + i)))
+        aMismatches.add (aCase.sDescription () + ": javac accepts " + aCase.sJavacRejects ());
+    }
+    LOGGER.info ("Checked " + aRefCases.size () + " method reference cases against javac, " + nRefs + " were created");
+    assertEquals ("Method references differing from lambdas: " + aMismatches, 0, aMismatches.size ());
   }
 }
