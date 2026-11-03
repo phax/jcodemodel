@@ -44,6 +44,11 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.junit.Test;
 
@@ -73,6 +78,7 @@ public final class TypedExpressionGenerationTest
   }
 
   @Test
+  @SuppressWarnings ("unchecked")
   public void testGenerateCompileAndRun () throws Exception
   {
     final JCodeModel cm = new JCodeModel ();
@@ -147,6 +153,49 @@ public final class TypedExpressionGenerationTest
       aMethod.body ()._return (ArrayExpression.newArrayOf (cm, ArrayType.INT.array (), aRow1, aRow2).raw ());
     }
 
+    // static Predicate <String> nonEmpty ()
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC,
+                                             PredicateExpression.type (TypedType.STRING).type (cm),
+                                             "nonEmpty");
+      aMethod.body ()._return (PredicateExpression.lambda (TypedType.STRING, "s", s -> s.isEmpty ().not ()).raw ());
+    }
+
+    // static Function <String, Integer> len ()
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC,
+                                             FunctionExpression.type (TypedType.STRING, TypedType.INTEGER).type (cm),
+                                             "len");
+      aMethod.body ()._return (FunctionExpression.lambda (TypedType.STRING, "s", StringExpression::length).raw ());
+    }
+
+    // static int count (String [] a, Predicate <String> p)
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.INT, "count");
+      final var aArray = ArrayExpression.param (aMethod, ArrayType.of (String.class, StringExpression::of), "a");
+      final var aPredicate = TypedVariable.param (aMethod, PredicateExpression.type (TypedType.STRING), "p");
+      final var aCount = TypedVariable.decl (cm, aMethod.body (), TypedType.INT, "n", IntExpression.lit (0));
+      final JForLoop aLoop = aMethod.body ()._for ();
+      final var aIdx = TypedVariable.of (TypedType.INT, aLoop.init (cm.INT, "i", IntExpression.lit (0).raw ()));
+      aLoop.test (aIdx.get ().lt (aArray.length ()).raw ());
+      aLoop.update (TypedVariable.postincr (aIdx).raw ());
+      aCount.assign (aLoop.body ()._if (aPredicate.get ().test (aArray.component (aIdx.get ())).raw ())._then (),
+                     aCount.get ().plus (1));
+      aMethod.body ()._return (aCount.get ().raw ());
+    }
+
+    // static void each (String [] a, Consumer <String> c): accept is void and can only become a statement
+    {
+      final JMethod aMethod = aClass.method (JMod.PUBLIC | JMod.STATIC, cm.VOID, "each");
+      final var aArray = ArrayExpression.param (aMethod, ArrayType.of (String.class, StringExpression::of), "a");
+      final var aConsumer = TypedVariable.param (aMethod, ConsumerExpression.type (TypedType.STRING), "c");
+      final JForLoop aLoop = aMethod.body ()._for ();
+      final var aIdx = TypedVariable.of (TypedType.INT, aLoop.init (cm.INT, "i", IntExpression.lit (0).raw ()));
+      aLoop.test (aIdx.get ().lt (aArray.length ()).raw ());
+      aLoop.update (TypedVariable.postincr (aIdx).raw ());
+      aConsumer.get ().accept (aArray.component (aIdx.get ()).plus ("!")).addTo (aLoop.body ());
+    }
+
     final DynamicClassLoader aLoader = MemoryCodeWriter.from (cm).compile ();
     final Class <?> aCompiled = aLoader.loadClass ("com.example.typed.Generated");
 
@@ -162,6 +211,16 @@ public final class TypedExpressionGenerationTest
     assertEquals (Integer.valueOf (6),
                   aCompiled.getMethod ("totalLength", String [].class)
                            .invoke (null, (Object) new String [] { "a", "bc", "def" }));
+    final Object aNonEmpty = aCompiled.getMethod ("nonEmpty").invoke (null);
+    assertEquals (Integer.valueOf (2),
+                  aCompiled.getMethod ("count", String [].class, Predicate.class)
+                           .invoke (null, new String [] { "", "a", "bc" }, aNonEmpty));
+    assertEquals (Integer.valueOf (3), ((Function <String, ?>) aCompiled.getMethod ("len").invoke (null)).apply ("abc"));
+    final List <String> aCollected = new ArrayList <> ();
+    final Consumer <String> aCollector = aCollected::add;
+    aCompiled.getMethod ("each", String [].class, Consumer.class)
+             .invoke (null, new String [] { "x", "y" }, aCollector);
+    assertEquals (List.of ("x!", "y!"), aCollected);
     assertArrayEquals (new int [] { 0, 1, 4, 9 },
                        (int []) aCompiled.getMethod ("squares", int.class).invoke (null, Integer.valueOf (4)));
     assertArrayEquals (new int [] [] { { 1, 2 }, { 3 } }, (int [] []) aCompiled.getMethod ("grid").invoke (null));

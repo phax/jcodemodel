@@ -353,7 +353,7 @@ public final class TypedExpressionTypingTest
 
   private static String _source (@NonNull final String sClassName, @NonNull final String sBody)
   {
-    return "import " + PKG + "*;\nclass " + sClassName + " {\n" + sBody + "\n}\n";
+    return "import " + PKG + "*;\nimport java.util.function.*;\nclass " + sClassName + " {\n" + sBody + "\n}\n";
   }
 
   @Test
@@ -452,6 +452,85 @@ public final class TypedExpressionTypingTest
     final List <String> aMismatches = _exactMismatches (aCases, _compile (aSources));
     LOGGER.info ("Checked " + aCases.size () + " variable assignments and increments against javac");
     assertEquals ("Variable operations differing from javac: " + aMismatches, 0, aMismatches.size ());
+  }
+
+  /** Description, Java snippet, typed snippet */
+  private static final String [] [] LAMBDA_CASES = { { "Function<String,Integer> lambda to Function<? super String,? extends Number>",
+                                                      "static void m (Function <? super String, ? extends Number> f) {}\nstatic void t () { m (s -> s.length ()); }",
+                                                      "static void m (ITypedExpression <? extends Function <? super String, ? extends Number>> f) {}\nstatic void t () { m (FunctionExpression.lambda (TypedType.STRING, \"s\", s -> s.length ())); }" },
+                                                    { "Function<String,Integer> lambda to Function<? super String,? extends String>",
+                                                      "static void m (Function <? super String, ? extends String> f) {}\nstatic void t () { m (s -> s.length ()); }",
+                                                      "static void m (ITypedExpression <? extends Function <? super String, ? extends String>> f) {}\nstatic void t () { m (FunctionExpression.lambda (TypedType.STRING, \"s\", s -> s.length ())); }" },
+                                                    { "Predicate with boolean body",
+                                                      "static void t () { Predicate <String> r = s -> s.isEmpty (); }",
+                                                      "static void t () { PredicateExpression <String> r = PredicateExpression.lambda (TypedType.STRING, \"s\", s -> s.isEmpty ()); }" },
+                                                    { "Predicate with int body",
+                                                      "static void t () { Predicate <String> r = s -> s.length (); }",
+                                                      "static void t () { var r = PredicateExpression.lambda (TypedType.STRING, \"s\", s -> s.length ()); }" },
+                                                    { "Predicate over a primitive",
+                                                      "static void t () { Predicate <int> r = i -> i > 0; }",
+                                                      "static void t () { var r = PredicateExpression.lambda (TypedType.INT, \"i\", i -> i.gt (IntExpression.lit (0))); }" },
+                                                    { "Predicate<Object> to Predicate<? super String>",
+                                                      "static void m (Predicate <? super String> p) {}\nstatic void t (Predicate <Object> a) { m (a); }",
+                                                      "static void m (ITypedExpression <? extends Predicate <? super String>> p) {}\nstatic void t (PredicateExpression <Object> a) { m (a); }" },
+                                                    { "Predicate<String> to Predicate<? super Object>",
+                                                      "static void m (Predicate <? super Object> p) {}\nstatic void t (Predicate <String> a) { m (a); }",
+                                                      "static void m (ITypedExpression <? extends Predicate <? super Object>> p) {}\nstatic void t (PredicateExpression <String> a) { m (a); }" },
+                                                    { "Predicate<String> assigned to Predicate<Object> variable",
+                                                      "static void t (Predicate <Object> v, Predicate <String> a) { v = a; }",
+                                                      "static void t (TypedVariable <PredicateExpression <Object>, ITypedExpression <? extends Predicate <Object>>> v, PredicateExpression <String> a) { v.assignExpr (a); }" },
+                                                    { "Predicate<CharSequence>.test(String)",
+                                                      "static void t (Predicate <CharSequence> p, String s) { boolean r = p.test (s); }",
+                                                      "static void t (PredicateExpression <CharSequence> p, StringExpression s) { BooleanExpression r = p.test (s); }" },
+                                                    { "Predicate<String>.test(Integer)",
+                                                      "static void t (Predicate <String> p, Integer i) { boolean r = p.test (i); }",
+                                                      "static void t (PredicateExpression <String> p, IntegerExpression i) { BooleanExpression r = p.test (i); }" },
+                                                    { "Function<String,Integer>.apply(s) + 1",
+                                                      "static void t (Function <String, Integer> f, String s) { int r = f.apply (s) + 1; }",
+                                                      "static void t (FunctionExpression <String, Integer> f, StringExpression s) { IntExpression r = f.apply (s, TypedType.INTEGER).plus (1); }" },
+                                                    { "Supplier<Integer> of an int",
+                                                      "static void t () { Supplier <Integer> r = () -> 5; }",
+                                                      "static void t () { SupplierExpression <Integer> r = SupplierExpression.lambda (IntExpression.lit (5)); }" },
+                                                    { "Supplier<Long> of an int",
+                                                      "static void t () { Supplier <Long> r = () -> 5; }",
+                                                      "static void t () { SupplierExpression <Long> r = SupplierExpression.lambda (IntExpression.lit (5)); }" },
+                                                    { "Function with void body",
+                                                      "static void t () { Function <String, Object> r = s -> System.out.println (s); }",
+                                                      "static void t () { var r = FunctionExpression.lambda (TypedType.STRING, \"s\", s -> (VoidExpression) null); }" },
+                                                    { "void as argument",
+                                                      "static void m (Object o) {}\nstatic void t (Consumer <String> c, String s) { m (c.accept (s)); }",
+                                                      "static void m (ITypedExpression <?> o) {}\nstatic void t (ConsumerExpression <String> c, StringExpression s) { m (c.accept (s)); }" },
+                                                    { "String + void",
+                                                      "static void t (Consumer <String> c, String s) { var r = s + c.accept (s); }",
+                                                      "static void t (ConsumerExpression <String> c, StringExpression s) { var r = s.plus (c.accept (s)); }" } };
+
+  @Test
+  public void testLambdasMatchJavac ()
+  {
+    final Map <String, String> aSources = new LinkedHashMap <> ();
+    final List <Case> aCases = new ArrayList <> ();
+    for (final String [] aCase : LAMBDA_CASES)
+    {
+      final int nIndex = aCases.size ();
+      aSources.put ("J" + nIndex, _source ("J" + nIndex, aCase[1]));
+      aSources.put ("T" + nIndex, _source ("T" + nIndex, aCase[2]));
+      aCases.add (new Case (aCase[0], "J" + nIndex, List.of ("T" + nIndex)));
+    }
+
+    final Map <String, String> aResults = _compile (aSources);
+    final List <String> aMismatches = new ArrayList <> ();
+    int nAccepted = 0;
+    for (final Case aCase : aCases)
+    {
+      final boolean bJava = !REJECTED.equals (aResults.get (aCase.sJavaClass ()));
+      final boolean bTyped = !REJECTED.equals (_typedOutcome (aCase, aResults));
+      if (bJava)
+        nAccepted++;
+      if (bJava != bTyped)
+        aMismatches.add (aCase.sDescription () + ": javac " + (bJava ? "accepts" : "rejects"));
+    }
+    LOGGER.info ("Checked " + aCases.size () + " lambda cases against javac, " + nAccepted + " are valid Java");
+    assertEquals ("Lambda cases differing from javac: " + aMismatches, 0, aMismatches.size ());
   }
 
   @Test

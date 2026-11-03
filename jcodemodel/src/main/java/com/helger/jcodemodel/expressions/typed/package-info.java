@@ -29,6 +29,11 @@
  * <li>Variables: <code>TypedVariable&lt;M, P&gt;</code> reads as the mirror <code>M</code> and
  * only accepts the parameter mirror <code>P</code> on assignment. <code>TypedType</code> describes
  * a type as such a pair, and arrays are built on top of it.</li>
+ * <li>Lambdas: <code>PredicateExpression</code>, <code>FunctionExpression</code>,
+ * <code>SupplierExpression</code> and <code>ConsumerExpression</code> create lambdas from typed
+ * bodies. Lambda parameters must have reference mirrors, as type arguments are always reference
+ * types. <code>VoidExpression</code> is not an <code>ITypedExpression</code>, so a
+ * <code>void</code> value can only become a statement.</li>
  * </ul>
  * Nothing in the core API depends on this package. Pass {@link ITypedExpression#raw()} wherever
  * an {@link com.helger.jcodemodel.IJExpression} is needed.
