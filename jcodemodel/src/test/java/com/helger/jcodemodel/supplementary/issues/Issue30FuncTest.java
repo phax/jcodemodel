@@ -47,12 +47,11 @@ import com.helger.jcodemodel.JCodeModel;
 import com.helger.jcodemodel.JDefinedClass;
 import com.helger.jcodemodel.JDirectClass;
 import com.helger.jcodemodel.JExpr;
-import com.helger.jcodemodel.JFieldVar;
 import com.helger.jcodemodel.JMethod;
 import com.helger.jcodemodel.JMod;
 import com.helger.jcodemodel.JPackage;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
-
+import com.helger.jcodemodel.vars.JFieldVar;
 /**
  * Test for https://github.com/phax/jcodemodel/issues/30
  *

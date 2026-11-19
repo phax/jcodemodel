@@ -50,6 +50,7 @@ import org.junit.Test;
 
 import com.helger.jcodemodel.exceptions.JCodeModelException;
 import com.helger.jcodemodel.util.CodeModelTestsHelper;
+import com.helger.jcodemodel.vars.JFieldVar;
 
 /**
  * A test program for the annotation use features Note: Not all the generated code would make sense
