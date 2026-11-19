@@ -112,10 +112,10 @@
   </contributors>
 
   <modules>
-    <module>jcodemodel</module>
-    <module>plugin</module>
     <module>examples</module>
+    <module>jcodemodel</module>
     <module>jcodemodeltests</module>
+    <module>plugin</module>
   </modules>
 
   <dependencyManagement>

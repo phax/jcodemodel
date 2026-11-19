@@ -210,6 +210,12 @@ public final class JOp
     return new JOpUnary (EUnaryOp.MINUS, aExpr);
   }
 
+  @NonNull
+  public static JOpUnary positive (@NonNull final IJExpression aExpr)
+  {
+    return new JOpUnary (EUnaryOp.POSITIVE, aExpr);
+  }
+
   /**
    * Logical not <code>'!x'</code>.
    *
